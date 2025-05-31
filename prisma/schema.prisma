@@ -1,0 +1,233 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Foot {
+  LEFT
+  RIGHT
+  BOTH
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Role {
+  FW
+  MF
+  DF
+  GK
+}
+
+enum Position {
+  CF
+  ST
+  LW
+  RW
+  AM
+  CM
+  DM
+  CB
+  LB
+  RB
+  GK
+}
+
+enum MatchSide {
+  HOME
+  AWAY
+}
+
+enum MatchRule {
+  HALF
+  MINI
+}
+
+enum AttendanceStatus {
+  ATTENDING
+  ABSENT
+  UNDECIDED
+}
+
+enum TeamMemberStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BoardType {
+  GENERAL
+  NOTICE
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String?   @unique
+  name            String?
+  image           String?
+  nickname        String
+  gender          String?   // 'male' | 'female'
+  birthday        DateTime?
+  phone           String?
+  injured         Boolean   @default(false)
+  position        String?   // ex: 'fw', 'mf', 'df', 'gk'
+  role            String?   // ex: 'cf', 'cm', 'cb', ...
+  teams           TeamMember[]
+  ownedTeams      Team[]    @relation("TeamOwner")
+  viceLeaderTeams TeamViceLeader[]
+  scoredGoals     AttackPoint[] @relation("Scorer")
+  assistedGoals   AttackPoint[] @relation("Assist")
+  uploadedPhotos  MatchDayPhoto[]
+  posts           Post[]
+  votes           Vote[]
+  receivedVotes   Vote[]    @relation("VoteTarget")
+  matchParticipations MatchParticipation[]
+  matchDayAttendance MatchDayAttendance[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Team {
+  id            String    @id @default(cuid())
+  name          String
+  code          String    @unique // 가입 코드
+  logoUrl       String?
+  coverUrl      String?
+  ownerId       String
+  owner         User      @relation("TeamOwner", fields: [ownerId], references: [id])
+  viceLeaders   TeamViceLeader[]
+  members       TeamMember[]
+  posts         Post[]
+  matchDays MatchDayTeam[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model TeamViceLeader {
+  id        String   @id @default(cuid())
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model MatchDay {
+  id          String     @id @default(cuid())
+  date        DateTime
+  location    String?
+  description String?
+  teams       MatchDayTeam[]
+  matches     Match[]
+  photos      MatchDayPhoto[]
+  attendance  MatchDayAttendance[]
+  votes       Vote[]
+  createdAt   DateTime   @default(now())
+}
+
+model MatchDayTeam {
+  id        String   @id @default(cuid())
+  matchDay  MatchDay @relation(fields: [matchDayId], references: [id])
+  matchDayId String
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    String
+  isHome    Boolean  @default(true)
+}
+
+model Match {
+  id            String    @id @default(cuid())
+  matchDay      MatchDay  @relation(fields: [matchDayId], references: [id])
+  matchDayId    String
+  rule          String    // 'halves' | 'single'
+  durationMin   Int       // 경기 시간 (ex. 15분)
+  homeScore     Int       @default(0)
+  awayScore     Int       @default(0)
+  attackPoints  AttackPoint[]
+  participants  MatchParticipation[]
+  createdAt     DateTime  @default(now())
+}
+
+model MatchParticipation {
+  id        String   @id @default(cuid())
+  match     Match    @relation(fields: [matchId], references: [id])
+  matchId   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  side      String   // 'home' | 'away'
+}
+
+model MatchDayAttendance {
+  id         String   @id @default(cuid())
+  matchDay   MatchDay @relation(fields: [matchDayId], references: [id])
+  matchDayId String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  status     String   // 'attend' | 'absent'
+  side       String?  // 'home' | 'away' | null
+}
+
+model AttackPoint {
+  id        String   @id @default(cuid())
+  match     Match    @relation(fields: [matchId], references: [id])
+  matchId   String
+  scorer    User     @relation("Scorer", fields: [scorerId], references: [id])
+  scorerId  String
+  assist    User?    @relation("Assist", fields: [assistId], references: [id])
+  assistId  String?
+  order     Int
+  half      String?  // 'first' | 'second', optional for single match
+}
+
+model MatchDayPhoto {
+  id         String   @id @default(cuid())
+  matchDay   MatchDay @relation(fields: [matchDayId], references: [id])
+  matchDayId String
+  url        String
+  uploadedBy User     @relation(fields: [uploadedById], references: [id])
+  uploadedById String
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  team      Team?    @relation(fields: [teamId], references: [id])
+  teamId    String?
+  title     String
+  content   String
+  type      String   // 'notice' | 'normal'
+  createdAt DateTime @default(now())
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  matchDay  MatchDay @relation(fields: [matchDayId], references: [id])
+  matchDayId String
+  target    User     @relation("VoteTarget", fields: [targetId], references: [id])
+  targetId  String
+}
+
