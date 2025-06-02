@@ -35,11 +35,17 @@ enum Role {
 enum Position {
   CF
   ST
+  LWF
   LW
+  LM
+  RWF
   RW
-  AM
+  RM
+  CAM
   CM
-  DM
+  CDM
+  LWB
+  RWB
   CB
   LB
   RB
@@ -66,6 +72,7 @@ enum TeamMemberStatus {
   PENDING
   APPROVED
   REJECTED
+  LEAVE
 }
 
 enum BoardType {
@@ -73,29 +80,52 @@ enum BoardType {
   NOTICE
 }
 
+enum MatchRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum RejectReason {
+  SCHEDULE_CONFLICT  // 일정 충돌
+  LOCATION_ISSUE     // 장소 문제
+  TEAM_CONDITION     // 팀 컨디션
+  OTHER              // 기타
+}
+
+
 model User {
   id              String    @id @default(cuid())
-  email           String?   @unique
-  name            String?
-  image           String?
-  nickname        String
-  gender          String?   // 'male' | 'female'
-  birthday        DateTime?
-  phone           String?
+  email           String    @unique
+  name            String
+  nickname        String    @unique
+  phone           String?   @unique
+  photo           String?
+
+  foot            Foot?   // 'left' | 'right' | 'both'
+  gender          Gender?   // 'male' | 'female'
+  birthDate       DateTime?
+  height          Int?
+  weight          Int?
+
+  role            Role?   // ex: 'cf', 'cm', 'cb', ...
+  position        Position?   // ex: 'fw', 'mf', 'df', 'gk'
   injured         Boolean   @default(false)
-  position        String?   // ex: 'fw', 'mf', 'df', 'gk'
-  role            String?   // ex: 'cf', 'cm', 'cb', ...
+
   teams           TeamMember[]
   ownedTeams      Team[]    @relation("TeamOwner")
   viceLeaderTeams TeamViceLeader[]
+
   scoredGoals     AttackPoint[] @relation("Scorer")
   assistedGoals   AttackPoint[] @relation("Assist")
+  receivedVotes   Vote[]    @relation("BestPlayer")
+  votes           Vote[]
+  
   uploadedPhotos  MatchDayPhoto[]
   posts           Post[]
-  votes           Vote[]
-  receivedVotes   Vote[]    @relation("VoteTarget")
-  matchParticipations MatchParticipation[]
-  matchDayAttendance MatchDayAttendance[]
+  matchPlayers MatchPlayer[]
+  matchDayMembers MatchDayMember[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 }
@@ -106,12 +136,16 @@ model Team {
   code          String    @unique // 가입 코드
   logoUrl       String?
   coverUrl      String?
+  city          String
+  district      String
   ownerId       String
   owner         User      @relation("TeamOwner", fields: [ownerId], references: [id])
   viceLeaders   TeamViceLeader[]
   members       TeamMember[]
   posts         Post[]
   matchDays MatchDayTeam[]
+  sentMatchRequests     TeamMatchRequest[] @relation("RequestorTeam")
+  receivedMatchRequests TeamMatchRequest[] @relation("TargetTeam")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -130,19 +164,24 @@ model TeamMember {
   teamId    String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  approved  Boolean  @default(false)
+  status    TeamMemberStatus @default(PENDING)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([teamId, userId])
+  @@index([userId, status])
 }
 
 model MatchDay {
   id          String     @id @default(cuid())
   date        DateTime
+  city        String?
+  district    String?
   location    String?
   description String?
   teams       MatchDayTeam[]
   matches     Match[]
   photos      MatchDayPhoto[]
-  attendance  MatchDayAttendance[]
+  members     MatchDayMember[]
   votes       Vote[]
   createdAt   DateTime   @default(now())
 }
@@ -160,32 +199,34 @@ model Match {
   id            String    @id @default(cuid())
   matchDay      MatchDay  @relation(fields: [matchDayId], references: [id])
   matchDayId    String
-  rule          String    // 'halves' | 'single'
+  rule          MatchRule
   durationMin   Int       // 경기 시간 (ex. 15분)
   homeScore     Int       @default(0)
   awayScore     Int       @default(0)
   attackPoints  AttackPoint[]
-  participants  MatchParticipation[]
+  players  MatchPlayer[]
   createdAt     DateTime  @default(now())
 }
 
-model MatchParticipation {
+model MatchPlayer {
   id        String   @id @default(cuid())
   match     Match    @relation(fields: [matchId], references: [id])
   matchId   String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  side      String   // 'home' | 'away'
+  side      MatchSide
 }
 
-model MatchDayAttendance {
+model MatchDayMember {
   id         String   @id @default(cuid())
   matchDay   MatchDay @relation(fields: [matchDayId], references: [id])
   matchDayId String
   user       User     @relation(fields: [userId], references: [id])
   userId     String
-  status     String   // 'attend' | 'absent'
-  side       String?  // 'home' | 'away' | null
+  status     AttendanceStatus @default(UNDECIDED)
+  side       MatchSide?  // 'home' | 'away' | null
+  @@unique([matchDayId, userId])
+  @@index([userId, status])
 }
 
 model AttackPoint {
@@ -197,7 +238,9 @@ model AttackPoint {
   assist    User?    @relation("Assist", fields: [assistId], references: [id])
   assistId  String?
   order     Int
-  half      String?  // 'first' | 'second', optional for single match
+  half      MatchRule?  
+  @@index([scorerId])
+  @@index([matchId])
 }
 
 model MatchDayPhoto {
@@ -217,7 +260,7 @@ model Post {
   teamId    String?
   title     String
   content   String
-  type      String   // 'notice' | 'normal'
+  type      BoardType   
   createdAt DateTime @default(now())
 }
 
@@ -227,7 +270,32 @@ model Vote {
   userId    String
   matchDay  MatchDay @relation(fields: [matchDayId], references: [id])
   matchDayId String
-  target    User     @relation("VoteTarget", fields: [targetId], references: [id])
-  targetId  String
+  bestPlayer    User     @relation("BestPlayer", fields: [bestPlayerId], references: [id])
+  bestPlayerId  String
 }
 
+model TeamMatchRequest {
+  id           String   @id @default(cuid())
+  requestorId  String
+  requestor    Team     @relation("RequestorTeam", fields: [requestorId], references: [id])
+  targetId     String?
+  target       Team?    @relation("TargetTeam", fields: [targetId], references: [id])
+  
+  proposedDate DateTime
+  city         String
+  district     String
+  location     String?
+
+  message      String?
+
+  status       MatchRequestStatus @default(PENDING)
+  rejectReason RejectReason?
+  rejectMessage String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([status, proposedDate])
+  @@index([requestorId, status])
+  @@index([targetId, status])
+}
