@@ -1,6 +1,5 @@
-// import Image from "next/image";
-import SignIn from "./components/sign-in";
-import { auth } from "@/../../auth";
+import { auth } from "@/shared/lib/auth";
+import SignIn from "@/shared/components/sign-in";
 
 export default async function Home() {
   const session = await auth();

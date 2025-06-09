@@ -1,4 +1,4 @@
-import { signIn } from "@/../../auth";
+import { signIn } from "@/shared/lib/auth";
 
 export default function SignIn() {
   return (
@@ -6,11 +6,12 @@ export default function SignIn() {
       action={async () => {
         "use server";
         // await signIn("kakao");
-        // await signIn();
-        await signIn("google");
+        await signIn();
+        // await signIn("google");
       }}
     >
-      <button type="submit">Signin with Google</button>
+      <button type="submit">Signin</button>
+      {/* <button type="submit">Signin with Google</button> */}
       {/* <button type="submit">Signin with Kakao</button> */}
     </form>
   );

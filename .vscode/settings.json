@@ -1,3 +1,5 @@
 {
-  "cSpell.words": ["cuid", "Kakao", "Participations"]
+  "cSpell.words": ["cuid", "Kakao", "kallemalle", "Participations", "supabase"],
+  "editor.gotoLocation.multipleDefinitions": "peek",
+  "editor.hover.enabled": true
 }
