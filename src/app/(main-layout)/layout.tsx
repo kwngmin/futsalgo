@@ -2,8 +2,8 @@ import {
   Users,
   Shirt,
   MoreHorizontal,
-  MessageCircleMore,
   Volleyball,
+  Newspaper,
 } from "lucide-react";
 import NavigationClient from "./ui/NavigationClient";
 import { headers } from "next/headers";
@@ -34,7 +34,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
     { id: "match", label: "경기", icon: Volleyball, href: "/matches" },
     { id: "team", label: "팀", icon: Shirt, href: "/" },
     { id: "player", label: "선수", icon: Users, href: "/players" },
-    { id: "board", label: "게시판", icon: MessageCircleMore, href: "/boards" },
+    { id: "board", label: "게시판", icon: Newspaper, href: "/boards" },
     { id: "more", label: "더보기", icon: MoreHorizontal, href: "/more" },
   ];
 

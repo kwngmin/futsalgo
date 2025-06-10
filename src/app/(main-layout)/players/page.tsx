@@ -158,7 +158,7 @@ const PlayersPage = () => {
                 </button>
               ))}
             </div>
-            <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+            <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100 mr-3">
               <ArrowDownUp className="w-5 h-5" />
             </button>
           </div>
