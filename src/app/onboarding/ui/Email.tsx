@@ -1,0 +1,110 @@
+"use client";
+
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/components/ui/card";
+import { Alert, AlertDescription } from "@/shared/components/ui/alert";
+import { Loader2, Check, X } from "lucide-react";
+import { useDebounce } from "@/shared/hooks/use-debounce";
+import { validateField } from "../OnboardingForm";
+import { ValidationField, ValidationStep } from "../model/type";
+
+export function OnboardingEmail({
+  setCurrentStep,
+}: {
+  setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
+}) {
+  const router = useRouter();
+  const [email, setEmail] = useState<ValidationField>({
+    value: "",
+    status: "idle",
+  });
+
+  const debouncedEmail = useDebounce(email.value, 300);
+
+  useEffect(() => {
+    if (debouncedEmail) {
+      validateField("email", debouncedEmail, setEmail);
+    } else {
+      setEmail({
+        value: "",
+        status: "idle",
+      });
+    }
+  }, [debouncedEmail]);
+
+  // 단계별 진행
+  const handleNextStep = () => {
+    if (email.status === "valid") {
+      setCurrentStep("phone");
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-md mx-auto bg-red-500">
+      <CardHeader>
+        <CardTitle>이메일 확인</CardTitle>
+        <CardDescription>사용할 이메일 주소를 확인해주세요</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">이메일</Label>
+          <div className="relative">
+            <Input
+              id="email"
+              type="email"
+              value={email.value}
+              onChange={(e) =>
+                setEmail((prev) => ({
+                  ...prev,
+                  value: e.target.value,
+                  status: "idle",
+                }))
+              }
+              placeholder="example@email.com"
+            />
+            {email.status === "checking" && (
+              <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin" />
+            )}
+            {email.status === "valid" && (
+              <Check className="absolute right-3 top-2.5 h-4 w-4 text-green-600" />
+            )}
+            {email.status === "invalid" && (
+              <X className="absolute right-3 top-2.5 h-4 w-4 text-red-600" />
+            )}
+          </div>
+          {email.error && (
+            <Alert>
+              <AlertDescription>{email.error}</AlertDescription>
+            </Alert>
+          )}
+        </div>
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            onClick={() => router.push("/dashboard")}
+            className="flex-1"
+          >
+            나중에 하기
+          </Button>
+          <Button
+            onClick={handleNextStep}
+            disabled={email.status !== "valid"}
+            className="flex-1"
+          >
+            다음
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
