@@ -112,7 +112,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
       <main className="lg:pl-20 xl:pl-72 pb-16 lg:pb-0">{children}</main>
 
       {/* 모바일 하단 네비게이션 */}
-      <nav className="fixed bottom-2 left-0 right-0 bg-white/50 backdrop-blur-sm rounded-lg lg:hidden max-w-xl mx-2 sm:mx-auto px-0.5 sm:px-1.5 shadow">
+      <nav className="fixed bottom-2 left-0 right-0 bg-white/50 backdrop-blur-sm rounded-lg lg:hidden max-w-xl mx-2 sm:mx-auto px-0.5 sm:px-1.5 shadow-xs">
         <div className="flex">
           {navItems.map((item) => {
             const Icon = item.icon;

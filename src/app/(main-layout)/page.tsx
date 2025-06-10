@@ -203,7 +203,7 @@ type TeamCardProps = {
 
 const TeamCard = ({ team }: TeamCardProps) => {
   return (
-    <div className="bg-white rounded-2xl p-3 shadow-sm/5 hover:shadow-md/5 transition-shadow cursor-pointer">
+    <div className="bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer">
       <div className="flex items-start gap-3">
         {/* 팀 로고 */}
         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
