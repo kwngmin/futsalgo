@@ -116,7 +116,7 @@ const MainPage = () => {
           <Search className="w-5 h-5" />
         </button>
       </div>
-      <div className="px-2 space-y-4">
+      <div className="px-3 space-y-4">
         <div>
           {/* 내 팀 섹션 */}
           {myTeams.length > 0 ? (
