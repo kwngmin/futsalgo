@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, ArrowDownUp } from "lucide-react";
 
 // 샘플 팀 데이터
 const teams = [
@@ -122,7 +122,7 @@ const MainPage = () => {
           {myTeams.length > 0 ? (
             <div className="space-y-3">
               {myTeams.map((team) => (
-                <TeamCard key={team.id} team={team} myTeam={true} />
+                <TeamCard key={team.id} team={team} isMyTeam />
               ))}
             </div>
           ) : (
@@ -149,7 +149,7 @@ const MainPage = () => {
         {/* 다른 팀 섹션 */}
         <div className="flex flex-col gap-2">
           {/* 하단: 필터 칩들 */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-between">
             {/* <span className="text-sm font-semibold text-gray-600 mr-1">
               구분
             </span> */}
@@ -169,6 +169,9 @@ const MainPage = () => {
                 </button>
               ))}
             </div>
+            <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+              <ArrowDownUp className="w-5 h-5" />
+            </button>
           </div>
 
           <div className="space-y-3">
@@ -199,14 +202,14 @@ type Team = {
 
 type TeamCardProps = {
   team: Team;
-  myTeam?: boolean;
+  isMyTeam?: boolean;
 };
 
-const TeamCard = ({ team, myTeam = false }: TeamCardProps) => {
+const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
   return (
     <div
       className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ${
-        myTeam ? "ring-2 ring-input" : ""
+        isMyTeam ? "ring-2 ring-accent" : ""
       }`}
     >
       <div className="flex items-start gap-3">

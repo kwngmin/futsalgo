@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, User } from "lucide-react";
+import { Search, User, ArrowDownUp } from "lucide-react";
 
 // 샘플 선수 데이터
 const players = [
@@ -142,7 +142,7 @@ const PlayersPage = () => {
         {/* 필터 섹션 */}
         <div className="flex flex-col gap-2">
           {/* 필터 칩들 */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-between">
             <div className="flex gap-1 bg-gray-100 rounded-full p-1">
               {filterOptions.map((option) => (
                 <button
@@ -158,6 +158,9 @@ const PlayersPage = () => {
                 </button>
               ))}
             </div>
+            <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+              <ArrowDownUp className="w-5 h-5" />
+            </button>
           </div>
 
           {/* 선수 목록 */}
@@ -209,7 +212,7 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
   return (
     <div
       className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ${
-        isCurrentUser ? "ring-2 ring-input" : ""
+        isCurrentUser ? "ring-2 ring-accent" : ""
       }`}
     >
       <div className="flex items-start gap-3">
