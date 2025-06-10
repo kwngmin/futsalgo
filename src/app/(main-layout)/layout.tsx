@@ -1,11 +1,8 @@
 import {
   Users,
-  // MessageCircle,
   Shirt,
   MoreHorizontal,
   MessageCircleMore,
-  // Search,
-  // Filter,
   Volleyball,
 } from "lucide-react";
 import NavigationClient from "./ui/NavigationClient";
@@ -24,7 +21,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
   const getActiveTab = (path: string) => {
     if (path.startsWith("/matches")) return "match";
     if (path.startsWith("/")) return "team";
-    if (path.startsWith("/users")) return "user";
+    if (path.startsWith("/players")) return "player";
     if (path.startsWith("/boards")) return "board";
     if (path.startsWith("/more")) return "more";
     return "team"; // 기본값
@@ -36,7 +33,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
   const navItems = [
     { id: "match", label: "경기", icon: Volleyball, href: "/matches" },
     { id: "team", label: "팀", icon: Shirt, href: "/" },
-    { id: "user", label: "유저", icon: Users, href: "/users" },
+    { id: "player", label: "선수", icon: Users, href: "/players" },
     { id: "board", label: "게시판", icon: MessageCircleMore, href: "/boards" },
     { id: "more", label: "더보기", icon: MoreHorizontal, href: "/more" },
   ];
@@ -130,7 +127,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
                 }`}
               >
                 <Icon className="w-6 h-6 mb-1" />
-                <span className="text-xs">{item.label}</span>
+                <span className="text-xs font-medium">{item.label}</span>
               </NavigationClient>
             );
           })}
