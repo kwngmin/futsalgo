@@ -3,8 +3,8 @@ import {
   MessageCircle,
   BarChart3,
   MoreHorizontal,
-  Search,
-  Filter,
+  // Search,
+  // Filter,
   Volleyball,
 } from "lucide-react";
 import NavigationClient from "./ui/NavigationClient";
@@ -113,7 +113,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
       {/* 메인 콘텐츠 */}
       <div className="lg:pl-20 xl:pl-72">
         {/* 모바일 헤더 */}
-        <header className="sticky top-0 z-40 bg-white border-b border-gray-200 lg:hidden">
+        {/* <header className="sticky top-0 z-40 bg-white border-b border-gray-200 lg:hidden">
           <div className="flex items-center justify-between px-4 py-3">
             <h1 className="text-lg font-semibold">
               {navItems.find((item) => item.id === activeTab)?.label || "팀즈"}
@@ -129,10 +129,10 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
               </div>
             )}
           </div>
-        </header>
+        </header> */}
 
         {/* 데스크톱/태블릿 헤더 */}
-        <header className="hidden lg:block sticky top-0 z-40 bg-white border-b border-gray-200">
+        {/* <header className="hidden lg:block sticky top-0 z-40 bg-white border-b border-gray-200">
           <div className="flex items-center justify-between px-6 py-4">
             <h1 className="text-xl font-semibold">
               {navItems.find((item) => item.id === activeTab)?.label || "팀즈"}
@@ -148,14 +148,14 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
               </div>
             )}
           </div>
-        </header>
+        </header> */}
 
         {/* 콘텐츠 */}
         <main className="pb-16 lg:pb-0">{children}</main>
       </div>
 
       {/* 모바일 하단 네비게이션 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden">
+      <nav className="fixed sm:bottom-2 bottom-0 left-0 right-0 bg-white/50 backdrop-blur-sm sm:border border-t border-l border-r sm:rounded-lg rounded-t-lg border-gray-200 lg:hidden max-w-xl mx-2 sm:mx-auto px-2">
         <div className="flex">
           {navItems.map((item) => {
             const Icon = item.icon;

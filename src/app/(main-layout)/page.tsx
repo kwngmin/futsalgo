@@ -92,13 +92,10 @@ const MainPage = () => {
       <div className="p-4 space-y-4">
         {/* 내 팀 섹션 */}
         {myTeams.length > 0 && (
-          <div>
-            <h2 className="text-lg font-semibold mb-3">내 팀</h2>
-            <div className="space-y-3">
-              {myTeams.map((team) => (
-                <TeamCard key={team.id} team={team} />
-              ))}
-            </div>
+          <div className="space-y-3">
+            {myTeams.map((team) => (
+              <TeamCard key={team.id} team={team} />
+            ))}
           </div>
         )}
 
