@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-// import { SessionProvider } from "next-auth/react";
 import { auth } from "@/shared/lib/auth";
 import { SessionProviderWrapper } from "@/shared/components/providers/session-provider";
 
@@ -26,6 +25,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
     <html lang="ko">
       <body
