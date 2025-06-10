@@ -111,7 +111,7 @@ const MainPage = () => {
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-semibold">팀</h1>
+        <h1 className="text-2xl font-semibold px-2">팀</h1>
         <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
           <Search className="w-5 h-5" />
         </button>
@@ -209,7 +209,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
           {team.logo}
           {team.isRecruiting && (
-            <span className="absolute -top-2 -left-2 mx-auto px-1.5 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-2xl flex-shrink-0 shadow-sm">
+            <span className="absolute -top-2 -left-2 px-2 py-1 text-xs font-semibold bg-gradient-to-br from-emerald-100 to-green-100 text-green-800 rounded-2xl flex-shrink-0 shadow-sm">
               모집중
             </span>
           )}
@@ -221,6 +221,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
             <h3 className="font-semibold text-base truncate mb-0.5">
               {team.name}
             </h3>
+            {/* 남성팀, 여성팀 구분 */}
             <span
               className={`size-5 flex items-center justify-center text-xs font-semibold rounded flex-shrink-0 ${
                 team.gender === "male"
@@ -244,39 +245,17 @@ const TeamCard = ({ team }: TeamCardProps) => {
               {team.memberCount}
             </div>
           </div>
-          <span className="text-gray-300">|</span>
+          {/* <span className="text-gray-300">|</span>
           <div className="w-12">
             <div className="text-xs text-gray-500 mb-1">경기</div>
             <div className="text-lg font-semibold text-gray-900">
               {team.totalMatches}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
   );
 };
-
-// // 더보기 콘텐츠 컴포넌트
-// const MoreContent = ({ items }) => {
-//   return (
-//     <div className="p-4">
-//       <div className="space-y-1">
-//         {items.map((item) => {
-//           const Icon = item.icon;
-//           return (
-//             <button
-//               key={item.id}
-//               className="w-full flex items-center px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
-//             >
-//               <Icon className="w-5 h-5 mr-3 text-gray-500" />
-//               <span className="text-gray-900">{item.label}</span>
-//             </button>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// };
 
 export default MainPage;
