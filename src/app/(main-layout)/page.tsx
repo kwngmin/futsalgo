@@ -231,7 +231,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
               {team.gender === "male" ? "M" : "F"}
             </span>
           </div>
-          <p className="text-gray-600 text-sm line-clamp-2">
+          <p className="text-gray-600 text-sm line-clamp-1 ">
             {team.description}
           </p>
         </div>
