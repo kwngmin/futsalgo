@@ -14,8 +14,9 @@ import {
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
-import { validateField } from "../OnboardingForm";
+import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/type";
+import { updateNickname } from "../model/onboarding-actions";
 
 type ValidationStatus = "idle" | "checking" | "valid" | "invalid";
 
@@ -35,7 +36,7 @@ export function OnboardingNickname({
     status: "idle",
   });
 
-  const debouncedNickname = useDebounce(nickname.value, 600);
+  const debouncedNickname = useDebounce(nickname.value, 450);
 
   useEffect(() => {
     const nicknameRegex = /^[가-힣a-zA-Z0-9]+$/;
@@ -62,9 +63,14 @@ export function OnboardingNickname({
   }, [debouncedNickname]);
 
   // 단계별 진행
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (nickname.status === "valid") {
-      setCurrentStep("profile");
+      try {
+        await updateNickname(nickname.value);
+        setCurrentStep("profile");
+      } catch (error) {
+        console.error("닉네임 업데이트 실패:", error);
+      }
     }
   };
 

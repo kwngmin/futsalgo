@@ -20,6 +20,9 @@ import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { ValidationStep } from "../model/type";
+import { POSITION_OPTIONS } from "@/shared/constants/profile";
+import { updateOnboardingData } from "../model/onboarding-actions";
+import { Position } from "@prisma/client";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -53,33 +56,12 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
-const POSITION_OPTIONS = [
-  { value: "FW", label: "포워드" },
-  { value: "CF", label: "센터 포워드" },
-  { value: "ST", label: "스트라이커" },
-  { value: "LWF", label: "레프트 윙 포워드" },
-  { value: "RWF", label: "라이트 윙 포워드" },
-  { value: "LW", label: "레프트 윙" },
-  { value: "RW", label: "라이트 윙" },
-  { value: "MF", label: "미드필더" },
-  { value: "CAM", label: "공격형 미드필더" },
-  { value: "CM", label: "센터 미드필더" },
-  { value: "CDM", label: "수비형 미드필더" },
-  { value: "LM", label: "레프트 미드필더" },
-  { value: "RM", label: "라이트 미드필더" },
-  { value: "DF", label: "수비수" },
-  { value: "CB", label: "센터백" },
-  { value: "LB", label: "레프트백" },
-  { value: "RB", label: "라이트백" },
-  { value: "LWB", label: "레프트 윙백" },
-  { value: "RWB", label: "라이트 윙백" },
-  { value: "GK", label: "골키퍼" },
-];
-
 export function OnboardingProfile({
   setCurrentStep,
+  name,
 }: {
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
+  name?: string;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -94,6 +76,7 @@ export function OnboardingProfile({
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
+      name,
       positions: [],
     },
   });
@@ -120,21 +103,22 @@ export function OnboardingProfile({
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/onboarding", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+      const response = await updateOnboardingData({
+        profile: {
+          ...data,
+          positions: data.positions as Position[],
+          birthYear: data.birthYear === "" ? undefined : data.birthYear,
+        },
       });
 
-      if (response.ok) {
+      if (response.success) {
         setCurrentStep("complete");
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push("/");
           router.refresh();
         }, 2000);
       } else {
-        const error = await response.json();
-        throw new Error(error.message || "온보딩 실패");
+        throw new Error(response.error || "온보딩 실패");
       }
     } catch (error) {
       console.error("Onboarding error:", error);

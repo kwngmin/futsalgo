@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, Dispatch, SetStateAction } from "react";
-// import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import OnboardingComplete from "./ui/Complete";
-import { OnboardingEmail } from "./ui/Email";
-import { OnboardingPhone } from "./ui/Phone";
-import { OnboardingNickname } from "./ui/Nickname";
-import { OnboardingProfile } from "./ui/Profile";
-import { ValidationField, ValidationStep } from "./model/type";
+import OnboardingComplete from "./OnboardingComplete";
+import { OnboardingEmail } from "./OnboardingEmail";
+import { OnboardingPhone } from "./OnboardingPhone";
+import { OnboardingNickname } from "./OnboardingNickname";
+import { OnboardingProfile } from "./OnboardingProfile";
+import { ValidationField, ValidationStep } from "../model/type";
 
 // 중복확인 함수
 export const validateField = async (
@@ -19,7 +18,7 @@ export const validateField = async (
   if (!value || value.trim() === "") return;
 
   setFieldState((prev) => ({ ...prev, status: "checking" }));
-  console.log(value, "value");
+
   try {
     const response = await fetch(`/api/check/${type}`, {
       method: "POST",
@@ -54,22 +53,10 @@ export const validateField = async (
   }
 };
 
-export function OnboardingForm() {
-  // const router = useRouter();
+export function OnboardingFlow() {
   const { data: session } = useSession();
-  const [currentStep, setCurrentStep] = useState<ValidationStep>(
-    session?.user?.email ? "phone" : "email"
-  );
-
-  // // 세션 데이터로 이메일 초기값 설정
-  // useEffect(() => {
-  //   if (session?.user?.email) {
-  //     setEmail((prev) => ({ ...prev, value: session.user.email! }));
-  //   }
-  //   if (session?.user?.name) {
-  //     setValue("name", session.user.name);
-  //   }
-  // }, [session, setValue]);
+  const initialStep = session?.user?.email ? "phone" : "email";
+  const [currentStep, setCurrentStep] = useState<ValidationStep>(initialStep);
 
   // 완료 화면
   if (currentStep === "complete") return <OnboardingComplete />;
@@ -80,12 +67,22 @@ export function OnboardingForm() {
 
   // 전화번호 확인 단계
   if (currentStep === "phone")
-    return <OnboardingPhone setCurrentStep={setCurrentStep} />;
+    return (
+      <OnboardingPhone
+        setCurrentStep={setCurrentStep}
+        initialStep={initialStep}
+      />
+    );
 
   // 닉네임 확인 단계
   if (currentStep === "nickname")
     return <OnboardingNickname setCurrentStep={setCurrentStep} />;
 
   // 프로필 정보 입력 단계
-  return <OnboardingProfile setCurrentStep={setCurrentStep} />;
+  return (
+    <OnboardingProfile
+      setCurrentStep={setCurrentStep}
+      name={session?.user.name}
+    />
+  );
 }

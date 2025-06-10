@@ -15,8 +15,9 @@ import {
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
-import { validateField } from "../OnboardingForm";
+import { validateField } from "./OnboardingFlow";
 import { ValidationField, ValidationStep } from "../model/type";
+import { updateEmail } from "../model/onboarding-actions";
 
 export function OnboardingEmail({
   setCurrentStep,
@@ -29,7 +30,7 @@ export function OnboardingEmail({
     status: "idle",
   });
 
-  const debouncedEmail = useDebounce(email.value, 300);
+  const debouncedEmail = useDebounce(email.value, 450);
 
   useEffect(() => {
     if (debouncedEmail) {
@@ -43,14 +44,19 @@ export function OnboardingEmail({
   }, [debouncedEmail]);
 
   // 단계별 진행
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (email.status === "valid") {
-      setCurrentStep("phone");
+      try {
+        await updateEmail(email.value);
+        setCurrentStep("phone");
+      } catch (error) {
+        console.error("이메일 업데이트 실패:", error);
+      }
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-red-500">
+    <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle>이메일 확인</CardTitle>
         <CardDescription>사용할 이메일 주소를 확인해주세요</CardDescription>
@@ -91,7 +97,7 @@ export function OnboardingEmail({
         <div className="flex gap-3">
           <Button
             variant="outline"
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push("/")}
             className="flex-1"
           >
             나중에 하기

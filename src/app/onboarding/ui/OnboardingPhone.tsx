@@ -14,20 +14,25 @@ import {
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
-import { validateField } from "../OnboardingForm";
+import { validateField } from "./OnboardingFlow";
 import { ValidationField, ValidationStep } from "../model/type";
+import { useRouter } from "next/navigation";
+import { updatePhone } from "../model/onboarding-actions";
 
 export function OnboardingPhone({
   setCurrentStep,
+  initialStep,
 }: {
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
+  initialStep: ValidationStep;
 }) {
+  const router = useRouter();
   const [phone, setPhone] = useState<ValidationField>({
     value: "",
     status: "idle",
   });
 
-  const debouncedPhone = useDebounce(phone.value, 600);
+  const debouncedPhone = useDebounce(phone.value, 450);
 
   // 전화번호 실시간 검증
   useEffect(() => {
@@ -53,9 +58,14 @@ export function OnboardingPhone({
   }, [debouncedPhone]);
 
   // 단계별 진행
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (phone.status === "valid") {
-      setCurrentStep("nickname");
+      try {
+        await updatePhone(phone.value);
+        setCurrentStep("nickname");
+      } catch (error) {
+        console.error("전화번호 업데이트 실패:", error);
+      }
     }
   };
 
@@ -105,13 +115,23 @@ export function OnboardingPhone({
           )}
         </div>
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep("email")}
-            className="flex-1"
-          >
-            이전
-          </Button>
+          {initialStep === "phone" ? (
+            <Button
+              variant="outline"
+              onClick={() => router.push("/")}
+              className="flex-1"
+            >
+              나중에 하기
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => setCurrentStep("email")}
+              className="flex-1"
+            >
+              이전
+            </Button>
+          )}
           <Button
             onClick={handleNextStep}
             disabled={phone.status !== "valid"}

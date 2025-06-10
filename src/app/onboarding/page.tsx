@@ -1,6 +1,6 @@
 import { auth } from "@/shared/lib/auth";
 import { redirect } from "next/navigation";
-import { OnboardingForm } from "./OnboardingForm";
+import { OnboardingFlow } from "./ui/OnboardingFlow";
 
 const OnboardingPage = async () => {
   const session = await auth();
@@ -9,9 +9,10 @@ const OnboardingPage = async () => {
     redirect("/login");
   }
 
-  //   if (session.user?.nickname) {
-  //     redirect("/dashboard");
-  //   }
+  if (session.user.phone) {
+    redirect("/");
+  }
+  console.log(session, "session");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
@@ -22,7 +23,7 @@ const OnboardingPage = async () => {
             서비스 이용을 위해 닉네임을 설정해주세요
           </p>
         </div>
-        <OnboardingForm />
+        <OnboardingFlow />
       </div>
     </div>
   );

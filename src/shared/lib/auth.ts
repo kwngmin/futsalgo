@@ -4,12 +4,26 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import Kakao from "next-auth/providers/kakao";
+import { Foot, Gender, Position } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session {
     user: {
+      birthYear: number | null;
+      createdAt: Date;
+      email: string | null;
+      emailVerified: Date | null;
+      foot: Foot | null;
+      gender: Gender | null;
+      height: number | null;
+      image: string | null;
+      injured: boolean;
       name: string;
-      image: string;
+      nickname: string | null;
+      phone: string | null;
+      position: Position | null;
+      updatedAt: Date;
+      weight: number | null;
     } & DefaultSession["user"];
   }
 }
