@@ -110,13 +110,13 @@ const MainPage = () => {
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-semibold px-2">팀</h1>
+      <div className="flex items-center justify-between px-6 h-16 shrink-0">
+        <h1 className="text-2xl font-semibold">팀</h1>
         <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
           <Search className="w-5 h-5" />
         </button>
       </div>
-      <div className="px-4 space-y-4">
+      <div className="px-2 space-y-4">
         <div>
           {/* 내 팀 섹션 */}
           {myTeams.length > 0 ? (
@@ -203,7 +203,7 @@ type TeamCardProps = {
 
 const TeamCard = ({ team }: TeamCardProps) => {
   return (
-    <div className="bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer">
+    <div className="bg-white rounded-2xl p-3 shadow-sm/5 hover:shadow-md/5 transition-shadow cursor-pointer">
       <div className="flex items-start gap-3">
         {/* 팀 로고 */}
         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
