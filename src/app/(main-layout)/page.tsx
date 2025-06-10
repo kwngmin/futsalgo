@@ -1,4 +1,7 @@
-import { Users } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Search } from "lucide-react";
 
 // 샘플 팀 데이터
 const teams = [
@@ -82,45 +85,98 @@ const teams = [
   },
 ];
 
+type FilterType = "all" | "male" | "female";
+
 const MainPage = () => {
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
+
+  // 필터에 따라 팀 목록 필터링
+  const filteredTeams = teams.filter((team) => {
+    if (selectedFilter === "all") return true;
+    return team.gender === selectedFilter;
+  });
+
   // 내 팀과 다른 팀 분리
   const myTeams = teams.filter((team) => team.isJoined);
-  const otherTeams = teams.filter((team) => !team.isJoined);
+  const otherTeams = filteredTeams.filter((team) => !team.isJoined);
+
+  // 필터 옵션들
+  const filterOptions = [
+    { id: "all", label: "전체" },
+    { id: "male", label: "남성" },
+    { id: "female", label: "여성" },
+  ];
 
   return (
-    <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl">
-      <div className="p-4 space-y-4">
-        {/* 내 팀 섹션 */}
-        {myTeams.length > 0 && (
-          <div className="space-y-3">
-            {myTeams.map((team) => (
-              <TeamCard key={team.id} team={team} />
-            ))}
-          </div>
-        )}
-
-        {/* 다른 팀 섹션 */}
+    <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
+      {/* 상단: 제목과 검색 */}
+      <div className="flex items-center justify-between px-4 h-16 shrink-0">
+        <h1 className="text-2xl font-semibold">팀</h1>
+        <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <Search className="w-5 h-5" />
+        </button>
+      </div>
+      <div className="px-4 space-y-4">
         <div>
-          <h2 className="text-lg font-semibold mb-3">
-            {myTeams.length > 0 ? "다른 팀" : "전체 팀"}
-          </h2>
+          {/* 내 팀 섹션 */}
+          {myTeams.length > 0 ? (
+            <div className="space-y-3">
+              {myTeams.map((team) => (
+                <TeamCard key={team.id} team={team} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-6 bg-gray-100 rounded-2xl p-4">
+              {/* 팀이 없는 경우 */}
+              {/* <Users className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
+              <h3 className="font-medium text-gray-900">
+                소속된 팀이 없습니다
+              </h3>
+              <p className="text-gray-500 text-sm">
+                새로운 팀을 만드시거나 팀 코드를 입력하여 가입해보세요.
+              </p>
+              <div className="flex gap-2 justify-center mt-3">
+                <button className="text-sm bg-black text-white px-4 min-w-28 py-1.5 rounded-full font-bold cursor-pointer">
+                  팀 만들기
+                </button>
+                <button className="text-sm bg-white text-black px-4 min-w-28 py-1.5 rounded-full cursor-pointer">
+                  팀 코드 입력
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        {/* 다른 팀 섹션 */}
+        <div className="flex flex-col gap-2">
+          {/* 하단: 필터 칩들 */}
+          <div className="flex items-center gap-2">
+            {/* <span className="text-sm font-semibold text-gray-600 mr-1">
+              구분
+            </span> */}
+            <div className="flex gap-1 bg-gray-100 rounded-full p-1">
+              {filterOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setSelectedFilter(option.id as FilterType)}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors cursor-pointer ${
+                    selectedFilter === option.id
+                      ? "bg-black text-white font-bold"
+                      : "text-gray-700 hover:bg-gray-50"
+                    //   : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="space-y-3">
             {otherTeams.map((team) => (
               <TeamCard key={team.id} team={team} />
             ))}
           </div>
         </div>
-
-        {/* 팀이 없는 경우 */}
-        {teams.length === 0 && (
-          <div className="text-center py-12">
-            <Users className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              팀이 없습니다
-            </h3>
-            <p className="text-gray-500 mb-6">새 팀을 만들어보세요</p>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -147,50 +203,52 @@ type TeamCardProps = {
 
 const TeamCard = ({ team }: TeamCardProps) => {
   return (
-    <div className="bg-white rounded-lg p-3 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer">
       <div className="flex items-start gap-3">
         {/* 팀 로고 */}
-        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
+        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
           {team.logo}
+          {team.isRecruiting && (
+            <span className="absolute -top-2 -left-2 mx-auto px-1.5 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-2xl flex-shrink-0 shadow-sm">
+              모집중
+            </span>
+          )}
         </div>
 
         {/* 팀 정보 */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-lg truncate">{team.name}</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-base truncate mb-0.5">
+              {team.name}
+            </h3>
             <span
-              className={`px-2 py-1 text-xs font-medium rounded-full flex-shrink-0 ${
+              className={`size-5 flex items-center justify-center text-xs font-semibold rounded flex-shrink-0 ${
                 team.gender === "male"
-                  ? "bg-blue-100 text-blue-800"
-                  : "bg-pink-100 text-pink-800"
+                  ? "bg-blue-50 text-blue-600"
+                  : "bg-pink-50 text-pink-600"
               }`}
             >
-              {team.gender === "male" ? "남성팀" : "여성팀"}
+              {team.gender === "male" ? "M" : "F"}
             </span>
-            {team.isRecruiting && (
-              <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full flex-shrink-0">
-                모집중
-              </span>
-            )}
           </div>
           <p className="text-gray-600 text-sm line-clamp-2">
             {team.description}
           </p>
         </div>
 
-        {/* 누적 경기수와 멤버 수 */}
+        {/* 누적 경기수와 팀원 수 */}
         <div className="text-center flex-shrink-0 flex items-center gap-2">
           <div className="w-12">
-            <div className="text-xs text-gray-500 mb-1">경기</div>
+            <div className="text-xs text-gray-500 mb-1">팀원</div>
             <div className="text-lg font-semibold text-gray-900">
-              {team.totalMatches}
+              {team.memberCount}
             </div>
           </div>
           <span className="text-gray-300">|</span>
           <div className="w-12">
-            <div className="text-xs text-gray-500 mb-1">멤버</div>
+            <div className="text-xs text-gray-500 mb-1">경기</div>
             <div className="text-lg font-semibold text-gray-900">
-              {team.memberCount}
+              {team.totalMatches}
             </div>
           </div>
         </div>

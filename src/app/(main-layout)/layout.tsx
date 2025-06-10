@@ -1,8 +1,9 @@
 import {
   Users,
-  MessageCircle,
-  BarChart3,
+  // MessageCircle,
+  Shirt,
   MoreHorizontal,
+  MessageCircleMore,
   // Search,
   // Filter,
   Volleyball,
@@ -21,22 +22,22 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
 
   // 현재 경로에서 활성 탭 결정
   const getActiveTab = (path: string) => {
-    if (path.startsWith("/matches")) return "matches";
-    if (path.startsWith("/teams")) return "teams";
-    if (path.startsWith("/board")) return "board";
-    if (path.startsWith("/stats")) return "stats";
+    if (path.startsWith("/matches")) return "match";
+    if (path.startsWith("/")) return "team";
+    if (path.startsWith("/users")) return "user";
+    if (path.startsWith("/boards")) return "board";
     if (path.startsWith("/more")) return "more";
-    return "teams"; // 기본값
+    return "team"; // 기본값
   };
 
   const activeTab = getActiveTab(pathname);
 
   // 내비게이션 메뉴 정의
   const navItems = [
-    { id: "matches", label: "경기", icon: Volleyball, href: "/matches" },
-    { id: "teams", label: "팀즈", icon: Users, href: "/teams" },
-    { id: "board", label: "게시판", icon: MessageCircle, href: "/board" },
-    { id: "stats", label: "통계", icon: BarChart3, href: "/stats" },
+    { id: "match", label: "경기", icon: Volleyball, href: "/matches" },
+    { id: "team", label: "팀", icon: Shirt, href: "/" },
+    { id: "user", label: "유저", icon: Users, href: "/users" },
+    { id: "board", label: "게시판", icon: MessageCircleMore, href: "/boards" },
     { id: "more", label: "더보기", icon: MoreHorizontal, href: "/more" },
   ];
 
@@ -110,52 +111,11 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
         </div>
       </div>
 
-      {/* 메인 콘텐츠 */}
-      <div className="lg:pl-20 xl:pl-72">
-        {/* 모바일 헤더 */}
-        {/* <header className="sticky top-0 z-40 bg-white border-b border-gray-200 lg:hidden">
-          <div className="flex items-center justify-between px-4 py-3">
-            <h1 className="text-lg font-semibold">
-              {navItems.find((item) => item.id === activeTab)?.label || "팀즈"}
-            </h1>
-            {activeTab === "teams" && (
-              <div className="flex items-center gap-2">
-                <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-full">
-                  <Search className="w-5 h-5" />
-                </button>
-                <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-full">
-                  <Filter className="w-5 h-5" />
-                </button>
-              </div>
-            )}
-          </div>
-        </header> */}
-
-        {/* 데스크톱/태블릿 헤더 */}
-        {/* <header className="hidden lg:block sticky top-0 z-40 bg-white border-b border-gray-200">
-          <div className="flex items-center justify-between px-6 py-4">
-            <h1 className="text-xl font-semibold">
-              {navItems.find((item) => item.id === activeTab)?.label || "팀즈"}
-            </h1>
-            {activeTab === "teams" && (
-              <div className="flex items-center gap-3">
-                <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                  <Search className="w-5 h-5" />
-                </button>
-                <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                  <Filter className="w-5 h-5" />
-                </button>
-              </div>
-            )}
-          </div>
-        </header> */}
-
-        {/* 콘텐츠 */}
-        <main className="pb-16 lg:pb-0">{children}</main>
-      </div>
+      {/* 콘텐츠 */}
+      <main className="lg:pl-20 xl:pl-72 pb-16 lg:pb-0">{children}</main>
 
       {/* 모바일 하단 네비게이션 */}
-      <nav className="fixed sm:bottom-2 bottom-0 left-0 right-0 bg-white/50 backdrop-blur-sm sm:border border-t border-l border-r sm:rounded-lg rounded-t-lg border-gray-200 lg:hidden max-w-xl mx-2 sm:mx-auto px-2">
+      <nav className="fixed bottom-2 left-0 right-0 bg-white/50 backdrop-blur-sm rounded-lg lg:hidden max-w-xl mx-2 sm:mx-auto px-0.5 sm:px-1.5 shadow">
         <div className="flex">
           {navItems.map((item) => {
             const Icon = item.icon;
