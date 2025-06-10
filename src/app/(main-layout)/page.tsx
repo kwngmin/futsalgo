@@ -122,7 +122,7 @@ const MainPage = () => {
           {myTeams.length > 0 ? (
             <div className="space-y-3">
               {myTeams.map((team) => (
-                <TeamCard key={team.id} team={team} />
+                <TeamCard key={team.id} team={team} myTeam={true} />
               ))}
             </div>
           ) : (
@@ -199,11 +199,16 @@ type Team = {
 
 type TeamCardProps = {
   team: Team;
+  myTeam?: boolean;
 };
 
-const TeamCard = ({ team }: TeamCardProps) => {
+const TeamCard = ({ team, myTeam = false }: TeamCardProps) => {
   return (
-    <div className="bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer">
+    <div
+      className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ${
+        myTeam ? "ring-2 ring-input" : ""
+      }`}
+    >
       <div className="flex items-start gap-3">
         {/* 팀 로고 */}
         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
