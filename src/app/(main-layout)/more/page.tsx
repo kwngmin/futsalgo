@@ -21,7 +21,7 @@ import {
   //   Edit,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
-// import Image from "next/image";
+import Image from "next/image";
 
 const MorePage = () => {
   const session = useSession();
@@ -73,41 +73,36 @@ const MorePage = () => {
           <div
             className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ring-2 ring-accent`}
           >
-            {session.data ? (
+            {session.data.user.image ? (
               <div className="flex items-start gap-3">
                 <div className="relative">
                   <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    {/* {session.data?.user?.image ? (
-                      <Image
-                        width={48}
-                        height={48}
-                        src={session.data?.user?.image}
-                        alt={session.data?.user?.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <User className="w-6 h-6 text-gray-400" />
-                    )} */}
+                    <Image
+                      width={48}
+                      height={48}
+                      src={session.data?.user?.image}
+                      alt="profile_image"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   {/* MorePage */}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold text-base truncate mb-0.5">
-                      {/* {session.data.user.name} */}
+                      {session.data.user.name}
                     </h3>
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-1">
                     가입일:
-                    {/* {new Date(session.data.user.createdAt).toLocaleDateString(
+                    {new Date(session.data.user.createdAt).toLocaleDateString(
                       "ko-KR",
                       {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
                       }
-                    )} */}
-                    {/* 소속 팀 없음 */}
+                    )}
                   </p>
                 </div>
               </div>
