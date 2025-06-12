@@ -56,7 +56,7 @@ const MorePage = () => {
 
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
-      {true && (
+      {isLoading && (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-white/50 backdrop-blur-lg rounded-lg outline-2 outline-white shadow-2xl shadow-black/5">
           <Loader2
             className="w-4 h-4 animate-spin"
