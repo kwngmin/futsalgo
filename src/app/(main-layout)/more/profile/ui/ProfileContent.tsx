@@ -235,7 +235,7 @@ export default function ProfileContent({
         </div>
       </div> */}
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-6 h-16 shrink-0">
+      <div className="flex items-center justify-between h-16 shrink-0">
         <Button
           variant="ghost"
           size="lg"
