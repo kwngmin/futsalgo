@@ -16,8 +16,8 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { validateField } from "./OnboardingFlow";
-import { ValidationField, ValidationStep } from "../model/type";
-import { updateEmail } from "../model/onboarding-actions";
+import { ValidationField, ValidationStep } from "../model/types";
+import { updateEmail } from "../model/actions";
 
 export function OnboardingEmail({
   setCurrentStep,

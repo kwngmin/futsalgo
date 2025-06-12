@@ -15,8 +15,8 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { validateField } from "./OnboardingFlow";
-import { ValidationStep } from "../model/type";
-import { updateNickname } from "../model/onboarding-actions";
+import { ValidationStep } from "../model/types";
+import { updateNickname } from "../model/actions";
 
 type ValidationStatus = "idle" | "checking" | "valid" | "invalid";
 

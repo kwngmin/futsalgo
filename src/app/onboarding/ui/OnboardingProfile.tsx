@@ -19,9 +19,9 @@ import { Badge } from "@/shared/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
-import { ValidationStep } from "../model/type";
+import { ValidationStep } from "../model/types";
 import { POSITION_OPTIONS } from "@/shared/constants/profile";
-import { updateOnboardingData } from "../model/onboarding-actions";
+import { updateOnboardingData } from "../model/actions";
 import { Position } from "@prisma/client";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)

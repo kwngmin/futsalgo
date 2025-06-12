@@ -1,29 +1,13 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import {
-  //   User,
-  LogOut,
-  LogIn,
-  //   Settings,
-  //   Bell,
-  //   Globe,
-  //   Moon,
-  //   Sun,
-  //   HelpCircle,
-  FileText,
-  Shield,
-  ChevronRight,
-  //   Info,
-  //   Star,
-  //   Clock,
-  //   Share2,
-  //   Edit,
-} from "lucide-react";
+import { LogOut, LogIn, FileText, Shield, ChevronRight } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const MorePage = () => {
+  const router = useRouter();
   const session = useSession();
   console.log(session, "data123123");
   console.log(session.data, "data");
@@ -59,6 +43,12 @@ const MorePage = () => {
     },
   ];
 
+  const provider = {
+    google: "Google",
+    kakao: "Kakao",
+    naver: "Naver",
+  };
+
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
@@ -72,6 +62,7 @@ const MorePage = () => {
         <div className="px-3 space-y-4">
           <div
             className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ring-2 ring-accent`}
+            onClick={() => router.push("/more/profile")}
           >
             {session.data.user.image ? (
               <div className="flex items-start gap-3">
@@ -102,7 +93,13 @@ const MorePage = () => {
                         month: "long",
                         day: "numeric",
                       }
-                    )}
+                    )}{" "}
+                    •{" "}
+                    {
+                      provider[
+                        session.data.user.provider as keyof typeof provider
+                      ]
+                    }
                   </p>
                 </div>
               </div>
