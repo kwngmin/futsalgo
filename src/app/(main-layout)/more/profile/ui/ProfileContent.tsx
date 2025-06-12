@@ -8,7 +8,6 @@ import { z } from "zod/v4";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { Card, CardContent } from "@/shared/components/ui/card";
 import { Badge } from "@/shared/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
@@ -35,6 +34,7 @@ import { Position, User } from "@prisma/client";
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
   name: z.string().min(1, "이름을 입력해주세요"),
+  nickname: z.string().min(1, "닉네임을 입력해주세요"),
   email: z.string().email("올바른 이메일 형식을 입력해주세요"),
   phone: z.string().min(10, "올바른 전화번호를 입력해주세요"),
   foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
@@ -113,6 +113,7 @@ export default function ProfileContent({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: data.name || "",
+      nickname: data.nickname || "",
       email: data.email || "",
       phone: data.phone || "",
       positions: data.positions || [],
@@ -175,7 +176,7 @@ export default function ProfileContent({
   };
 
   const renderFieldModal = (
-    field: "name" | "email" | "phone",
+    field: "nickname" | "email" | "phone",
     title: string,
     placeholder: string
   ) => (
@@ -196,7 +197,7 @@ export default function ProfileContent({
           }`}
         >
           <div className="flex items-center space-x-3">
-            {field === "name" ? (
+            {field === "nickname" ? (
               <CircleUserRound className={`w-5 h-5 text-gray-600`} />
             ) : field === "email" ? (
               <Mail className={`w-5 h-5 text-gray-600`} />
@@ -279,186 +280,208 @@ export default function ProfileContent({
         {/* 기본 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
           {/* <h3 className="text-sm font-medium text-gray-900">기본 정보</h3> */}
-          {renderFieldModal("name", "닉네임", "닉네임을 입력하세요")}
+          {renderFieldModal("nickname", "닉네임", "닉네임을 입력하세요")}
           {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
           {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
         </div>
 
-        <Card className="w-full max-w-2xl mx-auto">
-          {/* <CardHeader className="px-4">
+        {/* <CardHeader className="px-4">
             <CardTitle>프로필 정보</CardTitle>
             <CardDescription>
               축구 활동을 위한 기본 정보를 관리해주세요
             </CardDescription>
           </CardHeader> */}
-          <CardContent className="space-y-6 px-4">
-            {/* 프로필 폼 */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* 주발 */}
-              <div className="space-y-3">
-                <Label>주로 사용하는 발</Label>
-                <RadioGroup
-                  className="grid-cols-3 gap-2"
-                  value={watch("foot")}
-                  onValueChange={(value) =>
-                    setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
-                  }
-                >
-                  {[
-                    { value: "RIGHT", label: "오른발" },
-                    { value: "LEFT", label: "왼발" },
-                    { value: "BOTH", label: "양발" },
-                  ].map((option) => (
-                    <label
-                      key={option.value}
-                      className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer"
-                    >
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value}>{option.label}</Label>
-                    </label>
-                  ))}
-                </RadioGroup>
-                {errors.foot && (
-                  <Alert>
-                    <AlertDescription>{errors.foot.message}</AlertDescription>
-                  </Alert>
-                )}
+        <div className="space-y-6 p-4 bg-white rounded-2xl">
+          {/* 프로필 폼 */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* 포지션 */}
+            <div className="space-y-3">
+              <Label>
+                선호하는 포지션 • {selectedPositions?.length || 0}/5
+              </Label>
+              <div className="flex flex-wrap gap-2">
+                {POSITION_OPTIONS.map((position) => (
+                  <Badge
+                    key={position.value}
+                    variant={
+                      selectedPositions?.includes(position.value)
+                        ? "default"
+                        : "outline"
+                    }
+                    className="cursor-pointer text-center justify-center items-center h-9 px-3 rounded-full"
+                    onClick={() => togglePosition(position.value)}
+                  >
+                    {`${position.value} - ${position.label}`}
+                  </Badge>
+                ))}
               </div>
-
-              {/* 성별 */}
-              <div className="space-y-3">
-                <Label>성별</Label>
-                <RadioGroup
-                  className="grid-cols-2"
-                  value={watch("gender")}
-                  onValueChange={(value) =>
-                    setValue("gender", value as "MALE" | "FEMALE")
-                  }
-                >
-                  {[
-                    { value: "MALE", label: "남성" },
-                    { value: "FEMALE", label: "여성" },
-                  ].map((option) => (
-                    <label
-                      key={option.value}
-                      className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer"
-                    >
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value}>{option.label}</Label>
-                    </label>
-                  ))}
-                </RadioGroup>
-                {errors.gender && (
-                  <Alert>
-                    <AlertDescription>{errors.gender.message}</AlertDescription>
-                  </Alert>
-                )}
-              </div>
-
-              {/* 포지션 */}
-              <div className="space-y-3">
-                <Label>
-                  선호하는 포지션 • {selectedPositions?.length || 0}/5
-                </Label>
-                <div className="flex flex-wrap gap-2">
-                  {POSITION_OPTIONS.map((position) => (
-                    <Badge
-                      key={position.value}
-                      variant={
-                        selectedPositions?.includes(position.value)
-                          ? "default"
-                          : "outline"
-                      }
-                      className="cursor-pointer text-center justify-center items-center h-8 px-3 rounded-full"
-                      onClick={() => togglePosition(position.value)}
-                    >
-                      {`${position.value} - ${position.label}`}
-                    </Badge>
-                  ))}
-                </div>
-                {/* <p className="text-sm text-gray-500">
+              {/* <p className="text-sm text-gray-500">
                   선택된 포지션: {selectedPositions?.length || 0}/5
                 </p> */}
-                {errors.positions && (
-                  <Alert>
-                    <AlertDescription>
-                      {errors.positions.message}
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-
-              {/* 신장 */}
-              <div className="space-y-2">
-                <Label htmlFor="height">키 (cm)</Label>
-                <Input
-                  {...register("height", { valueAsNumber: true })}
-                  id="height"
-                  type="number"
-                  min="100"
-                  max="250"
-                  placeholder="175"
-                />
-                {errors.height && (
-                  <Alert>
-                    <AlertDescription>{errors.height.message}</AlertDescription>
-                  </Alert>
-                )}
-              </div>
-
-              {/* 출생년도 */}
-              <div className="space-y-2">
-                <Label htmlFor="birthYear" className="gap-1">
-                  출생년도<span className="text-gray-400">(선택)</span>
-                </Label>
-                <Input
-                  {...register("birthYear", { valueAsNumber: true })}
-                  id="birthYear"
-                  type="number"
-                  min="1950"
-                  max={new Date().getFullYear()}
-                  placeholder="1990"
-                />
-                {errors.birthYear && (
-                  <Alert>
-                    <AlertDescription>
-                      {errors.birthYear.message}
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-
-              {errors.root && (
+              {errors.positions && (
                 <Alert>
-                  <AlertDescription>{errors.root.message}</AlertDescription>
+                  <AlertDescription>
+                    {errors.positions.message}
+                  </AlertDescription>
                 </Alert>
               )}
+            </div>
 
-              {/* 저장 버튼 */}
-              <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    저장 중...
-                  </>
-                ) : (
-                  "저장"
-                )}
-              </Button>
-              {/* 최근 수정일 */}
-              {data.updatedAt && (
-                <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
-                  최근 수정일:{" "}
-                  {data.updatedAt.toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </div>
+            {/* 주발 */}
+            <div className="space-y-3">
+              <Label>주로 사용하는 발</Label>
+              <RadioGroup
+                className="flex flex-wrap gap-2"
+                value={watch("foot")}
+                onValueChange={(value) =>
+                  setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
+                }
+              >
+                {[
+                  { value: "RIGHT", label: "오른발" },
+                  { value: "LEFT", label: "왼발" },
+                  { value: "BOTH", label: "양발" },
+                ].map((option) => (
+                  <label
+                    key={option.value}
+                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-22 border border-input h-9 pt-0.5"
+                    htmlFor={option.value}
+                  >
+                    <RadioGroupItem value={option.value} id={option.value} />
+                    <span className="text-sm leading-none font-semibold">
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </RadioGroup>
+              {errors.foot && (
+                <Alert>
+                  <AlertDescription>{errors.foot.message}</AlertDescription>
+                </Alert>
               )}
-            </form>
-          </CardContent>
-        </Card>
+            </div>
+
+            {/* 신장 */}
+            <div className="space-y-2">
+              <Label htmlFor="height">키 (cm)</Label>
+              <Input
+                {...register("height", { valueAsNumber: true })}
+                id="height"
+                type="number"
+                min="100"
+                max="250"
+                placeholder="175"
+              />
+              {errors.height && (
+                <Alert>
+                  <AlertDescription>{errors.height.message}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            {/* 이름 */}
+            <div className="space-y-2">
+              <Label htmlFor="name" className="gap-1">
+                이름 (실명)
+              </Label>
+              <Input
+                {...register("name")}
+                id="name"
+                type="text"
+                placeholder="이름을 입력하세요"
+              />
+              {errors.name && (
+                <Alert>
+                  <AlertDescription>{errors.name.message}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            {/* 출생년도 */}
+            <div className="space-y-2">
+              <Label htmlFor="birthYear" className="gap-1">
+                출생년도<span className="text-gray-400">(선택)</span>
+              </Label>
+              <Input
+                {...register("birthYear", { valueAsNumber: true })}
+                id="birthYear"
+                type="number"
+                min="1950"
+                max={new Date().getFullYear()}
+                placeholder="1990"
+              />
+              {errors.birthYear && (
+                <Alert>
+                  <AlertDescription>
+                    {errors.birthYear.message}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            {/* 성별 */}
+            <div className="space-y-3">
+              <Label>성별</Label>
+              <RadioGroup
+                className="flex flex-wrap gap-2"
+                value={watch("gender")}
+                onValueChange={(value) =>
+                  setValue("gender", value as "MALE" | "FEMALE")
+                }
+              >
+                {[
+                  { value: "MALE", label: "남성" },
+                  { value: "FEMALE", label: "여성" },
+                ].map((option) => (
+                  <label
+                    key={option.value}
+                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-22 border border-input h-9 pt-0.5"
+                    htmlFor={option.value}
+                  >
+                    <RadioGroupItem value={option.value} id={option.value} />
+                    <span className="text-sm leading-none font-semibold">
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </RadioGroup>
+              {errors.gender && (
+                <Alert>
+                  <AlertDescription>{errors.gender.message}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            {errors.root && (
+              <Alert>
+                <AlertDescription>{errors.root.message}</AlertDescription>
+              </Alert>
+            )}
+
+            {/* 저장 버튼 */}
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  저장 중...
+                </>
+              ) : (
+                "저장"
+              )}
+            </Button>
+            {/* 최근 수정일 */}
+            {data.updatedAt && (
+              <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
+                최근 수정일:{" "}
+                {data.updatedAt.toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );
