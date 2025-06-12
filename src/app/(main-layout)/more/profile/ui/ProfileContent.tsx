@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { Loader2, Edit, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Pencil } from "lucide-react";
 import { POSITION_OPTIONS } from "@/shared/constants/profile";
 import { Position, User } from "@prisma/client";
 
@@ -182,12 +182,12 @@ export default function ProfileContent({
       title={`${title} 수정`}
       description={`새로운 ${title}을 입력해주세요.`}
       trigger={
-        <div className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+        <div className="flex items-center justify-between py-3 px-4 bg-white cursor-pointer border-b border-gray-100 last:border-b-0">
           <div>
             <p className="text-sm text-gray-600">{title}</p>
             <p className="font-medium">{getValues(field) || "설정되지 않음"}</p>
           </div>
-          <Edit className="h-4 w-4 text-gray-400" />
+          <Pencil className="h-4 w-4 text-gray-400" />
         </div>
       }
     >
@@ -235,12 +235,12 @@ export default function ProfileContent({
         </div>
       </div> */}
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between h-16 shrink-0">
+      <div className="flex items-center justify-between h-16 shrink-0 px-3">
         <Button
           variant="ghost"
           size="lg"
           onClick={handleGoBack}
-          className="flex items-center px-1 pl-2"
+          className="flex items-center gap-1.5 !px-2"
           // className="mr-2"
         >
           <ArrowLeft
@@ -248,30 +248,41 @@ export default function ProfileContent({
             // className="h-12 w-12"
             style={{ width: "24px", height: "24px" }}
           />
-          <h1 className="text-2xl font-bold">프로필 정보</h1>
+          <h1 className="text-2xl font-bold">프로필</h1>
         </Button>
         <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
           {/* <Search className="w-5 h-5" /> */}
         </button>
       </div>
 
-      <div className="px-4">
+      <div className="px-3 space-y-4">
+        {/* 기본 정보 섹션 */}
+        <div className="ring-2 ring-accent rounded-2xl overflow-hidden">
+          {/* 최근 수정일 */}
+          {/* {data.updatedAt && (
+            <div className="text-sm font-medium mb-3 px-2 text-gray-600">
+              최근 수정일:{" "}
+              {data.updatedAt.toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </div>
+          )} */}
+          {/* <h3 className="text-sm font-medium text-gray-900">기본 정보</h3> */}
+          {renderFieldModal("name", "닉네임", "닉네임을 입력하세요")}
+          {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
+          {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
+        </div>
+
         <Card className="w-full max-w-2xl mx-auto">
-          <CardHeader>
+          <CardHeader className="px-4">
             <CardTitle>프로필 정보</CardTitle>
             <CardDescription>
               축구 활동을 위한 기본 정보를 관리해주세요
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* 기본 정보 섹션 */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-900">기본 정보</h3>
-              {renderFieldModal("name", "닉네임", "닉네임을 입력하세요")}
-              {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
-              {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
-            </div>
-
+          <CardContent className="space-y-6 px-4">
             {/* 프로필 폼 */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* 주발 */}
@@ -337,7 +348,9 @@ export default function ProfileContent({
 
               {/* 포지션 */}
               <div className="space-y-3">
-                <Label>선호 포지션</Label>
+                <Label>
+                  선호하는 포지션 • {selectedPositions?.length || 0}/5
+                </Label>
                 <div className="flex flex-wrap gap-2">
                   {POSITION_OPTIONS.map((position) => (
                     <Badge
@@ -354,9 +367,9 @@ export default function ProfileContent({
                     </Badge>
                   ))}
                 </div>
-                <p className="text-sm text-gray-500">
+                {/* <p className="text-sm text-gray-500">
                   선택된 포지션: {selectedPositions?.length || 0}/5
-                </p>
+                </p> */}
                 {errors.positions && (
                   <Alert>
                     <AlertDescription>
@@ -423,18 +436,6 @@ export default function ProfileContent({
                   "저장"
                 )}
               </Button>
-
-              {/* 최근 수정일 */}
-              {data.updatedAt && (
-                <div className="text-center text-sm text-gray-500 pt-4 border-t">
-                  최근 수정일:{" "}
-                  {data.updatedAt.toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </div>
-              )}
             </form>
           </CardContent>
         </Card>
