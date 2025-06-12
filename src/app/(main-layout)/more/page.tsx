@@ -1,18 +1,23 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { LogOut, LogIn, FileText, Shield, ChevronRight } from "lucide-react";
+import {
+  LogOut,
+  LogIn,
+  FileText,
+  Shield,
+  ChevronRight,
+  Loader2,
+} from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const MorePage = () => {
   const router = useRouter();
   const session = useSession();
-  console.log(session, "data123123");
-  console.log(session.data, "data");
-  console.log(session.data?.user, "session");
-  console.log(session.data?.user?.image, "image");
+  const [isLoading, setIsLoading] = useState(false);
 
   const menuItems = [
     // {
@@ -51,6 +56,15 @@ const MorePage = () => {
 
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
+      {isLoading && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-white/50 backdrop-blur-lg rounded-lg outline-2 outline-white">
+          <Loader2
+            className="w-4 h-4 animate-spin"
+            style={{ width: "40px", height: "40px" }}
+          />
+          <div className="text-base text-muted-foreground">로딩 중입니다.</div>
+        </div>
+      )}
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-6 h-16 shrink-0">
         <h1 className="text-2xl font-bold">더보기</h1>
@@ -62,7 +76,10 @@ const MorePage = () => {
         <div className="px-3 space-y-4">
           <div
             className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ring-2 ring-accent`}
-            onClick={() => router.push("/more/profile")}
+            onClick={() => {
+              setIsLoading(true);
+              router.push("/more/profile");
+            }}
           >
             {session.data.user.image ? (
               <div className="flex items-start gap-3">
