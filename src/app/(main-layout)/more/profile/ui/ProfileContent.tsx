@@ -344,7 +344,7 @@ export default function ProfileContent({
                 ].map((option) => (
                   <label
                     key={option.value}
-                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-22 border border-input h-9 pt-0.5"
+                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
                     htmlFor={option.value}
                   >
                     <RadioGroupItem value={option.value} id={option.value} />
@@ -435,7 +435,7 @@ export default function ProfileContent({
                 ].map((option) => (
                   <label
                     key={option.value}
-                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-22 border border-input h-9 pt-0.5"
+                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
                     htmlFor={option.value}
                   >
                     <RadioGroupItem value={option.value} id={option.value} />
