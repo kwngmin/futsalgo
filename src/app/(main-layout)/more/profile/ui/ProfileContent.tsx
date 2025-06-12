@@ -8,13 +8,7 @@ import { z } from "zod/v4";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
+import { Card, CardContent } from "@/shared/components/ui/card";
 import { Badge } from "@/shared/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
@@ -27,9 +21,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { Loader2, ArrowLeft, Pencil } from "lucide-react";
+import {
+  Loader2,
+  ArrowLeft,
+  Pencil,
+  ChevronRight,
+  CircleUserRound,
+  Mail,
+  Phone,
+} from "lucide-react";
 import { POSITION_OPTIONS } from "@/shared/constants/profile";
 import { Position, User } from "@prisma/client";
+
+const modalItems = [
+  {
+    field: "name",
+    title: "닉네임",
+    placeholder: "닉네임을 입력하세요",
+  },
+  {
+    field: "email",
+    title: "이메일",
+    placeholder: "이메일을 입력하세요",
+  },
+  {
+    field: "phone",
+    title: "전화번호",
+    placeholder: "전화번호를 입력하세요",
+  },
+];
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
@@ -182,12 +202,31 @@ export default function ProfileContent({
       title={`${title} 수정`}
       description={`새로운 ${title}을 입력해주세요.`}
       trigger={
-        <div className="flex items-center justify-between py-3 px-4 bg-white cursor-pointer border-b border-gray-100 last:border-b-0">
-          <div>
-            <p className="text-sm text-gray-600">{title}</p>
-            <p className="font-medium">{getValues(field) || "설정되지 않음"}</p>
+        // <div className="flex items-center justify-between py-3 px-4 bg-white cursor-pointer border-b border-gray-100 last:border-b-0">
+        //   <div>
+        //     <p className="text-sm text-gray-600">{title}</p>
+        //     <p className="font-medium">{getValues(field) || "설정되지 않음"}</p>
+        //   </div>
+        //   <Pencil className="h-4 w-4 text-gray-400" />
+        // </div>
+        <div
+          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors ${
+            field !== "phone" ? `border-b border-gray-100` : ""
+          }`}
+        >
+          <div className="flex items-center space-x-3">
+            {field === "name" ? (
+              <CircleUserRound className={`w-5 h-5 text-gray-600`} />
+            ) : field === "email" ? (
+              <Mail className={`w-5 h-5 text-gray-600`} />
+            ) : (
+              <Phone className={`w-5 h-5 text-gray-600`} />
+            )}
+            <span className="font-medium">
+              {getValues(field) || "설정되지 않음"}
+            </span>
           </div>
-          <Pencil className="h-4 w-4 text-gray-400" />
+          <ChevronRight className={`w-5 h-5 text-gray-400}`} />
         </div>
       }
     >
@@ -257,18 +296,7 @@ export default function ProfileContent({
 
       <div className="px-3 space-y-4">
         {/* 기본 정보 섹션 */}
-        <div className="ring-2 ring-accent rounded-2xl overflow-hidden">
-          {/* 최근 수정일 */}
-          {/* {data.updatedAt && (
-            <div className="text-sm font-medium mb-3 px-2 text-gray-600">
-              최근 수정일:{" "}
-              {data.updatedAt.toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </div>
-          )} */}
+        <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
           {/* <h3 className="text-sm font-medium text-gray-900">기본 정보</h3> */}
           {renderFieldModal("name", "닉네임", "닉네임을 입력하세요")}
           {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
@@ -276,12 +304,12 @@ export default function ProfileContent({
         </div>
 
         <Card className="w-full max-w-2xl mx-auto">
-          <CardHeader className="px-4">
+          {/* <CardHeader className="px-4">
             <CardTitle>프로필 정보</CardTitle>
             <CardDescription>
               축구 활동을 위한 기본 정보를 관리해주세요
             </CardDescription>
-          </CardHeader>
+          </CardHeader> */}
           <CardContent className="space-y-6 px-4">
             {/* 프로필 폼 */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -436,6 +464,17 @@ export default function ProfileContent({
                   "저장"
                 )}
               </Button>
+              {/* 최근 수정일 */}
+              {data.updatedAt && (
+                <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
+                  최근 수정일:{" "}
+                  {data.updatedAt.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
+              )}
             </form>
           </CardContent>
         </Card>

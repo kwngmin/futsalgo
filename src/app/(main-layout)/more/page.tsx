@@ -57,7 +57,7 @@ const MorePage = () => {
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
       {isLoading && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100/50 to-zinc-100/50 backdrop-blur-lg rounded-lg">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 backdrop-blur-lg rounded-lg">
           <Loader2
             className="w-4 h-4 animate-spin"
             style={{ width: "40px", height: "40px", color: "gray" }}
@@ -126,10 +126,10 @@ const MorePage = () => {
           {/* 메뉴 섹션들 */}
           {menuItems.map((section, sectionIndex) => (
             <div key={sectionIndex} className="mb-6">
-              <h3 className={`text-sm font-medium mb-3 px-2 text-gray-600`}>
+              <h3 className="text-sm font-medium mb-3 px-2 text-gray-600">
                 {section.category}
               </h3>
-              <div className={`bg-white rounded-lg overflow-hidden`}>
+              <div className="bg-white rounded-lg overflow-hidden">
                 {section.items.map((item, itemIndex) => (
                   <button
                     key={itemIndex}
@@ -159,7 +159,10 @@ const MorePage = () => {
               } rounded-lg overflow-hidden`}
             >
               <button
-                onClick={() => signOut()}
+                onClick={() => {
+                  setIsLoading(true);
+                  signOut();
+                }}
                 className={`w-full flex items-center justify-between px-4 py-3 hover:${
                   false ? "bg-red-900" : "bg-red-50"
                 } transition-colors text-red-500`}
