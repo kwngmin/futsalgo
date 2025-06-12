@@ -4,15 +4,11 @@ import { OnboardingFlow } from "./ui/OnboardingFlow";
 
 const OnboardingPage = async () => {
   const session = await auth();
+  console.log(session, "session");
 
   if (!session) {
     redirect("/login");
   }
-
-  if (session.user.phone) {
-    redirect("/");
-  }
-  console.log(session, "session");
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">

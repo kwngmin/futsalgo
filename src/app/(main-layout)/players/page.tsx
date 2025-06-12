@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Search, User, ArrowDownUp } from "lucide-react";
+import { Search, ArrowDownUp } from "lucide-react";
+import Image from "next/image";
 
 // 샘플 선수 데이터
 const players = [
@@ -174,7 +175,7 @@ const PlayersPage = () => {
         {/* 선수가 없는 경우 */}
         {filteredPlayers.length === 0 && (
           <div className="text-center py-12">
-            <User className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+            <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               {selectedFilter === "all"
                 ? "선수가 없습니다"
@@ -211,7 +212,7 @@ type PlayerCardProps = {
 const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
   return (
     <div
-      className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ${
+      className={`bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer ${
         isCurrentUser ? "ring-2 ring-accent" : ""
       }`}
     >
@@ -220,20 +221,22 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
         <div className="relative">
           <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
             {player.image ? (
-              <img
+              <Image
+                width={48}
+                height={48}
                 src={player.image}
                 alt={player.nickname}
                 className="w-full h-full object-cover"
               />
             ) : (
-              <User className="w-6 h-6 text-gray-400" />
+              <div className="w-6 h-6 text-gray-400" />
             )}
           </div>
-          {isCurrentUser && (
+          {/* {isCurrentUser && (
             <div className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
               <span className="text-white text-[10px] font-extrabold">나</span>
             </div>
-          )}
+          )} */}
         </div>
 
         {/* 선수 정보 */}

@@ -208,7 +208,7 @@ type TeamCardProps = {
 const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
   return (
     <div
-      className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ${
+      className={`bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer ${
         isMyTeam ? "ring-2 ring-accent" : ""
       }`}
     >

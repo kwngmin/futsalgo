@@ -4,26 +4,14 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import Kakao from "next-auth/providers/kakao";
-import { Foot, Gender, Position } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session {
     user: {
-      birthYear: number | null;
-      createdAt: Date;
-      email: string | null;
-      emailVerified: Date | null;
-      foot: Foot | null;
-      gender: Gender | null;
-      height: number | null;
-      image: string | null;
-      injured: boolean;
-      name: string;
+      id: string;
       nickname: string | null;
-      phone: string | null;
-      position: Position | null;
-      updatedAt: Date;
-      weight: number | null;
+      createdAt: Date;
+      provider: string;
     } & DefaultSession["user"];
   }
 }
@@ -69,12 +57,24 @@ export function CustomPrismaAdapter(): Adapter {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomPrismaAdapter(),
   providers: [Google, Kakao],
+  // 세션 전략을 JWT로 설정
+  session: {
+    strategy: "jwt",
+    // 세션 유지기간 설정 (초 단위)
+    maxAge: 30 * 24 * 60 * 60, // 30일 (기본값)
+    // maxAge: 7 * 24 * 60 * 60,  // 7일
+    // maxAge: 24 * 60 * 60,      // 1일
+
+    // 세션 업데이트 주기 (JWT에서는 사용되지 않음)
+    updateAge: 24 * 60 * 60, // 24시간마다 토큰 갱신
+  },
+  // JWT 토큰 설정
+  jwt: {
+    // JWT 토큰 유지기간 (session.maxAge와 동일하게 설정 권장)
+    maxAge: 30 * 24 * 60 * 60, // 30일
+  },
   callbacks: {
-    signIn: async ({
-      user, //
-      account,
-      // profile,
-    }) => {
+    signIn: async ({ user, account }) => {
       console.log(`로그인 시도: ${user.email} via ${account?.provider}`);
 
       if (!account) {
@@ -84,6 +84,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // 기본 검증만 수행, 이메일 처리는 어댑터에서
       return true;
+    },
+    // JWT 토큰에 모든 사용자 정보 포함
+    jwt: async ({ token, user, account }) => {
+      if (user) {
+        // 데이터베이스에서 최신 사용자 정보 가져오기
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+        });
+
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.nickname = dbUser.nickname;
+          token.createdAt = dbUser.createdAt;
+        }
+      }
+
+      // Provider 정보도 추가
+      if (account) {
+        token.provider = account.provider;
+      }
+
+      return token;
+    },
+
+    // 세션에 모든 정보 포함
+    session: async ({ session, token }) => {
+      if (token && session.user) {
+        session.user.id = token.id as string;
+        session.user.nickname = token.nickname as string | null;
+        session.user.createdAt = token.createdAt as Date;
+        // Provider 정보도 세션에 포함
+        session.user.provider = token.provider as string;
+      }
+      return session;
     },
   },
   events: {
