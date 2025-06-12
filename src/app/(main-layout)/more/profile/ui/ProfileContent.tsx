@@ -24,7 +24,6 @@ import {
 import {
   Loader2,
   ArrowLeft,
-  Pencil,
   ChevronRight,
   CircleUserRound,
   Mail,
@@ -32,24 +31,6 @@ import {
 } from "lucide-react";
 import { POSITION_OPTIONS } from "@/shared/constants/profile";
 import { Position, User } from "@prisma/client";
-
-const modalItems = [
-  {
-    field: "name",
-    title: "닉네임",
-    placeholder: "닉네임을 입력하세요",
-  },
-  {
-    field: "email",
-    title: "이메일",
-    placeholder: "이메일을 입력하세요",
-  },
-  {
-    field: "phone",
-    title: "전화번호",
-    placeholder: "전화번호를 입력하세요",
-  },
-];
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
