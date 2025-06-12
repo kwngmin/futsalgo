@@ -9,7 +9,7 @@ const BottomNav = () => {
   };
 
   return (
-    <nav className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg rounded-t-lg lg:hidden max-w-xl mx-2 sm:mx-auto px-0.5 sm:px-1.5 shadow-xs outline-2 outline-white">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg rounded-t-lg lg:hidden max-w-xl mx-2 sm:mx-auto px-0.5 sm:px-1.5 shadow-xs outline-2 outline-white">
       <div className="flex">
         {navItems.map((item) => {
           const Icon = item.icon;
