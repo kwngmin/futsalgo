@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type PlayerCardProps = {
   player: User;
@@ -7,11 +8,13 @@ type PlayerCardProps = {
 };
 
 const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
+  const router = useRouter();
   return (
     <div
       className={`bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer ${
         isCurrentUser ? "ring-2 ring-accent" : ""
       }`}
+      onClick={() => router.push(`/players/${player.id}`)}
     >
       <div className="flex items-start gap-3">
         {/* 프로필 이미지 */}

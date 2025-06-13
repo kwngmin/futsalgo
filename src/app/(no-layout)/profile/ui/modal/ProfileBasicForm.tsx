@@ -83,7 +83,7 @@ const ProfileBasicForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-3">
       {/* 이름 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label
           htmlFor="name"
           className="font-semibold text-base text-muted-foreground"
@@ -104,7 +104,7 @@ const ProfileBasicForm = ({
       </div>
 
       {/* 출생년도 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label
           htmlFor="birthYear"
           className="font-semibold text-base text-muted-foreground"
@@ -127,7 +127,7 @@ const ProfileBasicForm = ({
       </div>
 
       {/* 성별 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label className="font-semibold text-base text-muted-foreground">
           성별
         </Label>
@@ -148,7 +148,7 @@ const ProfileBasicForm = ({
       )}
 
       {/* 신장 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label
           htmlFor="height"
           className="font-semibold text-base text-muted-foreground"
