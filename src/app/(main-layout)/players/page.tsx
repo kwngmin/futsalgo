@@ -7,88 +7,7 @@ import { getPlayers } from "./model/actions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import PlayerCard from "./ui/PayerCard";
 import { User } from "@prisma/client";
-import SkeletonPlayCard from "./ui/SkeletonPlayCard";
-
-// // 샘플 선수 데이터
-// const players = [
-//   {
-//     id: 1,
-//     nickname: "축구왕김철수",
-//     teamName: "FC 서울",
-//     gender: "male",
-//     image: null, // 프로필 이미지 URL
-//     totalMatches: 42,
-//     isFollowing: false,
-//   },
-//   {
-//     id: 2,
-//     nickname: "골잡이이영희",
-//     teamName: "서울 위민스 FC",
-//     gender: "female",
-//     image: null,
-//     totalMatches: 28,
-//     isFollowing: true,
-//   },
-//   {
-//     id: 3,
-//     nickname: "패스마스터",
-//     teamName: "한강 FC",
-//     gender: "male",
-//     image: null,
-//     totalMatches: 35,
-//     isFollowing: false,
-//   },
-//   {
-//     id: 4,
-//     nickname: "수비벽박민수",
-//     teamName: "강북 유나이티드",
-//     gender: "male",
-//     image: null,
-//     totalMatches: 51,
-//     isFollowing: true,
-//   },
-//   {
-//     id: 5,
-//     nickname: "윙어지우",
-//     teamName: "강남 레이디스",
-//     gender: "female",
-//     image: null,
-//     totalMatches: 19,
-//     isFollowing: false,
-//   },
-//   {
-//     id: 6,
-//     nickname: "골키퍼최강",
-//     teamName: "수원 FC",
-//     gender: "male",
-//     image: null,
-//     totalMatches: 38,
-//     isFollowing: false,
-//   },
-//   {
-//     id: 7,
-//     nickname: "드리블러김나나",
-//     teamName: null, // 무소속
-//     gender: "female",
-//     image: null,
-//     totalMatches: 15,
-//     isFollowing: false,
-//   },
-// ];
-
-// // 현재 사용자 정보 (로그인 상태에 따라)
-// const currentUser = {
-//   id: 99,
-//   nickname: "내닉네임",
-//   teamName: "FC 서울",
-//   gender: "male",
-//   image: null,
-//   totalMatches: 24,
-//   isFollowing: false,
-// };
-
-// 로그인 상태 시뮬레이션
-// const isLoggedIn = true; // false로 변경하면 로그인 안한 상태
+import SkeletonContent from "./ui/SkeletonContent";
 
 type FilterType = "all" | "MALE" | "FEMALE" | "following";
 
@@ -215,18 +134,7 @@ const PlayersPage = () => {
           )}
         </div>
       ) : (
-        <div className="px-3 space-y-4">
-          <SkeletonPlayCard nickName="w-32" teamName="w-24" />
-          <div className="flex flex-col gap-2">
-            <SkeletonPlayCard nickName="w-12" teamName="w-40" />
-            <SkeletonPlayCard />
-            <SkeletonPlayCard nickName="w-36" teamName="w-12" />
-            <SkeletonPlayCard />
-            <SkeletonPlayCard nickName="w-28" teamName="w-20" />
-            <SkeletonPlayCard nickName="w-40" teamName="w-32" />
-            <SkeletonPlayCard />
-          </div>
-        </div>
+        <SkeletonContent />
       )}
     </div>
   );
