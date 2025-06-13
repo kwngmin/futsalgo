@@ -16,13 +16,17 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { Badge } from "@/shared/components/ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { ValidationStep } from "../model/types";
 import { Position } from "@prisma/client";
 import { updateProfileData } from "@/app/(no-layout)/profile/model/actions";
-import { POSITION_OPTIONS } from "@/entities/user/model/constants";
+import {
+  FOOT_OPTIONS,
+  GENDER_OPTIONS,
+  POSITION_OPTIONS,
+} from "@/entities/user/model/constants";
+import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -133,8 +137,13 @@ export function OnboardingProfile({
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* 이름 */}
-          <div className="space-y-2">
-            <Label htmlFor="name">이름</Label>
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="name"
+              className="font-semibold text-base text-muted-foreground"
+            >
+              이름
+            </Label>
             <Input
               {...register("name")}
               id="name"
@@ -148,62 +157,40 @@ export function OnboardingProfile({
           </div>
 
           {/* 주발 */}
-          <div className="space-y-3">
-            <Label>주로 사용하는 발</Label>
-            <RadioGroup
-              className="grid-cols-3 gap-2"
+          <div className="space-y-1.5">
+            <Label className="font-semibold text-base text-muted-foreground">
+              주로 사용하는 발
+            </Label>
+            <CustomRadioGroup
+              options={FOOT_OPTIONS}
+              value={watch("foot")}
               onValueChange={(value) =>
                 setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
               }
-            >
-              <label className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer">
-                <RadioGroupItem value="RIGHT" id="right" />
-                <Label htmlFor="right">오른발</Label>
-              </label>
-              <label className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer">
-                <RadioGroupItem value="LEFT" id="left" />
-                <Label htmlFor="left">왼발</Label>
-              </label>
-              <label className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer">
-                <RadioGroupItem value="BOTH" id="both" />
-                <Label htmlFor="both">양발</Label>
-              </label>
-            </RadioGroup>
-            {errors.foot && (
-              <Alert>
-                <AlertDescription>{errors.foot.message}</AlertDescription>
-              </Alert>
-            )}
+              error={errors.foot?.message}
+            />
           </div>
 
           {/* 성별 */}
-          <div className="space-y-3">
-            <Label>성별</Label>
-            <RadioGroup
-              className="grid-cols-3"
+          <div className="space-y-1.5">
+            <Label className="font-semibold text-base text-muted-foreground">
+              성별
+            </Label>
+            <CustomRadioGroup
+              options={GENDER_OPTIONS}
+              value={watch("gender")}
               onValueChange={(value) =>
                 setValue("gender", value as "MALE" | "FEMALE")
               }
-            >
-              <label className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer">
-                <RadioGroupItem value="MALE" id="male" />
-                <Label htmlFor="male">남성</Label>
-              </label>
-              <label className="flex items-center space-x-2 rounded-md px-3 pb-0.5 h-8 cursor-pointer">
-                <RadioGroupItem value="FEMALE" id="female" />
-                <Label htmlFor="female">여성</Label>
-              </label>
-            </RadioGroup>
-            {errors.gender && (
-              <Alert>
-                <AlertDescription>{errors.gender.message}</AlertDescription>
-              </Alert>
-            )}
+              error={errors.gender?.message}
+            />
           </div>
 
           {/* 포지션 */}
-          <div className="space-y-3">
-            <Label>선호 포지션</Label>
+          <div className="space-y-1.5">
+            <Label className="font-semibold text-base text-muted-foreground">
+              선호하는 포지션 • {selectedPositions?.length || 0}/5
+            </Label>
             <div className="flex flex-wrap gap-2">
               {POSITION_OPTIONS.map((position) => (
                 <Badge
@@ -213,16 +200,13 @@ export function OnboardingProfile({
                       ? "default"
                       : "outline"
                   }
-                  className="cursor-pointer text-center justify-center items-center h-8 px-3 rounded-full"
+                  className="cursor-pointer text-center justify-center items-center h-9 px-3 rounded-full"
                   onClick={() => togglePosition(position.value)}
                 >
                   {`${position.value} - ${position.label}`}
                 </Badge>
               ))}
             </div>
-            <p className="text-sm text-gray-500">
-              선택된 포지션: {selectedPositions?.length || 0}/5
-            </p>
             {errors.positions && (
               <Alert>
                 <AlertDescription>{errors.positions.message}</AlertDescription>
@@ -231,8 +215,13 @@ export function OnboardingProfile({
           </div>
 
           {/* 신장 */}
-          <div className="space-y-2">
-            <Label htmlFor="height">키 (cm)</Label>
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="height"
+              className="font-semibold text-base text-muted-foreground"
+            >
+              키 (cm)
+            </Label>
             <Input
               {...register("height", { valueAsNumber: true })}
               id="height"
@@ -249,9 +238,12 @@ export function OnboardingProfile({
           </div>
 
           {/* 출생년도 (선택) */}
-          <div className="space-y-2">
-            <Label htmlFor="birthYear" className="gap-1">
-              출생년도<span className="text-gray-400">(선택)</span>
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="birthYear"
+              className="font-semibold text-base text-muted-foreground"
+            >
+              출생년도
             </Label>
             <Input
               {...register("birthYear", { valueAsNumber: true })}

@@ -104,8 +104,10 @@ const ProfileForm = ({ data }: { data: User }) => {
       className="space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
       {/* 몸 상태 */}
-      <div className="space-y-3">
-        <Label>몸 상태</Label>
+      <div className="space-y-1.5">
+        <Label className="font-semibold text-base text-muted-foreground">
+          몸 상태
+        </Label>
         <CustomRadioGroup
           options={CONDITION_OPTIONS}
           value={watch("condition")}
@@ -115,8 +117,10 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 포지션 */}
-      <div className="space-y-3">
-        <Label>선호하는 포지션 • {selectedPositions?.length || 0}/5</Label>
+      <div className="space-y-1.5">
+        <Label className="font-semibold text-base text-muted-foreground">
+          선호하는 포지션 • {selectedPositions?.length || 0}/5
+        </Label>
         <div className="flex flex-wrap gap-2">
           {POSITION_OPTIONS.map((position) => (
             <Badge
@@ -141,8 +145,10 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 주발 */}
-      <div className="space-y-3">
-        <Label>주로 사용하는 발</Label>
+      <div className="space-y-1.5">
+        <Label className="font-semibold text-base text-muted-foreground">
+          주로 사용하는 발
+        </Label>
         <CustomRadioGroup
           options={FOOT_OPTIONS}
           value={watch("foot")}

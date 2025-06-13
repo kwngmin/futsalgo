@@ -32,22 +32,12 @@ enum Condition {
 }
 
 enum Position {
-  FW
-  MF
-  DF
-  CF
   ST
-  LWF
   LW
-  LM
-  RWF
   RW
-  RM
-  CAM
+  AM
   CM
-  CDM
-  LWB
-  RWB
+  DM
   CB
   LB
   RB
@@ -164,7 +154,13 @@ model User {
   teams           TeamMember[]
   ownedTeams      Team[]    @relation("TeamOwner")
   viceLeaderTeams TeamViceLeader[]
-  likedTeams      TeamLike[]
+
+ // 팔로잉/팔로워 관계 (유저 간)
+  following       UserFollow[] @relation("Follower")    // 내가 팔로우하는 사람들
+  followers       UserFollow[] @relation("Following")   // 나를 팔로우하는 사람들
+  
+  // 팀 팔로잉
+  followingTeams  TeamFollow[]
 
   scoredGoals     AttackPoint[] @relation("Scorer")
   assistedGoals   AttackPoint[] @relation("Assist")
@@ -181,16 +177,35 @@ model User {
   @@map("users")
 }
 
-model TeamLike {
+
+// 유저 간 팔로잉 관계
+model UserFollow {
+  id          String   @id @default(cuid())
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId  String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String
+  createdAt   DateTime @default(now())
+  
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("user_follows")
+}
+
+// 팀 팔로잉 (기존 TeamLike 대체)
+model TeamFollow {
   id        String   @id @default(cuid())
-  team      Team     @relation(fields: [teamId], references: [id])
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   createdAt DateTime @default(now())
   
   @@unique([teamId, userId])
   @@index([userId])
+  @@index([teamId])
+  @@map("team_follows")
 }
 
 model Team {
@@ -212,7 +227,7 @@ model Team {
   members       TeamMember[]
   posts         Post[]
   matchDays     MatchDayTeam[]
-  likedByUsers  TeamLike[]  // 좋아요 기능
+  followers     TeamFollow[]  // 팔로워 (기존 likedByUsers 대체)
 
   sentMatchRequests     TeamMatchRequest[] @relation("RequestorTeam")
   receivedMatchRequests TeamMatchRequest[] @relation("TargetTeam")

@@ -1,46 +1,26 @@
 export const POSITION_OPTIONS = [
-  { value: "FW", label: "포워드" },
-  { value: "CF", label: "센터 포워드" },
   { value: "ST", label: "스트라이커" },
-  { value: "LWF", label: "레프트 윙 포워드" },
-  { value: "RWF", label: "라이트 윙 포워드" },
-  { value: "LW", label: "레프트 윙" },
-  { value: "RW", label: "라이트 윙" },
-  { value: "MF", label: "미드필더" },
-  { value: "CAM", label: "공격형 미드필더" },
-  { value: "CM", label: "센터 미드필더" },
-  { value: "CDM", label: "수비형 미드필더" },
-  { value: "LM", label: "레프트 미드필더" },
-  { value: "RM", label: "라이트 미드필더" },
-  { value: "DF", label: "수비수" },
-  { value: "CB", label: "센터백" },
-  { value: "LB", label: "레프트백" },
-  { value: "RB", label: "라이트백" },
-  { value: "LWB", label: "레프트 윙백" },
-  { value: "RWB", label: "라이트 윙백" },
+  { value: "LW", label: "왼쪽 윙어" },
+  { value: "RW", label: "오른쪽 윙어" },
+  { value: "AM", label: "중앙 공격형 미드필더" },
+  { value: "CM", label: "중앙 미드필더" },
+  { value: "DM", label: "중앙 수비형 미드필더" },
+  { value: "CB", label: "중앙 수비수" },
+  { value: "LB", label: "왼쪽 수비수" },
+  { value: "RB", label: "오른쪽 수비수" },
   { value: "GK", label: "골키퍼" },
 ];
 
 export const POSITIONS = {
-  FW: "포워드",
-  CF: "센터 포워드",
   ST: "스트라이커",
-  LWF: "레프트 윙 포워드",
-  RWF: "라이트 윙 포워드",
-  LW: "레프트 윙",
-  RW: "라이트 윙",
-  MF: "미드필더",
-  CAM: "공격형 미드필더",
-  CM: "센터 미드필더",
-  CDM: "수비형 미드필더",
-  LM: "레프트 미드필더",
-  RM: "라이트 미드필더",
-  DF: "수비수",
-  CB: "센터백",
-  LB: "레프트백",
-  RB: "라이트백",
-  LWB: "레프트 윙백",
-  RWB: "라이트 윙백",
+  LW: "왼쪽 윙어",
+  RW: "오른쪽 윙어",
+  AM: "중앙 공격형 미드필더",
+  CM: "중앙 미드필더",
+  DM: "중앙 수비형 미드필더",
+  CB: "중앙 수비수",
+  LB: "왼쪽 수비수",
+  RB: "오른쪽 수비수",
   GK: "골키퍼",
 };
 
@@ -57,8 +37,8 @@ export const FOOT = {
 } as const;
 
 export const GENDER_OPTIONS = [
-  { value: "MALE", label: "남성" },
-  { value: "FEMALE", label: "여성" },
+  { value: "MALE", label: "남자" },
+  { value: "FEMALE", label: "여자" },
 ];
 
 export const GENDER = {

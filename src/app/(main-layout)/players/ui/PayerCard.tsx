@@ -1,17 +1,6 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
 
-// // 선수 카드 컴포넌트
-// type Player = {
-//   id: number;
-//   nickname: string;
-//   teamName: string | null;
-//   gender: string;
-//   image: string | null;
-//   totalMatches: number;
-//   isFollowing: boolean;
-// };
-
 type PlayerCardProps = {
   player: User;
   isCurrentUser?: boolean;
@@ -54,7 +43,7 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
               {player.nickname}
             </h3>
             {/* 남성, 여성 구분 */}
-            <span
+            {/* <span
               className={`size-5 flex items-center justify-center text-xs font-semibold rounded flex-shrink-0 ${
                 player.gender === "MALE"
                   ? "bg-blue-50 text-blue-600"
@@ -62,7 +51,7 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
               }`}
             >
               {player.gender === "MALE" ? "M" : "F"}
-            </span>
+            </span> */}
             {/* 팔로잉 표시 (현재 사용자가 아닐 때만) */}
             {/* {!isCurrentUser && player.isFollowing && (
               <span className="px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-800 rounded-full flex-shrink-0 outline outline-slate-200">

@@ -1,5 +1,14 @@
 {
-  "cSpell.words": ["cuid", "Kakao", "kallemalle", "Participations", "supabase"],
+  "cSpell.words": [
+    "cuid",
+    "FIXO",
+    "GOLEIRO",
+    "Kakao",
+    "kallemalle",
+    "Participations",
+    "PIVO",
+    "supabase"
+  ],
   "editor.gotoLocation.multipleDefinitions": "peek",
   "editor.hover.enabled": true
 }

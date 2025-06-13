@@ -81,10 +81,13 @@ const ProfileBasicForm = ({
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-3">
       {/* 이름 */}
-      <div className="space-y-2">
-        <Label htmlFor="name" className="gap-1">
+      <div className="space-y-1.5">
+        <Label
+          htmlFor="name"
+          className="font-semibold text-base text-muted-foreground"
+        >
           이름 (실명)
         </Label>
         <Input
@@ -101,8 +104,11 @@ const ProfileBasicForm = ({
       </div>
 
       {/* 출생년도 */}
-      <div className="space-y-2">
-        <Label htmlFor="birthYear" className="gap-1">
+      <div className="space-y-1.5">
+        <Label
+          htmlFor="birthYear"
+          className="font-semibold text-base text-muted-foreground"
+        >
           출생년도
         </Label>
         <Input
@@ -121,8 +127,10 @@ const ProfileBasicForm = ({
       </div>
 
       {/* 성별 */}
-      <div className="space-y-3">
-        <Label>성별</Label>
+      <div className="space-y-1.5">
+        <Label className="font-semibold text-base text-muted-foreground">
+          성별
+        </Label>
         <CustomRadioGroup
           options={GENDER_OPTIONS}
           value={watch("gender")}
@@ -140,8 +148,13 @@ const ProfileBasicForm = ({
       )}
 
       {/* 신장 */}
-      <div className="space-y-2">
-        <Label htmlFor="height">키 (cm)</Label>
+      <div className="space-y-1.5">
+        <Label
+          htmlFor="height"
+          className="font-semibold text-base text-muted-foreground"
+        >
+          키 (cm)
+        </Label>
         <Input
           {...register("height", { valueAsNumber: true })}
           id="height"
@@ -158,7 +171,7 @@ const ProfileBasicForm = ({
       </div>
 
       {/* 저장 버튼 */}
-      <Button type="submit" disabled={isLoading} className="w-full mt-6">
+      <Button type="submit" disabled={isLoading} className="w-full mt-3">
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -42,8 +42,8 @@ const PlayersPage = () => {
   // 필터 옵션들
   const filterOptions = [
     { id: "all", label: "전체" },
-    { id: "MALE", label: "남성" },
-    { id: "FEMALE", label: "여성" },
+    { id: "MALE", label: "남자" },
+    { id: "FEMALE", label: "여자" },
     { id: "following", label: "팔로잉" },
   ];
 
@@ -95,7 +95,7 @@ const PlayersPage = () => {
                     onClick={() => setSelectedFilter(option.id as FilterType)}
                     className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors cursor-pointer ${
                       selectedFilter === option.id
-                        ? "bg-black text-white font-bold"
+                        ? "bg-slate-600 text-white font-bold"
                         : "text-gray-700 hover:bg-gray-50"
                     }`}
                   >
