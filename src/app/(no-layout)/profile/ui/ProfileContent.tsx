@@ -17,6 +17,8 @@ import { FieldModal } from "./FieldModal";
 import ProfilePhone from "./modal/ProfilePhone";
 import ProfileNickname from "./modal/ProfileNickname";
 import ProfileEmail from "./modal/ProfileEmail";
+import ProfileBasicForm from "./modal/ProfileBasicForm";
+import { useState } from "react";
 
 /**
  * 전화번호 문자열을 포맷팅해서 반환하는 함수
@@ -41,75 +43,60 @@ export function formatPhoneNumber(input: string): string {
   return input;
 }
 
-// 정보 Row 컴포넌트 (재사용을 위한 분리)
-const InfoRow = ({
-  icon,
-  // label,
-  value,
-  onClick,
-  showChevron = false,
-  isLast = false,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  onClick?: () => void;
-  showChevron?: boolean;
-  isLast?: boolean;
-}) => (
-  <div
-    className={`w-full flex items-center justify-between px-4 py-3 ${
-      onClick ? "hover:bg-gray-50 transition-colors cursor-pointer" : ""
-    } ${!isLast ? "border-b border-gray-100" : ""}`}
-    onClick={onClick}
-  >
-    <div className="flex items-center space-x-3">
-      {icon}
-      <div className="flex flex-col">
-        <span className="font-medium truncate max-w-64 overflow-hidden whitespace-nowrap">
-          {value || "설정되지 않음"}
-        </span>
-      </div>
-    </div>
-    {showChevron && <ChevronRight className="w-5 h-5 text-gray-400" />}
-  </div>
-);
-
 export default function ProfileContent({ data }: { data: User }) {
   const router = useRouter();
+  const [modalStates, setModalStates] = useState({
+    nickname: false,
+    email: false,
+    phone: false,
+    basic: false,
+  });
+
+  const openModal = (field: keyof typeof modalStates) => {
+    setModalStates((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const closeModal = (field: keyof typeof modalStates) => {
+    setModalStates((prev) => ({ ...prev, [field]: false }));
+  };
 
   const handleGoBack = () => {
     router.back();
   };
 
-  const handleBasicInfoEdit = () => {
-    router.push("/profile/basic");
-  };
-
   const renderFieldModal = (
-    field: "nickname" | "email" | "phone",
-    title: string,
-    placeholder: string
+    field: "nickname" | "email" | "phone" | "basic",
+    title: string
   ) => (
     <FieldModal
       title={`${title} 변경`}
+      open={modalStates[field]}
+      onOpenChange={(open) => {
+        if (!open) closeModal(field);
+      }}
       trigger={
         <div
-          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 ${
-            field !== "phone" ? `` : ""
-          }`}
+          onClick={() => openModal(field)}
+          className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
         >
-          <p className="hidden">{placeholder}</p>
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
               <AtSign className={`w-5 h-5 text-gray-600`} />
             ) : field === "email" ? (
               <Mail className={`w-5 h-5 text-gray-600`} />
-            ) : (
+            ) : field === "phone" ? (
               <Phone className={`w-5 h-5 text-gray-600`} />
+            ) : (
+              <IdCard className="w-5 h-5 text-gray-600" />
             )}
             <span className="font-medium">
-              {field === "phone"
+              {field === "basic"
+                ? `${data.name || "미설정"} • ${
+                    GENDER[data.gender as keyof typeof GENDER]
+                  } • ${data.height ? `${data.height}cm` : "키 미설정"} • ${
+                    data.birthYear ? `${data.birthYear}년생` : "출생년도 미설정"
+                  }`
+                : field === "phone"
                 ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
                 : data[field] || "설정되지 않음"}
             </span>
@@ -122,8 +109,10 @@ export default function ProfileContent({ data }: { data: User }) {
         <ProfilePhone data={data[field] || ""} />
       ) : field === "nickname" ? (
         <ProfileNickname data={data[field] || ""} />
-      ) : (
+      ) : field === "email" ? (
         <ProfileEmail data={data[field] || ""} />
+      ) : (
+        <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} />
       )}
     </FieldModal>
   );
@@ -180,21 +169,10 @@ export default function ProfileContent({ data }: { data: User }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
-          {renderFieldModal("nickname", "닉네임", "닉네임을 입력하세요")}
-          {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
-          {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
-          <InfoRow
-            icon={<IdCard className="w-5 h-5 text-gray-600" />}
-            label="개인정보"
-            value={`${data.name || "미설정"} • ${
-              GENDER[data.gender as keyof typeof GENDER]
-            } • ${data.height ? `${data.height}cm` : "키 미설정"} • ${
-              data.birthYear ? `${data.birthYear}년생` : "출생년도 미설정"
-            }`}
-            onClick={handleBasicInfoEdit}
-            showChevron
-            isLast
-          />
+          {renderFieldModal("nickname", "닉네임")}
+          {renderFieldModal("email", "이메일")}
+          {renderFieldModal("phone", "전화번호")}
+          {renderFieldModal("basic", "기본정보")}
         </div>
 
         <h3 className="text-sm font-medium mb-3 px-2 text-gray-600">

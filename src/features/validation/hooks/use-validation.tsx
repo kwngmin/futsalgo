@@ -105,7 +105,7 @@ export function useEmailValidation() {
     status: "idle",
   });
 
-  const debouncedEmail = useDebounce(email.value, 450);
+  const debouncedEmail = useDebounce(email.value, 300);
 
   useEffect(() => {
     if (debouncedEmail) {
