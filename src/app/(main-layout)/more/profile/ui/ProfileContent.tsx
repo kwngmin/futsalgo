@@ -1,16 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod/v4";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { Badge } from "@/shared/components/ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -21,50 +13,36 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import {
-  Loader2,
   ArrowLeft,
   ChevronRight,
   CircleUserRound,
   Mail,
   Phone,
 } from "lucide-react";
-import { POSITION_OPTIONS } from "@/shared/constants/profile";
-import { Position, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import ProfileForm from "./ProfileForm";
 
-// 프로필 스키마 (개선된 버전)
-const profileSchema = z.object({
-  name: z.string().min(1, "이름을 입력해주세요"),
-  nickname: z.string().min(1, "닉네임을 입력해주세요"),
-  email: z.string().email("올바른 이메일 형식을 입력해주세요"),
-  phone: z.string().min(10, "올바른 전화번호를 입력해주세요"),
-  foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
-    error: () => "주발을 선택해주세요",
-  }),
-  gender: z.enum(["MALE", "FEMALE"], {
-    error: () => "성별을 선택해주세요",
-  }),
-  positions: z
-    .array(z.string())
-    .min(1, "최소 1개의 포지션을 선택해주세요")
-    .max(5, "최대 5개의 포지션까지 선택 가능합니다"),
-  height: z
-    .number({ error: () => "신장을 입력해주세요" })
-    .min(100, "키는 100cm 이상이어야 합니다")
-    .max(250, "키는 250cm 이하여야 합니다"),
-  birthYear: z
-    .number()
-    .min(1950, "출생년도는 1950년 이후여야 합니다")
-    .max(new Date().getFullYear(), "출생년도는 현재 년도 이하여야 합니다")
-    .optional()
-    .or(z.literal("")),
-});
+/**
+ * 전화번호 문자열을 포맷팅해서 반환하는 함수
+ * @param input 숫자로 이루어진 문자열 (ex: "01012345678")
+ * @returns 포맷팅된 전화번호 문자열 (ex: "010-1234-5678")
+ */
+export function formatPhoneNumber(input: string): string {
+  // 숫자만 필터링
+  const digits = input.replace(/\D/g, "");
 
-type ProfileFormData = z.infer<typeof profileSchema>;
+  if (digits.length === 10) {
+    // 000-000-0000
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
 
-interface ProfilePageProps {
-  // initialData?: Partial<ProfileFormData>;
-  // lastModified?: string;
-  data: User;
+  if (digits.length === 11) {
+    // 000-0000-0000
+    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+  }
+
+  // 그 외는 원본 반환
+  return input;
 }
 
 // 개별 필드 모달 컴포넌트 (DRY 원칙 적용)
@@ -93,83 +71,8 @@ const FieldModal = ({
   );
 };
 
-export default function ProfileContent({
-  // initialData,
-  // lastModified,
-  data,
-}: ProfilePageProps) {
+export default function ProfileContent({ data }: { data: User }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-    setValue,
-    watch,
-    getValues,
-  } = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name: data.name || "",
-      nickname: data.nickname || "",
-      email: data.email || "",
-      phone: data.phone || "",
-      positions: data.positions || [],
-      foot: data.foot as "LEFT" | "RIGHT" | "BOTH",
-      gender: data.gender as "MALE" | "FEMALE",
-      height: data.height as number,
-      birthYear: data.birthYear || undefined,
-    },
-  });
-
-  const selectedPositions = watch("positions");
-
-  const togglePosition = (position: string) => {
-    const current = selectedPositions || [];
-    let updated: string[];
-
-    if (current.includes(position)) {
-      updated = current.filter((p) => p !== position);
-    } else if (current.length < 5) {
-      updated = [...current, position];
-    } else {
-      return;
-    }
-
-    setValue("positions", updated);
-  };
-
-  const onSubmit = async (data: ProfileFormData) => {
-    setIsLoading(true);
-    try {
-      // API 호출 로직
-      const response = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          positions: data.positions as Position[],
-          birthYear: data.birthYear === "" ? undefined : data.birthYear,
-        }),
-      });
-
-      if (response.ok) {
-        // 성공 처리
-        alert("프로필이 성공적으로 저장되었습니다.");
-      } else {
-        throw new Error("저장에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("Profile save error:", error);
-      setError("root", {
-        message: "처리 중 오류가 발생했습니다. 다시 시도해주세요.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGoBack = () => {
     router.back();
@@ -196,6 +99,7 @@ export default function ProfileContent({
             field !== "phone" ? `border-b border-gray-100` : ""
           }`}
         >
+          <p className="hidden">{placeholder}</p>
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
               <CircleUserRound className={`w-5 h-5 text-gray-600`} />
@@ -205,7 +109,9 @@ export default function ProfileContent({
               <Phone className={`w-5 h-5 text-gray-600`} />
             )}
             <span className="font-medium">
-              {getValues(field) || "설정되지 않음"}
+              {field === "phone"
+                ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
+                : data[field] || "설정되지 않음"}
             </span>
           </div>
           <ChevronRight className={`w-5 h-5 text-gray-400}`} />
@@ -215,19 +121,19 @@ export default function ProfileContent({
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor={field}>{title}</Label>
-          <Input
+          {/* <Input
             {...register(field)}
             id={field}
             placeholder={placeholder}
             type={
               field === "email" ? "email" : field === "phone" ? "tel" : "text"
             }
-          />
-          {errors[field] && (
+          /> */}
+          {/* {errors[field] && (
             <Alert>
               <AlertDescription>{errors[field]?.message}</AlertDescription>
             </Alert>
-          )}
+          )} */}
         </div>
         <DialogFooter>
           <Button type="button" onClick={() => {}}>
@@ -277,6 +183,17 @@ export default function ProfileContent({
       </div>
 
       <div className="px-3 space-y-4">
+        {/* 프로필 사진 */}
+        {/* <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+          <Image
+            width={80}
+            height={80}
+            src={data.image || ""}
+            alt="profile_image"
+            className="w-full h-full object-cover"
+          />
+        </div> */}
+
         {/* 기본 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
           {/* <h3 className="text-sm font-medium text-gray-900">기본 정보</h3> */}
@@ -291,197 +208,9 @@ export default function ProfileContent({
               축구 활동을 위한 기본 정보를 관리해주세요
             </CardDescription>
           </CardHeader> */}
-        <div className="space-y-6 p-4 bg-white rounded-2xl">
-          {/* 프로필 폼 */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* 포지션 */}
-            <div className="space-y-3">
-              <Label>
-                선호하는 포지션 • {selectedPositions?.length || 0}/5
-              </Label>
-              <div className="flex flex-wrap gap-2">
-                {POSITION_OPTIONS.map((position) => (
-                  <Badge
-                    key={position.value}
-                    variant={
-                      selectedPositions?.includes(position.value)
-                        ? "default"
-                        : "outline"
-                    }
-                    className="cursor-pointer text-center justify-center items-center h-9 px-3 rounded-full"
-                    onClick={() => togglePosition(position.value)}
-                  >
-                    {`${position.value} - ${position.label}`}
-                  </Badge>
-                ))}
-              </div>
-              {/* <p className="text-sm text-gray-500">
-                  선택된 포지션: {selectedPositions?.length || 0}/5
-                </p> */}
-              {errors.positions && (
-                <Alert>
-                  <AlertDescription>
-                    {errors.positions.message}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
 
-            {/* 주발 */}
-            <div className="space-y-3">
-              <Label>주로 사용하는 발</Label>
-              <RadioGroup
-                className="flex flex-wrap gap-2"
-                value={watch("foot")}
-                onValueChange={(value) =>
-                  setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
-                }
-              >
-                {[
-                  { value: "RIGHT", label: "오른발" },
-                  { value: "LEFT", label: "왼발" },
-                  { value: "BOTH", label: "양발" },
-                ].map((option) => (
-                  <label
-                    key={option.value}
-                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
-                    htmlFor={option.value}
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    <span className="text-sm leading-none font-semibold">
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
-              </RadioGroup>
-              {errors.foot && (
-                <Alert>
-                  <AlertDescription>{errors.foot.message}</AlertDescription>
-                </Alert>
-              )}
-            </div>
-
-            {/* 신장 */}
-            <div className="space-y-2">
-              <Label htmlFor="height">키 (cm)</Label>
-              <Input
-                {...register("height", { valueAsNumber: true })}
-                id="height"
-                type="number"
-                min="100"
-                max="250"
-                placeholder="175"
-              />
-              {errors.height && (
-                <Alert>
-                  <AlertDescription>{errors.height.message}</AlertDescription>
-                </Alert>
-              )}
-            </div>
-
-            {/* 이름 */}
-            <div className="space-y-2">
-              <Label htmlFor="name" className="gap-1">
-                이름 (실명)
-              </Label>
-              <Input
-                {...register("name")}
-                id="name"
-                type="text"
-                placeholder="이름을 입력하세요"
-              />
-              {errors.name && (
-                <Alert>
-                  <AlertDescription>{errors.name.message}</AlertDescription>
-                </Alert>
-              )}
-            </div>
-
-            {/* 출생년도 */}
-            <div className="space-y-2">
-              <Label htmlFor="birthYear" className="gap-1">
-                출생년도<span className="text-gray-400">(선택)</span>
-              </Label>
-              <Input
-                {...register("birthYear", { valueAsNumber: true })}
-                id="birthYear"
-                type="number"
-                min="1950"
-                max={new Date().getFullYear()}
-                placeholder="1990"
-              />
-              {errors.birthYear && (
-                <Alert>
-                  <AlertDescription>
-                    {errors.birthYear.message}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
-
-            {/* 성별 */}
-            <div className="space-y-3">
-              <Label>성별</Label>
-              <RadioGroup
-                className="flex flex-wrap gap-2"
-                value={watch("gender")}
-                onValueChange={(value) =>
-                  setValue("gender", value as "MALE" | "FEMALE")
-                }
-              >
-                {[
-                  { value: "MALE", label: "남성" },
-                  { value: "FEMALE", label: "여성" },
-                ].map((option) => (
-                  <label
-                    key={option.value}
-                    className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
-                    htmlFor={option.value}
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    <span className="text-sm leading-none font-semibold">
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
-              </RadioGroup>
-              {errors.gender && (
-                <Alert>
-                  <AlertDescription>{errors.gender.message}</AlertDescription>
-                </Alert>
-              )}
-            </div>
-
-            {errors.root && (
-              <Alert>
-                <AlertDescription>{errors.root.message}</AlertDescription>
-              </Alert>
-            )}
-
-            {/* 저장 버튼 */}
-            <Button type="submit" disabled={isLoading} className="w-full">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  저장 중...
-                </>
-              ) : (
-                "저장"
-              )}
-            </Button>
-            {/* 최근 수정일 */}
-            {data.updatedAt && (
-              <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
-                최근 수정일:{" "}
-                {data.updatedAt.toLocaleDateString("ko-KR", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </div>
-            )}
-          </form>
-        </div>
+        {/* 프로필 폼 */}
+        <ProfileForm data={data} />
       </div>
     </div>
   );

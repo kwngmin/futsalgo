@@ -26,6 +26,11 @@ enum Gender {
   FEMALE
 }
 
+enum Condition {
+  NORMAL
+  INJURED
+}
+
 enum Position {
   FW
   MF
@@ -154,7 +159,7 @@ model User {
   weight          Int?
 
   positions       Position[]   // ex: 'fw', 'mf', 'df', 'gk'
-  injured         Boolean   @default(false)
+  condition       Condition @default(NORMAL)
 
   teams           TeamMember[]
   ownedTeams      Team[]    @relation("TeamOwner")
