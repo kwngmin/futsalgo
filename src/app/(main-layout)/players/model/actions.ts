@@ -11,6 +11,12 @@ export async function getPlayers() {
       return { success: false, error: "인증이 필요합니다" };
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
+
     const players = await prisma.user.findMany({
       where: {
         NOT: {
@@ -19,7 +25,7 @@ export async function getPlayers() {
       },
     });
 
-    return { success: true, data: players };
+    return { success: true, data: { user, players } };
   } catch (error) {
     console.error("선수 데이터 조회 실패:", error);
     return { success: false, error: "서버 오류가 발생했습니다" };
