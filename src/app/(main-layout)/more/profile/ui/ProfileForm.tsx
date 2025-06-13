@@ -103,6 +103,17 @@ const ProfileForm = ({ data }: { data: User }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
+      {/* 몸 상태 */}
+      <div className="space-y-3">
+        <Label>몸 상태</Label>
+        <CustomRadioGroup
+          options={CONDITION_OPTIONS}
+          value={watch("condition")}
+          onValueChange={(value) => setValue("condition", value as Condition)}
+          error={errors.condition?.message}
+        />
+      </div>
+
       {/* 포지션 */}
       <div className="space-y-3">
         <Label>선호하는 포지션 • {selectedPositions?.length || 0}/5</Label>
@@ -139,17 +150,6 @@ const ProfileForm = ({ data }: { data: User }) => {
             setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
           }
           error={errors.foot?.message}
-        />
-      </div>
-
-      {/* 몸 상태 */}
-      <div className="space-y-3">
-        <Label>몸 상태</Label>
-        <CustomRadioGroup
-          options={CONDITION_OPTIONS}
-          value={watch("condition")}
-          onValueChange={(value) => setValue("condition", value as Condition)}
-          error={errors.condition?.message}
         />
       </div>
 
