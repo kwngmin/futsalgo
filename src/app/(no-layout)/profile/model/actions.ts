@@ -63,7 +63,7 @@ export async function updateProfileData(
       data: updateData,
     });
 
-    revalidatePath("/more/profile");
+    revalidatePath("/profile");
 
     return {
       success: true,

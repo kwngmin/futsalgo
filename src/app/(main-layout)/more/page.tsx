@@ -78,7 +78,7 @@ const MorePage = () => {
             className={`bg-white rounded-2xl p-3 hover:shadow-md/5 transition-shadow cursor-pointer ring-2 ring-accent`}
             onClick={() => {
               setIsLoading(true);
-              router.push("/more/profile");
+              router.push("/profile");
             }}
           >
             {session.data.user.image ? (

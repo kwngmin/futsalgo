@@ -21,7 +21,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { ValidationStep } from "../model/types";
 import { Position } from "@prisma/client";
-import { updateProfileData } from "@/app/(main-layout)/more/profile/model/actions";
+import { updateProfileData } from "@/app/(no-layout)/profile/model/actions";
 import { POSITION_OPTIONS } from "@/entities/user/model/constants";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)

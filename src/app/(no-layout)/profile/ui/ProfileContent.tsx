@@ -82,7 +82,7 @@ export default function ProfileContent({ data }: { data: User }) {
   };
 
   const handleBasicInfoEdit = () => {
-    router.push("/more/profile/basic");
+    router.push("/profile/basic");
   };
 
   const renderFieldModal = (

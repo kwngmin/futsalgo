@@ -17,8 +17,8 @@ import { useDebounce } from "@/shared/hooks/use-debounce";
 import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/types";
 import { useRouter } from "next/navigation";
-import { ValidationField } from "@/app/(main-layout)/more/profile/model/types";
-import { updatePhone } from "@/app/(main-layout)/more/profile/model/actions";
+import { ValidationField } from "@/app/(no-layout)/profile/model/types";
+import { updatePhone } from "@/app/(no-layout)/profile/model/actions";
 
 export function OnboardingPhone({
   setCurrentStep,

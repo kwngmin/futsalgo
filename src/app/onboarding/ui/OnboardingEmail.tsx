@@ -17,8 +17,8 @@ import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/types";
-import { ValidationField } from "@/app/(main-layout)/more/profile/model/types";
-import { updateEmail } from "@/app/(main-layout)/more/profile/model/actions";
+import { ValidationField } from "@/app/(no-layout)/profile/model/types";
+import { updateEmail } from "@/app/(no-layout)/profile/model/actions";
 
 export function OnboardingEmail({
   setCurrentStep,
