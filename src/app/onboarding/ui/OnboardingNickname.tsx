@@ -16,7 +16,7 @@ import { Loader2, Check, X } from "lucide-react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/types";
-import { updateNickname } from "../model/actions";
+import { updateNickname } from "@/app/(main-layout)/more/profile/model/actions";
 
 type ValidationStatus = "idle" | "checking" | "valid" | "invalid";
 

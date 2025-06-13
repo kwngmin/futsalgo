@@ -62,6 +62,16 @@ export const GENDER_OPTIONS = [
 ];
 
 export const GENDER = {
-  MALE: "남성",
-  FEMALE: "여성",
+  MALE: "남자",
+  FEMALE: "여자",
+};
+
+export const CONDITION_OPTIONS = [
+  { value: "NORMAL", label: "정상" },
+  { value: "INJURED", label: "부상" },
+];
+
+export const CONDITION = {
+  NORMAL: "정상",
+  INJURED: "부상",
 };

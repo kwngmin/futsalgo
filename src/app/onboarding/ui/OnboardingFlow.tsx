@@ -7,7 +7,8 @@ import { OnboardingEmail } from "./OnboardingEmail";
 import { OnboardingPhone } from "./OnboardingPhone";
 import { OnboardingNickname } from "./OnboardingNickname";
 import { OnboardingProfile } from "./OnboardingProfile";
-import { ValidationField, ValidationStep } from "../model/types";
+import { ValidationStep } from "../model/types";
+import { ValidationField } from "@/app/(main-layout)/more/profile/model/types";
 
 // 중복확인 함수
 export const validateField = async (

@@ -1,43 +1,31 @@
 import { Badge } from "@/shared/components/ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { POSITION_OPTIONS } from "@/shared/constants/profile";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Condition, Position, User } from "@prisma/client";
 import { Button } from "@/shared/components/ui/button";
+import {
+  CONDITION_OPTIONS,
+  FOOT_OPTIONS,
+  POSITION_OPTIONS,
+} from "@/entities/user/model/constants";
+import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
+import { updateProfileData } from "../model/actions";
+import { useRouter } from "next/navigation";
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
-  name: z.string().min(1, "이름을 입력해주세요"),
-  nickname: z.string().min(1, "닉네임을 입력해주세요"),
-  email: z.string().email("올바른 이메일 형식을 입력해주세요"),
-  phone: z.string().min(10, "올바른 전화번호를 입력해주세요"),
   foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
     error: () => "주발을 선택해주세요",
-  }),
-  gender: z.enum(["MALE", "FEMALE"], {
-    error: () => "성별을 선택해주세요",
   }),
   positions: z
     .array(z.string())
     .min(1, "최소 1개의 포지션을 선택해주세요")
     .max(5, "최대 5개의 포지션까지 선택 가능합니다"),
-  height: z
-    .number({ error: () => "신장을 입력해주세요" })
-    .min(100, "키는 100cm 이상이어야 합니다")
-    .max(250, "키는 250cm 이하여야 합니다"),
-  birthYear: z
-    .number()
-    .min(1950, "출생년도는 1950년 이후여야 합니다")
-    .max(new Date().getFullYear(), "출생년도는 현재 년도 이하여야 합니다")
-    .optional()
-    .or(z.literal("")),
   condition: z.enum(["NORMAL", "INJURED"], {
     error: () => "몸 상태를 선택해주세요",
   }),
@@ -46,10 +34,10 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 const ProfileForm = ({ data }: { data: User }) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     setError,
@@ -58,55 +46,47 @@ const ProfileForm = ({ data }: { data: User }) => {
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: data.name || "",
-      nickname: data.nickname || "",
-      email: data.email || "",
-      phone: data.phone || "",
       positions: data.positions || [],
       foot: data.foot as "LEFT" | "RIGHT" | "BOTH",
-      gender: data.gender as "MALE" | "FEMALE",
-      height: data.height as number,
-      birthYear: data.birthYear || undefined,
       condition: data.condition as Condition,
     },
   });
 
   const selectedPositions = watch("positions");
 
-  const togglePosition = (position: string) => {
-    const current = selectedPositions || [];
-    let updated: string[];
+  const togglePosition = useCallback(
+    (position: string) => {
+      const current = selectedPositions || [];
+      let updated: string[];
 
-    if (current.includes(position)) {
-      updated = current.filter((p) => p !== position);
-    } else if (current.length < 5) {
-      updated = [...current, position];
-    } else {
-      return;
-    }
+      if (current.includes(position)) {
+        updated = current.filter((p) => p !== position);
+      } else if (current.length < 5) {
+        updated = [...current, position];
+      } else {
+        return;
+      }
 
-    setValue("positions", updated);
-  };
+      setValue("positions", updated);
+    },
+    [selectedPositions, setValue]
+  );
 
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
-      // API 호출 로직
-      const response = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await updateProfileData({
+        profile: {
           ...data,
           positions: data.positions as Position[],
-          birthYear: data.birthYear === "" ? undefined : data.birthYear,
-        }),
+        },
       });
 
-      if (response.ok) {
-        // 성공 처리
+      if (response.success) {
         alert("프로필이 성공적으로 저장되었습니다.");
+        router.push("/more");
       } else {
-        throw new Error("저장에 실패했습니다.");
+        throw new Error(response.error || "저장에 실패했습니다.");
       }
     } catch (error) {
       console.error("Profile save error:", error);
@@ -155,82 +135,29 @@ const ProfileForm = ({ data }: { data: User }) => {
       {/* 주발 */}
       <div className="space-y-3">
         <Label>주로 사용하는 발</Label>
-        <RadioGroup
-          className="flex flex-wrap gap-2"
+        <CustomRadioGroup
+          options={FOOT_OPTIONS}
           value={watch("foot")}
           onValueChange={(value) =>
             setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
           }
-        >
-          {[
-            { value: "RIGHT", label: "오른발" },
-            { value: "LEFT", label: "왼발" },
-            { value: "BOTH", label: "양발" },
-          ].map((option) => (
-            <label
-              key={option.value}
-              className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
-              htmlFor={option.value}
-            >
-              <RadioGroupItem value={option.value} id={option.value} />
-              <span
-                className={`text-sm leading-none ${
-                  option.value === watch("foot")
-                    ? "font-semibold"
-                    : "font-medium"
-                }`}
-              >
-                {option.label}
-              </span>
-            </label>
-          ))}
-        </RadioGroup>
-        {errors.foot && (
-          <Alert>
-            <AlertDescription>{errors.foot.message}</AlertDescription>
-          </Alert>
-        )}
+          error={errors.foot?.message}
+        />
       </div>
 
       {/* 몸 상태 */}
       <div className="space-y-3">
         <Label>몸 상태</Label>
-        <RadioGroup
-          className="flex flex-wrap gap-2"
+        <CustomRadioGroup
+          options={CONDITION_OPTIONS}
           value={watch("condition")}
           onValueChange={(value) => setValue("condition", value as Condition)}
-        >
-          {[
-            { value: "NORMAL", label: "정상" },
-            { value: "INJURED", label: "부상" },
-          ].map((option) => (
-            <label
-              key={option.value}
-              className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
-              htmlFor={option.value}
-            >
-              <RadioGroupItem value={option.value} id={option.value} />
-              <span
-                className={`text-sm leading-none ${
-                  option.value === watch("condition")
-                    ? "font-semibold"
-                    : "font-medium"
-                }`}
-              >
-                {option.label}
-              </span>
-            </label>
-          ))}
-        </RadioGroup>
-        {errors.condition && (
-          <Alert>
-            <AlertDescription>{errors.condition.message}</AlertDescription>
-          </Alert>
-        )}
+          error={errors.condition?.message}
+        />
       </div>
 
       {/* 신장 */}
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label htmlFor="height">키 (cm)</Label>
         <Input
           {...register("height", { valueAsNumber: true })}
@@ -245,10 +172,10 @@ const ProfileForm = ({ data }: { data: User }) => {
             <AlertDescription>{errors.height.message}</AlertDescription>
           </Alert>
         )}
-      </div>
+      </div> */}
 
       {/* 이름 */}
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label htmlFor="name" className="gap-1">
           이름 (실명)
         </Label>
@@ -263,12 +190,12 @@ const ProfileForm = ({ data }: { data: User }) => {
             <AlertDescription>{errors.name.message}</AlertDescription>
           </Alert>
         )}
-      </div>
+      </div> */}
 
       {/* 출생년도 */}
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <Label htmlFor="birthYear" className="gap-1">
-          출생년도<span className="text-gray-400">(선택)</span>
+          출생년도
         </Label>
         <Input
           {...register("birthYear", { valueAsNumber: true })}
@@ -283,46 +210,20 @@ const ProfileForm = ({ data }: { data: User }) => {
             <AlertDescription>{errors.birthYear.message}</AlertDescription>
           </Alert>
         )}
-      </div>
+      </div> */}
 
       {/* 성별 */}
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         <Label>성별</Label>
-        <RadioGroup
-          className="flex flex-wrap gap-2"
+        <CustomRadioGroup
+          options={GENDER_OPTIONS}
           value={watch("gender")}
           onValueChange={(value) =>
             setValue("gender", value as "MALE" | "FEMALE")
           }
-        >
-          {[
-            { value: "MALE", label: "남성" },
-            { value: "FEMALE", label: "여성" },
-          ].map((option) => (
-            <label
-              key={option.value}
-              className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-10 pt-0.5"
-              htmlFor={option.value}
-            >
-              <RadioGroupItem value={option.value} id={option.value} />
-              <span
-                className={`text-sm leading-none ${
-                  option.value === watch("gender")
-                    ? "font-semibold"
-                    : "font-medium"
-                }`}
-              >
-                {option.label}
-              </span>
-            </label>
-          ))}
-        </RadioGroup>
-        {errors.gender && (
-          <Alert>
-            <AlertDescription>{errors.gender.message}</AlertDescription>
-          </Alert>
-        )}
-      </div>
+          error={errors.gender?.message}
+        />
+      </div> */}
 
       {errors.root && (
         <Alert>

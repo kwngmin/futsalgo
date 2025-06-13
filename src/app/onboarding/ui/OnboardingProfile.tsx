@@ -21,8 +21,8 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { ValidationStep } from "../model/types";
 import { POSITION_OPTIONS } from "@/shared/constants/profile";
-import { updateOnboardingData } from "../model/actions";
 import { Position } from "@prisma/client";
+import { updateProfileData } from "@/app/(main-layout)/more/profile/model/actions";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -38,20 +38,13 @@ const profileSchema = z.object({
     .min(1, "최소 1개의 포지션을 선택해주세요")
     .max(5, "최대 5개의 포지션까지 선택 가능합니다"),
   height: z
-    .number(
-      //   {
-      //     invalid_type_error: "신장은 숫자여야 합니다",
-      //   },
-      { error: () => "신장을 입력해주세요" }
-    )
+    .number({ error: () => "신장을 입력해주세요" })
     .min(100, "키는 100cm 이상이어야 합니다")
     .max(250, "키는 250cm 이하여야 합니다"),
   birthYear: z
     .number()
     .min(1950, "출생년도는 1950년 이후여야 합니다")
-    .max(new Date().getFullYear(), "출생년도는 현재 년도 이하여야 합니다")
-    .optional()
-    .or(z.literal("")),
+    .max(new Date().getFullYear(), "출생년도는 현재 년도 이하여야 합니다"),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -103,11 +96,10 @@ export function OnboardingProfile({
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
-      const response = await updateOnboardingData({
+      const response = await updateProfileData({
         profile: {
           ...data,
           positions: data.positions as Position[],
-          birthYear: data.birthYear === "" ? undefined : data.birthYear,
         },
       });
 

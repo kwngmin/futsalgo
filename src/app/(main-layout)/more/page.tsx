@@ -49,9 +49,9 @@ const MorePage = () => {
   ];
 
   const provider = {
-    google: "Google",
-    kakao: "Kakao",
-    naver: "Naver",
+    google: "구글",
+    kakao: "카카오",
+    naver: "네이버",
   };
 
   return (
@@ -102,7 +102,7 @@ const MorePage = () => {
                     </h3>
                   </div>
                   <p className="text-gray-600 text-sm line-clamp-1">
-                    가입일:
+                    가입일:{" "}
                     {new Date(session.data.user.createdAt).toLocaleDateString(
                       "ko-KR",
                       {

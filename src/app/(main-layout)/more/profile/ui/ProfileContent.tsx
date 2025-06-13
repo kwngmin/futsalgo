@@ -3,24 +3,19 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/components/ui/dialog";
+import { DialogFooter } from "@/shared/components/ui/dialog";
 import {
   ArrowLeft,
   ChevronRight,
   CircleUserRound,
   Mail,
   Phone,
+  User2,
 } from "lucide-react";
 import { User } from "@prisma/client";
 import ProfileForm from "./ProfileForm";
+import { GENDER } from "@/entities/user/model/constants";
+import { FieldModal } from "./FieldModal";
 
 /**
  * 전화번호 문자열을 포맷팅해서 반환하는 함수
@@ -45,31 +40,39 @@ export function formatPhoneNumber(input: string): string {
   return input;
 }
 
-// 개별 필드 모달 컴포넌트 (DRY 원칙 적용)
-const FieldModal = ({
-  title,
-  description,
-  children,
-  trigger,
+// 정보 Row 컴포넌트 (재사용을 위한 분리)
+const InfoRow = ({
+  icon,
+  // label,
+  value,
+  onClick,
+  showChevron = false,
+  isLast = false,
 }: {
-  title: string;
-  description: string;
-  children: React.ReactNode;
-  trigger: React.ReactNode;
-}) => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        {children}
-      </DialogContent>
-    </Dialog>
-  );
-};
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  onClick?: () => void;
+  showChevron?: boolean;
+  isLast?: boolean;
+}) => (
+  <div
+    className={`w-full flex items-center justify-between px-4 py-3 ${
+      onClick ? "hover:bg-gray-50 transition-colors cursor-pointer" : ""
+    } ${!isLast ? "border-b border-gray-100" : ""}`}
+    onClick={onClick}
+  >
+    <div className="flex items-center space-x-3">
+      {icon}
+      <div className="flex flex-col">
+        <span className="font-medium truncate max-w-64 overflow-hidden whitespace-nowrap">
+          {value || "설정되지 않음"}
+        </span>
+      </div>
+    </div>
+    {showChevron && <ChevronRight className="w-5 h-5 text-gray-400" />}
+  </div>
+);
 
 export default function ProfileContent({ data }: { data: User }) {
   const router = useRouter();
@@ -78,25 +81,21 @@ export default function ProfileContent({ data }: { data: User }) {
     router.back();
   };
 
+  const handleBasicInfoEdit = () => {
+    router.push("/more/profile/basic");
+  };
+
   const renderFieldModal = (
     field: "nickname" | "email" | "phone",
     title: string,
     placeholder: string
   ) => (
     <FieldModal
-      title={`${title} 수정`}
-      description={`새로운 ${title}을 입력해주세요.`}
+      title={`${title} 변경`}
       trigger={
-        // <div className="flex items-center justify-between py-3 px-4 bg-white cursor-pointer border-b border-gray-100 last:border-b-0">
-        //   <div>
-        //     <p className="text-sm text-gray-600">{title}</p>
-        //     <p className="font-medium">{getValues(field) || "설정되지 않음"}</p>
-        //   </div>
-        //   <Pencil className="h-4 w-4 text-gray-400" />
-        // </div>
         <div
-          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors ${
-            field !== "phone" ? `border-b border-gray-100` : ""
+          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer ${
+            field !== "phone" ? `` : ""
           }`}
         >
           <p className="hidden">{placeholder}</p>
@@ -114,7 +113,7 @@ export default function ProfileContent({ data }: { data: User }) {
                 : data[field] || "설정되지 않음"}
             </span>
           </div>
-          <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+          <ChevronRight className="w-5 h-5 text-gray-400" />
         </div>
       }
     >
@@ -194,22 +193,26 @@ export default function ProfileContent({ data }: { data: User }) {
           />
         </div> */}
 
-        {/* 기본 정보 섹션 */}
+        {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
-          {/* <h3 className="text-sm font-medium text-gray-900">기본 정보</h3> */}
+          <InfoRow
+            icon={<User2 className="w-5 h-5 text-gray-600" />}
+            label="개인정보"
+            value={`${data.name || "미설정"} • ${
+              GENDER[data.gender as keyof typeof GENDER]
+            } • ${
+              data.birthYear ? `${data.birthYear}년생` : "출생년도 미설정"
+            } • ${data.height ? `${data.height}cm` : "키 미설정"}`}
+            onClick={handleBasicInfoEdit}
+            showChevron
+            isLast
+          />
           {renderFieldModal("nickname", "닉네임", "닉네임을 입력하세요")}
           {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
           {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
         </div>
 
-        {/* <CardHeader className="px-4">
-            <CardTitle>프로필 정보</CardTitle>
-            <CardDescription>
-              축구 활동을 위한 기본 정보를 관리해주세요
-            </CardDescription>
-          </CardHeader> */}
-
-        {/* 프로필 폼 */}
+        {/* 플레이 정보 섹션 */}
         <ProfileForm data={data} />
       </div>
     </div>

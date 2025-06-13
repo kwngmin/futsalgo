@@ -1,40 +1,29 @@
 "use server";
 
+import { Profile } from "@/entities/user/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Condition, Foot, Gender, Position, User } from "@prisma/client";
+import { Position, User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-export type Profile = {
-  name: string;
-  foot?: Foot;
-  gender?: Gender;
-  positions?: Position[];
-  birthYear?: number;
-  height?: number;
-  weight?: number;
-  image?: string;
-  condition?: Condition;
-};
-
-// 온보딩 데이터 타입 정의
-export type OnboardingData = {
+// 프로필 데이터 타입 정의
+export type ProfileData = {
   email?: string;
   phone?: string;
   nickname?: string;
   profile?: Profile;
 };
 
-export type OnboardingResult = {
+export type ProfileResult = {
   success: boolean;
   error?: string;
   data?: User;
 };
 
 // 통합 온보딩 업데이트 함수
-export async function updateOnboardingData(
-  data: OnboardingData
-): Promise<OnboardingResult> {
+export async function updateProfileData(
+  data: ProfileData
+): Promise<ProfileResult> {
   try {
     // 1. 사용자 인증 확인
     const session = await auth();
@@ -43,7 +32,7 @@ export async function updateOnboardingData(
     }
 
     // 2. 데이터 검증
-    const validationResult = validateOnboardingData(data);
+    const validationResult = validateProfileData(data);
     if (!validationResult.success) {
       return validationResult;
     }
@@ -62,11 +51,8 @@ export async function updateOnboardingData(
       if (data.profile.gender) updateData.gender = data.profile.gender;
       if (data.profile.height) updateData.height = data.profile.height;
       if (data.profile.birthYear) updateData.birthYear = data.profile.birthYear;
-      if (data.profile.weight) updateData.weight = data.profile.weight;
       if (data.profile.image) updateData.image = data.profile.image;
       if (data.profile.condition) updateData.condition = data.profile.condition;
-
-      // 포지션은 별도 처리 (다대다 관계일 경우)
       if (data.profile.positions && data.profile.positions.length > 0) {
         updateData.positions = data.profile.positions as Position[];
       }
@@ -77,35 +63,33 @@ export async function updateOnboardingData(
       data: updateData,
     });
 
-    revalidatePath("/");
+    revalidatePath("/more/profile");
 
     return {
       success: true,
       data: updatedUser,
     };
   } catch (error) {
-    console.error("온보딩 데이터 업데이트 실패:", error);
+    console.error("프로필 데이터 업데이트 실패:", error);
     return { success: false, error: "서버 오류가 발생했습니다" };
   }
 }
 
 // 개별 필드 업데이트 함수들 (편의성을 위해)
-export async function updatePhone(phone: string): Promise<OnboardingResult> {
-  return updateOnboardingData({ phone });
+export async function updatePhone(phone: string): Promise<ProfileResult> {
+  return updateProfileData({ phone });
 }
 
-export async function updateEmail(email: string): Promise<OnboardingResult> {
-  return updateOnboardingData({ email });
+export async function updateEmail(email: string): Promise<ProfileResult> {
+  return updateProfileData({ email });
 }
 
-export async function updateNickname(
-  nickname: string
-): Promise<OnboardingResult> {
-  return updateOnboardingData({ nickname });
+export async function updateNickname(nickname: string): Promise<ProfileResult> {
+  return updateProfileData({ nickname });
 }
 
 // 데이터 검증 함수
-function validateOnboardingData(data: OnboardingData): OnboardingResult {
+function validateProfileData(data: ProfileData): ProfileResult {
   // 이메일 검증
   if (data.email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
