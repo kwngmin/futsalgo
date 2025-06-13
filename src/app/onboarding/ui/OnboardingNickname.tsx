@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -13,54 +13,16 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { useDebounce } from "@/shared/hooks/use-debounce";
-import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/types";
 import { updateNickname } from "@/app/(no-layout)/profile/model/actions";
-
-type ValidationStatus = "idle" | "checking" | "valid" | "invalid";
-
-interface ValidationField {
-  value: string;
-  status: ValidationStatus;
-  error?: string;
-}
+import { useNicknameValidation } from "@/features/validation/hooks/use-validation";
 
 export function OnboardingNickname({
   setCurrentStep,
 }: {
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
 }) {
-  const [nickname, setNickname] = useState<ValidationField>({
-    value: "",
-    status: "idle",
-  });
-
-  const debouncedNickname = useDebounce(nickname.value, 450);
-
-  useEffect(() => {
-    const nicknameRegex = /^[가-힣a-zA-Z0-9]+$/;
-    if (debouncedNickname) {
-      if (
-        debouncedNickname.length >= 2 &&
-        debouncedNickname.length <= 20 &&
-        nicknameRegex.test(debouncedNickname)
-      ) {
-        validateField("nickname", debouncedNickname, setNickname);
-      } else {
-        setNickname((prev) => ({
-          ...prev,
-          status: "invalid",
-          error: "닉네임은 2-20자의 한글, 영문, 숫자만 가능합니다",
-        }));
-      }
-    } else {
-      setNickname({
-        value: "",
-        status: "idle",
-      });
-    }
-  }, [debouncedNickname]);
+  const { nickname, onChange } = useNicknameValidation();
 
   // 단계별 진행
   const handleNextStep = async () => {
@@ -90,14 +52,7 @@ export function OnboardingNickname({
               id="nickname"
               type="text"
               value={nickname.value}
-              onChange={(e) => {
-                const valueWithoutSpaces = e.target.value.replace(/\s/g, ""); // 모든 공백 제거
-                setNickname((prev) => ({
-                  ...prev,
-                  value: valueWithoutSpaces,
-                  status: "idle",
-                }));
-              }}
+              onChange={(e) => onChange(e.target.value)}
               placeholder="닉네임을 입력하세요"
             />
             {nickname.status === "checking" && (

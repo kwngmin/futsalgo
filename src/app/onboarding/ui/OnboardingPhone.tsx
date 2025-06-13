@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, SetStateAction, Dispatch } from "react";
+import { SetStateAction, Dispatch } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -13,12 +13,10 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { useDebounce } from "@/shared/hooks/use-debounce";
-import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/types";
 import { useRouter } from "next/navigation";
-import { ValidationField } from "@/app/(no-layout)/profile/model/types";
 import { updatePhone } from "@/app/(no-layout)/profile/model/actions";
+import { usePhoneValidation } from "@/features/validation/hooks/use-validation";
 
 export function OnboardingPhone({
   setCurrentStep,
@@ -28,35 +26,7 @@ export function OnboardingPhone({
   initialStep: ValidationStep;
 }) {
   const router = useRouter();
-  const [phone, setPhone] = useState<ValidationField>({
-    value: "",
-    status: "idle",
-  });
-
-  const debouncedPhone = useDebounce(phone.value, 450);
-
-  // 전화번호 실시간 검증
-  useEffect(() => {
-    if (debouncedPhone) {
-      const phoneRegex = /^01[0-9]-?\d{3,4}-?\d{4}$/;
-      if (debouncedPhone.length > 9) {
-        if (phoneRegex.test(debouncedPhone)) {
-          validateField("phone", debouncedPhone, setPhone);
-        } else {
-          setPhone((prev) => ({
-            ...prev,
-            status: "invalid",
-            error: "올바른 전화번호 형식이 아닙니다",
-          }));
-        }
-      }
-    } else {
-      setPhone({
-        value: "",
-        status: "idle",
-      });
-    }
-  }, [debouncedPhone]);
+  const { phone, onChange } = usePhoneValidation();
 
   // 단계별 진행
   const handleNextStep = async () => {
@@ -86,14 +56,7 @@ export function OnboardingPhone({
               id="phone"
               type="tel"
               value={phone.value}
-              onChange={(e) => {
-                const onlyNumbers = e.target.value.replace(/\D/g, ""); // 숫자만 추출
-                setPhone((prev) => ({
-                  ...prev,
-                  value: onlyNumbers,
-                  status: "idle",
-                }));
-              }}
+              onChange={(e) => onChange(e.target.value)}
               placeholder="'-' 없이 입력해주세요 (ex. 01012345678)"
             />
             {phone.status === "checking" && (

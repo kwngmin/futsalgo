@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
-import { Label } from "@/shared/components/ui/label";
-import { DialogFooter } from "@/shared/components/ui/dialog";
 import {
   ArrowLeft,
   AtSign,
@@ -16,6 +14,9 @@ import { User } from "@prisma/client";
 import ProfileForm from "./ProfileForm";
 import { GENDER } from "@/entities/user/model/constants";
 import { FieldModal } from "./FieldModal";
+import ProfilePhone from "./modal/ProfilePhone";
+import ProfileNickname from "./modal/ProfileNickname";
+import ProfileEmail from "./modal/ProfileEmail";
 
 /**
  * 전화번호 문자열을 포맷팅해서 반환하는 함수
@@ -117,29 +118,13 @@ export default function ProfileContent({ data }: { data: User }) {
         </div>
       }
     >
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor={field}>{title}</Label>
-          {/* <Input
-            {...register(field)}
-            id={field}
-            placeholder={placeholder}
-            type={
-              field === "email" ? "email" : field === "phone" ? "tel" : "text"
-            }
-          /> */}
-          {/* {errors[field] && (
-            <Alert>
-              <AlertDescription>{errors[field]?.message}</AlertDescription>
-            </Alert>
-          )} */}
-        </div>
-        <DialogFooter>
-          <Button type="button" onClick={() => {}}>
-            저장
-          </Button>
-        </DialogFooter>
-      </div>
+      {field === "phone" ? (
+        <ProfilePhone data={data[field] || ""} />
+      ) : field === "nickname" ? (
+        <ProfileNickname data={data[field] || ""} />
+      ) : (
+        <ProfileEmail data={data[field] || ""} />
+      )}
     </FieldModal>
   );
 

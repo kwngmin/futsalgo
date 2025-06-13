@@ -20,21 +20,6 @@ const MorePage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const menuItems = [
-    // {
-    //   category: "계정",
-    //   items: [
-    //     {
-    //       icon: User,
-    //       label: "프로필 설정",
-    //       action: () => alert("프로필 설정"),
-    //     },
-    //     {
-    //       icon: Edit,
-    //       label: "계정 정보 수정",
-    //       action: () => alert("계정 정보 수정"),
-    //     },
-    //   ],
-    // },
     {
       category: "지원",
       items: [

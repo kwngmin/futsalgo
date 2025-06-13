@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -14,11 +14,9 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { useDebounce } from "@/shared/hooks/use-debounce";
-import { validateField } from "./OnboardingFlow";
 import { ValidationStep } from "../model/types";
-import { ValidationField } from "@/app/(no-layout)/profile/model/types";
 import { updateEmail } from "@/app/(no-layout)/profile/model/actions";
+import { useEmailValidation } from "@/features/validation/hooks/use-validation";
 
 export function OnboardingEmail({
   setCurrentStep,
@@ -26,23 +24,7 @@ export function OnboardingEmail({
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
 }) {
   const router = useRouter();
-  const [email, setEmail] = useState<ValidationField>({
-    value: "",
-    status: "idle",
-  });
-
-  const debouncedEmail = useDebounce(email.value, 450);
-
-  useEffect(() => {
-    if (debouncedEmail) {
-      validateField("email", debouncedEmail, setEmail);
-    } else {
-      setEmail({
-        value: "",
-        status: "idle",
-      });
-    }
-  }, [debouncedEmail]);
+  const { email, onChange } = useEmailValidation();
 
   // 단계별 진행
   const handleNextStep = async () => {
@@ -70,13 +52,7 @@ export function OnboardingEmail({
               id="email"
               type="email"
               value={email.value}
-              onChange={(e) =>
-                setEmail((prev) => ({
-                  ...prev,
-                  value: e.target.value,
-                  status: "idle",
-                }))
-              }
+              onChange={(e) => onChange(e.target.value)}
               placeholder="example@email.com"
             />
             {email.status === "checking" && (
