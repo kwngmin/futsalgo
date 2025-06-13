@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   AtSign,
   ChevronRight,
-  CircleUserRound,
   IdCard,
   Mail,
   Phone,
