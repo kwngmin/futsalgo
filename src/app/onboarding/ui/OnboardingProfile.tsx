@@ -127,17 +127,17 @@ export function OnboardingProfile({
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardHeader className="px-4">
         <CardTitle>프로필 정보 입력</CardTitle>
         <CardDescription>
           축구 활동을 위한 기본 정보를 입력해주세요
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* 이름 */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label
               htmlFor="name"
               className="font-semibold text-base text-muted-foreground"
@@ -157,7 +157,7 @@ export function OnboardingProfile({
           </div>
 
           {/* 주발 */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label className="font-semibold text-base text-muted-foreground">
               주로 사용하는 발
             </Label>
@@ -172,7 +172,7 @@ export function OnboardingProfile({
           </div>
 
           {/* 성별 */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label className="font-semibold text-base text-muted-foreground">
               성별
             </Label>
@@ -187,7 +187,7 @@ export function OnboardingProfile({
           </div>
 
           {/* 포지션 */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label className="font-semibold text-base text-muted-foreground">
               선호하는 포지션 • {selectedPositions?.length || 0}/5
             </Label>
@@ -215,7 +215,7 @@ export function OnboardingProfile({
           </div>
 
           {/* 신장 */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label
               htmlFor="height"
               className="font-semibold text-base text-muted-foreground"
@@ -238,7 +238,7 @@ export function OnboardingProfile({
           </div>
 
           {/* 출생년도 (선택) */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label
               htmlFor="birthYear"
               className="font-semibold text-base text-muted-foreground"

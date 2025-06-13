@@ -104,7 +104,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       className="space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
       {/* 몸 상태 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label className="font-semibold text-base text-muted-foreground">
           몸 상태
         </Label>
@@ -117,7 +117,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 포지션 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label className="font-semibold text-base text-muted-foreground">
           선호하는 포지션 • {selectedPositions?.length || 0}/5
         </Label>
@@ -145,7 +145,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 주발 */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label className="font-semibold text-base text-muted-foreground">
           주로 사용하는 발
         </Label>
