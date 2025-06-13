@@ -2,7 +2,7 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Foot, Gender, Position, User } from "@prisma/client";
+import { Condition, Foot, Gender, Position, User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export type Profile = {
@@ -14,7 +14,7 @@ export type Profile = {
   height?: number;
   weight?: number;
   image?: string;
-  injured?: boolean;
+  condition?: Condition;
 };
 
 // 온보딩 데이터 타입 정의
@@ -64,8 +64,7 @@ export async function updateOnboardingData(
       if (data.profile.birthYear) updateData.birthYear = data.profile.birthYear;
       if (data.profile.weight) updateData.weight = data.profile.weight;
       if (data.profile.image) updateData.image = data.profile.image;
-      if (data.profile.injured !== undefined)
-        updateData.injured = data.profile.injured;
+      if (data.profile.condition) updateData.condition = data.profile.condition;
 
       // 포지션은 별도 처리 (다대다 관계일 경우)
       if (data.profile.positions && data.profile.positions.length > 0) {
