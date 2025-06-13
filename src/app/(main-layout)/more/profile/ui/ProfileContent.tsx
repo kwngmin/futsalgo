@@ -94,7 +94,7 @@ export default function ProfileContent({ data }: { data: User }) {
       title={`${title} 변경`}
       trigger={
         <div
-          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100 ${
+          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 ${
             field !== "phone" ? `` : ""
           }`}
         >
@@ -195,6 +195,9 @@ export default function ProfileContent({ data }: { data: User }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
+          {renderFieldModal("nickname", "닉네임", "닉네임을 입력하세요")}
+          {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
+          {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
           <InfoRow
             icon={<CircleUserRound className="w-5 h-5 text-gray-600" />}
             label="개인정보"
@@ -207,9 +210,6 @@ export default function ProfileContent({ data }: { data: User }) {
             showChevron
             isLast
           />
-          {renderFieldModal("nickname", "닉네임", "닉네임을 입력하세요")}
-          {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
-          {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
         </div>
 
         <h3 className="text-sm font-medium mb-3 px-2 text-gray-600">
