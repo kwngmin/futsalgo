@@ -7,9 +7,29 @@ import { DialogFooter } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Check, Loader2, X } from "lucide-react";
+import { updateNickname } from "../../model/actions";
 
-const ProfileNickname = ({ data }: { data?: string }) => {
+const ProfileNickname = ({
+  data,
+  onSuccess,
+}: {
+  data?: string;
+  onSuccess: () => void;
+}) => {
   const { nickname, onChange } = useNicknameValidation();
+
+  // 단계별 진행
+  const handleClick = async () => {
+    if (nickname.status === "valid") {
+      try {
+        await updateNickname(nickname.value);
+        alert("닉네임이 성공적으로 업데이트되었습니다.");
+        onSuccess?.();
+      } catch (error) {
+        console.error("닉네임 업데이트 실패:", error);
+      }
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -48,7 +68,7 @@ const ProfileNickname = ({ data }: { data?: string }) => {
       <DialogFooter>
         <Button
           type="button"
-          onClick={() => {}}
+          onClick={handleClick}
           disabled={nickname.status !== "valid"}
         >
           저장

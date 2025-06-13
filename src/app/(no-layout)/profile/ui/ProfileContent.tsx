@@ -106,11 +106,20 @@ export default function ProfileContent({ data }: { data: User }) {
       }
     >
       {field === "phone" ? (
-        <ProfilePhone data={data[field] || ""} />
+        <ProfilePhone
+          data={data[field] || ""}
+          onSuccess={() => closeModal(field)}
+        />
       ) : field === "nickname" ? (
-        <ProfileNickname data={data[field] || ""} />
+        <ProfileNickname
+          data={data[field] || ""}
+          onSuccess={() => closeModal(field)}
+        />
       ) : field === "email" ? (
-        <ProfileEmail data={data[field] || ""} />
+        <ProfileEmail
+          data={data[field] || ""}
+          onSuccess={() => closeModal(field)}
+        />
       ) : (
         <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} />
       )}

@@ -8,9 +8,28 @@ import { usePhoneValidation } from "@/features/validation/hooks/use-validation";
 import { Check, Loader2, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { formatPhoneNumber } from "../ProfileContent";
+import { updatePhone } from "../../model/actions";
 
-const ProfilePhone = ({ data }: { data?: string }) => {
+const ProfilePhone = ({
+  data,
+  onSuccess,
+}: {
+  data?: string;
+  onSuccess: () => void;
+}) => {
   const { phone, onChange } = usePhoneValidation();
+
+  const handleClick = async () => {
+    if (phone.status === "valid") {
+      try {
+        await updatePhone(phone.value);
+        alert("전화번호가 성공적으로 업데이트되었습니다.");
+        onSuccess?.();
+      } catch (error) {
+        console.error("전화번호 업데이트 실패:", error);
+      }
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -50,7 +69,7 @@ const ProfilePhone = ({ data }: { data?: string }) => {
       <DialogFooter>
         <Button
           type="button"
-          onClick={() => {}}
+          onClick={handleClick}
           disabled={phone.status !== "valid"}
         >
           저장

@@ -7,10 +7,28 @@ import { DialogFooter } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Check, Loader2, X } from "lucide-react";
+import { updateEmail } from "../../model/actions";
 
-const ProfileEmail = ({ data }: { data?: string }) => {
+const ProfileEmail = ({
+  data,
+  onSuccess,
+}: {
+  data?: string;
+  onSuccess: () => void;
+}) => {
   const { email, onChange } = useEmailValidation();
 
+  const handleClick = async () => {
+    if (email.status === "valid") {
+      try {
+        await updateEmail(email.value);
+        alert("이메일이 성공적으로 업데이트되었습니다.");
+        onSuccess?.();
+      } catch (error) {
+        console.error("이메일 업데이트 실패:", error);
+      }
+    }
+  };
   return (
     <div className="space-y-4">
       {data && (
@@ -48,7 +66,7 @@ const ProfileEmail = ({ data }: { data?: string }) => {
       <DialogFooter>
         <Button
           type="button"
-          onClick={() => {}}
+          onClick={handleClick}
           disabled={email.status !== "valid"}
         >
           저장
