@@ -8,9 +8,9 @@ import {
   ArrowLeft,
   ChevronRight,
   CircleUserRound,
+  IdCard,
   Mail,
   Phone,
-  User2,
 } from "lucide-react";
 import { User } from "@prisma/client";
 import ProfileForm from "./ProfileForm";
@@ -196,7 +196,7 @@ export default function ProfileContent({ data }: { data: User }) {
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
           <InfoRow
-            icon={<User2 className="w-5 h-5 text-gray-600" />}
+            icon={<IdCard className="w-5 h-5 text-gray-600" />}
             label="개인정보"
             value={`${data.name || "미설정"} • ${
               GENDER[data.gender as keyof typeof GENDER]
@@ -212,6 +212,9 @@ export default function ProfileContent({ data }: { data: User }) {
           {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
         </div>
 
+        <h3 className="text-sm font-medium mb-3 px-2 text-gray-600">
+          플레이 정보
+        </h3>
         {/* 플레이 정보 섹션 */}
         <ProfileForm data={data} />
       </div>

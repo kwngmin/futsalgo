@@ -101,7 +101,7 @@ const ProfileForm = ({ data }: { data: User }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-white rounded-2xl"
+      className="space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
       {/* 포지션 */}
       <div className="space-y-3">
@@ -122,9 +122,6 @@ const ProfileForm = ({ data }: { data: User }) => {
             </Badge>
           ))}
         </div>
-        {/* <p className="text-sm text-gray-500">
-        선택된 포지션: {selectedPositions?.length || 0}/5
-      </p> */}
         {errors.positions && (
           <Alert>
             <AlertDescription>{errors.positions.message}</AlertDescription>
@@ -155,75 +152,6 @@ const ProfileForm = ({ data }: { data: User }) => {
           error={errors.condition?.message}
         />
       </div>
-
-      {/* 신장 */}
-      {/* <div className="space-y-2">
-        <Label htmlFor="height">키 (cm)</Label>
-        <Input
-          {...register("height", { valueAsNumber: true })}
-          id="height"
-          type="number"
-          min="100"
-          max="250"
-          placeholder="175"
-        />
-        {errors.height && (
-          <Alert>
-            <AlertDescription>{errors.height.message}</AlertDescription>
-          </Alert>
-        )}
-      </div> */}
-
-      {/* 이름 */}
-      {/* <div className="space-y-2">
-        <Label htmlFor="name" className="gap-1">
-          이름 (실명)
-        </Label>
-        <Input
-          {...register("name")}
-          id="name"
-          type="text"
-          placeholder="이름을 입력하세요"
-        />
-        {errors.name && (
-          <Alert>
-            <AlertDescription>{errors.name.message}</AlertDescription>
-          </Alert>
-        )}
-      </div> */}
-
-      {/* 출생년도 */}
-      {/* <div className="space-y-2">
-        <Label htmlFor="birthYear" className="gap-1">
-          출생년도
-        </Label>
-        <Input
-          {...register("birthYear", { valueAsNumber: true })}
-          id="birthYear"
-          type="number"
-          min="1950"
-          max={new Date().getFullYear()}
-          placeholder="1990"
-        />
-        {errors.birthYear && (
-          <Alert>
-            <AlertDescription>{errors.birthYear.message}</AlertDescription>
-          </Alert>
-        )}
-      </div> */}
-
-      {/* 성별 */}
-      {/* <div className="space-y-3">
-        <Label>성별</Label>
-        <CustomRadioGroup
-          options={GENDER_OPTIONS}
-          value={watch("gender")}
-          onValueChange={(value) =>
-            setValue("gender", value as "MALE" | "FEMALE")
-          }
-          error={errors.gender?.message}
-        />
-      </div> */}
 
       {errors.root && (
         <Alert>
