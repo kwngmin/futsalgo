@@ -331,7 +331,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       )}
 
       {/* 저장 버튼 */}
-      <Button type="submit" disabled={isLoading} className="w-full">
+      <Button type="submit" disabled={isLoading} className="w-full mt-6">
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -341,17 +341,16 @@ const ProfileForm = ({ data }: { data: User }) => {
           "저장"
         )}
       </Button>
+
       {/* 최근 수정일 */}
-      {data.updatedAt && (
-        <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
-          최근 수정일:{" "}
-          {data.updatedAt.toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </div>
-      )}
+      <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
+        최근 수정일:{" "}
+        {data.updatedAt.toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </div>
     </form>
   );
 };
