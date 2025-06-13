@@ -9,6 +9,7 @@ import {
   AtSign,
   ChevronRight,
   CircleUserRound,
+  IdCard,
   Mail,
   Phone,
 } from "lucide-react";
@@ -199,7 +200,7 @@ export default function ProfileContent({ data }: { data: User }) {
           {renderFieldModal("email", "이메일", "이메일을 입력하세요")}
           {renderFieldModal("phone", "전화번호", "전화번호를 입력하세요")}
           <InfoRow
-            icon={<CircleUserRound className="w-5 h-5 text-gray-600" />}
+            icon={<IdCard className="w-5 h-5 text-gray-600" />}
             label="개인정보"
             value={`${data.name || "미설정"} • ${
               GENDER[data.gender as keyof typeof GENDER]
