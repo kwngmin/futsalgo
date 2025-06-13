@@ -1,16 +1,11 @@
+import { notFound } from "next/navigation";
 import PlayerContent from "./ui/PlayerContent";
 
-interface PlayerPageProps {
-  params: {
-    id: string;
-  };
-}
-
-const PlayerPage = ({ params }: PlayerPageProps) => {
-  const { id } = params;
+const PlayerPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
 
   if (!id) {
-    return <div>선수를 찾을 수 없습니다.</div>;
+    notFound();
   }
 
   return <PlayerContent id={id} />;
