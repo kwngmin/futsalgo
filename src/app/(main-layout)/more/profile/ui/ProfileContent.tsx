@@ -6,9 +6,9 @@ import { Label } from "@/shared/components/ui/label";
 import { DialogFooter } from "@/shared/components/ui/dialog";
 import {
   ArrowLeft,
+  AtSign,
   ChevronRight,
   CircleUserRound,
-  IdCard,
   Mail,
   Phone,
 } from "lucide-react";
@@ -101,7 +101,7 @@ export default function ProfileContent({ data }: { data: User }) {
           <p className="hidden">{placeholder}</p>
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
-              <CircleUserRound className={`w-5 h-5 text-gray-600`} />
+              <AtSign className={`w-5 h-5 text-gray-600`} />
             ) : field === "email" ? (
               <Mail className={`w-5 h-5 text-gray-600`} />
             ) : (
@@ -196,13 +196,13 @@ export default function ProfileContent({ data }: { data: User }) {
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white">
           <InfoRow
-            icon={<IdCard className="w-5 h-5 text-gray-600" />}
+            icon={<CircleUserRound className="w-5 h-5 text-gray-600" />}
             label="개인정보"
             value={`${data.name || "미설정"} • ${
               GENDER[data.gender as keyof typeof GENDER]
-            } • ${
+            } • ${data.height ? `${data.height}cm` : "키 미설정"} • ${
               data.birthYear ? `${data.birthYear}년생` : "출생년도 미설정"
-            } • ${data.height ? `${data.height}cm` : "키 미설정"}`}
+            }`}
             onClick={handleBasicInfoEdit}
             showChevron
             isLast
