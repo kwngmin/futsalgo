@@ -1,6 +1,12 @@
 import PlayerContent from "./ui/PlayerContent";
 
-const PlayerPage = ({ params }: { params: { id: string } }) => {
+interface PlayerPageProps {
+  params: {
+    id: string;
+  };
+}
+
+const PlayerPage = ({ params }: PlayerPageProps) => {
   const { id } = params;
 
   if (!id) {
