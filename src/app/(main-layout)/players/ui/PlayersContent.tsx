@@ -3,9 +3,6 @@
 import { useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { getPlayers } from "./model/actions";
-import { useQuery } from "@tanstack/react-query";
 
 // 샘플 선수 데이터
 const players = [
@@ -90,19 +87,8 @@ const isLoggedIn = true; // false로 변경하면 로그인 안한 상태
 
 type FilterType = "all" | "male" | "female" | "following";
 
-const PlayersPage = () => {
-  const session = useSession();
-  console.log(session, "session");
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["players"],
-    queryFn: getPlayers,
-  });
-
-  console.log(data, "data");
-  console.log(isLoading, "isLoading");
-  console.log(error, "error");
-
+const PlayersContent = () => {
+  //   console.log(session, "session");
   const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
 
   // 필터에 따라 선수 목록 필터링
@@ -294,4 +280,4 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
   );
 };
 
-export default PlayersPage;
+export default PlayersContent;
