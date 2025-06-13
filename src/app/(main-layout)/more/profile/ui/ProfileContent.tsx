@@ -94,8 +94,8 @@ export default function ProfileContent({ data }: { data: User }) {
       title={`${title} 변경`}
       trigger={
         <div
-          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer ${
-            field !== "phone" ? `border-b border-gray-100` : ""
+          className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100 ${
+            field !== "phone" ? `` : ""
           }`}
         >
           <p className="hidden">{placeholder}</p>
