@@ -4,7 +4,7 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Share2 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
 import {
   FOOT,
@@ -62,16 +62,21 @@ const PlayerContent = ({ id }: { id: string }) => {
           />
           {/* <h1 className="text-2xl font-bold">{data?.data?.player.nickname}</h1> */}
         </Button>
-        {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
-          <Search className="w-5 h-5" />
-        </button> */}
-        <Button size="sm" className="rounded-full font-bold text-base">
-          팔로우
-        </Button>
+        <div className="flex gap-3 px-3">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
+            <Share2 className="w-5 h-5" />
+          </button>
+          <Button
+            size="sm"
+            className="rounded-full font-bold text-base py-0 px-4"
+          >
+            팔로우
+          </Button>
+        </div>
       </div>
       {data ? (
         <div className="px-3 space-y-4">
-          <div className="flex gap-6 items-center px-8 bg-white rounded-2xl py-6">
+          <div className="flex gap-6 items-center px-6 bg-white rounded-2xl py-6">
             {/* 프로필 사진 */}
             <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
               <Image
@@ -83,7 +88,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <h1 className="text-2xl font-bold">
+              <h1 className="text-xl font-bold">
                 {data?.data?.player.nickname}
               </h1>
               <p className="text-sm text-gray-500 font-semibold">
@@ -134,7 +139,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               <Label className="text-muted-foreground">실력</Label>
             </div>
           </div>
-          <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
+          {/* <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
             <h2 className="font-semibold text-gray-600 px-3">팀매치</h2>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
               <div className="flex flex-col gap-1 items-center my-3">
@@ -154,7 +159,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">출전 시간</Label>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
             <h2 className="font-semibold text-gray-600 px-3">스쿼드매치</h2>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
