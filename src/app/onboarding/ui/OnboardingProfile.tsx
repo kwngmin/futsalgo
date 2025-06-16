@@ -15,18 +15,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
-import { Badge } from "@/shared/components/ui/badge";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { ValidationStep } from "../model/types";
-import { Position } from "@prisma/client";
+import { PlayerBackground, Position, SkillLevel } from "@prisma/client";
 import { updateProfileData } from "@/app/(no-layout)/profile/model/actions";
 import {
   FOOT_OPTIONS,
   GENDER_OPTIONS,
+  PLAYER_BACKGROUND_OPTIONS,
   POSITION_OPTIONS,
+  SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
+import { validateBirthDate } from "@/features/validation/model/actions";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -37,18 +39,23 @@ const profileSchema = z.object({
   gender: z.enum(["MALE", "FEMALE"], {
     error: () => "성별을 선택해주세요",
   }),
-  positions: z
-    .array(z.string())
-    .min(1, "최소 1개의 포지션을 선택해주세요")
-    .max(5, "최대 5개의 포지션까지 선택 가능합니다"),
+  position: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"], {
+    error: () => "포지션을 선택해주세요",
+  }),
   height: z
     .number({ error: () => "신장을 입력해주세요" })
     .min(100, "키는 100cm 이상이어야 합니다")
     .max(250, "키는 250cm 이하여야 합니다"),
-  birthYear: z
-    .number()
-    .min(1950, "출생년도는 1950년 이후여야 합니다")
-    .max(new Date().getFullYear(), "출생년도는 현재 년도 이하여야 합니다"),
+  birthDate: z
+    .string({ error: () => "생년월일을 입력해주세요" })
+    .length(8, "생년월일은 8자리여야 합니다")
+    .refine(validateBirthDate, "올바른 생년월일을 입력해주세요 (예: 19850101)"),
+  playerBackground: z.enum(["NON_PROFESSIONAL", "PROFESSIONAL"], {
+    error: () => "선수 출신 여부를 선택해주세요",
+  }),
+  skillLevel: z.enum(["BEGINNER", "AMATEUR", "ACE", "SEMIPRO"], {
+    error: () => "실력 수준을 선택해주세요",
+  }),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -74,27 +81,8 @@ export function OnboardingProfile({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name,
-      positions: [],
     },
   });
-
-  const selectedPositions = watch("positions");
-
-  // 포지션 토글
-  const togglePosition = (position: string) => {
-    const current = selectedPositions || [];
-    let updated;
-
-    if (current.includes(position)) {
-      updated = current.filter((p) => p !== position);
-    } else if (current.length < 5) {
-      updated = [...current, position];
-    } else {
-      return; // 최대 5개 제한
-    }
-
-    setValue("positions", updated);
-  };
 
   // 최종 제출
   const onSubmit = async (data: ProfileFormData) => {
@@ -103,7 +91,6 @@ export function OnboardingProfile({
       const response = await updateProfileData({
         profile: {
           ...data,
-          positions: data.positions as Position[],
         },
       });
 
@@ -137,11 +124,8 @@ export function OnboardingProfile({
       <CardContent className="px-4">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* 이름 */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="name"
-              className="font-semibold text-base text-muted-foreground"
-            >
+          <div className="space-y-3">
+            <Label htmlFor="name" className="px-1">
               이름
             </Label>
             <Input
@@ -150,17 +134,15 @@ export function OnboardingProfile({
               placeholder="이름을 입력하세요"
             />
             {errors.name && (
-              <Alert>
+              <Alert variant="destructive">
                 <AlertDescription>{errors.name.message}</AlertDescription>
               </Alert>
             )}
           </div>
 
           {/* 주발 */}
-          <div className="space-y-2">
-            <Label className="font-semibold text-base text-muted-foreground">
-              주로 사용하는 발
-            </Label>
+          <div className="space-y-3">
+            <Label className="px-1">주로 사용하는 발</Label>
             <CustomRadioGroup
               options={FOOT_OPTIONS}
               value={watch("foot")}
@@ -172,10 +154,8 @@ export function OnboardingProfile({
           </div>
 
           {/* 성별 */}
-          <div className="space-y-2">
-            <Label className="font-semibold text-base text-muted-foreground">
-              성별
-            </Label>
+          <div className="space-y-3">
+            <Label className="px-1">성별</Label>
             <CustomRadioGroup
               options={GENDER_OPTIONS}
               value={watch("gender")}
@@ -187,81 +167,93 @@ export function OnboardingProfile({
           </div>
 
           {/* 포지션 */}
-          <div className="space-y-2">
-            <Label className="font-semibold text-base text-muted-foreground">
-              선호하는 포지션 • {selectedPositions?.length || 0}/5
-            </Label>
-            <div className="flex flex-wrap gap-2">
-              {POSITION_OPTIONS.map((position) => (
-                <Badge
-                  key={position.value}
-                  variant={
-                    selectedPositions?.includes(position.value)
-                      ? "default"
-                      : "outline"
-                  }
-                  className="cursor-pointer text-center justify-center items-center h-9 px-3 rounded-full"
-                  onClick={() => togglePosition(position.value)}
-                >
-                  {`${position.value} - ${position.label}`}
-                </Badge>
-              ))}
-            </div>
-            {errors.positions && (
-              <Alert>
-                <AlertDescription>{errors.positions.message}</AlertDescription>
-              </Alert>
-            )}
+          <div className="space-y-3">
+            <Label className="px-1">선호하는 포지션</Label>
+            <CustomRadioGroup
+              options={POSITION_OPTIONS}
+              value={watch("position")}
+              onValueChange={(value) => setValue("position", value as Position)}
+              error={errors.position?.message}
+              direction="vertical"
+            />
           </div>
 
           {/* 신장 */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="height"
-              className="font-semibold text-base text-muted-foreground"
-            >
-              키 (cm)
+          <div className="space-y-3">
+            <Label htmlFor="height" className="px-1">
+              키
             </Label>
-            <Input
-              {...register("height", { valueAsNumber: true })}
-              id="height"
-              type="number"
-              min="100"
-              max="250"
-              placeholder="175"
-            />
+            <div className="relative">
+              <Input
+                {...register("height", { valueAsNumber: true })}
+                id="height"
+                type="number"
+                min="100"
+                max="250"
+                placeholder="175"
+                className="pr-10 text-right text-base"
+              />
+              <span className="leading-none text-sm text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 select-none">
+                cm
+              </span>
+            </div>
             {errors.height && (
-              <Alert>
+              <Alert variant="destructive">
                 <AlertDescription>{errors.height.message}</AlertDescription>
               </Alert>
             )}
           </div>
 
-          {/* 출생년도 (선택) */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="birthYear"
-              className="font-semibold text-base text-muted-foreground"
-            >
-              출생년도
+          {/* 생년월일 */}
+          <div className="space-y-3">
+            <Label htmlFor="birthDate" className="px-1">
+              생년월일 8자리
             </Label>
             <Input
-              {...register("birthYear", { valueAsNumber: true })}
-              id="birthYear"
+              {...register("birthDate")} // valueAsNumber 제거
+              id="birthDate"
               type="number"
-              min="1950"
-              max={new Date().getFullYear()}
-              placeholder="1990"
+              placeholder="19850101"
+              className="text-base"
+              maxLength={8} // 8자리 제한
+              pattern="\d{8}" // 숫자만 입력 가능
             />
-            {errors.birthYear && (
-              <Alert>
-                <AlertDescription>{errors.birthYear.message}</AlertDescription>
+            {errors.birthDate && (
+              <Alert variant="destructive">
+                <AlertDescription>{errors.birthDate.message}</AlertDescription>
               </Alert>
             )}
           </div>
 
+          {/* 선수 출신 여부 */}
+          <div className="space-y-3">
+            <Label className="px-1">출신</Label>
+            <CustomRadioGroup
+              options={PLAYER_BACKGROUND_OPTIONS}
+              value={watch("playerBackground")}
+              onValueChange={(value) =>
+                setValue("playerBackground", value as PlayerBackground)
+              }
+              error={errors.playerBackground?.message}
+            />
+          </div>
+
+          {/* 실력 수준 */}
+          <div className="space-y-3">
+            <Label className="px-1">실력</Label>
+            <CustomRadioGroup
+              options={SKILL_LEVEL_OPTIONS}
+              value={watch("skillLevel")}
+              onValueChange={(value) =>
+                setValue("skillLevel", value as SkillLevel)
+              }
+              error={errors.skillLevel?.message}
+              direction="vertical"
+            />
+          </div>
+
           {errors.root && (
-            <Alert>
+            <Alert variant="destructive">
               <AlertDescription>{errors.root.message}</AlertDescription>
             </Alert>
           )}

@@ -6,15 +6,19 @@ const CustomRadioGroup = ({
   value,
   onValueChange,
   error,
+  direction = "horizontal",
 }: {
   options: readonly { value: string; label: string }[];
   value: string;
   onValueChange: (value: string) => void;
   error?: string;
+  direction?: "horizontal" | "vertical";
 }) => (
   <>
     <RadioGroup
-      className="flex flex-wrap gap-2"
+      className={`flex ${
+        direction === "vertical" ? "flex-col" : "flex-wrap"
+      } gap-2`}
       value={value}
       onValueChange={onValueChange}
     >
@@ -26,8 +30,8 @@ const CustomRadioGroup = ({
         >
           <RadioGroupItem value={option.value} id={option.value} />
           <span
-            className={`text-sm leading-none ${
-              option.value === value ? "font-semibold" : "font-medium"
+            className={`text-sm leading-none font-semibold ${
+              option.value === value ? "" : "text-muted-foreground"
             }`}
           >
             {option.label}
@@ -36,7 +40,7 @@ const CustomRadioGroup = ({
       ))}
     </RadioGroup>
     {error && (
-      <Alert>
+      <Alert variant="destructive">
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     )}

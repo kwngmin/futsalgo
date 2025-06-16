@@ -13,6 +13,7 @@ import { Button } from "@/shared/components/ui/button";
 import { GENDER_OPTIONS } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { updateProfileData } from "../../model/actions";
+import { validateBirthDate } from "@/features/validation/model/actions";
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
@@ -24,10 +25,10 @@ const profileSchema = z.object({
     .number({ error: () => "신장을 입력해주세요" })
     .min(100, "키는 100cm 이상이어야 합니다")
     .max(250, "키는 250cm 이하여야 합니다"),
-  birthYear: z
-    .number()
-    .min(1950, "출생년도는 1950년 이후여야 합니다")
-    .max(new Date().getFullYear(), "출생년도는 현재 년도 이하여야 합니다"),
+  birthDate: z
+    .string({ error: () => "생년월일을 입력해주세요" })
+    .length(8, "생년월일은 8자리여야 합니다")
+    .refine(validateBirthDate, "올바른 생년월일을 입력해주세요 (예: 19850101)"),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -54,7 +55,7 @@ const ProfileBasicForm = ({
       name: data.name as string,
       gender: data.gender as "MALE" | "FEMALE",
       height: data.height as number,
-      birthYear: data.birthYear as number,
+      birthDate: (data.birthDate as string) || "", // string으로 처리
     },
   });
 
@@ -80,15 +81,13 @@ const ProfileBasicForm = ({
       setIsLoading(false);
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-3">
       {/* 이름 */}
-      <div className="space-y-2">
-        <Label
-          htmlFor="name"
-          className="font-semibold text-base text-muted-foreground"
-        >
-          이름 (실명)
+      <div className="space-y-3">
+        <Label htmlFor="name" className="px-1">
+          이름
         </Label>
         <Input
           {...register("name")}
@@ -97,40 +96,36 @@ const ProfileBasicForm = ({
           placeholder="이름을 입력하세요"
         />
         {errors.name && (
-          <Alert>
+          <Alert variant="destructive">
             <AlertDescription>{errors.name.message}</AlertDescription>
           </Alert>
         )}
       </div>
 
-      {/* 출생년도 */}
-      <div className="space-y-2">
-        <Label
-          htmlFor="birthYear"
-          className="font-semibold text-base text-muted-foreground"
-        >
-          출생년도
+      {/* 생년월일 */}
+      <div className="space-y-3">
+        <Label htmlFor="birthDate" className="px-1">
+          생년월일 8자리
         </Label>
         <Input
-          {...register("birthYear", { valueAsNumber: true })}
-          id="birthYear"
+          {...register("birthDate")} // valueAsNumber 제거
+          id="birthDate"
           type="number"
-          min="1950"
-          max={new Date().getFullYear()}
-          placeholder="1990"
+          placeholder="19850101"
+          className="text-base"
+          maxLength={8} // 8자리 제한
+          pattern="\d{8}" // 숫자만 입력 가능
         />
-        {errors.birthYear && (
-          <Alert>
-            <AlertDescription>{errors.birthYear.message}</AlertDescription>
+        {errors.birthDate && (
+          <Alert variant="destructive">
+            <AlertDescription>{errors.birthDate.message}</AlertDescription>
           </Alert>
         )}
       </div>
 
       {/* 성별 */}
-      <div className="space-y-2">
-        <Label className="font-semibold text-base text-muted-foreground">
-          성별
-        </Label>
+      <div className="space-y-3">
+        <Label className="px-1">성별</Label>
         <CustomRadioGroup
           options={GENDER_OPTIONS}
           value={watch("gender")}
@@ -142,29 +137,32 @@ const ProfileBasicForm = ({
       </div>
 
       {errors.root && (
-        <Alert>
+        <Alert variant="destructive">
           <AlertDescription>{errors.root.message}</AlertDescription>
         </Alert>
       )}
 
       {/* 신장 */}
-      <div className="space-y-2">
-        <Label
-          htmlFor="height"
-          className="font-semibold text-base text-muted-foreground"
-        >
-          키 (cm)
+      <div className="space-y-3">
+        <Label htmlFor="height" className="px-1">
+          키
         </Label>
-        <Input
-          {...register("height", { valueAsNumber: true })}
-          id="height"
-          type="number"
-          min="100"
-          max="250"
-          placeholder="175"
-        />
+        <div className="relative">
+          <Input
+            {...register("height", { valueAsNumber: true })}
+            id="height"
+            type="number"
+            min="100"
+            max="250"
+            placeholder="175"
+            className="pr-10 text-right text-base"
+          />
+          <span className="leading-none text-sm text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 select-none">
+            cm
+          </span>
+        </div>
         {errors.height && (
-          <Alert>
+          <Alert variant="destructive">
             <AlertDescription>{errors.height.message}</AlertDescription>
           </Alert>
         )}

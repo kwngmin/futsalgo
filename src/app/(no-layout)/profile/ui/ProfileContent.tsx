@@ -19,29 +19,10 @@ import ProfileNickname from "./modal/ProfileNickname";
 import ProfileEmail from "./modal/ProfileEmail";
 import ProfileBasicForm from "./modal/ProfileBasicForm";
 import { useState } from "react";
-
-/**
- * 전화번호 문자열을 포맷팅해서 반환하는 함수
- * @param input 숫자로 이루어진 문자열 (ex: "01012345678")
- * @returns 포맷팅된 전화번호 문자열 (ex: "010-1234-5678")
- */
-export function formatPhoneNumber(input: string): string {
-  // 숫자만 필터링
-  const digits = input.replace(/\D/g, "");
-
-  if (digits.length === 10) {
-    // 000-000-0000
-    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
-  }
-
-  if (digits.length === 11) {
-    // 000-0000-0000
-    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
-  }
-
-  // 그 외는 원본 반환
-  return input;
-}
+import {
+  formatPhoneNumber,
+  getCurrentAge,
+} from "@/entities/user/model/actions";
 
 export default function ProfileContent({ data }: { data: User }) {
   const router = useRouter();
@@ -51,6 +32,8 @@ export default function ProfileContent({ data }: { data: User }) {
     phone: false,
     basic: false,
   });
+
+  const age = getCurrentAge(data.birthDate as string);
 
   const openModal = (field: keyof typeof modalStates) => {
     setModalStates((prev) => ({ ...prev, [field]: true }));
@@ -93,9 +76,13 @@ export default function ProfileContent({ data }: { data: User }) {
               {field === "basic"
                 ? `${data.name || "미설정"} • ${
                     GENDER[data.gender as keyof typeof GENDER]
-                  } • ${data.height ? `${data.height}cm` : "키 미설정"} • ${
-                    data.birthYear ? `${data.birthYear}년생` : "출생년도 미설정"
-                  }`
+                  } • ${
+                    data.birthDate
+                      ? age.success
+                        ? `${age.age}세`
+                        : "생년월일 미설정"
+                      : "생년월일 미설정"
+                  } • ${data.height ? `${data.height}cm` : "키 미설정"}`
                 : field === "phone"
                 ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
                 : data[field] || "설정되지 않음"}

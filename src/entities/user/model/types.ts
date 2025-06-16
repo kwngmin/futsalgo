@@ -1,11 +1,20 @@
-import { Condition, Foot, Gender, Position } from "@prisma/client";
+import {
+  Condition,
+  Foot,
+  Gender,
+  PlayerBackground,
+  Position,
+  SkillLevel,
+} from "@prisma/client";
 
 export type Profile = {
   name?: string;
   foot?: Foot;
   gender?: Gender;
-  positions?: Position[];
-  birthYear?: number;
+  position?: Position;
+  birthDate?: string;
+  playerBackground?: PlayerBackground;
+  skillLevel?: SkillLevel;
   height?: number;
   weight?: number;
   image?: string;

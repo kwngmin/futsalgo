@@ -11,7 +11,7 @@ const SkeletonPlayCard = ({
     <div className="bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer">
       <div className="flex gap-3">
         <div className="size-12 bg-gray-200 rounded-full animate-pulse" />
-        <div className="flex-1 flex flex-col justify-center space-y-2">
+        <div className="flex-1 flex flex-col justify-center space-y-3">
           <div
             className={cn(
               "h-4 bg-gray-200 rounded w-16 animate-pulse",
@@ -25,7 +25,7 @@ const SkeletonPlayCard = ({
             )}
           />
         </div>
-        <div className="w-12 flex flex-col justify-center items-center text-right space-y-2">
+        <div className="w-12 flex flex-col justify-center items-center text-right space-y-3">
           <div className="h-3 bg-gray-200 rounded w-10 animate-pulse" />
           <div className="h-5 bg-gray-200 rounded w-8 animate-pulse" />
         </div>

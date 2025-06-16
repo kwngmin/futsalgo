@@ -1,17 +1,24 @@
-import { Badge } from "@/shared/components/ui/badge";
 import { Label } from "@/shared/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useState } from "react";
-import { Condition, Position, User } from "@prisma/client";
+import { useState } from "react";
+import {
+  Condition,
+  PlayerBackground,
+  Position,
+  SkillLevel,
+  User,
+} from "@prisma/client";
 import { Button } from "@/shared/components/ui/button";
 import {
   CONDITION_OPTIONS,
   FOOT_OPTIONS,
+  PLAYER_BACKGROUND_OPTIONS,
   POSITION_OPTIONS,
+  SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { updateProfileData } from "../model/actions";
@@ -22,12 +29,17 @@ const profileSchema = z.object({
   foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
     error: () => "주발을 선택해주세요",
   }),
-  positions: z
-    .array(z.string())
-    .min(1, "최소 1개의 포지션을 선택해주세요")
-    .max(5, "최대 5개의 포지션까지 선택 가능합니다"),
+  position: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"], {
+    error: () => "포지션을 선택해주세요",
+  }),
   condition: z.enum(["NORMAL", "INJURED"], {
     error: () => "몸 상태를 선택해주세요",
+  }),
+  playerBackground: z.enum(["NON_PROFESSIONAL", "PROFESSIONAL"], {
+    error: () => "선수 출신 여부를 선택해주세요",
+  }),
+  skillLevel: z.enum(["BEGINNER", "AMATEUR", "ACE", "SEMIPRO"], {
+    error: () => "실력 수준을 선택해주세요",
   }),
 });
 
@@ -46,31 +58,13 @@ const ProfileForm = ({ data }: { data: User }) => {
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      positions: data.positions || [],
+      position: data.position as Position,
       foot: data.foot as "LEFT" | "RIGHT" | "BOTH",
       condition: data.condition as Condition,
+      playerBackground: data.playerBackground as PlayerBackground,
+      skillLevel: data.skillLevel as SkillLevel,
     },
   });
-
-  const selectedPositions = watch("positions");
-
-  const togglePosition = useCallback(
-    (position: string) => {
-      const current = selectedPositions || [];
-      let updated: string[];
-
-      if (current.includes(position)) {
-        updated = current.filter((p) => p !== position);
-      } else if (current.length < 5) {
-        updated = [...current, position];
-      } else {
-        return;
-      }
-
-      setValue("positions", updated);
-    },
-    [selectedPositions, setValue]
-  );
 
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
@@ -78,7 +72,6 @@ const ProfileForm = ({ data }: { data: User }) => {
       const response = await updateProfileData({
         profile: {
           ...data,
-          positions: data.positions as Position[],
         },
       });
 
@@ -104,10 +97,8 @@ const ProfileForm = ({ data }: { data: User }) => {
       className="space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
       {/* 몸 상태 */}
-      <div className="space-y-2">
-        <Label className="font-semibold text-base text-muted-foreground">
-          몸 상태
-        </Label>
+      <div className="space-y-3">
+        <Label className="px-1">몸 상태</Label>
         <CustomRadioGroup
           options={CONDITION_OPTIONS}
           value={watch("condition")}
@@ -117,38 +108,20 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 포지션 */}
-      <div className="space-y-2">
-        <Label className="font-semibold text-base text-muted-foreground">
-          선호하는 포지션 • {selectedPositions?.length || 0}/5
-        </Label>
-        <div className="flex flex-wrap gap-2">
-          {POSITION_OPTIONS.map((position) => (
-            <Badge
-              key={position.value}
-              variant={
-                selectedPositions?.includes(position.value)
-                  ? "default"
-                  : "outline"
-              }
-              className="cursor-pointer text-center justify-center items-center h-9 px-3 rounded-full"
-              onClick={() => togglePosition(position.value)}
-            >
-              {`${position.value} - ${position.label}`}
-            </Badge>
-          ))}
-        </div>
-        {errors.positions && (
-          <Alert>
-            <AlertDescription>{errors.positions.message}</AlertDescription>
-          </Alert>
-        )}
+      <div className="space-y-3">
+        <Label className="px-1">선호하는 포지션</Label>
+        <CustomRadioGroup
+          options={POSITION_OPTIONS}
+          value={watch("position")}
+          onValueChange={(value) => setValue("position", value as Position)}
+          error={errors.position?.message}
+          // direction="vertical"
+        />
       </div>
 
       {/* 주발 */}
-      <div className="space-y-2">
-        <Label className="font-semibold text-base text-muted-foreground">
-          주로 사용하는 발
-        </Label>
+      <div className="space-y-3">
+        <Label className="px-1">주로 사용하는 발</Label>
         <CustomRadioGroup
           options={FOOT_OPTIONS}
           value={watch("foot")}
@@ -159,8 +132,33 @@ const ProfileForm = ({ data }: { data: User }) => {
         />
       </div>
 
+      {/* 실력 수준 */}
+      <div className="space-y-3">
+        <Label className="px-1">실력</Label>
+        <CustomRadioGroup
+          options={SKILL_LEVEL_OPTIONS}
+          value={watch("skillLevel")}
+          onValueChange={(value) => setValue("skillLevel", value as SkillLevel)}
+          error={errors.skillLevel?.message}
+          // direction="vertical"
+        />
+      </div>
+
+      {/* 선수 출신 여부 */}
+      <div className="space-y-3">
+        <Label className="px-1">출신</Label>
+        <CustomRadioGroup
+          options={PLAYER_BACKGROUND_OPTIONS}
+          value={watch("playerBackground")}
+          onValueChange={(value) =>
+            setValue("playerBackground", value as PlayerBackground)
+          }
+          error={errors.playerBackground?.message}
+        />
+      </div>
+
       {errors.root && (
-        <Alert>
+        <Alert variant="destructive">
           <AlertDescription>{errors.root.message}</AlertDescription>
         </Alert>
       )}

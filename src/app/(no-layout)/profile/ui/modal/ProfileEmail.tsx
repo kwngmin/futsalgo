@@ -37,7 +37,7 @@ const ProfileEmail = ({
           <p>{data}</p>
         </div>
       )}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label htmlFor="email">새로운 이메일</Label>
         <div className="relative">
           <Input

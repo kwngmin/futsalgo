@@ -49,7 +49,7 @@ export function OnboardingPhone({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="phone">전화번호</Label>
           <div className="relative">
             <Input

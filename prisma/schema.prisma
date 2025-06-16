@@ -32,16 +32,10 @@ enum Condition {
 }
 
 enum Position {
-  ST
-  LW
-  RW
-  AM
-  CM
-  DM
-  CB
-  LB
-  RB
-  GK
+ PIVO
+ ALA
+ FIXO
+ GOLEIRO
 }
 
 enum MatchSide {
@@ -99,6 +93,17 @@ enum ActivityFrequency {
   IRREGULAR   // 불규칙
 }
 
+enum PlayerBackground {
+  NON_PROFESSIONAL  // 비선출
+  PROFESSIONAL      // 선출
+}
+
+enum SkillLevel {
+  BEGINNER     // 입문자
+  AMATEUR      // 중급자 (아마추어)
+  EXPERT       // 상급자
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -144,11 +149,14 @@ model User {
 
   foot            Foot?   // 'left' | 'right' | 'both'
   gender          Gender?   // 'male' | 'female'
-  birthYear       Int?
+  birthDate       String?   // YYYYMMDD 형식 (예: "19850312")
   height          Int?
   weight          Int?
 
-  positions       Position[]   // ex: 'fw', 'mf', 'df', 'gk'
+  playerBackground PlayerBackground @default(NON_PROFESSIONAL) // 선수 출신 여부
+  skillLevel      SkillLevel @default(BEGINNER) // 실력 수준
+
+  position        Position?   
   condition       Condition @default(NORMAL)
 
   teams           TeamMember[]

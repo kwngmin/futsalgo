@@ -39,7 +39,7 @@ const ProfileNickname = ({
           <p>{data}</p>
         </div>
       )}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label htmlFor="nickname">새로운 닉네임</Label>
         <div className="relative">
           <Input

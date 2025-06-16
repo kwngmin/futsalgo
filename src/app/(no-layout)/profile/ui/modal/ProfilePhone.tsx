@@ -39,7 +39,7 @@ const ProfilePhone = ({
           <p>{formatPhoneNumber(data)}</p>
         </div>
       )}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label htmlFor="phone">새로운 전화번호</Label>
         <div className="relative">
           <Input

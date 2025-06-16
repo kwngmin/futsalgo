@@ -44,3 +44,27 @@ export const validateField = async (
     }));
   }
 };
+
+// 생년월일 검증 함수
+export const validateBirthDate = (birthDate: string): boolean => {
+  // 8자리 숫자인지 확인
+  if (!/^\d{8}$/.test(birthDate)) return false;
+
+  // 유효한 날짜인지 확인
+  const year = parseInt(birthDate.substring(0, 4));
+  const month = parseInt(birthDate.substring(4, 6));
+  const day = parseInt(birthDate.substring(6, 8));
+
+  // 기본 범위 체크
+  if (year < 1900 || year > new Date().getFullYear()) return false;
+  if (month < 1 || month > 12) return false;
+  if (day < 1 || day > 31) return false;
+
+  // 실제 날짜 유효성 체크
+  const date = new Date(year, month - 1, day);
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+};

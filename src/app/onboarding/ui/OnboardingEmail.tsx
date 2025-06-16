@@ -45,7 +45,7 @@ export function OnboardingEmail({
         <CardDescription>사용할 이메일 주소를 확인해주세요</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="email">이메일</Label>
           <div className="relative">
             <Input
@@ -66,7 +66,7 @@ export function OnboardingEmail({
             )}
           </div>
           {email.error && (
-            <Alert>
+            <Alert variant="destructive">
               <AlertDescription>{email.error}</AlertDescription>
             </Alert>
           )}

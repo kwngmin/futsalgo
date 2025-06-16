@@ -45,7 +45,7 @@ export function OnboardingNickname({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <Label htmlFor="nickname">닉네임</Label>
           <div className="relative">
             <Input

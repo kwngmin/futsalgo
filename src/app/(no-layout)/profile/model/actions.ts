@@ -3,7 +3,7 @@
 import { Profile } from "@/entities/user/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Position, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 // 프로필 데이터 타입 정의
@@ -50,12 +50,14 @@ export async function updateProfileData(
       if (data.profile.foot) updateData.foot = data.profile.foot;
       if (data.profile.gender) updateData.gender = data.profile.gender;
       if (data.profile.height) updateData.height = data.profile.height;
-      if (data.profile.birthYear) updateData.birthYear = data.profile.birthYear;
+      if (data.profile.birthDate) updateData.birthDate = data.profile.birthDate;
       if (data.profile.image) updateData.image = data.profile.image;
       if (data.profile.condition) updateData.condition = data.profile.condition;
-      if (data.profile.positions && data.profile.positions.length > 0) {
-        updateData.positions = data.profile.positions as Position[];
-      }
+      if (data.profile.position) updateData.position = data.profile.position;
+      if (data.profile.playerBackground)
+        updateData.playerBackground = data.profile.playerBackground;
+      if (data.profile.skillLevel)
+        updateData.skillLevel = data.profile.skillLevel;
     }
 
     const updatedUser = await prisma.user.update({
