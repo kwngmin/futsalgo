@@ -7,7 +7,6 @@ import Image from "next/image";
 import { ArrowLeft, Star, Target, Trophy } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { FOOT } from "@/entities/user/model/constants";
-// import { getUser } from "@/app/(no-layout)/profile/model/actions";
 
 export const SKILL_LEVEL_DISPLAY = {
   BEGINNER: "입문자",
