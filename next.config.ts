@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
     if (dev) {
       config.devtool = "eval-source-map";
     }
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
+      use: ["@svgr/webpack"],
+    });
     return config;
   },
 };
