@@ -65,7 +65,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
           <Search className="w-5 h-5" />
         </button> */}
-        <Button variant="ghost" size="lg">
+        <Button size="sm" className="rounded-full font-bold text-base">
           팔로우
         </Button>
       </div>
@@ -86,7 +86,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               <h1 className="text-2xl font-bold">
                 {data?.data?.player.nickname}
               </h1>
-              <p className="text-sm text-gray-500 font-medium">소속 팀 없음</p>
+              <p className="text-sm text-gray-500 font-semibold">
+                소속 팀 없음
+              </p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
@@ -104,11 +106,11 @@ const PlayerContent = ({ id }: { id: string }) => {
               <div className="font-semibold">
                 {FOOT[data?.data?.player.foot as keyof typeof FOOT]}
               </div>
-              <Label className="text-muted-foreground">주로 사용하는 발</Label>
+              <Label className="text-muted-foreground">사용하는 발</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-3">
               <div className="font-semibold">{data?.data?.player.position}</div>
-              <Label className="text-muted-foreground">선호하는 포지션</Label>
+              <Label className="text-muted-foreground">선호 포지션</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-3">
               <div className="font-semibold">
@@ -130,6 +132,48 @@ const PlayerContent = ({ id }: { id: string }) => {
                 }
               </div>
               <Label className="text-muted-foreground">실력</Label>
+            </div>
+          </div>
+          <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
+            <h2 className="font-semibold text-gray-600 px-3">팀매치</h2>
+            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">11</div>
+                <Label className="text-muted-foreground">경기</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">2</div>
+                <Label className="text-muted-foreground">득점</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">5</div>
+                <Label className="text-muted-foreground">어시스트</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">8</div>
+                <Label className="text-muted-foreground">출전 시간</Label>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
+            <h2 className="font-semibold text-gray-600 px-3">스쿼드매치</h2>
+            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">2</div>
+                <Label className="text-muted-foreground">경기</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">득점</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">1</div>
+                <Label className="text-muted-foreground">어시스트</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">출전 시간</Label>
+              </div>
             </div>
           </div>
           {/* <div className="bg-slate-300">
