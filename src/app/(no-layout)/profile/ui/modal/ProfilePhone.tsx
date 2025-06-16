@@ -7,8 +7,8 @@ import { Input } from "@/shared/components/ui/input";
 import { usePhoneValidation } from "@/features/validation/hooks/use-validation";
 import { Check, Loader2, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
-import { formatPhoneNumber } from "../ProfileContent";
 import { updatePhone } from "../../model/actions";
+import { formatPhoneNumber } from "@/entities/user/model/actions";
 
 const ProfilePhone = ({
   data,

@@ -62,7 +62,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       foot: data.foot as "LEFT" | "RIGHT" | "BOTH",
       condition: data.condition as Condition,
       playerBackground: data.playerBackground as PlayerBackground,
-      skillLevel: data.skillLevel as SkillLevel,
+      skillLevel: data.skillLevel as SkillLevel | undefined,
     },
   });
 

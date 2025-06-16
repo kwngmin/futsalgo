@@ -93,7 +93,8 @@ export const SKILL_LEVEL_OPTIONS = [
 ];
 
 export const SKILL_LEVEL = {
-  BEGINNER: "입문자",
-  AMATEUR: "중급자",
-  EXPERT: "상급자",
+  BEGINNER: "비기너",
+  AMATEUR: "아마추어",
+  ACE: "에이스",
+  SEMIPRO: "세미프로",
 };

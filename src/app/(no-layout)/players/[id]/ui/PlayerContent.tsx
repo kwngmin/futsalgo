@@ -223,9 +223,11 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <div>
                   <div className="font-medium text-gray-900">실력 수준</div>
                   <div className="text-sm text-gray-500 mt-1">
-                    {data?.data?.player.skillLevel === "EXPERT" &&
+                    {data?.data?.player.skillLevel === "ACE" &&
                       "숙련된 실력을 보유하고 있습니다"}
                     {data?.data?.player.skillLevel === "AMATEUR" &&
+                      "중급 수준의 실력을 보유하고 있습니다"}
+                    {data?.data?.player.skillLevel === "SEMIPRO" &&
                       "중급 수준의 실력을 보유하고 있습니다"}
                     {data?.data?.player.skillLevel === "BEGINNER" &&
                       "축구를 배우고 있는 단계입니다"}
