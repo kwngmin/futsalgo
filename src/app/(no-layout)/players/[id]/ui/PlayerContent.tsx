@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
-import { FOOT } from "@/entities/user/model/constants";
+import {
+  FOOT,
+  PLAYER_BACKGROUND,
+  SKILL_LEVEL,
+} from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 // import FutsalPitchOutline from "/public/futsalpitch_outline.svg";
 // import FutsalPitch from "/public/futsalpitch.svg";
-import {
-  PLAYER_BACKGROUND_DISPLAY,
-  SKILL_LEVEL_DISPLAY,
-} from "./PlayerContent.test";
 // import { getUser } from "@/app/(no-layout)/profile/model/actions";
 
 const PlayerContent = ({ id }: { id: string }) => {
@@ -113,9 +113,9 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="flex flex-col gap-1 items-center my-3">
               <div className="font-semibold">
                 {
-                  PLAYER_BACKGROUND_DISPLAY[
+                  PLAYER_BACKGROUND[
                     data?.data?.player
-                      .playerBackground as keyof typeof PLAYER_BACKGROUND_DISPLAY
+                      .playerBackground as keyof typeof PLAYER_BACKGROUND
                   ]
                 }
               </div>
@@ -124,9 +124,8 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="flex flex-col gap-1 items-center my-3">
               <div className="font-semibold">
                 {
-                  SKILL_LEVEL_DISPLAY[
-                    data?.data?.player
-                      .skillLevel as keyof typeof SKILL_LEVEL_DISPLAY
+                  SKILL_LEVEL[
+                    data?.data?.player.skillLevel as keyof typeof SKILL_LEVEL
                   ]
                 }
               </div>
