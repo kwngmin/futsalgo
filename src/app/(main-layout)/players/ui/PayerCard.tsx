@@ -68,11 +68,8 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
 
         {/* 참가 경기수 */}
         {!isCurrentUser && (
-          <div className="text-center flex-shrink-0 w-12">
-            <div className="text-xs text-gray-500 mb-1">경기</div>
-            <div className="text-lg font-semibold text-gray-900">
-              {/* {player.totalMatches} */}0
-            </div>
+          <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
+            {/* {player.totalMatches} */}0
           </div>
         )}
       </div>

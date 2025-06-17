@@ -44,7 +44,6 @@ const PlayersPage = () => {
     { id: "all", label: "전체" },
     { id: "MALE", label: "남자" },
     { id: "FEMALE", label: "여자" },
-    { id: "following", label: "팔로잉" },
   ];
 
   return (
@@ -52,9 +51,14 @@ const PlayersPage = () => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-6 h-16 shrink-0">
         <h1 className="text-2xl font-bold">선수</h1>
-        <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
-          <Search className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
+            <Search className="w-5 h-5" />
+          </button>
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+            <ArrowDownUp className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       {data ? (
         <div className="px-3 space-y-4">
@@ -100,11 +104,13 @@ const PlayersPage = () => {
                   </button>
                 ))}
               </div>
-              <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100 mr-3">
-                <ArrowDownUp className="w-5 h-5" />
-              </button>
             </div>
-
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium px-2 text-gray-600">
+                선수 • {filteredPlayers?.length}명
+              </h3>
+              <span className="text-xs text-gray-500 mr-6">경기</span>
+            </div>
             {/* 선수 목록 */}
             <div className="space-y-3">
               {filteredPlayers?.map((player) => (
