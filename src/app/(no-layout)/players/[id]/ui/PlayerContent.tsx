@@ -18,13 +18,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/shared/components/ui/select";
 import { useSession } from "next-auth/react";
 
 const PlayerContent = ({ id }: { id: string }) => {
@@ -233,7 +233,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               <ChevronRight className={`w-5 h-5 text-gray-400}`} />
             </button>
           </div> */}
-          <div className="flex items-center justify-between gap-2">
+
+          {/* 경기 년도 선택 */}
+          {/* <div className="flex items-center justify-between gap-2">
             <h2 className="font-medium text-gray-600 px-2 text-sm">
               경기 년도 선택 :
             </h2>
@@ -245,7 +247,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <SelectItem value="1">2025년</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           <div className="flex flex-col p-3 bg-white rounded-2xl gap-3">
             {/* <Tooltip>
               <TooltipTrigger className="flex items-center gap-1 px-2 w-fit">
