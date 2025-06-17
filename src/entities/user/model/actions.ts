@@ -86,3 +86,17 @@ export function formatPhoneNumber(input: string): string {
   // 그 외는 원본 반환
   return input;
 }
+
+/**
+ * 이름의 첫 글자만 남기고 나머지는 *로 마스킹 처리함
+ * @param name 마스킹할 이름
+ * @returns 첫 글자 + *로 마스킹된 문자열
+ */
+export function maskName(name: string): string {
+  if (!name) return "";
+
+  const firstChar = name.charAt(0);
+  const mask = "*".repeat(name.length - 1);
+
+  return `${firstChar}${mask}`;
+}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { getPlayers } from "./model/actions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import PlayerCard from "./ui/PayerCard";
@@ -65,19 +65,16 @@ const PlayersPage = () => {
                 <PlayerCard player={data?.data?.user} isCurrentUser={true} />
               </div>
             ) : (
-              <div className="text-center py-6 bg-gray-100 rounded-2xl p-4">
-                <h3 className="font-medium text-gray-900">
-                  로그인이 필요합니다
+              <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
+                <h3 className="font-semibold text-gray-900">
+                  서비스를 이용하기 위해 로그인이 필요합니다
                 </h3>
-                <p className="text-gray-500 text-sm">
-                  로그인하시면 내 프로필과 경기 기록을 확인할 수 있습니다.
-                </p>
                 <div className="flex gap-2 justify-center mt-3">
-                  <button className="text-sm bg-black text-white px-4 min-w-28 py-1.5 rounded-full font-bold cursor-pointer">
-                    로그인
-                  </button>
-                  <button className="text-sm bg-white text-black px-4 min-w-28 py-1.5 rounded-full cursor-pointer">
-                    회원가입
+                  <button
+                    className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
+                    onClick={() => signIn()}
+                  >
+                    시작하기
                   </button>
                 </div>
               </div>

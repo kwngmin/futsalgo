@@ -5,11 +5,12 @@ import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Share2 } from "lucide-react";
-import { getCurrentAge } from "@/entities/user/model/actions";
+import { getCurrentAge, maskName } from "@/entities/user/model/actions";
 import {
   FOOT,
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
+  GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 // import FutsalPitchOutline from "/public/futsalpitch_outline.svg";
@@ -53,14 +54,8 @@ const PlayerContent = ({ id }: { id: string }) => {
           size="lg"
           onClick={handleGoBack}
           className="flex items-center gap-1.5 !px-2"
-          // className="mr-2"
         >
-          <ArrowLeft
-            // size={32}
-            // className="h-12 w-12"
-            style={{ width: "24px", height: "24px" }}
-          />
-          {/* <h1 className="text-2xl font-bold">{data?.data?.player.nickname}</h1> */}
+          <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </Button>
         <div className="flex gap-3 px-3">
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
@@ -76,9 +71,9 @@ const PlayerContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-4">
-          <div className="flex gap-6 items-center px-6 bg-white rounded-2xl py-6">
+          <div className="flex gap-4 items-center px-6 bg-white rounded-2xl py-6 h-48">
             {/* 프로필 사진 */}
-            <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+            <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
               <Image
                 width={80}
                 height={80}
@@ -87,12 +82,36 @@ const PlayerContent = ({ id }: { id: string }) => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col">
               <h1 className="text-xl font-bold">
                 {data?.data?.player.nickname}
               </h1>
-              <p className="text-sm text-gray-500 font-semibold">
-                소속 팀 없음
+              <p className="text-sm font-medium">
+                {/* 소속 팀 없음 */}
+                {`${
+                  data?.data?.player.gender
+                    ? `${
+                        GENDER[data?.data?.player.gender as keyof typeof GENDER]
+                      }`
+                    : "성별 미설정"
+                } • ${
+                  data?.data?.player.name
+                    ? maskName(data?.data?.player.name)
+                    : "이름 없음"
+                } `}
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                가입일:{" "}
+                {data?.data?.player.createdAt
+                  ? new Date(data?.data?.player.createdAt).toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
+                  : ""}
               </p>
             </div>
           </div>
@@ -139,8 +158,10 @@ const PlayerContent = ({ id }: { id: string }) => {
               <Label className="text-muted-foreground">실력</Label>
             </div>
           </div>
-          {/* <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
-            <h2 className="font-semibold text-gray-600 px-3">팀매치</h2>
+          <div className="flex flex-col p-3 bg-white rounded-2xl gap-3">
+            <h2 className="font-medium text-gray-600 px-2 text-sm">
+              친선 경기 - 우리 팀 vs 외부 팀
+            </h2>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">11</div>
@@ -159,9 +180,14 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">출전 시간</Label>
               </div>
             </div>
-          </div> */}
-          <div className="flex flex-col p-4 bg-white rounded-2xl gap-2">
-            <h2 className="font-semibold text-gray-600 px-3">스쿼드매치</h2>
+          </div>
+          <div className="flex flex-col p-3 bg-white rounded-2xl gap-2">
+            <h2 className="font-medium text-gray-600 px-2 text-sm">
+              연습 경기 - 우리 팀 vs 우리 팀
+            </h2>
+            {/* <Label className="text-muted-foreground">
+              스쿼드매치 - 팀 내에서 조를 나눈 경기
+            </Label> */}
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">2</div>

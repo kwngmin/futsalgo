@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import {
   ArrowLeft,
-  AtSign,
   ChevronRight,
+  FileUser,
   IdCard,
   Mail,
   Phone,
@@ -64,13 +64,13 @@ export default function ProfileContent({ data }: { data: User }) {
         >
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
-              <AtSign className={`w-5 h-5 text-gray-600`} />
+              <IdCard className={`w-5 h-5 text-gray-600`} />
             ) : field === "email" ? (
               <Mail className={`w-5 h-5 text-gray-600`} />
             ) : field === "phone" ? (
               <Phone className={`w-5 h-5 text-gray-600`} />
             ) : (
-              <IdCard className="w-5 h-5 text-gray-600" />
+              <FileUser className="w-5 h-5 text-gray-600" />
             )}
             <span className="font-medium">
               {field === "basic"
