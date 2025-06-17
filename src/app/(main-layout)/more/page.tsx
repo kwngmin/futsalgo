@@ -93,23 +93,6 @@ const MorePage = () => {
       </div>
       <div className="px-3 space-y-4">
         {!session.data && (
-          // <div
-          //   className={`${
-          //     false ? "bg-gray-800" : "bg-white"
-          //   } rounded-lg overflow-hidden`}
-          // >
-          //   <button
-          //     onClick={() => signIn()}
-          //     className={`w-full flex items-center justify-between px-4 py-3 hover:${
-          //       false ? "bg-slate-900" : "bg-red-50"
-          //     } transition-colors text-slate-500`}
-          //   >
-          //     <div className="flex items-center space-x-3">
-          //       <LogIn className="w-5 h-5" />
-          //       <span className="font-medium">시작하기</span>
-          //     </div>
-          //   </button>
-          // </div>
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <h3 className="font-semibold text-gray-900">
               서비스를 이용하기 위해 로그인이 필요합니다
