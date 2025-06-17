@@ -105,7 +105,9 @@ const MannerBar = ({ score }: { score: number }) => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             {icon}
-            <span className={cn("text-sm font-bold", textColor)}>{text}</span>
+            <span className={cn("text-sm font-semibold", textColor)}>
+              {text}
+            </span>
           </div>
           <div
             className={cn(
