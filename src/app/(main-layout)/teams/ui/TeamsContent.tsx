@@ -2,10 +2,6 @@
 
 import { useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getTeams } from "./model/actions";
-import { signIn, useSession } from "next-auth/react";
-import type { GetTeamsResponse } from "./model/actions";
 
 // 샘플 팀 데이터
 const teams = [
@@ -91,9 +87,7 @@ const teams = [
 
 type FilterType = "all" | "male" | "female";
 
-const TeamsPage = () => {
-  const session = useSession();
-  const isLoggedIn = session.status === "authenticated";
+const TeamsContent = () => {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
 
   // 필터에 따라 팀 목록 필터링
@@ -113,16 +107,6 @@ const TeamsPage = () => {
     { id: "female", label: "여성" },
   ];
 
-  const { data, isLoading, error } = useQuery<GetTeamsResponse>({
-    queryKey: ["teams"],
-    queryFn: getTeams,
-    placeholderData: keepPreviousData,
-  });
-
-  console.log(data, "data");
-  console.log(isLoading, "isLoading");
-  console.log(error, "error");
-
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
@@ -133,55 +117,6 @@ const TeamsPage = () => {
         </button>
       </div>
       <div className="px-3 space-y-4">
-        <div>
-          {isLoggedIn ? (
-            data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
-              // <div className="space-y-3">
-              //   <PlayerCard player={data?.data?.user} isCurrentUser={true} />
-              // </div>
-              <div className="space-y-3">
-                {myTeams.map((team) => (
-                  <TeamCard key={team.id} team={team} isMyTeam />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                <h3 className="font-semibold text-gray-900">
-                  소속된 팀이 없습니다
-                </h3>
-                <div className="flex gap-2 justify-center mt-3">
-                  <button
-                    className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => signIn()}
-                  >
-                    팀 만들기
-                  </button>
-                  <button
-                    className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => signIn()}
-                  >
-                    팀 가입하기
-                  </button>
-                </div>
-              </div>
-            )
-          ) : (
-            <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-              <h3 className="font-semibold text-gray-900">
-                서비스를 이용하기 위해 로그인이 필요합니다
-              </h3>
-              <div className="flex gap-2 justify-center mt-3">
-                <button
-                  className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                  onClick={() => signIn()}
-                >
-                  시작하기
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
         <div>
           {/* 내 팀 섹션 */}
           {myTeams.length > 0 ? (
@@ -331,4 +266,4 @@ const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
   );
 };
 
-export default TeamsPage;
+export default TeamsContent;
