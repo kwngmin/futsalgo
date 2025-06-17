@@ -52,32 +52,32 @@ const MannerBar = ({ score }: { score: number }) => {
     switch (color) {
       case "blue":
         return {
-          bgColor: "bg-blue-600",
+          bgColor: "bg-blue-600/15",
           textColor: "text-blue-700",
         };
       case "green":
         return {
-          bgColor: "bg-green-600",
+          bgColor: "bg-green-600/15",
           textColor: "text-green-700",
         };
       case "yellow":
         return {
-          bgColor: "bg-yellow-600",
+          bgColor: "bg-yellow-600/15",
           textColor: "text-yellow-700",
         };
       case "orange":
         return {
-          bgColor: "bg-orange-600",
+          bgColor: "bg-orange-600/15",
           textColor: "text-orange-700",
         };
       case "red":
         return {
-          bgColor: "bg-red-600",
+          bgColor: "bg-red-600/15",
           textColor: "text-red-700",
         };
       default:
         return {
-          bgColor: "bg-gray-700",
+          bgColor: "bg-gray-700/15",
           textColor: "text-black",
         };
     }
@@ -112,7 +112,8 @@ const MannerBar = ({ score }: { score: number }) => {
           <div
             className={cn(
               "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
-              bgColor
+              bgColor,
+              textColor
             )}
           >
             {score}
