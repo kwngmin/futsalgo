@@ -151,10 +151,10 @@ const TeamsPage = () => {
               </div>
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                <h3 className="font-semibold text-gray-900">
+                {/* <h3 className="font-semibold text-gray-900">
                   소속된 팀이 존재하지 않습니다
-                </h3>
-                <div className="flex gap-2 justify-center mt-3">
+                </h3> */}
+                <div className="flex gap-2 justify-center">
                   <button
                     className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
                     // onClick={() => signIn()}
@@ -187,8 +187,8 @@ const TeamsPage = () => {
           )}
         </div>
 
-        <div>
-          {/* 내 팀 섹션 */}
+        {/* 내 팀 섹션 */}
+        {/* <div>
           {myTeams.length > 0 ? (
             <div className="space-y-3">
               {myTeams.map((team) => (
@@ -197,8 +197,6 @@ const TeamsPage = () => {
             </div>
           ) : (
             <div className="text-center py-6 bg-gray-100 rounded-2xl p-4">
-              {/* 팀이 없는 경우 */}
-              {/* <Users className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
               <h3 className="font-medium text-gray-900">
                 소속된 팀이 없습니다
               </h3>
@@ -215,7 +213,8 @@ const TeamsPage = () => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
+
         {/* 다른 팀 섹션 */}
         <div className="flex flex-col gap-2">
           {/* 하단: 필터 칩들 */}
