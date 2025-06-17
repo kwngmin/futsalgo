@@ -6,6 +6,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeams } from "./model/actions";
 import { signIn, useSession } from "next-auth/react";
 import type { GetTeamsResponse } from "./model/actions";
+import { useRouter } from "next/navigation";
 
 // 샘플 팀 데이터
 const teams = [
@@ -92,6 +93,7 @@ const teams = [
 type FilterType = "all" | "male" | "female";
 
 const TeamsPage = () => {
+  const router = useRouter();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
   const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
@@ -157,7 +159,7 @@ const TeamsPage = () => {
                 <div className="flex gap-2 justify-center">
                   <button
                     className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    // onClick={() => signIn()}
+                    onClick={() => router.push("/teams/create")}
                   >
                     팀 만들기
                   </button>
