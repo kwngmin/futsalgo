@@ -60,14 +60,14 @@ const MorePage = () => {
       category: "지원",
       items: [
         {
-          icon: Bug,
-          label: "버그 신고하기",
-          action: () => alert("버그 신고"),
-        },
-        {
           icon: MessageCircleMore,
           label: "문의하기",
           action: () => alert("문의하기"),
+        },
+        {
+          icon: Bug,
+          label: "버그 신고하기",
+          action: () => alert("버그 신고"),
         },
         { icon: FileText, label: "이용약관", action: () => alert("이용약관") },
         {
