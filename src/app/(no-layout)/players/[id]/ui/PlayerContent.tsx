@@ -74,7 +74,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="flex justify-end p-3">
               <Button
                 size="sm"
-                className="rounded-full font-bold text-base py-0 px-4"
+                className="rounded-full font-bold text-sm py-0 px-4 h-7"
               >
                 팔로우
               </Button>
@@ -125,7 +125,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col justify-end px-3 h-14 space-y-2 mt-2">
+            <div className="flex flex-col justify-end px-3 h-16 space-y-3">
               <div className="flex justify-between px-2">
                 <Tooltip>
                   <TooltipTrigger className="flex items-center gap-0.5">
@@ -140,8 +140,8 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </p>
                   </TooltipContent>
                 </Tooltip>
-                <div className="flex items-center gap-0.5 bg-blue-500 px-2 py-0.5 rounded font-semibold text-lg text-white pb-0.5">
-                  92 <span className="text-base font-normal">점</span>
+                <div className="flex items-center gap-0.5 bg-blue-500 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-5">
+                  92
                 </div>
               </div>
               <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden">
