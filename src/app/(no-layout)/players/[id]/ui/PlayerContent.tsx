@@ -4,7 +4,14 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Share2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Info,
+  Laugh,
+  Share,
+  Skull,
+  Thermometer,
+} from "lucide-react";
 import { getCurrentAge, maskName } from "@/entities/user/model/actions";
 import {
   FOOT,
@@ -13,6 +20,11 @@ import {
   GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
 // import FutsalPitchOutline from "/public/futsalpitch_outline.svg";
 // import FutsalPitch from "/public/futsalpitch.svg";
 // import { getUser } from "@/app/(no-layout)/profile/model/actions";
@@ -59,60 +71,94 @@ const PlayerContent = ({ id }: { id: string }) => {
         </Button>
         <div className="flex gap-3 px-3">
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
-            <Share2 className="w-5 h-5" />
+            <Share className="w-5 h-5" />
           </button>
-          <Button
-            size="sm"
-            className="rounded-full font-bold text-base py-0 px-4"
-          >
-            팔로우
-          </Button>
         </div>
       </div>
       {data ? (
         <div className="px-3 space-y-4">
-          <div className="flex gap-4 items-center px-6 bg-white rounded-2xl py-6 h-48">
-            {/* 프로필 사진 */}
-            <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-              <Image
-                width={80}
-                height={80}
-                src={data?.data?.player.image ?? ""}
-                alt="profile_image"
-                className="w-full h-full object-cover"
-              />
+          <div className="bg-white rounded-2xl">
+            <div className="flex justify-end p-3">
+              <Button
+                size="sm"
+                className="rounded-full font-bold text-base py-0 px-4"
+              >
+                팔로우
+              </Button>
             </div>
-            <div className="flex flex-col">
-              <h1 className="text-xl font-bold">
-                {data?.data?.player.nickname}
-              </h1>
-              <p className="text-sm font-medium">
-                {/* 소속 팀 없음 */}
-                {`${
-                  data?.data?.player.gender
-                    ? `${
-                        GENDER[data?.data?.player.gender as keyof typeof GENDER]
-                      }`
-                    : "성별 미설정"
-                } • ${
-                  data?.data?.player.name
-                    ? maskName(data?.data?.player.name)
-                    : "이름 없음"
-                } `}
-              </p>
-              <p className="text-sm text-gray-500 mt-0.5">
-                가입일:{" "}
-                {data?.data?.player.createdAt
-                  ? new Date(data?.data?.player.createdAt).toLocaleDateString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )
-                  : ""}
-              </p>
+            <div className="flex items-center gap-4 px-6 h-20">
+              {/* 프로필 사진 */}
+              <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <Image
+                  width={80}
+                  height={80}
+                  src={data?.data?.player.image ?? ""}
+                  alt="profile_image"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <h1 className="text-xl font-bold">
+                  {data?.data?.player.nickname}
+                </h1>
+                <p className="text-base font-medium">
+                  {/* 소속 팀 없음 */}
+                  {`${
+                    data?.data?.player.gender
+                      ? `${
+                          GENDER[
+                            data?.data?.player.gender as keyof typeof GENDER
+                          ]
+                        }`
+                      : "성별 미설정"
+                  } • ${
+                    data?.data?.player.name
+                      ? maskName(data?.data?.player.name)
+                      : "이름 없음"
+                  } `}
+                </p>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  가입일:{" "}
+                  {data?.data?.player.createdAt
+                    ? new Date(data?.data?.player.createdAt).toLocaleDateString(
+                        "ko-KR",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )
+                    : ""}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col justify-end px-3 h-14 space-y-2 mt-2">
+              <div className="flex justify-between px-2">
+                <Tooltip>
+                  <TooltipTrigger className="flex items-center gap-0.5">
+                    <Thermometer className="w-4 h-4" />
+                    <Label className="font-semibold underline underline-offset-4">
+                      매너 점수
+                    </Label>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-sm font-medium">
+                      매너 온도는 플레이어의 매너 점수를 나타냅니다.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+                <div className="flex items-center gap-0.5 bg-blue-500 px-2 py-0.5 rounded font-semibold text-lg text-white pb-0.5">
+                  92 <span className="text-base font-normal">점</span>
+                </div>
+              </div>
+              <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden">
+                <div className="bg-black h-2 w-1/10" />
+                <div className="bg-red-500 h-2 w-1/4" />
+                <div className="bg-orange-500 h-2 w-1/4" />
+                <div className="bg-yellow-500 h-2 w-1/4" />
+                <div className="bg-green-500 h-2 w-1/4" />
+                <div className="bg-blue-500 h-2 w-1/10" />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
