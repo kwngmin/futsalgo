@@ -52,32 +52,32 @@ const MannerBar = ({ score }: { score: number }) => {
     switch (color) {
       case "blue":
         return {
-          bgColor: "bg-blue-600/15",
+          bgColor: "bg-blue-600/10",
           textColor: "text-blue-700",
         };
       case "green":
         return {
-          bgColor: "bg-green-600/15",
+          bgColor: "bg-green-600/10",
           textColor: "text-green-700",
         };
       case "yellow":
         return {
-          bgColor: "bg-yellow-600/15",
+          bgColor: "bg-yellow-600/10",
           textColor: "text-yellow-700",
         };
       case "orange":
         return {
-          bgColor: "bg-orange-600/15",
+          bgColor: "bg-orange-600/10",
           textColor: "text-orange-700",
         };
       case "red":
         return {
-          bgColor: "bg-red-600/15",
+          bgColor: "bg-red-600/10",
           textColor: "text-red-700",
         };
       default:
         return {
-          bgColor: "bg-gray-700/15",
+          bgColor: "bg-gray-700/10",
           textColor: "text-black",
         };
     }

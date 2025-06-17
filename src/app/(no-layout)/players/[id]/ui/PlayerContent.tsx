@@ -14,13 +14,6 @@ import {
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/shared/components/ui/select";
 import { useSession } from "next-auth/react";
 import MannerBar from "./MannerBar";
 
