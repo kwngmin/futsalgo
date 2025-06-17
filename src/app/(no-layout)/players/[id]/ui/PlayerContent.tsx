@@ -140,8 +140,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </p>
                   </TooltipContent>
                 </Tooltip>
-                <div className="flex items-center gap-0.5 bg-blue-500 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-5">
+                <div className="flex items-center gap-0.5 bg-blue-500 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6">
                   92
+                  <span className="text-xs font-normal">점</span>
                 </div>
               </div>
               <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden">
