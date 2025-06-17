@@ -165,31 +165,31 @@ const PlayerContent = ({ id }: { id: string }) => {
           <div className="bg-white rounded-2xl">
             <Label className="px-5 py-3">플레이 정보</Label>
             <div className="grid grid-cols-3 gap-3 px-4 pb-6">
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {data?.data?.player.height}cm
                 </div>
                 <Label className="text-muted-foreground">키</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {getCurrentAge(data?.data?.player.birthDate as string).age}살
                 </div>
                 <Label className="text-muted-foreground">나이</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {FOOT[data?.data?.player.foot as keyof typeof FOOT]}
                 </div>
                 <Label className="text-muted-foreground">사용하는 발</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {data?.data?.player.position}
                 </div>
                 <Label className="text-muted-foreground">선호 포지션</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {
                     PLAYER_BACKGROUND[
@@ -200,7 +200,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <Label className="text-muted-foreground">출신</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {
                     SKILL_LEVEL[
@@ -261,19 +261,19 @@ const PlayerContent = ({ id }: { id: string }) => {
               </span>
             </div>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">11</div>
                 <Label className="text-muted-foreground">경기</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">2</div>
                 <Label className="text-muted-foreground">득점</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">5</div>
                 <Label className="text-muted-foreground">어시스트</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">8</div>
                 <Label className="text-muted-foreground">출전 시간</Label>
               </div>
@@ -292,19 +292,19 @@ const PlayerContent = ({ id }: { id: string }) => {
               </span>
             </div>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">2</div>
                 <Label className="text-muted-foreground">경기</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">0</div>
                 <Label className="text-muted-foreground">득점</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">1</div>
                 <Label className="text-muted-foreground">어시스트</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">0</div>
                 <Label className="text-muted-foreground">출전 시간</Label>
               </div>
