@@ -3,7 +3,6 @@
 import { useSession } from "next-auth/react";
 import {
   LogOut,
-  LogIn,
   FileText,
   Shield,
   ChevronRight,
@@ -14,7 +13,6 @@ import {
   ChartPie,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
-// import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -69,11 +67,11 @@ const MorePage = () => {
     },
   ];
 
-  const provider = {
-    google: "구글",
-    kakao: "카카오",
-    naver: "네이버",
-  };
+  // const provider = {
+  //   google: "구글",
+  //   kakao: "카카오",
+  //   naver: "네이버",
+  // };
 
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
