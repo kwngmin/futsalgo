@@ -4,7 +4,7 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, ChevronRight, Info, Share } from "lucide-react";
+import { ArrowLeft, ChevronRight, Share } from "lucide-react";
 import { getCurrentAge, maskName } from "@/entities/user/model/actions";
 import {
   FOOT,
@@ -13,11 +13,7 @@ import {
   GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/shared/components/ui/tooltip";
+
 // import {
 //   Select,
 //   SelectContent,
@@ -26,6 +22,7 @@ import {
 //   SelectValue,
 // } from "@/shared/components/ui/select";
 import { useSession } from "next-auth/react";
+import MannerBar from "./MannerBar";
 
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -128,35 +125,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col justify-end px-3 h-16 space-y-3">
-              <div className="flex justify-between px-2">
-                <Tooltip>
-                  <TooltipTrigger className="flex items-center gap-1">
-                    <Label className="font-semibold underline underline-offset-4">
-                      매너 점수
-                    </Label>
-                    <Info className="size-4" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-sm font-medium">
-                      매너 온도는 플레이어의 매너 점수를 나타냅니다.
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-                <div className="flex items-center gap-0.5 bg-blue-500 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6">
-                  92
-                  <span className="text-xs font-medium">점</span>
-                </div>
-              </div>
-              <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden">
-                <div className="bg-black h-2 w-1/10" />
-                <div className="bg-red-500 h-2 w-1/4" />
-                <div className="bg-orange-500 h-2 w-1/4" />
-                <div className="bg-yellow-500 h-2 w-1/4" />
-                <div className="bg-green-500 h-2 w-1/4" />
-                <div className="bg-blue-500 h-2 w-1/10" />
-              </div>
-            </div>
+            <MannerBar score={Math.floor(Math.random() * 100)} />
           </div>
           <div className="bg-white rounded-lg overflow-hidden opacity-50 pointer-events-none">
             <button
