@@ -108,14 +108,23 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 포지션 */}
-      <div className="space-y-3">
+      <div className="space-y-3 sm:hidden">
         <Label className="px-1">선호하는 포지션</Label>
         <CustomRadioGroup
           options={POSITION_OPTIONS}
           value={watch("position")}
           onValueChange={(value) => setValue("position", value as Position)}
           error={errors.position?.message}
-          // direction="vertical"
+          direction="vertical"
+        />
+      </div>
+      <div className="space-y-3 hidden sm:block">
+        <Label className="px-1">선호하는 포지션</Label>
+        <CustomRadioGroup
+          options={POSITION_OPTIONS}
+          value={watch("position")}
+          onValueChange={(value) => setValue("position", value as Position)}
+          error={errors.position?.message}
         />
       </div>
 
@@ -132,28 +141,42 @@ const ProfileForm = ({ data }: { data: User }) => {
         />
       </div>
 
-      {/* 실력 수준 */}
-      <div className="space-y-3">
-        <Label className="px-1">실력</Label>
-        <CustomRadioGroup
-          options={SKILL_LEVEL_OPTIONS}
-          value={watch("skillLevel")}
-          onValueChange={(value) => setValue("skillLevel", value as SkillLevel)}
-          error={errors.skillLevel?.message}
-          // direction="vertical"
-        />
-      </div>
-
       {/* 선수 출신 여부 */}
       <div className="space-y-3">
         <Label className="px-1">출신</Label>
         <CustomRadioGroup
           options={PLAYER_BACKGROUND_OPTIONS}
           value={watch("playerBackground")}
-          onValueChange={(value) =>
-            setValue("playerBackground", value as PlayerBackground)
-          }
+          onValueChange={(value) => {
+            setValue("playerBackground", value as PlayerBackground);
+            if (value === "PROFESSIONAL") {
+              setValue("skillLevel", "SEMIPRO");
+            } else {
+              setValue("skillLevel", "BEGINNER");
+            }
+          }}
           error={errors.playerBackground?.message}
+        />
+      </div>
+
+      {/* 실력 수준 */}
+      <div className="space-y-3 sm:hidden">
+        <Label className="px-1">실력</Label>
+        <CustomRadioGroup
+          options={SKILL_LEVEL_OPTIONS}
+          value={watch("skillLevel")}
+          onValueChange={(value) => setValue("skillLevel", value as SkillLevel)}
+          error={errors.skillLevel?.message}
+          direction="vertical"
+        />
+      </div>
+      <div className="space-y-3 hidden sm:block">
+        <Label className="px-1">실력</Label>
+        <CustomRadioGroup
+          options={SKILL_LEVEL_OPTIONS}
+          value={watch("skillLevel")}
+          onValueChange={(value) => setValue("skillLevel", value as SkillLevel)}
+          error={errors.skillLevel?.message}
         />
       </div>
 
