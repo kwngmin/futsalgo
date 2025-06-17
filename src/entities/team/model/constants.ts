@@ -1,11 +1,11 @@
-export const GENDER_OPTIONS = [
-  { value: "MALE", label: "남성" },
-  { value: "FEMALE", label: "여성" },
-  { value: "MIXED", label: "혼성" },
+export const TEAM_GENDER_OPTIONS = [
+  { value: "MIXED", label: "혼성팀" },
+  { value: "MALE", label: "남성팀" },
+  { value: "FEMALE", label: "여성팀" },
 ];
 
-export const GENDER = {
-  MALE: "남성",
-  FEMALE: "여성",
-  MIXED: "혼성",
+export const TEAM_GENDER = {
+  MIXED: "혼성팀",
+  MALE: "남성팀",
+  FEMALE: "여성팀",
 };

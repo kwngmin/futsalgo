@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { Camera, Upload, MapPin } from "lucide-react";
+import { Camera, Upload, MapPin, ScrollText } from "lucide-react";
 import { Label } from "@/shared/components/ui/label";
 import { Input } from "@/shared/components/ui/input";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
-import { GENDER_OPTIONS } from "@/entities/team/model/constants";
+import { TEAM_GENDER_OPTIONS } from "@/entities/team/model/constants";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { createTeam } from "@/app/(no-layout)/profile/model/server-actions";
 import { useRouter } from "next/navigation";
+import { Textarea } from "@/shared/components/ui/textarea";
+import CustomSelect from "@/shared/components/ui/custom-select";
+import { Button } from "@/shared/components/ui/button";
 
 const teamSchema = z.object({
   name: z.string().min(1, "팀 이름을 입력해주세요"),
@@ -138,79 +141,81 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
 
         {/* 팀 정보 섹션 */}
         <div className="space-y-4">
-          <div className="space-y-6 p-4 bg-white rounded-2xl">
-            <h2 className="text-lg font-semibold">팀 정보</h2>
-
-            <div className="space-y-4">
-              <div className="space-y-3">
-                <Label className="">팀 이름</Label>
-                <Input
-                  {...register("name")}
-                  type="text"
-                  placeholder="팀 이름을 입력하세요"
-                />
+          <div className="bg-white rounded-lg overflow-hidden">
+            <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              <div className="flex items-center space-x-3">
+                <ScrollText className="w-5 h-5" />
+                <span className="font-medium">기본 정보</span>
               </div>
+            </div>
+            <div className="space-y-6 p-4">
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <Label className="">팀 이름</Label>
+                  <Input
+                    {...register("name")}
+                    type="text"
+                    placeholder="팀 이름을 입력하세요"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  팀 소개
-                </label>
-                <textarea
-                  {...register("description")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
-                  placeholder="팀에 대한 간단한 소개를 작성해주세요"
-                />
-              </div>
+                <div className="space-y-3">
+                  <Label className="">팀 소개</Label>
+                  <Textarea
+                    {...register("description")}
+                    // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
+                    placeholder="팀에 대한 간단한 소개를 작성해주세요"
+                  />
+                </div>
 
-              <div className="space-y-3">
-                <Label className="px-1">성별</Label>
-                <CustomRadioGroup
-                  options={GENDER_OPTIONS}
-                  value={watch("gender")}
-                  onValueChange={(value) =>
-                    setValue("gender", value as "MALE" | "FEMALE")
-                  }
-                  error={errors.gender?.message}
-                />
+                <div className="space-y-3">
+                  <Label className="px-1">팀 구분</Label>
+                  <CustomRadioGroup
+                    options={TEAM_GENDER_OPTIONS}
+                    value={watch("gender")}
+                    onValueChange={(value) =>
+                      setValue("gender", value as "MALE" | "FEMALE")
+                    }
+                    error={errors.gender?.message}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           {/* 활동 지역 섹션 */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold flex items-center">
-              <MapPin className="w-5 h-5 mr-2" />
-              활동 지역
-            </h2>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  시/도 <span className="text-red-500">*</span>
-                </label>
-                <select
-                  {...register("city")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">선택하세요</option>
-                  {koreanCities.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
+          <div className="bg-white rounded-lg overflow-hidden">
+            <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
+              <div className="flex items-center space-x-3">
+                <MapPin className="w-5 h-5" />
+                <span className="font-medium">활동 지역</span>
               </div>
+            </div>
+            <div className="space-y-6 p-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-3">
+                  <Label className="px-1">시/도</Label>
+                  <CustomSelect
+                    hasPlaceholder
+                    options={koreanCities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                    value={watch("city")}
+                    onChange={(e) => setValue("city", e.target.value)}
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  구/군 <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  {...register("district")}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="구/군을 입력하세요"
-                />
+                <div className="space-y-3">
+                  <Label className="px-1">구/군</Label>
+                  <Input
+                    type="text"
+                    {...register("district")}
+                    placeholder="구/군을 입력하세요"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -222,15 +227,24 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
           )}
 
           {/* 제출 버튼 */}
-          <div className="pt-6">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            >
-              {isSubmitting ? "팀 생성 중..." : "팀 만들기"}
-            </button>
-          </div>
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full h-12 text-base font-semibold"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "팀 생성 중..." : "팀 만들기"}
+          </Button>
+          <Button
+            onClick={() => router.back()}
+            type="button"
+            size="lg"
+            variant="ghost"
+            className="w-full h-10 text-base font-semibold"
+            disabled={isSubmitting}
+          >
+            취소
+          </Button>
         </div>
       </form>
     </div>
