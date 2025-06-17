@@ -8,13 +8,24 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import PlayerCard from "./ui/PayerCard";
 import { User } from "@prisma/client";
 import SkeletonContent from "./ui/SkeletonContent";
+import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
+import FilterModal from "./ui/FilterModal";
+
+const filterOptions = [
+  { id: "all", label: "전체" },
+  { id: "MALE", label: "남자" },
+  { id: "FEMALE", label: "여자" },
+];
 
 type FilterType = "all" | "MALE" | "FEMALE" | "following";
 
 const PlayersPage = () => {
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
-  console.log(session, "session");
+
+  const [modalStates, setModalStates] = useState({
+    sort: false,
+  });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["players"],
@@ -39,12 +50,40 @@ const PlayersPage = () => {
 
   console.log(filteredPlayers, "filteredPlayers");
 
-  // 필터 옵션들
-  const filterOptions = [
-    { id: "all", label: "전체" },
-    { id: "MALE", label: "남자" },
-    { id: "FEMALE", label: "여자" },
-  ];
+  const openModal = (field: keyof typeof modalStates) => {
+    setModalStates((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const closeModal = (field: keyof typeof modalStates) => {
+    setModalStates((prev) => ({ ...prev, [field]: false }));
+  };
+
+  const renderFieldModal = (
+    field: "sort"
+    // title: string
+  ) => (
+    <FieldModal
+      title={`정렬`}
+      open={modalStates[field]}
+      onOpenChange={(open) => {
+        if (!open) closeModal(field);
+      }}
+      trigger={
+        <button
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100"
+          onClick={() => openModal(field)}
+        >
+          <ArrowDownUp className="w-5 h-5" />
+        </button>
+      }
+    >
+      <FilterModal
+        filter={selectedFilter}
+        setFilter={setSelectedFilter}
+        onSuccess={() => closeModal(field)}
+      />
+    </FieldModal>
+  );
 
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
@@ -55,9 +94,10 @@ const PlayersPage = () => {
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
           </button>
-          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+          {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
             <ArrowDownUp className="w-5 h-5" />
-          </button>
+          </button> */}
+          {renderFieldModal("sort")}
         </div>
       </div>
       {data ? (
@@ -88,7 +128,7 @@ const PlayersPage = () => {
           {/* 필터 섹션 */}
           <div className="flex flex-col gap-2">
             {/* 필터 칩들 */}
-            <div className="flex items-center gap-2 justify-between">
+            {/* <div className="flex items-center gap-2 justify-between">
               <div className="flex gap-1 bg-gray-100 rounded-full p-1">
                 {filterOptions.map((option) => (
                   <button
@@ -104,7 +144,9 @@ const PlayersPage = () => {
                   </button>
                 ))}
               </div>
-            </div>
+            </div> */}
+
+            {/* 선수 목록 헤더 */}
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium px-2 text-gray-600">
                 선수 • {filteredPlayers?.length}명

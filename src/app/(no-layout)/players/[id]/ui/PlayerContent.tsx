@@ -25,9 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { useSession } from "next-auth/react";
 
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
+  const session = useSession();
 
   const { data } = useQuery({
     queryKey: ["player", id],
@@ -66,13 +68,17 @@ const PlayerContent = ({ id }: { id: string }) => {
         <div className="px-3 space-y-4">
           <div className="bg-white rounded-2xl">
             <div className="flex justify-end p-3">
-              <Button
-                size="sm"
-                className="rounded-full font-semibold text-sm py-0 px-4 h-7"
-                variant="outline"
-              >
-                팔로우
-              </Button>
+              {id === session.data?.user.id ? (
+                <div className="h-7" />
+              ) : (
+                <Button
+                  size="sm"
+                  className="rounded-full font-semibold text-sm py-0 px-4 h-7"
+                  variant="outline"
+                >
+                  팔로우
+                </Button>
+              )}
             </div>
             <div className="flex items-center gap-4 px-6 h-20">
               {/* 프로필 사진 */}
@@ -101,7 +107,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                       : "성별 미설정"
                   } • ${
                     data?.data?.player.name
-                      ? maskName(data?.data?.player.name)
+                      ? id === session.data?.user.id
+                        ? data?.data?.player.name
+                        : maskName(data?.data?.player.name)
                       : "이름 없음"
                   } `}
                 </p>
