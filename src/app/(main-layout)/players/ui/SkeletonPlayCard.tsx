@@ -25,10 +25,10 @@ const SkeletonPlayCard = ({
             )}
           />
         </div>
-        <div className="w-12 flex flex-col justify-center items-center text-right space-y-3">
+        {/* <div className="w-12 flex flex-col justify-center items-center text-right space-y-3">
           <div className="h-3 bg-gray-200 rounded w-10 animate-pulse" />
           <div className="h-5 bg-gray-200 rounded w-8 animate-pulse" />
-        </div>
+        </div> */}
       </div>
     </div>
   );

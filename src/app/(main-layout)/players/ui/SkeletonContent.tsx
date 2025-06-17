@@ -7,9 +7,9 @@ const SkeletonContent = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2 justify-between">
           <div className="flex gap-1 bg-gray-100 rounded-full p-1 w-64">
-            <div className="h-8 w-16 rounded-full bg-slate-200 animate-pulse" />
+            <div className="h-4 w-16 rounded-full bg-slate-200 animate-pulse" />
           </div>
-          <div className="animate-pulse rounded-full shrink-0 w-9 h-9 bg-gray-100 mr-3" />
+          <div className="animate-pulse rounded-full shrink-0 w-9 h-4 bg-gray-200 mr-4" />
         </div>
         <SkeletonPlayCard nickName="w-12" teamName="w-40" />
         <SkeletonPlayCard />
