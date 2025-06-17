@@ -100,7 +100,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     : "이름 없음"
                 } `}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-sm text-gray-500 mt-0.5">
                 가입일:{" "}
                 {data?.data?.player.createdAt
                   ? new Date(data?.data?.player.createdAt).toLocaleDateString(
