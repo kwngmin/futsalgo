@@ -11,36 +11,36 @@ const MannerBar = ({ score }: { score: number }) => {
   const transformScore = (score: number) => {
     if (score >= 90)
       return {
-        icon: <Laugh className="size-5" color="darkblue" />,
+        icon: <Laugh className="size-5 stroke-blue-700" />,
         color: "blue",
         text: "최고",
       };
     if (score >= 70)
       return {
-        icon: <Smile className="size-5" color="darkgreen" strokeWidth={2} />,
+        icon: <Smile className="size-5 stroke-green-700" strokeWidth={2} />,
         color: "green",
         text: "좋음",
       };
     if (score >= 50)
       return {
-        icon: <Meh className="size-5" color="#b78700" strokeWidth={2} />,
+        icon: <Meh className="size-5 stroke-yellow-700" strokeWidth={2} />,
         color: "yellow",
         text: "양호",
       };
     if (score >= 30)
       return {
-        icon: <Frown className="size-5" color="#c25000" strokeWidth={2} />,
+        icon: <Frown className="size-5 stroke-orange-700" strokeWidth={2} />,
         color: "orange",
         text: "주의",
       };
     if (score >= 10)
       return {
-        icon: <Angry className="size-5" color="darkred" strokeWidth={2} />,
+        icon: <Angry className="size-5 stroke-red-700" strokeWidth={2} />,
         color: "red",
         text: "위험",
       };
     return {
-      icon: <Skull className="size-5" color="gray" strokeWidth={2} />,
+      icon: <Skull className="size-5 stroke-gray-700" strokeWidth={2} />,
       color: "black",
       text: "최악",
     };
