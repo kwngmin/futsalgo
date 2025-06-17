@@ -11,9 +11,7 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
   const router = useRouter();
   return (
     <div
-      className={`bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer ${
-        isCurrentUser ? "ring-2 ring-accent" : ""
-      }`}
+      className="bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer "
       onClick={() => router.push(`/players/${player.id}`)}
     >
       <div className="flex items-start gap-3">
@@ -69,12 +67,14 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
         </div>
 
         {/* 참가 경기수 */}
-        <div className="text-center flex-shrink-0 w-12">
-          <div className="text-xs text-gray-500 mb-1">경기</div>
-          <div className="text-lg font-semibold text-gray-900">
-            {/* {player.totalMatches} */}0
+        {!isCurrentUser && (
+          <div className="text-center flex-shrink-0 w-12">
+            <div className="text-xs text-gray-500 mb-1">경기</div>
+            <div className="text-lg font-semibold text-gray-900">
+              {/* {player.totalMatches} */}0
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

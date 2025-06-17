@@ -4,14 +4,7 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  ArrowLeft,
-  Info,
-  Laugh,
-  Share,
-  Skull,
-  Thermometer,
-} from "lucide-react";
+import { ArrowLeft, Share, Thermometer } from "lucide-react";
 import { getCurrentAge, maskName } from "@/entities/user/model/actions";
 import {
   FOOT,

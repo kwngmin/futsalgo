@@ -5,10 +5,10 @@ import { Button } from "@/shared/components/ui/button";
 import {
   ArrowLeft,
   ChevronRight,
-  FileUser,
   IdCard,
   Mail,
   Phone,
+  User2,
 } from "lucide-react";
 import { User } from "@prisma/client";
 import ProfileForm from "./ProfileForm";
@@ -70,7 +70,7 @@ export default function ProfileContent({ data }: { data: User }) {
             ) : field === "phone" ? (
               <Phone className={`w-5 h-5 text-gray-600`} />
             ) : (
-              <FileUser className="w-5 h-5 text-gray-600" />
+              <User2 className="w-5 h-5 text-gray-600" />
             )}
             <span className="font-medium">
               {field === "basic"

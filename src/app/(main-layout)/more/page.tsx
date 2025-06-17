@@ -8,9 +8,9 @@ import {
   ChevronRight,
   Loader2,
   CircleUserRound,
-  UserRoundPlus,
   BookmarkPlus,
   ChartPie,
+  Heart,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -33,14 +33,14 @@ const MorePage = () => {
           },
         },
         {
-          icon: UserRoundPlus,
-          label: "팔로잉 한 선수",
-          action: () => alert("팔로잉 한 선수"),
+          icon: Heart,
+          label: "좋아요 한 팀",
+          action: () => alert("팔로잉 한 팀"),
         },
         {
           icon: BookmarkPlus,
-          label: "팔로잉 한 팀",
-          action: () => alert("팔로잉 한 팀"),
+          label: "팔로잉 한 선수",
+          action: () => alert("팔로잉 한 선수"),
         },
       ],
     },
