@@ -225,8 +225,21 @@ const PlayerContent = ({ id }: { id: string }) => {
               <ChevronRight className={`w-5 h-5 text-gray-400}`} />
             </button>
           </div> */}
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="font-medium text-gray-600 px-2 text-sm">
+              경기 년도 선택 :
+            </h2>
+            <Select>
+              <SelectTrigger className="grow bg-white">
+                <SelectValue placeholder="선택" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">2025년</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="flex flex-col p-3 bg-white rounded-2xl gap-3">
-            <Tooltip>
+            {/* <Tooltip>
               <TooltipTrigger className="flex items-center gap-1 px-2 w-fit">
                 <Label className="font-semibold underline underline-offset-4">
                   친선 경기
@@ -238,15 +251,15 @@ const PlayerContent = ({ id }: { id: string }) => {
                   친선 경기는 외부 팀과의 경기입니다.
                 </p>
               </TooltipContent>
-            </Tooltip>
-            <Select>
-              <SelectTrigger className="w-full" size="sm">
-                <SelectValue placeholder="경기" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1</SelectItem>
-              </SelectContent>
-            </Select>
+            </Tooltip> */}
+            <div className="flex justify-between">
+              <h2 className="font-medium text-gray-600 px-2 text-sm">
+                친선 경기
+              </h2>
+              <span className="text-gray-400 px-2 text-sm">
+                우리 팀 vs 외부 팀
+              </span>
+            </div>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">11</div>
@@ -267,19 +280,17 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div>
           <div className="flex flex-col p-3 bg-white rounded-2xl gap-2">
-            <Tooltip>
-              <TooltipTrigger className="flex items-center gap-1 px-2 w-fit">
-                <Label className="font-semibold underline underline-offset-4">
-                  연습 경기
-                </Label>
-                <Info className="size-4" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-sm font-medium">
-                  연습 경기는 팀 내에서 조를 나눈 경기입니다.
-                </p>
-              </TooltipContent>
-            </Tooltip>
+            {/* <h2 className="font-medium text-gray-600 px-2 text-sm">
+            연습 경기 - 우리 팀 vs 우리 팀
+            </h2> */}
+            <div className="flex justify-between">
+              <h2 className="font-medium text-gray-600 px-2 text-sm">
+                연습 경기
+              </h2>
+              <span className="text-gray-400 px-2 text-sm">
+                우리 팀 vs 우리 팀
+              </span>
+            </div>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-3">
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">2</div>
