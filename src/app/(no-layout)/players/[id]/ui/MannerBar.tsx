@@ -25,7 +25,7 @@ const MannerBar = ({ score }: { score: number }) => {
       return {
         icon: <Meh className="size-5" color="#b78700" strokeWidth={2} />,
         color: "yellow",
-        text: "보통",
+        text: "양호",
       };
     if (score >= 30)
       return {
@@ -37,7 +37,7 @@ const MannerBar = ({ score }: { score: number }) => {
       return {
         icon: <Angry className="size-5" color="darkred" strokeWidth={2} />,
         color: "red",
-        text: "경고",
+        text: "위험",
       };
     return {
       icon: <Skull className="size-5" color="gray" strokeWidth={2} />,
