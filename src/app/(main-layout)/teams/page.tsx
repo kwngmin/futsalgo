@@ -128,9 +128,14 @@ const TeamsPage = () => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-6 h-16 shrink-0">
         <h1 className="text-2xl font-bold">팀</h1>
-        <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
-          <Search className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
+            <Search className="w-5 h-5" />
+          </button>
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+            <ArrowDownUp className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       <div className="px-3 space-y-4">
         <div>
@@ -147,18 +152,18 @@ const TeamsPage = () => {
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
                 <h3 className="font-semibold text-gray-900">
-                  소속된 팀이 없습니다
+                  소속된 팀이 존재하지 않습니다
                 </h3>
                 <div className="flex gap-2 justify-center mt-3">
                   <button
                     className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => signIn()}
+                    // onClick={() => signIn()}
                   >
                     팀 만들기
                   </button>
                   <button
-                    className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => signIn()}
+                    className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
+                    // onClick={() => signIn()}
                   >
                     팀 가입하기
                   </button>
@@ -214,10 +219,7 @@ const TeamsPage = () => {
         {/* 다른 팀 섹션 */}
         <div className="flex flex-col gap-2">
           {/* 하단: 필터 칩들 */}
-          <div className="flex items-center gap-2 justify-between">
-            {/* <span className="text-sm font-semibold text-gray-600 mr-1">
-              구분
-            </span> */}
+          <div className="flex items-center gap-2 justify-between hidden">
             <div className="flex gap-1 bg-gray-100 rounded-full p-1">
               {filterOptions.map((option) => (
                 <button
@@ -234,9 +236,14 @@ const TeamsPage = () => {
                 </button>
               ))}
             </div>
-            <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100 mr-3">
-              <ArrowDownUp className="w-5 h-5" />
-            </button>
+          </div>
+
+          {/* 선수 목록 헤더 */}
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium px-2 text-gray-600">팀 • 23</h3>
+            <span className="text-xs text-gray-500 mr-3 w-12 text-center">
+              팀원
+            </span>
           </div>
 
           <div className="space-y-3">
@@ -311,20 +318,8 @@ const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
         </div>
 
         {/* 누적 경기수와 팀원 수 */}
-        <div className="text-center flex-shrink-0 flex items-center gap-2">
-          <div className="w-12">
-            <div className="text-xs text-gray-500 mb-1">팀원</div>
-            <div className="text-lg font-semibold text-gray-900">
-              {team.memberCount}
-            </div>
-          </div>
-          {/* <span className="text-gray-300">|</span>
-          <div className="w-12">
-            <div className="text-xs text-gray-500 mb-1">경기</div>
-            <div className="text-lg font-semibold text-gray-900">
-              {team.totalMatches}
-            </div>
-          </div> */}
+        <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
+          {team.memberCount}
         </div>
       </div>
     </div>
