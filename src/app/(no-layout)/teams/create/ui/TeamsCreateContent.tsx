@@ -33,7 +33,7 @@ const teamSchema = z.object({
 
 export type TeamFormData = z.infer<typeof teamSchema>;
 
-const TeamsCreateContent = ({ ownerId }: { ownerId: number }) => {
+const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
   const router = useRouter();
   const {
     register,
