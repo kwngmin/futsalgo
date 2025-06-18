@@ -12,27 +12,63 @@ export async function getTeam(id: string) {
           select: {
             id: true,
             name: true,
+            nickname: true,
             image: true,
           },
         },
-        _count: {
-          select: {
-            members: {
-              where: {
-                status: "APPROVED",
+        members: {
+          where: { status: "APPROVED" },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                nickname: true,
+                image: true,
+                skillLevel: true,
+                playerBackground: true,
+                sportType: true,
+                footballPositions: true,
+                futsalPosition: true,
               },
             },
-            followers: true,
           },
         },
       },
     });
 
-    // 비로그인 사용자의 경우
+    if (!team) {
+      return {
+        success: false,
+        error: "팀을 찾을 수 없습니다",
+        data: null,
+      };
+    }
+
+    // 실시간 통계 계산
+    const approvedMembers = team.members;
+    const stats = {
+      beginnerCount: approvedMembers.filter(
+        (m) => m.user.skillLevel === "BEGINNER"
+      ).length,
+      amateurCount: approvedMembers.filter(
+        (m) => m.user.skillLevel === "AMATEUR"
+      ).length,
+      aceCount: approvedMembers.filter((m) => m.user.skillLevel === "ACE")
+        .length,
+      semiproCount: approvedMembers.filter(
+        (m) => m.user.skillLevel === "SEMIPRO"
+      ).length,
+      professionalCount: approvedMembers.filter(
+        (m) => m.user.playerBackground === "PROFESSIONAL"
+      ).length,
+    };
+
     return {
       success: true,
       data: {
-        team,
+        ...team, // 팀 기본 정보 + members 포함
+        stats, // 통계 정보 추가
       },
     };
   } catch (error) {
