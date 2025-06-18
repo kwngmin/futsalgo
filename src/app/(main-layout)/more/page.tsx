@@ -8,11 +8,11 @@ import {
   ChevronRight,
   Loader2,
   CircleUserRound,
-  BookmarkPlus,
   ChartPie,
   Heart,
   Bug,
   MessageCircleMore,
+  Bookmark,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -35,12 +35,12 @@ const MorePage = () => {
           },
         },
         {
-          icon: Heart,
-          label: "좋아요 한 팀",
+          icon: Bookmark,
+          label: "팔로잉 한 팀",
           action: () => alert("팔로잉 한 팀"),
         },
         {
-          icon: BookmarkPlus,
+          icon: Heart,
           label: "팔로잉 한 선수",
           action: () => alert("팔로잉 한 선수"),
         },

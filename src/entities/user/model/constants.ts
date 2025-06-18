@@ -1,37 +1,37 @@
-// export const POSITION_OPTIONS = [
-//   { value: "ST", label: "스트라이커" },
-//   { value: "LW", label: "왼쪽 윙어" },
-//   { value: "RW", label: "오른쪽 윙어" },
-//   { value: "AM", label: "중앙 공격형 미드필더" },
-//   { value: "CM", label: "중앙 미드필더" },
-//   { value: "DM", label: "중앙 수비형 미드필더" },
-//   { value: "CB", label: "중앙 수비수" },
-//   { value: "LB", label: "왼쪽 수비수" },
-//   { value: "RB", label: "오른쪽 수비수" },
-//   { value: "GK", label: "골키퍼" },
-// ];
+export const FOOTBALL_POSITION_OPTIONS = [
+  { value: "ST", label: "스트라이커" },
+  { value: "LW", label: "왼쪽 윙어" },
+  { value: "RW", label: "오른쪽 윙어" },
+  { value: "AM", label: "중앙 공격형 미드필더" },
+  { value: "CM", label: "중앙 미드필더" },
+  { value: "DM", label: "중앙 수비형 미드필더" },
+  { value: "CB", label: "중앙 수비수" },
+  { value: "LB", label: "왼쪽 수비수" },
+  { value: "RB", label: "오른쪽 수비수" },
+  { value: "GK", label: "골키퍼" },
+];
 
-// export const POSITIONS = {
-//   ST: "스트라이커",
-//   LW: "왼쪽 윙어",
-//   RW: "오른쪽 윙어",
-//   AM: "중앙 공격형 미드필더",
-//   CM: "중앙 미드필더",
-//   DM: "중앙 수비형 미드필더",
-//   CB: "중앙 수비수",
-//   LB: "왼쪽 수비수",
-//   RB: "오른쪽 수비수",
-//   GK: "골키퍼",
-// };
+export const FOOTBALL_POSITIONS = {
+  ST: "스트라이커",
+  LW: "왼쪽 윙어",
+  RW: "오른쪽 윙어",
+  AM: "중앙 공격형 미드필더",
+  CM: "중앙 미드필더",
+  DM: "중앙 수비형 미드필더",
+  CB: "중앙 수비수",
+  LB: "왼쪽 수비수",
+  RB: "오른쪽 수비수",
+  GK: "골키퍼",
+};
 
-export const POSITION_OPTIONS = [
+export const FUTSAL_POSITION_OPTIONS = [
   { value: "PIVO", label: "PIVO - 공격수" },
   { value: "ALA", label: "ALA - 측면 공격수" },
   { value: "FIXO", label: "FIXO - 수비수" },
   { value: "GOLEIRO", label: "GOLEIRO - 골키퍼" },
 ];
 
-export const POSITIONS = {
+export const FUTSAL_POSITIONS = {
   PIVO: "공격수",
   ALA: "측면 공격수",
   FIXO: "수비수",
@@ -95,4 +95,16 @@ export const SKILL_LEVEL = {
   AMATEUR: "아마추어",
   ACE: "에이스",
   SEMIPRO: "세미프로",
+};
+
+export const SPORT_TYPE_OPTIONS = [
+  { value: "FUTSAL", label: "풋살" },
+  { value: "FOOTBALL", label: "축구" },
+  { value: "ALL", label: "풋살, 축구" },
+];
+
+export const SPORT_TYPE = {
+  FUTSAL: "풋살",
+  FOOTBALL: "축구",
+  ALL: "풋살, 축구",
 };

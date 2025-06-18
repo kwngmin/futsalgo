@@ -11,6 +11,7 @@ import {
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
   GENDER,
+  SPORT_TYPE,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 
@@ -88,6 +89,12 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <p className="text-base font-medium">
                   {/* 소속 팀 없음 */}
                   {`${
+                    data?.data?.player.name
+                      ? id === session.data?.user.id
+                        ? data?.data?.player.name
+                        : maskName(data?.data?.player.name)
+                      : "이름 없음"
+                  } • ${
                     data?.data?.player.gender
                       ? `${
                           GENDER[
@@ -95,13 +102,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                           ]
                         }`
                       : "성별 미설정"
-                  } • ${
-                    data?.data?.player.name
-                      ? id === session.data?.user.id
-                        ? data?.data?.player.name
-                        : maskName(data?.data?.player.name)
-                      : "이름 없음"
-                  } `}
+                  }`}
                 </p>
                 <p className="text-sm text-gray-500 mt-0.5">
                   가입일:{" "}
@@ -151,8 +152,14 @@ const PlayerContent = ({ id }: { id: string }) => {
               <Label className="text-muted-foreground">사용하는 발</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">{data?.data?.player.position}</div>
-              <Label className="text-muted-foreground">선호 포지션</Label>
+              <div className="font-semibold">
+                {
+                  SPORT_TYPE[
+                    data?.data?.player.sportType as keyof typeof SPORT_TYPE
+                  ]
+                }
+              </div>
+              <Label className="text-muted-foreground">종목</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">

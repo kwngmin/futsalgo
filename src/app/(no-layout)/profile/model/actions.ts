@@ -3,7 +3,7 @@
 import { Profile } from "@/entities/user/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { User } from "@prisma/client";
+import { FootballPosition, User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 // 프로필 데이터 타입 정의
@@ -53,11 +53,21 @@ export async function updateProfileData(
       if (data.profile.birthDate) updateData.birthDate = data.profile.birthDate;
       if (data.profile.image) updateData.image = data.profile.image;
       if (data.profile.condition) updateData.condition = data.profile.condition;
-      if (data.profile.position) updateData.position = data.profile.position;
+      if (data.profile.sportType) updateData.sportType = data.profile.sportType;
+      if (data.profile.futsalPosition)
+        updateData.futsalPosition = data.profile.futsalPosition;
       if (data.profile.playerBackground)
         updateData.playerBackground = data.profile.playerBackground;
       if (data.profile.skillLevel)
         updateData.skillLevel = data.profile.skillLevel;
+
+      if (
+        data.profile.footballPositions &&
+        data.profile.footballPositions.length > 0
+      ) {
+        updateData.footballPositions = data.profile
+          .footballPositions as FootballPosition[];
+      }
     }
 
     const updatedUser = await prisma.user.update({

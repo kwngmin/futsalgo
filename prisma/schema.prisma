@@ -31,7 +31,26 @@ enum Condition {
   INJURED
 }
 
-enum Position {
+enum SportType {
+  FUTSAL
+  FOOTBALL
+  ALL
+}
+
+enum FootballPosition {
+  ST
+  LW
+  RW
+  AM
+  CM
+  DM
+  CB
+  LB
+  RB
+  GK
+}
+
+enum FutsalPosition {
  PIVO
  ALA
  FIXO
@@ -157,8 +176,10 @@ model User {
   playerBackground PlayerBackground @default(NON_PROFESSIONAL) // 선수 출신 여부
   skillLevel      SkillLevel @default(BEGINNER) // 실력 수준
 
-  position        Position?   
-  condition       Condition @default(NORMAL)
+  sportType        SportType?  // 종목 선택
+  footballPositions FootballPosition[]   
+  futsalPosition   FutsalPosition?   
+  condition        Condition @default(NORMAL)
 
   teams           TeamMember[]
   ownedTeams      Team[]    @relation("TeamOwner")
