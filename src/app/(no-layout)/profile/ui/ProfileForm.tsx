@@ -34,7 +34,7 @@ const profileSchema = z.object({
   foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
     error: () => "주발을 선택해주세요",
   }),
-  sportType: z.enum(["FOOTBALL", "FUTSAL", "ALL"], {
+  sportType: z.enum(["FOOTBALL", "FUTSAL", "BOTH"], {
     error: () => "종목을 선택해주세요",
   }),
   footballPositions: z.array(z.string()).optional(),
@@ -141,6 +141,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       <div className="space-y-3">
         <Label className="px-1">주로 사용하는 발</Label>
         <CustomRadioGroup
+          name="foot"
           options={FOOT_OPTIONS}
           value={watch("foot")}
           onValueChange={(value) =>
@@ -154,17 +155,18 @@ const ProfileForm = ({ data }: { data: User }) => {
       <div className="space-y-3">
         <Label className="px-1">종목</Label>
         <CustomRadioGroup
+          name="sportType"
           options={SPORT_TYPE_OPTIONS}
           value={watch("sportType")}
           onValueChange={(value) =>
-            setValue("sportType", value as "FOOTBALL" | "FUTSAL" | "ALL")
+            setValue("sportType", value as "FOOTBALL" | "FUTSAL" | "BOTH")
           }
           error={errors.sportType?.message}
         />
       </div>
 
       {/* 풋살 포지션 */}
-      {(watch("sportType") === "FUTSAL" || watch("sportType") === "ALL") && (
+      {(watch("sportType") === "FUTSAL" || watch("sportType") === "BOTH") && (
         <div className="space-y-3">
           <Label className="px-1">선호하는 풋살 포지션</Label>
           <CustomRadioGroup
@@ -180,7 +182,7 @@ const ProfileForm = ({ data }: { data: User }) => {
       )}
 
       {/* 축구 포지션 */}
-      {(watch("sportType") === "FOOTBALL" || watch("sportType") === "ALL") && (
+      {(watch("sportType") === "FOOTBALL" || watch("sportType") === "BOTH") && (
         <div className="space-y-3">
           <Label className="px-1">
             선호하는 축구 포지션 • {selectedPositions?.length || 0}/5

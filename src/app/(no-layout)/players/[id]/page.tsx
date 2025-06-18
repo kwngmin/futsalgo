@@ -4,7 +4,7 @@ import PlayerContent from "./ui/PlayerContent";
 const PlayerPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
-  if (!id) {
+  if (!id || typeof id !== "string") {
     notFound();
   }
 

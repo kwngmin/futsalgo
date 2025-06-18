@@ -81,7 +81,7 @@ export const PLAYER_BACKGROUND = {
 };
 
 export const SKILL_LEVEL_OPTIONS = [
-  { value: "BEGINNER", label: "비기너 - 풋살 처음 접하거나 경험 적은 사용자" },
+  { value: "BEGINNER", label: "비기너 - 처음 접하거나 경험 적은 사용자" },
   { value: "AMATEUR", label: "아마추어 - 경기 참여 많고 팀 활동 경험 있음" },
   { value: "ACE", label: "에이스 - 경기 감각 좋고 잘 뛰는 사람" },
   {
@@ -100,11 +100,11 @@ export const SKILL_LEVEL = {
 export const SPORT_TYPE_OPTIONS = [
   { value: "FUTSAL", label: "풋살" },
   { value: "FOOTBALL", label: "축구" },
-  { value: "ALL", label: "풋살, 축구" },
+  { value: "BOTH", label: "풋살, 축구" },
 ];
 
 export const SPORT_TYPE = {
   FUTSAL: "풋살",
   FOOTBALL: "축구",
-  ALL: "풋살, 축구",
+  BOTH: "풋살, 축구",
 };

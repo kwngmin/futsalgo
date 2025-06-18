@@ -25,12 +25,21 @@ const PlayerContent = ({ id }: { id: string }) => {
   const { data } = useQuery({
     queryKey: ["player", id],
     queryFn: () => getPlayer(id),
+    enabled: !!id, // id 없으면 fetch 안 함
   });
   console.log(data, "player");
 
   const handleGoBack = () => {
     router.back();
   };
+
+  if (!data?.data?.player) {
+    return (
+      <div className="text-center text-gray-500 pt-10">
+        존재하지 않는 선수입니다.
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">

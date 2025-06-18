@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import { Textarea } from "@/shared/components/ui/textarea";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Button } from "@/shared/components/ui/button";
+import { SPORT_TYPE_OPTIONS } from "@/entities/user/model/constants";
+import { SportType } from "@prisma/client";
 
 const teamSchema = z.object({
   name: z.string().min(1, "팀 이름을 입력해주세요"),
@@ -24,11 +26,14 @@ const teamSchema = z.object({
   description: z.string().min(1, "팀 소개를 입력해주세요"),
   city: z.string().min(1, "시/도를 선택해주세요"),
   district: z.string().min(1, "구/군을 입력해주세요"),
+  sportType: z.enum(["FOOTBALL", "FUTSAL", "BOTH"], {
+    error: () => "종목을 선택해주세요",
+  }),
 });
 
 export type TeamFormData = z.infer<typeof teamSchema>;
 
-const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
+const TeamsCreateContent = ({ ownerId }: { ownerId: number }) => {
   const router = useRouter();
   const {
     register,
@@ -177,6 +182,18 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                       setValue("gender", value as "MALE" | "FEMALE")
                     }
                     error={errors.gender?.message}
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <Label className="px-1">팀 종목</Label>
+                  <CustomRadioGroup
+                    options={SPORT_TYPE_OPTIONS}
+                    value={watch("sportType")}
+                    onValueChange={(value) =>
+                      setValue("sportType", value as SportType)
+                    }
+                    error={errors.sportType?.message}
                   />
                 </div>
               </div>

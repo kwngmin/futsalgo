@@ -138,7 +138,6 @@ export async function getTeams(): Promise<GetTeamsResponse> {
     return {
       success: true,
       data: {
-        user: null,
         myTeams: [],
         teams,
       },

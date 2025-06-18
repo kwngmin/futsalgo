@@ -272,11 +272,14 @@ type TeamCardProps = {
 };
 
 const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
+  const router = useRouter();
+
   return (
     <div
       className={`bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer ${
         isMyTeam ? "ring-2 ring-accent" : ""
       }`}
+      onClick={() => router.push(`/teams/${team.id}`)}
     >
       <div className="flex items-start gap-3">
         {/* 팀 로고 */}

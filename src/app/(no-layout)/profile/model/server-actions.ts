@@ -23,6 +23,13 @@ export async function createTeam({
         ...data,
         code: await generateTeamCode(),
         ownerId,
+        members: {
+          create: {
+            userId: ownerId,
+            role: "OWNER",
+            status: "APPROVED",
+          },
+        },
       },
     });
 

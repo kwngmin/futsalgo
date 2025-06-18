@@ -47,7 +47,7 @@ const profileSchema = z.object({
   gender: z.enum(["MALE", "FEMALE"], {
     error: () => "성별을 선택해주세요",
   }),
-  sportType: z.enum(["FOOTBALL", "FUTSAL", "ALL"], {
+  sportType: z.enum(["FOOTBALL", "FUTSAL", "BOTH"], {
     error: () => "종목을 선택해주세요",
   }),
   futsalPosition: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"]).optional(),
@@ -235,6 +235,7 @@ export function OnboardingProfile({
           <div className="space-y-3">
             <Label className="px-1">주로 사용하는 발</Label>
             <CustomRadioGroup
+              name="foot"
               options={FOOT_OPTIONS}
               value={watch("foot")}
               onValueChange={(value) =>
@@ -248,10 +249,11 @@ export function OnboardingProfile({
           <div className="space-y-3">
             <Label className="px-1">종목</Label>
             <CustomRadioGroup
+              name="sportType"
               options={SPORT_TYPE_OPTIONS}
               value={watch("sportType")}
               onValueChange={(value) =>
-                setValue("sportType", value as "FOOTBALL" | "FUTSAL" | "ALL")
+                setValue("sportType", value as "FOOTBALL" | "FUTSAL" | "BOTH")
               }
               error={errors.sportType?.message}
             />
@@ -259,7 +261,7 @@ export function OnboardingProfile({
 
           {/* 풋살 포지션 */}
           {(watch("sportType") === "FUTSAL" ||
-            watch("sportType") === "ALL") && (
+            watch("sportType") === "BOTH") && (
             <div className="space-y-3">
               <Label className="px-1">선호하는 풋살 포지션</Label>
               <CustomRadioGroup
@@ -276,7 +278,7 @@ export function OnboardingProfile({
 
           {/* 축구 포지션 */}
           {(watch("sportType") === "FOOTBALL" ||
-            watch("sportType") === "ALL") && (
+            watch("sportType") === "BOTH") && (
             <div className="space-y-3">
               <Label className="px-1">
                 선호하는 축구 포지션 • {selectedPositions?.length || 0}/5
