@@ -10,16 +10,19 @@ import {
   ChevronRight,
   Mars,
   Share,
-  User2,
+  // User2,
   Venus,
   Volleyball,
 } from "lucide-react";
-import { getCurrentAge, maskName } from "@/entities/user/model/actions";
+import {
+  getCurrentAge, //
+  // maskName,
+} from "@/entities/user/model/actions";
 import {
   FOOT,
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
-  GENDER,
+  // GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 

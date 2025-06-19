@@ -8,7 +8,6 @@ import {
   BookText,
   ChartPie,
   ChevronRight,
-  MapPin,
   Share,
   // Volleyball,
 } from "lucide-react";
