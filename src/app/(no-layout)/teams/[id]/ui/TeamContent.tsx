@@ -5,6 +5,7 @@ import { getTeam } from "../model/actions";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
+  BookText,
   ChartPie,
   ChevronRight,
   Share,
@@ -173,42 +174,50 @@ const TeamContent = ({ id }: { id: string }) => {
           )}
 
           {/* 기본 정보 */}
-          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
-              </div>
-              <Label className="text-muted-foreground">선호 호지션</Label>
+          <div className="bg-white rounded-2xl pb-3">
+            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+              <BookText className={`w-5 h-5 text-gray-600`} />
+              <span className="font-medium">기본 정보</span>
             </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {TEAM_GENDER[data?.data?.gender as keyof typeof TEAM_GENDER]}
+            <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
+                </div>
+                <Label className="text-muted-foreground">선호 호지션</Label>
               </div>
-              <Label className="text-muted-foreground">구분</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {data.data.stats.professionalCount
-                  ? `${data.data.stats.professionalCount}명`
-                  : "없음"}
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {TEAM_GENDER[data?.data?.gender as keyof typeof TEAM_GENDER]}
+                </div>
+                <Label className="text-muted-foreground">구분</Label>
               </div>
-              <Label className="text-muted-foreground">선수 출신</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {data.data.stats.averageAge}세
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.stats.professionalCount
+                    ? `${data.data.stats.professionalCount}명`
+                    : "없음"}
+                </div>
+                <Label className="text-muted-foreground">선수 출신</Label>
               </div>
-              <Label className="text-muted-foreground">평균 연령</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {data.data.stats.averageHeight}cm
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.stats.averageAge}세
+                </div>
+                <Label className="text-muted-foreground">평균 연령</Label>
               </div>
-              <Label className="text-muted-foreground">평균 키</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">{data.data.members.length}명</div>
-              <Label className="text-muted-foreground">팀원 수</Label>
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.stats.averageHeight}cm
+                </div>
+                <Label className="text-muted-foreground">평균 키</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.members.length}명
+                </div>
+                <Label className="text-muted-foreground">팀원 수</Label>
+              </div>
             </div>
           </div>
 
