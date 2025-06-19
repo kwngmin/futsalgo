@@ -2,7 +2,7 @@ import SkeletonPlayCard from "./SkeletonPlayerCard";
 
 const SkeletonPlayerContent = () => {
   return (
-    <div className="px-3 space-y-4">
+    <div className="px-3 space-y-3">
       <SkeletonPlayCard nickName="w-32" teamName="w-24" />
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2 justify-between">

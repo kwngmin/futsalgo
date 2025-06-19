@@ -103,7 +103,7 @@ const MorePage = () => {
           {/* <Search className="w-5 h-5" /> */}
         </button>
       </div>
-      <div className="px-3 space-y-4">
+      <div className="px-3 space-y-3">
         {!session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <h3 className="font-semibold text-gray-900">

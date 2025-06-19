@@ -101,7 +101,7 @@ const PlayersPage = () => {
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-4">
+        <div className="px-3 space-y-3">
           {/* 내 프로필 섹션 또는 로그인 안내 */}
           <div>
             {isLoggedIn && data?.data?.user ? (

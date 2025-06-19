@@ -81,7 +81,7 @@ const TeamContent = ({ id }: { id: string }) => {
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-4">
+        <div className="px-3 space-y-3">
           <div className="bg-white rounded-2xl">
             <div className="flex justify-end p-3">
               {id === session.data?.user.id ? (
@@ -149,12 +149,12 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex justify-end px-3 h-12 mt-4 space-x-2">
               <div className="flex flex-col justify-center items-center space-y-3 min-w-14">
-                <span className="font-semibold text-sm px-2">개요</span>
+                <span className="font-semibold text-sm px-2">가입 신청</span>
                 {/* <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" /> */}
               </div>
             </div>
           </div>
-          <div className="flex px-3 h-12 mt-4 space-x-2 bg-gray-50 rounded-lg">
+          <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">
             <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
               <span className="font-semibold text-base px-2 leading-tight">
                 개요

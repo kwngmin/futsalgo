@@ -139,7 +139,7 @@ const TeamsPage = () => {
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-4">
+        <div className="px-3 space-y-3">
           <div>
             {isLoggedIn ? (
               data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (

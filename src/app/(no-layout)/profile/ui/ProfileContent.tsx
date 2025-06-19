@@ -136,7 +136,7 @@ export default function ProfileContent({ data }: { data: User }) {
         </button>
       </div>
 
-      <div className="px-3 space-y-4">
+      <div className="px-3 space-y-3">
         {/* 프로필 사진 */}
         {/* <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
           <Image
