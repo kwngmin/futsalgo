@@ -19,10 +19,10 @@ import { useSession } from "next-auth/react";
 import MannerBar from "./MannerBar";
 
 const logoOptions = [
-  "/assets/sample/team-logo-sample-1.png",
-  "/assets/sample/team-logo-sample-2.png",
-  "/assets/sample/team-logo-sample-3.png",
-  "/assets/sample/team-logo-sample-4.png",
+  "/images/team-logo-sample-1.png",
+  "/images/team-logo-sample-2.png",
+  "/images/team-logo-sample-3.png",
+  "/images/team-logo-sample-4.png",
 ];
 
 const PlayerContent = ({ id }: { id: string }) => {
