@@ -147,19 +147,25 @@ const TeamContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <div className="flex px-3 h-12 mt-4 space-x-3 border-t border-gray-200">
-              <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
+            <div className="flex justify-end px-3 h-12 mt-4 space-x-2">
+              <div className="flex flex-col justify-center items-center space-y-3 min-w-14">
                 <span className="font-semibold text-sm px-2">개요</span>
-                <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" />
+                {/* <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" /> */}
               </div>
-              <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-                <span className="font-semibold text-sm px-2">소개</span>
-                <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
-              </div>
-              <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-                <span className="font-semibold text-sm px-2">명단</span>
-                <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
-              </div>
+            </div>
+          </div>
+          <div className="flex px-3 h-10 mt-4 space-x-2">
+            <div className="flex flex-col justify-end items-center space-y-2 min-w-14">
+              <span className="font-semibold text-base px-2">개요</span>
+              <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" />
+            </div>
+            <div className="flex flex-col justify-end items-center space-y-2 min-w-14">
+              <span className="font-semibold text-base px-2">소개</span>
+              <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
+            </div>
+            <div className="flex flex-col justify-end items-center space-y-2 min-w-14">
+              <span className="font-semibold text-base px-2">명단</span>
+              <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
             </div>
           </div>
           {/* <div className="bg-white rounded-lg overflow-hidden opacity-50 pointer-events-none">
