@@ -9,15 +9,14 @@ import {
   ChartPie,
   ChevronRight,
   Share,
-  Text,
-  Users,
-  Volleyball,
+  // Volleyball,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
+import { Fragment, useState } from "react";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -26,9 +25,25 @@ const logoOptions = [
   "/assets/images/team-logo-sample-4.png",
 ];
 
+const tabs = [
+  {
+    label: "개요",
+    value: "overview",
+  },
+  {
+    label: "소개",
+    value: "introduction",
+  },
+  {
+    label: "명단",
+    value: "members",
+  },
+];
+
 const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
+  const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
 
   const { data } = useQuery({
     queryKey: ["player", id],
@@ -155,104 +170,110 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
           </div>
           <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">
-            <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-              <span className="font-semibold text-base px-2 leading-tight">
-                개요
-              </span>
-              <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" />
-            </div>
-            <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-              <span className="font-semibold text-base px-2 leading-tight">
-                소개
-              </span>
-              <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
-            </div>
-            <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-              <span className="font-semibold text-base px-2 leading-tight">
-                명단
-              </span>
-              <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
-            </div>
-          </div>
-          {/* <div className="bg-white rounded-lg overflow-hidden opacity-50 pointer-events-none">
-            <button
-              onClick={() => alert("플레이 정보 통계")}
-              className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
-            >
-              <div className="flex items-center space-x-3">
-                <div className="size-6 bg-gray-200 rounded-full" />
-                <span className="font-medium">소속 팀 없음</span>
+            {tabs.map((tab) => (
+              <div
+                key={tab.value}
+                className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
+                  selectedTab === tab.value
+                    ? "border-gray-500"
+                    : "border-transparent"
+                }`}
+                onClick={() => setSelectedTab(tab.value)}
+              >
+                {tab.label}
+                {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
               </div>
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
-            </button>
-          </div> */}
+            ))}
+          </div>
 
           {/* 소개 */}
-          {data?.data?.description && (
-            <div className="bg-white rounded-2xl">
-              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                <Text className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">팀 소개</span>
-              </div>
-              <p className="px-4 py-4">{data?.data?.description}</p>
+          {selectedTab === "introduction" && (
+            <p className="px-4 py-4 bg-white rounded-2xl">
+              {data?.data?.description ?? "소개 없음"}
+            </p>
+          )}
+
+          {/* 명단 */}
+          {selectedTab === "members" && (
+            <div className="bg-white rounded-lg overflow-hidden">
+              {data.data.members.map((member) => (
+                <button
+                  key={member.id}
+                  onClick={() => router.push(`/players/${member.userId}`)}
+                  className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="size-6 bg-gray-200 rounded-full" />
+                    <span className="font-medium">{member.user.nickname}</span>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                </button>
+              ))}
             </div>
           )}
 
-          {/* 기본 정보 */}
-          <div className="bg-white rounded-2xl pb-3">
-            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-              <BookText className={`w-5 h-5 text-gray-600`} />
-              <span className="font-medium">기본 정보</span>
-            </div>
-            <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {TEAM_GENDER[data?.data?.gender as keyof typeof TEAM_GENDER]}
+          {/* 개요 */}
+          {selectedTab === "overview" && (
+            <Fragment>
+              {/* 기본 정보 */}
+              <div className="bg-white rounded-2xl pb-3">
+                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                  <BookText className={`w-5 h-5 text-gray-600`} />
+                  <span className="font-medium">기본 정보</span>
                 </div>
-                <Label className="text-muted-foreground">구분</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
-                  {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
+                <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
+                  <div className="flex flex-col gap-1 items-center my-4">
+                    <div className="font-semibold">
+                      {
+                        TEAM_GENDER[
+                          data?.data?.gender as keyof typeof TEAM_GENDER
+                        ]
+                      }
+                    </div>
+                    <Label className="text-muted-foreground">구분</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-4">
+                    <div className="font-semibold">
+                      {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
+                      {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
+                    </div>
+                    <Label className="text-muted-foreground">실력</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-4">
+                    <div className="font-semibold">
+                      {data.data.stats.professionalCount
+                        ? `${data.data.stats.professionalCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">선수 출신</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-4">
+                    <div className="font-semibold">
+                      {data.data.stats.averageAge}세
+                    </div>
+                    <Label className="text-muted-foreground">평균 연령</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-4">
+                    <div className="font-semibold">
+                      {data.data.stats.averageHeight}cm
+                    </div>
+                    <Label className="text-muted-foreground">평균 키</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-4">
+                    <div className="font-semibold">
+                      {data.data.members.length}명
+                    </div>
+                    <Label className="text-muted-foreground">팀원</Label>
+                  </div>
                 </div>
-                <Label className="text-muted-foreground">실력</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {data.data.stats.professionalCount
-                    ? `${data.data.stats.professionalCount}명`
-                    : "없음"}
-                </div>
-                <Label className="text-muted-foreground">선수 출신</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {data.data.stats.averageAge}세
-                </div>
-                <Label className="text-muted-foreground">평균 연령</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {data.data.stats.averageHeight}cm
-                </div>
-                <Label className="text-muted-foreground">평균 키</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {data.data.members.length}명
-                </div>
-                <Label className="text-muted-foreground">팀원</Label>
-              </div>
-            </div>
-          </div>
 
-          {/* 통계 */}
-          {/* <div className="bg-white rounded-lg overflow-hidden">
-           */}
+              {/* 통계 */}
+              {/* <div className="bg-white rounded-lg overflow-hidden">
+               */}
 
-          {/* 경기 년도 선택 */}
-          {/* <div className="flex items-center justify-between gap-2">
+              {/* 경기 년도 선택 */}
+              {/* <div className="flex items-center justify-between gap-2">
             <h2 className="font-medium text-gray-600 px-2 text-sm">
               경기 년도 선택 :
             </h2>
@@ -266,49 +287,89 @@ const TeamContent = ({ id }: { id: string }) => {
             </Select>
           </div> */}
 
-          {/* 실력 분포 */}
-          <div className="bg-white rounded-2xl pb-3">
-            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-              <ChartPie className={`w-5 h-5 text-gray-600`} />
-              <span className="font-medium">팀원 실력</span>
-            </div>
-            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.beginnerCount
-                    ? `${data.data.stats.beginnerCount}명`
-                    : "없음"}
+              {/* 실력 분포 */}
+              <div className="bg-white rounded-2xl pb-3">
+                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                  <ChartPie className={`w-5 h-5 text-gray-600`} />
+                  <span className="font-medium">팀원 실력</span>
                 </div>
-                <Label className="text-muted-foreground">비기너</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.amateurCount
-                    ? `${data.data.stats.amateurCount}명`
-                    : "없음"}
+                <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.beginnerCount
+                        ? `${data.data.stats.beginnerCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">비기너</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.amateurCount
+                        ? `${data.data.stats.amateurCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">아마추어</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.aceCount
+                        ? `${data.data.stats.aceCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">에이스</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.semiproCount
+                        ? `${data.data.stats.semiproCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">세미프로</Label>
+                  </div>
                 </div>
-                <Label className="text-muted-foreground">아마추어</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.aceCount
-                    ? `${data.data.stats.aceCount}명`
-                    : "없음"}
-                </div>
-                <Label className="text-muted-foreground">에이스</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.semiproCount
-                    ? `${data.data.stats.semiproCount}명`
-                    : "없음"}
-                </div>
-                <Label className="text-muted-foreground">세미프로</Label>
-              </div>
-            </div>
-          </div>
 
-          <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
+              {/* 친선 경기 */}
+              {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
+                <button
+                  onClick={() => alert("친선 경기")}
+                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
+                >
+                  <div className="flex items-center space-x-3">
+                    <Volleyball className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">
+                      친선 경기
+                      <span className="text-gray-400 px-2 text-sm">
+                        우리 팀 vs 외부 팀
+                      </span>
+                    </span>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                </button>
+                <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">11</div>
+                    <Label className="text-muted-foreground">경기</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">2</div>
+                    <Label className="text-muted-foreground">득점</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">5</div>
+                    <Label className="text-muted-foreground">어시스트</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">8</div>
+                    <Label className="text-muted-foreground">출전 시간</Label>
+                  </div>
+                </div>
+              </div> */}
+            </Fragment>
+          )}
+
+          {/* 연습 경기 */}
+          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("연습 경기")}
               className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100
@@ -346,42 +407,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">세미프로</Label>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-            <button
-              onClick={() => alert("친선 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
-            >
-              <div className="flex items-center space-x-3">
-                <Volleyball className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">
-                  친선 경기
-                  <span className="text-gray-400 px-2 text-sm">
-                    우리 팀 vs 외부 팀
-                  </span>
-                </span>
-              </div>
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
-            </button>
-            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">11</div>
-                <Label className="text-muted-foreground">경기</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">2</div>
-                <Label className="text-muted-foreground">득점</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">5</div>
-                <Label className="text-muted-foreground">어시스트</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">8</div>
-                <Label className="text-muted-foreground">출전 시간</Label>
-              </div>
-            </div>
-          </div>
+          </div> */}
 
           {/* <div className="bg-slate-300">
             <div className="w-fit p-3">
