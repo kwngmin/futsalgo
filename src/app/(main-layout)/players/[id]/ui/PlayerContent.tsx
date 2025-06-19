@@ -157,7 +157,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       className="size-6 object-cover rounded-md overflow-hidden"
                       unoptimized
                     />
-                    <span className="font-medium shrink-0 text-sm">
+                    <span className="font-medium shrink-0">
                       {data.data.teams[0].team.name || "팀 이름 없음"}
                       <span className="text-gray-500 font-normal">
                         {" "}
@@ -174,7 +174,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 ) : (
                   <div className="w-full flex items-center justify-between gap-1.5">
                     <div className="size-6 bg-gray-200 rounded-full" />
-                    <span className="font-medium shrink-0 text-sm text-muted-foreground">
+                    <span className="font-medium shrink-0 text-muted-foreground">
                       소속 팀 없음
                     </span>
                   </div>

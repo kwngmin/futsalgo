@@ -133,7 +133,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </span>
                 </h1>
-                <p className="text-sm text-gray-500 mt-0.5">
+                <p className="text-gray-500 mt-0.5">
                   {`${
                     data?.data?.city && data?.data?.district
                       ? `${data?.data?.city} • ${data?.data?.district}`
