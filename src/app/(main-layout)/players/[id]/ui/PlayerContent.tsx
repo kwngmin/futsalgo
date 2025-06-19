@@ -146,15 +146,15 @@ const PlayerContent = ({ id }: { id: string }) => {
                     className="w-full flex items-center justify-between gap-1.5 cursor-pointer"
                   >
                     <Image
-                      width={20}
-                      height={20}
+                      width={24}
+                      height={24}
                       src={
                         logoOptions[
                           Math.floor(Math.random() * logoOptions.length)
                         ]
                       }
                       alt="profile_image"
-                      className="size-5 object-cover rounded-md overflow-hidden"
+                      className="size-6 object-cover rounded-md overflow-hidden"
                       unoptimized
                     />
                     <span className="font-medium shrink-0 text-sm">
@@ -173,7 +173,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </button>
                 ) : (
                   <div className="w-full flex items-center justify-between gap-1.5">
-                    <div className="size-5 bg-gray-200 rounded-full" />
+                    <div className="size-6 bg-gray-200 rounded-full" />
                     <span className="font-medium shrink-0 text-sm text-muted-foreground">
                       소속 팀 없음
                     </span>
