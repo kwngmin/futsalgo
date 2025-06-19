@@ -6,6 +6,13 @@ export async function getPlayer(id: string) {
   try {
     const player = await prisma.user.findUnique({
       where: { id },
+      include: {
+        teams: {
+          include: {
+            team: true,
+          },
+        },
+      },
     });
 
     if (!player) {
@@ -15,9 +22,16 @@ export async function getPlayer(id: string) {
       };
     }
 
+    const filteredTeams = player.teams.filter(
+      (team) => team.team.status === "ACTIVE"
+    );
+
     return {
       success: true,
-      data: { player },
+      data: {
+        ...player,
+        teams: filteredTeams,
+      },
     };
   } catch (error) {
     console.error("선수 데이터 조회 실패:", error);

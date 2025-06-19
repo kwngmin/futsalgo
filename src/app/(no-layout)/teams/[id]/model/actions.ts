@@ -13,7 +13,6 @@ export async function getTeam(id: string) {
             id: true,
             name: true,
             nickname: true,
-            image: true,
           },
         },
         members: {
@@ -30,6 +29,8 @@ export async function getTeam(id: string) {
                 sportType: true,
                 footballPositions: true,
                 futsalPosition: true,
+                birthDate: true,
+                height: true,
               },
             },
           },
@@ -47,6 +48,32 @@ export async function getTeam(id: string) {
 
     // 실시간 통계 계산
     const approvedMembers = team.members;
+
+    // 평균 연령 계산 (birthDate가 있는 멤버들만)
+    const membersWithBirthDate = approvedMembers.filter(
+      (m) => m.user.birthDate
+    );
+    const averageAge =
+      membersWithBirthDate.length > 0
+        ? Math.round(
+            membersWithBirthDate.reduce((sum, m) => {
+              const birthYear = parseInt(m.user.birthDate!.substring(0, 4));
+              const currentYear = new Date().getFullYear();
+              return sum + (currentYear - birthYear);
+            }, 0) / membersWithBirthDate.length
+          )
+        : null;
+
+    // 평균 키 계산 (height가 있는 멤버들만)
+    const membersWithHeight = approvedMembers.filter((m) => m.user.height);
+    const averageHeight =
+      membersWithHeight.length > 0
+        ? Math.round(
+            membersWithHeight.reduce((sum, m) => sum + m.user.height!, 0) /
+              membersWithHeight.length
+          )
+        : null;
+
     const stats = {
       beginnerCount: approvedMembers.filter(
         (m) => m.user.skillLevel === "BEGINNER"
@@ -62,6 +89,8 @@ export async function getTeam(id: string) {
       professionalCount: approvedMembers.filter(
         (m) => m.user.playerBackground === "PROFESSIONAL"
       ).length,
+      averageAge,
+      averageHeight,
     };
 
     return {

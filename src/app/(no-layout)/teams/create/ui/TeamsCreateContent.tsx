@@ -10,7 +10,7 @@ import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
-import { createTeam } from "@/app/(no-layout)/profile/model/server-actions";
+import { createTeam } from "@/app/(no-layout)/teams/create/model/server-actions";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/shared/components/ui/textarea";
 import CustomSelect from "@/shared/components/ui/custom-select";
