@@ -147,24 +147,18 @@ const TeamContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <div className="flex px-3 h-16">
+            <div className="flex px-3 h-12 mt-4 space-x-3 border-t border-gray-200">
               <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-                <div className="flex justify-between px-2">
-                  <span className="font-semibold text-sm">개요</span>
-                </div>
-                <div className="bg-gray-500 rounded-t-full h-1 w-full flex overflow-hidden" />
+                <span className="font-semibold text-sm px-2">개요</span>
+                <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" />
               </div>
               <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-                <div className="flex justify-between px-2">
-                  <span className="font-semibold text-sm">소개</span>
-                </div>
-                <div className="bg-transparent rounded-t-full h-1 w-full flex overflow-hidden" />
+                <span className="font-semibold text-sm px-2">소개</span>
+                <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
               </div>
               <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
-                <div className="flex justify-between px-2">
-                  <span className="font-semibold text-sm">명단</span>
-                </div>
-                <div className="bg-transparent rounded-t-full h-1 w-full flex overflow-hidden" />
+                <span className="font-semibold text-sm px-2">명단</span>
+                <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden" />
               </div>
             </div>
           </div>
