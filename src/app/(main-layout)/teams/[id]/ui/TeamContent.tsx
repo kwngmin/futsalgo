@@ -128,24 +128,18 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg font-bold">
+                <h1 className="text-xl font-semibold">
                   {data?.data?.name}
                   <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
                   </span>
                 </h1>
                 <p className="text-sm text-gray-500 mt-0.5">
-                  생성일:{" "}
-                  {data?.data?.createdAt
-                    ? new Date(data?.data?.createdAt).toLocaleDateString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )
-                    : ""}
+                  {`${
+                    data?.data?.city && data?.data?.district
+                      ? `${data?.data?.city} • ${data?.data?.district}`
+                      : "지역 미설정"
+                  }`}
                 </p>
               </div>
             </div>
@@ -174,7 +168,7 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 소개 */}
           {selectedTab === "introduction" && (
-            <p className="px-4 py-4 bg-white rounded-2xl">
+            <p className="px-4 py-4 bg-white rounded-2xl min-h-32">
               {data?.data?.description ?? "소개 없음"}
             </p>
           )}
@@ -201,7 +195,8 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 개요 */}
           {selectedTab === "overview" && (
             <Fragment>
-              <div className="bg-white rounded-lg overflow-hidden">
+              {/* 지역 */}
+              {/* <div className="bg-white rounded-lg overflow-hidden">
                 <button
                   className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
                 >
@@ -214,7 +209,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     }`}</span>
                   </div>
                 </button>
-              </div>
+              </div> */}
 
               {/* 기본 정보 */}
               <div className="bg-white rounded-2xl pb-3">
@@ -366,6 +361,19 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                 </div>
               </div> */}
+              <p className="text-center text-sm text-gray-500 mt-3">
+                생성일:{" "}
+                {data?.data?.createdAt
+                  ? new Date(data?.data?.createdAt).toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
+                  : ""}
+              </p>
             </Fragment>
           )}
 

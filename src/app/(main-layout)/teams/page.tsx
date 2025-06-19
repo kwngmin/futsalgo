@@ -184,7 +184,7 @@ type TeamCardProps = {
   isMyTeam?: boolean;
 };
 
-const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
+const TeamCard = ({ team, isMyTeam = false }: TeamCardProps) => {
   const router = useRouter();
 
   return (
@@ -234,9 +234,11 @@ const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
         </div>
 
         {/* 누적 경기수와 팀원 수 */}
-        <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
-          {team._count.members ?? 0}
-        </div>
+        {!isMyTeam && (
+          <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
+            {team._count.members ?? 0}
+          </div>
+        )}
       </div>
     </div>
   );

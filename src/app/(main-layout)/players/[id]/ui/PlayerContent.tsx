@@ -8,8 +8,10 @@ import {
   ArrowLeft,
   BookText,
   ChevronRight,
+  Mars,
   Share,
   User2,
+  Venus,
   Volleyball,
 } from "lucide-react";
 import { getCurrentAge, maskName } from "@/entities/user/model/actions";
@@ -112,28 +114,64 @@ const PlayerContent = ({ id }: { id: string }) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex flex-col">
-                <h1 className="text-lg font-bold">{data?.data?.nickname}</h1>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  가입일:{" "}
-                  {data?.data?.createdAt
-                    ? new Date(data?.data?.createdAt).toLocaleDateString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )
-                    : ""}
-                </p>
+              <div className="flex flex-col gap-1">
+                <h1 className="text-xl font-semibold flex items-center gap-1.5">
+                  {data?.data?.nickname}{" "}
+                  {data?.data?.gender === "MALE" ? (
+                    <div className="flex items-center bg-blue-500/5 rounded p-0.5">
+                      <Mars
+                        className="size-4 stroke-blue-700"
+                        strokeWidth={2}
+                      />
+                      {/* <span className="text-sm text-gray-500">남</span> */}
+                    </div>
+                  ) : (
+                    <div className="flex items-center bg-red-500/5 rounded p-0.5">
+                      <Venus
+                        className="size-4 stroke-red-700"
+                        strokeWidth={2}
+                      />
+                    </div>
+                  )}
+                </h1>
+                {data.data.teams && data.data.teams.length > 0 ? (
+                  <button
+                    onClick={() =>
+                      router.push(`/teams/${data.data.teams[0].team.id}`)
+                    }
+                    className="w-full flex items-center justify-between gap-1.5 cursor-pointer"
+                  >
+                    <Image
+                      width={20}
+                      height={20}
+                      src={
+                        logoOptions[
+                          Math.floor(Math.random() * logoOptions.length)
+                        ]
+                      }
+                      alt="profile_image"
+                      className="size-5 object-cover rounded-md overflow-hidden"
+                      unoptimized
+                    />
+                    <span className="font-medium shrink-0 text-sm">
+                      {data.data.teams[0].team.name || "팀 이름 없음"}
+                    </span>
+                  </button>
+                ) : (
+                  <div className="w-full flex items-center justify-between gap-1.5">
+                    <div className="size-5 bg-gray-200 rounded-full" />
+                    <span className="font-medium shrink-0 text-sm text-muted-foreground">
+                      소속 팀 없음
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             {/* <MannerBar score={Math.floor(Math.random() * 100)} /> */}
           </div>
 
           {/* 소속 팀 */}
-          {data.data.teams && data.data.teams.length > 0 ? (
+          {/* {data.data.teams && data.data.teams.length > 0 ? (
             <div className="bg-white rounded-2xl">
               <button
                 onClick={() =>
@@ -174,9 +212,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <ChevronRight className={`w-5 h-5 text-gray-400}`} />
               </button>
             </div>
-          )}
+          )} */}
 
-          <div className="bg-white rounded-lg overflow-hidden">
+          {/* 성별 및 이름 */}
+          {/* <div className="bg-white rounded-lg overflow-hidden">
             <button
               className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
             >
@@ -195,7 +234,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 }`}</span>
               </div>
             </button>
-          </div>
+          </div> */}
 
           {/* 기본 정보 */}
           <div className="bg-white rounded-2xl pb-3">
@@ -332,6 +371,16 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
         </div>
       ) : null}
+      <p className="text-center text-sm text-gray-500 mt-3">
+        가입일:{" "}
+        {data?.data?.createdAt
+          ? new Date(data?.data?.createdAt).toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : ""}
+      </p>
     </div>
   );
 };
