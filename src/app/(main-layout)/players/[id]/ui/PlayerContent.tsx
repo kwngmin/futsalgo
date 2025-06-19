@@ -8,6 +8,7 @@ import {
   ArrowLeft,
   BookText,
   ChevronRight,
+  EllipsisVertical,
   Mars,
   Share,
   // User2,
@@ -93,18 +94,23 @@ const PlayerContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl pb-14">
-            <div className="flex justify-end p-3">
+          <div className="bg-white rounded-2xl pb-11">
+            <div className="flex justify-end px-3 pt-3">
               {id === session.data?.user.id ? (
                 <div className="h-7" />
               ) : (
-                <Button
-                  size="sm"
-                  className="rounded-full font-semibold text-sm py-0 px-4 h-7"
-                  variant="outline"
-                >
-                  팔로우
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    className="rounded-full font-semibold text-sm py-0 px-4 h-7"
+                    variant="outline"
+                  >
+                    팔로우
+                  </Button>
+                  <button className="shrink-0 size-8 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                    <EllipsisVertical className="size-4" />
+                  </button>
+                </div>
               )}
             </div>
             <div className="flex items-center gap-4 px-6 h-20">
@@ -172,12 +178,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </span>
                   </button>
                 ) : (
-                  <div className="w-full flex items-center justify-between gap-1.5">
-                    <div className="size-6 bg-gray-200 rounded-full" />
-                    <span className="font-medium shrink-0 text-muted-foreground">
-                      소속 팀 없음
-                    </span>
-                  </div>
+                  <span className="font-medium shrink-0 text-muted-foreground">
+                    소속 팀 없음
+                  </span>
                 )}
               </div>
             </div>

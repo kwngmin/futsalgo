@@ -8,6 +8,7 @@ import {
   BookText,
   ChartPie,
   ChevronRight,
+  EllipsisVertical,
   Share,
   // Volleyball,
 } from "lucide-react";
@@ -97,18 +98,23 @@ const TeamContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl pb-14">
-            <div className="flex justify-end p-3">
+          <div className="bg-white rounded-2xl pb-11">
+            <div className="flex justify-end px-3 pt-3">
               {id === session.data?.user.id ? (
                 <div className="h-7" />
               ) : (
-                <Button
-                  size="sm"
-                  className="rounded-full font-semibold text-sm py-0 px-4 h-7"
-                  variant="outline"
-                >
-                  팔로우
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    className="rounded-full font-semibold text-sm py-0 px-4 h-7"
+                    variant="outline"
+                  >
+                    팔로우
+                  </Button>{" "}
+                  <button className="shrink-0 size-8 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                    <EllipsisVertical className="size-4" />
+                  </button>
+                </div>
               )}
             </div>
             <div className="flex items-center gap-4 px-6 h-20">
