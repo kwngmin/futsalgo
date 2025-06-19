@@ -158,6 +158,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     }
                     alt="profile_image"
                     className="size-6 object-cover"
+                    unoptimized
                   />
                   <span className="font-medium shrink-0">
                     {data.data.teams[0].team.name || "팀 이름 없음"}

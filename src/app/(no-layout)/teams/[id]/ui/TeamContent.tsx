@@ -108,6 +108,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   //   src={data?.data?.logoUrl ?? ""}
                   alt="profile_image"
                   className="w-full h-full object-cover"
+                  unoptimized
                 />
               </div>
               <div className="flex flex-col">
