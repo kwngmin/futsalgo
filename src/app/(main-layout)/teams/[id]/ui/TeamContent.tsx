@@ -18,7 +18,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
-import MannerBar from "@/app/(no-layout)/players/[id]/ui/MannerBar";
+import MannerBar from "@/app/(main-layout)/players/[id]/ui/MannerBar";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
