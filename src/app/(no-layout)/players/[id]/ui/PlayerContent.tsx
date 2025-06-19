@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
-  BookText,
   ChevronRight,
   Share,
   Shirt,
@@ -196,60 +195,53 @@ const PlayerContent = ({ id }: { id: string }) => {
           )}
 
           {/* 기본 정보 */}
-          <div className="bg-white rounded-2xl pb-3">
-            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-              <BookText className={`w-5 h-5 text-gray-600`} />
-              <span className="font-medium">기본 정보</span>
+          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">{data?.data?.height}cm</div>
+              <Label className="text-muted-foreground">키</Label>
             </div>
-            <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">{data?.data?.height}cm</div>
-                <Label className="text-muted-foreground">키</Label>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {getCurrentAge(data?.data?.birthDate as string).age}살
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {getCurrentAge(data?.data?.birthDate as string).age}살
-                </div>
-                <Label className="text-muted-foreground">나이</Label>
+              <Label className="text-muted-foreground">나이</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {FOOT[data?.data?.foot as keyof typeof FOOT]}
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {FOOT[data?.data?.foot as keyof typeof FOOT]}
-                </div>
-                <Label className="text-muted-foreground">사용하는 발</Label>
+              <Label className="text-muted-foreground">사용하는 발</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {
+                  FUTSAL_POSITIONS[
+                    data?.data?.futsalPosition as keyof typeof FUTSAL_POSITIONS
+                  ]
+                }
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {
-                    FUTSAL_POSITIONS[
-                      data?.data
-                        ?.futsalPosition as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }
-                </div>
-                <Label className="text-muted-foreground">선호 포지션</Label>
+              <Label className="text-muted-foreground">선호 포지션</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {
+                  PLAYER_BACKGROUND[
+                    data?.data
+                      ?.playerBackground as keyof typeof PLAYER_BACKGROUND
+                  ]
+                }
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {
-                    PLAYER_BACKGROUND[
-                      data?.data
-                        ?.playerBackground as keyof typeof PLAYER_BACKGROUND
-                    ]
-                  }
-                </div>
-                <Label className="text-muted-foreground">출신</Label>
+              <Label className="text-muted-foreground">출신</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {
+                  SKILL_LEVEL[
+                    data?.data?.skillLevel as keyof typeof SKILL_LEVEL
+                  ]
+                }
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {
-                    SKILL_LEVEL[
-                      data?.data?.skillLevel as keyof typeof SKILL_LEVEL
-                    ]
-                  }
-                </div>
-                <Label className="text-muted-foreground">실력</Label>
-              </div>
+              <Label className="text-muted-foreground">실력</Label>
             </div>
           </div>
 
