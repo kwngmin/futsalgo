@@ -20,10 +20,10 @@ import { SPORT_TYPE } from "@/entities/user/model/constants";
 import MannerBar from "@/app/(no-layout)/players/[id]/ui/MannerBar";
 
 const logoOptions = [
-  "/assets/sample/team-logo-1.png",
-  "/assets/sample/team-logo-2.png",
-  "/assets/sample/team-logo-3.png",
-  "/assets/sample/team-logo-4.png",
+  "/assets/sample/team-logo-sample-1.png",
+  "/assets/sample/team-logo-sample-2.png",
+  "/assets/sample/team-logo-sample-3.png",
+  "/assets/sample/team-logo-sample-4.png",
 ];
 
 const TeamContent = ({ id }: { id: string }) => {
