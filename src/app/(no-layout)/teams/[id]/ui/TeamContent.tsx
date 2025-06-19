@@ -184,7 +184,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="font-semibold">
                   {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
                 </div>
-                <Label className="text-muted-foreground">종목</Label>
+                <Label className="text-muted-foreground">선호 호지션</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
@@ -213,10 +213,10 @@ const TeamContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">평균 키</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold bg-green-600 px-2 rounded text-white leading-none h-6 flex items-center pb-0.5">
-                  3.4
+                <div className="font-semibold">
+                  {data.data.members.length}명
                 </div>
-                <Label className="text-muted-foreground">평점</Label>
+                <Label className="text-muted-foreground">팀원 수</Label>
               </div>
             </div>
           </div>

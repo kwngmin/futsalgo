@@ -4,14 +4,21 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, ChevronRight, Share, Volleyball } from "lucide-react";
+import {
+  ArrowLeft,
+  BookText,
+  ChevronRight,
+  Share,
+  Shirt,
+  Volleyball,
+} from "lucide-react";
 import { getCurrentAge, maskName } from "@/entities/user/model/actions";
 import {
   FOOT,
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
   GENDER,
-  SPORT_TYPE,
+  FUTSAL_POSITIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 
@@ -139,8 +146,14 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <MannerBar score={Math.floor(Math.random() * 100)} />
           </div>
+
+          {/* 소속 팀 */}
           {data.data.teams && data.data.teams.length > 0 ? (
-            <div className="bg-white rounded-lg overflow-hidden">
+            <div className="bg-white rounded-2xl">
+              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                <Shirt className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">소속 팀 정보</span>
+              </div>
               <button
                 onClick={() =>
                   router.push(`/teams/${data.data.teams[0].team.id}`)
@@ -182,49 +195,61 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">{data?.data?.height}cm</div>
-              <Label className="text-muted-foreground">키</Label>
+          {/* 기본 정보 */}
+          <div className="bg-white rounded-2xl pb-3">
+            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+              <BookText className={`w-5 h-5 text-gray-600`} />
+              <span className="font-medium">기본 정보</span>
             </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {getCurrentAge(data?.data?.birthDate as string).age}살
+            <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">{data?.data?.height}cm</div>
+                <Label className="text-muted-foreground">키</Label>
               </div>
-              <Label className="text-muted-foreground">나이</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {FOOT[data?.data?.foot as keyof typeof FOOT]}
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {getCurrentAge(data?.data?.birthDate as string).age}살
+                </div>
+                <Label className="text-muted-foreground">나이</Label>
               </div>
-              <Label className="text-muted-foreground">사용하는 발</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {FOOT[data?.data?.foot as keyof typeof FOOT]}
+                </div>
+                <Label className="text-muted-foreground">사용하는 발</Label>
               </div>
-              <Label className="text-muted-foreground">종목</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {
-                  PLAYER_BACKGROUND[
-                    data?.data
-                      ?.playerBackground as keyof typeof PLAYER_BACKGROUND
-                  ]
-                }
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {
+                    FUTSAL_POSITIONS[
+                      data?.data
+                        ?.futsalPosition as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </div>
+                <Label className="text-muted-foreground">선호 포지션</Label>
               </div>
-              <Label className="text-muted-foreground">출신</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {
-                  SKILL_LEVEL[
-                    data?.data?.skillLevel as keyof typeof SKILL_LEVEL
-                  ]
-                }
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {
+                    PLAYER_BACKGROUND[
+                      data?.data
+                        ?.playerBackground as keyof typeof PLAYER_BACKGROUND
+                    ]
+                  }
+                </div>
+                <Label className="text-muted-foreground">출신</Label>
               </div>
-              <Label className="text-muted-foreground">실력</Label>
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {
+                    SKILL_LEVEL[
+                      data?.data?.skillLevel as keyof typeof SKILL_LEVEL
+                    ]
+                  }
+                </div>
+                <Label className="text-muted-foreground">실력</Label>
+              </div>
             </div>
           </div>
 
@@ -232,21 +257,8 @@ const PlayerContent = ({ id }: { id: string }) => {
           {/* <div className="bg-white rounded-lg overflow-hidden">
            */}
 
-          {/* 경기 년도 선택 */}
-          {/* <div className="flex items-center justify-between gap-2">
-            <h2 className="font-medium text-gray-600 px-2 text-sm">
-              경기 년도 선택 :
-            </h2>
-            <Select>
-              <SelectTrigger className="grow bg-white">
-                <SelectValue placeholder="선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">2025년</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
-          <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
+          {/* 친선 경기 */}
+          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("친선 경기")}
               className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
@@ -280,7 +292,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">출전 시간</Label>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          {/* 연습 경기 */}
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("연습 경기")}
