@@ -98,7 +98,7 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex items-center gap-4 px-6 h-20">
               {/* 프로필 사진 */}
-              <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
                   width={80}
                   height={80}
@@ -259,7 +259,8 @@ const TeamContent = ({ id }: { id: string }) => {
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("연습 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100"
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100
+              cursor-pointer"
             >
               <div className="flex items-center space-x-3">
                 <Users className={`w-5 h-5 text-gray-600`} />
@@ -297,7 +298,7 @@ const TeamContent = ({ id }: { id: string }) => {
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("친선 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100"
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
             >
               <div className="flex items-center space-x-3">
                 <Volleyball className={`w-5 h-5 text-gray-600`} />

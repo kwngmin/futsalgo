@@ -145,7 +145,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 onClick={() =>
                   router.push(`/teams/${data.data.teams[0].team.id}`)
                 }
-                className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer"
               >
                 <div className="flex items-center space-x-3">
                   <Image
@@ -157,7 +157,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       ]
                     }
                     alt="profile_image"
-                    className="size-6 object-cover"
+                    className="size-6 object-cover rounded-md overflow-hidden"
                     unoptimized
                   />
                   <span className="font-medium shrink-0">
@@ -249,7 +249,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("친선 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100"
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
             >
               <div className="flex items-center space-x-3">
                 <Volleyball className={`w-5 h-5 text-gray-600`} />
@@ -284,7 +284,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("연습 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100"
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
             >
               <div className="flex items-center space-x-3">
                 <Volleyball className={`w-5 h-5 text-gray-600`} />
