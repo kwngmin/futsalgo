@@ -51,13 +51,13 @@ export const FOOT = {
 } as const;
 
 export const GENDER_OPTIONS = [
-  { value: "MALE", label: "남자" },
-  { value: "FEMALE", label: "여자" },
+  { value: "MALE", label: "남성" },
+  { value: "FEMALE", label: "여성" },
 ];
 
 export const GENDER = {
-  MALE: "남자",
-  FEMALE: "여자",
+  MALE: "남성",
+  FEMALE: "여성",
 };
 
 export const CONDITION_OPTIONS = [

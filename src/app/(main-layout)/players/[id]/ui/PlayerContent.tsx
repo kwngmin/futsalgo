@@ -21,7 +21,7 @@ import {
 import { Label } from "@/shared/components/ui/label";
 
 import { useSession } from "next-auth/react";
-import MannerBar from "./MannerBar";
+// import MannerBar from "./MannerBar";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -86,7 +86,7 @@ const PlayerContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl">
+          <div className="bg-white rounded-2xl pb-14">
             <div className="flex justify-end p-3">
               {id === session.data?.user.id ? (
                 <div className="h-7" />
@@ -116,15 +116,15 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <p className="text-base font-medium">
                   {/* 소속 팀 없음 */}
                   {`${
+                    data?.data?.gender
+                      ? `${GENDER[data?.data?.gender as keyof typeof GENDER]}`
+                      : "성별 미설정"
+                  } • ${
                     data?.data?.name
                       ? id === session.data?.user.id
                         ? data?.data?.name
                         : maskName(data?.data?.name)
                       : "이름 없음"
-                  } • ${
-                    data?.data?.gender
-                      ? `${GENDER[data?.data?.gender as keyof typeof GENDER]}`
-                      : "성별 미설정"
                   }`}
                 </p>
                 <p className="text-sm text-gray-500 mt-0.5">
@@ -142,7 +142,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <MannerBar score={Math.floor(Math.random() * 100)} />
+            {/* <MannerBar score={Math.floor(Math.random() * 100)} /> */}
           </div>
 
           {/* 소속 팀 */}

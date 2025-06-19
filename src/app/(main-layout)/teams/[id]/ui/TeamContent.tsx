@@ -97,7 +97,7 @@ const TeamContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl">
+          <div className="bg-white rounded-2xl pb-14">
             <div className="flex justify-end p-3">
               {id === session.data?.user.id ? (
                 <div className="h-7" />
@@ -133,13 +133,13 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </span>
                 </h1>
-                {/* <p className="text-base font-medium">
+                <p className="text-base font-medium">
                   {`${
                     data?.data?.city && data?.data?.district
-                      ? `${data?.data?.city} ${data?.data?.district}`
+                      ? `${data?.data?.city} • ${data?.data?.district}`
                       : "지역 미설정"
                   }`}
-                </p> */}
+                </p>
                 {/* <p className="text-base font-medium">
                   {`#${data.data.code} • ${
                     data?.data?.city && data?.data?.district
@@ -162,12 +162,11 @@ const TeamContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <div className="flex justify-end px-3 h-12 mt-4 space-x-2">
+            {/* <div className="flex justify-end px-3 h-12 mt-4 space-x-2">
               <div className="flex flex-col justify-center items-center space-y-3 min-w-14">
-                <span className="font-semibold text-sm px-2">가입 신청</span>
-                {/* <div className="bg-blue-500 rounded-t-full h-0.5 w-full flex overflow-hidden" /> */}
+                <span className="font-semibold text-sm px-2">4.82 • 5,435</span>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">
             {tabs.map((tab) => (
