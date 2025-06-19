@@ -18,7 +18,6 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
-import MannerBar from "@/app/(main-layout)/players/[id]/ui/MannerBar";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -153,7 +152,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="flex justify-between px-2">
                   <span className="font-semibold text-sm">개요</span>
                 </div>
-                <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden" />
+                <div className="bg-gray-500 rounded-t-full h-1 w-full flex overflow-hidden" />
               </div>
               <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
                 <div className="flex justify-between px-2">
