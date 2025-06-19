@@ -9,6 +9,7 @@ import {
   BookText,
   ChevronRight,
   Share,
+  User2,
   Volleyball,
 } from "lucide-react";
 import { getCurrentAge, maskName } from "@/entities/user/model/actions";
@@ -104,29 +105,15 @@ const PlayerContent = ({ id }: { id: string }) => {
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
-                  width={80}
-                  height={80}
+                  width={64}
+                  height={64}
                   src={data?.data?.image ?? ""}
                   alt="profile_image"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold">{data?.data?.nickname}</h1>
-                <p className="text-base font-medium">
-                  {/* 소속 팀 없음 */}
-                  {`${
-                    data?.data?.gender
-                      ? `${GENDER[data?.data?.gender as keyof typeof GENDER]}`
-                      : "성별 미설정"
-                  } • ${
-                    data?.data?.name
-                      ? id === session.data?.user.id
-                        ? data?.data?.name
-                        : maskName(data?.data?.name)
-                      : "이름 없음"
-                  }`}
-                </p>
+                <h1 className="text-lg font-bold">{data?.data?.nickname}</h1>
                 <p className="text-sm text-gray-500 mt-0.5">
                   가입일:{" "}
                   {data?.data?.createdAt
@@ -188,6 +175,27 @@ const PlayerContent = ({ id }: { id: string }) => {
               </button>
             </div>
           )}
+
+          <div className="bg-white rounded-lg overflow-hidden">
+            <button
+              className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
+            >
+              <div className="flex items-center space-x-3">
+                <User2 className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">{`${
+                  data?.data?.gender
+                    ? `${GENDER[data?.data?.gender as keyof typeof GENDER]}`
+                    : "성별 미설정"
+                } • ${
+                  data?.data?.name
+                    ? id === session.data?.user.id
+                      ? data?.data?.name
+                      : maskName(data?.data?.name)
+                    : "이름 없음"
+                }`}</span>
+              </div>
+            </button>
+          </div>
 
           {/* 기본 정보 */}
           <div className="bg-white rounded-2xl pb-3">

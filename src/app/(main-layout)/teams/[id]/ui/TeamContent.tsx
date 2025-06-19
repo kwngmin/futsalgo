@@ -8,6 +8,7 @@ import {
   BookText,
   ChartPie,
   ChevronRight,
+  MapPin,
   Share,
   // Volleyball,
 } from "lucide-react";
@@ -115,8 +116,8 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
-                  width={80}
-                  height={80}
+                  width={64}
+                  height={64}
                   src={
                     logoOptions[Math.floor(Math.random() * logoOptions.length)]
                   }
@@ -127,26 +128,12 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold">
+                <h1 className="text-lg font-bold">
                   {data?.data?.name}
                   <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
                   </span>
                 </h1>
-                <p className="text-base font-medium">
-                  {`${
-                    data?.data?.city && data?.data?.district
-                      ? `${data?.data?.city} • ${data?.data?.district}`
-                      : "지역 미설정"
-                  }`}
-                </p>
-                {/* <p className="text-base font-medium">
-                  {`#${data.data.code} • ${
-                    data?.data?.city && data?.data?.district
-                      ? `${data?.data?.city} ${data?.data?.district}`
-                      : "지역 미설정"
-                  }`}
-                </p> */}
                 <p className="text-sm text-gray-500 mt-0.5">
                   생성일:{" "}
                   {data?.data?.createdAt
@@ -214,6 +201,21 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 개요 */}
           {selectedTab === "overview" && (
             <Fragment>
+              <div className="bg-white rounded-lg overflow-hidden">
+                <button
+                  className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <MapPin className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">{`${
+                      data?.data?.city && data?.data?.district
+                        ? `${data?.data?.city} • ${data?.data?.district}`
+                        : "지역 미설정"
+                    }`}</span>
+                  </div>
+                </button>
+              </div>
+
               {/* 기본 정보 */}
               <div className="bg-white rounded-2xl pb-3">
                 <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
