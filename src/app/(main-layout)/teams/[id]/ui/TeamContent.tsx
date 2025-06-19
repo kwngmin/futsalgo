@@ -190,7 +190,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
                   {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
                 </div>
-                <Label className="text-muted-foreground">팀 실력</Label>
+                <Label className="text-muted-foreground">실력</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
@@ -216,7 +216,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="font-semibold">
                   {data.data.members.length}명
                 </div>
-                <Label className="text-muted-foreground">팀원 수</Label>
+                <Label className="text-muted-foreground">팀원</Label>
               </div>
             </div>
           </div>
