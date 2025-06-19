@@ -86,7 +86,7 @@ const MorePage = () => {
   // };
 
   return (
-    <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
+    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {isLoading && (
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 backdrop-blur-lg rounded-lg">
           <Loader2

@@ -121,7 +121,7 @@ const MannerBar = ({ score }: { score: number }) => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden">
+      <div className="bg-transparent rounded-t-full h-1 w-full flex overflow-hidden">
         <div className="bg-black h-2 w-1/10" />
         <div className="bg-red-500 h-2 w-1/4" />
         <div className="bg-orange-500 h-2 w-1/4" />

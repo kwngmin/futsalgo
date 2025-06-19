@@ -59,7 +59,7 @@ const TeamContent = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
+    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-3">
         <div className="w-20">
@@ -113,22 +113,24 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold">{data?.data?.name}</h1>
+                <h1 className="text-xl font-bold">
+                  {data?.data?.name}
+                  <span className="text-base font-normal text-gray-500 ml-2">
+                    #{data.data.code}
+                  </span>
+                </h1>
                 {/* <p className="text-base font-medium">
                   {`${
-                    data?.data?.player.name
-                      ? id === session.data?.user.id
-                        ? data?.data?.player.name
-                        : maskName(data?.data?.player.name)
-                      : "이름 없음"
-                  } • ${
-                    data?.data?.player.gender
-                      ? `${
-                          GENDER[
-                            data?.data?.player.gender as keyof typeof GENDER
-                          ]
-                        }`
-                      : "성별 미설정"
+                    data?.data?.city && data?.data?.district
+                      ? `${data?.data?.city} ${data?.data?.district}`
+                      : "지역 미설정"
+                  }`}
+                </p> */}
+                {/* <p className="text-base font-medium">
+                  {`#${data.data.code} • ${
+                    data?.data?.city && data?.data?.district
+                      ? `${data?.data?.city} ${data?.data?.district}`
+                      : "지역 미설정"
                   }`}
                 </p> */}
                 <p className="text-sm text-gray-500 mt-0.5">
@@ -146,7 +148,26 @@ const TeamContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            <MannerBar score={Math.floor(Math.random() * 100)} />
+            <div className="flex px-3 h-16">
+              <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
+                <div className="flex justify-between px-2">
+                  <span className="font-semibold text-sm">개요</span>
+                </div>
+                <div className="bg-gray-400 rounded-t-full h-1 w-full flex overflow-hidden" />
+              </div>
+              <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
+                <div className="flex justify-between px-2">
+                  <span className="font-semibold text-sm">소개</span>
+                </div>
+                <div className="bg-transparent rounded-t-full h-1 w-full flex overflow-hidden" />
+              </div>
+              <div className="flex flex-col justify-end items-center space-y-3 min-w-14">
+                <div className="flex justify-between px-2">
+                  <span className="font-semibold text-sm">명단</span>
+                </div>
+                <div className="bg-transparent rounded-t-full h-1 w-full flex overflow-hidden" />
+              </div>
+            </div>
           </div>
           {/* <div className="bg-white rounded-lg overflow-hidden opacity-50 pointer-events-none">
             <button

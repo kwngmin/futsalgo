@@ -114,7 +114,7 @@ export default function ProfileContent({ data }: { data: User }) {
   );
 
   return (
-    <div className="max-w-2xl mx-auto lg:max-w-4xl xl:max-w-2xl pb-16 flex flex-col">
+    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-3">
         <Button
