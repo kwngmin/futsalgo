@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   ChevronRight,
+  MessageSquareText,
   Share,
   Users,
   Volleyball,
@@ -158,6 +159,18 @@ const TeamContent = ({ id }: { id: string }) => {
             </button>
           </div> */}
 
+          {/* 소개 */}
+          {data?.data?.description && (
+            <div className="bg-white rounded-2xl">
+              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                <MessageSquareText className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">팀 소개</span>
+              </div>
+              <p className="px-4 py-4">{data?.data?.description}</p>
+            </div>
+          )}
+
+          {/* 기본 정보 */}
           <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
@@ -173,29 +186,26 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
-                {data.data.stats.professionalCount}
+                {data.data.stats.professionalCount
+                  ? `${data.data.stats.professionalCount}명`
+                  : "없음"}
               </div>
               <Label className="text-muted-foreground">선출</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">{data.data.stats.averageAge}</div>
+              <div className="font-semibold">
+                {data.data.stats.averageAge}세
+              </div>
               <Label className="text-muted-foreground">평균 연령</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
-                {data.data.stats.averageHeight}
+                {data.data.stats.averageHeight}cm
               </div>
               <Label className="text-muted-foreground">평균 키</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {/* {
-                  SKILL_LEVEL[
-                    data?.data?.player.skillLevel as keyof typeof SKILL_LEVEL
-                  ]
-                } */}
-                3.4
-              </div>
+              <div className="font-semibold">3.4</div>
               <Label className="text-muted-foreground">평점</Label>
             </div>
           </div>
@@ -218,6 +228,33 @@ const TeamContent = ({ id }: { id: string }) => {
               </SelectContent>
             </Select>
           </div> */}
+
+          {/* 실력 분포 */}
+          <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl py-6 px-3">
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">
+                {data.data.stats.beginnerCount}명
+              </div>
+              <Label className="text-muted-foreground">비기너</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">
+                {data.data.stats.amateurCount}명
+              </div>
+              <Label className="text-muted-foreground">아마추어</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">{data.data.stats.aceCount}명</div>
+              <Label className="text-muted-foreground">에이스</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">
+                {data.data.stats.semiproCount}명
+              </div>
+              <Label className="text-muted-foreground">세미프로</Label>
+            </div>
+          </div>
+
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("연습 경기")}

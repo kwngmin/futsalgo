@@ -139,7 +139,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <MannerBar score={Math.floor(Math.random() * 100)} />
           </div>
-          {data.data.teams ? (
+          {data.data.teams && data.data.teams.length > 0 ? (
             <div className="bg-white rounded-lg overflow-hidden">
               <button
                 onClick={() =>
@@ -157,10 +157,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                       ]
                     }
                     alt="profile_image"
-                    className="w-full h-full object-cover"
+                    className="size-6 object-cover"
                   />
                   <span className="font-medium shrink-0">
-                    {data.data.teams[0].team.name}
+                    {data.data.teams[0].team.name || "팀 이름 없음"}
                   </span>
                 </div>
                 <ChevronRight className={`w-5 h-5 text-gray-400}`} />
