@@ -5,9 +5,11 @@ import { getTeam } from "../model/actions";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
+  BookText,
+  ChartPie,
   ChevronRight,
-  MessageSquareText,
   Share,
+  Text,
   Users,
   Volleyball,
 } from "lucide-react";
@@ -164,7 +166,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {data?.data?.description && (
             <div className="bg-white rounded-2xl">
               <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                <MessageSquareText className={`w-5 h-5 text-gray-600`} />
+                <Text className={`w-5 h-5 text-gray-600`} />
                 <span className="font-medium">팀 소개</span>
               </div>
               <p className="px-4 py-4">{data?.data?.description}</p>
@@ -172,42 +174,50 @@ const TeamContent = ({ id }: { id: string }) => {
           )}
 
           {/* 기본 정보 */}
-          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
-              </div>
-              <Label className="text-muted-foreground">종목</Label>
+          <div className="bg-white rounded-2xl pb-3">
+            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+              <BookText className={`w-5 h-5 text-gray-600`} />
+              <span className="font-medium">기본 정보</span>
             </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {TEAM_GENDER[data?.data?.gender as keyof typeof TEAM_GENDER]}
+            <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
+                </div>
+                <Label className="text-muted-foreground">종목</Label>
               </div>
-              <Label className="text-muted-foreground">구분</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {data.data.stats.professionalCount
-                  ? `${data.data.stats.professionalCount}명`
-                  : "없음"}
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {TEAM_GENDER[data?.data?.gender as keyof typeof TEAM_GENDER]}
+                </div>
+                <Label className="text-muted-foreground">구분</Label>
               </div>
-              <Label className="text-muted-foreground">선출</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {data.data.stats.averageAge}세
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.stats.professionalCount
+                    ? `${data.data.stats.professionalCount}명`
+                    : "없음"}
+                </div>
+                <Label className="text-muted-foreground">선수 출신</Label>
               </div>
-              <Label className="text-muted-foreground">평균 연령</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {data.data.stats.averageHeight}cm
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.stats.averageAge}세
+                </div>
+                <Label className="text-muted-foreground">평균 연령</Label>
               </div>
-              <Label className="text-muted-foreground">평균 키</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">3.4</div>
-              <Label className="text-muted-foreground">평점</Label>
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {data.data.stats.averageHeight}cm
+                </div>
+                <Label className="text-muted-foreground">평균 키</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold bg-green-600 px-2 rounded text-white leading-none h-6 flex items-center pb-0.5">
+                  3.4
+                </div>
+                <Label className="text-muted-foreground">평점</Label>
+              </div>
             </div>
           </div>
 
@@ -231,28 +241,44 @@ const TeamContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 실력 분포 */}
-          <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl py-6 px-3">
-            <div className="flex flex-col gap-1 items-center my-3">
-              <div className="font-semibold">
-                {data.data.stats.beginnerCount}명
-              </div>
-              <Label className="text-muted-foreground">비기너</Label>
+          <div className="bg-white rounded-2xl pb-3">
+            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+              <ChartPie className={`w-5 h-5 text-gray-600`} />
+              <span className="font-medium">팀원 실력</span>
             </div>
-            <div className="flex flex-col gap-1 items-center my-3">
-              <div className="font-semibold">
-                {data.data.stats.amateurCount}명
+            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {data.data.stats.beginnerCount
+                    ? `${data.data.stats.beginnerCount}명`
+                    : "없음"}
+                </div>
+                <Label className="text-muted-foreground">비기너</Label>
               </div>
-              <Label className="text-muted-foreground">아마추어</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-3">
-              <div className="font-semibold">{data.data.stats.aceCount}명</div>
-              <Label className="text-muted-foreground">에이스</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-3">
-              <div className="font-semibold">
-                {data.data.stats.semiproCount}명
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {data.data.stats.amateurCount
+                    ? `${data.data.stats.amateurCount}명`
+                    : "없음"}
+                </div>
+                <Label className="text-muted-foreground">아마추어</Label>
               </div>
-              <Label className="text-muted-foreground">세미프로</Label>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {data.data.stats.aceCount
+                    ? `${data.data.stats.aceCount}명`
+                    : "없음"}
+                </div>
+                <Label className="text-muted-foreground">에이스</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {data.data.stats.semiproCount
+                    ? `${data.data.stats.semiproCount}명`
+                    : "없음"}
+                </div>
+                <Label className="text-muted-foreground">세미프로</Label>
+              </div>
             </div>
           </div>
 
