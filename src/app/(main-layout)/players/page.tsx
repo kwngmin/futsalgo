@@ -5,9 +5,9 @@ import { Search, ArrowDownUp } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { getPlayers } from "./model/actions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import PlayerCard from "./ui/PayerCard";
+import PlayerCard from "./ui/PlayerCard";
 import { User } from "@prisma/client";
-import SkeletonContent from "./ui/SkeletonContent";
+import SkeletonContent from "./ui/SkeletonPlayerContent";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 import FilterModal from "./ui/FilterModal";
 

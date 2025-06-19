@@ -1,6 +1,6 @@
-import SkeletonPlayCard from "./SkeletonPlayCard";
+import SkeletonPlayCard from "./SkeletonPlayerCard";
 
-const SkeletonContent = () => {
+const SkeletonPlayerContent = () => {
   return (
     <div className="px-3 space-y-4">
       <SkeletonPlayCard nickName="w-32" teamName="w-24" />
@@ -23,4 +23,4 @@ const SkeletonContent = () => {
   );
 };
 
-export default SkeletonContent;
+export default SkeletonPlayerContent;

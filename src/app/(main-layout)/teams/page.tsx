@@ -9,6 +9,7 @@ import type { GetTeamsResponse } from "./model/actions";
 import { useRouter } from "next/navigation";
 import { Team } from "@prisma/client";
 import Image from "next/image";
+import SkeletonContent from "./ui/SkeletonTeamContent";
 
 // 샘플 팀 데이터
 // const teams = [
@@ -137,55 +138,56 @@ const TeamsPage = () => {
           </button>
         </div>
       </div>
-      <div className="px-3 space-y-4">
-        <div>
-          {isLoggedIn ? (
-            data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
-              <div className="space-y-3">
-                {data?.data?.myTeams.map((team) => (
-                  <TeamCard key={team.id} team={team} isMyTeam />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                {/* <h3 className="font-semibold text-gray-900">
+      {data ? (
+        <div className="px-3 space-y-4">
+          <div>
+            {isLoggedIn ? (
+              data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
+                <div className="space-y-3">
+                  {data?.data?.myTeams.map((team) => (
+                    <TeamCard key={team.id} team={team} isMyTeam />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
+                  {/* <h3 className="font-semibold text-gray-900">
                   소속된 팀이 존재하지 않습니다
                 </h3> */}
-                <div className="flex gap-2 justify-center">
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
+                      onClick={() => router.push("/teams/create")}
+                    >
+                      팀 만들기
+                    </button>
+                    <button
+                      className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
+                      // onClick={() => signIn()}
+                    >
+                      팀 가입하기
+                    </button>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
+                <h3 className="font-semibold text-gray-900">
+                  서비스를 이용하기 위해 로그인이 필요합니다
+                </h3>
+                <div className="flex gap-2 justify-center mt-3">
                   <button
                     className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => router.push("/teams/create")}
+                    onClick={() => signIn()}
                   >
-                    팀 만들기
-                  </button>
-                  <button
-                    className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
-                    // onClick={() => signIn()}
-                  >
-                    팀 가입하기
+                    시작하기
                   </button>
                 </div>
               </div>
-            )
-          ) : (
-            <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-              <h3 className="font-semibold text-gray-900">
-                서비스를 이용하기 위해 로그인이 필요합니다
-              </h3>
-              <div className="flex gap-2 justify-center mt-3">
-                <button
-                  className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                  onClick={() => signIn()}
-                >
-                  시작하기
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* 내 팀 섹션 */}
-        {/* <div>
+          {/* 내 팀 섹션 */}
+          {/* <div>
           {myTeams.length > 0 ? (
             <div className="space-y-3">
               {myTeams.map((team) => (
@@ -212,41 +214,46 @@ const TeamsPage = () => {
           )}
         </div> */}
 
-        {/* 다른 팀 섹션 */}
-        <div className="flex flex-col gap-2">
-          {/* 하단: 필터 칩들 */}
-          <div className="flex items-center gap-2 justify-between hidden">
-            <div className="flex gap-1 bg-gray-100 rounded-full p-1">
-              {filterOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => setSelectedFilter(option.id as FilterType)}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors cursor-pointer ${
-                    selectedFilter === option.id
-                      ? "bg-black text-white font-bold"
-                      : "text-gray-700 hover:bg-gray-50"
-                    //   : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
+          {/* 다른 팀 섹션 */}
+          <div className="flex flex-col gap-2">
+            {/* 하단: 필터 칩들 */}
+            <div className="flex items-center gap-2 justify-between hidden">
+              <div className="flex gap-1 bg-gray-100 rounded-full p-1">
+                {filterOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => setSelectedFilter(option.id as FilterType)}
+                    className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors cursor-pointer ${
+                      selectedFilter === option.id
+                        ? "bg-black text-white font-bold"
+                        : "text-gray-700 hover:bg-gray-50"
+                      //   : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* 선수 목록 헤더 */}
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium px-2 text-gray-600">팀 • 23</h3>
-            <span className="text-xs text-gray-500 mr-3 w-12 text-center">
-              팀원
-            </span>
-          </div>
+            {/* 선수 목록 헤더 */}
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium px-2 text-gray-600">
+                팀 • 23
+              </h3>
+              <span className="text-xs text-gray-500 mr-3 w-12 text-center">
+                팀원
+              </span>
+            </div>
 
-          {data?.data?.teams.map((team) => (
-            <TeamCard key={team.id} team={team} />
-          ))}
+            {data?.data?.teams.map((team) => (
+              <TeamCard key={team.id} team={team} />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <SkeletonContent />
+      )}
     </div>
   );
 };

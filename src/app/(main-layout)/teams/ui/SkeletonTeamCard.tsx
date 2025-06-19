@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/utils";
 
-const SkeletonPlayCard = ({
+const SkeletonTeamCard = ({
   nickName,
   teamName,
 }: {
@@ -8,7 +8,7 @@ const SkeletonPlayCard = ({
   teamName?: string;
 }) => {
   return (
-    <div className="bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer">
+    <div className="bg-white rounded-2xl p-3">
       <div className="flex gap-3">
         <div className="size-12 bg-gray-200 rounded-full animate-pulse" />
         <div className="flex-1 flex flex-col justify-center space-y-3">
@@ -34,4 +34,4 @@ const SkeletonPlayCard = ({
   );
 };
 
-export default SkeletonPlayCard;
+export default SkeletonTeamCard;
