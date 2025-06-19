@@ -70,7 +70,7 @@ const PlayersPage = () => {
       }}
       trigger={
         <button
-          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100"
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={() => openModal(field)}
         >
           <ArrowDownUp className="w-5 h-5" />

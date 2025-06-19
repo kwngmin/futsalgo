@@ -3,95 +3,12 @@
 import { useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getTeams } from "./model/actions";
+import { getTeams, GetTeamsResponse } from "./model/actions";
 import { signIn, useSession } from "next-auth/react";
-import type { GetTeamsResponse } from "./model/actions";
 import { useRouter } from "next/navigation";
-import { Team } from "@prisma/client";
 import Image from "next/image";
 import SkeletonContent from "./ui/SkeletonTeamContent";
-
-// 샘플 팀 데이터
-// const teams = [
-//   {
-//     id: 1,
-//     name: "FC 서울",
-//     description: "매주 토요일 오후 2시, 강남구 축구장",
-//     memberCount: 12,
-//     city: "서울시",
-//     district: "강남구",
-//     isJoined: true,
-//     gender: "male",
-//     isRecruiting: true,
-//     logo: "⚽",
-//     totalMatches: 24,
-//   },
-//   {
-//     id: 2,
-//     name: "한강 FC",
-//     description: "일요일 아침 풋살, 초보자 환영",
-//     memberCount: 8,
-//     city: "서울시",
-//     district: "마포구",
-//     isJoined: false,
-//     gender: "male",
-//     isRecruiting: false,
-//     logo: "🔥",
-//     totalMatches: 18,
-//   },
-//   {
-//     id: 3,
-//     name: "강북 유나이티드",
-//     description: "주말 저녁 경기, 실력자들만",
-//     memberCount: 16,
-//     city: "서울시",
-//     district: "강북구",
-//     isJoined: false,
-//     gender: "male",
-//     isRecruiting: true,
-//     logo: "🏆",
-//     totalMatches: 32,
-//   },
-//   {
-//     id: 4,
-//     name: "서울 위민스 FC",
-//     description: "여성 축구팀, 매주 일요일 모임",
-//     memberCount: 10,
-//     city: "서울시",
-//     district: "영등포구",
-//     isJoined: false,
-//     gender: "female",
-//     isRecruiting: false,
-//     logo: "💜",
-//     totalMatches: 15,
-//   },
-//   {
-//     id: 5,
-//     name: "강남 레이디스",
-//     description: "강남 지역 여성 풋살팀",
-//     memberCount: 14,
-//     city: "서울시",
-//     district: "강남구",
-//     isJoined: false,
-//     gender: "female",
-//     isRecruiting: true,
-//     logo: "🌟",
-//     totalMatches: 28,
-//   },
-//   {
-//     id: 6,
-//     name: "수원 FC",
-//     description: "경기도 수원 지역 남성팀",
-//     memberCount: 20,
-//     city: "경기도",
-//     district: "수원시",
-//     isJoined: false,
-//     gender: "male",
-//     isRecruiting: true,
-//     logo: "⭐",
-//     totalMatches: 42,
-//   },
-// ];
+import { Team } from "@prisma/client";
 
 type FilterType = "all" | "male" | "female";
 
@@ -133,7 +50,7 @@ const TeamsPage = () => {
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
           </button>
-          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <ArrowDownUp className="w-5 h-5" />
           </button>
         </div>
@@ -239,7 +156,7 @@ const TeamsPage = () => {
             {/* 선수 목록 헤더 */}
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium px-2 text-gray-600">
-                팀 • 23
+                팀 • {data?.data?.teams.length}
               </h3>
               <span className="text-xs text-gray-500 mr-3 w-12 text-center">
                 팀원
@@ -258,23 +175,12 @@ const TeamsPage = () => {
   );
 };
 
-// 팀 카드 컴포넌트
-// type Team = {
-//   id: number;
-//   name: string;
-//   description: string;
-//   memberCount: number;
-//   city: string;
-//   district: string;
-//   isJoined: boolean;
-//   gender: string;
-//   isRecruiting: boolean;
-//   logo: string;
-//   totalMatches: number;
-// };
-
 type TeamCardProps = {
-  team: Team;
+  team: Team & {
+    _count: {
+      members: number;
+    };
+  };
   isMyTeam?: boolean;
 };
 
@@ -329,7 +235,7 @@ const TeamCard = ({ team, isMyTeam: isMyTeam = false }: TeamCardProps) => {
 
         {/* 누적 경기수와 팀원 수 */}
         <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
-          {/* {team.memberCount} */}
+          {team._count.members ?? 0}
         </div>
       </div>
     </div>
