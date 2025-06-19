@@ -27,6 +27,7 @@ import {
 import { Label } from "@/shared/components/ui/label";
 
 import { useSession } from "next-auth/react";
+import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
 
 const logoOptions = [
@@ -158,6 +159,16 @@ const PlayerContent = ({ id }: { id: string }) => {
                     />
                     <span className="font-medium shrink-0 text-sm">
                       {data.data.teams[0].team.name || "팀 이름 없음"}
+                      <span className="text-gray-500 font-normal">
+                        {" "}
+                        •{" "}
+                        {
+                          TEAM_GENDER[
+                            data.data.teams[0].team
+                              .gender as keyof typeof TEAM_GENDER
+                          ]
+                        }
+                      </span>
                     </span>
                   </button>
                 ) : (
