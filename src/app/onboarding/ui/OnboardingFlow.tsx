@@ -38,7 +38,7 @@ export function OnboardingFlow() {
   return (
     <OnboardingProfile
       setCurrentStep={setCurrentStep}
-      name={session?.user?.name ?? undefined}
+      // name={session?.user?.name ?? undefined}
     />
   );
 }

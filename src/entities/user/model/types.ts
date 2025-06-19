@@ -3,22 +3,18 @@ import {
   Foot,
   Gender,
   PlayerBackground,
-  FootballPosition,
-  FutsalPosition,
-  SkillLevel,
-  SportType,
+  PlayerSkillLevel,
+  Position,
 } from "@prisma/client";
 
 export type Profile = {
   name?: string;
   foot?: Foot;
   gender?: Gender;
-  sportType?: SportType;
-  futsalPosition?: FutsalPosition;
-  footballPositions?: FootballPosition[];
+  position?: Position;
   birthDate?: string;
   playerBackground?: PlayerBackground;
-  skillLevel?: SkillLevel;
+  skillLevel?: PlayerSkillLevel;
   height?: number;
   weight?: number;
   image?: string;

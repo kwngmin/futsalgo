@@ -7,12 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import {
   Condition,
-  FootballPosition,
-  FutsalPosition,
+  Position,
   PlayerBackground,
-  SkillLevel,
-  SportType,
   User,
+  PlayerSkillLevel,
 } from "@prisma/client";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -21,24 +19,19 @@ import {
   PLAYER_BACKGROUND_OPTIONS,
   FUTSAL_POSITION_OPTIONS,
   SKILL_LEVEL_OPTIONS,
-  SPORT_TYPE_OPTIONS,
-  FOOTBALL_POSITION_OPTIONS,
 } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { updateProfileData } from "../model/actions";
 import { useRouter } from "next/navigation";
-import { Badge } from "@/shared/components/ui/badge";
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
   foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
     error: () => "주발을 선택해주세요",
   }),
-  sportType: z.enum(["FOOTBALL", "FUTSAL", "BOTH"], {
-    error: () => "종목을 선택해주세요",
+  position: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"], {
+    error: () => "포지션을 선택해주세요",
   }),
-  footballPositions: z.array(z.string()).optional(),
-  futsalPosition: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"]).optional(),
   condition: z.enum(["NORMAL", "INJURED"], {
     error: () => "몸 상태를 선택해주세요",
   }),
@@ -65,33 +58,13 @@ const ProfileForm = ({ data }: { data: User }) => {
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      sportType: data.sportType as SportType,
-      footballPositions: data.footballPositions as FootballPosition[],
-      futsalPosition: data.futsalPosition as FutsalPosition,
+      position: data.position as Position,
       foot: data.foot as "LEFT" | "RIGHT" | "BOTH",
       condition: data.condition as Condition,
       playerBackground: data.playerBackground as PlayerBackground,
-      skillLevel: data.skillLevel as SkillLevel | undefined,
+      skillLevel: data.skillLevel as PlayerSkillLevel | undefined,
     },
   });
-
-  const selectedPositions = watch("footballPositions");
-
-  // 포지션 토글
-  const togglePosition = (position: string) => {
-    const current = selectedPositions || [];
-    let updated;
-
-    if (current.includes(position)) {
-      updated = current.filter((p) => p !== position);
-    } else if (current.length < 5) {
-      updated = [...current, position];
-    } else {
-      return; // 최대 5개 제한
-    }
-
-    setValue("footballPositions", updated);
-  };
 
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
@@ -99,9 +72,6 @@ const ProfileForm = ({ data }: { data: User }) => {
       const response = await updateProfileData({
         profile: {
           ...data,
-          footballPositions: data.footballPositions
-            ? (data.footballPositions as FootballPosition[])
-            : undefined,
         },
       });
 
@@ -151,69 +121,17 @@ const ProfileForm = ({ data }: { data: User }) => {
         />
       </div>
 
-      {/* 종목 */}
+      {/* 포지션 */}
       <div className="space-y-3">
-        <Label className="px-1">종목</Label>
+        <Label className="px-1">선호하는 풋살 포지션</Label>
         <CustomRadioGroup
-          name="sportType"
-          options={SPORT_TYPE_OPTIONS}
-          value={watch("sportType")}
-          onValueChange={(value) =>
-            setValue("sportType", value as "FOOTBALL" | "FUTSAL" | "BOTH")
-          }
-          error={errors.sportType?.message}
+          options={FUTSAL_POSITION_OPTIONS}
+          value={watch("position") ?? ""}
+          onValueChange={(value) => setValue("position", value as Position)}
+          error={errors.position?.message}
+          direction="vertical"
         />
       </div>
-
-      {/* 풋살 포지션 */}
-      {(watch("sportType") === "FUTSAL" || watch("sportType") === "BOTH") && (
-        <div className="space-y-3">
-          <Label className="px-1">선호하는 풋살 포지션</Label>
-          <CustomRadioGroup
-            options={FUTSAL_POSITION_OPTIONS}
-            value={watch("futsalPosition") ?? ""}
-            onValueChange={(value) =>
-              setValue("futsalPosition", value as FutsalPosition)
-            }
-            error={errors.futsalPosition?.message}
-            direction="vertical"
-          />
-        </div>
-      )}
-
-      {/* 축구 포지션 */}
-      {(watch("sportType") === "FOOTBALL" || watch("sportType") === "BOTH") && (
-        <div className="space-y-3">
-          <Label className="px-1">
-            선호하는 축구 포지션 • {selectedPositions?.length || 0}/5
-          </Label>
-          <div className="flex flex-wrap gap-2">
-            {FOOTBALL_POSITION_OPTIONS.map((position) => (
-              <Badge
-                key={position.value}
-                variant={
-                  selectedPositions?.includes(position.value)
-                    ? "default"
-                    : "outline"
-                }
-                className="cursor-pointer text-center justify-center items-center h-9 px-4 rounded-full"
-                onClick={() =>
-                  togglePosition(position.value as unknown as FootballPosition)
-                }
-              >
-                {`${position.value} - ${position.label}`}
-              </Badge>
-            ))}
-          </div>
-          {errors.footballPositions && (
-            <Alert>
-              <AlertDescription>
-                {errors.footballPositions.message}
-              </AlertDescription>
-            </Alert>
-          )}
-        </div>
-      )}
 
       {/* 선수 출신 여부 */}
       <div className="space-y-3">
@@ -239,7 +157,9 @@ const ProfileForm = ({ data }: { data: User }) => {
         <CustomRadioGroup
           options={SKILL_LEVEL_OPTIONS}
           value={watch("skillLevel")}
-          onValueChange={(value) => setValue("skillLevel", value as SkillLevel)}
+          onValueChange={(value) =>
+            setValue("skillLevel", value as PlayerSkillLevel)
+          }
           error={errors.skillLevel?.message}
           direction="vertical"
         />
@@ -249,7 +169,9 @@ const ProfileForm = ({ data }: { data: User }) => {
         <CustomRadioGroup
           options={SKILL_LEVEL_OPTIONS}
           value={watch("skillLevel")}
-          onValueChange={(value) => setValue("skillLevel", value as SkillLevel)}
+          onValueChange={(value) =>
+            setValue("skillLevel", value as PlayerSkillLevel)
+          }
           error={errors.skillLevel?.message}
         />
       </div>

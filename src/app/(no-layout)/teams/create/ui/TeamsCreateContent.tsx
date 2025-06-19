@@ -5,7 +5,10 @@ import { Camera, Upload, MapPin, ScrollText } from "lucide-react";
 import { Label } from "@/shared/components/ui/label";
 import { Input } from "@/shared/components/ui/input";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
-import { TEAM_GENDER_OPTIONS } from "@/entities/team/model/constants";
+import {
+  TEAM_GENDER_OPTIONS,
+  TEAM_LEVEL_OPTIONS,
+} from "@/entities/team/model/constants";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,8 +18,7 @@ import { useRouter } from "next/navigation";
 import { Textarea } from "@/shared/components/ui/textarea";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Button } from "@/shared/components/ui/button";
-import { SPORT_TYPE_OPTIONS } from "@/entities/user/model/constants";
-import { SportType } from "@prisma/client";
+import { TeamLevel } from "@prisma/client";
 
 const teamSchema = z.object({
   name: z.string().min(1, "팀 이름을 입력해주세요"),
@@ -26,8 +28,8 @@ const teamSchema = z.object({
   description: z.string().min(1, "팀 소개를 입력해주세요"),
   city: z.string().min(1, "시/도를 선택해주세요"),
   district: z.string().min(1, "구/군을 입력해주세요"),
-  sportType: z.enum(["FOOTBALL", "FUTSAL", "BOTH"], {
-    error: () => "종목을 선택해주세요",
+  level: z.enum(["VERY_LOW", "LOW", "MID", "HIGH", "VERY_HIGH"], {
+    error: () => "팀 실력을 선택해주세요",
   }),
 });
 
@@ -185,15 +187,28 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                   />
                 </div>
 
-                <div className="space-y-3">
-                  <Label className="px-1">팀 종목</Label>
+                {/* 팀 실력 */}
+                <div className="space-y-3 hidden sm:block">
+                  <Label className="px-1">팀 실력</Label>
                   <CustomRadioGroup
-                    options={SPORT_TYPE_OPTIONS}
-                    value={watch("sportType")}
+                    options={TEAM_LEVEL_OPTIONS}
+                    value={watch("level")}
                     onValueChange={(value) =>
-                      setValue("sportType", value as SportType)
+                      setValue("level", value as TeamLevel)
                     }
-                    error={errors.sportType?.message}
+                    error={errors.level?.message}
+                  />
+                </div>
+                <div className="space-y-3 sm:hidden">
+                  <Label className="px-1">팀 실력</Label>
+                  <CustomRadioGroup
+                    options={TEAM_LEVEL_OPTIONS}
+                    value={watch("level")}
+                    onValueChange={(value) =>
+                      setValue("level", value as TeamLevel)
+                    }
+                    error={errors.level?.message}
+                    direction="vertical"
                   />
                 </div>
               </div>

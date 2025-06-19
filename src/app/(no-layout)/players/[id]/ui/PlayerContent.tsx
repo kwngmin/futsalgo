@@ -17,7 +17,6 @@ import {
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
   GENDER,
-  FUTSAL_POSITIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 
@@ -214,14 +213,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">사용하는 발</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {
-                    FUTSAL_POSITIONS[
-                      data?.data
-                        ?.futsalPosition as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }
-                </div>
+                <div className="font-semibold">{data?.data?.position}</div>
                 <Label className="text-muted-foreground">선호 포지션</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">

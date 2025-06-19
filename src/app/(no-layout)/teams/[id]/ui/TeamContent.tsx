@@ -17,8 +17,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
-import { TEAM_GENDER } from "@/entities/team/model/constants";
-import { SPORT_TYPE } from "@/entities/user/model/constants";
+import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
 import MannerBar from "@/app/(no-layout)/players/[id]/ui/MannerBar";
 
 const logoOptions = [
@@ -182,15 +181,16 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
               <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
-                  {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]}
-                </div>
-                <Label className="text-muted-foreground">선호 호지션</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
                   {TEAM_GENDER[data?.data?.gender as keyof typeof TEAM_GENDER]}
                 </div>
                 <Label className="text-muted-foreground">구분</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">
+                  {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
+                  {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
+                </div>
+                <Label className="text-muted-foreground">팀 실력</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">

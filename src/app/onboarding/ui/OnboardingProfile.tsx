@@ -18,12 +18,7 @@ import {
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { ValidationStep } from "../model/types";
-import {
-  FootballPosition,
-  FutsalPosition,
-  PlayerBackground,
-  SkillLevel,
-} from "@prisma/client";
+import { Position, PlayerBackground, PlayerSkillLevel } from "@prisma/client";
 import { updateProfileData } from "@/app/(no-layout)/profile/model/actions";
 import {
   FOOT_OPTIONS,
@@ -31,12 +26,9 @@ import {
   PLAYER_BACKGROUND_OPTIONS,
   FUTSAL_POSITION_OPTIONS,
   SKILL_LEVEL_OPTIONS,
-  FOOTBALL_POSITION_OPTIONS,
-  SPORT_TYPE_OPTIONS,
 } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { validateBirthDate } from "@/features/validation/model/actions";
-import { Badge } from "@/shared/components/ui/badge";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -47,11 +39,9 @@ const profileSchema = z.object({
   gender: z.enum(["MALE", "FEMALE"], {
     error: () => "성별을 선택해주세요",
   }),
-  sportType: z.enum(["FOOTBALL", "FUTSAL", "BOTH"], {
-    error: () => "종목을 선택해주세요",
+  position: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"], {
+    error: () => "포지션을 선택해주세요",
   }),
-  futsalPosition: z.enum(["PIVO", "ALA", "FIXO", "GOLEIRO"]).optional(),
-  footballPositions: z.array(z.string()).optional(),
   height: z
     .number({ error: () => "신장을 입력해주세요" })
     .min(100, "키는 100cm 이상이어야 합니다")
@@ -72,10 +62,8 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 
 export function OnboardingProfile({
   setCurrentStep,
-  name,
 }: {
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
-  name?: string;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -89,28 +77,25 @@ export function OnboardingProfile({
     watch,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name,
-    },
   });
 
-  const selectedPositions = watch("footballPositions");
+  // const selectedPositions = watch("footballPositions");
 
   // 포지션 토글
-  const togglePosition = (position: string) => {
-    const current = selectedPositions || [];
-    let updated;
+  // const togglePosition = (position: string) => {
+  //   const current = selectedPositions || [];
+  //   let updated;
 
-    if (current.includes(position)) {
-      updated = current.filter((p) => p !== position);
-    } else if (current.length < 5) {
-      updated = [...current, position];
-    } else {
-      return; // 최대 5개 제한
-    }
+  //   if (current.includes(position)) {
+  //     updated = current.filter((p) => p !== position);
+  //   } else if (current.length < 5) {
+  //     updated = [...current, position];
+  //   } else {
+  //     return; // 최대 5개 제한
+  //   }
 
-    setValue("footballPositions", updated);
-  };
+  //   setValue("footballPositions", updated);
+  // };
 
   // 최종 제출
   const onSubmit = async (data: ProfileFormData) => {
@@ -119,9 +104,6 @@ export function OnboardingProfile({
       const response = await updateProfileData({
         profile: {
           ...data,
-          footballPositions: data.footballPositions
-            ? (data.footballPositions as FootballPosition[])
-            : undefined,
         },
       });
 
@@ -159,11 +141,7 @@ export function OnboardingProfile({
             <Label htmlFor="name" className="px-1">
               이름
             </Label>
-            <Input
-              {...register("name")}
-              id="name"
-              placeholder="이름을 입력하세요"
-            />
+            <Input {...register("name")} id="name" placeholder="예) 홍길동" />
             {errors.name && (
               <Alert variant="destructive">
                 <AlertDescription>{errors.name.message}</AlertDescription>
@@ -180,7 +158,7 @@ export function OnboardingProfile({
               {...register("birthDate")} // valueAsNumber 제거
               id="birthDate"
               type="number"
-              placeholder="19850101"
+              placeholder="예) 19850101"
               className="text-base"
               maxLength={8} // 8자리 제한
               pattern="\d{8}" // 숫자만 입력 가능
@@ -204,7 +182,7 @@ export function OnboardingProfile({
                 type="number"
                 min="100"
                 max="250"
-                placeholder="175"
+                placeholder="예) 175"
                 className="pr-10 text-right text-base"
               />
               <span className="leading-none text-sm text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 select-none">
@@ -245,39 +223,20 @@ export function OnboardingProfile({
             />
           </div>
 
-          {/* 종목 */}
+          {/* 포지션 */}
           <div className="space-y-3">
-            <Label className="px-1">종목</Label>
+            <Label className="px-1">선호하는 풋살 포지션</Label>
             <CustomRadioGroup
-              name="sportType"
-              options={SPORT_TYPE_OPTIONS}
-              value={watch("sportType")}
-              onValueChange={(value) =>
-                setValue("sportType", value as "FOOTBALL" | "FUTSAL" | "BOTH")
-              }
-              error={errors.sportType?.message}
+              options={FUTSAL_POSITION_OPTIONS}
+              value={watch("position") ?? ""}
+              onValueChange={(value) => setValue("position", value as Position)}
+              error={errors.position?.message}
+              direction="vertical"
             />
           </div>
 
-          {/* 풋살 포지션 */}
-          {(watch("sportType") === "FUTSAL" ||
-            watch("sportType") === "BOTH") && (
-            <div className="space-y-3">
-              <Label className="px-1">선호하는 풋살 포지션</Label>
-              <CustomRadioGroup
-                options={FUTSAL_POSITION_OPTIONS}
-                value={watch("futsalPosition") ?? ""}
-                onValueChange={(value) =>
-                  setValue("futsalPosition", value as FutsalPosition)
-                }
-                error={errors.futsalPosition?.message}
-                direction="vertical"
-              />
-            </div>
-          )}
-
           {/* 축구 포지션 */}
-          {(watch("sportType") === "FOOTBALL" ||
+          {/* {(watch("sportType") === "FOOTBALL" ||
             watch("sportType") === "BOTH") && (
             <div className="space-y-3">
               <Label className="px-1">
@@ -311,7 +270,7 @@ export function OnboardingProfile({
                 </Alert>
               )}
             </div>
-          )}
+          )} */}
 
           {/* 선수 출신 여부 */}
           <div className="space-y-3">
@@ -333,7 +292,7 @@ export function OnboardingProfile({
               options={SKILL_LEVEL_OPTIONS}
               value={watch("skillLevel")}
               onValueChange={(value) =>
-                setValue("skillLevel", value as SkillLevel)
+                setValue("skillLevel", value as PlayerSkillLevel)
               }
               error={errors.skillLevel?.message}
               direction="vertical"

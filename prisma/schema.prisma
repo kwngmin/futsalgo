@@ -31,26 +31,26 @@ enum Condition {
   INJURED
 }
 
-enum SportType {
-  FUTSAL
-  FOOTBALL
-  BOTH  
-}
+// enum SportType {
+//   FUTSAL
+//   FOOTBALL
+//   BOTH  
+// }
 
-enum FootballPosition {
-  ST
-  LW
-  RW
-  AM
-  CM
-  DM
-  CB
-  LB
-  RB
-  GK
-}
+// enum FootballPosition {
+//   ST
+//   LW
+//   RW
+//   AM
+//   CM
+//   DM
+//   CB
+//   LB
+//   RB
+//   GK
+// }
 
-enum FutsalPosition {
+enum Position {
  PIVO
  ALA
  FIXO
@@ -124,11 +124,19 @@ enum PlayerBackground {
   PROFESSIONAL      // 선출
 }
 
-enum SkillLevel {
+enum PlayerSkillLevel {
   BEGINNER     // 비기너
   AMATEUR      // 아마추어
   ACE          // 에이스
   SEMIPRO      // 세미프로
+}
+
+enum TeamLevel {
+  VERY_LOW     // 하
+  LOW          // 중하
+  MID          // 중
+  HIGH         // 중상
+  VERY_HIGH    // 상
 }
 
 enum TeamStatus {
@@ -192,17 +200,15 @@ model User {
   weight          Int?
 
   playerBackground PlayerBackground @default(NON_PROFESSIONAL) // 선수 출신 여부
-  skillLevel      SkillLevel @default(BEGINNER) // 실력 수준
+  skillLevel       PlayerSkillLevel @default(BEGINNER) // 실력 수준
 
-  sportType        SportType?  // 종목 선택
-  footballPositions FootballPosition[]   
-  futsalPosition   FutsalPosition?   
+  position         Position?   
   condition        Condition @default(NORMAL)
 
   teams           TeamMember[]
   ownedTeams      Team[]    @relation("TeamOwner")  
 
- // 팔로잉/팔로워 관계 (유저 간)
+  // 팔로잉/팔로워 관계 (유저 간)
   following       UserFollow[] @relation("Follower")    // 내가 팔로우하는 사람들
   followers       UserFollow[] @relation("Following")   // 나를 팔로우하는 사람들
   
@@ -267,9 +273,9 @@ model Team {
   status        TeamStatus @default(ACTIVE)
   recruitmentStatus RecruitmentStatus @default(RECRUITING)
 
-  gender        TeamGender @default(MIXED)  // 팀 성별
+  gender        TeamGender
+  level         TeamLevel @default(MID)
   activityFrequency ActivityFrequency @default(WEEKLY)
-  sportType     SportType  // 필수 필드
 
   ownerId       String
   owner         User      @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
@@ -284,7 +290,7 @@ model Team {
   updatedAt     DateTime  @updatedAt
 
   @@index([city, district])  // 지역 검색을 위한 인덱스
-  @@index([sportType, gender])  // 종목별 검색을 위한 인덱스
+  @@index([level, gender])  // 종목별 검색을 위한 인덱스
 }
 
 // TeamManager 모델 제거하고 TeamMember로 통합
