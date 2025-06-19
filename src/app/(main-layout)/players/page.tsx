@@ -70,7 +70,7 @@ const PlayersPage = () => {
       }}
       trigger={
         <button
-          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100"
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100"
           onClick={() => openModal(field)}
         >
           <ArrowDownUp className="w-5 h-5" />
@@ -91,10 +91,10 @@ const PlayersPage = () => {
       <div className="flex items-center justify-between px-6 h-16 shrink-0">
         <h1 className="text-2xl font-bold">선수</h1>
         <div className="flex items-center gap-2">
-          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
           </button>
-          {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
+          {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
             <ArrowDownUp className="w-5 h-5" />
           </button> */}
           {renderFieldModal("sort")}

@@ -79,7 +79,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           선수 정보
         </h1>
         <div className="w-20 flex justify-end gap-3 px-3">
-          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
         </div>
