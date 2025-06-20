@@ -101,8 +101,8 @@ const TeamContent = ({ id }: { id: string }) => {
           <div className="bg-white rounded-2xl pb-12">
             <div className="flex justify-between items-center px-3 pt-3">
               {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-green-50">
-                  <div className="rounded-full size-2 bg-green-600 " />
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
+                  <div className="rounded-full size-2 bg-indigo-600 " />
                   팀원 모집중
                 </div>
               ) : (
