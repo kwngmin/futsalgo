@@ -100,13 +100,16 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="px-3 space-y-3">
           <div className="bg-white rounded-2xl pb-12">
             <div className="flex justify-between items-center px-3 pt-3">
-              {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-green-100">
+              {data.data.recruitmentStatus !== "RECRUITING" ? (
+                <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-green-50">
                   <div className="rounded-full size-2 bg-green-600 " />
                   팀원 모집중
                 </div>
               ) : (
-                <div>모집종료</div>
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-gray-50">
+                  <div className="rounded-full size-2 bg-gray-400 " />
+                  팀원 모집 쉬는중
+                </div>
               )}
               {id === session.data?.user.id ? (
                 <div className="h-7 " />
@@ -125,7 +128,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-28">
+            <div className="flex items-center gap-4 px-6 h-32">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
