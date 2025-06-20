@@ -304,12 +304,11 @@ model TeamMember {
   updatedAt DateTime @updatedAt
   bannedAt  DateTime?
   
-  @@unique([teamId, userId])
-  @@index([userId, status])
-  @@index([teamId, status])
-  @@index([teamId, role])  // 역할별 조회를 위한 인덱스
-  @@index([teamId, role, status]) // 복합 인덱스 추가
-  @@unique([teamId, userId], name: "teamId_userId_unique")
+  @@unique([teamId, userId], map: "team_user_unique")
+  @@index([userId, status], map: "user_status_idx")
+  @@index([teamId, status], map: "team_status_idx")
+  @@index([teamId, role], map: "team_role_idx")
+  @@index([teamId, role, status], map: "team_role_status_idx")
 }
 
 model MatchDay {
