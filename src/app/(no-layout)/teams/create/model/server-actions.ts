@@ -22,7 +22,6 @@ export async function createTeam({
       data: {
         ...data,
         code: await generateTeamCode(),
-        ownerId,
         members: {
           create: {
             userId: ownerId,
@@ -39,3 +38,28 @@ export async function createTeam({
     return { success: false, error: "팀 생성에 실패했습니다." };
   }
 }
+
+// 사용자별 소유 팀 조회
+export const getUserOwnedTeams = async (userId: string) => {
+  return await prisma.teamMember.findMany({
+    where: {
+      userId,
+      role: "OWNER",
+      status: "APPROVED",
+    },
+    include: { team: true },
+  });
+};
+
+// // 관리자 권한 확인 (Owner + Manager)
+// const hasManagementRole = (role: TeamMemberRole) => {
+//   return role === 'OWNER' || role === 'MANAGER';
+// };
+
+// // 사용자의 팀 내 권한 확인
+// const getUserTeamRole = async (userId: string, teamId: string) => {
+//   const member = await prisma.teamMember.findUnique({
+//     where: { teamId_userId: { teamId, userId } }
+//   });
+//   return member?.role;
+// };

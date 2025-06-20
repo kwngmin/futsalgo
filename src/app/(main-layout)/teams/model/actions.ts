@@ -5,11 +5,6 @@ import { prisma } from "@/shared/lib/prisma";
 import { Team, User } from "@prisma/client";
 
 interface TeamWithDetails extends Team {
-  owner: {
-    id: string;
-    name: string | null;
-    image: string | null;
-  };
   _count: {
     members: number;
     followers: number;
@@ -40,7 +35,6 @@ export async function getTeams(): Promise<GetTeamsResponse> {
         ? {
             NOT: {
               OR: [
-                { ownerId: userId },
                 {
                   members: {
                     some: {
@@ -54,13 +48,6 @@ export async function getTeams(): Promise<GetTeamsResponse> {
           }
         : {},
       include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
-        },
         _count: {
           select: {
             members: {
@@ -82,7 +69,6 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       const myTeams = await prisma.team.findMany({
         where: {
           OR: [
-            { ownerId: userId },
             {
               members: {
                 some: {
@@ -94,13 +80,6 @@ export async function getTeams(): Promise<GetTeamsResponse> {
           ],
         },
         include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
           members: {
             where: {
               userId: userId,
@@ -128,8 +107,8 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       return {
         success: true,
         data: {
-          myTeams,
-          teams,
+          myTeams: myTeams as TeamWithDetails[],
+          teams: teams as TeamWithDetails[],
         },
       };
     }
@@ -139,7 +118,7 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       success: true,
       data: {
         myTeams: [],
-        teams,
+        teams: teams as TeamWithDetails[],
       },
     };
   } catch (error) {
