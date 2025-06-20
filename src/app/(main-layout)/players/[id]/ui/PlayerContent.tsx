@@ -93,8 +93,8 @@ const PlayerContent = ({ id }: { id: string }) => {
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl pb-11">
+        <div className="px-3 space-y-2">
+          <div className="bg-white rounded-2xl pb-12">
             <div className="flex justify-end px-3 pt-3">
               {id === session.data?.user.id ? (
                 <div className="h-7" />
@@ -107,13 +107,13 @@ const PlayerContent = ({ id }: { id: string }) => {
                   >
                     팔로우
                   </Button>
-                  <button className="shrink-0 size-8 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                    <EllipsisVertical className="size-4" />
+                  <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                    <EllipsisVertical className="size-5" />
                   </button>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-20">
+            <div className="flex items-center gap-4 px-6 h-32">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image

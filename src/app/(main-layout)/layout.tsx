@@ -7,7 +7,7 @@ interface MainLayoutProps {
 
 const MainLayout = async ({ children }: MainLayoutProps) => {
   return (
-    <div className="min-h-dvh bg-gray-100">
+    <div className="min-h-dvh bg-gray-200">
       {/* 데스크톱 & 태블릿 사이드바 */}
       <SideNav />
 
