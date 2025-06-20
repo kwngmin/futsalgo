@@ -82,36 +82,42 @@ const TeamContent = ({ id }: { id: string }) => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-3">
-        <div className="w-20">
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={handleGoBack}
-            className="flex items-center gap-1.5 !px-2"
-          >
-            <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          </Button>
-        </div>
-        <h1 className="grow flex justify-center text-lg font-semibold">
-          팀 정보
-        </h1>
-        <div className="w-20 flex items-center justify-end gap-3 px-3">
-          <Button
+        {/* <div className="w-20"> */}
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={handleGoBack}
+          className="flex items-center gap-1.5 !px-2"
+        >
+          <ArrowLeft style={{ width: "24px", height: "24px" }} />
+          <h1 className="text-2xl font-bold">팀 정보</h1>
+          {/* <h1 className="grow flex justify-center text-lg font-semibold">
+            팀 정보
+          </h1> */}
+        </Button>
+        {/* </div> */}
+
+        <div className="flex items-center justify-end gap-3 px-3">
+          {/* <Button
             // size="sm"
-            className="rounded-full font-semibold py-0 px-4 text-base"
+            className="rounded-full font-semibold py-0 px-4 text-base h-8"
             // variant="outline"
           >
             팔로우
-          </Button>
-          {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          </Button> */}
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
-          </button> */}
+          </button>
+          <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+            <EllipsisVertical className="size-5" />
+          </button>
         </div>
       </div>
       {data ? (
         <div className="px-3 space-y-3">
+          {/* 팀 정보 */}
           <div className="bg-white rounded-2xl">
-            <div className="flex justify-between items-center px-3 pt-3">
+            <div className="flex justify-between items-center px-3 pt-3 h-12">
               {data.data.recruitmentStatus === "RECRUITING" ? (
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
                   <div className="rounded-full size-2 bg-indigo-600 " />
@@ -127,6 +133,13 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="h-7 " />
               ) : (
                 <div className="flex items-center gap-2">
+                  <Button
+                    // size="sm"
+                    className="rounded-full font-semibold py-0 px-4 text-base h-8"
+                    // variant="outline"
+                  >
+                    팔로우
+                  </Button>
                   {/* <Button
                     size="sm"
                     className="rounded-full font-semibold text-sm py-0 px-4 h-7"
@@ -134,16 +147,16 @@ const TeamContent = ({ id }: { id: string }) => {
                   >
                     팔로우
                   </Button>{" "} */}
-                  <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                  {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
                     <Share className="w-5 h-5" />
                   </button>
                   <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
                     <EllipsisVertical className="size-5" />
-                  </button>
+                  </button> */}
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-32 mb-4">
+            <div className="flex items-center gap-4 px-6 h-28">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
@@ -174,8 +187,125 @@ const TeamContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
+            {/* 가입하기 */}
+            <div className="p-3">
+              {data.data.currentUserMembership.role === "MANAGER" ||
+              data.data.currentUserMembership.role === "OWNER" ? (
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => {
+                    alert("팀 관리하기");
+                  }}
+                  // onClick={() => router.push(`/players/${member.userId}`)}
+                  className="w-full text-base font-semibold cursor-pointer"
+                >
+                  팀 정보 수정
+                  {/* <div className="flex items-center space-x-3">
+                  <Settings className="size-5 text-gray-600" />
+                  <span className="font-medium">팀 관리하기</span>
+                </div> */}
+                  {/* <ChevronRight className={`w-5 h-5 text-gray-400}`} /> */}
+                </Button>
+              ) : // <div className="grid grid-cols-2 gap-2">
+              //   <Button
+              //     variant="outline"
+              //     size="lg"
+              //     onClick={() => {
+              //       alert("팀 관리하기");
+              //     }}
+              //     className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer"
+              //   >
+              //     팀원 관리
+              //   </Button>
+              //   <button
+              //     onClick={() => {
+              //       alert("팀 관리하기");
+              //     }}
+              //     className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer"
+              //   >
+              //     <div className="flex items-center space-x-3">
+              //       <Settings className="size-5 text-gray-600" />
+              //       <span className="font-medium">팀 관리하기</span>
+              //     </div>
+              //     <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              //   </button>
+              // </div>
+              !data.data.currentUserMembership.isMember ? (
+                data.data.recruitmentStatus === "RECRUITING" ? (
+                  <Button
+                    className="w-full text-base font-semibold bg-indigo-700"
+                    size="lg"
+                    onClick={async () => {
+                      if (session.data) {
+                        try {
+                          const result = await joinTeam(id);
+                          console.log(result);
+                          if (result?.success) {
+                            alert("가입 신청이 완료되었습니다.");
+                          } else {
+                            alert(result?.error);
+                          }
+                        } catch (error) {
+                          console.error(error);
+                          alert("가입 신청에 실패했습니다.");
+                        }
+                      } else {
+                        alert("로그인이 필요합니다.");
+                        signIn();
+                      }
+                    }}
+                  >
+                    가입 신청
+                  </Button>
+                ) : null
+              ) : data.data.currentUserMembership.status === "PENDING" ? (
+                <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
+                  <div className="flex items-center px-2">
+                    {/* <Hourglass className="w-5 h-5 mr-3 stroke-indigo-700" /> */}
+                    <span className="font-medium text-slate-700">
+                      승인 대기중
+                    </span>
+                  </div>
+                  <Button
+                    className="text-sm font-semibold text-slate-700"
+                    variant="outline"
+                    size="sm"
+                  >
+                    가입신청 취소
+                  </Button>
+                </div>
+              ) : (
+                data.data.currentUserMembership.status === "REJECTED" && (
+                  <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
+                    <div className="flex items-center px-2">
+                      <CircleX className="w-5 h-5 text-red-600 mr-3" />
+                      <span className="font-medium text-red-600">
+                        가입 신청이 거절되었습니다.
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        className="text-sm font-semibold"
+                        variant="outline"
+                        size="sm"
+                      >
+                        거절 사유보기
+                      </Button>
+                      <Button
+                        className="text-sm font-semibold text-white bg-indigo-700"
+                        size="sm"
+                      >
+                        재가입 신청하기
+                      </Button>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+
             {/* 탭 */}
-            <div className="flex px-3 h-12 space-x-2 border-t border-gray-100">
+            <div className="flex px-3 h-12 space-x-2">
               {tabs.map((tab) => (
                 <div
                   key={tab.value}
@@ -194,7 +324,7 @@ const TeamContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 가입하기 */}
-          {!data.data.currentUserMembership.isMember ? (
+          {/* {!data.data.currentUserMembership.isMember ? (
             data.data.recruitmentStatus === "RECRUITING" ? (
               <Button
                 className="w-full text-base font-semibold bg-indigo-700"
@@ -262,10 +392,10 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             )
-          )}
+          )} */}
 
           {/* 팀 관리하기 */}
-          {(data.data.currentUserMembership.role === "MANAGER" ||
+          {/* {(data.data.currentUserMembership.role === "MANAGER" ||
             data.data.currentUserMembership.role === "OWNER") && (
             <div className="bg-white rounded-lg overflow-hidden">
               <button
@@ -282,7 +412,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <ChevronRight className={`w-5 h-5 text-gray-400}`} />
               </button>
             </div>
-          )}
+          )} */}
 
           {/* 소개 */}
           {selectedTab === "introduction" && (
