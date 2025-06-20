@@ -144,7 +144,7 @@ const MorePage = () => {
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <item.icon className={`w-5 h-5 text-gray-600`} />
+                      <item.icon className="size-5 text-gray-600" />
                       <span className="font-medium">{item.label}</span>
                     </div>
                     <ChevronRight className={`w-5 h-5 text-gray-400}`} />

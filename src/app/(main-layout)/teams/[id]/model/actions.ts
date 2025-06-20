@@ -2,11 +2,12 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Prisma, TeamMemberStatus } from "@prisma/client";
+import { Prisma, TeamMemberRole, TeamMemberStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 interface UserMembershipInfo {
   isMember: boolean;
+  role: TeamMemberRole | null;
   status: TeamMemberStatus | null;
   joinedAt: Date | null;
 }
@@ -60,12 +61,14 @@ export async function getTeam(id: string) {
 
           return {
             isMember: !!userMember,
+            role: userMember?.role || null,
             status: userMember?.status || null,
             joinedAt: userMember?.createdAt || null,
           };
         })()
       : {
           isMember: false,
+          role: null,
           status: null,
           joinedAt: null,
         };

@@ -11,6 +11,7 @@ import {
   CircleX,
   EllipsisVertical,
   Hourglass,
+  Settings,
   Share,
   // Volleyball,
 } from "lucide-react";
@@ -241,6 +242,27 @@ const TeamContent = ({ id }: { id: string }) => {
             )
           )}
 
+          {/* 팀 관리하기 */}
+          {(data.data.currentUserMembership.role === "MANAGER" ||
+            data.data.currentUserMembership.role === "OWNER") && (
+            <div className="bg-white rounded-lg overflow-hidden">
+              <button
+                onClick={() => {
+                  alert("팀 관리하기");
+                }}
+                // onClick={() => router.push(`/players/${member.userId}`)}
+                className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0`}
+              >
+                <div className="flex items-center space-x-3">
+                  <Settings className="size-5 text-gray-600" />
+                  <span className="font-medium">팀 관리하기</span>
+                </div>
+                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              </button>
+            </div>
+          )}
+
+          {/* 탭 */}
           <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">
             {tabs.map((tab) => (
               <div
