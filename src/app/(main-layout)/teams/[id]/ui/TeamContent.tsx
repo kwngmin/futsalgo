@@ -10,8 +10,8 @@ import {
   ChevronRight,
   CircleX,
   EllipsisVertical,
-  Hourglass,
-  Settings,
+  // Hourglass,
+  // Settings,
   Share,
   // Volleyball,
 } from "lucide-react";
