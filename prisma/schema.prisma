@@ -78,7 +78,6 @@ enum TeamMemberStatus {
   APPROVED
   REJECTED
   LEAVE
-  OWNER    // 팀장 상태 추가
 }
 
 enum TeamMemberRole {
@@ -184,7 +183,7 @@ model User {
   id              String     @id @default(cuid())
   email           String?    @unique
   emailVerified   DateTime?  @map("email_verified")
-  name            String
+  name            String?
   nickname        String?    @unique
 
   accounts        Account[]
@@ -206,7 +205,6 @@ model User {
   condition        Condition @default(NORMAL)
 
   teams           TeamMember[]
-  ownedTeams      Team[]    @relation("TeamOwner")  
 
   // 팔로잉/팔로워 관계 (유저 간)
   following       UserFollow[] @relation("Follower")    // 내가 팔로우하는 사람들
@@ -277,8 +275,6 @@ model Team {
   level         TeamLevel @default(MID)
   activityFrequency ActivityFrequency @default(WEEKLY)
 
-  ownerId       String
-  owner         User      @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   members       TeamMember[]  // TeamManager 제거하고 TeamMember로 통합
   posts         Post[]
   matchDays     MatchDayTeam[]
@@ -302,6 +298,7 @@ model TeamMember {
   userId    String
   status    TeamMemberStatus @default(PENDING)
   role      TeamMemberRole   @default(MEMBER)   // 역할 추가
+  joinedAt  DateTime?        // 실제 승인된 날짜
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -309,6 +306,7 @@ model TeamMember {
   @@index([userId, status])
   @@index([teamId, status])
   @@index([teamId, role])  // 역할별 조회를 위한 인덱스
+  @@index([teamId, role, status]) // 복합 인덱스 추가
 }
 
 model MatchDay {

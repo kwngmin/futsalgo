@@ -14,6 +14,12 @@ declare module "next-auth" {
       provider: string;
     } & DefaultSession["user"];
   }
+  interface JWT {
+    id?: string;
+    nickname?: string | null;
+    createdAt?: Date;
+    provider?: string;
+  }
 }
 
 export function CustomPrismaAdapter(): Adapter {
@@ -86,17 +92,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
     // JWT 토큰에 모든 사용자 정보 포함
-    jwt: async ({ token, user, account }) => {
-      if (user) {
-        // 데이터베이스에서 최신 사용자 정보 가져오기
-        const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
-        });
+    jwt: async ({ token, user, account, trigger }) => {
+      // 초기 로그인 시 또는 사용자 정보 업데이트 시
+      if (user || trigger === "update") {
+        try {
+          // 데이터베이스에서 최신 사용자 정보 가져오기
+          const dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+          });
 
-        if (dbUser) {
-          token.id = dbUser.id;
-          token.nickname = dbUser.nickname;
-          token.createdAt = dbUser.createdAt;
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.nickname = dbUser.nickname;
+            token.createdAt = dbUser.createdAt;
+          }
+        } catch (error) {
+          console.error("JWT 콜백에서 사용자 조회 실패:", error);
         }
       }
 
@@ -131,10 +142,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         console.log(`사용자 생성 완료: ${user.email}`);
       }
     },
+    signIn: async ({ user, account }) => {
+      console.log(`로그인 완료: ${user.email} via ${account?.provider}`);
+    },
+    signOut: async () => {
+      console.log(`로그아웃 완료`);
+    },
   },
   pages: {
     // signIn: "/login",
     newUser: "/onboarding",
     // error: "/login",
   },
+  // debug: process.env.NODE_ENV === "development", // 개발 환경에서만 디버그
 });

@@ -1,6 +1,6 @@
 "use server";
 
-import { generateTeamCode } from "@/entities/team/model/actions";
+import { generateTeamCode } from "@/entities/team/model/server-actions";
 import { TeamFormData } from "../ui/TeamsCreateContent";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
