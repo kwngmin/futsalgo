@@ -188,7 +188,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 </div>
 
                 {/* 팀 실력 */}
-                <div className="space-y-3 hidden sm:block">
+                {/* <div className="space-y-3 hidden sm:block">
                   <Label className="px-1">팀 실력</Label>
                   <CustomRadioGroup
                     options={TEAM_LEVEL_OPTIONS}
@@ -198,8 +198,8 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                     }
                     error={errors.level?.message}
                   />
-                </div>
-                <div className="space-y-3 sm:hidden">
+                </div> */}
+                <div className="space-y-3">
                   <Label className="px-1">팀 실력</Label>
                   <CustomRadioGroup
                     options={TEAM_LEVEL_OPTIONS}

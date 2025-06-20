@@ -98,10 +98,18 @@ const TeamContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl pb-11">
-            <div className="flex justify-end px-3 pt-3">
+          <div className="bg-white rounded-2xl pb-12">
+            <div className="flex justify-between items-center px-3 pt-3">
+              {data.data.recruitmentStatus === "RECRUITING" ? (
+                <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-green-100">
+                  <div className="rounded-full size-2 bg-green-600 " />
+                  팀원 모집중
+                </div>
+              ) : (
+                <div>모집종료</div>
+              )}
               {id === session.data?.user.id ? (
-                <div className="h-7" />
+                <div className="h-7 " />
               ) : (
                 <div className="flex items-center gap-2">
                   <Button
@@ -111,13 +119,13 @@ const TeamContent = ({ id }: { id: string }) => {
                   >
                     팔로우
                   </Button>{" "}
-                  <button className="shrink-0 size-8 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                    <EllipsisVertical className="size-4" />
+                  <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                    <EllipsisVertical className="size-5" />
                   </button>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-20">
+            <div className="flex items-center gap-4 px-6 h-28">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
@@ -133,13 +141,13 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-semibold">
+                <h1 className="text-lg font-semibold">
                   {data?.data?.name}
                   <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
                   </span>
                 </h1>
-                <p className="text-gray-500 mt-0.5">
+                <p className="text-sm text-gray-500 mt-0.5">
                   {`${
                     data?.data?.city && data?.data?.district
                       ? `${data?.data?.city} • ${data?.data?.district}`
@@ -154,6 +162,17 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
             </div> */}
           </div>
+
+          {/* 가입하기 */}
+          {data.data.recruitmentStatus === "RECRUITING" && (
+            <Button
+              className="w-full text-base font-semibold bg-indigo-700"
+              size="lg"
+            >
+              가입하기
+            </Button>
+          )}
+
           <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">
             {tabs.map((tab) => (
               <div

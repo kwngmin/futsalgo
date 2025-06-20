@@ -125,7 +125,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <h1 className="text-xl font-semibold flex items-center gap-1.5">
+                <h1 className="text-lg font-semibold flex items-center gap-1.5">
                   {data?.data?.nickname}{" "}
                   {data?.data?.gender === "MALE" ? (
                     <div className="flex items-center bg-blue-500/5 rounded p-0.5">
@@ -163,9 +163,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                       className="size-6 object-cover rounded-md overflow-hidden"
                       unoptimized
                     />
-                    <span className="font-medium shrink-0">
+                    <span className="font-medium shrink-0 text-sm">
                       {data.data.teams[0].team.name || "팀 이름 없음"}
-                      <span className="text-gray-500 font-normal">
+                      <span className="font-normal">
                         {" "}
                         •{" "}
                         {
@@ -178,7 +178,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </span>
                   </button>
                 ) : (
-                  <span className="font-medium shrink-0 text-muted-foreground">
+                  <span className="font-medium shrink-0 text-muted-foreground text-sm">
                     소속 팀 없음
                   </span>
                 )}

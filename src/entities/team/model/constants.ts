@@ -11,11 +11,23 @@ export const TEAM_GENDER = {
 };
 
 export const TEAM_LEVEL_OPTIONS = [
-  { value: "VERY_LOW", label: "하 - 초보자 위주로 구성된 팀" },
-  { value: "LOW", label: "중하 - 비기너, 아마추어가 섞인 팀" },
-  { value: "MID", label: "중 - 경기 감각이 있는 아마추어 중심 팀" },
-  { value: "HIGH", label: "중상 - 아마추어, 에이스 혼합 팀" },
-  { value: "VERY_HIGH", label: "상 - 세미프로, 에이스 중심 팀" },
+  {
+    value: "VERY_LOW",
+    label: "하하하 - 왕초보 팀. 체력이나 풋살 경험이 부족",
+  },
+  { value: "LOW", label: "하하 - 일반인 팀에서 초보 팀. 기본기 부족" },
+  {
+    value: "MID",
+    label: "하 - 일반인 팀인데 발이 좀 맞는 팀. 팀워크 존재",
+  },
+  {
+    value: "HIGH",
+    label: "중하 - 선출이랑 발 맞추는게 가능한 팀",
+  },
+  {
+    value: "VERY_HIGH",
+    label: "중 - 전원 선출이거나, 비선출 중 킹반인급만 모인 팀",
+  },
 ];
 
 export const TEAM_LEVEL = {
