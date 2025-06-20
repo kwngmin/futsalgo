@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { getTeam } from "../model/actions";
+import { getTeam, joinTeam } from "../model/actions";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -15,7 +15,7 @@ import {
   // Volleyball,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
@@ -47,9 +47,11 @@ const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
+  console.log(session, "session");
+  console.log(id, "id");
 
   const { data } = useQuery({
-    queryKey: ["player", id],
+    queryKey: ["team", id],
     queryFn: () => getTeam(id),
     enabled: !!id, // id 없으면 fetch 안 함
   });
@@ -174,9 +176,24 @@ const TeamContent = ({ id }: { id: string }) => {
               <Button
                 className="w-full text-base font-semibold bg-indigo-700"
                 size="lg"
-                onClick={() => {
-                  console.log("가입 신청");
-                  router.push(`/teams/join/${id}`);
+                onClick={async () => {
+                  if (session.data) {
+                    try {
+                      const result = await joinTeam(id);
+                      console.log(result);
+                      if (result?.success) {
+                        alert("가입 신청이 완료되었습니다.");
+                      } else {
+                        alert(result?.error);
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      alert("가입 신청에 실패했습니다.");
+                    }
+                  } else {
+                    alert("로그인이 필요합니다.");
+                    signIn();
+                  }
                 }}
               >
                 가입 신청

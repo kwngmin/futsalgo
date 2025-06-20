@@ -309,6 +309,7 @@ model TeamMember {
   @@index([teamId, status])
   @@index([teamId, role])  // 역할별 조회를 위한 인덱스
   @@index([teamId, role, status]) // 복합 인덱스 추가
+  @@unique([teamId, userId], name: "teamId_userId_unique")
 }
 
 model MatchDay {
