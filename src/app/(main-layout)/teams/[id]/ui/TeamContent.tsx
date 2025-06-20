@@ -8,7 +8,9 @@ import {
   BookText,
   ChartPie,
   ChevronRight,
+  CircleX,
   EllipsisVertical,
+  Hourglass,
   Share,
   // Volleyball,
 } from "lucide-react";
@@ -167,13 +169,59 @@ const TeamContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 가입하기 */}
-          {data.data.recruitmentStatus === "RECRUITING" && (
-            <Button
-              className="w-full text-base font-semibold bg-indigo-700"
-              size="lg"
-            >
-              가입하기
-            </Button>
+          {!data.data.currentUserMembership.isMember ? (
+            data.data.recruitmentStatus === "RECRUITING" ? (
+              <Button
+                className="w-full text-base font-semibold bg-indigo-700"
+                size="lg"
+                onClick={() => {
+                  console.log("가입 신청");
+                  router.push(`/teams/join/${id}`);
+                }}
+              >
+                가입 신청
+              </Button>
+            ) : null
+          ) : data.data.currentUserMembership.status === "PENDING" ? (
+            <div className="flex items-center justify-between bg-indigo-400/10 rounded-lg p-2">
+              <div className="flex items-center px-2">
+                <Hourglass className="w-5 h-5 text-indigo-600 mr-3" />
+                <span className="font-medium text-indigo-600">가입 대기중</span>
+              </div>
+              <Button
+                className="text-sm font-semibold text-indigo-700 border-indigo-700"
+                variant="outline"
+                size="sm"
+              >
+                가입 취소
+              </Button>
+            </div>
+          ) : (
+            data.data.currentUserMembership.status === "REJECTED" && (
+              <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
+                <div className="flex items-center px-2">
+                  <CircleX className="w-5 h-5 text-red-600 mr-3" />
+                  <span className="font-medium text-red-600">
+                    가입 신청이 거절되었습니다.
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    className="text-sm font-semibold"
+                    variant="outline"
+                    size="sm"
+                  >
+                    거절 사유보기
+                  </Button>
+                  <Button
+                    className="text-sm font-semibold text-white bg-indigo-700"
+                    size="sm"
+                  >
+                    재가입 신청하기
+                  </Button>
+                </div>
+              </div>
+            )
           )}
 
           <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">

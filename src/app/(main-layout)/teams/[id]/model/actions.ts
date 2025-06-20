@@ -1,9 +1,18 @@
 "use server";
 
-// import { auth } from "@/shared/lib/auth";
+import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
+import { TeamMemberStatus } from "@prisma/client";
+
+interface UserMembershipInfo {
+  isMember: boolean;
+  status: TeamMemberStatus | null;
+  joinedAt: Date | null;
+}
 
 export async function getTeam(id: string) {
+  const session = await auth();
+
   try {
     const team = await prisma.team.findUnique({
       where: { id },
@@ -37,58 +46,89 @@ export async function getTeam(id: string) {
       };
     }
 
-    // 실시간 통계 계산
-    const approvedMembers = team.members;
-
-    // 평균 연령 계산 (birthDate가 있는 멤버들만)
-    const membersWithBirthDate = approvedMembers.filter(
-      (m) => m.user.birthDate
+    // 승인된 멤버들만 필터링
+    const approvedMembers = team.members.filter(
+      (member) => member.status === "APPROVED"
     );
-    const averageAge =
-      membersWithBirthDate.length > 0
-        ? Math.round(
-            membersWithBirthDate.reduce((sum, m) => {
-              const birthYear = parseInt(m.user.birthDate!.substring(0, 4));
-              const currentYear = new Date().getFullYear();
-              return sum + (currentYear - birthYear);
-            }, 0) / membersWithBirthDate.length
-          )
-        : null;
 
-    // 평균 키 계산 (height가 있는 멤버들만)
-    const membersWithHeight = approvedMembers.filter((m) => m.user.height);
-    const averageHeight =
-      membersWithHeight.length > 0
-        ? Math.round(
-            membersWithHeight.reduce((sum, m) => sum + m.user.height!, 0) /
-              membersWithHeight.length
-          )
-        : null;
+    // 현재 사용자의 멤버십 정보 확인
+    const currentUserMembership: UserMembershipInfo = session?.user?.id
+      ? (() => {
+          const userMember = team.members.find(
+            (member) => member.user.id === session.user.id
+          );
 
+          return {
+            isMember: !!userMember,
+            status: userMember?.status || null,
+            joinedAt: userMember?.createdAt || null,
+          };
+        })()
+      : {
+          isMember: false,
+          status: null,
+          joinedAt: null,
+        };
+
+    // 통계 계산을 위한 헬퍼 함수들
+    const calculateAverageAge = (members: typeof approvedMembers) => {
+      const membersWithBirthDate = members.filter((m) => m.user.birthDate);
+
+      if (membersWithBirthDate.length === 0) return null;
+
+      const totalAge = membersWithBirthDate.reduce((sum, m) => {
+        const birthYear = parseInt(m.user.birthDate!.substring(0, 4));
+        const currentYear = new Date().getFullYear();
+        return sum + (currentYear - birthYear);
+      }, 0);
+
+      return Math.round(totalAge / membersWithBirthDate.length);
+    };
+
+    const calculateAverageHeight = (members: typeof approvedMembers) => {
+      const membersWithHeight = members.filter((m) => m.user.height);
+
+      if (membersWithHeight.length === 0) return null;
+
+      const totalHeight = membersWithHeight.reduce(
+        (sum, m) => sum + m.user.height!,
+        0
+      );
+
+      return Math.round(totalHeight / membersWithHeight.length);
+    };
+
+    const countBySkillLevel = (
+      members: typeof approvedMembers,
+      level: string
+    ) => members.filter((m) => m.user.skillLevel === level).length;
+
+    const countByPlayerBackground = (
+      members: typeof approvedMembers,
+      background: string
+    ) => members.filter((m) => m.user.playerBackground === background).length;
+
+    // 실시간 통계 계산
     const stats = {
-      beginnerCount: approvedMembers.filter(
-        (m) => m.user.skillLevel === "BEGINNER"
-      ).length,
-      amateurCount: approvedMembers.filter(
-        (m) => m.user.skillLevel === "AMATEUR"
-      ).length,
-      aceCount: approvedMembers.filter((m) => m.user.skillLevel === "ACE")
-        .length,
-      semiproCount: approvedMembers.filter(
-        (m) => m.user.skillLevel === "SEMIPRO"
-      ).length,
-      professionalCount: approvedMembers.filter(
-        (m) => m.user.playerBackground === "PROFESSIONAL"
-      ).length,
-      averageAge,
-      averageHeight,
+      beginnerCount: countBySkillLevel(approvedMembers, "BEGINNER"),
+      amateurCount: countBySkillLevel(approvedMembers, "AMATEUR"),
+      aceCount: countBySkillLevel(approvedMembers, "ACE"),
+      semiproCount: countBySkillLevel(approvedMembers, "SEMIPRO"),
+      professionalCount: countByPlayerBackground(
+        approvedMembers,
+        "PROFESSIONAL"
+      ),
+      averageAge: calculateAverageAge(approvedMembers),
+      averageHeight: calculateAverageHeight(approvedMembers),
     };
 
     return {
       success: true,
       data: {
-        ...team, // 팀 기본 정보 + members 포함
-        stats, // 통계 정보 추가
+        ...team,
+        members: approvedMembers, // 승인된 멤버들만 반환
+        stats,
+        currentUserMembership, // 현재 사용자의 멤버십 정보 추가
       },
     };
   } catch (error) {

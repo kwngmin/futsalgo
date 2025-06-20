@@ -298,9 +298,11 @@ model TeamMember {
   userId    String
   status    TeamMemberStatus @default(PENDING)
   role      TeamMemberRole   @default(MEMBER)   // 역할 추가
+  banned    Boolean @default(false)
   joinedAt  DateTime?        // 실제 승인된 날짜
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  bannedAt  DateTime?
   
   @@unique([teamId, userId])
   @@index([userId, status])
