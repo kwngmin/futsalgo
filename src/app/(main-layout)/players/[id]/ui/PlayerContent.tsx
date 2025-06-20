@@ -93,7 +93,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-2">
+        <div className="px-3 space-y-3">
           <div className="bg-white rounded-2xl pb-12">
             <div className="flex justify-end px-3 pt-3">
               {id === session.data?.user.id ? (

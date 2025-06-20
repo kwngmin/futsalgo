@@ -95,15 +95,22 @@ const TeamContent = ({ id }: { id: string }) => {
         <h1 className="grow flex justify-center text-lg font-semibold">
           팀 정보
         </h1>
-        <div className="w-20 flex justify-end gap-3 px-3">
-          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+        <div className="w-20 flex items-center justify-end gap-3 px-3">
+          <Button
+            // size="sm"
+            className="rounded-full font-semibold py-0 px-4 text-base"
+            // variant="outline"
+          >
+            팔로우
+          </Button>
+          {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
-          </button>
+          </button> */}
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-2">
-          <div className="bg-white rounded-2xl pb-12">
+        <div className="px-3 space-y-3">
+          <div className="bg-white rounded-2xl">
             <div className="flex justify-between items-center px-3 pt-3">
               {data.data.recruitmentStatus === "RECRUITING" ? (
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
@@ -120,20 +127,23 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="h-7 " />
               ) : (
                 <div className="flex items-center gap-2">
-                  <Button
+                  {/* <Button
                     size="sm"
                     className="rounded-full font-semibold text-sm py-0 px-4 h-7"
                     variant="outline"
                   >
                     팔로우
-                  </Button>{" "}
+                  </Button>{" "} */}
+                  <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                    <Share className="w-5 h-5" />
+                  </button>
                   <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
                     <EllipsisVertical className="size-5" />
                   </button>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-32">
+            <div className="flex items-center gap-4 px-6 h-32 mb-4">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
@@ -164,11 +174,23 @@ const TeamContent = ({ id }: { id: string }) => {
                 </p>
               </div>
             </div>
-            {/* <div className="flex justify-end px-3 h-12 mt-4 space-x-2">
-              <div className="flex flex-col justify-center items-center space-y-3 min-w-14">
-                <span className="font-semibold text-sm px-2">4.82 • 5,435</span>
-              </div>
-            </div> */}
+            {/* 탭 */}
+            <div className="flex px-3 h-12 space-x-2 border-t border-gray-100">
+              {tabs.map((tab) => (
+                <div
+                  key={tab.value}
+                  className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
+                    selectedTab === tab.value
+                      ? "border-gray-500"
+                      : "border-transparent"
+                  }`}
+                  onClick={() => setSelectedTab(tab.value)}
+                >
+                  {tab.label}
+                  {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* 가입하기 */}
@@ -201,13 +223,13 @@ const TeamContent = ({ id }: { id: string }) => {
               </Button>
             ) : null
           ) : data.data.currentUserMembership.status === "PENDING" ? (
-            <div className="flex items-center justify-between bg-indigo-400/10 rounded-lg p-2">
+            <div className="flex items-center justify-between bg-white rounded-lg p-2">
               <div className="flex items-center px-2">
-                <Hourglass className="w-5 h-5 text-indigo-600 mr-3" />
-                <span className="font-medium text-indigo-600">가입 대기중</span>
+                <Hourglass className="w-5 h-5 mr-3" />
+                <span className="font-medium">가입 대기중</span>
               </div>
               <Button
-                className="text-sm font-semibold text-indigo-700 border-indigo-700"
+                className="text-sm font-semibold text-indigo-700"
                 variant="outline"
                 size="sm"
               >
@@ -251,7 +273,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   alert("팀 관리하기");
                 }}
                 // onClick={() => router.push(`/players/${member.userId}`)}
-                className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0`}
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer"
               >
                 <div className="flex items-center space-x-3">
                   <Settings className="size-5 text-gray-600" />
@@ -261,24 +283,6 @@ const TeamContent = ({ id }: { id: string }) => {
               </button>
             </div>
           )}
-
-          {/* 탭 */}
-          <div className="flex px-3 h-12 space-x-2 bg-gray-50 rounded-lg">
-            {tabs.map((tab) => (
-              <div
-                key={tab.value}
-                className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
-                  selectedTab === tab.value
-                    ? "border-gray-500"
-                    : "border-transparent"
-                }`}
-                onClick={() => setSelectedTab(tab.value)}
-              >
-                {tab.label}
-                {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
-              </div>
-            ))}
-          </div>
 
           {/* 소개 */}
           {selectedTab === "introduction" && (
@@ -331,8 +335,8 @@ const TeamContent = ({ id }: { id: string }) => {
                   <BookText className={`w-5 h-5 text-gray-600`} />
                   <span className="font-medium">기본 정보</span>
                 </div>
-                <div className="grid grid-cols-3 gap-3 px-4 bg-white rounded-2xl">
-                  <div className="flex flex-col gap-1 items-center my-4">
+                <div className="grid grid-cols-3 gap-3 px-4 py-2 bg-white rounded-2xl">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {
                         TEAM_GENDER[
@@ -342,14 +346,14 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                     <Label className="text-muted-foreground">구분</Label>
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
                       {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
                     </div>
                     <Label className="text-muted-foreground">실력</Label>
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {data.data.stats.professionalCount
                         ? `${data.data.stats.professionalCount}명`
@@ -357,19 +361,19 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                     <Label className="text-muted-foreground">선수 출신</Label>
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {data.data.stats.averageAge}세
                     </div>
                     <Label className="text-muted-foreground">평균 연령</Label>
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {data.data.stats.averageHeight}cm
                     </div>
                     <Label className="text-muted-foreground">평균 키</Label>
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {data.data.members.length}명
                     </div>
