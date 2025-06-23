@@ -178,9 +178,9 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="flex flex-col">
                 <h1 className="text-lg font-semibold">
                   {data?.data?.name}
-                  <span className="text-base font-normal text-gray-500 ml-2">
+                  {/* <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
-                  </span>
+                  </span> */}
                 </h1>
                 <p className="text-sm text-gray-500 mt-0.5">
                   {`${
