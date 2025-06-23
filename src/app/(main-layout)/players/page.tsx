@@ -160,7 +160,7 @@ const PlayersPage = () => {
               </span>
             </div>
             {/* 선수 목록 */}
-            <div className="space-y-3">
+            <div className="bg-white rounded-2xl">
               {filteredPlayers?.map((player) => (
                 <PlayerCard
                   key={player.id}

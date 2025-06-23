@@ -14,9 +14,10 @@ const PlayerCard = ({
   teamName,
 }: PlayerCardProps) => {
   const router = useRouter();
+  console.log(player, "player");
   return (
     <div
-      className="bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer "
+      className="bg-white rounded-2xl p-3 hover:bg-gray-50 hover:shadow-sm/5 transition-shadow cursor-pointer "
       onClick={() => router.push(`/players/${player.id}`)}
     >
       <div className="flex items-start gap-3">
