@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   BookText,
   ChartPie,
-  ChevronRight,
   CircleX,
   EllipsisVertical,
   // Hourglass,
@@ -21,6 +20,7 @@ import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
+import TeamPlayers from "./TeamPlayers";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -48,8 +48,8 @@ const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
-  console.log(session, "session");
-  console.log(id, "id");
+  // console.log(session, "session");
+  // console.log(id, "id");
 
   const { data } = useQuery({
     queryKey: ["team", id],
@@ -191,37 +191,23 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="p-3">
               {data.data.currentUserMembership.role === "MANAGER" ||
               data.data.currentUserMembership.role === "OWNER" ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    // variant="secondary"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => {
-                      alert("팀 관리하기");
-                    }}
-                    // onClick={() => router.push(`/players/${member.userId}`)}
-                    className="w-full text-base font-semibold cursor-pointer"
-                  >
-                    팀 정보 수정
-                    {/* <div className="flex items-center space-x-3">
-                  <Settings className="size-5 text-gray-600" />
-                  <span className="font-medium">팀 관리하기</span>
-                </div> */}
-                    {/* <ChevronRight className={`w-5 h-5 text-gray-400}`} /> */}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    // variant="secondary"
-                    size="lg"
-                    onClick={() => {
-                      alert("팀 관리하기");
-                    }}
-                    // onClick={() => router.push(`/players/${member.userId}`)}
-                    className="w-full text-base font-semibold cursor-pointer"
-                  >
-                    팀원 관리
-                  </Button>
-                </div>
+                <Button
+                  // variant="secondary"
+                  variant="outline"
+                  size="lg"
+                  onClick={() => {
+                    alert("팀 관리하기");
+                  }}
+                  // onClick={() => router.push(`/players/${member.userId}`)}
+                  className="w-full text-base font-semibold cursor-pointer"
+                >
+                  팀 정보 수정
+                  {/* <div className="flex items-center space-x-3">
+              <Settings className="size-5 text-gray-600" />
+              <span className="font-medium">팀 관리하기</span>
+            </div> */}
+                  {/* <ChevronRight className={`w-5 h-5 text-gray-400}`} /> */}
+                </Button>
               ) : // <div className="grid grid-cols-2 gap-2">
               //   <Button
               //     variant="outline"
@@ -438,21 +424,11 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 명단 */}
           {selectedTab === "members" && (
-            <div className="bg-white rounded-lg overflow-hidden">
-              {data.data.members.map((member) => (
-                <button
-                  key={member.id}
-                  onClick={() => router.push(`/players/${member.userId}`)}
-                  className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="size-6 bg-gray-200 rounded-full" />
-                    <span className="font-medium">{member.user.nickname}</span>
-                  </div>
-                  <ChevronRight className={`w-5 h-5 text-gray-400}`} />
-                </button>
-              ))}
-            </div>
+            <TeamPlayers
+              members={data.data.members}
+              isMember={data.data.currentUserMembership.isMember}
+              role={data.data.currentUserMembership.role}
+            />
           )}
 
           {/* 개요 */}

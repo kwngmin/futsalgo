@@ -32,6 +32,7 @@ export async function getTeam(id: string) {
                 position: true,
                 birthDate: true,
                 height: true,
+                gender: true,
               },
             },
           },
@@ -49,7 +50,7 @@ export async function getTeam(id: string) {
 
     // 승인된 멤버들만 필터링
     const approvedMembers = team.members.filter(
-      (member) => member.status === "APPROVED"
+      (member) => member.status === "APPROVED" || member.status === "PENDING"
     );
 
     // 현재 사용자의 멤버십 정보 확인
