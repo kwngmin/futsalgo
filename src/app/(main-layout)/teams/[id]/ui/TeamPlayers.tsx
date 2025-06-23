@@ -12,6 +12,7 @@ import {
 import { ChevronRight, Mars, Venus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { approveTeamMember } from "../model/actions";
 
 interface TeamMemberWithUser extends TeamMember {
   user: Pick<
@@ -34,28 +35,28 @@ const TeamPlayers = ({
   isMember,
   role,
   status,
+  refetch,
+  teamId,
 }: {
-  members: TeamMemberWithUser[];
+  members: {
+    approved: TeamMemberWithUser[];
+    pending: TeamMemberWithUser[];
+  };
   isMember: boolean;
   role: TeamMemberRole | null;
   status: TeamMemberStatus | null;
+  refetch: () => void;
+  teamId: string;
 }) => {
   console.log(role, "role");
   const router = useRouter();
   console.log(members, "members");
 
-  const pendingMembers = members.filter(
-    (member) => member.status === "PENDING"
-  );
-  const approvedMembers = members.filter(
-    (member) => member.status === "APPROVED"
-  );
-
   // 팀원 목록 조회
   if (!isMember || (isMember && status === "PENDING")) {
     return (
       <div className="bg-white rounded-lg overflow-hidden">
-        {approvedMembers.map((member) => (
+        {members.approved.map((member) => (
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
@@ -118,7 +119,7 @@ const TeamPlayers = ({
           승인 대기
         </h3>
         <div className="bg-white rounded-lg overflow-hidden">
-          {pendingMembers.map((member) => (
+          {members.pending.map((member) => (
             <div
               key={member.id}
               className="flex flex-col pb-2 border-t border-gray-100 first:border-t-0"
@@ -177,7 +178,27 @@ const TeamPlayers = ({
                 <ChevronRight className={`w-5 h-5 text-gray-400}`} />
               </button>
               <div className="mx-3 p-1 grid grid-cols-2 gap-2">
-                <Button variant="outline" className="font-semibold">
+                <Button
+                  variant="outline"
+                  className="font-semibold"
+                  onClick={async () => {
+                    try {
+                      const result = await approveTeamMember(
+                        teamId,
+                        member.userId
+                      );
+                      if (result?.success) {
+                        // toast.success("팀원 승인이 완료되었습니다.");
+                        alert("팀원 승인이 완료되었습니다.");
+                        refetch();
+                      } else {
+                        alert(result?.error);
+                      }
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  }}
+                >
                   승인
                 </Button>
                 <Button variant="secondary">거절</Button>
@@ -191,7 +212,7 @@ const TeamPlayers = ({
           승인 완료
         </h3>
         <div className="bg-white rounded-lg overflow-hidden">
-          {approvedMembers.map((member) => (
+          {members.approved.map((member) => (
             <button
               key={member.id}
               onClick={() => router.push(`/players/${member.userId}`)}

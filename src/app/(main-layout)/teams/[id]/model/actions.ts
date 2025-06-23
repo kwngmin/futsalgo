@@ -50,7 +50,12 @@ export async function getTeam(id: string) {
 
     // 승인된 멤버들만 필터링
     const approvedMembers = team.members.filter(
-      (member) => member.status === "APPROVED" || member.status === "PENDING"
+      (member) => member.status === "APPROVED"
+    );
+
+    // 승인된 멤버들만 필터링
+    const pendingMembers = team.members.filter(
+      (member) => member.status === "PENDING"
     );
 
     // 현재 사용자의 멤버십 정보 확인
@@ -86,7 +91,7 @@ export async function getTeam(id: string) {
         return sum + (currentYear - birthYear);
       }, 0);
 
-      return Math.round(totalAge / membersWithBirthDate.length);
+      return Math.round((totalAge / membersWithBirthDate.length) * 10) / 10;
     };
 
     const calculateAverageHeight = (members: typeof approvedMembers) => {
@@ -99,7 +104,7 @@ export async function getTeam(id: string) {
         0
       );
 
-      return Math.round(totalHeight / membersWithHeight.length);
+      return Math.round((totalHeight / membersWithHeight.length) * 10) / 10;
     };
 
     const countBySkillLevel = (
@@ -130,7 +135,10 @@ export async function getTeam(id: string) {
       success: true,
       data: {
         ...team,
-        members: approvedMembers, // 승인된 멤버들만 반환
+        members: {
+          approved: approvedMembers,
+          pending: pendingMembers,
+        },
         stats,
         currentUserMembership, // 현재 사용자의 멤버십 정보 추가
       },
@@ -292,6 +300,574 @@ export async function joinTeam(teamId: string) {
           console.error("알 수 없는 Prisma 에러:", error);
       }
     }
+
+    return {
+      success: false,
+      error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요",
+      data: null,
+    };
+  }
+}
+
+export async function cancelJoinTeam(teamId: string) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      error: "로그인이 필요합니다",
+      data: null,
+    };
+  }
+
+  try {
+    // 1. 팀이 존재하는지 확인
+    const existingTeam = await prisma.team.findUnique({
+      where: { id: teamId },
+    });
+
+    if (!existingTeam) {
+      return {
+        success: false,
+        error: "존재하지 않는 팀입니다",
+        data: null,
+      };
+    }
+
+    // 2. 현재 사용자의 팀 멤버십 확인
+    const existingMember = await prisma.teamMember.findUnique({
+      where: {
+        teamId_userId: {
+          teamId,
+          userId: session.user.id,
+        },
+      },
+    });
+
+    if (!existingMember) {
+      return {
+        success: false,
+        error: "가입 신청 내역이 없습니다",
+        data: null,
+      };
+    }
+
+    // 3. 상태별 처리
+    switch (existingMember.status) {
+      case "PENDING":
+        // PENDING 상태인 경우만 취소 가능
+        break;
+      case "APPROVED":
+        return {
+          success: false,
+          error:
+            "이미 승인된 멤버는 가입 신청을 취소할 수 없습니다. 팀 탈퇴를 이용해주세요",
+          data: null,
+        };
+      case "REJECTED":
+        return {
+          success: false,
+          error: "이미 거절된 가입 신청입니다",
+          data: null,
+        };
+      case "LEAVE":
+        return {
+          success: false,
+          error: "이미 팀을 떠난 상태입니다",
+          data: null,
+        };
+      default:
+        return {
+          success: false,
+          error: "알 수 없는 상태입니다",
+          data: null,
+        };
+    }
+
+    // 4. 가입 신청 취소 (레코드 삭제)
+    const cancelledMember = await prisma.teamMember.delete({
+      where: { id: existingMember.id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    revalidatePath(`/teams/${teamId}`);
+
+    return {
+      success: true,
+      message: "가입 신청이 취소되었습니다",
+      data: cancelledMember,
+    };
+  } catch (error) {
+    console.error("가입 신청 취소 실패:", error);
+
+    // Prisma 에러 타입별 처리
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      switch (error.code) {
+        case "P2025": // Record not found
+          return {
+            success: false,
+            error: "가입 신청 내역을 찾을 수 없습니다",
+            data: null,
+          };
+        case "P2003": // Foreign key constraint violation
+          return {
+            success: false,
+            error: "유효하지 않은 요청입니다",
+            data: null,
+          };
+        default:
+          console.error("알 수 없는 Prisma 에러:", error);
+      }
+    }
+
+    return {
+      success: false,
+      error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요",
+      data: null,
+    };
+  }
+}
+
+// 추가: 팀 탈퇴 함수 (승인된 멤버용)
+export async function leaveTeam(teamId: string) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      error: "로그인이 필요합니다",
+      data: null,
+    };
+  }
+
+  try {
+    // 1. 팀이 존재하는지 확인
+    const existingTeam = await prisma.team.findUnique({
+      where: { id: teamId },
+    });
+
+    if (!existingTeam) {
+      return {
+        success: false,
+        error: "존재하지 않는 팀입니다",
+        data: null,
+      };
+    }
+
+    // 2. 현재 사용자의 팀 멤버십 확인
+    const existingMember = await prisma.teamMember.findUnique({
+      where: {
+        teamId_userId: {
+          teamId,
+          userId: session.user.id,
+        },
+      },
+    });
+
+    if (!existingMember) {
+      return {
+        success: false,
+        error: "팀 멤버가 아닙니다",
+        data: null,
+      };
+    }
+
+    // 3. 상태 확인
+    if (existingMember.status !== "APPROVED") {
+      return {
+        success: false,
+        error: "승인된 멤버만 팀을 탈퇴할 수 있습니다",
+        data: null,
+      };
+    }
+
+    // 4. 팀 오너인지 확인 (오너는 탈퇴 불가)
+    if (existingMember.role === "OWNER") {
+      return {
+        success: false,
+        error:
+          "팀 오너는 팀을 탈퇴할 수 없습니다. 팀을 삭제하거나 오너 권한을 이양해주세요",
+        data: null,
+      };
+    }
+
+    // 5. 팀 탈퇴 처리 (상태를 LEAVE로 변경)
+    const leftMember = await prisma.teamMember.update({
+      where: { id: existingMember.id },
+      data: {
+        status: "LEAVE",
+        joinedAt: null, // 탈퇴 시 가입일 초기화
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    revalidatePath(`/teams/${teamId}`);
+
+    return {
+      success: true,
+      message: "팀에서 탈퇴했습니다",
+      data: leftMember,
+    };
+  } catch (error) {
+    console.error("팀 탈퇴 실패:", error);
+
+    // Prisma 에러 타입별 처리
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      switch (error.code) {
+        case "P2025": // Record not found
+          return {
+            success: false,
+            error: "멤버 정보를 찾을 수 없습니다",
+            data: null,
+          };
+        default:
+          console.error("알 수 없는 Prisma 에러:", error);
+      }
+    }
+
+    return {
+      success: false,
+      error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요",
+      data: null,
+    };
+  }
+}
+
+export async function approveTeamMember(teamId: string, targetUserId: string) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      error: "로그인이 필요합니다",
+      data: null,
+    };
+  }
+
+  try {
+    // 1. 팀이 존재하는지 확인
+    const existingTeam = await prisma.team.findUnique({
+      where: { id: teamId },
+    });
+
+    if (!existingTeam) {
+      return {
+        success: false,
+        error: "존재하지 않는 팀입니다",
+        data: null,
+      };
+    }
+
+    // 2. 현재 사용자가 팀의 관리자인지 확인
+    const currentUserMember = await prisma.teamMember.findUnique({
+      where: {
+        teamId_userId: {
+          teamId,
+          userId: session.user.id,
+        },
+      },
+    });
+
+    if (!currentUserMember) {
+      return {
+        success: false,
+        error: "팀 멤버가 아닙니다",
+        data: null,
+      };
+    }
+
+    if (
+      currentUserMember.role !== "OWNER" &&
+      currentUserMember.role !== "MANAGER"
+    ) {
+      return {
+        success: false,
+        error:
+          "가입 승인 권한이 없습니다. 팀 오너 또는 관리자만 승인할 수 있습니다",
+        data: null,
+      };
+    }
+
+    if (currentUserMember.status !== "APPROVED") {
+      return {
+        success: false,
+        error: "승인된 멤버만 다른 멤버를 승인할 수 있습니다",
+        data: null,
+      };
+    }
+
+    // 3. 승인할 대상 멤버 확인
+    const targetMember = await prisma.teamMember.findUnique({
+      where: {
+        teamId_userId: {
+          teamId,
+          userId: targetUserId,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    if (!targetMember) {
+      return {
+        success: false,
+        error: "승인할 가입 신청을 찾을 수 없습니다",
+        data: null,
+      };
+    }
+
+    // 4. 상태별 처리
+    switch (targetMember.status) {
+      case "PENDING":
+        // PENDING 상태인 경우만 승인 가능
+        break;
+      case "APPROVED":
+        return {
+          success: false,
+          error: "이미 승인된 멤버입니다",
+          data: null,
+        };
+      case "REJECTED":
+        return {
+          success: false,
+          error: "거절된 가입 신청입니다. 사용자가 다시 가입 신청해야 합니다",
+          data: null,
+        };
+      case "LEAVE":
+        return {
+          success: false,
+          error: "팀을 떠난 사용자입니다. 사용자가 다시 가입 신청해야 합니다",
+          data: null,
+        };
+      default:
+        return {
+          success: false,
+          error: "알 수 없는 상태입니다",
+          data: null,
+        };
+    }
+
+    // 5. 가입 승인 처리
+    const approvedMember = await prisma.teamMember.update({
+      where: { id: targetMember.id },
+      data: {
+        status: "APPROVED",
+        joinedAt: new Date(), // 실제 승인된 날짜 기록
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+            image: true,
+            skillLevel: true,
+            playerBackground: true,
+            position: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    revalidatePath(`/teams/${teamId}`);
+
+    return {
+      success: true,
+      message: `${
+        approvedMember.user.nickname || approvedMember.user.name
+      }님의 가입을 승인했습니다`,
+      data: approvedMember,
+    };
+  } catch (error) {
+    console.error("가입 승인 실패:", error);
+
+    // Prisma 에러 타입별 처리
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      switch (error.code) {
+        case "P2025": // Record not found
+          return {
+            success: false,
+            error: "승인할 멤버를 찾을 수 없습니다",
+            data: null,
+          };
+        case "P2003": // Foreign key constraint violation
+          return {
+            success: false,
+            error: "유효하지 않은 요청입니다",
+            data: null,
+          };
+        default:
+          console.error("알 수 없는 Prisma 에러:", error);
+      }
+    }
+
+    return {
+      success: false,
+      error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요",
+      data: null,
+    };
+  }
+}
+
+// 추가: 가입 거절 함수
+export async function rejectTeamMember(
+  teamId: string,
+  targetUserId: string,
+  reason?: string
+) {
+  const session = await auth();
+  console.log(reason, "reason");
+
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      error: "로그인이 필요합니다",
+      data: null,
+    };
+  }
+
+  try {
+    // 1. 팀이 존재하는지 확인
+    const existingTeam = await prisma.team.findUnique({
+      where: { id: teamId },
+    });
+
+    if (!existingTeam) {
+      return {
+        success: false,
+        error: "존재하지 않는 팀입니다",
+        data: null,
+      };
+    }
+
+    // 2. 현재 사용자가 팀의 관리자인지 확인
+    const currentUserMember = await prisma.teamMember.findUnique({
+      where: {
+        teamId_userId: {
+          teamId,
+          userId: session.user.id,
+        },
+      },
+    });
+
+    if (
+      !currentUserMember ||
+      (currentUserMember.role !== "OWNER" &&
+        currentUserMember.role !== "MANAGER") ||
+      currentUserMember.status !== "APPROVED"
+    ) {
+      return {
+        success: false,
+        error: "가입 거절 권한이 없습니다",
+        data: null,
+      };
+    }
+
+    // 3. 거절할 대상 멤버 확인
+    const targetMember = await prisma.teamMember.findUnique({
+      where: {
+        teamId_userId: {
+          teamId,
+          userId: targetUserId,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+          },
+        },
+      },
+    });
+
+    if (!targetMember || targetMember.status !== "PENDING") {
+      return {
+        success: false,
+        error: "거절할 수 있는 가입 신청이 없습니다",
+        data: null,
+      };
+    }
+
+    // 4. 가입 거절 처리
+    const rejectedMember = await prisma.teamMember.update({
+      where: { id: targetMember.id },
+      data: {
+        status: "REJECTED",
+        // 거절 사유가 있다면 메모 필드에 저장 (스키마에 memo 필드가 있다면)
+        // memo: reason,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    revalidatePath(`/teams/${teamId}`);
+
+    return {
+      success: true,
+      message: `${
+        rejectedMember.user.nickname || rejectedMember.user.name
+      }님의 가입을 거절했습니다`,
+      data: rejectedMember,
+    };
+  } catch (error) {
+    console.error("가입 거절 실패:", error);
 
     return {
       success: false,

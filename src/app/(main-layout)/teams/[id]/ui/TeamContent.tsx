@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { getTeam, joinTeam } from "../model/actions";
+import { cancelJoinTeam, getTeam, joinTeam } from "../model/actions";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -52,7 +52,7 @@ const TeamContent = ({ id }: { id: string }) => {
   // console.log(session, "session");
   // console.log(id, "id");
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["team", id],
     queryFn: () => getTeam(id),
     enabled: !!id, // id 없으면 fetch 안 함
@@ -248,6 +248,7 @@ const TeamContent = ({ id }: { id: string }) => {
                           console.log(result);
                           if (result?.success) {
                             alert("가입 신청이 완료되었습니다.");
+                            refetch();
                           } else {
                             alert(result?.error);
                           }
@@ -284,6 +285,21 @@ const TeamContent = ({ id }: { id: string }) => {
                   className="w-full text-base font-semibold"
                   size="lg"
                   variant="outline"
+                  onClick={async () => {
+                    try {
+                      const result = await cancelJoinTeam(id);
+                      console.log(result);
+                      if (result?.success) {
+                        alert("가입 신청이 취소되었습니다.");
+                        refetch();
+                      } else {
+                        alert(result?.error);
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      alert("가입 신청 취소에 실패했습니다.");
+                    }
+                  }}
                 >
                   가입신청 취소
                 </Button>
@@ -468,6 +484,8 @@ const TeamContent = ({ id }: { id: string }) => {
               isMember={data.data.currentUserMembership.isMember}
               role={data.data.currentUserMembership.role}
               status={data.data.currentUserMembership.status}
+              refetch={refetch}
+              teamId={id}
             />
           )}
 
@@ -536,7 +554,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.members.length}명
+                      {data.data.members.approved.length}명
                     </div>
                     <Label className="text-muted-foreground">팀원</Label>
                   </div>
