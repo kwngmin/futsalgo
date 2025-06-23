@@ -22,7 +22,6 @@ import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
 import TeamPlayers from "./TeamPlayers";
-import ManagePlayers from "./ManagePlayers";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -43,10 +42,6 @@ const tabs = [
   {
     label: "팀원",
     value: "members",
-  },
-  {
-    label: "팀원 관리",
-    value: "management",
   },
 ];
 
@@ -123,7 +118,7 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
           <div className="bg-white rounded-2xl">
-            <div className="flex justify-between items-center px-3 pt-3">
+            <div className="flex justify-end items-center px-3 pt-3">
               {/* {data.data.recruitmentStatus === "RECRUITING" ? (
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
                   <div className="rounded-full size-2 bg-indigo-600 " />
@@ -135,9 +130,9 @@ const TeamContent = ({ id }: { id: string }) => {
                   팀원 모집 완료
                 </div>
               )} */}
-              <span className="px-2 text-sm font-medium text-gray-500">
+              {/* <span className="px-2 text-sm font-medium text-gray-500">
                 #{data.data.code}
-              </span>
+              </span> */}
               {id === session.data?.user.id ? (
                 <div className="h-7 " />
               ) : (
@@ -165,7 +160,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-24">
+            <div className="flex items-center gap-4 px-6 h-20">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
@@ -183,9 +178,9 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="flex flex-col">
                 <h1 className="text-lg font-semibold">
                   {data?.data?.name}
-                  {/* <span className="text-base font-normal text-gray-500 ml-2">
+                  <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
-                  </span> */}
+                  </span>
                 </h1>
                 <p className="text-sm text-gray-500 mt-0.5">
                   {`${
@@ -270,21 +265,28 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Button>
                 ) : null
               ) : data.data.currentUserMembership.status === "PENDING" ? (
-                <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
-                  <div className="flex items-center px-2">
-                    {/* <Hourglass className="w-5 h-5 mr-3 stroke-indigo-700" /> */}
-                    <span className="font-medium text-slate-700">
-                      승인 대기중
-                    </span>
-                  </div>
-                  <Button
-                    className="text-sm font-semibold text-slate-700"
-                    variant="outline"
-                    size="sm"
-                  >
-                    가입신청 취소
-                  </Button>
-                </div>
+                // <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
+                //   <div className="flex items-center px-2">
+                //     {/* <Hourglass className="w-5 h-5 mr-3 stroke-indigo-700" /> */}
+                //     <span className="font-medium text-slate-700">
+                //       승인 대기중
+                //     </span>
+                //   </div>
+                //   <Button
+                //     className="text-sm font-semibold text-slate-700"
+                //     variant="outline"
+                //     size="sm"
+                //   >
+                //     가입신청 취소
+                //   </Button>
+                // </div>
+                <Button
+                  className="w-full text-base font-semibold"
+                  size="lg"
+                  variant="secondary"
+                >
+                  가입신청 취소
+                </Button>
               ) : (
                 data.data.currentUserMembership.status === "REJECTED" && (
                   <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
@@ -342,13 +344,13 @@ const TeamContent = ({ id }: { id: string }) => {
                   ))}
               </div>
               {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-6 rounded-full bg-indigo-500/10">
-                  <div className="rounded-full size-2 bg-indigo-600 " />
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-6">
+                  <div className="rounded-full size-2 bg-indigo-600" />
                   팀원 모집중
                 </div>
               ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-6 rounded-full bg-gray-100">
-                  <div className="rounded-full size-2 bg-gray-400 " />
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-6">
+                  <div className="rounded-full size-2 bg-gray-400" />
                   팀원 모집 완료
                 </div>
               )}
@@ -462,16 +464,6 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 팀원 */}
           {selectedTab === "members" && (
             <TeamPlayers
-              members={data.data.members}
-              isMember={data.data.currentUserMembership.isMember}
-              role={data.data.currentUserMembership.role}
-              status={data.data.currentUserMembership.status}
-            />
-          )}
-
-          {/* 팀원 관리 */}
-          {selectedTab === "management" && (
-            <ManagePlayers
               members={data.data.members}
               isMember={data.data.currentUserMembership.isMember}
               role={data.data.currentUserMembership.role}
