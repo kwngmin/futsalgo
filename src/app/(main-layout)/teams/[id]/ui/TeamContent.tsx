@@ -135,8 +135,8 @@ const TeamContent = ({ id }: { id: string }) => {
                   팀원 모집 완료
                 </div>
               )} */}
-              <span className="text-sm font-normal text-gray-500 ml-2">
-                팀 코드: #{data.data.code}
+              <span className="px-2 text-sm font-medium text-gray-500">
+                #{data.data.code}
               </span>
               {id === session.data?.user.id ? (
                 <div className="h-7 " />
