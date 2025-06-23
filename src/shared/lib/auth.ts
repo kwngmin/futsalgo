@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import Kakao from "next-auth/providers/kakao";
+import Naver from "next-auth/providers/naver";
 
 declare module "next-auth" {
   interface Session {
@@ -62,7 +63,7 @@ export function CustomPrismaAdapter(): Adapter {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomPrismaAdapter(),
-  providers: [Google, Kakao],
+  providers: [Google, Kakao, Naver],
   // 세션 전략을 JWT로 설정
   session: {
     strategy: "jwt",
