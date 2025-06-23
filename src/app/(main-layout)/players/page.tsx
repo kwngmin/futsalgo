@@ -106,7 +106,11 @@ const PlayersPage = () => {
           <div>
             {isLoggedIn && data?.data?.user ? (
               <div className="space-y-3">
-                <PlayerCard player={data?.data?.user} isCurrentUser={true} />
+                <PlayerCard
+                  player={data?.data?.user}
+                  isCurrentUser={true}
+                  teamName={data?.data?.user?.teams[0]?.team?.name}
+                />
               </div>
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
