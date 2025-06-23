@@ -15,11 +15,63 @@ export async function getPlayers() {
             },
           }
         : {},
+      include: {
+        teams: {
+          where: {
+            status: "APPROVED", // 승인된 팀 멤버십만 포함
+          },
+          select: {
+            team: {
+              select: {
+                id: true,
+                name: true,
+                logoUrl: true,
+                description: true,
+                city: true,
+                district: true,
+                status: true,
+                recruitmentStatus: true,
+                gender: true,
+                level: true,
+              },
+            },
+            status: true,
+            role: true,
+            joinedAt: true,
+          },
+        },
+      },
     });
 
     if (session?.user?.id) {
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
+        include: {
+          teams: {
+            where: {
+              status: "APPROVED", // 현재 사용자의 승인된 팀 멤버십도 포함
+            },
+            select: {
+              team: {
+                select: {
+                  id: true,
+                  name: true,
+                  logoUrl: true,
+                  description: true,
+                  city: true,
+                  district: true,
+                  status: true,
+                  recruitmentStatus: true,
+                  gender: true,
+                  level: true,
+                },
+              },
+              status: true,
+              role: true,
+              joinedAt: true,
+            },
+          },
+        },
       });
 
       return {

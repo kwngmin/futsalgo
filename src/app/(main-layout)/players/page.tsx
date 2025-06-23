@@ -158,7 +158,11 @@ const PlayersPage = () => {
             {/* 선수 목록 */}
             <div className="space-y-3">
               {filteredPlayers?.map((player) => (
-                <PlayerCard key={player.id} player={player} />
+                <PlayerCard
+                  key={player.id}
+                  player={player}
+                  teamName={player.teams[0]?.team?.name}
+                />
               ))}
             </div>
           </div>

@@ -5,9 +5,14 @@ import { useRouter } from "next/navigation";
 type PlayerCardProps = {
   player: User;
   isCurrentUser?: boolean;
+  teamName?: string;
 };
 
-const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
+const PlayerCard = ({
+  player,
+  isCurrentUser = false,
+  teamName,
+}: PlayerCardProps) => {
   const router = useRouter();
   return (
     <div
@@ -61,8 +66,8 @@ const PlayerCard = ({ player, isCurrentUser = false }: PlayerCardProps) => {
             )} */}
           </div>
           <p className="text-gray-600 text-sm line-clamp-1">
-            {/* {player.teamName || "무소속"} */}
-            소속 팀 없음
+            {teamName || "소속 팀 없음"}
+            {/* 소속 팀 없음 */}
           </p>
         </div>
 
