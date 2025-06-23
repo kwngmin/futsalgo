@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeams, GetTeamsResponse } from "./model/actions";
@@ -10,13 +10,13 @@ import Image from "next/image";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import { Team } from "@prisma/client";
 
-type FilterType = "all" | "male" | "female";
+// type FilterType = "all" | "male" | "female";
 
 const TeamsPage = () => {
   const router = useRouter();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
-  const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
+  // const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
 
   // 필터에 따라 팀 목록 필터링
   // const filteredTeams = teams.filter((team) => {
@@ -25,11 +25,11 @@ const TeamsPage = () => {
   // });
 
   // 필터 옵션들
-  const filterOptions = [
-    { id: "all", label: "전체" },
-    { id: "male", label: "남성" },
-    { id: "female", label: "여성" },
-  ];
+  // const filterOptions = [
+  //   { id: "all", label: "전체" },
+  //   { id: "male", label: "남성" },
+  //   { id: "female", label: "여성" },
+  // ];
 
   const { data, isLoading, error } = useQuery<GetTeamsResponse>({
     queryKey: ["teams"],
@@ -134,7 +134,7 @@ const TeamsPage = () => {
           {/* 다른 팀 섹션 */}
           <div className="flex flex-col gap-2">
             {/* 하단: 필터 칩들 */}
-            <div className="flex items-center gap-2 justify-between hidden">
+            {/* <div className="flex items-center gap-2 justify-between hidden">
               <div className="flex gap-1 bg-gray-100 rounded-full p-1">
                 {filterOptions.map((option) => (
                   <button
@@ -144,14 +144,13 @@ const TeamsPage = () => {
                       selectedFilter === option.id
                         ? "bg-black text-white font-bold"
                         : "text-gray-700 hover:bg-gray-50"
-                      //   : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
                     }`}
                   >
                     {option.label}
                   </button>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             {/* 선수 목록 헤더 */}
             <div className="flex items-center justify-between">
@@ -163,9 +162,11 @@ const TeamsPage = () => {
               </span>
             </div>
 
-            {data?.data?.teams.map((team) => (
-              <TeamCard key={team.id} team={team} />
-            ))}
+            <div className="bg-white rounded-2xl">
+              {data?.data?.teams.map((team) => (
+                <TeamCard key={team.id} team={team} />
+              ))}
+            </div>
           </div>
         </div>
       ) : (

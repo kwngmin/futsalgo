@@ -83,7 +83,6 @@ const TeamContent = ({ id }: { id: string }) => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-3">
-        {/* <div className="w-20"> */}
         <Button
           variant="ghost"
           size="lg"
@@ -92,11 +91,7 @@ const TeamContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
           <h1 className="text-2xl font-bold">팀 정보</h1>
-          {/* <h1 className="grow flex justify-center text-lg font-semibold">
-            팀 정보
-          </h1> */}
         </Button>
-        {/* </div> */}
 
         <div className="flex items-center justify-end gap-3 px-3">
           {/* <Button
@@ -239,7 +234,8 @@ const TeamContent = ({ id }: { id: string }) => {
               !data.data.currentUserMembership.isMember ? (
                 data.data.recruitmentStatus === "RECRUITING" ? (
                   <Button
-                    className="w-full text-base font-semibold bg-indigo-700"
+                    // className="w-full text-base font-semibold bg-indigo-700"
+                    className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
                     size="lg"
                     onClick={async () => {
                       if (session.data) {
