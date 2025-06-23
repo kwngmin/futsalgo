@@ -342,12 +342,12 @@ const TeamContent = ({ id }: { id: string }) => {
                   ))}
               </div>
               {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full">
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-6 rounded-full bg-indigo-500/10">
                   <div className="rounded-full size-2 bg-indigo-600 " />
                   팀원 모집중
                 </div>
               ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-gray-100">
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-6 rounded-full bg-gray-100">
                   <div className="rounded-full size-2 bg-gray-400 " />
                   팀원 모집 완료
                 </div>
