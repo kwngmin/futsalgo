@@ -191,22 +191,37 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="p-3">
               {data.data.currentUserMembership.role === "MANAGER" ||
               data.data.currentUserMembership.role === "OWNER" ? (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => {
-                    alert("팀 관리하기");
-                  }}
-                  // onClick={() => router.push(`/players/${member.userId}`)}
-                  className="w-full text-base font-semibold cursor-pointer"
-                >
-                  팀 정보 수정
-                  {/* <div className="flex items-center space-x-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    // variant="secondary"
+                    variant="outline"
+                    size="lg"
+                    onClick={() => {
+                      alert("팀 관리하기");
+                    }}
+                    // onClick={() => router.push(`/players/${member.userId}`)}
+                    className="w-full text-base font-semibold cursor-pointer"
+                  >
+                    팀 정보 수정
+                    {/* <div className="flex items-center space-x-3">
                   <Settings className="size-5 text-gray-600" />
                   <span className="font-medium">팀 관리하기</span>
                 </div> */}
-                  {/* <ChevronRight className={`w-5 h-5 text-gray-400}`} /> */}
-                </Button>
+                    {/* <ChevronRight className={`w-5 h-5 text-gray-400}`} /> */}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    // variant="secondary"
+                    size="lg"
+                    onClick={() => {
+                      alert("팀 관리하기");
+                    }}
+                    // onClick={() => router.push(`/players/${member.userId}`)}
+                    className="w-full text-base font-semibold cursor-pointer"
+                  >
+                    팀원 관리
+                  </Button>
+                </div>
               ) : // <div className="grid grid-cols-2 gap-2">
               //   <Button
               //     variant="outline"

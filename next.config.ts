@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       "lh3.googleusercontent.com", // Google 프로필 이미지
       "t1.kakaocdn.net", // 카카오 프로필 이미지
       "img1.kakaocdn.net", // 카카오 프로필 이미지
+      "k.kakaocdn.net",
       "dthumb-phinf.pstatic.net", // 필요 시 네이버 등 다른 외부 도메인도 추가
     ],
   },
