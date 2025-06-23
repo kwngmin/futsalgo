@@ -67,11 +67,42 @@ const TeamPlayers = ({
                 alt="profile"
                 width={40}
                 height={40}
-                className="rounded-full"
-              />{" "}
-              <span className="font-medium">
-                {member.user.nickname || "팀원"}
-              </span>
+                className="rounded-full size-10"
+              />
+              <div className="flex flex-col items-start">
+                <span className="font-medium flex items-center gap-1.5">
+                  {member.user.nickname || "닉네임 없음"}
+                  {member.user.gender === "MALE" ? (
+                    <div className="flex items-center bg-blue-500/5 rounded p-0.5">
+                      <Mars
+                        className="size-4 stroke-blue-700"
+                        strokeWidth={2}
+                      />
+                      {/* <span className="text-sm text-gray-500">남</span> */}
+                    </div>
+                  ) : (
+                    <div className="flex items-center bg-red-500/5 rounded p-0.5">
+                      <Venus
+                        className="size-4 stroke-red-700"
+                        strokeWidth={2}
+                      />
+                    </div>
+                  )}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {`${member.user.name || "미설정"} • ${
+                    GENDER[member.user.gender as keyof typeof GENDER]
+                  } • ${
+                    member.user.birthDate
+                      ? getCurrentAge(member.user.birthDate).success
+                        ? `${getCurrentAge(member.user.birthDate).age}세`
+                        : "생년월일 미설정"
+                      : "생년월일 미설정"
+                  } • ${
+                    member.user.height ? `${member.user.height}cm` : "키 미설정"
+                  }`}
+                </span>
+              </div>
             </div>
             <ChevronRight className={`w-5 h-5 text-gray-400}`} />
           </button>

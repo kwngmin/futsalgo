@@ -283,7 +283,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <Button
                   className="w-full text-base font-semibold"
                   size="lg"
-                  variant="secondary"
+                  variant="outline"
                 >
                   가입신청 취소
                 </Button>
