@@ -33,9 +33,9 @@ import { TEAM_GENDER } from "@/entities/team/model/constants";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
-  "/assets/images/team-logo-sample-2.png",
-  "/assets/images/team-logo-sample-3.png",
-  "/assets/images/team-logo-sample-4.png",
+  // "/assets/images/team-logo-sample-2.png",
+  // "/assets/images/team-logo-sample-3.png",
+  // "/assets/images/team-logo-sample-4.png",
 ];
 
 const PlayerContent = ({ id }: { id: string }) => {

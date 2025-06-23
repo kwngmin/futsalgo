@@ -12,6 +12,7 @@ import {
   // Hourglass,
   // Settings,
   Share,
+  Text,
   // Volleyball,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,6 +22,7 @@ import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
 import TeamPlayers from "./TeamPlayers";
+import ManagePlayers from "./ManagePlayers";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -34,13 +36,17 @@ const tabs = [
     label: "개요",
     value: "overview",
   },
+  // {
+  //   label: "소개",
+  //   value: "introduction",
+  // },
   {
-    label: "소개",
-    value: "introduction",
+    label: "팀원",
+    value: "members",
   },
   {
-    label: "명단",
-    value: "members",
+    label: "팀원 관리",
+    value: "management",
   },
 ];
 
@@ -117,8 +123,8 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
           <div className="bg-white rounded-2xl">
-            <div className="flex justify-between items-center px-3 pt-3 h-12">
-              {data.data.recruitmentStatus === "RECRUITING" ? (
+            <div className="flex justify-between items-center px-3 pt-3">
+              {/* {data.data.recruitmentStatus === "RECRUITING" ? (
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
                   <div className="rounded-full size-2 bg-indigo-600 " />
                   팀원 모집중
@@ -128,7 +134,10 @@ const TeamContent = ({ id }: { id: string }) => {
                   <div className="rounded-full size-2 bg-gray-400 " />
                   팀원 모집 완료
                 </div>
-              )}
+              )} */}
+              <span className="text-sm font-normal text-gray-500 ml-2">
+                팀 코드: #{data.data.code}
+              </span>
               {id === session.data?.user.id ? (
                 <div className="h-7 " />
               ) : (
@@ -156,7 +165,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-28">
+            <div className="flex items-center gap-4 px-6 h-24">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
@@ -174,9 +183,9 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="flex flex-col">
                 <h1 className="text-lg font-semibold">
                   {data?.data?.name}
-                  <span className="text-base font-normal text-gray-500 ml-2">
+                  {/* <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
-                  </span>
+                  </span> */}
                 </h1>
                 <p className="text-sm text-gray-500 mt-0.5">
                   {`${
@@ -306,21 +315,43 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
 
             {/* 탭 */}
-            <div className="flex px-3 h-12 space-x-2">
-              {tabs.map((tab) => (
-                <div
-                  key={tab.value}
-                  className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
-                    selectedTab === tab.value
-                      ? "border-gray-500"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => setSelectedTab(tab.value)}
-                >
-                  {tab.label}
-                  {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
+            <div className="flex items-center justify-between gap-2 px-3">
+              <div className="flex h-12 space-x-2">
+                {tabs
+                  .filter(
+                    (tab) =>
+                      tab.value !== "management" ||
+                      (tab.value === "management" &&
+                        (data.data.currentUserMembership.role === "MANAGER" ||
+                          data.data.currentUserMembership.role === "OWNER") &&
+                        data.data.currentUserMembership.status === "APPROVED")
+                  )
+                  .map((tab) => (
+                    <div
+                      key={tab.value}
+                      className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
+                        selectedTab === tab.value
+                          ? "border-gray-500"
+                          : "border-transparent"
+                      }`}
+                      onClick={() => setSelectedTab(tab.value)}
+                    >
+                      {tab.label}
+                      {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
+                    </div>
+                  ))}
+              </div>
+              {data.data.recruitmentStatus === "RECRUITING" ? (
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full">
+                  <div className="rounded-full size-2 bg-indigo-600 " />
+                  팀원 모집중
                 </div>
-              ))}
+              ) : (
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-gray-100">
+                  <div className="rounded-full size-2 bg-gray-400 " />
+                  팀원 모집 완료
+                </div>
+              )}
             </div>
           </div>
 
@@ -417,17 +448,34 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 소개 */}
           {selectedTab === "introduction" && (
-            <p className="px-4 py-4 bg-white rounded-2xl min-h-32">
-              {data?.data?.description ?? "소개 없음"}
-            </p>
+            <div className="bg-white rounded-2xl pb-3">
+              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                <ChartPie className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">팀원 실력</span>
+              </div>
+              <p className="px-4 py-4 bg-white rounded-2xl min-h-32">
+                {data?.data?.description ?? "소개 없음"}
+              </p>
+            </div>
           )}
 
-          {/* 명단 */}
+          {/* 팀원 */}
           {selectedTab === "members" && (
             <TeamPlayers
               members={data.data.members}
               isMember={data.data.currentUserMembership.isMember}
               role={data.data.currentUserMembership.role}
+              status={data.data.currentUserMembership.status}
+            />
+          )}
+
+          {/* 팀원 관리 */}
+          {selectedTab === "management" && (
+            <ManagePlayers
+              members={data.data.members}
+              isMember={data.data.currentUserMembership.isMember}
+              role={data.data.currentUserMembership.role}
+              status={data.data.currentUserMembership.status}
             />
           )}
 
@@ -564,6 +612,17 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
 
+              {/* 소개 */}
+              <div className="bg-white rounded-2xl pb-3">
+                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                  <Text className={`w-5 h-5 text-gray-600`} />
+                  <span className="font-medium">소개</span>
+                </div>
+                <p className="px-4 py-4 bg-white rounded-2xl">
+                  {data?.data?.description ?? "소개 없음"}
+                </p>
+              </div>
+
               {/* 친선 경기 */}
               {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
                 <button
@@ -654,12 +713,6 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <Label className="text-muted-foreground">세미프로</Label>
               </div>
-            </div>
-          </div> */}
-
-          {/* <div className="bg-slate-300">
-            <div className="w-fit p-3">
-              <FutsalPitch className="w-24" fill="gray" />
             </div>
           </div> */}
         </div>

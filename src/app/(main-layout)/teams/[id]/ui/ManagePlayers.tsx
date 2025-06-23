@@ -29,7 +29,7 @@ interface TeamMemberWithUser extends TeamMember {
   >;
 }
 
-const TeamPlayers = ({
+const ManagePlayers = ({
   members,
   isMember,
   role,
@@ -51,7 +51,6 @@ const TeamPlayers = ({
     (member) => member.status === "APPROVED"
   );
 
-  // 팀원 목록 조회
   if (!isMember || (isMember && status === "PENDING")) {
     return (
       <div className="bg-white rounded-lg overflow-hidden">
@@ -222,4 +221,4 @@ const TeamPlayers = ({
   );
 };
 
-export default TeamPlayers;
+export default ManagePlayers;
