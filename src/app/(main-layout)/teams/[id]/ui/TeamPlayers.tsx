@@ -72,7 +72,7 @@ const TeamPlayers = ({
                 className="rounded-full size-10"
               />
               <div className="flex flex-col items-start">
-                <span className="text-lg font-medium flex items-center gap-1.5">
+                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5">
                   {member.user.nickname || "닉네임 없음"}
                   {/* {member.user.gender === "MALE" ? (
                     <div className="flex items-center bg-blue-500/5 rounded p-0.5">
@@ -140,7 +140,7 @@ const TeamPlayers = ({
                   className="rounded-full size-10"
                 />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg font-medium flex items-center gap-1.5">
+                  <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5">
                     {member.user.nickname || "닉네임 없음"}
                   </span>
                   <span className="text-sm text-gray-500">
@@ -166,7 +166,7 @@ const TeamPlayers = ({
                 <ChevronRight className={`w-5 h-5 text-gray-400}`} />
               </div>
             </button>
-            <div className="mx-3 my-1 p-1 grid grid-cols-2 gap-2">
+            <div className="px-4 py-2 mb-3 grid grid-cols-2 gap-2">
               <Button
                 variant="outline"
                 className="font-semibold"
@@ -210,7 +210,7 @@ const TeamPlayers = ({
                 className="rounded-full"
               />
               <div className="flex flex-col items-start">
-                <span className="text-lg font-medium flex items-center gap-1.5">
+                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
                     <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded pl-1 pr-1.5 h-5">

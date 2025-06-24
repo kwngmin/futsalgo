@@ -114,6 +114,19 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 팀 정보 */}
           <div className="bg-white rounded-2xl">
             <div className="flex justify-end items-center p-3 pb-0">
+              {/* <p className="text-sm text-gray-500 px-2">
+                팀 생성일:{" "}
+                {data?.data?.createdAt
+                  ? new Date(data?.data?.createdAt).toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
+                  : ""}
+              </p> */}
               {/* {false ? (
                 <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-2 h-6">
                   <div className="rounded-full size-2 bg-green-600 " />
@@ -177,7 +190,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </span> */}
                 </h1>
-                <p className="font-medium">
+                <p className="">
                   주요 활동 지역:{" "}
                   {`${
                     data?.data?.city && data?.data?.district
