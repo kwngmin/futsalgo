@@ -151,14 +151,15 @@ const PlayersPage = () => {
             </div> */}
 
             {/* 선수 목록 헤더 */}
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium px-2 text-gray-600">
                 선수 • {filteredPlayers?.length}명
               </h3>
               <span className="text-xs text-gray-500 mr-3 w-12 text-center">
                 경기
               </span>
-            </div>
+            </div> */}
+
             {/* 선수 목록 */}
             <div className="bg-white rounded-2xl">
               {filteredPlayers?.map((player) => (

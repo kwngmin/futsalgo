@@ -154,14 +154,14 @@ const TeamsPage = () => {
             </div> */}
 
             {/* 선수 목록 헤더 */}
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <h3 className="text-sm font-medium px-2 text-gray-600">
                 팀 • {data?.data?.teams.length}
               </h3>
               <span className="text-xs text-gray-500 mr-3 w-12 text-center">
                 팀원
               </span>
-            </div>
+            </div> */}
 
             <div className="bg-white rounded-2xl">
               {data?.data?.teams.map((team) => (
