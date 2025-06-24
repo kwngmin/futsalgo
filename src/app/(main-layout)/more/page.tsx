@@ -107,7 +107,7 @@ const MorePage = () => {
         {!session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <h3 className="font-semibold text-gray-900">
-              서비스를 이용하기 위해 로그인이 필요합니다
+              원활한 서비스 이용을 위해 로그인이 필요합니다
             </h3>
             <div className="flex gap-2 justify-center mt-3">
               <button

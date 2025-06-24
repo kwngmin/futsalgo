@@ -79,7 +79,7 @@ const TeamPlayers = ({
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
-                        ? `${getCurrentAge(member.user.birthDate).age}세`
+                        ? `${getCurrentAge(member.user.birthDate).age}살`
                         : "생년월일 미설정"
                       : "생년월일 미설정"
                   } • ${
@@ -125,14 +125,14 @@ const TeamPlayers = ({
                   className="rounded-full size-10"
                 />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
+                  <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                     {member.user.nickname || "닉네임 없음"}
-                  </span>
+                  </h3>
                   <span className="sm:text-sm text-gray-500">
                     {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                       member.user.birthDate
                         ? getCurrentAge(member.user.birthDate).success
-                          ? `${getCurrentAge(member.user.birthDate).age}세`
+                          ? `${getCurrentAge(member.user.birthDate).age}살`
                           : "생년월일 미설정"
                         : "생년월일 미설정"
                     } • ${
@@ -260,7 +260,7 @@ const TeamPlayers = ({
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
-                        ? `${getCurrentAge(member.user.birthDate).age}세`
+                        ? `${getCurrentAge(member.user.birthDate).age}살`
                         : "생년월일 미설정"
                       : "생년월일 미설정"
                   } • ${

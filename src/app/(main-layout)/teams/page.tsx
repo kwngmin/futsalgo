@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import { Team } from "@prisma/client";
+import { TEAM_GENDER } from "@/entities/team/model/constants";
 
 // type FilterType = "all" | "male" | "female";
 
@@ -89,7 +90,7 @@ const TeamsPage = () => {
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
                 <h3 className="font-semibold text-gray-900">
-                  서비스를 이용하기 위해 로그인이 필요합니다
+                  원활한 서비스 이용을 위해 로그인이 필요합니다
                 </h3>
                 <div className="flex gap-2 justify-center mt-3">
                   <button
@@ -185,17 +186,15 @@ type TeamCardProps = {
   isMyTeam?: boolean;
 };
 
-const TeamCard = ({ team, isMyTeam = false }: TeamCardProps) => {
+const TeamCard = ({ team }: TeamCardProps) => {
   const router = useRouter();
 
   return (
     <div
-      className={`bg-white rounded-2xl p-3 hover:shadow-sm/5 transition-shadow cursor-pointer ${
-        isMyTeam ? "ring-2 ring-accent" : ""
-      }`}
+      className="border-t border-gray-100 first:border-t-0 px-3 py-4 hover:bg-gray-50 transition-colors cursor-pointer"
       onClick={() => router.push(`/teams/${team.id}`)}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         {/* 팀 로고 */}
         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
           {team.logoUrl ? (
@@ -213,33 +212,23 @@ const TeamCard = ({ team, isMyTeam = false }: TeamCardProps) => {
         </div>
 
         {/* 팀 정보 */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-base truncate mb-0.5">
-              {team.name}
-            </h3>
-            {/* 남성팀, 여성팀 구분 */}
-            <span
-              className={`size-5 flex items-center justify-center text-xs font-semibold rounded flex-shrink-0 ${
-                team.gender === "MALE"
-                  ? "bg-blue-50 text-blue-600"
-                  : "bg-pink-50 text-pink-600"
-              }`}
-            >
-              {team.gender === "MALE" ? "M" : "F"}
-            </span>
-          </div>
-          <p className="text-gray-600 text-sm line-clamp-1 ">
-            {team.description}
-          </p>
+        <div className="flex flex-col items-start">
+          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-5 sm:h-6">
+            {team.name}
+          </h3>
+          <span className="sm:text-sm text-gray-500">
+            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+              team._count.members
+            }명 • ${team.city} ${team.district}`}
+          </span>
         </div>
 
         {/* 누적 경기수와 팀원 수 */}
-        {!isMyTeam && (
+        {/* {!isMyTeam && (
           <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
             {team._count.members ?? 0}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
