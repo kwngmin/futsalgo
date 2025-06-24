@@ -72,7 +72,7 @@ const TeamPlayers = ({
                 className="rounded-full size-10"
               />
               <div className="flex flex-col items-start">
-                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5">
+                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-6">
                   {member.user.nickname || "닉네임 없음"}
                   {/* {member.user.gender === "MALE" ? (
                     <div className="flex items-center bg-blue-500/5 rounded p-0.5">
@@ -90,7 +90,7 @@ const TeamPlayers = ({
                     </div>
                   )} */}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="sm:text-sm text-gray-500">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
@@ -140,10 +140,10 @@ const TeamPlayers = ({
                   className="rounded-full size-10"
                 />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5">
+                  <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-6">
                     {member.user.nickname || "닉네임 없음"}
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <span className="sm:text-sm text-gray-500">
                     {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                       member.user.birthDate
                         ? getCurrentAge(member.user.birthDate).success
@@ -246,7 +246,7 @@ const TeamPlayers = ({
                 className="rounded-full"
               />
               <div className="flex flex-col items-start">
-                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5">
+                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-6">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
                     <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded pl-1 pr-1.5 h-5">
@@ -254,7 +254,7 @@ const TeamPlayers = ({
                         className="size-4 text-indigo-700 p-0.5"
                         strokeWidth={2.5}
                       />
-                      <span className="text-xs text-indigo-700 font-medium">
+                      <span className="text-xs text-indigo-700 font-semibold">
                         매니저
                       </span>
                     </div>
@@ -265,13 +265,13 @@ const TeamPlayers = ({
                         className="size-4 text-amber-700 p-0.5"
                         strokeWidth={2.5}
                       />
-                      <span className="text-xs text-amber-700 font-medium">
+                      <span className="text-xs text-amber-700 font-semibold">
                         팀장
                       </span>
                     </div>
                   )}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="sm:text-sm text-gray-500">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
