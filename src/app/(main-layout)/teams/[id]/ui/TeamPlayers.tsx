@@ -61,7 +61,7 @@ const TeamPlayers = ({
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
-            className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
+            className={`w-full flex items-center justify-between px-3 py-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
               <Image
@@ -72,23 +72,8 @@ const TeamPlayers = ({
                 className="rounded-full size-10"
               />
               <div className="flex flex-col items-start">
-                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-6">
+                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
-                  {/* {member.user.gender === "MALE" ? (
-                    <div className="flex items-center bg-blue-500/5 rounded p-0.5">
-                      <Mars
-                        className="size-4 stroke-blue-700"
-                        strokeWidth={2}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center bg-red-500/5 rounded p-0.5">
-                      <Venus
-                        className="size-4 stroke-red-700"
-                        strokeWidth={2}
-                      />
-                    </div>
-                  )} */}
                 </span>
                 <span className="sm:text-sm text-gray-500">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
@@ -123,7 +108,7 @@ const TeamPlayers = ({
         {members.pending.map((member) => (
           <div
             key={member.id}
-            className="border-t border-gray-100 first:border-t-0 w-full flex flex-col gap-3 p-4 hover:bg-gray-50 transition-colors"
+            className="border-t border-gray-100 first:border-t-0 w-full flex flex-col gap-3 px-3 py-4 hover:bg-gray-50 transition-colors"
           >
             <button
               onClick={() => router.push(`/players/${member.userId}`)}
@@ -140,7 +125,7 @@ const TeamPlayers = ({
                   className="rounded-full size-10"
                 />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-6">
+                  <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                     {member.user.nickname || "닉네임 없음"}
                   </span>
                   <span className="sm:text-sm text-gray-500">
@@ -235,7 +220,7 @@ const TeamPlayers = ({
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
-            className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
+            className={`w-full flex items-center justify-between px-3 py-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
               <Image
@@ -246,7 +231,7 @@ const TeamPlayers = ({
                 className="rounded-full"
               />
               <div className="flex flex-col items-start">
-                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-6">
+                <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
                     <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded pl-1 pr-1.5 h-5">
