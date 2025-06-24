@@ -123,11 +123,11 @@ const TeamPlayers = ({
         {members.pending.map((member) => (
           <div
             key={member.id}
-            className="flex flex-col border-t border-gray-100 first:border-t-0"
+            className="border-t border-gray-100 first:border-t-0 w-full flex flex-col gap-3 p-4 hover:bg-gray-50 transition-colors"
           >
             <button
               onClick={() => router.push(`/players/${member.userId}`)}
-              className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors cursor-pointer`}
+              className="flex items-center justify-between cursor-pointer"
             >
               <div className="flex items-center space-x-3">
                 <Image
@@ -159,14 +159,45 @@ const TeamPlayers = ({
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                {/* <span className="text-base font-medium text-gray-500">
-                    {member.user.name || "미설정"}
-                  </span>
-                  <Separator orientation="vertical" /> */}
+                <div className="hidden sm:grid grid-cols-2 gap-1.5 w-32 mr-3">
+                  <Button
+                    variant="outline"
+                    className="font-semibold"
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      try {
+                        const result = await approveTeamMember(
+                          teamId,
+                          member.userId
+                        );
+                        if (result?.success) {
+                          // toast.success("팀원 승인이 완료되었습니다.");
+                          alert("팀원 승인이 완료되었습니다.");
+                          refetch();
+                        } else {
+                          alert(result?.error);
+                        }
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    }}
+                  >
+                    승인
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="text-destructive bg-destructive/10 hover:bg-destructive/20"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    거절
+                  </Button>
+                </div>
                 <ChevronRight className={`w-5 h-5 text-gray-400}`} />
               </div>
             </button>
-            <div className="px-4 py-2 mb-3 grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:hidden">
               <Button
                 variant="outline"
                 className="font-semibold"
@@ -190,7 +221,12 @@ const TeamPlayers = ({
               >
                 승인
               </Button>
-              <Button variant="secondary">거절</Button>
+              <Button
+                variant="secondary"
+                className="text-destructive bg-destructive/10 hover:bg-destructive/20"
+              >
+                거절
+              </Button>
             </div>
           </div>
         ))}
