@@ -11,7 +11,13 @@ interface TeamWithDetails extends Team {
   };
   members?: {
     status: string;
+    user: {
+      playerBackground: string | null;
+    };
   }[];
+  stats?: {
+    professionalCount: number;
+  };
 }
 
 export interface GetTeamsResponse {
@@ -48,6 +54,18 @@ export async function getTeams(): Promise<GetTeamsResponse> {
           }
         : {},
       include: {
+        members: {
+          where: {
+            status: "APPROVED",
+          },
+          include: {
+            user: {
+              select: {
+                playerBackground: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             members: {
@@ -64,28 +82,38 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       },
     });
 
+    // 각 팀에 프로 선수 통계 추가
+    const teamsWithStats = teams.map((team) => ({
+      ...team,
+      stats: {
+        professionalCount: team.members.filter(
+          (member) => member.user.playerBackground === "PROFESSIONAL"
+        ).length,
+      },
+    }));
+
     if (userId) {
       // 사용자의 소속 팀들 조회
       const myTeams = await prisma.team.findMany({
         where: {
-          OR: [
-            {
-              members: {
-                some: {
-                  userId: userId,
-                  status: "APPROVED",
-                },
-              },
+          members: {
+            some: {
+              userId: userId,
+              status: "APPROVED",
             },
-          ],
+          },
         },
         include: {
           members: {
             where: {
-              userId: userId,
+              status: "APPROVED",
             },
-            select: {
-              status: true,
+            include: {
+              user: {
+                select: {
+                  playerBackground: true,
+                },
+              },
             },
           },
           _count: {
@@ -104,11 +132,21 @@ export async function getTeams(): Promise<GetTeamsResponse> {
         },
       });
 
+      // 내 팀들에도 프로 선수 통계 추가
+      const myTeamsWithStats = myTeams.map((team) => ({
+        ...team,
+        stats: {
+          professionalCount: team.members.filter(
+            (member) => member.user.playerBackground === "PROFESSIONAL"
+          ).length,
+        },
+      }));
+
       return {
         success: true,
         data: {
-          myTeams: myTeams as TeamWithDetails[],
-          teams: teams as TeamWithDetails[],
+          myTeams: myTeamsWithStats as TeamWithDetails[],
+          teams: teamsWithStats as TeamWithDetails[],
         },
       };
     }
@@ -118,7 +156,7 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       success: true,
       data: {
         myTeams: [],
-        teams: teams as TeamWithDetails[],
+        teams: teamsWithStats as TeamWithDetails[],
       },
     };
   } catch (error) {

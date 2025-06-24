@@ -182,6 +182,9 @@ type TeamCardProps = {
     _count: {
       members: number;
     };
+    stats?: {
+      professionalCount: number;
+    };
   };
   isMyTeam?: boolean;
 };
@@ -218,8 +221,12 @@ const TeamCard = ({ team }: TeamCardProps) => {
           </h3>
           <span className="sm:text-sm text-gray-500">
             {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
-              team._count.members
-            }명 • ${team.city} ${team.district}`}
+              team.city
+            } ${team.district} • 팀원 ${team._count.members}명(${
+              team.stats?.professionalCount
+                ? `선출 ${team.stats?.professionalCount}명`
+                : "선출 없음"
+            })`}
           </span>
         </div>
 

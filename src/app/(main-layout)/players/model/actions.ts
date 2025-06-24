@@ -41,6 +41,9 @@ export async function getPlayers() {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     if (session?.user?.id) {
