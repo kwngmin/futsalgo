@@ -61,7 +61,7 @@ const TeamPlayers = ({
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
-            className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0`}
+            className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
               <Image
@@ -72,7 +72,7 @@ const TeamPlayers = ({
                 className="rounded-full size-10"
               />
               <div className="flex flex-col items-start">
-                <span className="font-medium flex items-center gap-1.5">
+                <span className="text-lg font-medium flex items-center gap-1.5">
                   {member.user.nickname || "닉네임 없음"}
                   {/* {member.user.gender === "MALE" ? (
                     <div className="flex items-center bg-blue-500/5 rounded p-0.5">
@@ -127,7 +127,7 @@ const TeamPlayers = ({
           >
             <button
               onClick={() => router.push(`/players/${member.userId}`)}
-              className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors`}
+              className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors cursor-pointer`}
             >
               <div className="flex items-center space-x-3">
                 <Image
@@ -140,7 +140,7 @@ const TeamPlayers = ({
                   className="rounded-full size-10"
                 />
                 <div className="flex flex-col items-start">
-                  <span className="font-medium flex items-center gap-1.5">
+                  <span className="text-lg font-medium flex items-center gap-1.5">
                     {member.user.nickname || "닉네임 없음"}
                   </span>
                   <span className="text-sm text-gray-500">
@@ -199,7 +199,7 @@ const TeamPlayers = ({
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
-            className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0`}
+            className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
               <Image
@@ -210,7 +210,7 @@ const TeamPlayers = ({
                 className="rounded-full"
               />
               <div className="flex flex-col items-start">
-                <span className="font-medium flex items-center gap-1.5">
+                <span className="text-lg font-medium flex items-center gap-1.5">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
                     <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded pl-1 pr-1.5 h-5">
