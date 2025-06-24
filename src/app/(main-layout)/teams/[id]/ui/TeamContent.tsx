@@ -112,17 +112,17 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
-          <div className="bg-white rounded-2xl mb-6">
-            <div className="flex justify-end items-center px-3 pt-3">
-              {/* {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
-                  <div className="rounded-full size-2 bg-indigo-600 " />
-                  팀원 모집중
+          <div className="bg-white rounded-2xl">
+            <div className="flex justify-end items-center p-3 pb-0">
+              {/* {false ? (
+                <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-2 h-6">
+                  <div className="rounded-full size-2 bg-green-600 " />
+                  팀전 신청 가능
                 </div>
               ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-gray-100">
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-6">
                   <div className="rounded-full size-2 bg-gray-400 " />
-                  팀원 모집 완료
+                  자체전 위주
                 </div>
               )} */}
               {/* <span className="px-2 text-sm font-medium text-gray-500">
@@ -171,19 +171,33 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg font-semibold">
+                <h1 className="text-xl font-semibold">
                   {data?.data?.name}
                   {/* <span className="text-base font-normal text-gray-500 ml-2">
                     #{data.data.code}
                   </span> */}
                 </h1>
-                <p className="text-sm text-gray-500 mt-0.5">
+                <p className="font-medium">
+                  주요 활동 지역:{" "}
                   {`${
                     data?.data?.city && data?.data?.district
                       ? `${data?.data?.city} • ${data?.data?.district}`
                       : "지역 미설정"
                   }`}
                 </p>
+                {/* <p className="text-sm text-gray-500">
+                  팀 생성일:{" "}
+                  {data?.data?.createdAt
+                    ? new Date(data?.data?.createdAt).toLocaleDateString(
+                        "ko-KR",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )
+                    : ""}
+                </p> */}
               </div>
             </div>
             {/* 가입하기 */}
@@ -329,7 +343,7 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
 
             {/* 탭 */}
-            <div className="flex items-center justify-between gap-2 px-3">
+            <div className="flex items-center justify-between gap-2 px-3 border-t border-input">
               <div className="flex h-12 space-x-2">
                 {tabs
                   .filter(
@@ -356,13 +370,13 @@ const TeamContent = ({ id }: { id: string }) => {
                   ))}
               </div>
               {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-6">
-                  <div className="rounded-full size-2 bg-indigo-600" />
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-6 bg-indigo-500/10 rounded">
+                  {/* <div className="rounded-full size-2 bg-indigo-600" /> */}
                   팀원 모집중
                 </div>
               ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-3 h-6">
-                  <div className="rounded-full size-2 bg-gray-400" />
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-6 bg-gray-100 rounded">
+                  {/* <div className="rounded-full size-2 bg-gray-400" /> */}
                   팀원 모집 완료
                 </div>
               )}
@@ -665,7 +679,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                 </div>
               </div> */}
-              <p className="text-center text-sm text-gray-500 mt-3">
+              {/* <p className="text-center text-sm text-gray-500 mt-3">
                 생성일:{" "}
                 {data?.data?.createdAt
                   ? new Date(data?.data?.createdAt).toLocaleDateString(
@@ -677,7 +691,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       }
                     )
                   : ""}
-              </p>
+              </p> */}
             </Fragment>
           )}
 
