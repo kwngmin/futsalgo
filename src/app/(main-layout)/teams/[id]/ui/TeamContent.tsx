@@ -540,8 +540,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <span className="font-medium">기본 정보</span>
                   </div>
                   <Info
-                    className="size-5 text-blue-600 cursor-pointer active:scale-98 transition-transform"
-                    strokeWidth={2.3}
+                    className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
                     onClick={() => {
                       alert("기본 정보");
                     }}
@@ -621,8 +620,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <span className="font-medium">팀원 실력</span>
                   </div>
                   <Info
-                    className="size-5 text-blue-600 cursor-pointer active:scale-98 transition-transform"
-                    strokeWidth={2.3}
+                    className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
                     onClick={() => {
                       alert("팀원 실력");
                     }}
