@@ -9,6 +9,7 @@ import {
   ChartPie,
   CircleX,
   EllipsisVertical,
+  Info,
   // Hourglass,
   // Settings,
   Share,
@@ -533,9 +534,18 @@ const TeamContent = ({ id }: { id: string }) => {
 
               {/* 기본 정보 */}
               <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                  <BookText className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">기본 정보</span>
+                <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
+                  <div className="flex items-center space-x-3">
+                    <BookText className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">기본 정보</span>
+                  </div>
+                  <Info
+                    className="size-5 text-blue-600 cursor-pointer active:scale-98 transition-transform"
+                    strokeWidth={2.3}
+                    onClick={() => {
+                      alert("기본 정보");
+                    }}
+                  />
                 </div>
                 <div className="grid grid-cols-3 gap-3 px-4 py-2 bg-white rounded-2xl">
                   <div className="flex flex-col gap-1 items-center my-3">
@@ -605,9 +615,18 @@ const TeamContent = ({ id }: { id: string }) => {
 
               {/* 실력 분포 */}
               <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                  <ChartPie className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">팀원 실력</span>
+                <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
+                  <div className="flex items-center space-x-3">
+                    <ChartPie className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">팀원 실력</span>
+                  </div>
+                  <Info
+                    className="size-5 text-blue-600 cursor-pointer active:scale-98 transition-transform"
+                    strokeWidth={2.3}
+                    onClick={() => {
+                      alert("팀원 실력");
+                    }}
+                  />
                 </div>
                 <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
