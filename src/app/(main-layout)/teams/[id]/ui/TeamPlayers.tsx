@@ -9,10 +9,11 @@ import {
   TeamMemberStatus,
   User,
 } from "@prisma/client";
-import { ChevronRight, Mars, Venus } from "lucide-react";
+import { ChevronRight, Crown, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
+import { Separator } from "@/shared/components/ui/separator";
 
 interface TeamMemberWithUser extends TeamMember {
   user: Pick<
@@ -73,13 +74,12 @@ const TeamPlayers = ({
               <div className="flex flex-col items-start">
                 <span className="font-medium flex items-center gap-1.5">
                   {member.user.nickname || "닉네임 없음"}
-                  {member.user.gender === "MALE" ? (
+                  {/* {member.user.gender === "MALE" ? (
                     <div className="flex items-center bg-blue-500/5 rounded p-0.5">
                       <Mars
                         className="size-4 stroke-blue-700"
                         strokeWidth={2}
                       />
-                      {/* <span className="text-sm text-gray-500">남</span> */}
                     </div>
                   ) : (
                     <div className="flex items-center bg-red-500/5 rounded p-0.5">
@@ -88,12 +88,10 @@ const TeamPlayers = ({
                         strokeWidth={2}
                       />
                     </div>
-                  )}
+                  )} */}
                 </span>
                 <span className="text-sm text-gray-500">
-                  {`${member.user.name || "미설정"} • ${
-                    GENDER[member.user.gender as keyof typeof GENDER]
-                  } • ${
+                  {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
                         ? `${getCurrentAge(member.user.birthDate).age}세`
@@ -105,7 +103,13 @@ const TeamPlayers = ({
                 </span>
               </div>
             </div>
-            <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+            <div className="flex items-center gap-1">
+              {/* <span className="text-base font-medium text-gray-500">
+                {member.user.name || "미설정"}
+              </span>
+              <Separator orientation="vertical" /> */}
+              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+            </div>
           </button>
         ))}
       </div>
@@ -141,25 +145,9 @@ const TeamPlayers = ({
                   <div className="flex flex-col items-start">
                     <span className="font-medium flex items-center gap-1.5">
                       {member.user.nickname || "닉네임 없음"}
-                      {member.user.gender === "MALE" ? (
-                        <div className="flex items-center bg-blue-500/5 rounded p-0.5">
-                          <Mars
-                            className="size-4 stroke-blue-700"
-                            strokeWidth={2}
-                          />
-                          {/* <span className="text-sm text-gray-500">남</span> */}
-                        </div>
-                      ) : (
-                        <div className="flex items-center bg-red-500/5 rounded p-0.5">
-                          <Venus
-                            className="size-4 stroke-red-700"
-                            strokeWidth={2}
-                          />
-                        </div>
-                      )}
                     </span>
                     <span className="text-sm text-gray-500">
-                      {`${member.user.name || "미설정"} • ${
+                      {`${
                         GENDER[member.user.gender as keyof typeof GENDER]
                       } • ${
                         member.user.birthDate
@@ -175,7 +163,13 @@ const TeamPlayers = ({
                     </span>
                   </div>
                 </div>
-                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                <div className="flex items-center gap-1">
+                  {/* <span className="text-base font-medium text-gray-500">
+                    {member.user.name || "미설정"}
+                  </span>
+                  <Separator orientation="vertical" /> */}
+                  <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                </div>
               </button>
               <div className="mx-3 p-1 grid grid-cols-2 gap-2">
                 <Button
@@ -231,27 +225,31 @@ const TeamPlayers = ({
                 <div className="flex flex-col items-start">
                   <span className="font-medium flex items-center gap-1.5">
                     {member.user.nickname || "닉네임 없음"}
-                    {member.user.gender === "MALE" ? (
-                      <div className="flex items-center bg-blue-500/5 rounded p-0.5">
-                        <Mars
-                          className="size-4 stroke-blue-700"
-                          strokeWidth={2}
+                    {member.role === "MANAGER" && (
+                      <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded pl-1 pr-1.5 h-5">
+                        <UserRoundCog
+                          className="size-4 text-indigo-700 p-0.5"
+                          strokeWidth={2.5}
                         />
-                        {/* <span className="text-sm text-gray-500">남</span> */}
+                        <span className="text-xs text-indigo-700 font-medium">
+                          매니저
+                        </span>
                       </div>
-                    ) : (
-                      <div className="flex items-center bg-red-500/5 rounded p-0.5">
-                        <Venus
-                          className="size-4 stroke-red-700"
-                          strokeWidth={2}
+                    )}
+                    {member.role === "OWNER" && (
+                      <div className="flex items-center gap-0.5 bg-amber-500/10 rounded pl-1 pr-1.5 h-5">
+                        <Crown
+                          className="size-4 text-amber-700 p-0.5"
+                          strokeWidth={2.5}
                         />
+                        <span className="text-xs text-amber-700 font-medium">
+                          팀장
+                        </span>
                       </div>
                     )}
                   </span>
                   <span className="text-sm text-gray-500">
-                    {`${member.user.name || "미설정"} • ${
-                      GENDER[member.user.gender as keyof typeof GENDER]
-                    } • ${
+                    {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                       member.user.birthDate
                         ? getCurrentAge(member.user.birthDate).success
                           ? `${getCurrentAge(member.user.birthDate).age}세`
@@ -265,7 +263,13 @@ const TeamPlayers = ({
                   </span>
                 </div>
               </div>
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {member.user.name || "미설정"}
+                </span>
+                <Separator orientation="vertical" />
+                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              </div>
             </button>
           ))}
         </div>

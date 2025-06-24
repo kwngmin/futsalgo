@@ -112,7 +112,7 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
-          <div className="bg-white rounded-2xl">
+          <div className="bg-white rounded-2xl mb-6">
             <div className="flex justify-end items-center px-3 pt-3">
               {/* {data.data.recruitmentStatus === "RECRUITING" ? (
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-3 h-7 rounded-full bg-indigo-500/10">
@@ -538,7 +538,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.stats.averageAge}세
+                      {data.data.stats.averageAge}살
                     </div>
                     <Label className="text-muted-foreground">평균 연령</Label>
                   </div>
