@@ -11,6 +11,7 @@ import {
   CircleX,
   EllipsisVertical,
   Info,
+  Loader2,
   // Hourglass,
   // Settings,
   Share,
@@ -53,6 +54,8 @@ const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
+  const [isLoading, setIsLoading] = useState(false);
+
   // const [modalStates, setModalStates] = useState({
   //   edit: false,
   //   TeamLevel: false,
@@ -183,6 +186,15 @@ const TeamContent = ({ id }: { id: string }) => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
+      {isLoading && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 backdrop-blur-lg rounded-lg">
+          <Loader2
+            className="w-4 h-4 animate-spin"
+            style={{ width: "40px", height: "40px", color: "gray" }}
+          />
+          <div className="text-base text-muted-foreground">로딩 중입니다.</div>
+        </div>
+      )}
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-3">
         <Button
@@ -323,7 +335,10 @@ const TeamContent = ({ id }: { id: string }) => {
                   variant="outline"
                   size="lg"
                   className="w-full text-base font-semibold cursor-pointer"
-                  onClick={() => router.push(`/edit-team/${id}`)}
+                  onClick={() => {
+                    setIsLoading(true);
+                    router.push(`/edit-team/${id}`);
+                  }}
                 >
                   팀 정보 수정
                 </Button>
