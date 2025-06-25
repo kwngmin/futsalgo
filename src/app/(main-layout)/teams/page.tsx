@@ -227,12 +227,12 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
 
         {/* 팀 정보 */}
         <div className="flex flex-col items-start justify-center grow">
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-6">
+          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {team.name}
             {isMyTeam && (
-              <div className="flex items-center gap-0.5 bg-black rounded-full px-2.5 sm:px-2 h-5 sm:h-4.5">
-                <span className="text-xs text-white font-bold tracking-tight">
-                  내 팀
+              <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/5 h-4.5 border border-slate-300">
+                <span className="text-xs text-slate-700 font-bold tracking-tight">
+                  소속 팀
                 </span>
               </div>
             )}
