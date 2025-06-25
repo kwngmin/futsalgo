@@ -1,9 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// import { Button } from "@/shared/components/ui/button";
 import {
-  // ArrowLeft,
+  Camera,
   ChevronRight,
   IdCard,
   Mail,
@@ -24,6 +23,8 @@ import {
   formatPhoneNumber,
   getCurrentAge,
 } from "@/entities/user/model/actions";
+import Image from "next/image";
+import { Button } from "@/shared/components/ui/button";
 
 export default function ProfileContent({ data }: { data: User }) {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function ProfileContent({ data }: { data: User }) {
       trigger={
         <div
           onClick={() => openModal(field)}
-          className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
+          className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100"
         >
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
@@ -151,6 +152,23 @@ export default function ProfileContent({ data }: { data: User }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white mb-6">
+          <div className="p-4 flex flex-col justify-center items-center gap-2">
+            <Image
+              width={64}
+              height={64}
+              src={data.image || ""}
+              alt="profile_image"
+              className="size-16 object-cover rounded-full mt-3"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full flex items-center gap-2"
+            >
+              <Camera className="size-5" />
+              <span className="text-sm font-semibold">프로필 사진 변경</span>
+            </Button>
+          </div>
           {renderFieldModal("nickname", "닉네임")}
           {renderFieldModal("email", "이메일")}
           {renderFieldModal("phone", "전화번호")}

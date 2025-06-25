@@ -183,7 +183,11 @@ const ProfileForm = ({ data }: { data: User }) => {
       )}
 
       {/* 저장 버튼 */}
-      <Button type="submit" disabled={isLoading} className="w-full mt-6">
+      <Button
+        type="submit"
+        disabled={isLoading}
+        className="w-full mt-3 font-semibold text-base"
+      >
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
