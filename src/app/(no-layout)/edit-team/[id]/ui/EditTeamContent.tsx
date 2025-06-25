@@ -3,9 +3,11 @@
 import { useRouter } from "next/navigation";
 // import { Button } from "@/shared/components/ui/button";
 import {
-  // ArrowLeft,
+  Camera,
   ChevronRight,
-  User2,
+  ClipboardType,
+  // Trophy,
+  // User2,
   X,
 } from "lucide-react";
 import { Team } from "@prisma/client";
@@ -18,6 +20,8 @@ import { Team } from "@prisma/client";
 import { useState } from "react";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 import EditTeamForm from "./EditTeamForm";
+import Image from "next/image";
+import { Button } from "@/shared/components/ui/button";
 
 export default function EditTeamContent({ data }: { data: Team }) {
   const router = useRouter();
@@ -47,14 +51,15 @@ export default function EditTeamContent({ data }: { data: Team }) {
       trigger={
         <div
           onClick={() => openModal(field)}
-          className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
+          className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100"
         >
           <div className="flex items-center space-x-3">
-            <User2 className="w-5 h-5 text-gray-600" />
-            <span className="font-medium">팀 이름</span>
+            <ClipboardType className="w-5 h-5 text-gray-600" />
+            {/* <span className="font-medium">팀 이름</span> */}
+            <span className="font-medium">{data.name}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-medium">{data.name}</span>
+            {/* <span className="font-medium">{data.name}</span> */}
             <ChevronRight className="w-5 h-5 text-gray-400" />
           </div>
         </div>
@@ -119,6 +124,29 @@ export default function EditTeamContent({ data }: { data: Team }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white mb-6">
+          <div className="p-4 flex flex-col justify-center items-center gap-3">
+            {data.logoUrl ? (
+              <Image
+                width={80}
+                height={80}
+                src={data.logoUrl || ""}
+                alt="profile_image"
+                className="size-20 object-cover rounded-full mt-2"
+              />
+            ) : (
+              <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                {/* <ImageIcon className="size-10 text-gray-600" /> */}
+              </div>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full flex items-center gap-2"
+            >
+              <Camera className="size-5 text-gray-600" />
+              <span className="font-medium">프로필 사진 변경</span>
+            </Button>
+          </div>
           {renderFieldModal("name", "팀 이름")}
         </div>
 
