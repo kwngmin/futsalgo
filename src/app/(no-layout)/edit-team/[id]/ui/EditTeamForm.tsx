@@ -153,7 +153,6 @@ const EditTeamForm = ({ data }: { data: Team }) => {
 
       {/* 저장 버튼 */}
       <Button
-        size="lg"
         type="submit"
         disabled={isLoading}
         className="w-full mt-3 font-semibold text-base"
