@@ -7,7 +7,7 @@ import {
   ArrowLeft,
   BookText,
   ChartPie,
-  ChevronRight,
+  // ChevronRight,
   CircleX,
   EllipsisVertical,
   Info,
@@ -24,8 +24,8 @@ import { Label } from "@/shared/components/ui/label";
 import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
 import TeamMemberList from "./TeamMemberList";
-import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
-import EditTeamForm from "./EditTeamForm";
+// import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
+// import EditTeamForm from "./EditTeamForm";
 
 const logoOptions = [
   "/assets/images/team-logo-sample-1.png",
@@ -53,11 +53,11 @@ const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
-  const [modalStates, setModalStates] = useState({
-    edit: false,
-    TeamLevel: false,
-    playerSkillLevel: false,
-  });
+  // const [modalStates, setModalStates] = useState({
+  //   edit: false,
+  //   TeamLevel: false,
+  //   playerSkillLevel: false,
+  // });
 
   const { data, refetch } = useQuery({
     queryKey: ["team", id],
@@ -70,100 +70,100 @@ const TeamContent = ({ id }: { id: string }) => {
     router.back();
   };
 
-  const openModal = (field: keyof typeof modalStates) => {
-    setModalStates((prev) => ({ ...prev, [field]: true }));
-  };
+  // const openModal = (field: keyof typeof modalStates) => {
+  //   setModalStates((prev) => ({ ...prev, [field]: true }));
+  // };
 
-  const closeModal = (field: keyof typeof modalStates) => {
-    setModalStates((prev) => ({ ...prev, [field]: false }));
-  };
+  // const closeModal = (field: keyof typeof modalStates) => {
+  //   setModalStates((prev) => ({ ...prev, [field]: false }));
+  // };
 
-  const renderFieldModal = (
-    field: "edit" | "TeamLevel" | "playerSkillLevel",
-    title: string
-  ) => (
-    <FieldModal
-      title={title}
-      open={modalStates[field]}
-      onOpenChange={(open) => {
-        if (!open) closeModal(field);
-      }}
-      trigger={
-        field === "edit" ? (
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-full text-base font-semibold cursor-pointer"
-            onClick={() => openModal(field)}
-          >
-            팀 정보 수정
-          </Button>
-        ) : (
-          <div
-            onClick={() => openModal(field)}
-            className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
-          >
-            <div className="flex items-center space-x-3">
-              {/* {field === "nickname" ? (
-              <IdCard className={`w-5 h-5 text-gray-600`} />
-            ) : field === "email" ? (
-              <Mail className={`w-5 h-5 text-gray-600`} />
-            ) : field === "phone" ? (
-              <Phone className={`w-5 h-5 text-gray-600`} />
-            ) : (
-              <User2 className="w-5 h-5 text-gray-600" />
-            )} */}
-              <span className="font-medium">
-                hhihihi
-                {/* {field === "basic"
-                ? `${data.name || "미설정"} • ${
-                    GENDER[data.gender as keyof typeof GENDER]
-                  } • ${
-                    data.birthDate
-                      ? age.success
-                        ? `${age.age}세`
-                        : "생년월일 미설정"
-                      : "생년월일 미설정"
-                  } • ${data.height ? `${data.height}cm` : "키 미설정"}`
-                : field === "phone"
-                ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
-                : data[field] || "설정되지 않음"} */}
-              </span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-400" />
-          </div>
-        )
-      }
-    >
-      {field === "edit" ? (
-        data?.data ? (
-          <EditTeamForm team={data?.data} />
-        ) : (
-          <div>데이터 없음</div>
-        )
-      ) : (
-        <div>hihi</div>
-      )}
-      {/* {field === "phone" ? (
-        <ProfilePhone
-          data={data[field] || ""}
-          onSuccess={() => closeModal(field)}
-        />
-      ) : field === "nickname" ? (
-        <ProfileNickname
-          data={data[field] || ""}
-          onSuccess={() => closeModal(field)}
-        />
-      ) : field === "email" ? (
-        <ProfileEmail
-          data={data[field] || ""}
-          onSuccess={() => closeModal(field)}
-        />
-      ) : (
-        <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} />
-      )} */}
-    </FieldModal>
-  );
+  // const renderFieldModal = (
+  //   field: "edit" | "TeamLevel" | "playerSkillLevel",
+  //   title: string
+  // ) => (
+  //   <FieldModal
+  //     title={title}
+  //     open={modalStates[field]}
+  //     onOpenChange={(open) => {
+  //       if (!open) closeModal(field);
+  //     }}
+  //     trigger={
+  //       field === "edit" ? (
+  //         <Button
+  //           variant="outline"
+  //           size="lg"
+  //           className="w-full text-base font-semibold cursor-pointer"
+  //           onClick={() => openModal(field)}
+  //         >
+  //           팀 정보 수정
+  //         </Button>
+  //       ) : (
+  //         <div
+  //           onClick={() => openModal(field)}
+  //           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
+  //         >
+  //           <div className="flex items-center space-x-3">
+  //             {/* {field === "nickname" ? (
+  //             <IdCard className={`w-5 h-5 text-gray-600`} />
+  //           ) : field === "email" ? (
+  //             <Mail className={`w-5 h-5 text-gray-600`} />
+  //           ) : field === "phone" ? (
+  //             <Phone className={`w-5 h-5 text-gray-600`} />
+  //           ) : (
+  //             <User2 className="w-5 h-5 text-gray-600" />
+  //           )} */}
+  //             <span className="font-medium">
+  //               hhihihi
+  //               {/* {field === "basic"
+  //               ? `${data.name || "미설정"} • ${
+  //                   GENDER[data.gender as keyof typeof GENDER]
+  //                 } • ${
+  //                   data.birthDate
+  //                     ? age.success
+  //                       ? `${age.age}세`
+  //                       : "생년월일 미설정"
+  //                     : "생년월일 미설정"
+  //                 } • ${data.height ? `${data.height}cm` : "키 미설정"}`
+  //               : field === "phone"
+  //               ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
+  //               : data[field] || "설정되지 않음"} */}
+  //             </span>
+  //           </div>
+  //           <ChevronRight className="w-5 h-5 text-gray-400" />
+  //         </div>
+  //       )
+  //     }
+  //   >
+  //     {field === "edit" ? (
+  //       data?.data ? (
+  //         <EditTeamForm team={data?.data} />
+  //       ) : (
+  //         <div>데이터 없음</div>
+  //       )
+  //     ) : (
+  //       <div>hihi</div>
+  //     )}
+  //     {/* {field === "phone" ? (
+  //       <ProfilePhone
+  //         data={data[field] || ""}
+  //         onSuccess={() => closeModal(field)}
+  //       />
+  //     ) : field === "nickname" ? (
+  //       <ProfileNickname
+  //         data={data[field] || ""}
+  //         onSuccess={() => closeModal(field)}
+  //       />
+  //     ) : field === "email" ? (
+  //       <ProfileEmail
+  //         data={data[field] || ""}
+  //         onSuccess={() => closeModal(field)}
+  //       />
+  //     ) : (
+  //       <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} />
+  //     )} */}
+  //   </FieldModal>
+  // );
 
   if (!data) {
     return (
@@ -319,8 +319,17 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="p-3">
               {data.data.currentUserMembership.role === "MANAGER" ||
               data.data.currentUserMembership.role === "OWNER" ? (
-                renderFieldModal("edit", "팀 정보 수정") // <div className="grid grid-cols-2 gap-2">
-              ) : //   <Button
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full text-base font-semibold cursor-pointer"
+                  onClick={() => router.push(`/edit-team/${id}`)}
+                >
+                  팀 정보 수정
+                </Button>
+              ) : // renderFieldModal("edit", "팀 정보 수정")
+              // <div className="grid grid-cols-2 gap-2">
+              //   <Button
               //     variant="outline"
               //     size="lg"
               //     onClick={() => {

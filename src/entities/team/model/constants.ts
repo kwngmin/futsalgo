@@ -18,7 +18,7 @@ export const TEAM_LEVEL_OPTIONS = [
   { value: "LOW", label: "하하 - 일반인 팀에서 초보 팀. 기본기 부족" },
   {
     value: "MID",
-    label: "하 - 일반인 팀인데 발이 좀 맞는 팀",
+    label: "하 - 일반인 팀인데 발이 좀 맞는 팀. 팀워크 존재",
   },
   {
     value: "HIGH",
@@ -26,7 +26,7 @@ export const TEAM_LEVEL_OPTIONS = [
   },
   {
     value: "VERY_HIGH",
-    label: "중 - 전원 선출이거나, 킹반인급만 모인 팀",
+    label: "중 - 전원 선출이거나, 비선출 중 킹반인급만 모인 팀",
   },
 ];
 

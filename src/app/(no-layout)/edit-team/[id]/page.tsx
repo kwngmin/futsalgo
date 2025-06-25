@@ -1,25 +1,33 @@
+import { getTeam } from "@/app/(main-layout)/teams/[id]/model/actions";
 import { auth } from "@/shared/lib/auth";
-import { prisma } from "@/shared/lib/prisma";
+// import { prisma } from "@/shared/lib/prisma";
 import { Loader2 } from "lucide-react";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import EditTeamContent from "./ui/EditTeamContent";
 // import ProfileContent from "./ui/ProfileContent";
 
-const EditTeamPage = async () => {
+const EditTeamPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+
+  if (!id || typeof id !== "string") {
+    notFound();
+  }
+
   const session = await auth();
 
   if (!session?.user?.id) {
     return redirect("/");
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  });
+  const team = await getTeam(id);
 
-  console.log(user, "user");
+  console.log(team, "team");
 
-  if (!user) {
+  if (!team) {
     return (
       <div className="flex flex-col gap-4 items-center justify-center h-screen">
         <div className="text-sm text-gray-500">
@@ -33,8 +41,14 @@ const EditTeamPage = async () => {
     );
   }
 
-  return <div>EditTeamPage</div>;
-  // return <ProfileContent data={user} />;
+  if (!team.data || !team.success) {
+    console.error(team.error);
+    return notFound();
+  }
+
+  console.log(team, "team");
+
+  return <EditTeamContent data={team.data} />;
 };
 
 export default EditTeamPage;

@@ -5,36 +5,25 @@ import { useRouter } from "next/navigation";
 import {
   // ArrowLeft,
   ChevronRight,
-  IdCard,
-  Mail,
-  Phone,
   User2,
   X,
 } from "lucide-react";
-import { User } from "@prisma/client";
-import ProfileForm from "./ProfileForm";
-import { GENDER } from "@/entities/user/model/constants";
-import { FieldModal } from "./FieldModal";
-import ProfilePhone from "./modal/ProfilePhone";
-import ProfileNickname from "./modal/ProfileNickname";
-import ProfileEmail from "./modal/ProfileEmail";
-import ProfileBasicForm from "./modal/ProfileBasicForm";
+import { Team } from "@prisma/client";
+// import ProfileForm from "./ProfileForm";
+// import { FieldModal } from "./FieldModal";
+// import ProfilePhone from "./modal/ProfilePhone";
+// import ProfileNickname from "./modal/ProfileNickname";
+// import ProfileEmail from "./modal/ProfileEmail";
+// import ProfileBasicForm from "./modal/ProfileBasicForm";
 import { useState } from "react";
-import {
-  formatPhoneNumber,
-  getCurrentAge,
-} from "@/entities/user/model/actions";
+import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
+import EditTeamForm from "./EditTeamForm";
 
-export default function ProfileContent({ data }: { data: User }) {
+export default function EditTeamContent({ data }: { data: Team }) {
   const router = useRouter();
   const [modalStates, setModalStates] = useState({
-    nickname: false,
-    email: false,
-    phone: false,
-    basic: false,
+    name: false,
   });
-
-  const age = getCurrentAge(data.birthDate as string);
 
   const openModal = (field: keyof typeof modalStates) => {
     setModalStates((prev) => ({ ...prev, [field]: true }));
@@ -48,10 +37,7 @@ export default function ProfileContent({ data }: { data: User }) {
     router.back();
   };
 
-  const renderFieldModal = (
-    field: "nickname" | "email" | "phone" | "basic",
-    title: string
-  ) => (
+  const renderFieldModal = (field: "name", title: string) => (
     <FieldModal
       title={`${title} 변경`}
       open={modalStates[field]}
@@ -64,36 +50,18 @@ export default function ProfileContent({ data }: { data: User }) {
           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
         >
           <div className="flex items-center space-x-3">
-            {field === "nickname" ? (
-              <IdCard className={`w-5 h-5 text-gray-600`} />
-            ) : field === "email" ? (
-              <Mail className={`w-5 h-5 text-gray-600`} />
-            ) : field === "phone" ? (
-              <Phone className={`w-5 h-5 text-gray-600`} />
-            ) : (
-              <User2 className="w-5 h-5 text-gray-600" />
-            )}
-            <span className="font-medium">
-              {field === "basic"
-                ? `${data.name || "미설정"} • ${
-                    GENDER[data.gender as keyof typeof GENDER]
-                  } • ${
-                    data.birthDate
-                      ? age.success
-                        ? `${age.age}세`
-                        : "생년월일 미설정"
-                      : "생년월일 미설정"
-                  } • ${data.height ? `${data.height}cm` : "키 미설정"}`
-                : field === "phone"
-                ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
-                : data[field] || "설정되지 않음"}
-            </span>
+            <User2 className="w-5 h-5 text-gray-600" />
+            <span className="font-medium">팀 이름</span>
           </div>
-          <ChevronRight className="w-5 h-5 text-gray-400" />
+          <div className="flex items-center gap-2">
+            <span className="font-medium">{data.name}</span>
+            <ChevronRight className="w-5 h-5 text-gray-400" />
+          </div>
         </div>
       }
     >
-      {field === "phone" ? (
+      <div>hihi</div>
+      {/* {field === "phone" ? (
         <ProfilePhone
           data={data[field] || ""}
           onSuccess={() => closeModal(field)}
@@ -109,8 +77,8 @@ export default function ProfileContent({ data }: { data: User }) {
           onSuccess={() => closeModal(field)}
         />
       ) : (
-        <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} />
-      )}
+        <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} /> */}
+      {/* )} */}
     </FieldModal>
   );
 
@@ -127,7 +95,7 @@ export default function ProfileContent({ data }: { data: User }) {
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
           <h1 className="text-2xl font-bold">프로필</h1>
         </Button> */}
-        <h1 className="text-2xl font-bold">프로필</h1>
+        <h1 className="text-2xl font-bold">팀 정보 수정</h1>
 
         <button
           className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
@@ -151,17 +119,14 @@ export default function ProfileContent({ data }: { data: User }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white mb-6">
-          {renderFieldModal("nickname", "닉네임")}
-          {renderFieldModal("email", "이메일")}
-          {renderFieldModal("phone", "전화번호")}
-          {renderFieldModal("basic", "기본정보")}
+          {renderFieldModal("name", "팀 이름")}
         </div>
 
         <h3 className="text-sm font-medium mb-3 px-2 text-gray-600">
-          플레이 정보
+          기본 정보
         </h3>
         {/* 플레이 정보 섹션 */}
-        <ProfileForm data={data} />
+        <EditTeamForm data={data} />
       </div>
     </div>
   );
