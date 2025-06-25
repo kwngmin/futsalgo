@@ -144,7 +144,7 @@ export default function EditTeamContent({ data }: { data: Team }) {
               className="rounded-full flex items-center gap-2"
             >
               <Camera className="size-5 text-gray-600" />
-              <span className="font-medium">프로필 사진 변경</span>
+              <span className="font-medium">팀 로고 변경</span>
             </Button>
           </div>
           {renderFieldModal("name", "팀 이름")}
