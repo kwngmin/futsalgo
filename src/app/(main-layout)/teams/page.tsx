@@ -229,7 +229,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
             {team.name}
           </h3>
           <div className="w-full flex flex-col sm:flex-row sm:justify-between">
-            <div className="sm:text-sm font-medium tracking-tight flex items-center gap-2 mb-3 sm:mb-1.5">
+            <div className="sm:text-sm font-medium tracking-tight flex items-center gap-2 mb-2 sm:mb-0.5">
               {team.gender === "MALE" ? (
                 <Mars className="size-4 text-sky-700" />
               ) : team.gender === "FEMALE" ? (
@@ -251,21 +251,21 @@ const TeamCard = ({ team }: TeamCardProps) => {
               team.stats?.professionalCount) && (
               <div className="flex items-center gap-1">
                 {team.recruitmentStatus === "RECRUITING" ? (
-                  <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1 h-5">
-                    <span className="text-xs text-sky-700 font-semibold tracking-tight">
+                  <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
+                    <span className="text-sm sm:text-xs text-sky-700 font-semibold tracking-tight">
                       팀원 모집
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1 h-5">
-                    <span className="text-xs text-slate-700 font-semibold tracking-tight">
+                  <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
+                    <span className="text-sm sm:text-xs text-slate-700 font-semibold tracking-tight">
                       팀원 모집마감
                     </span>
                   </div>
                 )}
                 {team.stats?.professionalCount ? (
-                  <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1 h-5">
-                    <span className="text-xs text-indigo-700 font-medium tracking-tight">
+                  <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
+                    <span className="text-sm sm:text-xs text-indigo-700 font-medium tracking-tight">
                       {`선출 ${team.stats?.professionalCount}명`}
                     </span>
                   </div>
