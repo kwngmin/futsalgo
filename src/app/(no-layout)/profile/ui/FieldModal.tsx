@@ -23,7 +23,7 @@ export const FieldModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md fixed -translate-x-0 -translate-y-0 inset-x-4 top-5 sm:inset-x-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2">
+      <DialogContent className="sm:max-w-md fixed -translate-x-0 -translate-y-0 inset-x-4 top-5 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 lg:ml-10 xl:ml-32 sm:top-1/3 sm:-translate-y-1/2">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

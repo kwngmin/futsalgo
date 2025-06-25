@@ -31,7 +31,7 @@ interface TeamMemberWithUser extends TeamMember {
   >;
 }
 
-const TeamPlayers = ({
+const TeamMemberList = ({
   members,
   isMember,
   role,
@@ -108,13 +108,13 @@ const TeamPlayers = ({
         {members.pending.map((member) => (
           <div
             key={member.id}
-            className="border-t border-gray-100 first:border-t-0 w-full flex flex-col gap-3 px-3 py-4 hover:bg-gray-50 transition-colors"
+            className="border-t border-gray-100 first:border-t-0 w-full flex flex-col sm:flex-row sm:gap-0"
           >
             <button
               onClick={() => router.push(`/players/${member.userId}`)}
-              className="flex items-center justify-between cursor-pointer"
+              className="flex items-center justify-between gap-3 cursor-pointer sm:grow px-3 py-4 hover:bg-gray-50 transition-colors"
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 grow">
                 <Image
                   src={
                     member.user.image || "/assets/images/default-profile.png"
@@ -124,7 +124,7 @@ const TeamPlayers = ({
                   height={40}
                   className="rounded-full size-10"
                 />
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start grow">
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                     {member.user.nickname || "닉네임 없음"}
                   </h3>
@@ -143,46 +143,9 @@ const TeamPlayers = ({
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="hidden sm:grid grid-cols-2 gap-1.5 w-32 mr-3">
-                  <Button
-                    variant="outline"
-                    className="font-semibold"
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      try {
-                        const result = await approveTeamMember(
-                          teamId,
-                          member.userId
-                        );
-                        if (result?.success) {
-                          // toast.success("팀원 승인이 완료되었습니다.");
-                          alert("팀원 승인이 완료되었습니다.");
-                          refetch();
-                        } else {
-                          alert(result?.error);
-                        }
-                      } catch (error) {
-                        console.error(error);
-                      }
-                    }}
-                  >
-                    승인
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="text-destructive bg-destructive/10 hover:bg-destructive/20"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    거절
-                  </Button>
-                </div>
-                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
-              </div>
+              <ChevronRight className="w-5 h-5 text-gray-400 sm:hidden" />
             </button>
-            <div className="grid grid-cols-2 gap-2 sm:hidden">
+            <div className="grid grid-cols-2 gap-2 px-3 pt-1.5 mb-4 sm:mb-0 sm:py-0 items-center">
               <Button
                 variant="outline"
                 className="font-semibold"
@@ -283,4 +246,4 @@ const TeamPlayers = ({
   );
 };
 
-export default TeamPlayers;
+export default TeamMemberList;
