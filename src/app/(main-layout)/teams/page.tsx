@@ -18,6 +18,7 @@ import Image from "next/image";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import { Team } from "@prisma/client";
 import { TEAM_GENDER } from "@/entities/team/model/constants";
+import { Separator } from "@/shared/components/ui/separator";
 
 // type FilterType = "all" | "male" | "female";
 
@@ -223,47 +224,42 @@ const TeamCard = ({ team }: TeamCardProps) => {
         </div>
 
         {/* 팀 정보 */}
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start grow">
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-6 mb-0.5">
             {team.name}
-            {/* <div className="text-indigo-800 flex items-center text-xs gap-2 font-medium px-1 h-5 bg-indigo-500/10 rounded">
-              팀원 모집중
-            </div> */}
           </h3>
-          {/* <span className="sm:text-sm text-gray-500">
-            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
-              team.city
-            } ${team.district} • 총 ${team._count.members}명 • ${
-              team.stats?.professionalCount
-                ? `선출 ${team.stats?.professionalCount}명`
-                : "선출 없음"
-            }`}
-            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
-              team.city
-            } ${team.district} • 총 ${team._count.members}명${
-              team.stats?.professionalCount
-                ? ` • 선출 ${team.stats?.professionalCount}명`
-                : ""
-            }`}
-          </span> */}
-          <div className="sm:text-sm font-medium tracking-tight flex items-center gap-2 mb-1 sm:mb-1.5">
-            {team.gender === "MALE" ? (
-              <Mars className="size-4 text-sky-700" />
-            ) : team.gender === "FEMALE" ? (
-              <Venus className="size-4 text-pink-700" />
-            ) : (
-              <Blend className="size-4 text-gray-700" />
-            )}
-            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
-              team._count.members
-            }명`}
+          <div className="w-full flex flex-col sm:flex-row sm:justify-between">
+            <div className="sm:text-sm font-medium tracking-tight flex items-center gap-2 mb-3 sm:mb-1.5">
+              {team.gender === "MALE" ? (
+                <Mars className="size-4 text-sky-700" />
+              ) : team.gender === "FEMALE" ? (
+                <Venus className="size-4 text-pink-700" />
+              ) : (
+                <Blend className="size-4 text-gray-700" />
+              )}
+              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+                team._count.members
+              }명`}
+              <div className="flex items-center gap-1.5 h-4">
+                <Separator orientation="vertical" />
+                <span className="text-sm sm:text-xs text-gray-500 font-medium">
+                  {`${team.city} ${team.district}`}
+                </span>
+              </div>
+            </div>
             {(team.recruitmentStatus === "RECRUITING" ||
               team.stats?.professionalCount) && (
               <div className="flex items-center gap-1">
-                {team.recruitmentStatus === "RECRUITING" && (
+                {team.recruitmentStatus === "RECRUITING" ? (
                   <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1 h-5">
                     <span className="text-xs text-sky-700 font-semibold tracking-tight">
                       팀원 모집
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1 h-5">
+                    <span className="text-xs text-slate-700 font-semibold tracking-tight">
+                      팀원 모집마감
                     </span>
                   </div>
                 )}
@@ -274,20 +270,9 @@ const TeamCard = ({ team }: TeamCardProps) => {
                     </span>
                   </div>
                 ) : null}
-                <div className="flex items-center gap-0.5 bg-teal-500/10 rounded px-1 h-5">
-                  <span className="text-xs text-teal-700 font-semibold tracking-tight">
-                    팀전 가능
-                  </span>
-                </div>
               </div>
             )}
           </div>
-          <span className="text-sm sm:text-xs text-gray-500">
-            {`${team.city} ${team.district}`}
-          </span>
-          {/* <div className="flex items-center gap-1">
-            <MapPinned className="size-4 text-gray-400" />
-          </div> */}
         </div>
 
         {/* 누적 경기수와 팀원 수 */}
