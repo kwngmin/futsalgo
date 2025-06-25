@@ -72,7 +72,9 @@ const TeamsPage = () => {
               data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
                 <div className="space-y-3">
                   {data?.data?.myTeams.map((team) => (
-                    <TeamCard key={team.id} team={team} isMyTeam />
+                    <div key={team.id} className="bg-white rounded-2xl">
+                      <TeamCard team={team} isMyTeam />
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -198,7 +200,7 @@ type TeamCardProps = {
   isMyTeam?: boolean;
 };
 
-const TeamCard = ({ team }: TeamCardProps) => {
+const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
   const router = useRouter();
 
   return (
@@ -227,6 +229,13 @@ const TeamCard = ({ team }: TeamCardProps) => {
         <div className="flex flex-col items-start justify-center grow">
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-6">
             {team.name}
+            {isMyTeam && (
+              <div className="flex items-center gap-0.5 bg-black rounded-full px-2.5 sm:px-2 h-5 sm:h-4.5">
+                <span className="text-xs text-white font-bold tracking-tight">
+                  내 팀
+                </span>
+              </div>
+            )}
           </h3>
           <div className="w-full flex flex-col sm:flex-row sm:justify-between">
             <div className="sm:text-sm font-medium tracking-tight flex items-center gap-2 mb-2 sm:mb-0.5">
