@@ -106,90 +106,86 @@ const EditTeamForm = ({ team }: { team: Team }) => {
       </div>
 
       {/* 팀 정보 섹션 */}
-      <div className="space-y-4">
-        <div className="bg-white rounded-lg overflow-hidden">
-          <div className="space-y-6 p-4">
-            <div className="space-y-6">
+      <div className="space-y-6">
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <Label className="">팀 이름</Label>
+            <Input
+              {...register("name")}
+              type="text"
+              placeholder="팀 이름을 입력하세요"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <Label className="">팀 소개</Label>
+            <Textarea
+              {...register("description")}
+              // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
+              placeholder="팀에 대한 간단한 소개를 작성해주세요"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <Label className="px-1">팀 구분</Label>
+            <CustomRadioGroup
+              options={TEAM_GENDER_OPTIONS}
+              value={watch("gender")}
+              onValueChange={(value) =>
+                setValue("gender", value as "MALE" | "FEMALE")
+              }
+              error={errors.gender?.message}
+            />
+          </div>
+
+          <div className="space-y-3">
+            <Label className="px-1">팀 실력</Label>
+            <CustomRadioGroup
+              options={TEAM_LEVEL_OPTIONS}
+              value={watch("level")}
+              onValueChange={(value) => setValue("level", value as TeamLevel)}
+              error={errors.level?.message}
+              direction="vertical"
+            />
+          </div>
+
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-3">
-                <Label className="">팀 이름</Label>
+                <Label className="px-1">시/도</Label>
+                <CustomSelect
+                  hasPlaceholder
+                  options={koreanCities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                  value={watch("city")}
+                  onChange={(e) => setValue("city", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <Label className="px-1">구/군</Label>
                 <Input
-                  {...register("name")}
                   type="text"
-                  placeholder="팀 이름을 입력하세요"
+                  {...register("district")}
+                  placeholder="구/군을 입력하세요"
                 />
-              </div>
-
-              <div className="space-y-3">
-                <Label className="">팀 소개</Label>
-                <Textarea
-                  {...register("description")}
-                  // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
-                  placeholder="팀에 대한 간단한 소개를 작성해주세요"
-                />
-              </div>
-
-              <div className="space-y-3">
-                <Label className="px-1">팀 구분</Label>
-                <CustomRadioGroup
-                  options={TEAM_GENDER_OPTIONS}
-                  value={watch("gender")}
-                  onValueChange={(value) =>
-                    setValue("gender", value as "MALE" | "FEMALE")
-                  }
-                  error={errors.gender?.message}
-                />
-              </div>
-
-              <div className="space-y-3">
-                <Label className="px-1">팀 실력</Label>
-                <CustomRadioGroup
-                  options={TEAM_LEVEL_OPTIONS}
-                  value={watch("level")}
-                  onValueChange={(value) =>
-                    setValue("level", value as TeamLevel)
-                  }
-                  error={errors.level?.message}
-                  direction="vertical"
-                />
-              </div>
-
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-3">
-                    <Label className="px-1">시/도</Label>
-                    <CustomSelect
-                      hasPlaceholder
-                      options={koreanCities.map((city) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      ))}
-                      value={watch("city")}
-                      onChange={(e) => setValue("city", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label className="px-1">구/군</Label>
-                    <Input
-                      type="text"
-                      {...register("district")}
-                      placeholder="구/군을 입력하세요"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {errors.root && (
-          <Alert variant="destructive">
-            <AlertDescription>{errors.root.message}</AlertDescription>
-          </Alert>
-        )}
+      {errors.root && (
+        <Alert variant="destructive">
+          <AlertDescription>{errors.root.message}</AlertDescription>
+        </Alert>
+      )}
 
-        {/* 제출 버튼 */}
+      {/* 제출 버튼 */}
+      <div className="flex flex-col gap-3">
         <Button
           type="submit"
           size="lg"
