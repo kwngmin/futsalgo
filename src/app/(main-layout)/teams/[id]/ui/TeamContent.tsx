@@ -488,19 +488,6 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
           )} */}
 
-          {/* 소개 */}
-          {selectedTab === "introduction" && (
-            <div className="bg-white rounded-2xl pb-3">
-              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                <ChartPie className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">팀원 실력</span>
-              </div>
-              <p className="px-4 py-4 bg-white rounded-2xl min-h-32">
-                {data?.data?.description ?? "소개 없음"}
-              </p>
-            </div>
-          )}
-
           {/* 팀원 */}
           {selectedTab === "members" && (
             <TeamPlayers
@@ -559,10 +546,9 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
-                      {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
+                      {data.data.members.approved.length}명
                     </div>
-                    <Label className="text-muted-foreground">실력</Label>
+                    <Label className="text-muted-foreground">팀원</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
@@ -586,9 +572,10 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.members.approved.length}명
+                      {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
+                      {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
                     </div>
-                    <Label className="text-muted-foreground">팀원</Label>
+                    <Label className="text-muted-foreground">실력</Label>
                   </div>
                 </div>
               </div>

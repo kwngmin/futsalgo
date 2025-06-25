@@ -253,7 +253,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
                 {team.recruitmentStatus === "RECRUITING" ? (
                   <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
                     <span className="text-sm sm:text-xs text-indigo-700 font-semibold tracking-tight">
-                      팀원 모집
+                      팀원 모집중
                     </span>
                   </div>
                 ) : (
