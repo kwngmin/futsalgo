@@ -1,22 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-// import { Button } from "@/shared/components/ui/button";
-import {
-  Camera,
-  ChevronRight,
-  ClipboardType,
-  // Trophy,
-  // User2,
-  X,
-} from "lucide-react";
+import { Camera, ChevronRight, Flame, X } from "lucide-react";
 import { Team } from "@prisma/client";
-// import ProfileForm from "./ProfileForm";
-// import { FieldModal } from "./FieldModal";
-// import ProfilePhone from "./modal/ProfilePhone";
-// import ProfileNickname from "./modal/ProfileNickname";
-// import ProfileEmail from "./modal/ProfileEmail";
-// import ProfileBasicForm from "./modal/ProfileBasicForm";
 import { useState } from "react";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 import EditTeamForm from "./EditTeamForm";
@@ -54,7 +40,7 @@ export default function EditTeamContent({ data }: { data: Team }) {
           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100"
         >
           <div className="flex items-center space-x-3">
-            <ClipboardType className="w-5 h-5 text-gray-600" />
+            <Flame className="w-5 h-5 text-gray-600" />
             {/* <span className="font-medium">팀 이름</span> */}
             <span className="font-medium">{data.name}</span>
           </div>
