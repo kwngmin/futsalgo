@@ -1,13 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Camera, ChevronRight, Flame, X } from "lucide-react";
+import { ChevronRight, Flame, X } from "lucide-react";
 import { Team } from "@prisma/client";
 import { useState } from "react";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 import EditTeamForm from "./EditTeamForm";
-import Image from "next/image";
-import { Button } from "@/shared/components/ui/button";
+import LogoUploader from "./LogoUploader";
 
 export default function EditTeamContent({ data }: { data: Team }) {
   const router = useRouter();
@@ -110,29 +109,7 @@ export default function EditTeamContent({ data }: { data: Team }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white mb-6">
-          <div className="p-4 flex flex-col justify-center items-center gap-3">
-            {data.logoUrl ? (
-              <Image
-                width={80}
-                height={80}
-                src={data.logoUrl || ""}
-                alt="profile_image"
-                className="size-20 object-cover rounded-full mt-2"
-              />
-            ) : (
-              <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-                {/* <ImageIcon className="size-10 text-gray-600" /> */}
-              </div>
-            )}
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full flex items-center gap-2"
-            >
-              <Camera className="size-5 text-gray-600" />
-              <span className="font-medium">팀 로고 변경</span>
-            </Button>
-          </div>
+          <LogoUploader url={data.logoUrl || undefined} />
           {renderFieldModal("name", "팀 이름")}
         </div>
 
