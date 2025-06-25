@@ -224,8 +224,8 @@ const TeamCard = ({ team }: TeamCardProps) => {
         </div>
 
         {/* 팀 정보 */}
-        <div className="flex flex-col items-start grow">
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-6 mb-0.5">
+        <div className="flex flex-col items-start justify-center grow">
+          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-6">
             {team.name}
           </h3>
           <div className="w-full flex flex-col sm:flex-row sm:justify-between">
@@ -242,7 +242,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
               }명`}
               <div className="flex items-center gap-1.5 h-4">
                 <Separator orientation="vertical" />
-                <span className="text-sm sm:text-xs text-gray-500 font-medium">
+                <span className="text-base sm:text-sm text-gray-500 font-medium">
                   {`${team.city} ${team.district}`}
                 </span>
               </div>
