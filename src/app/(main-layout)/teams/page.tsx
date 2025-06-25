@@ -177,7 +177,7 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {team.name}
             {isMyTeam && (
-              <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/5 h-5 border border-slate-300">
+              <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/5 h-5 border border-slate-300 mb-[1px]">
                 <span className="text-xs text-slate-700 font-bold tracking-tight">
                   소속 팀
                 </span>
