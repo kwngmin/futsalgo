@@ -206,7 +206,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
       className="border-t border-gray-100 first:border-t-0 px-3 py-4 hover:bg-gray-50 transition-colors cursor-pointer"
       onClick={() => router.push(`/teams/${team.id}`)}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex gap-3">
         {/* 팀 로고 */}
         <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
           {team.logoUrl ? (
