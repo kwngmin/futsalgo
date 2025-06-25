@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { getPlayers } from "./model/actions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import PlayerCard from "./ui/PlayerCard";
@@ -102,32 +102,16 @@ const PlayersPage = () => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          {/* 내 프로필 섹션 또는 로그인 안내 */}
-          <div>
-            {isLoggedIn && data?.data?.user ? (
-              <div className="space-y-3">
-                <PlayerCard
-                  player={data?.data?.user}
-                  isCurrentUser={true}
-                  teamName={data?.data?.user?.teams[0]?.team?.name}
-                />
-              </div>
-            ) : (
-              <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                <h3 className="font-semibold text-gray-900">
-                  원활한 서비스 이용을 위해 로그인이 필요합니다
-                </h3>
-                <div className="flex gap-2 justify-center mt-3">
-                  <button
-                    className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => signIn()}
-                  >
-                    시작하기
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          {/* 내 프로필 섹션 */}
+          {isLoggedIn && data?.data?.user ? (
+            <div className="space-y-3">
+              <PlayerCard
+                player={data?.data?.user}
+                isCurrentUser={true}
+                teamName={data?.data?.user?.teams[0]?.team?.name}
+              />
+            </div>
+          ) : null}
 
           {/* 필터 섹션 */}
           <div className="flex flex-col gap-2">

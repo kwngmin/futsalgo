@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeams, GetTeamsResponse } from "./model/actions";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SkeletonContent from "./ui/SkeletonTeamContent";
@@ -67,83 +67,35 @@ const TeamsPage = () => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div>
-            {isLoggedIn ? (
-              data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
-                <div className="space-y-3">
-                  {data?.data?.myTeams.map((team) => (
-                    <div key={team.id} className="bg-white rounded-2xl">
-                      <TeamCard team={team} isMyTeam />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                  {/* <h3 className="font-semibold text-gray-900">
-                  소속된 팀이 존재하지 않습니다
-                </h3> */}
-                  <div className="flex gap-2 justify-center">
-                    <button
-                      className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                      onClick={() => router.push("/teams/create")}
-                    >
-                      팀 만들기
-                    </button>
-                    <button
-                      className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
-                      // onClick={() => signIn()}
-                    >
-                      팀 가입하기
-                    </button>
+          {isLoggedIn ? (
+            data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
+              <div className="space-y-3">
+                {data?.data?.myTeams.map((team) => (
+                  <div key={team.id} className="bg-white rounded-2xl">
+                    <TeamCard team={team} isMyTeam />
                   </div>
-                </div>
-              )
+                ))}
+              </div>
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                <h3 className="font-semibold text-gray-900">
-                  원활한 서비스 이용을 위해 로그인이 필요합니다
-                </h3>
-                <div className="flex gap-2 justify-center mt-3">
+                <div className="flex gap-2 justify-center">
                   <button
                     className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => signIn()}
+                    onClick={() => router.push("/teams/create")}
                   >
-                    시작하기
+                    팀 만들기
+                  </button>
+                  <button
+                    className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
+                    // onClick={() => signIn()}
+                  >
+                    팀 가입하기
                   </button>
                 </div>
               </div>
-            )}
-          </div>
+            )
+          ) : null}
 
-          {/* 내 팀 섹션 */}
-          {/* <div>
-          {myTeams.length > 0 ? (
-            <div className="space-y-3">
-              {myTeams.map((team) => (
-                <TeamCard key={team.id} team={team} isMyTeam />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-6 bg-gray-100 rounded-2xl p-4">
-              <h3 className="font-medium text-gray-900">
-                소속된 팀이 없습니다
-              </h3>
-              <p className="text-gray-500 text-sm">
-                새로운 팀을 만드시거나 팀 코드를 입력하여 가입해보세요.
-              </p>
-              <div className="flex gap-2 justify-center mt-3">
-                <button className="text-sm bg-black text-white px-4 min-w-28 py-1.5 rounded-full font-bold cursor-pointer">
-                  팀 만들기
-                </button>
-                <button className="text-sm bg-white text-black px-4 min-w-28 py-1.5 rounded-full cursor-pointer">
-                  팀 코드 입력
-                </button>
-              </div>
-            </div>
-          )}
-        </div> */}
-
-          {/* 다른 팀 섹션 */}
           <div className="flex flex-col gap-2">
             {/* 하단: 필터 칩들 */}
             {/* <div className="flex items-center gap-2 justify-between hidden">
@@ -218,11 +170,6 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
               {team.name.charAt(0)}
             </div>
           )}
-          {/* {team.isRecruiting && (
-            <span className="absolute -top-2 -left-2 px-2 py-1 text-xs font-semibold bg-gradient-to-br from-emerald-100 to-green-100 text-green-800 rounded-2xl flex-shrink-0 shadow-sm">
-              모집중
-            </span>
-          )} */}
         </div>
 
         {/* 팀 정보 */}
@@ -260,25 +207,30 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
               team.stats?.professionalCount) && (
               <div className="flex items-center gap-1">
                 {team.recruitmentStatus === "RECRUITING" ? (
-                  <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
-                    <span className="text-sm sm:text-xs text-indigo-700 font-semibold tracking-tight">
+                  <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 h-6">
+                    <span className="text-sm text-indigo-700 font-semibold tracking-tight">
                       팀원 모집중
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
-                    <span className="text-sm sm:text-xs text-slate-700 font-semibold tracking-tight">
+                  <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 h-6">
+                    <span className="text-sm text-slate-700 font-semibold tracking-tight">
                       팀원 모집마감
                     </span>
                   </div>
                 )}
                 {team.stats?.professionalCount ? (
-                  <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1.5 sm:px-1 h-6 sm:h-5">
-                    <span className="text-sm sm:text-xs text-sky-700 font-medium tracking-tight">
+                  <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1.5 h-6">
+                    <span className="text-sm text-sky-700 font-medium tracking-tight">
                       {`선출 ${team.stats?.professionalCount}명`}
                     </span>
                   </div>
                 ) : null}
+                {/* <div className="flex items-center gap-0.5 bg-teal-500/10 rounded px-1.5 h-6">
+                  <span className="text-sm text-teal-700 font-semibold tracking-tight">
+                    팀전 신청 가능
+                  </span>
+                </div> */}
               </div>
             )}
           </div>
