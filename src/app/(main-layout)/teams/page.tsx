@@ -1,7 +1,15 @@
 "use client";
 
 // import { useState } from "react";
-import { Search, ArrowDownUp } from "lucide-react";
+import {
+  Search, //
+  ArrowDownUp,
+  Mars,
+  Venus,
+  Blend,
+
+  // UserRoundPlus,
+} from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeams, GetTeamsResponse } from "./model/actions";
 import { signIn, useSession } from "next-auth/react";
@@ -216,18 +224,70 @@ const TeamCard = ({ team }: TeamCardProps) => {
 
         {/* 팀 정보 */}
         <div className="flex flex-col items-start">
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-5 sm:h-6">
+          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 truncate leading-none h-6 mb-0.5">
             {team.name}
+            {/* <div className="text-indigo-800 flex items-center text-xs gap-2 font-medium px-1 h-5 bg-indigo-500/10 rounded">
+              팀원 모집중
+            </div> */}
           </h3>
-          <span className="sm:text-sm text-gray-500">
-            {`${team.city} ${team.district} • ${
-              TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]
-            } • 총 ${team._count.members}명 • ${
+          {/* <span className="sm:text-sm text-gray-500">
+            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+              team.city
+            } ${team.district} • 총 ${team._count.members}명 • ${
               team.stats?.professionalCount
                 ? `선출 ${team.stats?.professionalCount}명`
                 : "선출 없음"
             }`}
+            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+              team.city
+            } ${team.district} • 총 ${team._count.members}명${
+              team.stats?.professionalCount
+                ? ` • 선출 ${team.stats?.professionalCount}명`
+                : ""
+            }`}
+          </span> */}
+          <div className="sm:text-sm font-medium tracking-tight flex items-center gap-2 mb-1 sm:mb-1.5">
+            {team.gender === "MALE" ? (
+              <Mars className="size-4 text-sky-700" />
+            ) : team.gender === "FEMALE" ? (
+              <Venus className="size-4 text-pink-700" />
+            ) : (
+              <Blend className="size-4 text-gray-700" />
+            )}
+            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+              team._count.members
+            }명`}
+            {(team.recruitmentStatus === "RECRUITING" ||
+              team.stats?.professionalCount) && (
+              <div className="flex items-center gap-1">
+                {team.recruitmentStatus === "RECRUITING" && (
+                  <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1 h-5">
+                    <span className="text-xs text-sky-700 font-semibold tracking-tight">
+                      팀원 모집
+                    </span>
+                  </div>
+                )}
+                {team.stats?.professionalCount ? (
+                  <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1 h-5">
+                    <span className="text-xs text-indigo-700 font-medium tracking-tight">
+                      {`선출 ${team.stats?.professionalCount}명`}
+                    </span>
+                  </div>
+                ) : null}
+                <div className="flex items-center gap-0.5 bg-teal-500/10 rounded px-1 h-5">
+                  <span className="text-xs text-teal-700 font-semibold tracking-tight">
+                    팀전 가능
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          <span className="text-sm sm:text-xs text-gray-500">
+            {`${team.city} ${team.district}`}
           </span>
+          {/* <div className="flex items-center gap-1">
+            <MapPinned className="size-4 text-gray-400" />
+          </div> */}
         </div>
 
         {/* 누적 경기수와 팀원 수 */}
