@@ -1,14 +1,12 @@
 "use client";
 
-// import { useState } from "react";
 import {
   Search, //
   ArrowDownUp,
   Mars,
   Venus,
   Blend,
-
-  // UserRoundPlus,
+  Users,
 } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeams, GetTeamsResponse } from "./model/actions";
@@ -21,6 +19,34 @@ import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import { Separator } from "@/shared/components/ui/separator";
 
 // type FilterType = "all" | "male" | "female";
+
+/**
+ * @param city 전체 시/도 이름 (예: '서울특별시', '충청북도')
+ * @returns 축약된 지역명 (예: '서울', '충북')
+ */
+export function formatCityName(city: string): string {
+  const cityMap: Record<string, string> = {
+    서울특별시: "서울",
+    부산광역시: "부산",
+    대구광역시: "대구",
+    인천광역시: "인천",
+    광주광역시: "광주",
+    대전광역시: "대전",
+    울산광역시: "울산",
+    세종특별자치시: "세종",
+    경기도: "경기",
+    강원도: "강원",
+    충청북도: "충북",
+    충청남도: "충남",
+    전라북도: "전북",
+    전라남도: "전남",
+    경상북도: "경북",
+    경상남도: "경남",
+    제주특별자치도: "제주",
+  };
+
+  return cityMap[city] ?? city;
+}
 
 const TeamsPage = () => {
   const router = useRouter();
@@ -71,8 +97,12 @@ const TeamsPage = () => {
             data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
               <div className="space-y-3">
                 {data?.data?.myTeams.map((team) => (
-                  <div key={team.id} className="bg-white rounded-2xl">
-                    <TeamCard team={team} isMyTeam />
+                  <div
+                    key={team.id}
+                    className="bg-white rounded-2xl ring ring-foreground/50"
+                    // className="bg-white rounded-2xl ring-4 ring-border"
+                  >
+                    <TeamCard team={team} />
                   </div>
                 ))}
               </div>
@@ -149,10 +179,10 @@ type TeamCardProps = {
       professionalCount: number;
     };
   };
-  isMyTeam?: boolean;
+  // isMyTeam?: boolean;
 };
 
-const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
+const TeamCard = ({ team }: TeamCardProps) => {
   const router = useRouter();
 
   return (
@@ -175,16 +205,16 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
       <div className="flex flex-col items-start justify-center grow gap-0.5">
         <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
           {team.name}
-          {isMyTeam && (
+          {/* {isMyTeam && (
             <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/10 h-5 border border-slate-300 mb-0.5">
               <span className="text-xs text-slate-800 font-semibold tracking-tight">
                 소속 팀
               </span>
             </div>
-          )}
+          )} */}
         </h3>
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-          <div className="text-sm font-medium tracking-tight flex items-center gap-2 text-muted-foreground">
+          <div className="w-full sm:text-sm font-medium tracking-tight flex items-center gap-1 text-muted-foreground">
             {team.gender === "MALE" ? (
               <Mars className="size-4 text-sky-700" />
             ) : team.gender === "FEMALE" ? (
@@ -192,17 +222,13 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
             ) : (
               <Blend className="size-4 text-gray-700" />
             )}
-            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
-              team._count.members
-            }명${
+            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]}`}
+            {/* <Users className="size-4 text-gray-700" /> */} •{" "}
+            {`${
               Boolean(team.stats?.professionalCount)
-                ? ` 중 선출 ${team.stats?.professionalCount}명`
-                : ""
-            } • ${`${team.city} ${team.district}`}`}
-            {/* <div className="flex items-center gap-1.5 h-4">
-                <Separator orientation="vertical" />
-                <span className="text-gray-500 font-medium"></span>
-              </div> */}
+                ? `선출포함 ${team._count.members}명`
+                : `${team._count.members}명`
+            } • ${`${formatCityName(team.city)} ${team.district}`}`}
           </div>
         </div>
       </div>
@@ -212,7 +238,7 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
         team.stats?.professionalCount) && (
         <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
           {team.recruitmentStatus === "RECRUITING" && (
-            <div className="flex items-center gap-0.5 bg-indigo-500/10 px-2 h-7">
+            <div className="flex items-center gap-0.5 bg-indigo-500/10 px-2 h-8">
               <span className="text-sm text-indigo-700 font-medium tracking-tight">
                 팀원 모집중
               </span>
