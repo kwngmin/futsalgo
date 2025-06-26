@@ -619,22 +619,6 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 개요 */}
           {selectedTab === "overview" && (
             <Fragment>
-              {/* 지역 */}
-              {/* <div className="bg-white rounded-lg overflow-hidden">
-                <button
-                  className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <MapPin className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">{`${
-                      data?.data?.city && data?.data?.district
-                        ? `${data?.data?.city} • ${data?.data?.district}`
-                        : "지역 미설정"
-                    }`}</span>
-                  </div>
-                </button>
-              </div> */}
-
               {/* 기본 정보 */}
               <div className="bg-white rounded-2xl pb-3">
                 <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
@@ -662,17 +646,17 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.members.approved.length}명
-                    </div>
-                    <Label className="text-muted-foreground">팀원</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
                       {data.data.stats.professionalCount
                         ? `${data.data.stats.professionalCount}명`
                         : "없음"}
                     </div>
                     <Label className="text-muted-foreground">선수 출신</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.members.approved.length}명
+                    </div>
+                    <Label className="text-muted-foreground">팀원</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
