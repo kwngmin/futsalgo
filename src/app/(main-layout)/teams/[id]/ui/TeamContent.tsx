@@ -35,14 +35,17 @@ const tabs = [
   {
     label: "개요",
     value: "overview",
+    isDisabled: false,
   },
-  // {
-  //   label: "소개",
-  //   value: "introduction",
-  // },
   {
     label: "팀원",
     value: "members",
+    isDisabled: false,
+  },
+  {
+    label: "후기",
+    value: "reviews",
+    isDisabled: true,
   },
 ];
 
@@ -222,7 +225,7 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
-          <div className="bg-white rounded-2xl pt-4 relative">
+          <div className="bg-white rounded-2xl pt-6 relative">
             {data.data.recruitmentStatus === "RECRUITING" ? (
               <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded">
@@ -473,14 +476,14 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="flex items-center justify-between gap-2 px-3 border-t border-input">
               <div className="flex h-12 space-x-2">
                 {tabs
-                  .filter(
-                    (tab) =>
-                      tab.value !== "management" ||
-                      (tab.value === "management" &&
-                        (data.data.currentUserMembership.role === "MANAGER" ||
-                          data.data.currentUserMembership.role === "OWNER") &&
-                        data.data.currentUserMembership.status === "APPROVED")
-                  )
+                  // .filter(
+                  //   (tab) =>
+                  //     tab.value !== "management" ||
+                  //     (tab.value === "management" &&
+                  //       (data.data.currentUserMembership.role === "MANAGER" ||
+                  //         data.data.currentUserMembership.role === "OWNER") &&
+                  //       data.data.currentUserMembership.status === "APPROVED")
+                  // )
                   .map((tab) => (
                     <div
                       key={tab.value}
@@ -488,6 +491,8 @@ const TeamContent = ({ id }: { id: string }) => {
                         selectedTab === tab.value
                           ? "border-gray-500"
                           : "border-transparent"
+                      } ${
+                        tab.isDisabled ? "pointer-events-none opacity-50" : ""
                       }`}
                       onClick={() => setSelectedTab(tab.value)}
                     >
