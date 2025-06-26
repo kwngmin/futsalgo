@@ -37,3 +37,13 @@ export const TEAM_LEVEL = {
   HIGH: "중상",
   VERY_HIGH: "상",
 };
+
+export const TEAM_RECRUITMENT_STATUS_OPTIONS = [
+  { value: "RECRUITING", label: "모집중" },
+  { value: "NOT_RECRUITING", label: "모집마감" },
+];
+
+export const TEAM_RECRUITMENT_STATUS = {
+  RECRUITING: "모집중",
+  NOT_RECRUITING: "모집마감",
+};

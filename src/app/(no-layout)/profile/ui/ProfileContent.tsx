@@ -1,15 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  Camera,
-  ChevronRight,
-  IdCard,
-  Mail,
-  Phone,
-  User2,
-  X,
-} from "lucide-react";
+import { ChevronRight, IdCard, Mail, Phone, User2, X } from "lucide-react";
 import { User } from "@prisma/client";
 import ProfileForm from "./ProfileForm";
 import { GENDER } from "@/entities/user/model/constants";
@@ -23,8 +15,7 @@ import {
   formatPhoneNumber,
   getCurrentAge,
 } from "@/entities/user/model/actions";
-import Image from "next/image";
-import { Button } from "@/shared/components/ui/button";
+import ProfilePhoto from "./ProfilePhoto";
 
 export default function ProfileContent({ data }: { data: User }) {
   const router = useRouter();
@@ -152,23 +143,7 @@ export default function ProfileContent({ data }: { data: User }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white mb-6">
-          <div className="p-4 flex flex-col justify-center items-center gap-3">
-            <Image
-              width={80}
-              height={80}
-              src={data.image || ""}
-              alt="profile_image"
-              className="size-20 object-cover rounded-full mt-2"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full flex items-center gap-2"
-            >
-              <Camera className="size-5 text-gray-600" />
-              <span className="font-medium">프로필 사진 변경</span>
-            </Button>
-          </div>
+          <ProfilePhoto url={data.image || undefined} userId={data.id} />
           {renderFieldModal("nickname", "닉네임")}
           {renderFieldModal("email", "이메일")}
           {renderFieldModal("phone", "전화번호")}

@@ -127,7 +127,7 @@ export default function EditTeamContent({
           기본 정보
         </h3>
         {/* 플레이 정보 섹션 */}
-        <EditTeamForm data={data} />
+        <EditTeamForm data={data} teamId={data.id} userId={userId} />
       </div>
     </div>
   );

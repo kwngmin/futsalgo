@@ -14,22 +14,13 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import {
   TEAM_GENDER_OPTIONS,
   TEAM_LEVEL_OPTIONS,
+  TEAM_RECRUITMENT_STATUS_OPTIONS,
 } from "@/entities/team/model/constants";
 import { Input } from "@/shared/components/ui/input";
 import CustomSelect from "@/shared/components/ui/custom-select";
-
-const editTeamFormSchema = z.object({
-  // name: z.string().min(1, "팀 이름을 입력해주세요"),
-  gender: z.enum(["MALE", "FEMALE", "MIXED"], {
-    error: () => "성별을 선택해주세요",
-  }),
-  description: z.string().min(1, "팀 소개를 입력해주세요"),
-  city: z.string().min(1, "시/도를 선택해주세요"),
-  district: z.string().min(1, "구/군을 입력해주세요"),
-  level: z.enum(["VERY_LOW", "LOW", "MID", "HIGH", "VERY_HIGH"], {
-    error: () => "팀 실력을 선택해주세요",
-  }),
-});
+import { updateTeam } from "../model/actions";
+import { editTeamFormSchema } from "../model/schema.model";
+import { useRouter } from "next/navigation";
 
 export type EditTeamFormData = z.infer<typeof editTeamFormSchema>;
 
@@ -53,15 +44,23 @@ const koreanCities = [
   "제주특별자치도",
 ];
 
-const EditTeamForm = ({ data }: { data: Team }) => {
-  //   const router = useRouter();
+const EditTeamForm = ({
+  data,
+  teamId,
+}: // userId,
+{
+  data: Team;
+  teamId: string;
+  userId: string;
+}) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  console.log(data, "data");
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // setError,
+    setError,
     setValue,
     watch,
   } = useForm<EditTeamFormData>({
@@ -72,13 +71,63 @@ const EditTeamForm = ({ data }: { data: Team }) => {
       city: data.city,
       district: data.district,
       level: data.level,
+      recruitmentStatus: data.recruitmentStatus,
     },
   });
 
-  const onSubmit = async (data: EditTeamFormData) => {
+  const onSubmit = async (formData: EditTeamFormData) => {
     setIsLoading(true);
-    console.log(data);
-    setIsLoading(false);
+
+    try {
+      console.log("🚀 Submitting team update:", formData);
+
+      const result = await updateTeam({
+        // userId,
+        teamId,
+        data: formData,
+      });
+      console.log(result, "result");
+
+      if (result.success) {
+        console.log("✅ Team update successful:", result);
+
+        // 성공 알림
+        alert(result.message || "팀 정보가 업데이트되었습니다.");
+
+        // 팀 상세 페이지로 리다이렉트 (선택사항)
+        router.push(`/teams/${teamId}`);
+
+        // 또는 현재 페이지에서 폼 상태만 리셋
+        // router.refresh(); // 페이지 데이터 새로고침
+      }
+    } catch (error) {
+      console.error("❌ Team update failed:", error);
+
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "팀 정보 업데이트에 실패했습니다.";
+
+      // 에러 처리
+      if (errorMessage.includes("권한이 없습니다")) {
+        setError("root", { message: "팀 정보를 수정할 권한이 없습니다." });
+      } else if (errorMessage.includes("로그인이 필요합니다")) {
+        setError("root", { message: "로그인이 필요합니다." });
+        router.push("/login");
+      } else if (errorMessage.includes("입력")) {
+        // 입력 데이터 관련 에러는 폼 에러로 표시
+        setError("root", { message: errorMessage });
+      } else {
+        setError("root", {
+          message: "팀 정보 업데이트 중 오류가 발생했습니다.",
+        });
+      }
+
+      // 토스트 에러 알림
+      console.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,7 +140,23 @@ const EditTeamForm = ({ data }: { data: Team }) => {
         <Textarea
           {...register("description")}
           // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
+          className="min-h-24"
           placeholder="팀에 대한 간단한 소개를 작성해주세요"
+        />
+      </div>
+
+      <div className="space-y-3">
+        <Label className="px-1">팀원 모집</Label>
+        <CustomRadioGroup
+          options={TEAM_RECRUITMENT_STATUS_OPTIONS}
+          value={watch("recruitmentStatus")}
+          onValueChange={(value) =>
+            setValue(
+              "recruitmentStatus",
+              value as "RECRUITING" | "NOT_RECRUITING"
+            )
+          }
+          error={errors.recruitmentStatus?.message}
         />
       </div>
 
