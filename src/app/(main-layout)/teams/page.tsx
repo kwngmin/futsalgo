@@ -207,30 +207,32 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
               team.stats?.professionalCount) && (
               <div className="flex items-center gap-1">
                 {team.recruitmentStatus === "RECRUITING" ? (
-                  <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 h-5 sm:h-6">
+                  <div className="flex items-center gap-0.5 bg-indigo-500/5 rounded px-1.5 h-5 sm:h-6">
                     <span className="text-xs sm:text-sm text-indigo-700 font-semibold tracking-tight">
                       팀원 모집중
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 h-5 sm:h-6">
+                  <div className="flex items-center gap-0.5 bg-slate-500/5 rounded px-1.5 h-5 sm:h-6">
                     <span className="text-xs sm:text-sm text-slate-700 font-semibold tracking-tight">
                       팀원 모집마감
                     </span>
                   </div>
                 )}
-                {team.stats?.professionalCount ? (
-                  <div className="flex items-center gap-0.5 bg-sky-500/10 rounded px-1.5 h-5 sm:h-6">
+                {team.stats?.professionalCount && (
+                  <div className="flex items-center gap-0.5 bg-sky-500/5 rounded px-1.5 h-5 sm:h-6">
                     <span className="text-xs sm:text-sm text-sky-700 font-medium tracking-tight">
                       {`선출 ${team.stats?.professionalCount}명`}
                     </span>
                   </div>
-                ) : null}
-                <div className="flex items-center gap-0.5 bg-teal-500/10 rounded px-1.5 h-5 sm:h-6">
-                  <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
-                    팀전 신청 가능
-                  </span>
-                </div>
+                )}
+                {false && (
+                  <div className="flex items-center gap-0.5 bg-teal-500/5 rounded px-1.5 h-5 sm:h-6">
+                    <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
+                      팀전 신청 가능
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
