@@ -184,7 +184,7 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
               </div>
             )}
           </h3>
-          <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-1.5">
+          <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
             <div className="text-sm font-medium tracking-tight flex items-center gap-2">
               {team.gender === "MALE" ? (
                 <Mars className="size-4 text-sky-700" />
@@ -193,9 +193,9 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
               ) : (
                 <Blend className="size-4 text-gray-700" />
               )}
-              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} (${
                 team._count.members
-              }명`}
+              }명)`}
               <div className="flex items-center gap-1.5 h-4">
                 <Separator orientation="vertical" />
                 <span className="text-gray-500 font-medium">
@@ -203,7 +203,7 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
                 </span>
               </div>
             </div>
-            {(team.recruitmentStatus === "RECRUITING" ||
+            {/* {(team.recruitmentStatus === "RECRUITING" ||
               team.stats?.professionalCount) && (
               <div className="flex items-center gap-1">
                 {team.recruitmentStatus === "RECRUITING" ? (
@@ -219,7 +219,7 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
                     </span>
                   </div>
                 )}
-                {team.stats?.professionalCount && (
+                {Boolean(team.stats?.professionalCount) && (
                   <div className="flex items-center gap-0.5 bg-sky-500/5 rounded px-1.5 h-5 sm:h-6">
                     <span className="text-xs sm:text-sm text-sky-700 font-medium tracking-tight">
                       {`선출 ${team.stats?.professionalCount}명`}
@@ -234,16 +234,9 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
                   </div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         </div>
-
-        {/* 누적 경기수와 팀원 수 */}
-        {/* {!isMyTeam && (
-          <div className="text-center flex-shrink-0 w-12 text-lg font-semibold text-gray-900 my-auto">
-            {team._count.members ?? 0}
-          </div>
-        )} */}
       </div>
     </div>
   );
