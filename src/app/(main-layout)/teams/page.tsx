@@ -157,104 +157,89 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
 
   return (
     <div
-      className="border-t border-gray-100 first:border-t-0 px-3 py-4 hover:bg-gray-50 transition-colors cursor-pointer relative"
+      className="border-t border-gray-100 first:border-t-0 px-3 py-4 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-3"
       onClick={() => router.push(`/teams/${team.id}`)}
     >
-      <div className="flex items-center gap-3">
-        {/* 팀 로고 */}
-        <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
-          {team.logoUrl ? (
-            <Image src={team.logoUrl} alt={team.name} width={48} height={48} />
-          ) : (
-            <div className="size-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
-              {team.name.charAt(0)}
+      {/* 팀 로고 */}
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
+        {team.logoUrl ? (
+          <Image src={team.logoUrl} alt={team.name} width={48} height={48} />
+        ) : (
+          <div className="size-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
+            {team.name.charAt(0)}
+          </div>
+        )}
+      </div>
+
+      {/* 팀 정보 */}
+      <div className="flex flex-col items-start justify-center grow gap-0.5">
+        <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+          {team.name}
+          {isMyTeam && (
+            <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/10 h-5 border border-slate-300 mb-0.5">
+              <span className="text-xs text-slate-800 font-semibold tracking-tight">
+                소속 팀
+              </span>
             </div>
           )}
-        </div>
-
-        {/* 팀 정보 */}
-        <div className="flex flex-col items-start justify-center grow gap-0.5">
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
-            {team.name}
-            <div className="flex items-center gap-1 mb-0.5">
-              {isMyTeam && (
-                <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/10 h-5 border border-slate-300">
-                  <span className="text-xs text-slate-800 font-semibold tracking-tight">
-                    소속 팀
-                  </span>
-                </div>
-              )}
-              {team.recruitmentStatus === "RECRUITING" ? (
-                <div className="absolute right-4 top-0 flex items-center gap-0.5 bg-indigo-500/10 rounded-b px-2 h-6">
-                  <span className="text-sm text-indigo-700 font-semibold tracking-tight">
-                    팀원 모집중
-                  </span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 h-5">
-                  <span className="text-xs text-slate-700 font-semibold tracking-tight">
-                    팀원 모집마감
-                  </span>
-                </div>
-              )}
-            </div>
-          </h3>
-          <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-            <div className="text-sm font-medium tracking-tight flex items-center gap-2 text-muted-foreground">
-              {team.gender === "MALE" ? (
-                <Mars className="size-4 text-sky-700" />
-              ) : team.gender === "FEMALE" ? (
-                <Venus className="size-4 text-pink-700" />
-              ) : (
-                <Blend className="size-4 text-gray-700" />
-              )}
-              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
-                team._count.members
-              }명${
-                Boolean(team.stats?.professionalCount)
-                  ? ` 중 선출 ${team.stats?.professionalCount}명`
-                  : ""
-              } • ${`${team.city} ${team.district}`}`}
-              {/* <div className="flex items-center gap-1.5 h-4">
+        </h3>
+        <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
+          <div className="text-sm font-medium tracking-tight flex items-center gap-2 text-muted-foreground">
+            {team.gender === "MALE" ? (
+              <Mars className="size-4 text-sky-700" />
+            ) : team.gender === "FEMALE" ? (
+              <Venus className="size-4 text-pink-700" />
+            ) : (
+              <Blend className="size-4 text-gray-700" />
+            )}
+            {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
+              team._count.members
+            }명${
+              Boolean(team.stats?.professionalCount)
+                ? ` 중 선출 ${team.stats?.professionalCount}명`
+                : ""
+            } • ${`${team.city} ${team.district}`}`}
+            {/* <div className="flex items-center gap-1.5 h-4">
                 <Separator orientation="vertical" />
                 <span className="text-gray-500 font-medium"></span>
               </div> */}
-            </div>
-            {/* {(team.recruitmentStatus === "RECRUITING" ||
-              team.stats?.professionalCount) && (
-              <div className="flex items-center gap-1">
-                {team.recruitmentStatus === "RECRUITING" ? (
-                  <div className="flex items-center gap-0.5 bg-indigo-500/5 rounded px-1.5 h-5 sm:h-6">
-                    <span className="text-xs sm:text-sm text-indigo-700 font-semibold tracking-tight">
-                      팀원 모집중
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-0.5 bg-slate-500/5 rounded px-1.5 h-5 sm:h-6">
-                    <span className="text-xs sm:text-sm text-slate-700 font-semibold tracking-tight">
-                      팀원 모집마감
-                    </span>
-                  </div>
-                )}
-                {Boolean(team.stats?.professionalCount) && (
-                  <div className="flex items-center gap-0.5 bg-sky-500/5 rounded px-1.5 h-5 sm:h-6">
-                    <span className="text-xs sm:text-sm text-sky-700 font-medium tracking-tight">
-                      {`선출 ${team.stats?.professionalCount}명`}
-                    </span>
-                  </div>
-                )}
-                {false && (
-                  <div className="flex items-center gap-0.5 bg-teal-500/5 rounded px-1.5 h-5 sm:h-6">
-                    <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
-                      팀전 신청 가능
-                    </span>
-                  </div>
-                )}
-              </div>
-            )} */}
           </div>
         </div>
       </div>
+
+      {/* 상단 리본 */}
+      {(team.recruitmentStatus === "RECRUITING" ||
+        team.stats?.professionalCount) && (
+        <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
+          {team.recruitmentStatus === "RECRUITING" ? (
+            <div className="flex items-center gap-0.5 bg-indigo-500/10 px-2 h-6">
+              <span className="text-sm text-indigo-700 font-medium tracking-tight">
+                팀원 모집중
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-0.5 bg-slate-500/10 px-2 h-6">
+              <span className="text-xs text-slate-700 font-semibold tracking-tight">
+                팀원 모집마감
+              </span>
+            </div>
+          )}
+          {/* {Boolean(team.stats?.professionalCount) && (
+              <div className="flex items-center gap-0.5 bg-sky-500/5 rounded px-1.5 h-5 sm:h-6">
+                <span className="text-xs sm:text-sm text-sky-700 font-medium tracking-tight">
+                  {`선출 ${team.stats?.professionalCount}명`}
+                </span>
+              </div>
+            )} */}
+          {false && (
+            <div className="flex items-center gap-0.5 bg-teal-500/5 rounded px-1.5 h-5 sm:h-6">
+              <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
+                팀전 신청 가능
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
