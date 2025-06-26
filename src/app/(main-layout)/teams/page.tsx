@@ -18,7 +18,7 @@ import Image from "next/image";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import { Team } from "@prisma/client";
 import { TEAM_GENDER } from "@/entities/team/model/constants";
-import { Separator } from "@/shared/components/ui/separator";
+// import { Separator } from "@/shared/components/ui/separator";
 
 // type FilterType = "all" | "male" | "female";
 
