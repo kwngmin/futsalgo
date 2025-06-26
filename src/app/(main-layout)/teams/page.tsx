@@ -211,16 +211,10 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
       {(team.recruitmentStatus === "RECRUITING" ||
         team.stats?.professionalCount) && (
         <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
-          {team.recruitmentStatus === "RECRUITING" ? (
+          {team.recruitmentStatus === "RECRUITING" && (
             <div className="flex items-center gap-0.5 bg-indigo-500/10 px-2 h-6">
               <span className="text-sm text-indigo-700 font-medium tracking-tight">
                 팀원 모집중
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-0.5 bg-slate-500/10 px-2 h-6">
-              <span className="text-xs text-slate-700 font-semibold tracking-tight">
-                팀원 모집마감
               </span>
             </div>
           )}

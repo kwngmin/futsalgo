@@ -48,7 +48,7 @@ const EditTeamPage = async ({
 
   console.log(team, "team");
 
-  return <EditTeamContent data={team.data} />;
+  return <EditTeamContent data={team.data} userId={session.user.id} />;
 };
 
 export default EditTeamPage;

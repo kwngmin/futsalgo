@@ -29,12 +29,12 @@ import TeamMemberList from "./TeamMemberList";
 // import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 // import EditTeamForm from "./EditTeamForm";
 
-const logoOptions = [
-  "/assets/images/team-logo-sample-1.png",
-  // "/assets/images/team-logo-sample-2.png",
-  // "/assets/images/team-logo-sample-3.png",
-  // "/assets/images/team-logo-sample-4.png",
-];
+// const logoOptions = [
+//   "/assets/images/team-logo-sample-1.png",
+//   "/assets/images/team-logo-sample-2.png",
+//   "/assets/images/team-logo-sample-3.png",
+//   "/assets/images/team-logo-sample-4.png",
+// ];
 
 const tabs = [
   {
@@ -286,7 +286,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="flex items-center gap-4 px-6 h-20">
               {/* 프로필 사진 */}
               <div className="size-16 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <Image
+                {/* <Image
                   width={64}
                   height={64}
                   src={
@@ -296,7 +296,20 @@ const TeamContent = ({ id }: { id: string }) => {
                   alt="profile_image"
                   className="w-full h-full object-cover"
                   unoptimized
-                />
+                /> */}
+                {data?.data?.logoUrl ? (
+                  <Image
+                    width={64}
+                    height={64}
+                    src={data?.data?.logoUrl}
+                    alt="profile_image"
+                    className="size-16 object-cover"
+                  />
+                ) : (
+                  <div className="size-16 bg-gray-100 text-2xl flex items-center justify-center">
+                    {data?.data?.name.charAt(0)}
+                  </div>
+                )}
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-semibold">

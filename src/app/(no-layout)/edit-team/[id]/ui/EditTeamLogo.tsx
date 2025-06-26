@@ -1,33 +1,43 @@
 "use client";
 
-import { createUploadUrl } from "@/features/upload/model/actions";
+import updateTeamLogo from "@/features/update-team-logo/model/actions";
 import { Button } from "@/shared/components/ui/button";
-import { Camera } from "lucide-react";
+import { createUploadUrl } from "@/shared/lib/cloudflare/create-upload-url";
+import { uploadImage } from "@/shared/lib/cloudflare/upload-image";
+import { Camera, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-const LogoUploader = ({ url }: { url?: string }) => {
+// {
+//   "result": {
+//       "id": "af60720b-94cd-4c34-9ed3-409a4e216d00",
+//       "filename": "doosan.png",
+//       "meta": {},
+//       "uploaded": "2025-06-26T06:32:52.244Z",
+//       "requireSignedURLs": false,
+//       "variants": [
+//           "https://imagedelivery.net/pXiEidAZDcXP-QKb9ZHtcg/af60720b-94cd-4c34-9ed3-409a4e216d00/public"
+//       ]
+//   },
+//   "success": true,
+//   "errors": [],
+//   "messages": []
+// }
+
+const EditTeamLogo = ({
+  url,
+  teamId,
+  userId,
+}: {
+  url?: string;
+  teamId: string;
+  userId: string;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(url || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadURL, setUploadURL] = useState<string | null>(null);
-
-  const uploadToCloudflare = async (file: File, uploadURL: string) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await fetch(uploadURL, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to upload to Cloudflare");
-    }
-
-    return response.json();
-  };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -72,8 +82,22 @@ const LogoUploader = ({ url }: { url?: string }) => {
     setIsLoading(true);
 
     try {
-      const response = await uploadToCloudflare(file, uploadURL);
-      console.log(response, "response");
+      const response = await uploadImage(file, uploadURL);
+
+      if (response.success) {
+        const result = await updateTeamLogo({
+          userId,
+          teamId,
+          logoUrl: response.result.variants[0],
+        });
+        console.log(result, "result");
+
+        if (result.success) {
+          alert("팀 로고가 성공적으로 업데이트되었습니다.");
+        } else {
+          alert(result.message);
+        }
+      }
 
       // 임시 파일 상태 초기화
       setFile(null);
@@ -109,6 +133,15 @@ const LogoUploader = ({ url }: { url?: string }) => {
 
   return (
     <div className="p-4 flex flex-col justify-center items-center gap-3">
+      {isLoading && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 backdrop-blur-lg rounded-lg">
+          <Loader2
+            className="w-4 h-4 animate-spin"
+            style={{ width: "40px", height: "40px", color: "gray" }}
+          />
+          <div className="text-base text-muted-foreground">로딩 중입니다.</div>
+        </div>
+      )}
       {previewUrl ? (
         <Image
           width={80}
@@ -119,7 +152,7 @@ const LogoUploader = ({ url }: { url?: string }) => {
         />
       ) : (
         <div className="size-20 bg-gray-100 rounded-full mt-2 flex items-center justify-center flex-shrink-0 overflow-hidden">
-          {/* <ImageIcon className="size-10 text-gray-600" /> */}
+          {/* {team.name.charAt(0)} */}
         </div>
       )}
       {file ? (
@@ -152,7 +185,6 @@ const LogoUploader = ({ url }: { url?: string }) => {
             {isLoading ? "로딩중..." : "팀 로고 변경"}
           </span>
           <input
-            //   {...register("avatar")}
             id="logo"
             type="file"
             className="hidden"
@@ -165,4 +197,4 @@ const LogoUploader = ({ url }: { url?: string }) => {
   );
 };
 
-export default LogoUploader;
+export default EditTeamLogo;

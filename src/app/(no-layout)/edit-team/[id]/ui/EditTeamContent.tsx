@@ -6,9 +6,15 @@ import { Team } from "@prisma/client";
 import { useState } from "react";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 import EditTeamForm from "./EditTeamForm";
-import LogoUploader from "./LogoUploader";
+import EditTeamLogo from "./EditTeamLogo";
 
-export default function EditTeamContent({ data }: { data: Team }) {
+export default function EditTeamContent({
+  data,
+  userId,
+}: {
+  data: Team;
+  userId: string;
+}) {
   const router = useRouter();
   const [modalStates, setModalStates] = useState({
     name: false,
@@ -109,7 +115,11 @@ export default function EditTeamContent({ data }: { data: Team }) {
 
         {/* 유니크 정보 섹션 */}
         <div className="ring-2 ring-accent rounded-2xl overflow-hidden bg-white mb-6">
-          <LogoUploader url={data.logoUrl || undefined} />
+          <EditTeamLogo
+            url={data.logoUrl || undefined}
+            teamId={data.id}
+            userId={userId}
+          />
           {renderFieldModal("name", "팀 이름")}
         </div>
 

@@ -30,6 +30,17 @@ export async function createUploadUrl() {
     return data;
   } catch (error) {
     console.error("Failed to create upload URL:", error);
-    throw new Error("업로드 URL 생성에 실패했습니다.");
+
+    // 에러 타입에 따른 구체적인 메시지 제공
+    if (error instanceof Error) {
+      if (error.message.includes("HTTP error")) {
+        throw new Error("Cloudflare 서비스에 연결할 수 없습니다.");
+      }
+      if (error.message.includes("Cloudflare API error")) {
+        throw new Error(`업로드 URL 생성 실패: ${error.message}`);
+      }
+    }
+
+    throw new Error("업로드 URL 생성 중 예상치 못한 오류가 발생했습니다.");
   }
 }
