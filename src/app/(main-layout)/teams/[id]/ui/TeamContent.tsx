@@ -10,6 +10,7 @@ import {
   // ChevronRight,
   CircleX,
   EllipsisVertical,
+  Flag,
   Info,
   Loader2,
   // Hourglass,
@@ -304,14 +305,17 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </span> */}
                 </h1>
-                <p className="font-medium text-muted-foreground">
-                  {/* 주요 활동 지역:{" "} */}
-                  {`${
-                    data?.data?.city && data?.data?.district
-                      ? `${data?.data?.city} • ${data?.data?.district}`
-                      : "지역 미설정"
-                  }`}
-                </p>
+                <div className="flex items-center gap-1 h-6">
+                  <Flag className="size-4 text-gray-500" />
+                  <span className="sm:text-sm font-medium text-muted-foreground tracking-tight">
+                    {/* 주요 활동 지역:{" "} */}
+                    {`${
+                      data?.data?.city && data?.data?.district
+                        ? `${data?.data?.city} ${data?.data?.district}`
+                        : "지역 미설정"
+                    }`}
+                  </span>
+                </div>
                 {/* <p className="text-sm text-gray-500">
                   팀 생성일:{" "}
                   {data?.data?.createdAt
