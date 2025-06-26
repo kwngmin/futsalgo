@@ -4,6 +4,7 @@ import "./globals.css";
 import { auth } from "@/shared/lib/auth";
 import { SessionProviderWrapper } from "@/shared/components/providers/session-provider";
 import { QueryProvider } from "@/shared/components/providers/query-provider";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,12 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-y-scroll`}
       >
