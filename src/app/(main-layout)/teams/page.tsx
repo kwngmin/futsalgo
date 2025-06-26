@@ -176,22 +176,22 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
         <div className="flex flex-col items-start justify-center grow gap-0.5">
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {team.name}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 mb-0.5">
               {isMyTeam && (
-                <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/5 h-5 border border-slate-300">
-                  <span className="text-xs text-slate-700 font-bold tracking-tight">
+                <div className="flex items-center gap-0.5 rounded px-1.5 bg-slate-500/10 h-5">
+                  <span className="text-xs text-slate-800 font-semibold tracking-tight">
                     소속 팀
                   </span>
                 </div>
               )}
               {team.recruitmentStatus === "RECRUITING" ? (
-                <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 h-5 border border-indigo-100">
+                <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 h-5">
                   <span className="text-xs text-indigo-700 font-semibold tracking-tight">
                     팀원 모집중
                   </span>
                 </div>
               ) : (
-                <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 h-5 border border-slate-100">
+                <div className="flex items-center gap-0.5 bg-slate-500/10 rounded px-1.5 h-5">
                   <span className="text-xs text-slate-700 font-semibold tracking-tight">
                     팀원 모집마감
                   </span>
