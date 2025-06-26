@@ -200,7 +200,7 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
             </div>
           </h3>
           <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-            <div className="text-sm font-medium tracking-tight flex items-center gap-2">
+            <div className="text-sm font-medium tracking-tight flex items-center gap-2 text-muted-foreground">
               {team.gender === "MALE" ? (
                 <Mars className="size-4 text-sky-700" />
               ) : team.gender === "FEMALE" ? (
@@ -214,13 +214,11 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
                 Boolean(team.stats?.professionalCount)
                   ? ` 중 선출 ${team.stats?.professionalCount}명`
                   : ""
-              }`}
-              <div className="flex items-center gap-1.5 h-4">
+              } • ${`${team.city} ${team.district}`}`}
+              {/* <div className="flex items-center gap-1.5 h-4">
                 <Separator orientation="vertical" />
-                <span className="text-gray-500 font-medium">
-                  {`${team.city} ${team.district}`}
-                </span>
-              </div>
+                <span className="text-gray-500 font-medium"></span>
+              </div> */}
             </div>
             {/* {(team.recruitmentStatus === "RECRUITING" ||
               team.stats?.professionalCount) && (
