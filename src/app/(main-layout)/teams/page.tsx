@@ -6,7 +6,6 @@ import {
   Mars,
   Venus,
   Blend,
-  Users,
 } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeams, GetTeamsResponse } from "./model/actions";
