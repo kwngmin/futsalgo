@@ -98,7 +98,7 @@ const TeamsPage = () => {
                 {data?.data?.myTeams.map((team) => (
                   <div
                     key={team.id}
-                    className="bg-white rounded-2xl ring ring-foreground/50"
+                    className="bg-white rounded-2xl ring-2 ring-border"
                     // className="bg-white rounded-2xl ring-4 ring-border"
                   >
                     <TeamCard team={team} />
@@ -201,7 +201,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
       </div>
 
       {/* 팀 정보 */}
-      <div className="flex flex-col items-start justify-center grow gap-0.5">
+      <div className="flex flex-col items-start justify-center grow">
         <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
           {team.name}
           {/* {isMyTeam && (
