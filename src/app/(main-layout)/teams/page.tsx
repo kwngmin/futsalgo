@@ -99,7 +99,6 @@ const TeamsPage = () => {
                   <div
                     key={team.id}
                     className="bg-white rounded-2xl ring-2 ring-border"
-                    // className="bg-white rounded-2xl ring-4 ring-border"
                   >
                     <TeamCard team={team} />
                   </div>

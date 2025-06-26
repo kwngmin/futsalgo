@@ -1,27 +1,27 @@
 import { cn } from "@/shared/lib/utils";
 
 const SkeletonTeamCard = ({
-  nickName,
   teamName,
+  description,
 }: {
-  nickName?: string;
   teamName?: string;
+  description?: string;
 }) => {
   return (
-    <div className="bg-white rounded-2xl p-3">
+    <div className="px-3 py-4 border-t border-gray-100 first:border-t-0">
       <div className="flex gap-3">
-        <div className="size-12 bg-gray-200 rounded-full animate-pulse" />
+        <div className="size-12 bg-gray-200 rounded-lg animate-pulse" />
         <div className="flex-1 flex flex-col justify-center space-y-3">
           <div
             className={cn(
               "h-4 bg-gray-200 rounded w-16 animate-pulse",
-              nickName
+              teamName
             )}
           />
           <div
             className={cn(
               "h-3 bg-gray-200 rounded w-24 animate-pulse",
-              teamName
+              description
             )}
           />
         </div>

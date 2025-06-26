@@ -7,17 +7,12 @@ import {
   ArrowLeft,
   BookText,
   ChartPie,
-  // ChevronRight,
   CircleX,
   EllipsisVertical,
-  Flag,
   Info,
   Loader2,
-  // Hourglass,
-  // Settings,
   Share,
   Text,
-  // Volleyball,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -227,9 +222,21 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
-          <div className="bg-white rounded-2xl">
-            <div className="flex justify-end items-center p-3 pb-0">
-              {/* <p className="text-sm text-gray-500 px-2">
+          <div className="bg-white rounded-2xl pt-4 relative">
+            {data.data.recruitmentStatus === "RECRUITING" ? (
+              <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded">
+                  팀원 모집중
+                </div>
+              </div>
+            ) : (
+              <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-8 bg-gray-100 rounded">
+                  팀원 모집 완료
+                </div>
+              </div>
+            )}
+            {/* <p className="text-sm text-gray-500 px-2">
                 팀 생성일:{" "}
                 {data?.data?.createdAt
                   ? new Date(data?.data?.createdAt).toLocaleDateString(
@@ -242,7 +249,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     )
                   : ""}
               </p> */}
-              {/* {false ? (
+            {/* {false ? (
                 <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-2 h-6">
                   <div className="rounded-full size-2 bg-green-600 " />
                   팀전 신청 가능
@@ -253,36 +260,18 @@ const TeamContent = ({ id }: { id: string }) => {
                   자체전 위주
                 </div>
               )} */}
-              {/* <span className="px-2 text-sm font-medium text-gray-500">
+            {/* <span className="px-2 text-sm font-medium text-gray-500">
                 #{data.data.code}
               </span> */}
-              {id === session.data?.user.id ? (
+            {/* {id === session.data?.user.id ? (
                 <div className="h-7 " />
               ) : (
                 <div className="flex items-center gap-2">
-                  <Button
-                    // size="sm"
-                    className="rounded-full font-semibold py-0 px-4 text-base h-8"
-                    // variant="outline"
-                  >
+                  <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
                     팔로우
                   </Button>
-                  {/* <Button
-                    size="sm"
-                    className="rounded-full font-semibold text-sm py-0 px-4 h-7"
-                    variant="outline"
-                  >
-                    팔로우
-                  </Button>{" "} */}
-                  {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                    <Share className="w-5 h-5" />
-                  </button>
-                  <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                    <EllipsisVertical className="size-5" />
-                  </button> */}
                 </div>
-              )}
-            </div>
+              )} */}
             <div className="flex items-center gap-4 px-6 h-20">
               {/* 프로필 사진 */}
               <div className="size-16 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -319,7 +308,6 @@ const TeamContent = ({ id }: { id: string }) => {
                   </span> */}
                 </h1>
                 <div className="flex items-center gap-1 h-6">
-                  <Flag className="size-4 text-gray-500" />
                   <span className="sm:text-sm font-medium text-muted-foreground tracking-tight">
                     {/* 주요 활동 지역:{" "} */}
                     {`${
@@ -508,17 +496,15 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                   ))}
               </div>
-              {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-6 bg-indigo-500/10 rounded">
-                  {/* <div className="rounded-full size-2 bg-indigo-600" /> */}
+              {/* {data.data.recruitmentStatus === "RECRUITING" ? (
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded">
                   팀원 모집중
                 </div>
               ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-6 bg-gray-100 rounded">
-                  {/* <div className="rounded-full size-2 bg-gray-400" /> */}
+                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-8 bg-gray-100 rounded">
                   팀원 모집 완료
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 
