@@ -69,7 +69,7 @@ const TeamMemberList = ({
                 alt="profile"
                 width={40}
                 height={40}
-                className="rounded-full size-10"
+                className="rounded-full size-10 object-cover"
               />
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
@@ -122,7 +122,7 @@ const TeamMemberList = ({
                   alt="profile"
                   width={40}
                   height={40}
-                  className="rounded-full size-10"
+                  className="rounded-full size-10 object-cover"
                 />
                 <div className="flex flex-col items-start grow">
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
@@ -191,7 +191,7 @@ const TeamMemberList = ({
                 alt="profile"
                 width={40}
                 height={40}
-                className="rounded-full"
+                className="rounded-full size-10 object-cover"
               />
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
