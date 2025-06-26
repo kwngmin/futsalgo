@@ -176,13 +176,28 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
         <div className="flex flex-col items-start justify-center grow gap-0.5">
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {team.name}
-            {isMyTeam && (
-              <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/5 h-5 border border-slate-300 mb-[1px]">
-                <span className="text-xs text-slate-700 font-bold tracking-tight">
-                  소속 팀
-                </span>
-              </div>
-            )}
+            <div className="flex items-center gap-1">
+              {isMyTeam && (
+                <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/5 h-5 border border-slate-300 mb-[1px]">
+                  <span className="text-xs text-slate-700 font-bold tracking-tight">
+                    소속 팀
+                  </span>
+                </div>
+              )}
+              {team.recruitmentStatus === "RECRUITING" ? (
+                <div className="flex items-center gap-0.5 bg-indigo-500/5 rounded px-1.5 h-5">
+                  <span className="text-xs text-indigo-700 font-semibold tracking-tight">
+                    팀원 모집중
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-0.5 bg-slate-500/5 rounded px-1.5 h-5">
+                  <span className="text-xs text-slate-700 font-semibold tracking-tight">
+                    팀원 모집마감
+                  </span>
+                </div>
+              )}
+            </div>
           </h3>
           <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
             <div className="text-sm font-medium tracking-tight flex items-center gap-2">
@@ -193,9 +208,13 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
               ) : (
                 <Blend className="size-4 text-gray-700" />
               )}
-              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} (${
+              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]} • ${
                 team._count.members
-              }명)`}
+              }명${
+                Boolean(team.stats?.professionalCount)
+                  ? ` 중 선출 ${team.stats?.professionalCount}명`
+                  : ""
+              }`}
               <div className="flex items-center gap-1.5 h-4">
                 <Separator orientation="vertical" />
                 <span className="text-gray-500 font-medium">
