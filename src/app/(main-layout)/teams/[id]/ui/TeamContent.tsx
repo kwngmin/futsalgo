@@ -284,7 +284,7 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex items-center gap-4 px-6 h-20">
               {/* 프로필 사진 */}
-              <div className="size-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-16 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
                   width={64}
                   height={64}
@@ -304,8 +304,8 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </span> */}
                 </h1>
-                <p className="">
-                  주요 활동 지역:{" "}
+                <p className="font-medium text-muted-foreground">
+                  {/* 주요 활동 지역:{" "} */}
                   {`${
                     data?.data?.city && data?.data?.district
                       ? `${data?.data?.city} • ${data?.data?.district}`
