@@ -157,16 +157,16 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
 
   return (
     <div
-      className="border-t border-gray-100 first:border-t-0 px-3 py-4 hover:bg-gray-50 transition-colors cursor-pointer"
+      className="border-t border-gray-100 first:border-t-0 px-3 py-4 hover:bg-gray-50 transition-colors cursor-pointer relative"
       onClick={() => router.push(`/teams/${team.id}`)}
     >
       <div className="flex items-center gap-3">
         {/* 팀 로고 */}
-        <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
+        <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
           {team.logoUrl ? (
             <Image src={team.logoUrl} alt={team.name} width={48} height={48} />
           ) : (
-            <div className="size-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 relative">
+            <div className="size-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
               {team.name.charAt(0)}
             </div>
           )}
@@ -178,15 +178,15 @@ const TeamCard = ({ team, isMyTeam }: TeamCardProps) => {
             {team.name}
             <div className="flex items-center gap-1 mb-0.5">
               {isMyTeam && (
-                <div className="flex items-center gap-0.5 rounded px-1.5 bg-slate-500/10 h-5">
+                <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/10 h-5 border border-slate-300">
                   <span className="text-xs text-slate-800 font-semibold tracking-tight">
                     소속 팀
                   </span>
                 </div>
               )}
               {team.recruitmentStatus === "RECRUITING" ? (
-                <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded px-1.5 h-5">
-                  <span className="text-xs text-indigo-700 font-semibold tracking-tight">
+                <div className="absolute right-4 top-0 flex items-center gap-0.5 bg-indigo-500/10 rounded-b px-2 h-6">
+                  <span className="text-sm text-indigo-700 font-semibold tracking-tight">
                     팀원 모집중
                   </span>
                 </div>
