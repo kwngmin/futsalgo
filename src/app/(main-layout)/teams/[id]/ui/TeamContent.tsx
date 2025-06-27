@@ -228,7 +228,7 @@ const TeamContent = ({ id }: { id: string }) => {
           <div className="bg-white rounded-2xl pt-6 relative">
             {data.data.recruitmentStatus === "RECRUITING" ? (
               <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded">
+                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded tracking-tight">
                   팀원 모집중
                 </div>
               </div>
@@ -501,15 +501,6 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                   ))}
               </div>
-              {/* {data.data.recruitmentStatus === "RECRUITING" ? (
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded">
-                  팀원 모집중
-                </div>
-              ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-8 bg-gray-100 rounded">
-                  팀원 모집 완료
-                </div>
-              )} */}
             </div>
           </div>
 

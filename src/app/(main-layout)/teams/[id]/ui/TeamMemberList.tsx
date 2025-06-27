@@ -197,23 +197,23 @@ const TeamMemberList = ({
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
-                    <div className="flex items-center gap-0.5 bg-indigo-500/10 rounded pl-1 pr-1.5 h-5">
+                    <div className="flex items-center gap-0.5 h-5">
                       <UserRoundCog
-                        className="size-4 text-indigo-700 p-0.5"
-                        strokeWidth={2.5}
+                        className="size-5 text-indigo-700 p-0.5"
+                        strokeWidth={2}
                       />
-                      <span className="text-xs text-indigo-700 font-semibold">
+                      <span className="text-sm text-indigo-700 font-semibold">
                         매니저
                       </span>
                     </div>
                   )}
                   {member.role === "OWNER" && (
-                    <div className="flex items-center gap-0.5 bg-amber-500/10 rounded pl-1 pr-1.5 h-5">
+                    <div className="flex items-center gap-0.5 h-5">
                       <Crown
-                        className="size-4 text-amber-700 p-0.5"
-                        strokeWidth={2.5}
+                        className="size-5 text-amber-700 p-0.5"
+                        strokeWidth={2}
                       />
-                      <span className="text-xs text-amber-700 font-semibold">
+                      <span className="text-sm text-amber-700 font-semibold">
                         팀장
                       </span>
                     </div>
