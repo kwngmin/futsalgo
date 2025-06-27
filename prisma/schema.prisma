@@ -15,6 +15,8 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ========== ENUMS ==========
+
 enum Foot {
   LEFT
   RIGHT
@@ -30,12 +32,6 @@ enum Condition {
   NORMAL
   INJURED
 }
-
-// enum SportType {
-//   FUTSAL
-//   FOOTBALL
-//   BOTH  
-// }
 
 // enum FootballPosition {
 //   ST
@@ -57,22 +53,6 @@ enum Position {
  GOLEIRO
 }
 
-enum MatchSide {
-  HOME
-  AWAY
-}
-
-enum MatchRule {
-  HALF
-  MINI
-}
-
-enum AttendanceStatus {
-  ATTENDING
-  ABSENT
-  UNDECIDED
-}
-
 enum TeamMemberStatus {
   PENDING
   APPROVED
@@ -91,25 +71,18 @@ enum BoardType {
   NOTICE
 }
 
-enum MatchRequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  CANCELLED
-}
-
-enum RejectReason {
-  SCHEDULE_CONFLICT  // 일정 충돌
-  LOCATION_ISSUE     // 장소 문제
-  TEAM_CONDITION     // 팀 컨디션
-  OTHER              // 기타
-}
-
 enum TeamGender {
   MALE
   FEMALE
   MIXED  
 }
+
+// enum RejectReason {
+//   SCHEDULE_CONFLICT  // 일정 충돌
+//   LOCATION_ISSUE     // 장소 문제
+//   TEAM_CONDITION     // 팀 컨디션
+//   OTHER              // 기타
+// }
 
 enum ActivityFrequency {
   WEEKLY      // 주 1회
@@ -149,6 +122,32 @@ enum RecruitmentStatus {
   NOT_RECRUITING // 모집 안함
 }
 
+enum MatchType {
+  SQUAD
+  TEAM
+}
+
+enum ScheduleStatus {
+  PENDING      // 팀매치 수락 대기
+  READY        // 경기 준비 완료 
+  REJECTED     // 팀매치 거절됨
+  PLAY         // 경기 시작됨 → 참석 여부 변경 불가
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum TeamSide {
+  HOME
+  AWAY
+  UNDECIDED
+}
+
+// ========== AUTHENTICATION MODELS ==========
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -179,6 +178,8 @@ model Session {
   @@map("sessions")
 }
 
+// ========== CORE MODELS ==========
+
 model User {
   id              String     @id @default(cuid())
   email           String?    @unique
@@ -197,31 +198,33 @@ model User {
   birthDate       String?   // YYYYMMDD 형식 (예: "19850312")
   height          Int?
   weight          Int?
+  condition       Condition @default(NORMAL)
 
   playerBackground PlayerBackground @default(NON_PROFESSIONAL) // 선수 출신 여부
   skillLevel       PlayerSkillLevel @default(BEGINNER) // 실력 수준
 
-  position         Position?   
-  condition        Condition @default(NORMAL)
-
+  position        Position?   
   teams           TeamMember[]
 
-  // 팔로잉/팔로워 관계 (유저 간)
+  // 팔로잉
   following       UserFollow[] @relation("Follower")    // 내가 팔로우하는 사람들
   followers       UserFollow[] @relation("Following")   // 나를 팔로우하는 사람들
-  
-  // 팀 팔로잉
   followingTeams  TeamFollow[]
 
-  scoredGoals     AttackPoint[] @relation("Scorer")
-  assistedGoals   AttackPoint[] @relation("Assist")
-  receivedVotes   Vote[]    @relation("BestPlayer")
-  votes           Vote[]
-  
-  uploadedPhotos  MatchDayPhoto[]
+  // 일정 관련
+  createdSchedules Schedule[]
+  attendances     ScheduleAttendance[]
+  comments        ScheduleComment[]
+
+  // 매치 관련
+  createdMatches  Match[]
+  lineups         Lineup[]
+  goals           GoalRecord[] @relation("Scorer")
+  assists         GoalRecord[] @relation("Assist")
+
+  // 게시판
   posts           Post[]
-  matchPlayers    MatchPlayer[]
-  matchDayMembers MatchDayMember[]
+
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
    
@@ -277,16 +280,23 @@ model Team {
 
   members       TeamMember[]  // TeamManager 제거하고 TeamMember로 통합
   posts         Post[]
-  matchDays     MatchDayTeam[]
   followers     TeamFollow[]  // 팔로워 (기존 likedByUsers 대체)
 
-  sentMatchRequests     TeamMatchRequest[] @relation("RequestorTeam")
-  receivedMatchRequests TeamMatchRequest[] @relation("TargetTeam")
+  // 일정 관련
+  hostedSchedules  Schedule[] @relation("HostTeam")
+  guestSchedules   Schedule[] @relation("GuestTeam")
+  invitations      TeamMatchInvitation[]
+
+  // 매치 관련
+  homeMatches      Match[]    @relation("MatchHomeTeam")
+  awayMatches      Match[]    @relation("MatchAwayTeam")
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   @@index([city, district])  // 지역 검색을 위한 인덱스
   @@index([level, gender])  // 종목별 검색을 위한 인덱스
+  @@map("teams")
 }
 
 // TeamManager 모델 제거하고 TeamMember로 통합
@@ -309,107 +319,168 @@ model TeamMember {
   @@index([teamId, status], map: "team_status_idx")
   @@index([teamId, role], map: "team_role_idx")
   @@index([teamId, role, status], map: "team_role_status_idx")
+  @@map("team_members")
 }
 
-model MatchDay {
-  id          String     @id @default(cuid())
-  date        DateTime
-  city        String?
-  district    String?
-  location    String?
-  description String?
-  teams       MatchDayTeam[]
-  matches     Match[]
-  photos      MatchDayPhoto[]
-  members     MatchDayMember[]
-  votes       Vote[]
-  createdAt   DateTime   @default(now())
+// ========== SCHEDULE & MATCH MODELS ==========
+
+model Schedule {
+  id                 String         @id @default(cuid())
+  title              String?
+  place              String
+  description        String?
+  date               DateTime
+  year               Int            // 연도 기반 통계용
+  startTime          DateTime
+  endTime            DateTime
+  matchType          MatchType
+  status             ScheduleStatus @default(PENDING)
   
-  @@index([date])
-  @@index([city, district])
+  createdById        String
+  hostTeamId         String
+  guestTeamId        String?
+
+  // 관계들
+  createdBy          User      @relation(fields: [createdById], references: [id])
+  hostTeam           Team      @relation("HostTeam", fields: [hostTeamId], references: [id])
+  guestTeam          Team?     @relation("GuestTeam", fields: [guestTeamId], references: [id])
+  
+  invitation         TeamMatchInvitation?
+  matches            Match[]
+  attendances        ScheduleAttendance[]
+  comments           ScheduleComment[]
+  
+  photos             String[]       // 사진 URL 배열
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
+  @@index([date, status])
+  @@index([hostTeamId])
+  @@index([year])
+  @@map("schedules")
 }
 
-model MatchDayTeam {
-  id        String   @id @default(cuid())
-  matchDay  MatchDay @relation(fields: [matchDayId], references: [id], onDelete: Cascade)
-  matchDayId String
-  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId    String
-  isHome    Boolean  @default(true)
+model ScheduleAttendance {
+  id                     String   @id @default(cuid())
+  scheduleId             String
+  userId                 String
+  isAttending            Boolean   @default(false)
+  side                   TeamSide  @default(UNDECIDED)
+
+  // MVP 투표 관련 필드
+  bestPlayerVotedUserId  String?   // 내가 투표한 사람
+  votesReceived          Int       @default(0) // 내가 받은 투표 수
+
+  schedule               Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt              DateTime @default(now())
   
-  @@unique([matchDayId, teamId])
-  @@index([teamId])
+  @@unique([scheduleId, userId])
+  @@index([scheduleId, isAttending])
+  @@map("schedule_attendances")
+}
+
+model TeamMatchInvitation {
+  id              String           @id @default(cuid())
+  scheduleId      String           @unique
+  invitedTeamId   String
+  status          InvitationStatus @default(PENDING)
+  reason          String?          // 거절 사유
+
+  schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  invitedTeam     Team     @relation(fields: [invitedTeamId], references: [id])
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([invitedTeamId, status])
+  @@map("team_match_invitations")
 }
 
 model Match {
-  id            String    @id @default(cuid())
-  matchDay      MatchDay  @relation(fields: [matchDayId], references: [id], onDelete: Cascade)
-  matchDayId    String
-  rule          MatchRule
-  durationMin   Int       // 경기 시간 (ex. 15분)
-  homeScore     Int       @default(0)
-  awayScore     Int       @default(0)
-  attackPoints  AttackPoint[]
-  players       MatchPlayer[]
-  createdAt     DateTime  @default(now())
+  id              String   @id @default(cuid())
+  scheduleId      String
+  order           Int      // 몇 번째 경기인지
+  durationMinutes Int
+  isEnded         Boolean  @default(false)
   
-  @@index([matchDayId])
+  // 점수
+  homeScore       Int      @default(0)
+  awayScore       Int      @default(0)
+  
+  createdById     String
+  homeTeamId      String
+  awayTeamId      String
+
+  // 관계들
+  schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  createdBy       User     @relation(fields: [createdById], references: [id])
+  homeTeam        Team     @relation("MatchHomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam        Team     @relation("MatchAwayTeam", fields: [awayTeamId], references: [id])
+
+  lineups         Lineup[]
+  goals           GoalRecord[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([scheduleId, order])
+  @@index([scheduleId])
+  @@index([isEnded])
+  @@map("matches")
 }
 
-model MatchPlayer {
+model Lineup {
   id        String   @id @default(cuid())
-  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
   matchId   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  side      MatchSide
+  side      TeamSide
+
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@unique([matchId, userId])
-  @@index([userId])
+  @@index([matchId, side])
+  @@map("lineups")
 }
 
-model MatchDayMember {
-  id         String   @id @default(cuid())
-  matchDay   MatchDay @relation(fields: [matchDayId], references: [id], onDelete: Cascade)
-  matchDayId String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
-  status     AttendanceStatus @default(UNDECIDED)
-  side       MatchSide?  // 'home' | 'away' | null
-  
-  @@unique([matchDayId, userId])
-  @@index([userId, status])
-  @@index([matchDayId, status])
-}
+model GoalRecord {
+  id          String   @id @default(cuid())
+  matchId     String
+  scorerId    String
+  assistId    String?
+  side        TeamSide
+  order       Int
 
-model AttackPoint {
-  id        String   @id @default(cuid())
-  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  matchId   String
-  scorer    User     @relation("Scorer", fields: [scorerId], references: [id], onDelete: Cascade)
-  scorerId  String
-  assist    User?    @relation("Assist", fields: [assistId], references: [id], onDelete: SetNull)
-  assistId  String?
-  order     Int
-  half      MatchRule?  
+  match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  scorer      User     @relation("Scorer", fields: [scorerId], references: [id])
+  assist      User?    @relation("Assist", fields: [assistId], references: [id])
+
+  createdAt   DateTime @default(now())
   
-  @@index([scorerId])
   @@index([matchId])
-  @@index([assistId])
+  @@index([scorerId])
+  @@map("goal_records")
 }
 
-model MatchDayPhoto {
-  id         String   @id @default(cuid())
-  matchDay   MatchDay @relation(fields: [matchDayId], references: [id], onDelete: Cascade)
-  matchDayId String
-  url        String
-  uploadedBy User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
-  uploadedById String
-  createdAt  DateTime @default(now())
+model ScheduleComment {
+  id          String   @id @default(cuid())
+  scheduleId  String
+  authorId    String
+  content     String
+
+  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  author      User     @relation(fields: [authorId], references: [id])
   
-  @@index([matchDayId])
-  @@index([uploadedById])
+  createdAt   DateTime @default(now())
+  
+  @@index([scheduleId, createdAt])
+  @@map("schedule_comments")
 }
+
+// ========== BOARD MODELS ==========
 
 model Post {
   id        String   @id @default(cuid())
@@ -426,45 +497,5 @@ model Post {
   @@index([teamId, type])
   @@index([authorId])
   @@index([createdAt])
-}
-
-model Vote {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
-  matchDay   MatchDay @relation(fields: [matchDayId], references: [id], onDelete: Cascade)
-  matchDayId String
-  bestPlayer    User     @relation("BestPlayer", fields: [bestPlayerId], references: [id], onDelete: Cascade)
-  bestPlayerId  String
-  createdAt  DateTime @default(now())
-  
-  @@unique([userId, matchDayId])
-  @@index([matchDayId])
-  @@index([bestPlayerId])
-}
-
-model TeamMatchRequest {
-  id           String   @id @default(cuid())
-  requestorId  String
-  requestor    Team     @relation("RequestorTeam", fields: [requestorId], references: [id], onDelete: Cascade)
-  targetId     String?    
-  target       Team?    @relation("TargetTeam", fields: [targetId], references: [id], onDelete: SetNull)
-  
-  proposedDate DateTime
-  city         String
-  district     String
-  location     String?
-
-  message      String?
-
-  status       MatchRequestStatus @default(PENDING)
-  rejectReason RejectReason?
-  rejectMessage String?
-  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  @@index([status, proposedDate])
-  @@index([requestorId, status])
-  @@index([targetId, status])
+  @@map("posts")
 }
