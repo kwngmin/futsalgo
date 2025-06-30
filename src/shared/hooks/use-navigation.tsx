@@ -1,17 +1,11 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import {
-  Users,
-  Shirt,
-  MoreHorizontal,
-  Volleyball,
-  Newspaper,
-} from "lucide-react";
+import { Users, Shirt, MoreHorizontal, Newspaper, Home } from "lucide-react";
 
 export const navItems = [
-  { id: "match", label: "경기", icon: Volleyball, href: "/matches" },
-  { id: "team", label: "팀", icon: Shirt, href: "/" },
+  { id: "home", label: "홈", icon: Home, href: "/" },
+  { id: "team", label: "팀", icon: Shirt, href: "/teams" },
   { id: "player", label: "선수", icon: Users, href: "/players" },
   { id: "board", label: "게시판", icon: Newspaper, href: "/boards" },
   { id: "more", label: "더보기", icon: MoreHorizontal, href: "/more" },
@@ -28,8 +22,8 @@ export const useNavigation = () => {
   const getActiveMenu = (path: string) => {
     const firstSegment = "/" + path.split("/")[1];
     switch (firstSegment) {
-      case "/matches":
-        return "match";
+      // case "/matches":
+      //   return "match";
       case "/teams":
         return "team";
       case "/players":
@@ -39,7 +33,7 @@ export const useNavigation = () => {
       case "/more":
         return "more";
       default:
-        return "team";
+        return "home";
     }
   };
 
