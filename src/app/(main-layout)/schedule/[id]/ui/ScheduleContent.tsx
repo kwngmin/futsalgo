@@ -46,6 +46,11 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
     },
   });
 
+  const opposingTeam =
+    data.data.schedule?.matchType === "SQUAD"
+      ? data.data.schedule.hostTeam
+      : data.data.schedule?.guestTeam;
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {isLoading && (
@@ -88,10 +93,20 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 일정 정보 */}
-          <div className="bg-white rounded-2xl pt-6 relative">
+          <div className="bg-white rounded-2xl relative">
+            <div className="flex items-center h-16 mb-3 px-6">
+              <span>
+                {
+                  MATCH_TYPE[
+                    data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
+                  ]
+                }
+              </span>
+            </div>
             <div className="grid grid-cols-3 gap-1 px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
+                <span>HOME</span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -109,17 +124,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 <span className="font-semibold">
                   {data?.data?.schedule?.hostTeam?.name}
                 </span>
-                <span>HOME</span>
               </div>
               {/* 공통 */}
               <div className="flex flex-col items-center">
-                <span>
-                  {
-                    MATCH_TYPE[
-                      data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-                    ]
-                  }
-                </span>
                 <span>
                   {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
                     year: "numeric",
@@ -128,28 +135,27 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   })}
                 </span>
                 <span className="">{timeRange}</span>
-                <span className="font-extrabold text-lg text-muted-foreground">
+                <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
                   VS
-                </span>
+                </div>
                 <span>{data.data.schedule?.status}</span>
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                {data?.data?.schedule?.guestTeam?.logoUrl ? (
+                <span>AWAY</span>
+                {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
-                      src={data?.data?.schedule?.guestTeam?.logoUrl}
+                      src={opposingTeam?.logoUrl}
                       alt="logo"
                       width={100}
                       height={100}
                     />
                   </div>
                 ) : (
-                  <div className="">
-                    {data?.data?.schedule?.guestTeam?.name.charAt(0)}
-                  </div>
+                  <div className="">{opposingTeam?.name.charAt(0)}</div>
                 )}
-                <span>{data?.data?.schedule?.guestTeam?.name}</span>
+                <span>{opposingTeam?.name}</span>
               </div>
             </div>
             <div className="flex items-center gap-4 px-6 h-20">
