@@ -1,7 +1,7 @@
-import { getMatches } from "@/app/(main-layout)/matches/actions/get-matches";
 import { useQuery } from "@tanstack/react-query";
 import { keepPreviousData } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { getSchedules } from "../actions/get-schedules";
 
 /**
  * 경기 목록을 불러오는 커스텀 훅
@@ -12,8 +12,8 @@ export function useMatchesQuery() {
   const session = useSession();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["matches"],
-    queryFn: getMatches,
+    queryKey: ["schedules"],
+    queryFn: getSchedules,
     placeholderData: keepPreviousData,
     enabled: !!session.data?.user?.id,
   });

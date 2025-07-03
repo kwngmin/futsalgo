@@ -3,7 +3,7 @@
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 
-export async function getMatches() {
+export async function getSchedules() {
   try {
     const session = await auth();
     const player = await prisma.user.findUnique({
