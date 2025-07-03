@@ -24,13 +24,13 @@ const PlayerCard = ({
     >
       {/* 프로필 이미지 */}
       {player.image ? (
-        <div className="size-14 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <div className="size-14 flex items-center justify-center flex-shrink-0 overflow-hidden">
           <Image
             width={56}
             height={56}
             src={player.image}
             alt={player.nickname || "프로필 이미지"}
-            className="size-12 rounded-full object-cover"
+            className="size-14 p-0.5 rounded-full object-cover"
           />
         </div>
       ) : (

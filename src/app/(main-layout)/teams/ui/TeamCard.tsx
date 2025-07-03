@@ -22,7 +22,7 @@ const TeamCard = ({
 
   return (
     <div
-      className="border-t border-gray-100 first:border-t-0 p-3 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-1"
+      className="border-t border-gray-100 first:border-t-0 p-3 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2"
       onClick={() => router.push(`/teams/${team.id}`)}
     >
       {/* 팀 로고 */}
