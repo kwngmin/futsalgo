@@ -124,7 +124,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-400 font-bold">HOME</span>
+                <span className="text-slate-300 font-bold">HOME</span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -145,7 +145,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 공통 */}
               <div className="flex flex-col items-center justify-center">
-                <span className="sm:h-10 flex items-center justify-center font-medium text-lg sm:text-3xl tracking-tight">
+                <span className="sm:h-10 flex items-center justify-center font-medium text-xl sm:text-3xl tracking-tight">
                   {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -198,7 +198,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-400 font-bold">AWAY</span>
+                <span className="text-slate-300 font-bold">AWAY</span>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
