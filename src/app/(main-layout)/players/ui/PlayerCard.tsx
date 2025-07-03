@@ -20,7 +20,7 @@ const PlayerCard = ({
   return (
     <div
       className={`bg-white rounded-2xl p-3 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2 ${
-        isCurrentUser ? "ring-2 ring-border" : ""
+        isCurrentUser ? "ring ring-slate-400" : ""
       }`}
       onClick={() => router.push(`/players/${player.id}`)}
     >
