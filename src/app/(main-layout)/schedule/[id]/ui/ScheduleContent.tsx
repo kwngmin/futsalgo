@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
+import { Countdown } from "./CountDown";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
@@ -68,6 +69,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
     data.data.schedule?.matchType === "SQUAD"
       ? data.data.schedule.hostTeam
       : data.data.schedule?.guestTeam;
+
+  const dDay = calculateDday(data.data.schedule?.date as Date);
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -159,18 +162,27 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
                       className={`flex items-center gap-1 sm:text-lg font-medium tracking-tight ${
-                        calculateDday(data.data.schedule?.date as Date) > 0
-                          ? "text-muted-foreground"
-                          : "bg-green-600"
+                        dDay > 0 ? "text-muted-foreground" : "bg-green-600"
                       }`}
                     >
-                      {`경기시작 ${
-                        calculateDday(data.data.schedule?.date as Date) > 0
-                          ? `D-${calculateDday(
-                              data.data.schedule?.date as Date
-                            )}`
-                          : "D-day"
-                      }`}
+                      {dDay > 1 ? (
+                        data.data.schedule.startTime?.toLocaleDateString(
+                          "ko-KR",
+                          {
+                            // year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      ) : dDay === 1 ? (
+                        "내일"
+                      ) : dDay === 0 ? (
+                        <Countdown
+                          date={data.data.schedule.startTime as Date}
+                        />
+                      ) : (
+                        "경기 종료"
+                      )}
                     </button>
                   ) : data.data.schedule?.status === "PLAY" ? (
                     <div>경기중</div>
