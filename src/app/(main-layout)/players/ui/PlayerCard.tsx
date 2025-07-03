@@ -6,12 +6,14 @@ type PlayerCardProps = {
   player: User;
   isCurrentUser?: boolean;
   teamName?: string;
+  teamLogoUrl?: string;
 };
 
 const PlayerCard = ({
   player,
   isCurrentUser = false,
   teamName,
+  teamLogoUrl,
 }: PlayerCardProps) => {
   const router = useRouter();
   console.log(player, "player");
@@ -34,7 +36,7 @@ const PlayerCard = ({
           />
         </div>
       ) : (
-        <div className="size-14 text-gray-400" />
+        <div className="size-14 bg-gray-400" />
       )}
       {/* {isCurrentUser && (
               <div className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
@@ -65,10 +67,35 @@ const PlayerCard = ({
               </span>
             )} */}
         </div>
-        <p className="sm:text-sm font-medium tracking-tight text-sm text-muted-foreground line-clamp-1">
+        {/* <p className="sm:text-sm font-medium tracking-tight text-sm text-muted-foreground line-clamp-1">
           {teamName || "소속 팀 없음"}
-          {/* 소속 팀 없음 */}
-        </p>
+        </p> */}
+        <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
+          <div className="w-full sm:text-sm font-medium tracking-tight flex items-center gap-1 text-muted-foreground">
+            {teamLogoUrl ? (
+              <div className="size-5 sm:size-4 text-gray-700">
+                <Image
+                  width={24}
+                  height={24}
+                  src={teamLogoUrl}
+                  alt="team logo"
+                  className="size-5 sm:size-4 rounded-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="size-5 sm:size-4 p-0.5">
+                <div className="size-full bg-gray-100 rounded-full" />
+              </div>
+            )}
+            {teamName || "소속 팀 없음"}
+            {/* {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]}`}
+            {`${
+              Boolean(team.stats?.professionalCount)
+                ? `선출포함 ${team._count.members}명`
+                : `${team._count.members}명`
+            } • ${`${formatCityName(team.city)} ${team.district}`}`} */}
+          </div>
+        </div>
       </div>
 
       {/* 참가 경기수 */}

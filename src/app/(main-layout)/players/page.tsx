@@ -109,6 +109,9 @@ const PlayersPage = () => {
                 player={data?.data?.user}
                 isCurrentUser={true}
                 teamName={data?.data?.user?.teams[0]?.team?.name}
+                teamLogoUrl={
+                  data?.data?.user?.teams[0]?.team?.logoUrl || undefined
+                }
               />
             </div>
           ) : null}
@@ -151,6 +154,7 @@ const PlayersPage = () => {
                   key={player.id}
                   player={player}
                   teamName={player.teams[0]?.team?.name}
+                  teamLogoUrl={player.teams[0]?.team?.logoUrl || undefined}
                 />
               ))}
             </div>
