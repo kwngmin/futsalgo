@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
-import formatTimeRange from "@/entities/schedule/lib/format-time-range";
+// import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -57,12 +57,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
     );
   }
 
-  const timeRange = formatTimeRange({
-    time: {
-      start: data.data.schedule?.startTime as Date,
-      end: data.data.schedule?.endTime as Date,
-    },
-  });
+  // const timeRange = formatTimeRange({
+  //   time: {
+  //     start: data.data.schedule?.startTime as Date,
+  //     end: data.data.schedule?.endTime as Date,
+  //   },
+  // });
 
   const opposingTeam =
     data.data.schedule?.matchType === "SQUAD"
