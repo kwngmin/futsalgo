@@ -124,7 +124,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
-                <span>HOME</span>
+                <span className="text-slate-400 font-bold">HOME</span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -158,7 +158,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <div>상대팀 대전신청 거절됨</div>
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
-                      className={`flex items-center gap-1 text-sm sm:text-lg font-medium ${
+                      className={`flex items-center gap-1 sm:text-lg font-medium tracking-tight ${
                         calculateDday(data.data.schedule?.date as Date) > 0
                           ? "text-muted-foreground"
                           : "bg-green-600"
@@ -198,7 +198,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                <span>AWAY</span>
+                <span className="text-slate-400 font-bold">AWAY</span>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -211,7 +211,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 ) : (
                   <div className="">{opposingTeam?.name.charAt(0)}</div>
                 )}
-                <span>{opposingTeam?.name}</span>
+                <span className="font-semibold">{opposingTeam?.name}</span>
               </div>
             </div>
 
