@@ -89,7 +89,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           className="flex items-center gap-1.5 !px-2"
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          <h1 className="text-2xl font-bold">일정 정보</h1>
+          <h1 className="text-2xl font-bold">경기 일정</h1>
         </Button>
 
         <div className="flex items-center justify-end gap-3 px-3">
@@ -121,7 +121,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 }
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-1 px-6">
+            <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
                 <span>HOME</span>
@@ -145,7 +145,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 공통 */}
               <div className="flex flex-col items-center justify-center">
-                <span className="h-10 flex items-center justify-center font-medium text-3xl">
+                <span className="sm:h-10 flex items-center justify-center font-medium text-lg sm:text-3xl tracking-tight">
                   {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -158,20 +158,19 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <div>상대팀 대전신청 거절됨</div>
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
-                      className={`flex items-center gap-2 text-lg rounded-full px-6 font-medium ${
+                      className={`flex items-center gap-1 text-sm sm:text-lg font-medium ${
                         calculateDday(data.data.schedule?.date as Date) > 0
                           ? "text-muted-foreground"
                           : "bg-green-600"
                       }`}
                     >
-                      <span>경기시작</span>
-                      <span>
-                        {calculateDday(data.data.schedule?.date as Date) > 0
+                      {`경기시작 ${
+                        calculateDday(data.data.schedule?.date as Date) > 0
                           ? `D-${calculateDday(
                               data.data.schedule?.date as Date
                             )}`
-                          : "D-day"}
-                      </span>
+                          : "D-day"
+                      }`}
                     </button>
                   ) : data.data.schedule?.status === "PLAY" ? (
                     <div>경기중</div>
