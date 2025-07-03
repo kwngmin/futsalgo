@@ -9,6 +9,24 @@ import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
+/**
+ * @param date YYYY-MM-DD 형식의 날짜 문자열
+ * @returns D-day 숫자 (예: D-3이면 3, 오늘이면 0, 지났으면 음수)
+ */
+export function calculateDday(date: Date): number {
+  const today = new Date();
+  const targetDate = new Date(date);
+
+  // 시차 보정: 시간을 00:00:00으로 맞춰줌 (UTC 문제 방지)
+  today.setHours(0, 0, 0, 0);
+  targetDate.setHours(0, 0, 0, 0);
+
+  const diffMs = targetDate.getTime() - today.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+}
+
 const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
   const { data, isLoading, error } = useQuery({
@@ -126,19 +144,58 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </span>
               </div>
               {/* 공통 */}
-              <div className="flex flex-col items-center">
-                <span>
+              <div className="flex flex-col items-center justify-center">
+                <span className="h-10 flex items-center justify-center font-medium text-3xl">
+                  {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+                <div className="w-full flex flex-col items-center">
+                  {data.data.schedule?.status === "PENDING" ? (
+                    <div>상대팀 대전신청 대기중</div>
+                  ) : data.data.schedule?.status === "REJECTED" ? (
+                    <div>상대팀 대전신청 거절됨</div>
+                  ) : data.data.schedule?.status === "READY" ? (
+                    <button
+                      className={`flex items-center gap-2 text-lg rounded-full px-6 font-medium ${
+                        calculateDday(data.data.schedule?.date as Date) > 0
+                          ? "text-muted-foreground"
+                          : "bg-green-600"
+                      }`}
+                    >
+                      <span>경기시작</span>
+                      <span>
+                        {calculateDday(data.data.schedule?.date as Date) > 0
+                          ? `D-${calculateDday(
+                              data.data.schedule?.date as Date
+                            )}`
+                          : "D-day"}
+                      </span>
+                    </button>
+                  ) : data.data.schedule?.status === "PLAY" ? (
+                    <div>경기중</div>
+                  ) : (
+                    <div>경기 종료</div>
+                  )}
+                  {/* <span>
+                {calculateDday(data.data.schedule?.date as Date) > 0
+                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+                  : "D-day"}
+              </span> */}
+                </div>
+                {/* <span>{timeRange}</span> */}
+                {/* <span>
                   {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
                 </span>
-                <span className="">{timeRange}</span>
-                <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
+                <span className="">{timeRange}</span> */}
+                {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
                   VS
-                </div>
-                <span>{data.data.schedule?.status}</span>
+                </div> */}
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
@@ -158,6 +215,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 <span>{opposingTeam?.name}</span>
               </div>
             </div>
+
             <div className="flex items-center gap-4 px-6 h-20">
               <div className="flex flex-col">
                 <div className="flex items-center gap-1 h-6">
