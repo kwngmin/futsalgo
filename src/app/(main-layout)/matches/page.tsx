@@ -1,6 +1,6 @@
 "use client";
 
-import { getSchedules } from "@/features/get-schedule/model/actions/get-schedules";
+import { getMatches } from "@/app/(main-layout)/matches/actions/get-matches";
 // import { Separator } from "@/shared/components/ui/separator";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 // import {
@@ -14,13 +14,13 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const HomePage = () => {
+const MatchesPage = () => {
   const router = useRouter();
   const session = useSession();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["players"],
-    queryFn: getSchedules,
+    queryKey: ["matches"],
+    queryFn: getMatches,
     placeholderData: keepPreviousData,
     enabled: !!session.data?.user?.id,
   });
@@ -86,26 +86,22 @@ const HomePage = () => {
             : `${startStr} ~ ${endStr}`;
 
           return (
-            <div key={schedule.id} className="space-y-2">
-              <div className="flex justify-between items-center px-3">
-                {/* <div>
-                  {schedule.date.toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                  })}
-                </div> */}
-                {/* <div className="flex items-center">
-              <div>{schedule.place}</div>
-              <ChevronRight className="size-5 text-muted-foreground" />
-            </div> */}
-              </div>
-              <div className="overflow-hidden bg-white rounded-2xl">
-                <div className="flex justify-center *:tracking-tight items-center h-4 gap-2 mt-4 mb-1 text-sm sm:text-base">
-                  {schedule.date.toLocaleDateString("ko-KR", {
-                    // year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                  ,
+            <div
+              className="overflow-hidden bg-white rounded-2xl"
+              key={schedule.id}
+            >
+              <div
+                className="cursor-pointer"
+                onClick={() => router.push(`/matches/${schedule.id}`)}
+              >
+                <div className="flex justify-center *:tracking-tight items-center h-4 gap-1 mt-4 mb-1 text-sm">
+                  <span>
+                    {schedule.date.toLocaleDateString("ko-KR", {
+                      // year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
                   {/* {`${schedule.startTime.toLocaleTimeString("ko-KR", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -113,49 +109,49 @@ const HomePage = () => {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}`} */}
-                  <span className="font-semibold">{timeRange}</span>
+                  <span className="">{timeRange}</span>
                 </div>
 
                 {schedule.matchType !== "TEAM" ? (
-                  <div className="flex justify-center items-center gap-2 h-16">
+                  <div className="flex justify-center items-center gap-2 h-14">
                     <div className="flex flex-col items-end gap-2">
                       {/* <div>HOME</div> */}
-                      <div className="flex items-center gap-2">
-                        <div className="text-lg font-bold">
+                      <div className="flex items-center gap-1">
+                        <div className="sm:text-lg font-bold">
                           {schedule.hostTeam.name}
                         </div>
-                        <div>
-                          {schedule.hostTeam.logoUrl ? (
+                        {schedule.hostTeam.logoUrl ? (
+                          <div className="size-8 sm:size-12">
                             <Image
                               src={schedule.hostTeam.logoUrl}
                               alt={schedule.hostTeam.name}
-                              width={40}
-                              height={40}
+                              width={48}
+                              height={48}
                             />
-                          ) : (
-                            <div className="size-6 bg-gray-200 rounded-full" />
-                          )}
-                        </div>
+                          </div>
+                        ) : (
+                          <div className="size-5 sm:size-6 bg-gray-200 rounded-full" />
+                        )}
                         {/* <div>HOME</div> */}
                       </div>
                     </div>
-                    <div className="text-xl font-bold">VS</div>
+                    <div className="font-bold">VS</div>
                     <div className="flex flex-col gap-2">
                       {/* <div>AWAY</div> */}
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         {/* <div>AWAY</div> */}
-                        <div>
-                          {schedule.hostTeam.logoUrl ? (
+                        {schedule.hostTeam.logoUrl ? (
+                          <div className="size-8 sm:size-12">
                             <Image
                               src={schedule.hostTeam.logoUrl}
                               alt={schedule.hostTeam.name}
-                              width={40}
-                              height={40}
+                              width={48}
+                              height={48}
                             />
-                          ) : (
-                            <div className="size-6 bg-gray-200 rounded-full" />
-                          )}
-                        </div>
+                          </div>
+                        ) : (
+                          <div className="size-6 bg-gray-200 rounded-full" />
+                        )}
                         <div className="text-lg font-bold">
                           {schedule.hostTeam.name}
                         </div>
@@ -167,26 +163,24 @@ const HomePage = () => {
                   schedule.guestTeam?.name
                 )}
                 <div className="w-full flex justify-center">
-                  <div className="flex items-center mb-4 rounded-full !font-semibold text-sm text-muted-foreground px-3 h-6">
+                  <div className="flex items-center mb-4 rounded-full !font-medium text-sm text-muted-foreground px-3 h-6">
                     {`${schedule.place}`}
                   </div>
                 </div>
-
-                {schedule.attendances
-                  .map((attendance) => attendance.userId)
-                  .includes(session.data?.user?.id ?? "") ? (
-                  <div>hello</div>
-                ) : (
-                  <div className="w-full grid grid-cols-2 border-t border-input h-12 *:cursor-pointer *:font-medium">
-                    <button className="!font-semibold text-blue-600">
-                      참석
-                    </button>
-                    <button className="text-destructive border-l border-input">
-                      불참
-                    </button>
-                  </div>
-                )}
               </div>
+
+              {schedule.attendances
+                .map((attendance) => attendance.userId)
+                .includes(session.data?.user?.id ?? "") ? (
+                <div>hello</div>
+              ) : (
+                <div className="w-full grid grid-cols-2 border-t border-input h-12 *:cursor-pointer *:font-medium">
+                  <button className="!font-semibold text-blue-600">참석</button>
+                  <button className="text-destructive border-l border-input">
+                    불참
+                  </button>
+                </div>
+              )}
             </div>
           );
         })}
@@ -207,4 +201,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default MatchesPage;

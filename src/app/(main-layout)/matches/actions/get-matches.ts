@@ -3,7 +3,7 @@
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 
-export async function getSchedules() {
+export async function getMatches() {
   try {
     const session = await auth();
     const player = await prisma.user.findUnique({
@@ -60,43 +60,6 @@ export async function getSchedules() {
         createdAt: "desc",
       },
     });
-
-    // if (session?.user?.id) {
-    //   const user = await prisma.user.findUnique({
-    //     where: { id: session.user.id },
-    //     include: {
-    //       teams: {
-    //         where: {
-    //           status: "APPROVED", // 현재 사용자의 승인된 팀 멤버십도 포함
-    //         },
-    //         select: {
-    //           team: {
-    //             select: {
-    //               id: true,
-    //               name: true,
-    //               logoUrl: true,
-    //               description: true,
-    //               city: true,
-    //               district: true,
-    //               status: true,
-    //               recruitmentStatus: true,
-    //               gender: true,
-    //               level: true,
-    //             },
-    //           },
-    //           status: true,
-    //           role: true,
-    //           joinedAt: true,
-    //         },
-    //       },
-    //     },
-    //   });
-
-    //   return {
-    //     success: true,
-    //     data: { user, players },
-    //   };
-    // }
 
     // 세션이 없는 경우: user 없이 players만 전달
     return {
