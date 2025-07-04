@@ -57,21 +57,28 @@ const PlayerCard = ({
           </h3>
           <div className="flex items-center h-4 gap-2">
             <Separator orientation="vertical" />
-            <span className="sm:text-sm mb-0.5 sm:mb-0 tracking-tight">
-              {`${GENDER[player.gender as keyof typeof GENDER]} • ${
+            <span className="sm:text-sm mb-0.5 sm:mb-0 tracking-tight font-medium">
+              {/* {`${GENDER[player.gender as keyof typeof GENDER]} • ${
                 player.birthDate
                   ? age.success
                     ? `${age.age}세`
                     : "생년월일 미설정"
                   : "생년월일 미설정"
-              } • ${player.height ? `${player.height}cm` : "키 미설정"}`}
-              {/* {`${GENDER[player.gender as keyof typeof GENDER]} • ${
+              } • ${player.height ? `${player.height}cm` : "키 미설정"}`} */}
+              {`${GENDER[player.gender as keyof typeof GENDER]} ${
                 player.birthDate
                   ? age.success
-                    ? `${age.age}살`
+                    ? `${age.age}세`
                     : "생년월일 미설정"
                   : "생년월일 미설정"
-              } • ${player.height ? `${player.height}cm` : "키 미설정"}`} */}
+              }`}
+              {/* {`${GENDER[player.gender as keyof typeof GENDER]}, ${
+                player.birthDate
+                  ? age.success
+                    ? `${age.age}세`
+                    : "생년월일 미설정"
+                  : "생년월일 미설정"
+              }`} */}
             </span>
           </div>
         </div>
