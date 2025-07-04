@@ -6,10 +6,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
-  BookText,
   ChevronRight,
   EllipsisVertical,
-  Shapes,
   Share,
   Volleyball,
 } from "lucide-react";
@@ -276,59 +274,53 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 기본 정보 */}
-          <div className="bg-white rounded-2xl pb-3">
-            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-              <BookText className={`w-5 h-5 text-gray-600`} />
-              <span className="font-medium">기본 정보</span>
+          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {GENDER[data?.data?.gender as keyof typeof GENDER]}
+              </div>
+              <Label className="text-muted-foreground">성별</Label>
             </div>
-            <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {GENDER[data?.data?.gender as keyof typeof GENDER]}
-                </div>
-                <Label className="text-muted-foreground">성별</Label>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {getCurrentAge(data?.data?.birthDate as string).age}살
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {getCurrentAge(data?.data?.birthDate as string).age}살
-                </div>
-                <Label className="text-muted-foreground">나이</Label>
+              <Label className="text-muted-foreground">나이</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">{data?.data?.height}cm</div>
+              <Label className="text-muted-foreground">키</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {FOOT[data?.data?.foot as keyof typeof FOOT]}
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">{data?.data?.height}cm</div>
-                <Label className="text-muted-foreground">키</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {FOOT[data?.data?.foot as keyof typeof FOOT]}
-                </div>
-                <Label className="text-muted-foreground">사용하는 발</Label>
-              </div>
-              {/* <div className="flex flex-col gap-1 items-center my-4">
+              <Label className="text-muted-foreground">사용하는 발</Label>
+            </div>
+            {/* <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">{data?.data?.position}</div>
                 <Label className="text-muted-foreground">선호 포지션</Label>
               </div> */}
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {
-                    PLAYER_BACKGROUND[
-                      data?.data
-                        ?.playerBackground as keyof typeof PLAYER_BACKGROUND
-                    ]
-                  }
-                </div>
-                <Label className="text-muted-foreground">출신</Label>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {
+                  PLAYER_BACKGROUND[
+                    data?.data
+                      ?.playerBackground as keyof typeof PLAYER_BACKGROUND
+                  ]
+                }
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">
-                  {
-                    SKILL_LEVEL[
-                      data?.data?.skillLevel as keyof typeof SKILL_LEVEL
-                    ]
-                  }
-                </div>
-                <Label className="text-muted-foreground">실력</Label>
+              <Label className="text-muted-foreground">출신</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {
+                  SKILL_LEVEL[
+                    data?.data?.skillLevel as keyof typeof SKILL_LEVEL
+                  ]
+                }
               </div>
+              <Label className="text-muted-foreground">실력</Label>
             </div>
           </div>
 
@@ -374,94 +366,86 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 선호 포지션 */}
-          <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-            <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <div className="flex items-center space-x-3">
-                <Shapes className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">선호 포지션</span>
+          <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl p-3 gap-3">
+            <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
+              <div className="font-semibold">
+                {
+                  FUTSAL_POSITIONS[
+                    data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                  ]
+                }
               </div>
-              {/* <ChevronRight className="size-5 text-gray-400" /> */}
+              {/* <div className="font-semibold">{data?.data?.position}</div> */}
+              <Label className="text-muted-foreground">
+                선호 포지션
+                {/* {
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  } */}
+              </Label>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl mb-3 px-3 gap-3">
-              <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
-                <div className="font-semibold">
-                  {
-                    FUTSAL_POSITIONS[
-                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }
+            <div className="relative">
+              <Image
+                src="/half_pitch.svg"
+                alt="position"
+                width={306}
+                height={306}
+                className="rounded-lg overflow-hidden"
+              />
+              <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
+                {/* <div className="absolute top-0 left-0 size-5 bg-red-500 rounded-full" /> */}
+                <div className="w-full h-1/4 flex items-center justify-center">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "PIVO"
+                        ? "bg-black text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    PIVO
+                  </div>
                 </div>
-                {/* <div className="font-semibold">{data?.data?.position}</div> */}
-                {/* <Label className="text-muted-foreground">
-                  {
-                    FUTSAL_POSITIONS[
-                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }
-                </Label> */}
-              </div>
-              <div className="relative">
-                <Image
-                  src="/half_pitch.svg"
-                  alt="position"
-                  width={306}
-                  height={306}
-                  className="rounded-lg overflow-hidden"
-                />
-                <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
-                  {/* <div className="absolute top-0 left-0 size-5 bg-red-500 rounded-full" /> */}
-                  <div className="w-full h-1/4 flex items-center justify-center">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "PIVO"
-                          ? "bg-black text-white"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      PIVO
-                    </div>
+                <div className="w-full h-1/4 flex justify-between items-center px-3">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "ALA"
+                        ? "bg-black text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    ALA
                   </div>
-                  <div className="w-full h-1/4 flex justify-between items-center px-3">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "ALA"
-                          ? "bg-black text-white"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      ALA
-                    </div>
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "ALA"
-                          ? "bg-black text-white"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      ALA
-                    </div>
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "ALA"
+                        ? "bg-black text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    ALA
                   </div>
-                  <div className="w-full h-1/4 flex items-center justify-center">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "FIXO"
-                          ? "bg-black text-white"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      FIXO
-                    </div>
+                </div>
+                <div className="w-full h-1/4 flex items-center justify-center">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "FIXO"
+                        ? "bg-black text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    FIXO
                   </div>
-                  <div className="w-full h-1/4 flex items-center justify-center">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "GOLEIRO"
-                          ? "bg-black text-white"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      GOLEIRO
-                    </div>
+                </div>
+                <div className="w-full h-1/4 flex items-center justify-center">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "GOLEIRO"
+                        ? "bg-black text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    GOLEIRO
                   </div>
                 </div>
               </div>

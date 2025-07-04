@@ -5,13 +5,11 @@ import { cancelJoinTeam, getTeam, joinTeam } from "../model/actions";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
-  BookText,
   ChartPie,
   ChevronRight,
   CircleX,
   EllipsisVertical,
   Loader2,
-  MapPinned,
   Share,
   Sparkles,
   Text,
@@ -596,71 +594,57 @@ const TeamContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
-                  <div className="flex items-center space-x-3">
-                    <BookText className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">기본 정보</span>
+              <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {
+                      TEAM_GENDER[
+                        data?.data?.gender as keyof typeof TEAM_GENDER
+                      ]
+                    }
                   </div>
-                  {/* <Info
-                    className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
-                    onClick={() => {
-                      alert("기본 정보");
-                    }}
-                  /> */}
+                  <Label className="text-muted-foreground">구분</Label>
                 </div>
-                <div className="grid grid-cols-3 gap-3 px-4 py-2 bg-white rounded-2xl">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {
-                        TEAM_GENDER[
-                          data?.data?.gender as keyof typeof TEAM_GENDER
-                        ]
-                      }
-                    </div>
-                    <Label className="text-muted-foreground">구분</Label>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.stats.averageAge}살
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageAge}살
-                    </div>
-                    <Label className="text-muted-foreground">평균 연령</Label>
+                  <Label className="text-muted-foreground">평균 연령</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.stats.averageHeight}cm
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageHeight}cm
-                    </div>
-                    <Label className="text-muted-foreground">평균 키</Label>
+                  <Label className="text-muted-foreground">평균 키</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.recruitmentStatus === "RECRUITING"
+                      ? "모집중"
+                      : "마감"}
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.recruitmentStatus === "RECRUITING"
-                        ? "모집중"
-                        : "마감"}
-                    </div>
-                    <Label className="text-muted-foreground">팀원 모집</Label>
+                  <Label className="text-muted-foreground">팀원 모집</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.members.approved.length}명
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.members.approved.length}명
-                    </div>
-                    <Label className="text-muted-foreground">팀원 수</Label>
+                  <Label className="text-muted-foreground">팀원 수</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.stats.professionalCount
+                      ? `${data.data.stats.professionalCount}명`
+                      : "없음"}
                   </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.professionalCount
-                        ? `${data.data.stats.professionalCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">선수 출신</Label>
-                  </div>
-                  {/* <div className="flex flex-col gap-1 items-center my-3">
+                  <Label className="text-muted-foreground">선수 출신</Label>
+                </div>
+                {/* <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
                     </div>
                     <Label className="text-muted-foreground">실력</Label>
                   </div> */}
-                </div>
               </div>
 
               {/* 통계 */}
@@ -683,28 +667,12 @@ const TeamContent = ({ id }: { id: string }) => {
           </div> */}
 
               {/* 주요 활동 지역 */}
-              <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
-                  <div className="flex items-center space-x-3">
-                    <MapPinned className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">주요 활동 지역</span>
-                  </div>
-                  {/* <Info
-                    className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
-                    onClick={() => {
-                      alert("주요 활동 지역");
-                    }}
-                  /> */}
+              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-28">
+                <div className="font-semibold">
+                  {data.data.city}
+                  {data.data.district && ` ${data.data.district}`}
                 </div>
-                <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.city}
-                      {data.data.district && ` ${data.data.district}`}
-                    </div>
-                    {/* <Label className="text-muted-foreground">비기너</Label> */}
-                  </div>
-                </div>
+                <Label className="text-muted-foreground">주요 활동 지역</Label>
               </div>
 
               {/* 팀 실력 */}
