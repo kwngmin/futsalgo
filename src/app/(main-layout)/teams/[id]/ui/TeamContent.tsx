@@ -10,7 +10,6 @@ import {
   ChevronRight,
   CircleX,
   EllipsisVertical,
-  Info,
   Loader2,
   MapPinned,
   Share,
