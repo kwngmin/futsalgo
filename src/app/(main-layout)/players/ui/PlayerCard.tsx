@@ -57,7 +57,7 @@ const PlayerCard = ({
           </h3>
           <div className="flex items-center h-4 gap-2">
             <Separator orientation="vertical" />
-            <span className="sm:text-sm font-medium text-muted-foreground mb-0.5 tracking-tight">
+            <span className="sm:text-sm mb-0.5 sm:mb-0 tracking-tight">
               {`${GENDER[player.gender as keyof typeof GENDER]} • ${
                 player.birthDate
                   ? age.success
