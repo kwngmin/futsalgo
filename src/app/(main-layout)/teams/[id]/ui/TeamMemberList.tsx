@@ -93,7 +93,7 @@ const TeamMemberList = ({
                 {member.user.name || "미설정"}
               </span>
               <Separator orientation="vertical" /> */}
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              <ChevronRight className="size-5 text-gray-400" />
             </div>
           </button>
         ))}
@@ -237,7 +237,7 @@ const TeamMemberList = ({
                 {member.user.name || "미설정"}
               </span>
               <Separator orientation="vertical" />
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              <ChevronRight className="size-5 text-gray-400" />
             </div>
           </button>
         ))}

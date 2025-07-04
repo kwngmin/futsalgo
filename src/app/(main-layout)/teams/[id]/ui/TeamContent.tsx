@@ -7,18 +7,25 @@ import {
   ArrowLeft,
   BookText,
   ChartPie,
+  ChevronRight,
   CircleX,
   EllipsisVertical,
   Info,
   Loader2,
+  MapPinned,
   Share,
+  Sparkles,
   Text,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
-import { TEAM_GENDER, TEAM_LEVEL } from "@/entities/team/model/constants";
+import {
+  TEAM_GENDER,
+  TEAM_LEVEL,
+  TEAM_LEVEL_DESCRIPTION,
+} from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
 import TeamMemberList from "./TeamMemberList";
 // import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
@@ -226,7 +233,7 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
           <div className="bg-white rounded-2xl pt-6 relative">
-            {data.data.recruitmentStatus === "RECRUITING" ? (
+            {/* {data.data.recruitmentStatus === "RECRUITING" ? (
               <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded tracking-tight">
                   팀원 모집중
@@ -238,7 +245,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   팀원 모집 완료
                 </div>
               </div>
-            )}
+            )} */}
             {/* <p className="text-sm text-gray-500 px-2">
                 팀 생성일:{" "}
                 {data?.data?.createdAt
@@ -310,29 +317,27 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </span> */}
                 </h1>
-                <div className="flex items-center gap-1 h-6">
+                {/* <div className="flex items-center gap-1 h-6">
                   <span className="sm:text-sm font-medium text-muted-foreground tracking-tight">
-                    {/* 주요 활동 지역:{" "} */}
                     {`${
                       data?.data?.city && data?.data?.district
                         ? `${data?.data?.city} ${data?.data?.district}`
                         : "지역 미설정"
                     }`}
                   </span>
-                </div>
-                {/* <p className="text-sm text-gray-500">
-                  팀 생성일:{" "}
+                </div> */}
+                <span className="sm:text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
-                    ? new Date(data?.data?.createdAt).toLocaleDateString(
+                    ? `${new Date(data?.data?.createdAt).toLocaleDateString(
                         "ko-KR",
                         {
                           year: "numeric",
                           month: "long",
                           day: "numeric",
                         }
-                      )
-                    : ""}
-                </p> */}
+                      )} 생성됨`
+                    : "데이터 없음"}
+                </span>
               </div>
             </div>
             {/* 가입하기 */}
@@ -372,7 +377,7 @@ const TeamContent = ({ id }: { id: string }) => {
               //       <Settings className="size-5 text-gray-600" />
               //       <span className="font-medium">팀 관리하기</span>
               //     </div>
-              //     <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              //     <ChevronRight className="size-5 text-gray-400" />
               //   </button>
               // </div>
               !data.data.currentUserMembership.isMember ? (
@@ -590,7 +595,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   <Settings className="size-5 text-gray-600" />
                   <span className="font-medium">팀 관리하기</span>
                 </div>
-                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                <ChevronRight className="size-5 text-gray-400" />
               </button>
             </div>
           )} */}
@@ -617,12 +622,12 @@ const TeamContent = ({ id }: { id: string }) => {
                     <BookText className={`w-5 h-5 text-gray-600`} />
                     <span className="font-medium">기본 정보</span>
                   </div>
-                  <Info
+                  {/* <Info
                     className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
                     onClick={() => {
                       alert("기본 정보");
                     }}
-                  />
+                  /> */}
                 </div>
                 <div className="grid grid-cols-3 gap-3 px-4 py-2 bg-white rounded-2xl">
                   <div className="flex flex-col gap-1 items-center my-3">
@@ -637,21 +642,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.stats.professionalCount
-                        ? `${data.data.stats.professionalCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">선수 출신</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.members.approved.length}명
-                    </div>
-                    <Label className="text-muted-foreground">팀원</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageAge}세
+                      {data.data.stats.averageAge}살
                     </div>
                     <Label className="text-muted-foreground">평균 연령</Label>
                   </div>
@@ -663,11 +654,32 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {/* {SPORT_TYPE[data?.data?.sportType as keyof typeof SPORT_TYPE]} */}
+                      {data.data.recruitmentStatus === "RECRUITING"
+                        ? "모집중"
+                        : "마감"}
+                    </div>
+                    <Label className="text-muted-foreground">팀원 모집</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.members.approved.length}명
+                    </div>
+                    <Label className="text-muted-foreground">팀원 수</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.professionalCount
+                        ? `${data.data.stats.professionalCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">선수 출신</Label>
+                  </div>
+                  {/* <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
                       {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
                     </div>
                     <Label className="text-muted-foreground">실력</Label>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -690,19 +702,75 @@ const TeamContent = ({ id }: { id: string }) => {
             </Select>
           </div> */}
 
-              {/* 실력 분포 */}
+              {/* 주요 활동 지역 */}
               <div className="bg-white rounded-2xl pb-3">
                 <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
                   <div className="flex items-center space-x-3">
-                    <ChartPie className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">팀원 실력</span>
+                    <MapPinned className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">주요 활동 지역</span>
                   </div>
-                  <Info
+                  {/* <Info
                     className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
                     onClick={() => {
-                      alert("팀원 실력");
+                      alert("주요 활동 지역");
                     }}
-                  />
+                  /> */}
+                </div>
+                <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.city}
+                      {data.data.district && ` ${data.data.district}`}
+                    </div>
+                    {/* <Label className="text-muted-foreground">비기너</Label> */}
+                  </div>
+                </div>
+              </div>
+
+              {/* 팀 실력 */}
+              <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+                <div
+                  className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    alert("팀 실력");
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <Sparkles className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">팀 실력</span>
+                  </div>
+
+                  <ChevronRight className="size-5 text-gray-400" />
+                </div>
+                <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]}
+                    </div>
+                    <Label className="text-muted-foreground">
+                      {
+                        TEAM_LEVEL_DESCRIPTION[
+                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                        ]
+                      }
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
+              {/* 실력 분포 */}
+              <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+                <div
+                  className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    alert("팀원 실력 분포");
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <ChartPie className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">팀원 실력 분포</span>
+                  </div>
+                  <ChevronRight className="size-5 text-gray-400" />
                 </div>
                 <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
@@ -766,7 +834,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       </span>
                     </span>
                   </div>
-                  <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                  <ChevronRight className="size-5 text-gray-400" />
                 </button>
                 <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
                   <div className="flex flex-col gap-1 items-center my-3">
@@ -816,7 +884,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   팀원 • {data.data.members.length ?? 0}명
                 </span>
               </div>
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              <ChevronRight className="size-5 text-gray-400" />
             </button>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
               <div className="flex flex-col gap-1 items-center my-3">

@@ -147,7 +147,7 @@ const MorePage = () => {
                       <item.icon className="size-5 text-gray-600" />
                       <span className="font-medium">{item.label}</span>
                     </div>
-                    <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                    <ChevronRight className="size-5 text-gray-400" />
                   </button>
                 ))}
               </div>

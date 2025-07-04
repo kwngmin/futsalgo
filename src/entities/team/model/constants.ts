@@ -38,6 +38,14 @@ export const TEAM_LEVEL = {
   VERY_HIGH: "상",
 };
 
+export const TEAM_LEVEL_DESCRIPTION = {
+  VERY_LOW: "왕초보 팀. 체력이나 풋살 경험이 부족",
+  LOW: "일반인 팀에서 초보 팀. 기본기 부족",
+  MID: "일반인 팀인데 발이 좀 맞는 팀. 팀워크 존재",
+  HIGH: "선출이랑 발 맞추는게 가능한 팀",
+  VERY_HIGH: "전원 선출이거나, 비선출 중 킹반인급만 모인 팀",
+};
+
 export const TEAM_RECRUITMENT_STATUS_OPTIONS = [
   { value: "RECRUITING", label: "모집중" },
   { value: "NOT_RECRUITING", label: "모집마감" },

@@ -204,7 +204,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     {data.data.teams[0].team.name || "팀 이름 없음"}
                   </span>
                 </div>
-                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                <ChevronRight className="size-5 text-gray-400" />
               </button>
             </div>
           ) : (
@@ -217,7 +217,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <div className="size-6 bg-gray-200 rounded-full" />
                   <span className="font-medium">소속 팀 없음</span>
                 </div>
-                <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+                <ChevronRight className="size-5 text-gray-400" />
               </button>
             </div>
           )} */}
@@ -320,7 +320,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </span>
                 </span>
               </div>
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              <ChevronRight className="size-5 text-gray-400" />
             </button>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
               <div className="flex flex-col gap-1 items-center my-3">
@@ -357,7 +357,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </span>
                 </span>
               </div>
-              <ChevronRight className={`w-5 h-5 text-gray-400}`} />
+              <ChevronRight className="size-5 text-gray-400" />
             </button>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
               <div className="flex flex-col gap-1 items-center my-3">
