@@ -1,8 +1,9 @@
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER } from "@/entities/user/model/constants";
-import { Separator } from "@/shared/components/ui/separator";
+// import { Separator } from "@/shared/components/ui/separator";
 // import { Separator } from "@/shared/components/ui/separator";
 import { User } from "@prisma/client";
+import { Mars, Venus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -56,15 +57,30 @@ const PlayerCard = ({
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {player.nickname}
           </h3>
-          <div className="h-4 flex items-center gap-2 sm:text-sm mb-0.5 sm:mb-0 tracking-tight font-medium text-slate-600">
-            <Separator orientation="vertical" />
-            {`${GENDER[player.gender as keyof typeof GENDER]} ${
+          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight font-medium text-slate-600 gap-2">
+            {/* <Separator orientation="vertical" /> */}
+            <div className="flex items-center gap-1">
+              {`${
+                player.birthDate
+                  ? age.success
+                    ? `${age.age}살`
+                    : "생년월일 미설정"
+                  : "생년월일 미설정"
+              } ${GENDER[player.gender as keyof typeof GENDER]}`}
+              {player.gender === "MALE" ? (
+                <Mars className="size-4 text-sky-700" />
+              ) : player.gender === "FEMALE" ? (
+                <Venus className="size-4 text-pink-700" />
+              ) : null}
+            </div>
+
+            {/* {`${GENDER[player.gender as keyof typeof GENDER]} ${
               player.birthDate
                 ? age.success
-                  ? `${age.age}세`
+                  ? `${age.age}살`
                   : "생년월일 미설정"
                 : "생년월일 미설정"
-            }`}
+            }`} */}
           </div>
 
           {/* <div className="flex items-center h-4 gap-2">

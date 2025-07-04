@@ -40,6 +40,9 @@ const TeamCard = ({
       <div className="flex flex-col items-start justify-center grow">
         <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
           {team.name}
+          <span className="sm:text-sm font-medium text-amber-600">
+            {team._count.members}
+          </span>
           {/* {isMyTeam && (
               <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/10 h-5 border border-slate-300 mb-0.5">
                 <span className="text-xs text-slate-800 font-semibold tracking-tight">
@@ -58,12 +61,17 @@ const TeamCard = ({
               <Blend className="size-4 text-gray-700" />
             )}
             {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]}`}
-            {/* <Users className="size-4 text-gray-700" /> */} •{" "}
+            {/* <Users className="size-4 text-gray-700" /> */}
             {`${
+              Boolean(team.stats?.professionalCount)
+                ? ` • 선출 ${team.stats?.professionalCount}명`
+                : ""
+            } • ${`${formatCityName(team.city)} ${team.district}`}`}
+            {/* {`${
               Boolean(team.stats?.professionalCount)
                 ? `선출포함 ${team._count.members}명`
                 : `${team._count.members}명`
-            } • ${`${formatCityName(team.city)} ${team.district}`}`}
+            } • ${`${formatCityName(team.city)} ${team.district}`}`} */}
           </div>
         </div>
       </div>
