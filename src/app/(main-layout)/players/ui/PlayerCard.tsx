@@ -65,18 +65,25 @@ const PlayerCard = ({
                   ? `${age.age}살`
                   : "생년월일 미설정"
                 : "생년월일 미설정"} */}
-              {`${
+              {`${GENDER[player.gender as keyof typeof GENDER]} • ${
                 player.birthDate
                   ? age.success
                     ? `${age.age}살`
                     : "생년월일 미설정"
                   : "생년월일 미설정"
-              } • ${GENDER[player.gender as keyof typeof GENDER]}`}
-              {player.gender === "MALE" ? (
+              }`}
+              {/* {`${
+                player.birthDate
+                  ? age.success
+                    ? `${age.age}살`
+                    : "생년월일 미설정"
+                  : "생년월일 미설정"
+              } • ${GENDER[player.gender as keyof typeof GENDER]}`} */}
+              {/* {player.gender === "MALE" ? (
                 <Mars className="size-4 text-sky-700" />
               ) : player.gender === "FEMALE" ? (
                 <Venus className="size-4 text-pink-700" />
-              ) : null}
+              ) : null} */}
             </div>
 
             {/* {`${GENDER[player.gender as keyof typeof GENDER]} ${
