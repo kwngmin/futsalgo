@@ -56,7 +56,7 @@ const PlayerCard = ({
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {player.nickname}
           </h3>
-          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight font-medium text-slate-600 gap-2">
+          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight text-slate-500 gap-2">
             <Separator orientation="vertical" />
             <div className="flex items-center gap-1">
               {/* {player.birthDate

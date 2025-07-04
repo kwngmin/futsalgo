@@ -127,7 +127,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-300 font-bold">HOME</span>
+                <span className="text-slate-300 font-bold text-xl">HOME</span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -210,7 +210,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-300 font-bold">AWAY</span>
+                <span className="text-slate-300 font-bold text-xl">AWAY</span>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
