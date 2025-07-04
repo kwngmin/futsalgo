@@ -1,9 +1,8 @@
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER } from "@/entities/user/model/constants";
-// import { Separator } from "@/shared/components/ui/separator";
 import { Separator } from "@/shared/components/ui/separator";
 import { User } from "@prisma/client";
-import { Mars, Venus } from "lucide-react";
+// import { Mars, Venus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
