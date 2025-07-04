@@ -129,7 +129,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <h1 className="text-xl font-semibold">
                   {data?.data?.nickname}
                 </h1>
-                <span className="sm:text-sm text-muted-foreground tracking-tight">
+                <span className="text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
                     ? `${new Date(data?.data?.createdAt).toLocaleDateString(
                         "ko-KR",

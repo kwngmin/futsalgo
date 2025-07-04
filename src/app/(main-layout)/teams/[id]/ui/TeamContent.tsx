@@ -306,7 +306,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     #{data.data.code}
                   </div> */}
                 </div>
-                <span className="sm:text-sm text-muted-foreground tracking-tight">
+                <span className="text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
                     ? `${new Date(data?.data?.createdAt).toLocaleDateString(
                         "ko-KR",
