@@ -122,7 +122,6 @@ const TeamContent = ({ id }: { id: string }) => {
   //             <User2 className="w-5 h-5 text-gray-600" />
   //           )} */}
   //             <span className="font-medium">
-  //               hhihihi
   //               {/* {field === "basic"
   //               ? `${data.name || "미설정"} • ${
   //                   GENDER[data.gender as keyof typeof GENDER]
@@ -150,7 +149,7 @@ const TeamContent = ({ id }: { id: string }) => {
   //         <div>데이터 없음</div>
   //       )
   //     ) : (
-  //       <div>hihi</div>
+  //       <div>hi</div>
   //     )}
   //     {/* {field === "phone" ? (
   //       <ProfilePhone
@@ -310,21 +309,12 @@ const TeamContent = ({ id }: { id: string }) => {
                 )}
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-semibold">
-                  {data?.data?.name}
-                  {/* <span className="text-base font-normal text-gray-500 ml-2">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl font-semibold">{data?.data?.name}</h1>
+                  {/* <div className="h-5 flex items-center text-base sm:text-sm font-normal text-slate-500">
                     #{data.data.code}
-                  </span> */}
-                </h1>
-                {/* <div className="flex items-center gap-1 h-6">
-                  <span className="sm:text-sm font-medium text-muted-foreground tracking-tight">
-                    {`${
-                      data?.data?.city && data?.data?.district
-                        ? `${data?.data?.city} ${data?.data?.district}`
-                        : "지역 미설정"
-                    }`}
-                  </span>
-                </div> */}
+                  </div> */}
+                </div>
                 <span className="sm:text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
                     ? `${new Date(data?.data?.createdAt).toLocaleDateString(

@@ -26,14 +26,14 @@ export const FOOTBALL_POSITIONS = {
 
 export const FUTSAL_POSITION_OPTIONS = [
   { value: "PIVO", label: "PIVO - 공격수" },
-  { value: "ALA", label: "ALA - 측면 공격수" },
+  { value: "ALA", label: "ALA - 윙어 겸 미드필더" },
   { value: "FIXO", label: "FIXO - 수비수" },
   { value: "GOLEIRO", label: "GOLEIRO - 골키퍼" },
 ];
 
 export const FUTSAL_POSITIONS = {
   PIVO: "공격수",
-  ALA: "측면 공격수",
+  ALA: "윙어 겸 미드필더",
   FIXO: "수비수",
   GOLEIRO: "골키퍼",
 };

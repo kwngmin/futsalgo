@@ -9,6 +9,7 @@ import {
   BookText,
   ChevronRight,
   EllipsisVertical,
+  Shapes,
   Share,
   Volleyball,
 } from "lucide-react";
@@ -25,17 +26,9 @@ import {
   // GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
-// import HlafPitch from "@/public/hlaf_pitch.svg";
 import { useSession } from "next-auth/react";
-import { TEAM_GENDER } from "@/entities/team/model/constants";
+// import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
-
-const logoOptions = [
-  "/assets/images/team-logo-sample-1.png",
-  // "/assets/images/team-logo-sample-2.png",
-  // "/assets/images/team-logo-sample-3.png",
-  // "/assets/images/team-logo-sample-4.png",
-];
 
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -132,11 +125,23 @@ const PlayerContent = ({ id }: { id: string }) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <h1 className="text-lg font-semibold flex items-center gap-1.5">
+              <div className="flex flex-col">
+                <h1 className="text-xl font-semibold">
                   {data?.data?.nickname}
                 </h1>
-                {data.data.teams && data.data.teams.length > 0 ? (
+                <span className="sm:text-sm text-muted-foreground tracking-tight">
+                  {data?.data?.createdAt
+                    ? `${new Date(data?.data?.createdAt).toLocaleDateString(
+                        "ko-KR",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )} 가입함`
+                    : "데이터 없음"}
+                </span>
+                {/* {data.data.teams && data.data.teams.length > 0 ? (
                   <button
                     onClick={() =>
                       router.push(`/teams/${data.data.teams[0].team.id}`)
@@ -173,7 +178,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <span className="font-medium shrink-0 text-muted-foreground text-sm">
                     소속 팀 없음
                   </span>
-                )}
+                )} */}
               </div>
             </div>
             {/* <MannerBar score={Math.floor(Math.random() * 100)} /> */}
@@ -243,6 +248,31 @@ const PlayerContent = ({ id }: { id: string }) => {
                 }`}</span>
               </div>
             </button>
+          </div> */}
+
+          {/* 소속 팀 */}
+          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
+            <button
+              onClick={() => alert("소속 팀")}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
+            >
+              <div className="flex items-center space-x-3">
+                <Shirt className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">소속 팀</span>
+              </div>
+              <ChevronRight className="size-5 text-gray-400" />
+            </button>
+            <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl mb-3 px-3 gap-3">
+              <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
+                <div className="font-semibold">
+                  {
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </div>
+              </div>
+            </div>
           </div> */}
 
           {/* 기본 정보 */}
@@ -343,14 +373,14 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div> */}
 
-          {/* 연습 경기 */}
+          {/* 선호 포지션 */}
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
-              onClick={() => alert("연습 경기")}
+              onClick={() => alert("선호 포지션")}
               className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
             >
               <div className="flex items-center space-x-3">
-                <Volleyball className={`w-5 h-5 text-gray-600`} />
+                <Shapes className={`w-5 h-5 text-gray-600`} />
                 <span className="font-medium">
                   선호 포지션
                   {/* <span className="text-gray-400 px-2 text-sm">
@@ -362,14 +392,21 @@ const PlayerContent = ({ id }: { id: string }) => {
             </button>
             <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl mb-3 px-3 gap-3">
               <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
-                <div className="font-semibold">{data?.data?.position}</div>
-                <Label className="text-muted-foreground">
+                <div className="font-semibold">
                   {
                     FUTSAL_POSITIONS[
                       data?.data?.position as keyof typeof FUTSAL_POSITIONS
                     ]
                   }
-                </Label>
+                </div>
+                {/* <div className="font-semibold">{data?.data?.position}</div> */}
+                {/* <Label className="text-muted-foreground">
+                  {
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </Label> */}
               </div>
               <div className="relative">
                 <Image
@@ -482,7 +519,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
         </div>
       ) : null}
-      <p className="text-center text-sm text-gray-500 mt-3">
+      {/* <p className="text-center text-sm text-gray-500 mt-3">
         가입일:{" "}
         {data?.data?.createdAt
           ? new Date(data?.data?.createdAt).toLocaleDateString("ko-KR", {
@@ -491,7 +528,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               day: "numeric",
             })
           : ""}
-      </p>
+      </p> */}
     </div>
   );
 };
