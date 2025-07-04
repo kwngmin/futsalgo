@@ -9,10 +9,7 @@ import {
   BookText,
   ChevronRight,
   EllipsisVertical,
-  Mars,
   Share,
-  // User2,
-  Venus,
   Volleyball,
 } from "lucide-react";
 import {
@@ -21,6 +18,7 @@ import {
 } from "@/entities/user/model/actions";
 import {
   FOOT,
+  GENDER,
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
   // GENDER,
@@ -135,23 +133,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex flex-col gap-1">
                 <h1 className="text-lg font-semibold flex items-center gap-1.5">
-                  {data?.data?.nickname}{" "}
-                  {data?.data?.gender === "MALE" ? (
-                    <div className="flex items-center bg-blue-500/5 rounded p-0.5">
-                      <Mars
-                        className="size-4 stroke-blue-700"
-                        strokeWidth={2}
-                      />
-                      {/* <span className="text-sm text-gray-500">남</span> */}
-                    </div>
-                  ) : (
-                    <div className="flex items-center bg-red-500/5 rounded p-0.5">
-                      <Venus
-                        className="size-4 stroke-red-700"
-                        strokeWidth={2}
-                      />
-                    </div>
-                  )}
+                  {data?.data?.nickname}
                 </h1>
                 {data.data.teams && data.data.teams.length > 0 ? (
                   <button
@@ -270,8 +252,10 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
               <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">{data?.data?.height}cm</div>
-                <Label className="text-muted-foreground">키</Label>
+                <div className="font-semibold">
+                  {GENDER[data?.data?.gender as keyof typeof GENDER]}
+                </div>
+                <Label className="text-muted-foreground">성별</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
@@ -280,15 +264,19 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <Label className="text-muted-foreground">나이</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-4">
+                <div className="font-semibold">{data?.data?.height}cm</div>
+                <Label className="text-muted-foreground">키</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {FOOT[data?.data?.foot as keyof typeof FOOT]}
                 </div>
                 <Label className="text-muted-foreground">사용하는 발</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-4">
+              {/* <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">{data?.data?.position}</div>
                 <Label className="text-muted-foreground">선호 포지션</Label>
-              </div>
+              </div> */}
               <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">
                   {

@@ -651,7 +651,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.stats.averageAge}살
+                      {data.data.stats.averageAge}세
                     </div>
                     <Label className="text-muted-foreground">평균 연령</Label>
                   </div>
