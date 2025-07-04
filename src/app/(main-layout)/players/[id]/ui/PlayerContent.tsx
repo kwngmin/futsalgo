@@ -375,21 +375,13 @@ const PlayerContent = ({ id }: { id: string }) => {
 
           {/* 선호 포지션 */}
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-            <button
-              onClick={() => alert("선호 포지션")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
-            >
+            <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
                 <Shapes className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">
-                  선호 포지션
-                  {/* <span className="text-gray-400 px-2 text-sm">
-                    우리 팀 vs 우리 팀
-                  </span> */}
-                </span>
+                <span className="font-medium">선호 포지션</span>
               </div>
-              <ChevronRight className="size-5 text-gray-400" />
-            </button>
+              {/* <ChevronRight className="size-5 text-gray-400" /> */}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl mb-3 px-3 gap-3">
               <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
                 <div className="font-semibold">

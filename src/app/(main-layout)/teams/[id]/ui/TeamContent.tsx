@@ -27,15 +27,6 @@ import {
 } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
 import TeamMemberList from "./TeamMemberList";
-// import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
-// import EditTeamForm from "./EditTeamForm";
-
-// const logoOptions = [
-//   "/assets/images/team-logo-sample-1.png",
-//   "/assets/images/team-logo-sample-2.png",
-//   "/assets/images/team-logo-sample-3.png",
-//   "/assets/images/team-logo-sample-4.png",
-// ];
 
 const tabs = [
   {
@@ -726,23 +717,36 @@ const TeamContent = ({ id }: { id: string }) => {
                 >
                   <div className="flex items-center space-x-3">
                     <Sparkles className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">팀 실력</span>
+                    <span className="font-medium">{`팀 실력 • ${
+                      TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
+                    }`}</span>
                   </div>
-
+                  {/* <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL] ||
+                        "미설정"}
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div> */}
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>
                 <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]}
-                    </div>
-                    <Label className="text-muted-foreground">
                       {
                         TEAM_LEVEL_DESCRIPTION[
                           data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
                         ]
                       }
-                    </Label>
+                      {/* {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]} */}
+                    </div>
+                    {/* <Label className="text-muted-foreground">
+                      {
+                        TEAM_LEVEL_DESCRIPTION[
+                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                        ]
+                      }
+                    </Label> */}
                   </div>
                 </div>
               </div>

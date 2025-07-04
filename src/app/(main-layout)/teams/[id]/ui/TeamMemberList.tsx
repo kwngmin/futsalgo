@@ -13,7 +13,6 @@ import { ChevronRight, Crown, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
-import { Separator } from "@/shared/components/ui/separator";
 
 interface TeamMemberWithUser extends TeamMember {
   user: Pick<
@@ -236,7 +235,6 @@ const TeamMemberList = ({
               <span className="text-base font-medium text-gray-500">
                 {member.user.name || "미설정"}
               </span>
-              <Separator orientation="vertical" />
               <ChevronRight className="size-5 text-gray-400" />
             </div>
           </button>
