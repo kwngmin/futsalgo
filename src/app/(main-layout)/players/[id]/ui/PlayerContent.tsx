@@ -360,8 +360,8 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <ChevronRight className="size-5 text-gray-400" />
             </button>
-            <div className="grid grid-cols-3 bg-white rounded-2xl mb-6 px-3">
-              <div className="col-span-2 flex flex-col gap-1 items-center justify-center my-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl mb-6 px-3">
+              <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
                 <div className="font-semibold">{data?.data?.position}</div>
                 <Label className="text-muted-foreground">
                   {
