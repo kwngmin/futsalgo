@@ -18,13 +18,14 @@ import {
 } from "@/entities/user/model/actions";
 import {
   FOOT,
+  FUTSAL_POSITIONS,
   GENDER,
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
   // GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
-
+// import HlafPitch from "@/public/hlaf_pitch.svg";
 import { useSession } from "next-auth/react";
 import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
@@ -341,6 +342,101 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
           </div> */}
+
+          {/* 연습 경기 */}
+          <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
+            <button
+              onClick={() => alert("연습 경기")}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
+            >
+              <div className="flex items-center space-x-3">
+                <Volleyball className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">
+                  선호 포지션
+                  {/* <span className="text-gray-400 px-2 text-sm">
+                    우리 팀 vs 우리 팀
+                  </span> */}
+                </span>
+              </div>
+              <ChevronRight className="size-5 text-gray-400" />
+            </button>
+            <div className="grid grid-cols-3 bg-white rounded-2xl mb-6 px-3">
+              <div className="col-span-2 flex flex-col gap-1 items-center justify-center my-3">
+                <div className="font-semibold">{data?.data?.position}</div>
+                <Label className="text-muted-foreground">
+                  {
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </Label>
+              </div>
+              <div className="relative">
+                <Image
+                  src="/half_pitch.svg"
+                  alt="position"
+                  width={306}
+                  height={306}
+                />
+                <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
+                  {/* <div className="absolute top-0 left-0 size-5 bg-red-500 rounded-full" /> */}
+                  <div className="w-full h-1/4 flex items-center justify-center">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "PIVO"
+                          ? "bg-black text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      PIVO
+                    </div>
+                  </div>
+                  <div className="w-full h-1/4 flex justify-between items-center px-3">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "ALA"
+                          ? "bg-black text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      ALA
+                    </div>
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "ALA"
+                          ? "bg-black text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      ALA
+                    </div>
+                  </div>
+                  <div className="w-full h-1/4 flex items-center justify-center">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "FIXO"
+                          ? "bg-black text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      FIXO
+                    </div>
+                  </div>
+                  <div className="w-full h-1/4 flex items-center justify-center">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "GOLEIRO"
+                          ? "bg-black text-white"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      GOLEIRO
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* 연습 경기 */}
           <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">

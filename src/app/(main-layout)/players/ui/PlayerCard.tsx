@@ -124,7 +124,7 @@ const PlayerCard = ({
               </div>
             ) : (
               <div className="size-5 sm:size-4 p-0.5">
-                <div className="size-full bg-gray-100 rounded-full" />
+                <div className="size-full bg-gradient-to-br from-slate-300 to-gray-100 rounded-full" />
               </div>
             )}
             {teamName || "소속 팀 없음"}
