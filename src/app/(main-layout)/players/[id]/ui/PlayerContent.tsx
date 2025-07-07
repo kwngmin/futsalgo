@@ -25,6 +25,7 @@ import {
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 import { useSession } from "next-auth/react";
+import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 // import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
 
@@ -183,6 +184,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 소속 팀 */}
+          {/* <TeamCard team={data?.data?.teams[0]?.team} /> */}
           {/* {data.data.teams && data.data.teams.length > 0 ? (
             <div className="bg-white rounded-2xl">
               <button
@@ -248,31 +250,6 @@ const PlayerContent = ({ id }: { id: string }) => {
             </button>
           </div> */}
 
-          {/* 소속 팀 */}
-          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-            <button
-              onClick={() => alert("소속 팀")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
-            >
-              <div className="flex items-center space-x-3">
-                <Shirt className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">소속 팀</span>
-              </div>
-              <ChevronRight className="size-5 text-gray-400" />
-            </button>
-            <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl mb-3 px-3 gap-3">
-              <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
-                <div className="font-semibold">
-                  {
-                    FUTSAL_POSITIONS[
-                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }
-                </div>
-              </div>
-            </div>
-          </div> */}
-
           {/* 기본 정보 */}
           <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
             <div className="flex flex-col gap-1 items-center my-4">
@@ -297,10 +274,6 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <Label className="text-muted-foreground">사용하는 발</Label>
             </div>
-            {/* <div className="flex flex-col gap-1 items-center my-4">
-                <div className="font-semibold">{data?.data?.position}</div>
-                <Label className="text-muted-foreground">선호 포지션</Label>
-              </div> */}
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
                 {
@@ -324,47 +297,6 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div>
 
-          {/* 통계 */}
-          {/* <div className="bg-white rounded-lg overflow-hidden">
-           */}
-
-          {/* 친선 경기 */}
-          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-            <button
-              onClick={() => alert("친선 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
-            >
-              <div className="flex items-center space-x-3">
-                <Volleyball className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">
-                  친선 경기
-                  <span className="text-gray-400 px-2 text-sm">
-                    우리 팀 vs 외부 팀
-                  </span>
-                </span>
-              </div>
-              <ChevronRight className="size-5 text-gray-400" />
-            </button>
-            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">11</div>
-                <Label className="text-muted-foreground">경기</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">2</div>
-                <Label className="text-muted-foreground">득점</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">5</div>
-                <Label className="text-muted-foreground">어시스트</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">8</div>
-                <Label className="text-muted-foreground">출전 시간</Label>
-              </div>
-            </div>
-          </div> */}
-
           {/* 선호 포지션 */}
           <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl p-3 gap-3">
             <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
@@ -375,15 +307,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   ]
                 }
               </div>
-              {/* <div className="font-semibold">{data?.data?.position}</div> */}
-              <Label className="text-muted-foreground">
-                선호 포지션
-                {/* {
-                    FUTSAL_POSITIONS[
-                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  } */}
-              </Label>
+              <Label className="text-muted-foreground">선호 포지션</Label>
             </div>
             <div className="relative">
               <Image
@@ -394,7 +318,6 @@ const PlayerContent = ({ id }: { id: string }) => {
                 className="rounded-lg overflow-hidden"
               />
               <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
-                {/* <div className="absolute top-0 left-0 size-5 bg-red-500 rounded-full" /> */}
                 <div className="w-full h-1/4 flex items-start justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
