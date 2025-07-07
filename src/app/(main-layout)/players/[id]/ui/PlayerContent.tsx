@@ -218,7 +218,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             )}
             {/* 탭 */}
-            <div className="flex items-center justify-between gap-2 px-3 border-t border-input">
+            <div className="flex items-center justify-between gap-2 px-3 border-t border-gray-100">
               <div className="flex h-12 space-x-2">
                 {tabs
                   // .filter(
