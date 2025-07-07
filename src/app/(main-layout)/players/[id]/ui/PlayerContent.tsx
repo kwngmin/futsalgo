@@ -5,16 +5,9 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  ArrowLeft,
-  ChevronRight,
-  EllipsisVertical,
-  Share,
-  Volleyball,
-} from "lucide-react";
+import { ArrowLeft, EllipsisVertical, Share } from "lucide-react";
 import {
   getCurrentAge, //
-  // maskName,
 } from "@/entities/user/model/actions";
 import {
   FOOT,
@@ -22,20 +15,16 @@ import {
   GENDER,
   PLAYER_BACKGROUND,
   SKILL_LEVEL,
-  // GENDER,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { useState } from "react";
-// import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
-// import { TEAM_GENDER } from "@/entities/team/model/constants";
-// import MannerBar from "./MannerBar";
 
 const tabs = [
   {
-    label: "개요",
+    label: "요약",
     value: "overview",
     isDisabled: false,
   },
@@ -452,42 +441,56 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div>
 
+          <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+            <div className="flex flex-col gap-1 items-center my-6">
+              <div className="font-semibold">2</div>
+              <Label className="text-muted-foreground">경기</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-6">
+              <div className="font-semibold">0</div>
+              <Label className="text-muted-foreground">득점</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-6">
+              <div className="font-semibold">1</div>
+              <Label className="text-muted-foreground">어시스트</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-6">
+              <div className="font-semibold">0</div>
+              <Label className="text-muted-foreground">최우수 선수</Label>
+            </div>
+          </div>
+
           {/* 연습 경기 */}
-          <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
+          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
             <button
               onClick={() => alert("연습 경기")}
               className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
             >
               <div className="flex items-center space-x-3">
                 <Volleyball className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">
-                  연습 경기
-                  <span className="text-gray-400 px-2 text-sm">
-                    우리 팀 vs 우리 팀
-                  </span>
-                </span>
+                <span className="font-medium">2025년</span>
               </div>
               <ChevronRight className="size-5 text-gray-400" />
             </button>
-            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
-              <div className="flex flex-col gap-1 items-center my-3">
+            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">2</div>
                 <Label className="text-muted-foreground">경기</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">0</div>
                 <Label className="text-muted-foreground">득점</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">1</div>
                 <Label className="text-muted-foreground">어시스트</Label>
               </div>
-              <div className="flex flex-col gap-1 items-center my-3">
+              <div className="flex flex-col gap-1 items-center my-4">
                 <div className="font-semibold">0</div>
                 <Label className="text-muted-foreground">출전 시간</Label>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* <div className="bg-slate-300">
             <div className="w-fit p-3">
               <FutsalPitch className="w-24" fill="gray" />

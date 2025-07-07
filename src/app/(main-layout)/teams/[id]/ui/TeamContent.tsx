@@ -38,6 +38,11 @@ const tabs = [
     isDisabled: false,
   },
   {
+    label: "경기",
+    value: "matches",
+    isDisabled: true,
+  },
+  {
     label: "후기",
     value: "reviews",
     isDisabled: true,
@@ -685,28 +690,22 @@ const TeamContent = ({ id }: { id: string }) => {
                 >
                   <div className="flex items-center space-x-3">
                     <Sparkles className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">{`팀 실력 • ${
-                      TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
-                    }`}</span>
+                    <span className="font-medium">팀 실력</span>
                   </div>
-                  {/* <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL] ||
-                        "미설정"}
-                    </span>
-                    <ChevronRight className="size-5 text-gray-400" />
-                  </div> */}
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>
                 <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {
-                        TEAM_LEVEL_DESCRIPTION[
-                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                        ]
-                      }
-                      {/* {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]} */}
+                      {`${
+                        TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
+                      } - 
+                        ${
+                          TEAM_LEVEL_DESCRIPTION[
+                            data.data
+                              .level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                          ]
+                        }`}
                     </div>
                     {/* <Label className="text-muted-foreground">
                       {
