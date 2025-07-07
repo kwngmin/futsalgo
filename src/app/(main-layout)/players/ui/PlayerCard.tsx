@@ -39,6 +39,9 @@ const PlayerCard = ({
             src={player.image}
             alt={player.nickname || "프로필 이미지"}
             className="size-14 p-0.5 rounded-full object-cover"
+            priority={isCurrentUser}
+            loading={isCurrentUser ? "eager" : "lazy"}
+            sizes="56px"
           />
         </div>
       ) : (

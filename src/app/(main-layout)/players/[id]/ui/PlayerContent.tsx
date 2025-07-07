@@ -399,7 +399,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "PIVO"
-                        ? "bg-black text-white"
+                        ? "bg-white ring"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -410,7 +410,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "ALA"
-                        ? "bg-black text-white"
+                        ? "bg-white ring"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -419,7 +419,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "ALA"
-                        ? "bg-black text-white"
+                        ? "bg-white ring"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -430,7 +430,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "FIXO"
-                        ? "bg-black text-white"
+                        ? "bg-white ring"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -441,7 +441,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "GOLEIRO"
-                        ? "bg-black text-white"
+                        ? "bg-white ring"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >

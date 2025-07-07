@@ -7,7 +7,7 @@ export async function getPlayers() {
   try {
     const session = await auth();
 
-    const players = await prisma.user.findMany({
+    const playersPromise = prisma.user.findMany({
       where: session?.user?.id
         ? {
             NOT: {
@@ -46,47 +46,43 @@ export async function getPlayers() {
       },
     });
 
-    if (session?.user?.id) {
-      const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        include: {
-          teams: {
-            where: {
-              status: "APPROVED", // 현재 사용자의 승인된 팀 멤버십도 포함
-            },
-            select: {
-              team: {
-                select: {
-                  id: true,
-                  name: true,
-                  logoUrl: true,
-                  description: true,
-                  city: true,
-                  district: true,
-                  status: true,
-                  recruitmentStatus: true,
-                  gender: true,
-                  level: true,
-                },
+    const userPromise = session?.user?.id
+      ? prisma.user.findUnique({
+          where: { id: session.user.id },
+          include: {
+            teams: {
+              where: {
+                status: "APPROVED", // 현재 사용자의 승인된 팀 멤버십도 포함
               },
-              status: true,
-              role: true,
-              joinedAt: true,
+              select: {
+                team: {
+                  select: {
+                    id: true,
+                    name: true,
+                    logoUrl: true,
+                    description: true,
+                    city: true,
+                    district: true,
+                    status: true,
+                    recruitmentStatus: true,
+                    gender: true,
+                    level: true,
+                  },
+                },
+                status: true,
+                role: true,
+                joinedAt: true,
+              },
             },
           },
-        },
-      });
+        })
+      : Promise.resolve(null);
 
-      return {
-        success: true,
-        data: { user, players },
-      };
-    }
+    const [players, user] = await Promise.all([playersPromise, userPromise]);
 
-    // 세션이 없는 경우: user 없이 players만 전달
     return {
       success: true,
-      data: { user: null, players },
+      data: { user, players },
     };
   } catch (error) {
     console.error("선수 데이터 조회 실패:", error);

@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  compiler: {
+    // 프로덕션에서 console.log 제거
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+
   images: {
     domains: [
       "lh3.googleusercontent.com", // Google 프로필 이미지
