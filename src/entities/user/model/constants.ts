@@ -71,13 +71,13 @@ export const CONDITION = {
 };
 
 export const PLAYER_BACKGROUND_OPTIONS = [
-  { value: "NON_PROFESSIONAL", label: "비선출" },
-  { value: "PROFESSIONAL", label: "선출" },
+  { value: "NON_PROFESSIONAL", label: "비선수" },
+  { value: "PROFESSIONAL", label: "선수" },
 ];
 
 export const PLAYER_BACKGROUND = {
-  NON_PROFESSIONAL: "비선출",
-  PROFESSIONAL: "선출",
+  NON_PROFESSIONAL: "비선수",
+  PROFESSIONAL: "선수",
 };
 
 export const SKILL_LEVEL_OPTIONS = [

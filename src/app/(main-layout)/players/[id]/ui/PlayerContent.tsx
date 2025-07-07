@@ -60,7 +60,7 @@ const PlayerContent = ({ id }: { id: string }) => {
   if (!data) {
     return (
       <div className="text-center text-gray-500 pt-10">
-        선수 정보를 불러오는 중입니다.
+        회원 정보를 불러오는 중입니다.
       </div>
     );
   }
@@ -68,7 +68,7 @@ const PlayerContent = ({ id }: { id: string }) => {
   if (!data?.data) {
     return (
       <div className="text-center text-gray-500 pt-10">
-        존재하지 않는 선수입니다.
+        존재하지 않는 회원입니다.
       </div>
     );
   }
@@ -84,7 +84,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           className="flex items-center gap-1.5 !px-2"
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          <h1 className="text-2xl font-bold">선수 정보</h1>
+          <h1 className="text-2xl font-bold">회원 정보</h1>
         </Button>
         <div className="w-20 flex justify-end gap-3 px-3">
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
@@ -316,7 +316,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 기본 정보 */}
-          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
+          <div className="grid grid-cols-3 gap-x-3 p-4 bg-white rounded-2xl">
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
                 {GENDER[data?.data?.gender as keyof typeof GENDER]}
@@ -455,7 +455,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center my-6">
               <div className="font-semibold">0</div>
-              <Label className="text-muted-foreground">최우수 선수</Label>
+              <Label className="text-muted-foreground">MVP</Label>
             </div>
           </div>
 

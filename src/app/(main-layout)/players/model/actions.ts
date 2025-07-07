@@ -85,7 +85,7 @@ export async function getPlayers() {
       data: { user, players },
     };
   } catch (error) {
-    console.error("선수 데이터 조회 실패:", error);
+    console.error("회원 데이터 조회 실패:", error);
     return { success: false, error: "서버 오류가 발생했습니다" };
   }
 }

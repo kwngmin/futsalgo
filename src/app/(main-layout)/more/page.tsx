@@ -41,8 +41,8 @@ const MorePage = () => {
         },
         {
           icon: Heart,
-          label: "팔로잉 한 선수",
-          action: () => alert("팔로잉 한 선수"),
+          label: "팔로잉 한 회원",
+          action: () => alert("팔로잉 한 회원"),
         },
       ],
     },

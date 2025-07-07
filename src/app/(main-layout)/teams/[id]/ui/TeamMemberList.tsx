@@ -1,7 +1,7 @@
 "use client";
 
 import { getCurrentAge } from "@/entities/user/model/actions";
-import { GENDER } from "@/entities/user/model/constants";
+import { GENDER, SKILL_LEVEL } from "@/entities/user/model/constants";
 import { Button } from "@/shared/components/ui/button";
 import {
   TeamMember,
@@ -13,6 +13,7 @@ import { ChevronRight, Crown, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
+import { PLAYER_BACKGROUND } from "@/entities/user/model/constants";
 
 interface TeamMemberWithUser extends TeamMember {
   user: Pick<
@@ -81,17 +82,19 @@ const TeamMemberList = ({
                         ? `${getCurrentAge(member.user.birthDate).age}살`
                         : "생년월일 미설정"
                       : "생년월일 미설정"
+                  }${
+                    member.user.playerBackground === "PROFESSIONAL"
+                      ? " • 선출"
+                      : ""
                   } • ${
-                    member.user.height ? `${member.user.height}cm` : "키 미설정"
+                    SKILL_LEVEL[
+                      member.user.skillLevel as keyof typeof SKILL_LEVEL
+                    ] || "미설정"
                   }`}
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-1">
-              {/* <span className="text-base font-medium text-gray-500">
-                {member.user.name || "미설정"}
-              </span>
-              <Separator orientation="vertical" /> */}
               <ChevronRight className="size-5 text-gray-400" />
             </div>
           </button>

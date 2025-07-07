@@ -41,7 +41,7 @@ const PlayersPage = () => {
 
   const [selectedFilter, setSelectedFilter] = useState<FilterType>("all");
 
-  // 필터에 따라 선수 목록 필터링
+  // 필터에 따라 회원 목록 필터링
   const filteredPlayers = data?.data?.players?.filter((player: User) => {
     if (selectedFilter === "all") return true;
     // if (selectedFilter === "following") return player.isFollowing;
@@ -89,7 +89,7 @@ const PlayersPage = () => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-6 h-16 shrink-0">
-        <h1 className="text-2xl font-bold">선수</h1>
+        <h1 className="text-2xl font-bold">회원</h1>
         <div className="flex items-center gap-2">
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
@@ -137,17 +137,7 @@ const PlayersPage = () => {
               </div>
             </div> */}
 
-            {/* 선수 목록 헤더 */}
-            {/* <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium px-2 text-gray-600">
-                선수 • {filteredPlayers?.length}명
-              </h3>
-              <span className="text-xs text-gray-500 mr-3 w-12 text-center">
-                경기
-              </span>
-            </div> */}
-
-            {/* 선수 목록 */}
+            {/* 회원 목록 */}
             <div className="bg-white rounded-2xl">
               {filteredPlayers?.map((player) => (
                 <PlayerCard
@@ -160,18 +150,18 @@ const PlayersPage = () => {
             </div>
           </div>
 
-          {/* 선수가 없는 경우 */}
+          {/* 회원이 없는 경우 */}
           {filteredPlayers?.length === 0 && (
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 {selectedFilter === "all"
-                  ? "선수가 없습니다"
+                  ? "회원이 없습니다"
                   : selectedFilter === "following"
-                  ? "팔로잉한 선수가 없습니다"
+                  ? "팔로잉한 회원이 없습니다"
                   : `${
                       filterOptions.find((f) => f.id === selectedFilter)?.label
-                    } 선수가 없습니다`}
+                    } 회원이 없습니다`}
               </h3>
               <p className="text-gray-500 mb-6">다른 필터를 선택해보세요</p>
             </div>

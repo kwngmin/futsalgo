@@ -6,7 +6,7 @@ import { Users, Shirt, MoreHorizontal, Newspaper, Home } from "lucide-react";
 export const navItems = [
   { id: "home", label: "홈", icon: Home, href: "/" },
   { id: "team", label: "팀", icon: Shirt, href: "/teams" },
-  { id: "player", label: "선수", icon: Users, href: "/players" },
+  { id: "player", label: "회원", icon: Users, href: "/players" },
   { id: "board", label: "게시판", icon: Newspaper, href: "/boards" },
   { id: "more", label: "더보기", icon: MoreHorizontal, href: "/more" },
 ];

@@ -177,7 +177,7 @@ const TeamContent = ({ id }: { id: string }) => {
   if (!data?.data) {
     return (
       <div className="text-center text-gray-500 pt-10">
-        존재하지 않는 선수입니다.
+        존재하지 않는 회원입니다.
       </div>
     );
   }

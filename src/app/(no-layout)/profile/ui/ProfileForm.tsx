@@ -123,7 +123,7 @@ const ProfileForm = ({ data }: { data: User }) => {
 
       {/* 포지션 */}
       <div className="space-y-3">
-        <Label className="px-1">선호하는 풋살 포지션</Label>
+        <Label className="px-1">선호하는 포지션</Label>
         <CustomRadioGroup
           options={FUTSAL_POSITION_OPTIONS}
           value={watch("position") ?? ""}
