@@ -143,7 +143,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </h1>
                 <span className="text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
-                    ? `가입일: ${new Date(
+                    ? `시작일: ${new Date(
                         data?.data?.createdAt
                       ).toLocaleDateString("ko-KR", {
                         year: "numeric",
