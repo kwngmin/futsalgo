@@ -86,7 +86,7 @@ const MannerBar = ({ score }: { score: number }) => {
   const { bgColor, textColor } = transformColor(color);
 
   return (
-    <div className="flex flex-col justify-center mx-3 h-12 space-y-3 bg-gray-50 rounded-lg my-3 overflow-hidden">
+    <div className="flex flex-col justify-center mx-3 h-12 space-y-3 bg-gray-50 rounded-lg my-3 overflow-hidden border">
       {/* <div className="flex flex-col justify-end px-3 h-16 space-y-3"> */}
       <div className="flex justify-between px-3">
         <Tooltip>

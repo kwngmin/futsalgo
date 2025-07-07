@@ -19,10 +19,7 @@ const nextConfig: NextConfig = {
     ],
   },
   // 개발 모드에서 브라우저 확장 에러 억제
-  webpack: (config, { dev }) => {
-    if (dev) {
-      config.devtool = "eval-source-map";
-    }
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       issuer: /\.[jt]sx?$/,
