@@ -395,7 +395,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               />
               <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
                 {/* <div className="absolute top-0 left-0 size-5 bg-red-500 rounded-full" /> */}
-                <div className="w-full h-1/4 flex items-center justify-center">
+                <div className="w-full h-1/4 flex items-start justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "PIVO"
@@ -406,7 +406,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     PIVO
                   </div>
                 </div>
-                <div className="w-full h-1/4 flex justify-between items-center px-3">
+                <div className="w-full h-1/4 flex justify-between items-start px-3">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "ALA"
@@ -426,7 +426,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     ALA
                   </div>
                 </div>
-                <div className="w-full h-1/4 flex items-center justify-center">
+                <div className="w-full h-1/4 flex items-start justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "FIXO"
@@ -437,7 +437,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     FIXO
                   </div>
                 </div>
-                <div className="w-full h-1/4 flex items-center justify-center">
+                <div className="w-full h-1/4 flex items-end justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "GOLEIRO"
