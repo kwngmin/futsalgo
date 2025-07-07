@@ -86,7 +86,8 @@ const MannerBar = ({ score }: { score: number }) => {
   const { bgColor, textColor } = transformColor(color);
 
   return (
-    <div className="flex flex-col justify-end px-3 h-16 space-y-3">
+    <div className="flex flex-col justify-center px-6 h-16 space-y-3">
+      {/* <div className="flex flex-col justify-end px-3 h-16 space-y-3"> */}
       <div className="flex justify-between px-2">
         <Tooltip>
           <TooltipTrigger className="flex items-center gap-1">
@@ -121,14 +122,14 @@ const MannerBar = ({ score }: { score: number }) => {
           </div>
         </div>
       </div>
-      <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden">
+      {/* <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden">
         <div className="bg-black h-2 w-1/10" />
         <div className="bg-red-500 h-2 w-1/4" />
         <div className="bg-orange-500 h-2 w-1/4" />
         <div className="bg-yellow-500 h-2 w-1/4" />
         <div className="bg-green-500 h-2 w-1/4" />
         <div className="bg-blue-500 h-2 w-1/10" />
-      </div>
+      </div> */}
     </div>
   );
 };

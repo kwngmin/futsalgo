@@ -25,6 +25,8 @@ import {
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 import { useSession } from "next-auth/react";
+import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
+import MannerBar from "./MannerBar";
 // import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 // import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
@@ -113,7 +115,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-4 px-6 h-20">
+            <div className="flex flex-col sm:flex-row items-center gap-2 px-6">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
@@ -124,7 +126,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center sm:items-start">
                 <h1 className="text-xl font-semibold">
                   {data?.data?.nickname}
                 </h1>
@@ -180,11 +182,34 @@ const PlayerContent = ({ id }: { id: string }) => {
                 )} */}
               </div>
             </div>
-            {/* <MannerBar score={Math.floor(Math.random() * 100)} /> */}
+            <MannerBar score={Math.floor(Math.random() * 100)} />
+            {data?.data?.teams[0]?.team ? (
+              <div className="ring ring-border bg-white rounded-2xl overflow-hidden mx-4">
+                <TeamCard team={data?.data?.teams[0]?.team} />
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 p-3 bg-muted rounded-2xl h-20 mx-4">
+                <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full " />
+                <span className="sm:text-sm text-muted-foreground font-medium">
+                  소속 팀 없음
+                </span>
+              </div>
+            )}
           </div>
 
           {/* 소속 팀 */}
-          {/* <TeamCard team={data?.data?.teams[0]?.team} /> */}
+          {/* {data?.data?.teams[0]?.team ? (
+            <div className="bg-white rounded-2xl overflow-hidden">
+              <TeamCard team={data?.data?.teams[0]?.team} />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 p-3 bg-white/50 rounded-2xl h-20">
+              <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full " />
+              <span className="sm:text-sm text-muted-foreground font-medium">
+                소속 팀 없음
+              </span>
+            </div>
+          )} */}
           {/* {data.data.teams && data.data.teams.length > 0 ? (
             <div className="bg-white rounded-2xl">
               <button

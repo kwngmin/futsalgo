@@ -8,8 +8,36 @@ export async function getPlayer(id: string) {
       where: { id },
       include: {
         teams: {
+          where: {
+            status: "APPROVED",
+          },
           include: {
-            team: true,
+            team: {
+              include: {
+                members: {
+                  where: {
+                    status: "APPROVED",
+                  },
+                  include: {
+                    user: {
+                      select: {
+                        playerBackground: true,
+                      },
+                    },
+                  },
+                },
+                _count: {
+                  select: {
+                    members: {
+                      where: {
+                        status: "APPROVED",
+                      },
+                    },
+                    followers: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
