@@ -78,7 +78,7 @@ const TeamsPage = () => {
                     className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
                     onClick={() => router.push("/teams/create")}
                   >
-                    팀 만들기
+                    팀 등록하기
                   </button>
                   <button
                     className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"

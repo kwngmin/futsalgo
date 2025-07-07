@@ -311,14 +311,13 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <span className="text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
-                    ? `${new Date(data?.data?.createdAt).toLocaleDateString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )} 생성됨`
+                    ? `등록일: ${new Date(
+                        data?.data?.createdAt
+                      ).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}`
                     : "데이터 없음"}
                 </span>
               </div>

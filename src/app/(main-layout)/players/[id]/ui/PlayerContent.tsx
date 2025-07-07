@@ -143,14 +143,13 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </h1>
                 <span className="text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
-                    ? `${new Date(data?.data?.createdAt).toLocaleDateString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )} 가입함`
+                    ? `가입일: ${new Date(
+                        data?.data?.createdAt
+                      ).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}`
                     : "데이터 없음"}
                 </span>
                 {/* {data.data.teams && data.data.teams.length > 0 ? (
