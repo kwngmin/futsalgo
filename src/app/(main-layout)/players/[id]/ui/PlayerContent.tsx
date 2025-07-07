@@ -25,7 +25,7 @@ import {
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 import { useSession } from "next-auth/react";
-import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
+// import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 // import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
 
