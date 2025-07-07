@@ -13,7 +13,6 @@ import { ChevronRight, Crown, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
-import { PLAYER_BACKGROUND } from "@/entities/user/model/constants";
 
 interface TeamMemberWithUser extends TeamMember {
   user: Pick<
