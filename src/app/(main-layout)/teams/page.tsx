@@ -65,7 +65,7 @@ const TeamsPage = () => {
                 {data?.data?.myTeams.map((team) => (
                   <div
                     key={team.id}
-                    className="bg-white rounded-2xl ring ring-gray-300"
+                    className="bg-white rounded-2xl ring ring-border"
                   >
                     <TeamCard team={team} />
                   </div>
