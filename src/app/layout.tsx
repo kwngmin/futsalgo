@@ -44,7 +44,7 @@ export default async function RootLayout({
         />
       </Head> */}
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-y-scroll`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-y-scroll touch-manipulation overscroll-none`}
       >
         <SessionProviderWrapper session={session}>
           <QueryProvider>{children}</QueryProvider>
