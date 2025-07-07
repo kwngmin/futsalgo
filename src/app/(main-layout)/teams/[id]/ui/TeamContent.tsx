@@ -599,7 +599,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <Fragment>
               {/* 기본 정보 */}
               <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
-                <div className="flex flex-col gap-1 items-center my-3">
+                <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {
                       TEAM_GENDER[
@@ -609,19 +609,19 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <Label className="text-muted-foreground">구분</Label>
                 </div>
-                <div className="flex flex-col gap-1 items-center my-3">
+                <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {data.data.stats.averageAge}살
                   </div>
                   <Label className="text-muted-foreground">평균 연령</Label>
                 </div>
-                <div className="flex flex-col gap-1 items-center my-3">
+                <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {data.data.stats.averageHeight}cm
                   </div>
                   <Label className="text-muted-foreground">평균 키</Label>
                 </div>
-                <div className="flex flex-col gap-1 items-center my-3">
+                <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {data.data.recruitmentStatus === "RECRUITING"
                       ? "모집중"
@@ -629,13 +629,13 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <Label className="text-muted-foreground">팀원 모집</Label>
                 </div>
-                <div className="flex flex-col gap-1 items-center my-3">
+                <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {data.data.members.approved.length}명
                   </div>
                   <Label className="text-muted-foreground">팀원 수</Label>
                 </div>
-                <div className="flex flex-col gap-1 items-center my-3">
+                <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {data.data.stats.professionalCount
                       ? `${data.data.stats.professionalCount}명`

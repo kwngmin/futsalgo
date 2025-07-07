@@ -316,7 +316,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 기본 정보 */}
-          <div className="grid grid-cols-3 gap-x-3 p-4 bg-white rounded-2xl">
+          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
                 {GENDER[data?.data?.gender as keyof typeof GENDER]}
