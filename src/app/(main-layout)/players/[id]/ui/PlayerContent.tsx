@@ -1,4 +1,5 @@
 "use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
@@ -27,13 +28,34 @@ import { Label } from "@/shared/components/ui/label";
 import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
+import { useState } from "react";
 // import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 // import { TEAM_GENDER } from "@/entities/team/model/constants";
 // import MannerBar from "./MannerBar";
 
+const tabs = [
+  {
+    label: "개요",
+    value: "overview",
+    isDisabled: false,
+  },
+  {
+    label: "경기",
+    value: "matches",
+    isDisabled: true,
+  },
+  // {
+  //   label: "후기",
+  //   value: "reviews",
+  //   isDisabled: true,
+  // },
+];
+
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
+
+  const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
 
   const { data } = useQuery({
     queryKey: ["player", id],
@@ -86,7 +108,7 @@ const PlayerContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl pb-12">
+          <div className="bg-white rounded-2xl">
             <div className="flex justify-end px-3 pt-3">
               {id === session.data?.user.id ? (
                 <div className="h-7 " />
@@ -184,17 +206,47 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <MannerBar score={Math.floor(Math.random() * 100)} />
             {data?.data?.teams[0]?.team ? (
-              <div className="ring ring-border bg-white rounded-2xl overflow-hidden mx-4">
-                <TeamCard team={data?.data?.teams[0]?.team} />
-              </div>
+              <TeamCard team={data?.data?.teams[0]?.team} />
             ) : (
-              <div className="flex items-center gap-2 p-3 bg-muted rounded-2xl h-20 mx-4">
-                <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full " />
+              <div className="flex items-center gap-2 p-3 bg-gray-50 h-20">
+                <div className="size-14 flex items-center justify-center">
+                  <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full " />
+                </div>
                 <span className="sm:text-sm text-muted-foreground font-medium">
                   소속 팀 없음
                 </span>
               </div>
             )}
+            {/* 탭 */}
+            <div className="flex items-center justify-between gap-2 px-3 border-t border-input">
+              <div className="flex h-12 space-x-2">
+                {tabs
+                  // .filter(
+                  //   (tab) =>
+                  //     tab.value !== "management" ||
+                  //     (tab.value === "management" &&
+                  //       (data.data.currentUserMembership.role === "MANAGER" ||
+                  //         data.data.currentUserMembership.role === "OWNER") &&
+                  //       data.data.currentUserMembership.status === "APPROVED")
+                  // )
+                  .map((tab) => (
+                    <div
+                      key={tab.value}
+                      className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
+                        selectedTab === tab.value
+                          ? "border-gray-500"
+                          : "border-transparent"
+                      } ${
+                        tab.isDisabled ? "pointer-events-none opacity-50" : ""
+                      }`}
+                      onClick={() => setSelectedTab(tab.value)}
+                    >
+                      {tab.label}
+                      {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
+                    </div>
+                  ))}
+              </div>
+            </div>
           </div>
 
           {/* 소속 팀 */}

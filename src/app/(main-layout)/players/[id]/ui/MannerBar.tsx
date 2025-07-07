@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
-import { Angry, Frown, Laugh, Meh, Skull, Smile } from "lucide-react";
+import { Angry, Frown, Info, Laugh, Meh, Skull, Smile } from "lucide-react";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/utils";
 
@@ -86,16 +86,16 @@ const MannerBar = ({ score }: { score: number }) => {
   const { bgColor, textColor } = transformColor(color);
 
   return (
-    <div className="flex flex-col justify-center px-6 h-16 space-y-3">
+    <div className="flex flex-col justify-center mx-3 h-12 space-y-3 bg-gray-50 rounded-lg my-3 overflow-hidden">
       {/* <div className="flex flex-col justify-end px-3 h-16 space-y-3"> */}
-      <div className="flex justify-between px-2">
+      <div className="flex justify-between px-3">
         <Tooltip>
           <TooltipTrigger className="flex items-center gap-1">
             <Label className="font-semibold">
               {/* <Label className="font-semibold underline underline-offset-4"> */}
               매너 점수
             </Label>
-            {/* <Info className="size-4" /> */}
+            <Info className="size-4" />
           </TooltipTrigger>
           <TooltipContent>
             <p className="text-sm font-medium">
@@ -122,13 +122,13 @@ const MannerBar = ({ score }: { score: number }) => {
           </div>
         </div>
       </div>
-      {/* <div className="bg-transparent rounded-t-full h-0.5 w-full flex overflow-hidden">
-        <div className="bg-black h-2 w-1/10" />
-        <div className="bg-red-500 h-2 w-1/4" />
-        <div className="bg-orange-500 h-2 w-1/4" />
-        <div className="bg-yellow-500 h-2 w-1/4" />
-        <div className="bg-green-500 h-2 w-1/4" />
-        <div className="bg-blue-500 h-2 w-1/10" />
+      {/* <div className="bg-transparent rounded-t-full h-0.5 w-full flex items-stretch overflow-hidden px-2 shrink-0">
+        <div className="bg-black w-1/10" />
+        <div className="bg-red-500 w-1/4" />
+        <div className="bg-orange-500 w-1/4" />
+        <div className="bg-yellow-500 w-1/4" />
+        <div className="bg-green-500 w-1/4" />
+        <div className="bg-blue-500 w-1/10" />
       </div> */}
     </div>
   );
