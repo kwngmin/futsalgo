@@ -197,7 +197,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             {data?.data?.teams[0]?.team ? (
               <TeamCard team={data?.data?.teams[0]?.team} />
             ) : (
-              <div className="flex items-center gap-2 p-3 bg-gray-50 h-20">
+              <div className="flex items-center gap-2 p-3 h-20 border-t border-gray-100">
                 <div className="size-14 flex items-center justify-center">
                   <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full " />
                 </div>
