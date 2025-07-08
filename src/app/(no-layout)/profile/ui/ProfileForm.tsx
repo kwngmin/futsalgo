@@ -182,21 +182,35 @@ const ProfileForm = ({ data }: { data: User }) => {
         </Alert>
       )}
 
-      {/* 저장 버튼 */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full mt-3 font-semibold text-base"
-      >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            저장 중...
-          </>
-        ) : (
-          "저장"
-        )}
-      </Button>
+      <div className="mt-3 space-y-3">
+        {/* 저장 버튼 */}
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full font-semibold text-base"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              저장 중...
+            </>
+          ) : (
+            "저장"
+          )}
+        </Button>
+
+        {/*  취소 버튼 */}
+        <Button
+          type="button"
+          disabled={isLoading}
+          className="w-full font-medium text-base text-muted-foreground"
+          onClick={() => router.push("/more")}
+          variant="secondary"
+          size="sm"
+        >
+          취소
+        </Button>
+      </div>
 
       {/* 최근 수정일 */}
       <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">

@@ -37,7 +37,8 @@ export default function ProfileContent({ data }: { data: User }) {
   };
 
   const handleGoBack = () => {
-    router.back();
+    // router.back();
+    router.push("/more");
   };
 
   const renderFieldModal = (
