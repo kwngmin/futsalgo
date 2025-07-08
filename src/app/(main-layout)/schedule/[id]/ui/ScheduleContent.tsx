@@ -83,7 +83,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       )}
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between shrink-0 px-3 h-16">
+      <div className="flex items-center justify-between shrink-0 px-6 h-16">
         <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
           <ArrowLeft
             style={{ width: "24px", height: "24px" }}

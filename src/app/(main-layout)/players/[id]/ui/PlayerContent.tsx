@@ -84,7 +84,7 @@ const PlayerContent = ({ id }: { id: string }) => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between h-16 shrink-0 px-3 gap-3">
+      <div className="flex items-center justify-between h-16 shrink-0 px-6 gap-3">
         <button
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
