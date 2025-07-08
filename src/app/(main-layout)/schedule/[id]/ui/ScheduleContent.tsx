@@ -88,7 +88,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* 일정 정보 */}
           <div className="bg-white rounded-2xl relative mt-3">
             {/* 상단: 제목과 검색 */}
-            <div className="flex items-center justify-between shrink-0 p-2 mb-3 border-b border-gray-100">
+            <div className="flex items-center justify-between shrink-0 px-3 mb-6 border-b border-gray-100 h-16">
               <Button
                 variant="ghost"
                 onClick={handleGoBack}
