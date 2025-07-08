@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
-  ChartPie,
   ChevronRight,
   EllipsisVertical,
   Share,
@@ -29,7 +28,6 @@ import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { useState } from "react";
-import CustomSelect from "@/shared/components/ui/custom-select";
 
 const tabs = [
   {
