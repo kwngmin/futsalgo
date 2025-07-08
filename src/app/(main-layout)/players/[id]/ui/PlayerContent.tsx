@@ -110,12 +110,12 @@ const PlayerContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           <div className="bg-white rounded-2xl">
-            <div className="flex flex-col sm:flex-row items-center gap-2 px-6 pt-6">
+            <div className="flex flex-col sm:flex-row items-center gap-2 px-6 pt-8">
               {/* 프로필 사진 */}
-              <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
-                  width={64}
-                  height={64}
+                  width={80}
+                  height={80}
                   src={data?.data?.image ?? ""}
                   alt="profile_image"
                   className="w-full h-full object-cover"
