@@ -492,24 +492,22 @@ const PlayerContent = ({ id }: { id: string }) => {
 
           {/* 경기 통계 */}
           <div className="bg-white rounded-2xl pb-3 overflow-hidden">
-            <div className="w-full flex items-center justify-between pl-4 pr-1.5 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors h-12">
+            <div
+              className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+              onClick={() => {
+                alert("통계");
+              }}
+            >
               <div className="flex items-center space-x-3">
-                <ChartPie className={`w-5 h-5 text-gray-600`} />
+                <Sparkles className={`w-5 h-5 text-gray-600`} />
                 <span className="font-medium">통계</span>
               </div>
-              <CustomSelect
-                options={["2025"].map((year) => (
-                  <option key={year} value={year}>
-                    {`${year}년`}
-                  </option>
-                ))}
-                value={"2025"}
-                onChange={() => {}}
-                className="grow"
-                classNames={{
-                  select: "border-none shadow-none",
-                }}
-              />
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  2025년
+                </span>
+                <ChevronRight className="size-5 text-gray-400" />
+              </div>
             </div>
             <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
               <div className="flex flex-col gap-1 items-center my-3">
