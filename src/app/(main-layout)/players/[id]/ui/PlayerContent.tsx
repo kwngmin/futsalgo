@@ -177,7 +177,10 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             <MannerBar score={Math.floor(Math.random() * 100)} />
-            {data?.data?.teams[0]?.team ? (
+            {data?.data?.teams[0]?.team && (
+              <TeamCard team={data?.data?.teams[0]?.team} />
+            )}
+            {/* {data?.data?.teams[0]?.team ? (
               <TeamCard team={data?.data?.teams[0]?.team} />
             ) : (
               <div className="flex items-center gap-2 p-3 h-20 border-t border-gray-100">
@@ -188,7 +191,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   소속 팀 없음
                 </span>
               </div>
-            )}
+            )} */}
             {/* 탭 */}
             <div className="flex items-center justify-between gap-2 px-3 border-t border-gray-100">
               <div className="flex h-12 space-x-2">

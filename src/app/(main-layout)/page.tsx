@@ -44,7 +44,7 @@ const HomePage = () => {
                 className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
                 onClick={() => router.push("/schedule/new")}
               >
-                일정 추가
+                경기일정 추가
               </button>
             </div>
           </div>

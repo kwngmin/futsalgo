@@ -47,6 +47,11 @@ const tabs = [
     value: "reviews",
     isDisabled: true,
   },
+  {
+    label: "사진",
+    value: "photos",
+    isDisabled: true,
+  },
 ];
 
 const TeamContent = ({ id }: { id: string }) => {
