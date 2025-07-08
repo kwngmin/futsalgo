@@ -344,6 +344,18 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
+                {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
+              </div>
+              <Label className="text-muted-foreground">몸 상태</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
+                {FOOT[data?.data?.foot as keyof typeof FOOT]}
+              </div>
+              <Label className="text-muted-foreground">사용하는 발</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
                 {getCurrentAge(data?.data?.birthDate as string).age}살
               </div>
               <Label className="text-muted-foreground">나이</Label>
@@ -352,29 +364,6 @@ const PlayerContent = ({ id }: { id: string }) => {
               <div className="font-semibold">{data?.data?.height}cm</div>
               <Label className="text-muted-foreground">키</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {FOOT[data?.data?.foot as keyof typeof FOOT]}
-              </div>
-              <Label className="text-muted-foreground">사용하는 발</Label>
-            </div>
-
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
-              </div>
-              <Label className="text-muted-foreground">몸 상태</Label>
-            </div>
-            {/* <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {
-                  SKILL_LEVEL[
-                    data?.data?.skillLevel as keyof typeof SKILL_LEVEL
-                  ]
-                }
-              </div>
-              <Label className="text-muted-foreground">실력</Label>
-            </div> */}
           </div>
 
           {/* 선호 포지션 */}

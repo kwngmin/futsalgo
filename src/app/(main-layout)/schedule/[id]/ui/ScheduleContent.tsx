@@ -83,51 +83,43 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           <div className="text-base text-muted-foreground">로딩 중입니다.</div>
         </div>
       )}
-      {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between h-16 shrink-0 px-3">
-        <Button
-          variant="ghost"
-          size="lg"
-          onClick={handleGoBack}
-          className="flex items-center gap-1.5 !px-2"
-        >
-          <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          <h1 className="text-2xl font-bold">경기 일정</h1>
-        </Button>
-
-        <div className="flex items-center justify-end gap-3 px-3">
-          {/* <Button
-        // size="sm"
-        className="rounded-full font-semibold py-0 px-4 text-base h-8"
-        // variant="outline"
-      >
-        팔로우
-      </Button> */}
-          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-            <Share className="w-5 h-5" />
-          </button>
-          <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-            <EllipsisVertical className="size-5" />
-          </button>
-        </div>
-      </div>
       {data ? (
         <div className="px-3 space-y-3">
           {/* 일정 정보 */}
-          <div className="bg-white rounded-2xl relative">
-            <div className="flex items-center h-16 mb-3 px-6">
-              <span>
-                {
-                  MATCH_TYPE[
-                    data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-                  ]
-                }
-              </span>
+          <div className="bg-white rounded-2xl relative mt-3">
+            {/* 상단: 제목과 검색 */}
+            <div className="flex items-center justify-between shrink-0 p-2 mb-3">
+              <Button
+                variant="ghost"
+                onClick={handleGoBack}
+                className="flex items-center gap-1 !pr-3 !pl-1.5"
+                size="sm"
+              >
+                <ArrowLeft style={{ width: "24px", height: "24px" }} />
+                <h1 className="text-lg font-bold">
+                  {
+                    MATCH_TYPE[
+                      data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
+                    ]
+                  }
+                </h1>
+              </Button>
+              <div className="flex items-center justify-end gap-3">
+                <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                  <Share className="w-5 h-5" />
+                </button>
+                <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+                  <EllipsisVertical className="size-5" />
+                </button>
+              </div>
             </div>
+
             <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-300 font-bold text-xl">HOME</span>
+                <span className="text-slate-300 font-extrabold text-lg tracking-tight">
+                  HOME
+                </span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -210,7 +202,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-300 font-bold text-xl">AWAY</span>
+                <span className="text-slate-300 font-extrabold text-lg tracking-tight">
+                  AWAY
+                </span>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
