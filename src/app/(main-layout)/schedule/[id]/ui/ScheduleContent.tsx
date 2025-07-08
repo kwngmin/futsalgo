@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSchedule } from "../actions/get-schedule";
 import { ArrowLeft, EllipsisVertical, Loader2, Share } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
@@ -86,9 +85,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between shrink-0 px-3 h-16">
         <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-          <ArrowLeft style={{ width: "24px", height: "24px" }} />
+          <ArrowLeft
+            style={{ width: "24px", height: "24px" }}
+            onClick={handleGoBack}
+          />
         </button>
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-2">
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>

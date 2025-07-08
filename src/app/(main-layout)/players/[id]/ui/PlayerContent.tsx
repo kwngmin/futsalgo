@@ -91,14 +91,10 @@ const PlayerContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-2">
           {id !== session.data?.user.id && (
             <div className="flex items-center gap-2">
-              <Button
-                // size="sm"
-                className="rounded-full font-semibold py-0 px-4 text-base h-8"
-                // variant="outline"
-              >
+              <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
                 팔로우
               </Button>
             </div>

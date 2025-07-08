@@ -195,24 +195,16 @@ const TeamContent = ({ id }: { id: string }) => {
       )}
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-3">
-        <Button
-          variant="ghost"
-          size="lg"
+        <button
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
-          className="flex items-center gap-1.5 !px-2"
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          <h1 className="text-2xl font-bold">팀 정보</h1>
-        </Button>
-
-        <div className="flex items-center justify-end gap-3 px-3">
-          {/* <Button
-            // size="sm"
-            className="rounded-full font-semibold py-0 px-4 text-base h-8"
-            // variant="outline"
-          >
+        </button>
+        <div className="flex items-center justify-end gap-2">
+          <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
             팔로우
-          </Button> */}
+          </Button>
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
