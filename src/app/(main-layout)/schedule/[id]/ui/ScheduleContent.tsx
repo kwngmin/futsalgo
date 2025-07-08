@@ -83,37 +83,31 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           <div className="text-base text-muted-foreground">로딩 중입니다.</div>
         </div>
       )}
+      {/* 상단: 제목과 검색 */}
+      <div className="flex items-center justify-between shrink-0 px-3 h-16">
+        <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <ArrowLeft style={{ width: "24px", height: "24px" }} />
+        </button>
+        <div className="flex items-center justify-end gap-3">
+          <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+            <Share className="w-5 h-5" />
+          </button>
+          <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+            <EllipsisVertical className="size-5" />
+          </button>
+        </div>
+      </div>
       {data ? (
         <div className="px-3 space-y-3">
           {/* 일정 정보 */}
-          <div className="bg-white rounded-2xl relative mt-3">
-            {/* 상단: 제목과 검색 */}
-            <div className="flex items-center justify-between shrink-0 px-3 mb-6 border-b border-gray-100 h-16">
-              <Button
-                variant="ghost"
-                onClick={handleGoBack}
-                className="flex items-center gap-1 !pr-3 !pl-1.5"
-                size="sm"
-              >
-                <ArrowLeft style={{ width: "24px", height: "24px" }} />
-                <h1 className="text-lg font-bold">
-                  {
-                    MATCH_TYPE[
-                      data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-                    ]
-                  }
-                </h1>
-              </Button>
-              <div className="flex items-center justify-end gap-3">
-                <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                  <Share className="w-5 h-5" />
-                </button>
-                <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                  <EllipsisVertical className="size-5" />
-                </button>
-              </div>
-            </div>
-
+          <div className="bg-white rounded-2xl relative">
+            <h1 className="text-lg font-bold px-3 flex items-center h-12 mb-3">
+              {
+                MATCH_TYPE[
+                  data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
+                ]
+              }
+            </h1>
             <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">

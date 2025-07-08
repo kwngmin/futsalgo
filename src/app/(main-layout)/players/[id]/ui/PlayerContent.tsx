@@ -84,17 +84,25 @@ const PlayerContent = ({ id }: { id: string }) => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between h-16 shrink-0 px-3">
-        <Button
-          variant="ghost"
-          size="lg"
+      <div className="flex items-center justify-between h-16 shrink-0 px-3 gap-3">
+        <button
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
-          className="flex items-center gap-1.5 !px-2"
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          <h1 className="text-2xl font-bold">회원 정보</h1>
-        </Button>
-        <div className="w-20 flex justify-end gap-3 px-3">
+        </button>
+        <div className="flex justify-end gap-3">
+          {id !== session.data?.user.id && (
+            <div className="flex items-center gap-2">
+              <Button
+                // size="sm"
+                className="rounded-full font-semibold py-0 px-4 text-base h-8"
+                // variant="outline"
+              >
+                팔로우
+              </Button>
+            </div>
+          )}
           <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
@@ -106,35 +114,7 @@ const PlayerContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           <div className="bg-white rounded-2xl">
-            <div className="flex justify-end px-3 pt-3">
-              {id === session.data?.user.id ? (
-                <div className="h-7 " />
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Button
-                    // size="sm"
-                    className="rounded-full font-semibold py-0 px-4 text-base h-8"
-                    // variant="outline"
-                  >
-                    팔로우
-                  </Button>
-                  {/* <Button
-                    size="sm"
-                    className="rounded-full font-semibold text-sm py-0 px-4 h-7"
-                    variant="outline"
-                  >
-                    팔로우
-                  </Button>{" "} */}
-                  {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                    <Share className="w-5 h-5" />
-                  </button>
-                  <button className="shrink-0 size-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-                    <EllipsisVertical className="size-5" />
-                  </button> */}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col sm:flex-row items-center gap-2 px-6">
+            <div className="flex flex-col sm:flex-row items-center gap-2 px-6 pt-6">
               {/* 프로필 사진 */}
               <div className="size-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
