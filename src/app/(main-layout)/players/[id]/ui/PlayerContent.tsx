@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
+  ChartPie,
   ChevronRight,
   EllipsisVertical,
   Share,
@@ -497,8 +498,8 @@ const PlayerContent = ({ id }: { id: string }) => {
               }}
             >
               <div className="flex items-center space-x-3">
-                <Sparkles className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">통계</span>
+                <ChartPie className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">참가한 경기 통계</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-base font-medium text-gray-500">

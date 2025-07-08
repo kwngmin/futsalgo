@@ -727,7 +727,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 >
                   <div className="flex items-center space-x-3">
                     <ChartPie className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">팀원 실력</span>
+                    <span className="font-medium">팀원 실력 통계</span>
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>

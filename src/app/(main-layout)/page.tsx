@@ -147,7 +147,7 @@ const HomePage = () => {
                 <div>hello</div>
               ) : (
                 <div className="w-full grid grid-cols-2 border-t border-input h-12 *:cursor-pointer *:font-medium">
-                  <button className="!font-semibold text-blue-600">참석</button>
+                  <button className="!font-semibold text-blue-600">참가</button>
                   <button className="text-destructive border-l border-input">
                     불참
                   </button>

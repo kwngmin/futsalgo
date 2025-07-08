@@ -131,7 +131,7 @@ enum ScheduleStatus {
   PENDING      // 팀매치 수락 대기
   READY        // 경기 준비 완료 
   REJECTED     // 팀매치 거절됨
-  PLAY         // 경기 시작됨 → 참석 여부 변경 불가
+  PLAY         // 경기 시작됨 → 참가 여부 변경 불가
 }
 
 enum InvitationStatus {
