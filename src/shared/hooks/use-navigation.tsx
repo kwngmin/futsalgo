@@ -1,14 +1,58 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Users, Shirt, MoreHorizontal, Newspaper, Home } from "lucide-react";
+// import { Users, Shirt, MoreHorizontal, Newspaper, Home } from "lucide-react";
+import {
+  HomeIcon,
+  TrophyIcon,
+  FaceSmileIcon,
+  ChatBubbleOvalLeftIcon,
+  EllipsisHorizontalCircleIcon,
+} from "@heroicons/react/24/solid";
+import {
+  HomeIcon as HomeIconOutline,
+  TrophyIcon as TrophyIconOutline,
+  FaceSmileIcon as FaceSmileIconOutline,
+  ChatBubbleOvalLeftIcon as ChatBubbleOvalLeftOutline,
+  EllipsisHorizontalIcon as EllipsisHorizontalOutline,
+} from "@heroicons/react/24/outline";
 
 export const navItems = [
-  { id: "home", label: "홈", icon: Home, href: "/" },
-  { id: "team", label: "팀", icon: Shirt, href: "/teams" },
-  { id: "player", label: "회원", icon: Users, href: "/players" },
-  { id: "board", label: "게시판", icon: Newspaper, href: "/boards" },
-  { id: "more", label: "더보기", icon: MoreHorizontal, href: "/more" },
+  {
+    id: "home",
+    label: "홈",
+    outlinedIcon: HomeIconOutline,
+    filledIcon: HomeIcon,
+    href: "/",
+  },
+  {
+    id: "team",
+    label: "팀",
+    outlinedIcon: TrophyIconOutline,
+    filledIcon: TrophyIcon,
+    href: "/teams",
+  },
+  {
+    id: "player",
+    label: "회원",
+    outlinedIcon: FaceSmileIconOutline,
+    filledIcon: FaceSmileIcon,
+    href: "/players",
+  },
+  {
+    id: "board",
+    label: "게시판",
+    outlinedIcon: ChatBubbleOvalLeftOutline,
+    filledIcon: ChatBubbleOvalLeftIcon,
+    href: "/boards",
+  },
+  {
+    id: "more",
+    label: "더보기",
+    outlinedIcon: EllipsisHorizontalOutline,
+    filledIcon: EllipsisHorizontalCircleIcon,
+    href: "/more",
+  },
 ];
 
 /**

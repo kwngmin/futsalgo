@@ -22,8 +22,8 @@ const SideNav = () => {
           {/* 데스크톱 네비게이션 */}
           <nav className="flex-1 px-4 py-4 space-y-1">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive = activeMenu === item.id;
+              const Icon = isActive ? item.filledIcon : item.outlinedIcon;
               return (
                 <button
                   key={item.id}
@@ -35,7 +35,7 @@ const SideNav = () => {
                   }`}
                   type="button"
                 >
-                  <Icon className="w-6 h-6 mr-4" />
+                  <Icon className="w-6 h-6 mr-4" strokeWidth={1.75} />
                   {item.label}
                 </button>
               );
@@ -57,8 +57,8 @@ const SideNav = () => {
           {/* 태블릿 네비게이션 (아이콘만) */}
           <nav className="flex-1 px-2 py-4 space-y-1">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive = activeMenu === item.id;
+              const Icon = isActive ? item.filledIcon : item.outlinedIcon;
               return (
                 <button
                   key={item.id}
@@ -70,7 +70,7 @@ const SideNav = () => {
                   }`}
                   type="button"
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className="w-6 h-6" strokeWidth={1.75} />
                 </button>
               );
             })}

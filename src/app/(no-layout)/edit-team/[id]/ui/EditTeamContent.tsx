@@ -93,7 +93,7 @@ export default function EditTeamContent({
         </Button> */}
         <h1 className="text-2xl font-bold">팀 정보 수정</h1>
         <button
-          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
+          className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
         >
           <X className="w-5 h-5" />

@@ -113,7 +113,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="grid grid-cols-3 px-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-300 font-extrabold text-lg tracking-tight">
+                <span className="text-slate-500/50 font-bold text-lg tracking-tight">
                   HOME
                 </span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
@@ -198,7 +198,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-300 font-extrabold text-lg tracking-tight">
+                <span className="text-slate-500/50 font-bold text-lg tracking-tight">
                   AWAY
                 </span>
                 {opposingTeam?.logoUrl ? (

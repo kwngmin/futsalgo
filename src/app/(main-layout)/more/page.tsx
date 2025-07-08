@@ -11,8 +11,8 @@ import {
   ChartPie,
   Heart,
   Bug,
-  MessageCircleMore,
   Bookmark,
+  Lightbulb,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -60,9 +60,9 @@ const MorePage = () => {
       category: "지원",
       items: [
         {
-          icon: MessageCircleMore,
-          label: "문의하기",
-          action: () => alert("문의하기"),
+          icon: Lightbulb,
+          label: "제안하기",
+          action: () => alert("제안하기"),
         },
         {
           icon: Bug,

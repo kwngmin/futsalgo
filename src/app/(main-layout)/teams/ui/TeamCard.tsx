@@ -95,7 +95,7 @@ const TeamCard = ({
           {/* <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
             팀전 신청 가능
           </span> */}
-          <span className="text-sm text-indigo-700 font-medium tracking-tight">
+          <span className="text-sm text-indigo-700 font-semibold tracking-tight">
             모집중
           </span>
         </div>
