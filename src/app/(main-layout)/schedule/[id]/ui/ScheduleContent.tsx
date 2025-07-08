@@ -447,7 +447,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                         ? `${data.data.stats.beginnerCount}명`
                         : "없음"}
                     </div>
-                    <Label className="text-muted-foreground">비기너</Label>
+                    <Label className="text-muted-foreground">스타터</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">

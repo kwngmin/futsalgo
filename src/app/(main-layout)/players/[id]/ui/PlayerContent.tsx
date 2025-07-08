@@ -5,22 +5,31 @@ import { getPlayer } from "../model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, EllipsisVertical, Share } from "lucide-react";
+import {
+  ArrowLeft,
+  ChartPie,
+  ChevronRight,
+  EllipsisVertical,
+  Share,
+  Sparkles,
+} from "lucide-react";
 import {
   getCurrentAge, //
 } from "@/entities/user/model/actions";
 import {
+  CONDITION,
   FOOT,
   FUTSAL_POSITIONS,
   GENDER,
   PLAYER_BACKGROUND,
-  SKILL_LEVEL,
+  SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { useState } from "react";
+import CustomSelect from "@/shared/components/ui/custom-select";
 
 const tabs = [
   {
@@ -325,6 +334,17 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
+                {
+                  PLAYER_BACKGROUND[
+                    data?.data
+                      ?.playerBackground as keyof typeof PLAYER_BACKGROUND
+                  ]
+                }
+              </div>
+              <Label className="text-muted-foreground">출신</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-4">
+              <div className="font-semibold">
                 {getCurrentAge(data?.data?.birthDate as string).age}살
               </div>
               <Label className="text-muted-foreground">나이</Label>
@@ -339,18 +359,14 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <Label className="text-muted-foreground">사용하는 발</Label>
             </div>
+
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
-                {
-                  PLAYER_BACKGROUND[
-                    data?.data
-                      ?.playerBackground as keyof typeof PLAYER_BACKGROUND
-                  ]
-                }
+                {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
               </div>
-              <Label className="text-muted-foreground">출신</Label>
+              <Label className="text-muted-foreground">몸 상태</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-4">
+            {/* <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
                 {
                   SKILL_LEVEL[
@@ -359,7 +375,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 }
               </div>
               <Label className="text-muted-foreground">실력</Label>
-            </div>
+            </div> */}
           </div>
 
           {/* 선호 포지션 */}
@@ -440,22 +456,78 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
-            <div className="flex flex-col gap-1 items-center my-6">
-              <div className="font-semibold">2</div>
-              <Label className="text-muted-foreground">경기</Label>
+          {/* 실력 */}
+          <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+            <div
+              className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+              onClick={() => {
+                alert("실력");
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <Sparkles className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">실력</span>
+              </div>
+              <ChevronRight className="size-5 text-gray-400" />
             </div>
-            <div className="flex flex-col gap-1 items-center my-6">
-              <div className="font-semibold">0</div>
-              <Label className="text-muted-foreground">득점</Label>
+            <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {
+                    SKILL_LEVEL_OPTIONS.find(
+                      (option) => option.value === data.data.skillLevel
+                    )?.label
+                  }
+                </div>
+                {/* <Label className="text-muted-foreground">
+                      {
+                        TEAM_LEVEL_DESCRIPTION[
+                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                        ]
+                      }
+                    </Label> */}
+              </div>
             </div>
-            <div className="flex flex-col gap-1 items-center my-6">
-              <div className="font-semibold">1</div>
-              <Label className="text-muted-foreground">어시스트</Label>
+          </div>
+
+          {/* 경기 통계 */}
+          <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+            <div className="w-full flex items-center justify-between pl-4 pr-1.5 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors h-12">
+              <div className="flex items-center space-x-3">
+                <ChartPie className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">통계</span>
+              </div>
+              <CustomSelect
+                options={["2025"].map((year) => (
+                  <option key={year} value={year}>
+                    {`${year}년`}
+                  </option>
+                ))}
+                value={"2025"}
+                onChange={() => {}}
+                className="grow"
+                classNames={{
+                  select: "border-none shadow-none",
+                }}
+              />
             </div>
-            <div className="flex flex-col gap-1 items-center my-6">
-              <div className="font-semibold">0</div>
-              <Label className="text-muted-foreground">MVP</Label>
+            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">2</div>
+                <Label className="text-muted-foreground">경기</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">득점</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">1</div>
+                <Label className="text-muted-foreground">어시스트</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">MVP</Label>
+              </div>
             </div>
           </div>
 

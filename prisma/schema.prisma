@@ -97,7 +97,7 @@ enum PlayerBackground {
 }
 
 enum PlayerSkillLevel {
-  BEGINNER     // 비기너
+  BEGINNER     // 스타터
   AMATEUR      // 아마추어
   ACE          // 에이스
   SEMIPRO      // 세미프로

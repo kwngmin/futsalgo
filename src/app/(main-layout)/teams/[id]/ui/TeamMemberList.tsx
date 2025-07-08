@@ -74,7 +74,7 @@ const TeamMemberList = ({
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
                 </span>
-                <span className="sm:text-sm text-gray-500">
+                <span className="sm:text-sm text-gray-500 tracking-tight">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
@@ -129,17 +129,21 @@ const TeamMemberList = ({
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                     {member.user.nickname || "닉네임 없음"}
                   </h3>
-                  <span className="sm:text-sm text-gray-500">
+                  <span className="sm:text-sm text-gray-500 tracking-tight">
                     {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                       member.user.birthDate
                         ? getCurrentAge(member.user.birthDate).success
                           ? `${getCurrentAge(member.user.birthDate).age}살`
                           : "생년월일 미설정"
                         : "생년월일 미설정"
+                    }${
+                      member.user.playerBackground === "PROFESSIONAL"
+                        ? " • 선출"
+                        : ""
                     } • ${
-                      member.user.height
-                        ? `${member.user.height}cm`
-                        : "키 미설정"
+                      SKILL_LEVEL[
+                        member.user.skillLevel as keyof typeof SKILL_LEVEL
+                      ] || "미설정"
                     }`}
                   </span>
                 </div>
@@ -220,15 +224,21 @@ const TeamMemberList = ({
                     </div>
                   )}
                 </span>
-                <span className="sm:text-sm text-gray-500">
+                <span className="sm:text-sm text-gray-500 tracking-tight">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
                         ? `${getCurrentAge(member.user.birthDate).age}살`
                         : "생년월일 미설정"
                       : "생년월일 미설정"
+                  }${
+                    member.user.playerBackground === "PROFESSIONAL"
+                      ? " • 선출"
+                      : ""
                   } • ${
-                    member.user.height ? `${member.user.height}cm` : "키 미설정"
+                    SKILL_LEVEL[
+                      member.user.skillLevel as keyof typeof SKILL_LEVEL
+                    ] || "미설정"
                   }`}
                 </span>
               </div>

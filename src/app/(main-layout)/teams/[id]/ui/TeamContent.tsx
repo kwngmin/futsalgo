@@ -671,7 +671,7 @@ const TeamContent = ({ id }: { id: string }) => {
           </div> */}
 
               {/* 주요 활동 지역 */}
-              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-28">
+              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-32">
                 <div className="font-semibold">
                   {data.data.city}
                   {data.data.district && ` ${data.data.district}`}
@@ -738,7 +738,7 @@ const TeamContent = ({ id }: { id: string }) => {
                         ? `${data.data.stats.beginnerCount}명`
                         : "없음"}
                     </div>
-                    <Label className="text-muted-foreground">비기너</Label>
+                    <Label className="text-muted-foreground">스타터</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
@@ -850,7 +850,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="font-semibold">
                   {data.data.stats.beginnerCount}
                 </div>
-                <Label className="text-muted-foreground">비기너</Label>
+                <Label className="text-muted-foreground">스타터</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">

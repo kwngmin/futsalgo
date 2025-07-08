@@ -81,7 +81,7 @@ export const PLAYER_BACKGROUND = {
 };
 
 export const SKILL_LEVEL_OPTIONS = [
-  { value: "BEGINNER", label: "비기너 - 처음 접하거나 경험 적은 사용자" },
+  { value: "BEGINNER", label: "스타터 - 처음 접하거나 경험 적은 사용자" },
   { value: "AMATEUR", label: "아마추어 - 경기 참여 많고 팀 활동 경험 있음" },
   { value: "ACE", label: "에이스 - 경기 감각 좋고 잘 뛰는 사람" },
   {
@@ -91,7 +91,7 @@ export const SKILL_LEVEL_OPTIONS = [
 ];
 
 export const SKILL_LEVEL = {
-  BEGINNER: "비기너",
+  BEGINNER: "스타터",
   AMATEUR: "아마추어",
   ACE: "에이스",
   SEMIPRO: "세미프로",
