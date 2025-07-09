@@ -208,11 +208,11 @@ const HomePage = () => {
                 .includes(session.data?.user?.id ?? "") ? (
                 <div>hello</div>
               ) : (
-                <div className="w-full grid grid-cols-2 border-t h-12 *:cursor-pointer *:font-medium">
-                  <button className="!font-semibold text-blue-600 hover:bg-blue-600/5">
+                <div className="w-full grid grid-cols-2 border-t h-10 *:cursor-pointer *:text-sm">
+                  <button className="font-semibold text-blue-600 hover:bg-blue-600/5">
                     참가
                   </button>
-                  <button className="text-destructive border-l  hover:bg-red-600/5">
+                  <button className="font-medium text-destructive border-l  hover:bg-red-600/5">
                     불참
                   </button>
                 </div>
