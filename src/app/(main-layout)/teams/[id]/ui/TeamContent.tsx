@@ -221,7 +221,7 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 팀 정보 */}
-          <div className="bg-white rounded-2xl pt-6 relative">
+          <div className="pt-6 relative border-b border-gray-300">
             {/* {data.data.recruitmentStatus === "RECRUITING" ? (
               <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
                 <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded tracking-tight">
@@ -595,7 +595,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
+              <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl border">
                 <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {
@@ -677,9 +677,9 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 팀 실력 */}
-              <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+              <div className="border rounded-2xl pb-3 overflow-hidden">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
                     alert("팀 실력");
                   }}
@@ -715,9 +715,9 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 실력 분포 */}
-              <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+              <div className="border rounded-2xl pb-3 overflow-hidden">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
                     alert("팀원 실력");
                   }}
@@ -765,8 +765,8 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 소개 */}
-              <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+              <div className="border rounded-2xl pb-3">
+                <div className="w-full flex items-center justify-start px-4 py-3 border-b bg-gray-50 space-x-3">
                   <Text className={`w-5 h-5 text-gray-600`} />
                   <span className="font-medium">소개</span>
                 </div>

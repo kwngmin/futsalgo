@@ -72,11 +72,11 @@ const HomePage = () => {
 
           return (
             <div
-              className="overflow-hidden bg-white rounded-2xl border"
+              className="overflow-hidden bg-white rounded-2xl border hover:shadow-lg shadow-accent transition-shadow duration-300"
               key={schedule.id}
             >
               <div
-                className="flex items-center h-11 border-b border-gray-100 px-3 bg-gray-50"
+                className="flex items-center h-11 border-b px-3 bg-gray-50 cursor-pointer"
                 onClick={() => handleScheduleClick(schedule.id)}
               >
                 <MapPinSimpleIcon
@@ -90,7 +90,7 @@ const HomePage = () => {
               {schedule.matchType !== "TEAM" ? (
                 <div className="flex flex-col sm:flex-row sm:items-stretch">
                   <div
-                    className="sm:grow grid grid-cols-2 items-center gap-16 h-20 relative"
+                    className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer"
                     onClick={() => handleScheduleClick(schedule.id)}
                   >
                     <div className="flex flex-col items-end gap-2">
