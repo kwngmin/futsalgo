@@ -82,7 +82,7 @@ const HomePage = () => {
                 </div> */}
 
                 {schedule.matchType !== "TEAM" ? (
-                  <div className="grid grid-cols-2 items-center gap-16 h-16 relative">
+                  <div className="grid grid-cols-2 items-center gap-16 h-20 relative">
                     <div className="flex flex-col items-end gap-2">
                       {/* <div>HOME</div> */}
                       <div className="flex items-center gap-1">
