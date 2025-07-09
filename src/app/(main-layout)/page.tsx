@@ -76,7 +76,7 @@ const HomePage = () => {
                 className="cursor-pointer"
                 onClick={() => router.push(`/schedule/${schedule.id}`)}
               >
-                <div className="flex items-center h-10 border-b border-gray-100 px-3 bg-gray-50">
+                <div className="flex items-center h-11 border-b border-gray-100 px-3 bg-gray-50">
                   <MapPinSimpleIcon
                     className="text-gray-600 mr-2"
                     size={20}
@@ -208,7 +208,7 @@ const HomePage = () => {
                 .includes(session.data?.user?.id ?? "") ? (
                 <div>hello</div>
               ) : (
-                <div className="w-full grid grid-cols-2 border-t h-10 *:cursor-pointer *:text-sm">
+                <div className="w-full grid grid-cols-2 border-t h-11 *:cursor-pointer">
                   <button className="font-semibold text-blue-600 hover:bg-blue-600/5">
                     참가
                   </button>
