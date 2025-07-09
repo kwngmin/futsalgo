@@ -6,7 +6,8 @@ interface MainLayoutProps {
 
 const NoLayout = async ({ children }: MainLayoutProps) => {
   return (
-    <div className="min-h-dvh bg-gray-100">
+    <div className="min-h-dvh">
+      {/* <div className="min-h-dvh bg-gray-100"> */}
       {/* 데스크톱 & 태블릿 사이드바 */}
       <SideNav />
 
