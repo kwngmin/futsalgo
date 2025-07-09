@@ -143,9 +143,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div> */}
             {/* 팀 정보 */}
-            <div className="grid grid-cols-3 p-4">
+            <div className="grid grid-cols-3 px-4">
               {/* 호스트 */}
-              <div className="flex flex-col  items-center">
+              <div className="flex flex-col items-center border py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
                   팀매치 신청한 팀
                 </span> */}
@@ -231,7 +231,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div> */}
               </div>
               {/* 게스트 */}
-              <div className="flex flex-col  items-center">
+              <div className="flex flex-col items-center border py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
                   신청 받은 팀
                 </span> */}
@@ -254,7 +254,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="p-4">
               <Button
                 // className="w-full text-base font-semibold bg-indigo-700"
-                className="w-full text-base font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight"
+                className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
                 size="lg"
                 // onClick={async () => {
                 //   if (session.data) {
