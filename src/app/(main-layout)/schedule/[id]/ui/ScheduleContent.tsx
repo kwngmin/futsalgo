@@ -8,6 +8,7 @@ import {
   Loader2,
   Share,
   Text,
+  Trophy,
   // Trophy,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,8 +17,10 @@ import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
 import {
-  // CourtBasketballIcon, //
-  SoccerBallIcon,
+  CourtBasketballIcon,
+  MapPinSimpleAreaIcon,
+  MapPinSimpleIcon, //
+  // SoccerBallIcon,
 } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
@@ -115,21 +118,30 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         <div className="px-3 space-y-3">
           {/* 일정 정보 */}
           <div className="bg-white rounded-2xl relative">
-            <div className="flex items-center px-3 h-12 border-b">
-              {/* <Trophy className="size-4 text-gray-600 mr-2" /> */}
-              <SoccerBallIcon
+            <div className="flex justify-between items-center px-3 h-12 border-b">
+              {/* <SoccerBallIcon
                 className="text-gray-600 mr-2"
                 size={24}
                 weight="fill"
-              />
+              /> */}
               {/* <CourtBasketballIcon className="text-gray-600 mr-2" size={24} /> */}
-              <h1 className="text-md font-bold flex items-center">
+              <div className="flex items-center">
+                <MapPinSimpleIcon
+                  className="text-gray-600 mr-2"
+                  size={20}
+                  weight="fill"
+                />
+                {/* <Trophy className="size-5 text-gray-600 mr-2" /> */}
+                <span className="font-bold">{data?.data?.schedule?.place}</span>
+              </div>
+
+              <span className="text-sm font-medium text-muted-foreground px-2">
                 {
                   MATCH_TYPE[
                     data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
                   ]
                 }
-              </h1>
+              </span>
             </div>
             {/* 팀 정보 */}
             <div className="grid grid-cols-3 px-3 sm:px-6 py-6">
