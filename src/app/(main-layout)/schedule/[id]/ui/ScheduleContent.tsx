@@ -5,6 +5,7 @@ import { getSchedule } from "../actions/get-schedule";
 import {
   ArrowLeft,
   EllipsisVertical,
+  Info,
   Loader2,
   Share,
   Text,
@@ -132,14 +133,16 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 {/* <Trophy className="size-5 text-gray-600 mr-2" /> */}
                 <span className="font-bold">{data?.data?.schedule?.place}</span>
               </div>
-
-              <span className="text-sm font-medium text-muted-foreground px-2">
-                {
-                  MATCH_TYPE[
-                    data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-                  ]
-                }
-              </span>
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <span className="text-sm font-semibold">
+                  {
+                    MATCH_TYPE[
+                      data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
+                    ]
+                  }
+                </span>
+                <Info className="size-4" />
+              </div>
             </div>
             {/* 팀 정보 */}
             <div className="grid grid-cols-3 px-3 sm:px-6 py-6">
@@ -181,7 +184,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <div>상대팀 대전신청 거절됨</div>
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
-                      className={`flex items-center gap-1 sm:text-lg font-medium tracking-tight ${
+                      className={`flex items-center gap-1 text-sm sm:text-lg font-medium tracking-tight ${
                         dDay > 0 ? "text-muted-foreground" : "bg-green-600"
                       }`}
                     >
@@ -190,6 +193,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                           "ko-KR",
                           {
                             // year: "numeric",
+                            weekday: "long",
                             month: "long",
                             day: "numeric",
                           }
