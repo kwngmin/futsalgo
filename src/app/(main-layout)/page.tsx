@@ -5,9 +5,9 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import formatTimeRange from "@/entities/schedule/lib/format-time-range";
-import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
-import { Countdown } from "./schedule/[id]/ui/CountDown";
+// import formatTimeRange from "@/entities/schedule/lib/format-time-range";
+// import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
+// import { Countdown } from "./schedule/[id]/ui/CountDown";
 
 const HomePage = () => {
   const router = useRouter();
@@ -52,13 +52,13 @@ const HomePage = () => {
           </div>
         )}
         {data?.data?.hostSchedules.map((schedule) => {
-          const timeRange = formatTimeRange({
-            time: {
-              start: schedule.startTime,
-              end: schedule.endTime,
-            },
-          });
-          const dDay = calculateDday(schedule?.date as Date);
+          // const timeRange = formatTimeRange({
+          //   time: {
+          //     start: schedule.startTime,
+          //     end: schedule.endTime,
+          //   },
+          // });
+          // const dDay = calculateDday(schedule?.date as Date);
           const [period, time] = schedule?.startTime
             ?.toLocaleTimeString("ko-KR", {
               hour: "2-digit",
