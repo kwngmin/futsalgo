@@ -19,14 +19,18 @@ const BottomNav = () => {
               key={item.id}
               onClick={() => handleClick(item.href)}
               className={`flex-1 flex flex-col items-center py-2 px-1 transition-colors cursor-pointer ${
-                isActive ? "text-gray-700" : "text-gray-500"
+                isActive ? "text-gray-700" : "text-neutral-400"
                 // isActive ? "text-blue-600" : "text-gray-500"
               }`}
               type="button"
             >
               <Icon
-                className="w-6 h-6 mb-1"
-                weight={isActive ? "fill" : "regular"}
+                className="mb-0.5"
+                // className="mb-1 mt-0.5"
+                // className="w-6 h-6 mb-1"
+                weight="fill"
+                size={24}
+                // weight={isActive ? "fill" : "regular"}
               />
               <span className="text-xs font-medium">{item.label}</span>
             </button>

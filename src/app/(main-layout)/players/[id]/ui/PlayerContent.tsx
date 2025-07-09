@@ -133,8 +133,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                      })}`
+                      })}}`
                     : "데이터 없음"}
+                  {/* • ${data.data. */}
                 </span>
                 {/* {data.data.teams && data.data.teams.length > 0 ? (
                   <button

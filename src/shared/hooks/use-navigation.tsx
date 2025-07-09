@@ -18,8 +18,9 @@ import { usePathname, useRouter } from "next/navigation";
 // } from "@heroicons/react/24/outline";
 import {
   HouseIcon,
-  AddressBookIcon,
   TShirtIcon,
+  UserIcon,
+  // AddressBookIcon,
   ChatsCircleIcon,
   DotsThreeOutlineIcon,
 } from "@phosphor-icons/react";
@@ -40,7 +41,7 @@ export const navItems = [
   {
     id: "player",
     label: "회원",
-    icon: AddressBookIcon,
+    icon: UserIcon,
     href: "/players",
   },
   {
