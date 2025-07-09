@@ -6,6 +6,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
+import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
+import { Countdown } from "./schedule/[id]/ui/CountDown";
 
 const HomePage = () => {
   const router = useRouter();
@@ -32,7 +34,7 @@ const HomePage = () => {
         </button> */}
       </div>
       {/* MatchesPage */}
-      <div className="px-3 space-y-3">
+      <div className="px-4 space-y-3">
         {session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <h3 className="font-semibold text-gray-900">
@@ -56,6 +58,13 @@ const HomePage = () => {
               end: schedule.endTime,
             },
           });
+          const dDay = calculateDday(schedule?.date as Date);
+          const [period, time] = schedule?.startTime
+            ?.toLocaleTimeString("ko-KR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+            .split(" ");
 
           return (
             <div
@@ -66,34 +75,22 @@ const HomePage = () => {
                 className="cursor-pointer"
                 onClick={() => router.push(`/schedule/${schedule.id}`)}
               >
-                <div className="flex justify-center *:tracking-tight items-center h-4 gap-1 mt-4 mb-1 text-sm">
-                  <span>
-                    {schedule.date.toLocaleDateString("ko-KR", {
-                      // year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                  {/* {`${schedule.startTime.toLocaleTimeString("ko-KR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })} ~ ${schedule.endTime.toLocaleTimeString("ko-KR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}`} */}
+                {/* <div className="flex justify-center *:tracking-tight items-center h-4 gap-1 mt-4 mb-1 text-sm">
+                  <span>{period}</span>
+                  <span>{time}</span>
                   <span className="">{timeRange}</span>
-                </div>
+                </div> */}
 
                 {schedule.matchType !== "TEAM" ? (
-                  <div className="flex justify-center items-center gap-2 h-14">
+                  <div className="grid grid-cols-2 items-center gap-16 h-16 relative">
                     <div className="flex flex-col items-end gap-2">
                       {/* <div>HOME</div> */}
                       <div className="flex items-center gap-1">
-                        <div className="sm:text-lg font-bold">
+                        <div className="sm:text-lg font-semibold">
                           {schedule.hostTeam.name}
                         </div>
                         {schedule.hostTeam.logoUrl ? (
-                          <div className="size-8 sm:size-12">
+                          <div className="size-7 sm:size-12">
                             <Image
                               src={schedule.hostTeam.logoUrl}
                               alt={schedule.hostTeam.name}
@@ -107,13 +104,72 @@ const HomePage = () => {
                         {/* <div>HOME</div> */}
                       </div>
                     </div>
-                    <div className="font-bold">VS</div>
+                    {/* <div className="font-bold">VS</div> */}
+                    {/* 공통 */}
+                    <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center">
+                      <span className="h-4 flex items-center justify-center font-medium text-sm sm:text-base tracking-tight text-muted-foreground">
+                        {period}
+                      </span>
+                      <span className="h-5 sm:h-6 flex items-center justify-center font-semibold sm:text-lg tracking-tight">
+                        {time}
+                      </span>
+                      <div className="w-full flex flex-col items-center">
+                        {/* {schedule?.status === "PENDING" ? (
+                          <div>대기중</div>
+                        ) : schedule?.status === "REJECTED" ? (
+                          <div>거절됨</div>
+                        ) : schedule?.status === "READY" ? (
+                          <div
+                            className={`flex items-center gap-1 text-sm sm:text-lg font-medium tracking-tight ${
+                              dDay > 0
+                                ? "text-muted-foreground"
+                                : "bg-green-600"
+                            }`}
+                          >
+                            {dDay > 1 ? (
+                              schedule.startTime?.toLocaleDateString("ko-KR", {
+                           
+                                month: "long",
+                                day: "numeric",
+                              })
+                            ) : dDay === 1 ? (
+                              "내일"
+                            ) : dDay === 0 ? (
+                              <Countdown date={schedule.startTime as Date} />
+                            ) : (
+                              "경기 종료"
+                            )}
+                          </div>
+                        ) : schedule?.status === "PLAY" ? (
+                          <div>경기중</div>
+                        ) : (
+                          <div>경기 종료</div>
+                        )} */}
+                        {/* <span>
+                {calculateDday(data.data.schedule?.date as Date) > 0
+                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+                  : "D-day"}
+              </span> */}
+                      </div>
+                      {/* <span>{timeRange}</span> */}
+                      {/* <span>
+                  {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="">{timeRange}</span> */}
+                      {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
+                  VS
+                </div> */}
+                    </div>
                     <div className="flex flex-col gap-2">
                       {/* <div>AWAY</div> */}
                       <div className="flex items-center gap-1">
                         {/* <div>AWAY</div> */}
                         {schedule.hostTeam.logoUrl ? (
-                          <div className="size-8 sm:size-12">
+                          <div className="size-7 sm:size-12">
                             <Image
                               src={schedule.hostTeam.logoUrl}
                               alt={schedule.hostTeam.name}
@@ -124,7 +180,7 @@ const HomePage = () => {
                         ) : (
                           <div className="size-6 bg-gray-200 rounded-full" />
                         )}
-                        <div className="sm:text-lg font-bold">
+                        <div className="sm:text-lg font-semibold">
                           {schedule.hostTeam.name}
                         </div>
                         {/* <div>HOME</div> */}
@@ -146,7 +202,7 @@ const HomePage = () => {
                 .includes(session.data?.user?.id ?? "") ? (
                 <div>hello</div>
               ) : (
-                <div className="w-full grid grid-cols-2 border-t h-12 *:cursor-pointer *:font-medium">
+                <div className="w-full grid grid-cols-2 border-t border-gray-100 h-12 *:cursor-pointer *:font-medium">
                   <button className="!font-semibold text-blue-600">참가</button>
                   <button className="text-destructive border-l border-gray-100">
                     불참
