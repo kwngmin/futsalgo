@@ -2,11 +2,18 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getSchedule } from "../actions/get-schedule";
-import { ArrowLeft, EllipsisVertical, Loader2, Share } from "lucide-react";
+import {
+  ArrowLeft,
+  EllipsisVertical,
+  Loader2,
+  Share,
+  Text,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
+import { Button } from "@/shared/components/ui/button";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
@@ -82,7 +89,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           <div className="text-base text-muted-foreground">로딩 중입니다.</div>
         </div>
       )}
-      {/* 상단: 제목과 검색 */}
+      {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
       <div className="flex items-center justify-between shrink-0 px-6 h-16">
         <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
           <ArrowLeft
@@ -102,18 +109,19 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 일정 정보 */}
-          <div className="bg-white rounded-2xl relative">
-            <h1 className="text-lg font-bold px-3 flex items-center h-12 mb-3">
+          <div className="bg-white rounded-2xl relative pt-6">
+            {/* <h1 className="text-lg font-bold px-3 flex items-center h-12 mb-3">
               {
                 MATCH_TYPE[
                   data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
                 ]
               }
-            </h1>
-            <div className="grid grid-cols-3 px-3 sm:px-6">
+            </h1> */}
+            {/* 팀 정보 */}
+            <div className="grid grid-cols-3 p-3 sm:px-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-500/50 font-bold text-lg tracking-tight">
+                <span className="text-slate-500/50 font-bold text-md tracking-tight">
                   HOME
                 </span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
@@ -121,8 +129,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <Image
                       src={data?.data?.schedule?.hostTeam?.logoUrl}
                       alt="logo"
-                      width={100}
-                      height={100}
+                      width={64}
+                      height={64}
                     />
                   </div>
                 ) : (
@@ -198,7 +206,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 게스트 */}
               <div className="flex flex-col  items-center">
-                <span className="text-slate-500/50 font-bold text-lg tracking-tight">
+                <span className="text-slate-500/50 font-bold text-md tracking-tight">
                   AWAY
                 </span>
                 {opposingTeam?.logoUrl ? (
@@ -206,8 +214,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <Image
                       src={opposingTeam?.logoUrl}
                       alt="logo"
-                      width={100}
-                      height={100}
+                      width={64}
+                      height={64}
                     />
                   </div>
                 ) : (
@@ -217,13 +225,43 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 px-6 h-20">
+            <div className="p-3">
+              <Button
+                // className="w-full text-base font-semibold bg-indigo-700"
+                className="w-full text-base font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight"
+                size="lg"
+                // onClick={async () => {
+                //   if (session.data) {
+                //     try {
+                //       const result = await joinTeam(id);
+                //       console.log(result);
+                //       if (result?.success) {
+                //         alert("가입 신청이 완료되었습니다.");
+                //         refetch();
+                //       } else {
+                //         alert(result?.error);
+                //       }
+                //     } catch (error) {
+                //       console.error(error);
+                //       alert("가입 신청에 실패했습니다.");
+                //     }
+                //   } else {
+                //     alert("로그인이 필요합니다.");
+                //     signIn();
+                //   }
+                // }}
+              >
+                경기 시작
+              </Button>
+            </div>
+
+            {/* <div className="flex items-center gap-4 px-6 h-20">
               <div className="flex flex-col">
                 <div className="flex items-center gap-1 h-6">
                   <span className="sm:text-sm font-medium text-muted-foreground tracking-tight"></span>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* <div className="p-3">
               {data.data.currentUserMembership.role === "MANAGER" ||
               data.data.currentUserMembership.role === "OWNER" ? (
@@ -340,6 +378,17 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 ))} */}
               </div>
             </div>
+          </div>
+
+          {/* 소개 */}
+          <div className="bg-white rounded-2xl pb-3">
+            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+              <Text className={`w-5 h-5 text-gray-600`} />
+              <span className="font-medium">소개</span>
+            </div>
+            <p className="px-4 py-4 bg-white rounded-2xl">
+              {data?.data.schedule?.description ?? "소개 없음"}
+            </p>
           </div>
 
           {/* 팀원 */}
