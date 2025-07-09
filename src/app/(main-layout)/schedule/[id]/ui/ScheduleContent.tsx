@@ -8,12 +8,17 @@ import {
   Loader2,
   Share,
   Text,
+  // Trophy,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
+import {
+  // CourtBasketballIcon, //
+  SoccerBallIcon,
+} from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
@@ -109,16 +114,25 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       {data ? (
         <div className="px-3 space-y-3">
           {/* 일정 정보 */}
-          <div className="bg-white rounded-2xl relative pt-6">
-            {/* <h1 className="text-lg font-bold px-3 flex items-center h-12 mb-3">
-              {
-                MATCH_TYPE[
-                  data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-                ]
-              }
-            </h1> */}
+          <div className="bg-white rounded-2xl relative">
+            <div className="flex items-center px-3 h-12 border-b">
+              {/* <Trophy className="size-4 text-gray-600 mr-2" /> */}
+              <SoccerBallIcon
+                className="text-gray-600 mr-2"
+                size={24}
+                weight="fill"
+              />
+              {/* <CourtBasketballIcon className="text-gray-600 mr-2" size={24} /> */}
+              <h1 className="text-md font-bold flex items-center">
+                {
+                  MATCH_TYPE[
+                    data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
+                  ]
+                }
+              </h1>
+            </div>
             {/* 팀 정보 */}
-            <div className="grid grid-cols-3 p-3 sm:px-6">
+            <div className="grid grid-cols-3 px-3 sm:px-6 py-6">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
                 <span className="text-slate-500/50 font-bold text-md tracking-tight">
