@@ -24,6 +24,9 @@ const HomePage = () => {
   console.log(data, "data");
   console.log(isLoading, "isLoading");
   console.log(error, "error");
+  const handleScheduleClick = (scheduleId: string) => {
+    router.push(`/schedule/${scheduleId}`);
+  };
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -73,22 +76,23 @@ const HomePage = () => {
               key={schedule.id}
             >
               <div
-                className="cursor-pointer"
-                onClick={() => router.push(`/schedule/${schedule.id}`)}
+                className="flex items-center h-11 border-b border-gray-100 px-3 bg-gray-50"
+                onClick={() => handleScheduleClick(schedule.id)}
               >
-                <div className="flex items-center h-11 border-b border-gray-100 px-3 bg-gray-50">
-                  <MapPinSimpleIcon
-                    className="text-gray-600 mr-2"
-                    size={20}
-                    weight="fill"
-                  />
-                  <span className="text-sm font-semibold">
-                    {schedule.place}
-                  </span>
-                </div>
+                <MapPinSimpleIcon
+                  className="text-gray-600 mr-2"
+                  size={20}
+                  weight="fill"
+                />
+                <span className="text-sm font-semibold">{schedule.place}</span>
+              </div>
 
-                {schedule.matchType !== "TEAM" ? (
-                  <div className="grid grid-cols-2 items-center gap-16 h-20 relative">
+              {schedule.matchType !== "TEAM" ? (
+                <div className="flex flex-col sm:flex-row sm:items-stretch">
+                  <div
+                    className="sm:grow grid grid-cols-2 items-center gap-16 h-20 relative"
+                    onClick={() => handleScheduleClick(schedule.id)}
+                  >
                     <div className="flex flex-col items-end gap-2">
                       {/* <div>HOME</div> */}
                       <div className="flex items-center gap-1">
@@ -193,29 +197,23 @@ const HomePage = () => {
                       </div>
                     </div>
                   </div>
-                ) : (
-                  schedule.guestTeam?.name
-                )}
-                {/* <div className="w-full flex justify-center">
-                  <div className="flex items-center mb-4 rounded-full !font-medium text-sm text-muted-foreground px-3 h-6">
-                    {`${schedule.place}`}
-                  </div>
-                </div> */}
-              </div>
-
-              {schedule.attendances
-                .map((attendance) => attendance.userId)
-                .includes(session.data?.user?.id ?? "") ? (
-                <div>hello</div>
-              ) : (
-                <div className="w-full grid grid-cols-2 border-t h-11 *:cursor-pointer">
-                  <button className="font-semibold text-blue-600 hover:bg-blue-600/5">
-                    참가
-                  </button>
-                  <button className="font-medium text-destructive border-l  hover:bg-red-600/5">
-                    불참
-                  </button>
+                  {schedule.attendances
+                    .map((attendance) => attendance.userId)
+                    .includes(session.data?.user?.id ?? "") ? (
+                    <div>hello</div>
+                  ) : (
+                    <div className="w-full sm:w-32 grid grid-cols-2 sm:flex flex-col border-t sm:border-t-0 sm:border-l h-11 sm:h-full *:cursor-pointer">
+                      <button className="sm:h-10 font-semibold text-blue-600 hover:bg-blue-600/5">
+                        참가
+                      </button>
+                      <button className="sm:h-10 font-medium text-destructive border-l sm:border-l-0 sm:border-t hover:bg-red-600/5">
+                        불참
+                      </button>
+                    </div>
+                  )}
                 </div>
+              ) : (
+                schedule.guestTeam?.name
               )}
             </div>
           );

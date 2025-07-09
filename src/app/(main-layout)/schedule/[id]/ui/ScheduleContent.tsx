@@ -15,11 +15,9 @@ import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
-import // CourtBasketballIcon,
-// MapPinSimpleAreaIcon,
-// MapPinSimpleIcon, //
-// SoccerBallIcon,
-"@phosphor-icons/react";
+// import {
+//   MapPinSimpleIcon, //
+// } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
@@ -145,7 +143,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div> */}
             {/* 팀 정보 */}
-            <div className="grid grid-cols-3 px-3 sm:px-6 py-6">
+            <div className="grid grid-cols-3 p-4">
               {/* 호스트 */}
               <div className="flex flex-col  items-center">
                 <span className="text-slate-500/50 font-bold text-md tracking-tight">
@@ -253,7 +251,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
 
-            <div className="p-3">
+            <div className="p-4">
               <Button
                 // className="w-full text-base font-semibold bg-indigo-700"
                 className="w-full text-base font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight"
