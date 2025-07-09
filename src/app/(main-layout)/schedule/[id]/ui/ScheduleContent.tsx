@@ -97,13 +97,21 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       )}
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
-      <div className="flex items-center justify-between shrink-0 px-6 h-16">
+      <div className="grid grid-cols-3 items-center shrink-0 px-3 h-16">
         <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
           <ArrowLeft
             style={{ width: "24px", height: "24px" }}
             onClick={handleGoBack}
           />
         </button>
+        <span className="text-center font-bold">
+          {/* {data?.data?.schedule?.place} */}
+          {
+            MATCH_TYPE[
+              data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
+            ]
+          }
+        </span>
         <div className="flex items-center justify-end gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
@@ -114,23 +122,16 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-3">
+        <div className="space-y-3">
           {/* 일정 정보 */}
-          <div className="bg-white rounded-2xl relative">
-            <div className="flex justify-between items-center px-3 h-12 border-b">
-              {/* <SoccerBallIcon
-                className="text-gray-600 mr-2"
-                size={24}
-                weight="fill"
-              /> */}
-              {/* <CourtBasketballIcon className="text-gray-600 mr-2" size={24} /> */}
+          <div className="relative">
+            {/* <div className="flex justify-between items-center px-3 h-10 border-b">
               <div className="flex items-center">
                 <MapPinSimpleIcon
                   className="text-gray-600 mr-2"
                   size={20}
                   weight="fill"
                 />
-                {/* <Trophy className="size-5 text-gray-600 mr-2" /> */}
                 <span className="font-bold">{data?.data?.schedule?.place}</span>
               </div>
               <div className="flex items-center gap-1 text-muted-foreground">
@@ -143,7 +144,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </span>
                 <Info className="size-4" />
               </div>
-            </div>
+            </div> */}
             {/* 팀 정보 */}
             <div className="grid grid-cols-3 px-3 sm:px-6 py-6">
               {/* 호스트 */}
@@ -184,7 +185,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <div>상대팀 대전신청 거절됨</div>
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
-                      className={`flex items-center gap-1 text-sm sm:text-lg font-medium tracking-tight ${
+                      className={`flex items-center gap-1 sm:text-lg font-medium tracking-tight ${
                         dDay > 0 ? "text-muted-foreground" : "bg-green-600"
                       }`}
                     >
