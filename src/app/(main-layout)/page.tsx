@@ -68,7 +68,7 @@ const HomePage = () => {
 
           return (
             <div
-              className="overflow-hidden bg-white rounded-2xl border"
+              className="overflow-hidden bg-white rounded-2xl border border-gray-100"
               key={schedule.id}
             >
               <div
