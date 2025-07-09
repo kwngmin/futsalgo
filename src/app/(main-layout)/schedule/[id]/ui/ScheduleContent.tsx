@@ -81,6 +81,15 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       : data.data.schedule?.guestTeam;
 
   const dDay = calculateDday(data.data.schedule?.date as Date);
+  const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
+    "ko-KR",
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
+
+  const [period, time] = timeString?.split(" ") || [];
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -169,11 +178,17 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 공통 */}
               <div className="flex flex-col items-center justify-center">
-                <span className="sm:h-10 flex items-center justify-center font-medium text-xl sm:text-3xl tracking-tight">
+                <span className="hidden sm:h-10 sm:flex items-center justify-center font-semibold text-xl sm:text-3xl tracking-tight">
                   {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
+                </span>
+                <span className="h-6 flex sm:hidden items-center justify-center font-semibold text-xl tracking-tight">
+                  {period}
+                </span>
+                <span className="sm:h-10 flex sm:hidden items-center justify-center font-semibold text-2xl tracking-tight">
+                  {time}
                 </span>
                 <div className="w-full flex flex-col items-center">
                   {data.data.schedule?.status === "PENDING" ? (
@@ -182,7 +197,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <div>상대팀 대전신청 거절됨</div>
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
-                      className={`flex items-center gap-1 sm:text-lg font-medium tracking-tight ${
+                      className={`flex items-center gap-1 text-lg font-medium tracking-tight ${
                         dDay > 0 ? "text-muted-foreground" : "bg-green-600"
                       }`}
                     >
@@ -191,7 +206,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                           "ko-KR",
                           {
                             // year: "numeric",
-                            weekday: "long",
+                            // weekday: "long",
                             month: "long",
                             day: "numeric",
                           }
