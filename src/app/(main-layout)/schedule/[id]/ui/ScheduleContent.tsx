@@ -5,7 +5,7 @@ import { getSchedule } from "../actions/get-schedule";
 import {
   ArrowLeft,
   EllipsisVertical,
-  Info,
+  // Info,
   Loader2,
   Share,
   Text,
@@ -15,12 +15,11 @@ import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
-import {
-  // CourtBasketballIcon,
-  // MapPinSimpleAreaIcon,
-  MapPinSimpleIcon, //
-  // SoccerBallIcon,
-} from "@phosphor-icons/react";
+import // CourtBasketballIcon,
+// MapPinSimpleAreaIcon,
+// MapPinSimpleIcon, //
+// SoccerBallIcon,
+"@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
