@@ -8,8 +8,6 @@ import {
   Loader2,
   Share,
   Text,
-  Trophy,
-  // Trophy,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -17,8 +15,8 @@ import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
 import {
-  CourtBasketballIcon,
-  MapPinSimpleAreaIcon,
+  // CourtBasketballIcon,
+  // MapPinSimpleAreaIcon,
   MapPinSimpleIcon, //
   // SoccerBallIcon,
 } from "@phosphor-icons/react";
