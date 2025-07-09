@@ -5,6 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
 // import { Countdown } from "./schedule/[id]/ui/CountDown";
@@ -68,18 +69,23 @@ const HomePage = () => {
 
           return (
             <div
-              className="overflow-hidden bg-white rounded-2xl border border-gray-100"
+              className="overflow-hidden bg-white rounded-2xl border"
               key={schedule.id}
             >
               <div
                 className="cursor-pointer"
                 onClick={() => router.push(`/schedule/${schedule.id}`)}
               >
-                {/* <div className="flex justify-center *:tracking-tight items-center h-4 gap-1 mt-4 mb-1 text-sm">
-                  <span>{period}</span>
-                  <span>{time}</span>
-                  <span className="">{timeRange}</span>
-                </div> */}
+                <div className="flex items-center h-10 border-b border-gray-100 px-3 bg-gray-50">
+                  <MapPinSimpleIcon
+                    className="text-gray-600 mr-2"
+                    size={20}
+                    weight="fill"
+                  />
+                  <span className="text-sm font-semibold">
+                    {schedule.place}
+                  </span>
+                </div>
 
                 {schedule.matchType !== "TEAM" ? (
                   <div className="grid grid-cols-2 items-center gap-16 h-20 relative">
@@ -202,9 +208,11 @@ const HomePage = () => {
                 .includes(session.data?.user?.id ?? "") ? (
                 <div>hello</div>
               ) : (
-                <div className="w-full grid grid-cols-2 border-t border-gray-100 h-12 *:cursor-pointer *:font-medium">
-                  <button className="!font-semibold text-blue-600">참가</button>
-                  <button className="text-destructive border-l border-gray-100">
+                <div className="w-full grid grid-cols-2 border-t h-12 *:cursor-pointer *:font-medium">
+                  <button className="!font-semibold text-blue-600 hover:bg-blue-600/5">
+                    참가
+                  </button>
+                  <button className="text-destructive border-l  hover:bg-red-600/5">
                     불참
                   </button>
                 </div>
