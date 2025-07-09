@@ -59,7 +59,7 @@ const HomePage = () => {
 
           return (
             <div
-              className="overflow-hidden bg-white rounded-2xl"
+              className="overflow-hidden bg-white rounded-2xl border"
               key={schedule.id}
             >
               <div
@@ -134,11 +134,11 @@ const HomePage = () => {
                 ) : (
                   schedule.guestTeam?.name
                 )}
-                <div className="w-full flex justify-center">
+                {/* <div className="w-full flex justify-center">
                   <div className="flex items-center mb-4 rounded-full !font-medium text-sm text-muted-foreground px-3 h-6">
                     {`${schedule.place}`}
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {schedule.attendances
@@ -146,9 +146,9 @@ const HomePage = () => {
                 .includes(session.data?.user?.id ?? "") ? (
                 <div>hello</div>
               ) : (
-                <div className="w-full grid grid-cols-2 border-t border-input h-12 *:cursor-pointer *:font-medium">
+                <div className="w-full grid grid-cols-2 border-t h-12 *:cursor-pointer *:font-medium">
                   <button className="!font-semibold text-blue-600">참가</button>
-                  <button className="text-destructive border-l border-input">
+                  <button className="text-destructive border-l border-gray-100">
                     불참
                   </button>
                 </div>
