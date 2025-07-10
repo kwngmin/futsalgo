@@ -457,7 +457,7 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
 
             {/* 탭 */}
-            <div className="flex items-center justify-between gap-2 px-3 border-t border-gray-100">
+            <div className="flex items-center justify-between gap-2 px-4">
               <div className="flex h-12 space-x-2">
                 {tabs
                   // .filter(
@@ -668,7 +668,7 @@ const TeamContent = ({ id }: { id: string }) => {
           </div> */}
 
               {/* 주요 활동 지역 */}
-              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-32 mx-4">
+              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-32 mx-4 border">
                 <div className="font-semibold">
                   {data.data.city}
                   {data.data.district && ` ${data.data.district}`}

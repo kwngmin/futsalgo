@@ -30,14 +30,15 @@ const SideNav = () => {
                   onClick={() => handleClick(item.href)}
                   className={`w-full flex items-center px-4 py-3 text-lg font-medium rounded-full transition-colors cursor-pointer ${
                     isActive
-                      ? "bg-blue-50 text-blue-600"
+                      ? "bg-blue-50 text-blue-600 font-bold"
                       : "text-gray-700 hover:bg-gray-50"
                   }`}
                   type="button"
                 >
                   <Icon
-                    className="w-6 h-6 mr-4"
+                    className="mr-4"
                     weight={isActive ? "fill" : "regular"}
+                    size={28}
                   />
                   {item.label}
                 </button>
@@ -74,7 +75,8 @@ const SideNav = () => {
                   type="button"
                 >
                   <Icon
-                    className="w-6 h-6"
+                    // className="w-6 h-6"
+                    size={28}
                     weight={isActive ? "fill" : "regular"}
                   />
                 </button>

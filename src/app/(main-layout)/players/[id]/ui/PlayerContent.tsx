@@ -178,11 +178,6 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             <MannerBar score={Math.floor(Math.random() * 100)} />
-            {data?.data?.teams[0]?.team && (
-              <div className="mx-4 border overflow-hidden rounded-lg">
-                <TeamCard team={data?.data?.teams[0]?.team} />
-              </div>
-            )}
             {/* {data?.data?.teams[0]?.team ? (
               <TeamCard team={data?.data?.teams[0]?.team} />
             ) : (
@@ -196,7 +191,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             )} */}
             {/* 탭 */}
-            <div className="flex items-center justify-between gap-2 px-3 border-t border-gray-100">
+            <div className="flex items-center justify-between gap-2 px-4">
               <div className="flex h-12 space-x-2">
                 {tabs
                   // .filter(
@@ -304,6 +299,13 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </button>
           </div> */}
+
+          {/* 팀 */}
+          {data?.data?.teams[0]?.team && (
+            <div className="mx-4 border overflow-hidden rounded-2xl">
+              <TeamCard team={data?.data?.teams[0]?.team} />
+            </div>
+          )}
 
           {/* 기본 정보 */}
           <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl border mx-4">
