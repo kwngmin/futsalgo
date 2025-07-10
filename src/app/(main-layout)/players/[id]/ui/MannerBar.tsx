@@ -1,10 +1,13 @@
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/shared/components/ui/tooltip";
-import { Angry, Frown, Info, Laugh, Meh, Skull, Smile } from "lucide-react";
-import { Label } from "@/shared/components/ui/label";
+  Angry,
+  ChevronRight,
+  Frown,
+  Gem,
+  Laugh,
+  Meh,
+  Skull,
+  Smile,
+} from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
 const MannerBar = ({ score }: { score: number }) => {
@@ -86,46 +89,71 @@ const MannerBar = ({ score }: { score: number }) => {
   const { bgColor, textColor } = transformColor(color);
 
   return (
-    <div className="flex justify-between items-center h-12 px-4 space-y-4 rounded-lg overflow-hidden border">
-      <Tooltip>
-        <TooltipTrigger className="flex items-center gap-1 my-auto">
-          <Label className="font-medium text-base">
-            {/* <Label className="font-semibold underline underline-offset-4"> */}
-            매너 점수
-          </Label>
-          <Info className="size-4" />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="text-sm font-medium">
-            매너 온도는 플레이어의 매너 점수를 나타냅니다.
-          </p>
-        </TooltipContent>
-      </Tooltip>
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1">
-          {icon}
-          <span className={cn("text-sm font-semibold", textColor)}>{text}</span>
-        </div>
-        <div
-          className={cn(
-            "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
-            bgColor,
-            textColor
-          )}
-        >
-          {score}
-          <span className="text-xs font-medium">점</span>
-        </div>
+    <div
+      className="w-full flex items-center justify-between px-4 py-3 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ring ring-border rounded-lg"
+      onClick={() => {
+        alert("통계");
+      }}
+    >
+      <div className="flex items-center space-x-3">
+        <Gem className="size-5 text-gray-600" />
+        <span className="font-medium">매너 점수</span>
       </div>
-      {/* <div className="bg-transparent rounded-t-full h-0.5 w-full flex items-stretch overflow-hidden px-2 shrink-0">
-        <div className="bg-black w-1/10" />
-        <div className="bg-red-500 w-1/4" />
-        <div className="bg-orange-500 w-1/4" />
-        <div className="bg-yellow-500 w-1/4" />
-        <div className="bg-green-500 w-1/4" />
-        <div className="bg-blue-500 w-1/10" />
-      </div> */}
+      <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            {icon}
+            <span className={cn("text-sm font-semibold", textColor)}>
+              {text}
+            </span>
+          </div>
+          <div
+            className={cn(
+              "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
+              bgColor,
+              textColor
+            )}
+          >
+            {score}
+            <span className="text-xs font-medium">점</span>
+          </div>
+        </div>
+        <ChevronRight className="size-5 text-gray-400" />
+      </div>
     </div>
+    // <div className="flex justify-between items-center h-12 px-4 space-y-4 rounded-lg overflow-hidden border">
+    //   <Tooltip>
+    //     <TooltipTrigger className="flex items-center gap-1 my-auto">
+    //       <Label className="font-medium text-base flex items-center space-x-3">
+    //         <Gem className="size-5 text-gray-600" />
+    //         매너 점수
+    //       </Label>
+    //       <Info className="size-4" />
+    //     </TooltipTrigger>
+    //     <TooltipContent>
+    //       <p className="text-sm font-medium">
+    //         매너 온도는 플레이어의 매너 점수를 나타냅니다.
+    //       </p>
+    //     </TooltipContent>
+    //   </Tooltip>
+    //   <div className="flex items-center gap-2">
+    //     <div className="flex items-center gap-1">
+    //       {icon}
+    //       <span className={cn("text-sm font-semibold", textColor)}>{text}</span>
+    //     </div>
+    //     <div
+    //       className={cn(
+    //         "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
+    //         bgColor,
+    //         textColor
+    //       )}
+    //     >
+    //       {score}
+    //       <span className="text-xs font-medium">점</span>
+    //     </div>
+    //   </div>
+
+    // </div>
   );
 };
 
