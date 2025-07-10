@@ -156,7 +156,7 @@ const MorePage = () => {
         {session.data && (
           <div
             className={`${
-              false ? "bg-gray-800" : "bg-muted"
+              false ? "bg-gray-800" : "bg-white"
             } rounded-lg overflow-hidden`}
           >
             <button
