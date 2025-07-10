@@ -392,7 +392,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       key={tab.value}
                       className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
                         selectedTab === tab.value
-                          ? "border-gray-500"
+                          ? "border-gray-700"
                           : "border-transparent"
                       } ${
                         tab.isDisabled ? "pointer-events-none opacity-50" : ""
