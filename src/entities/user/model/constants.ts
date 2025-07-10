@@ -38,6 +38,13 @@ export const FUTSAL_POSITIONS = {
   GOLEIRO: "골키퍼",
 };
 
+export const POSITION_DESCRIPTION = {
+  PIVO: "최전방 공격수로, 볼을 지키고 동료에게 연결",
+  ALA: "윙어처럼 측면에서 공격을 지원하고, 적극적으로 수비 가담",
+  FIXO: "수비형 미드필더 또는 수비수로, 상대 공격을 차단하고 빌드업을 지원",
+  GOLEIRO: "골키퍼로, 팀의 마지막 수비수이자 공격의 시작",
+};
+
 export const FOOT_OPTIONS = [
   { value: "RIGHT", label: "오른발" },
   { value: "LEFT", label: "왼발" },

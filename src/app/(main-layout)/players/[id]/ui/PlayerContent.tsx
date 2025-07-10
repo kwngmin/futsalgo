@@ -24,6 +24,7 @@ import {
   FUTSAL_POSITIONS,
   GENDER,
   PLAYER_BACKGROUND,
+  // POSITION_DESCRIPTION,
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
@@ -367,7 +368,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 선호 포지션 */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 mx-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 mx-4 gap-3 sm:h-[212px]">
             <div className="border rounded-2xl overflow-hidden sm:col-span-2 flex flex-col">
               <div
                 className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
@@ -381,14 +382,24 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <ChevronRight className="size-5 text-gray-400" />
               </div>
-              <div className="grow flex items-center justify-center font-semibold">
-                {
-                  FUTSAL_POSITIONS[
-                    data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                  ]
-                }
+              <div className="grow flex flex-col gap-1 items-center justify-center px-4">
+                <span className="font-semibold">
+                  {
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </span>
+                {/* <Label className="text-muted-foreground break-keep text-center leading-tight sm:w-4/5 hidden sm:block">
+                  {
+                    POSITION_DESCRIPTION[
+                      data?.data?.position as keyof typeof POSITION_DESCRIPTION
+                    ]
+                  }
+                </Label> */}
               </div>
             </div>
+            {/* 피치 포지션 */}
             <div className="relative select-none">
               <Image
                 src="/half_pitch.svg"
@@ -397,8 +408,8 @@ const PlayerContent = ({ id }: { id: string }) => {
                 height={306}
                 className="rounded-2xl overflow-hidden"
               />
-              <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
-                <div className="w-full h-1/4 flex items-start justify-center">
+              <div className="absolute w-full h-full top-0 left-0 flex flex-col pt-3 pb-5">
+                <div className="w-full h-1/4 flex items-center justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "PIVO"
@@ -409,7 +420,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     PIVO
                   </div>
                 </div>
-                <div className="w-full h-1/4 flex justify-between items-start px-3">
+                <div className="w-full h-1/4 flex justify-between items-center px-3">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "ALA"
@@ -429,7 +440,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     ALA
                   </div>
                 </div>
-                <div className="w-full h-1/4 flex items-start justify-center">
+                <div className="w-full h-1/4 flex items-center justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
                       data.data.position === "FIXO"
