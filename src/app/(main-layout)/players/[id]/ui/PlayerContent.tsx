@@ -113,13 +113,13 @@ const PlayerContent = ({ id }: { id: string }) => {
           <div className="border-b border-gray-300 ">
             <div className="flex items-center gap-4 px-4 h-20">
               {/* 프로필 사진 */}
-              <div className="size-16 rounded-3xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-20 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
                   width={80}
                   height={80}
                   src={data?.data?.image ?? ""}
                   alt="profile_image"
-                  className="w-full h-full object-cover"
+                  className="object-cover"
                 />
               </div>
               <div className="flex flex-col">
@@ -178,7 +178,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 )} */}
               </div>
             </div>
-            <div className="mx-4 my-2 bg-gray-50 rounded-lg">
+            <div className="m-4 bg-gray-50 rounded-lg">
               <MannerBar score={Math.floor(Math.random() * 100)} />
             </div>
             {/* {data?.data?.teams[0]?.team ? (

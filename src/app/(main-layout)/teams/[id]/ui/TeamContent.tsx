@@ -224,14 +224,14 @@ const TeamContent = ({ id }: { id: string }) => {
           <div className="border-b border-gray-300">
             <div className="flex items-center gap-4 px-4 h-20">
               {/* 프로필 사진 */}
-              <div className="size-16 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {data?.data?.logoUrl ? (
                   <Image
-                    width={64}
-                    height={64}
+                    width={80}
+                    height={80}
                     src={data?.data?.logoUrl}
                     alt="profile_image"
-                    className="size-16 object-cover"
+                    className="object-cover"
                   />
                 ) : (
                   <div className="size-16 bg-gray-100 text-2xl flex items-center justify-center">
