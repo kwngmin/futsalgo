@@ -15,8 +15,8 @@ const SideNav = () => {
       <div className="hidden xl:flex xl:fixed xl:inset-y-0 xl:left-0 xl:w-72 xl:bg-white xl:border-r xl:border-gray-200">
         <div className="flex flex-col w-full">
           {/* 로고 */}
-          <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
-            <h1 className="text-xl font-bold text-blue-600">Football</h1>
+          <div className="flex items-center justify-center h-24 px-4">
+            <h1 className="text-2xl font-black tracking-tighter">FUTSALGO</h1>
           </div>
 
           {/* 데스크톱 네비게이션 */}
@@ -53,9 +53,9 @@ const SideNav = () => {
       <div className="hidden lg:flex lg:xl:hidden lg:fixed lg:inset-y-0 lg:left-0 lg:w-20 lg:bg-white lg:border-r lg:border-gray-200">
         <div className="flex flex-col w-full">
           {/* 로고 */}
-          <div className="flex items-center justify-center h-16 border-b border-gray-200">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">F</span>
+          <div className="flex items-center justify-center h-16">
+            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+              <span className="text-white font-black text-sm">F</span>
             </div>
           </div>
 

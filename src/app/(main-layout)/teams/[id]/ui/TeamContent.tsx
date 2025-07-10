@@ -9,10 +9,12 @@ import {
   ChevronRight,
   CircleX,
   EllipsisVertical,
+  List,
   Loader2,
+  MapPinned,
+  ScrollText,
   Share,
   Sparkles,
-  Text,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -512,57 +514,59 @@ const TeamContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl border mx-4">
-                <div className="flex flex-col gap-1 items-center my-4">
-                  <div className="font-semibold">
-                    {
-                      TEAM_GENDER[
-                        data?.data?.gender as keyof typeof TEAM_GENDER
-                      ]
-                    }
+              <div className="border rounded-2xl overflow-hidden mx-4">
+                <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <List className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">기본 정보</span>
                   </div>
-                  <Label className="text-muted-foreground">구분</Label>
                 </div>
-                <div className="flex flex-col gap-1 items-center my-4">
-                  <div className="font-semibold">
-                    {data.data.stats.averageAge}살
-                  </div>
-                  <Label className="text-muted-foreground">평균 연령</Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center my-4">
-                  <div className="font-semibold">
-                    {data.data.stats.averageHeight}cm
-                  </div>
-                  <Label className="text-muted-foreground">평균 키</Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center my-4">
-                  <div className="font-semibold">
-                    {data.data.recruitmentStatus === "RECRUITING"
-                      ? "모집중"
-                      : "마감"}
-                  </div>
-                  <Label className="text-muted-foreground">팀원 모집</Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center my-4">
-                  <div className="font-semibold">
-                    {data.data.members.approved.length}명
-                  </div>
-                  <Label className="text-muted-foreground">팀원 수</Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center my-4">
-                  <div className="font-semibold">
-                    {data.data.stats.professionalCount
-                      ? `${data.data.stats.professionalCount}명`
-                      : "없음"}
-                  </div>
-                  <Label className="text-muted-foreground">선수 출신</Label>
-                </div>
-                {/* <div className="flex flex-col gap-1 items-center my-3">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
+                      {
+                        TEAM_GENDER[
+                          data?.data?.gender as keyof typeof TEAM_GENDER
+                        ]
+                      }
                     </div>
-                    <Label className="text-muted-foreground">실력</Label>
-                  </div> */}
+                    <Label className="text-muted-foreground">구분</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.averageAge}살
+                    </div>
+                    <Label className="text-muted-foreground">평균 연령</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.averageHeight}cm
+                    </div>
+                    <Label className="text-muted-foreground">평균 키</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.recruitmentStatus === "RECRUITING"
+                        ? "모집중"
+                        : "마감"}
+                    </div>
+                    <Label className="text-muted-foreground">팀원 모집</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.members.approved.length}명
+                    </div>
+                    <Label className="text-muted-foreground">팀원 수</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.professionalCount
+                        ? `${data.data.stats.professionalCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">선수 출신</Label>
+                  </div>
+                </div>
               </div>
 
               {/* 통계 */}
@@ -585,12 +589,17 @@ const TeamContent = ({ id }: { id: string }) => {
           </div> */}
 
               {/* 주요 활동 지역 */}
-              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-32 mx-4 border">
-                <div className="font-semibold">
+              <div className="border rounded-2xl overflow-hidden mx-4">
+                <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <MapPinned className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">주요 활동 지역</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
                   {data.data.city}
                   {data.data.district && ` ${data.data.district}`}
                 </div>
-                <Label className="text-muted-foreground">주요 활동 지역</Label>
               </div>
 
               {/* 팀 실력 */}
@@ -619,7 +628,7 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 실력 분포 */}
-              <div className="border rounded-2xl pb-3 overflow-hidden mx-4">
+              <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
                   className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
@@ -632,7 +641,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>
-                <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+                <div className="grid grid-cols-4 gap-3 p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
                       {data.data.stats.beginnerCount
@@ -671,106 +680,15 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 소개 */}
               <div className="border rounded-2xl mx-4">
                 <div className="w-full flex items-center justify-start px-4 py-3 border-b bg-gray-50 space-x-3">
-                  <Text className={`w-5 h-5 text-gray-600`} />
+                  <ScrollText className={`w-5 h-5 text-gray-600`} />
                   <span className="font-medium">소개</span>
                 </div>
-                <p className="px-4 py-6 bg-white rounded-2xl">
+                <p className="px-4 py-6 my-3 sm:my-0">
                   {data?.data?.description ?? "소개 없음"}
                 </p>
               </div>
-
-              {/* 친선 경기 */}
-              {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-                <button
-                  onClick={() => alert("친선 경기")}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
-                >
-                  <div className="flex items-center space-x-3">
-                    <Volleyball className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">
-                      친선 경기
-                      <span className="text-gray-400 px-2 text-sm">
-                        우리 팀 vs 외부 팀
-                      </span>
-                    </span>
-                  </div>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </button>
-                <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">11</div>
-                    <Label className="text-muted-foreground">경기</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">2</div>
-                    <Label className="text-muted-foreground">득점</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">5</div>
-                    <Label className="text-muted-foreground">어시스트</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">8</div>
-                    <Label className="text-muted-foreground">출전 시간</Label>
-                  </div>
-                </div>
-              </div> */}
-              {/* <p className="text-center text-sm text-gray-500 mt-3">
-                생성일:{" "}
-                {data?.data?.createdAt
-                  ? new Date(data?.data?.createdAt).toLocaleDateString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )
-                  : ""}
-              </p> */}
             </Fragment>
           )}
-
-          {/* 연습 경기 */}
-          {/* <div className="flex flex-col bg-white rounded-2xl overflow-hidden space-y-3">
-            <button
-              onClick={() => alert("연습 경기")}
-              className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100
-              cursor-pointer"
-            >
-              <div className="flex items-center space-x-3">
-                <Users className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">
-                  팀원 • {data.data.members.length ?? 0}명
-                </span>
-              </div>
-              <ChevronRight className="size-5 text-gray-400" />
-            </button>
-            <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl mb-6 px-3">
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.beginnerCount}
-                </div>
-                <Label className="text-muted-foreground">스타터</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.amateurCount}
-                </div>
-                <Label className="text-muted-foreground">아마추어</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">{data.data.stats.aceCount}</div>
-                <Label className="text-muted-foreground">에이스</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {data.data.stats.semiproCount}
-                </div>
-                <Label className="text-muted-foreground">세미프로</Label>
-              </div>
-            </div>
-          </div> */}
         </div>
       ) : null}
     </div>

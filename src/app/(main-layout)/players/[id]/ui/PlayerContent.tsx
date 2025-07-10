@@ -10,6 +10,8 @@ import {
   ChartPie,
   ChevronRight,
   EllipsisVertical,
+  Flame,
+  List,
   Share,
   Sparkles,
 } from "lucide-react";
@@ -314,120 +316,146 @@ const PlayerContent = ({ id }: { id: string }) => {
           )}
 
           {/* 기본 정보 */}
-          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl border mx-4">
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {GENDER[data?.data?.gender as keyof typeof GENDER]}
+          <div className="border rounded-2xl overflow-hidden mx-4">
+            <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
+              <div className="flex items-center space-x-3">
+                <List className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">기본 정보</span>
               </div>
-              <Label className="text-muted-foreground">성별</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {
-                  PLAYER_BACKGROUND[
-                    data?.data
-                      ?.playerBackground as keyof typeof PLAYER_BACKGROUND
-                  ]
-                }
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {GENDER[data?.data?.gender as keyof typeof GENDER]}
+                </div>
+                <Label className="text-muted-foreground">성별</Label>
               </div>
-              <Label className="text-muted-foreground">출신</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {
+                    PLAYER_BACKGROUND[
+                      data?.data
+                        ?.playerBackground as keyof typeof PLAYER_BACKGROUND
+                    ]
+                  }
+                </div>
+                <Label className="text-muted-foreground">출신</Label>
               </div>
-              <Label className="text-muted-foreground">몸 상태</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {FOOT[data?.data?.foot as keyof typeof FOOT]}
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
+                </div>
+                <Label className="text-muted-foreground">몸 상태</Label>
               </div>
-              <Label className="text-muted-foreground">사용하는 발</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">
-                {getCurrentAge(data?.data?.birthDate as string).age}살
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {FOOT[data?.data?.foot as keyof typeof FOOT]}
+                </div>
+                <Label className="text-muted-foreground">사용하는 발</Label>
               </div>
-              <Label className="text-muted-foreground">나이</Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center my-4">
-              <div className="font-semibold">{data?.data?.height}cm</div>
-              <Label className="text-muted-foreground">키</Label>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">
+                  {getCurrentAge(data?.data?.birthDate as string).age}살
+                </div>
+                <Label className="text-muted-foreground">나이</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">{data?.data?.height}cm</div>
+                <Label className="text-muted-foreground">키</Label>
+              </div>
             </div>
           </div>
 
           {/* 선호 포지션 */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl p-3 gap-3 border mx-4">
-            <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
-              <div className="font-semibold">
-                {
-                  FUTSAL_POSITIONS[
-                    data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                  ]
-                }
+          <div className="border rounded-2xl overflow-hidden mx-4">
+            <div
+              className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              onClick={() => {
+                alert("선호 포지션");
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <Flame className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">선호 포지션</span>
               </div>
-              <Label className="text-muted-foreground">선호 포지션</Label>
+              <ChevronRight className="size-5 text-gray-400" />
             </div>
-            <div className="relative">
-              <Image
-                src="/half_pitch.svg"
-                alt="position"
-                width={306}
-                height={306}
-                className="rounded-lg overflow-hidden"
-              />
-              <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
-                <div className="w-full h-1/4 flex items-start justify-center">
-                  <div
-                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      data.data.position === "PIVO"
-                        ? "bg-white shadow-md"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    PIVO
-                  </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 p-3 gap-3">
+              <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
+                <div className="font-semibold">
+                  {/* {`${data?.data?.position} - ${
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }`} */}
+                  {
+                    FUTSAL_POSITIONS[
+                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
                 </div>
-                <div className="w-full h-1/4 flex justify-between items-start px-3">
-                  <div
-                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      data.data.position === "ALA"
-                        ? "bg-white shadow-md"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    ALA
+              </div>
+              <div className="relative">
+                <Image
+                  src="/half_pitch.svg"
+                  alt="position"
+                  width={306}
+                  height={306}
+                  className="rounded-lg overflow-hidden"
+                />
+                <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
+                  <div className="w-full h-1/4 flex items-start justify-center">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "PIVO"
+                          ? "bg-white shadow-md"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      PIVO
+                    </div>
                   </div>
-                  <div
-                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      data.data.position === "ALA"
-                        ? "bg-white shadow-md"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    ALA
+                  <div className="w-full h-1/4 flex justify-between items-start px-3">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "ALA"
+                          ? "bg-white shadow-md"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      ALA
+                    </div>
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "ALA"
+                          ? "bg-white shadow-md"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      ALA
+                    </div>
                   </div>
-                </div>
-                <div className="w-full h-1/4 flex items-start justify-center">
-                  <div
-                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      data.data.position === "FIXO"
-                        ? "bg-white shadow-md"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    FIXO
+                  <div className="w-full h-1/4 flex items-start justify-center">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "FIXO"
+                          ? "bg-white shadow-md"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      FIXO
+                    </div>
                   </div>
-                </div>
-                <div className="w-full h-1/4 flex items-end justify-center">
-                  <div
-                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      data.data.position === "GOLEIRO"
-                        ? "bg-white shadow-md"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    GOLEIRO
+                  <div className="w-full h-1/4 flex items-end justify-center">
+                    <div
+                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        data.data.position === "GOLEIRO"
+                          ? "bg-white shadow-md"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      GOLEIRO
+                    </div>
                   </div>
                 </div>
               </div>
