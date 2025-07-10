@@ -109,10 +109,11 @@ const PlayerContent = ({ id }: { id: string }) => {
       </div>
       {data ? (
         <div className="space-y-3">
+          {/* 회원 정보 */}
           <div className="border-b border-gray-300 ">
-            <div className="flex flex-col sm:flex-row items-center gap-4 px-6 pt-8">
+            <div className="flex items-center gap-4 px-4 h-20">
               {/* 프로필 사진 */}
-              <div className="size-20 bg-gray-100 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-16 rounded-3xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
                   width={80}
                   height={80}
@@ -121,7 +122,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex flex-col items-center sm:items-start">
+              <div className="flex flex-col">
                 <h1 className="text-xl font-semibold">
                   {data?.data?.nickname}
                 </h1>
@@ -177,7 +178,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                 )} */}
               </div>
             </div>
-            <MannerBar score={Math.floor(Math.random() * 100)} />
+            <div className="mx-4 my-2 bg-gray-50 rounded-lg">
+              <MannerBar score={Math.floor(Math.random() * 100)} />
+            </div>
             {/* {data?.data?.teams[0]?.team ? (
               <TeamCard team={data?.data?.teams[0]?.team} />
             ) : (

@@ -221,70 +221,10 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 팀 정보 */}
-          <div className="pt-6 relative border-b border-gray-300">
-            {/* {data.data.recruitmentStatus === "RECRUITING" ? (
-              <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
-                <div className="text-indigo-800 flex items-center text-sm gap-2 font-medium px-2 h-8 bg-indigo-500/10 rounded tracking-tight">
-                  팀원 모집중
-                </div>
-              </div>
-            ) : (
-              <div className="absolute right-4 top-0 flex rounded-b overflow-hidden">
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-8 bg-gray-100 rounded">
-                  팀원 모집 완료
-                </div>
-              </div>
-            )} */}
-            {/* <p className="text-sm text-gray-500 px-2">
-                팀 생성일:{" "}
-                {data?.data?.createdAt
-                  ? new Date(data?.data?.createdAt).toLocaleDateString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )
-                  : ""}
-              </p> */}
-            {/* {false ? (
-                <div className="text-green-800 flex items-center text-sm gap-2 font-medium px-2 h-6">
-                  <div className="rounded-full size-2 bg-green-600 " />
-                  팀전 신청 가능
-                </div>
-              ) : (
-                <div className="text-muted-foreground flex items-center text-sm gap-2 font-medium px-2 h-6">
-                  <div className="rounded-full size-2 bg-gray-400 " />
-                  자체전 위주
-                </div>
-              )} */}
-            {/* <span className="px-2 text-sm font-medium text-gray-500">
-                #{data.data.code}
-              </span> */}
-            {/* {id === session.data?.user.id ? (
-                <div className="h-7 " />
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
-                    팔로우
-                  </Button>
-                </div>
-              )} */}
-            <div className="flex items-center gap-4 px-6 h-20">
+          <div className="border-b border-gray-300">
+            <div className="flex items-center gap-4 px-4 h-20">
               {/* 프로필 사진 */}
               <div className="size-16 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                {/* <Image
-                  width={64}
-                  height={64}
-                  src={
-                    logoOptions[Math.floor(Math.random() * logoOptions.length)]
-                  }
-                  //   src={data?.data?.logoUrl ?? ""}
-                  alt="profile_image"
-                  className="w-full h-full object-cover"
-                  unoptimized
-                /> */}
                 {data?.data?.logoUrl ? (
                   <Image
                     width={64}
@@ -302,9 +242,9 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-semibold">{data?.data?.name}</h1>
-                  {/* <div className="h-5 flex items-center text-base sm:text-sm font-normal text-slate-500">
+                  <div className="h-5 flex items-center sm:text-base text-sm font-normal pb-0.5">
                     #{data.data.code}
-                  </div> */}
+                  </div>
                 </div>
                 <span className="text-sm text-muted-foreground tracking-tight">
                   {data?.data?.createdAt
