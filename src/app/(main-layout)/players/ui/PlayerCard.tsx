@@ -39,7 +39,6 @@ const PlayerCard = ({
             className="size-14 p-0.5 rounded-3xl object-cover"
             priority={isCurrentUser}
             loading={isCurrentUser ? "eager" : "lazy"}
-            sizes="56px"
           />
         </div>
       ) : (

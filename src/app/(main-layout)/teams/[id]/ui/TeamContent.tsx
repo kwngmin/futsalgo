@@ -390,7 +390,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   .map((tab) => (
                     <div
                       key={tab.value}
-                      className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
+                      className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
                         selectedTab === tab.value
                           ? "border-gray-500"
                           : "border-transparent"

@@ -60,21 +60,22 @@ const TeamMemberList = ({
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
-            className={`w-full flex items-center justify-between px-3 py-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
+            className={`w-full flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
               <Image
                 src={member.user.image || "/assets/images/default-profile.png"}
                 alt="profile"
-                width={40}
-                height={40}
-                className="rounded-full size-10 object-cover"
+                width={56}
+                height={56}
+                loading="lazy"
+                className="size-14 p-0.5 rounded-3xl object-cover"
               />
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
                 </span>
-                <span className="sm:text-sm text-gray-500 tracking-tight">
+                <span className="sm:text-sm text-muted-foreground tracking-tight">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
@@ -113,7 +114,7 @@ const TeamMemberList = ({
           >
             <button
               onClick={() => router.push(`/players/${member.userId}`)}
-              className="flex items-center justify-between gap-3 cursor-pointer sm:grow px-3 py-4 hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between gap-3 cursor-pointer sm:grow px-4 py-2 hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center space-x-3 grow">
                 <Image
@@ -121,15 +122,16 @@ const TeamMemberList = ({
                     member.user.image || "/assets/images/default-profile.png"
                   }
                   alt="profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full size-10 object-cover"
+                  width={56}
+                  height={56}
+                  loading="lazy"
+                  className="size-14 p-0.5 rounded-3xl object-cover"
                 />
                 <div className="flex flex-col items-start grow">
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                     {member.user.nickname || "닉네임 없음"}
                   </h3>
-                  <span className="sm:text-sm text-gray-500 tracking-tight">
+                  <span className="sm:text-sm text-muted-foreground tracking-tight">
                     {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                       member.user.birthDate
                         ? getCurrentAge(member.user.birthDate).success
@@ -188,15 +190,16 @@ const TeamMemberList = ({
           <button
             key={member.id}
             onClick={() => router.push(`/players/${member.userId}`)}
-            className={`w-full flex items-center justify-between px-3 py-4 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
+            className={`w-full flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
               <Image
                 src={member.user.image || "/assets/images/default-profile.png"}
                 alt="profile"
-                width={40}
-                height={40}
-                className="rounded-full size-10 object-cover"
+                width={56}
+                height={56}
+                loading="lazy"
+                className="size-14 p-0.5 rounded-3xl object-cover"
               />
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
@@ -224,7 +227,7 @@ const TeamMemberList = ({
                     </div>
                   )}
                 </span>
-                <span className="sm:text-sm text-gray-500 tracking-tight">
+                <span className="sm:text-sm text-muted-foreground tracking-tight">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
                     member.user.birthDate
                       ? getCurrentAge(member.user.birthDate).success
