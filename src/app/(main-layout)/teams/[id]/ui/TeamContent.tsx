@@ -249,7 +249,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       #{data.data.code}
                     </div>
                   </div>
-                  <span className="text-sm text-muted-foreground tracking-tight">
+                  <span className="text-muted-foreground tracking-tight">
                     {data?.data?.createdAt
                       ? `등록일: ${new Date(
                           data?.data?.createdAt

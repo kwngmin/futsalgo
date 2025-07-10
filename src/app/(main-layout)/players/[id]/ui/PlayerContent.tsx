@@ -127,7 +127,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   <h1 className="text-xl font-semibold">
                     {data?.data?.nickname}
                   </h1>
-                  <span className="text-sm text-muted-foreground tracking-tight">
+                  <span className="text-muted-foreground tracking-tight">
                     {data?.data?.createdAt
                       ? `시작일: ${new Date(
                           data?.data?.createdAt
@@ -135,7 +135,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                           year: "numeric",
                           month: "long",
                           day: "numeric",
-                        })}}`
+                        })}`
                       : "데이터 없음"}
                     {/* • ${data.data. */}
                   </span>
