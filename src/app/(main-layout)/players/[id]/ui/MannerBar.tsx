@@ -86,40 +86,35 @@ const MannerBar = ({ score }: { score: number }) => {
   const { bgColor, textColor } = transformColor(color);
 
   return (
-    <div className="flex flex-col justify-center mx-3 h-12 space-y-3 bg-gray-50 rounded-lg my-3 overflow-hidden border">
-      {/* <div className="flex flex-col justify-end px-3 h-16 space-y-3"> */}
-      <div className="flex justify-between px-3">
-        <Tooltip>
-          <TooltipTrigger className="flex items-center gap-1">
-            <Label className="font-semibold">
-              {/* <Label className="font-semibold underline underline-offset-4"> */}
-              매너 점수
-            </Label>
-            <Info className="size-4" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="text-sm font-medium">
-              매너 온도는 플레이어의 매너 점수를 나타냅니다.
-            </p>
-          </TooltipContent>
-        </Tooltip>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            {icon}
-            <span className={cn("text-sm font-semibold", textColor)}>
-              {text}
-            </span>
-          </div>
-          <div
-            className={cn(
-              "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
-              bgColor,
-              textColor
-            )}
-          >
-            {score}
-            <span className="text-xs font-medium">점</span>
-          </div>
+    <div className="flex justify-between items-center p-4 space-y-4 rounded-lg overflow-hidden">
+      <Tooltip>
+        <TooltipTrigger className="flex items-center gap-1 my-auto">
+          <Label className="font-semibold">
+            {/* <Label className="font-semibold underline underline-offset-4"> */}
+            매너 점수
+          </Label>
+          <Info className="size-4" />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="text-sm font-medium">
+            매너 온도는 플레이어의 매너 점수를 나타냅니다.
+          </p>
+        </TooltipContent>
+      </Tooltip>
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          {icon}
+          <span className={cn("text-sm font-semibold", textColor)}>{text}</span>
+        </div>
+        <div
+          className={cn(
+            "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
+            bgColor,
+            textColor
+          )}
+        >
+          {score}
+          <span className="text-xs font-medium">점</span>
         </div>
       </div>
       {/* <div className="bg-transparent rounded-t-full h-0.5 w-full flex items-stretch overflow-hidden px-2 shrink-0">

@@ -199,9 +199,9 @@ const TeamContent = ({ id }: { id: string }) => {
         </div>
       )}
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between h-16 shrink-0 px-6">
+      <div className="flex items-center justify-between h-16 shrink-0 px-3">
         <button
-          className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
+          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
@@ -210,16 +210,16 @@ const TeamContent = ({ id }: { id: string }) => {
           <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
             팔로우
           </Button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
           </button>
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-3">
+        <div className="space-y-3">
           {/* 팀 정보 */}
           <div className="pt-6 relative border-b border-gray-300">
             {/* {data.data.recruitmentStatus === "RECRUITING" ? (
@@ -320,7 +320,7 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 가입하기 */}
-            <div className="p-3">
+            <div className="p-4">
               {data.data.currentUserMembership.role === "MANAGER" ||
               data.data.currentUserMembership.role === "OWNER" ? (
                 <Button
@@ -595,7 +595,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl border">
+              <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl border mx-4">
                 <div className="flex flex-col gap-1 items-center my-4">
                   <div className="font-semibold">
                     {
@@ -668,7 +668,7 @@ const TeamContent = ({ id }: { id: string }) => {
           </div> */}
 
               {/* 주요 활동 지역 */}
-              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-32">
+              <div className="flex flex-col gap-1 bg-white rounded-2xl p-4 items-center justify-center h-32 mx-4">
                 <div className="font-semibold">
                   {data.data.city}
                   {data.data.district && ` ${data.data.district}`}
@@ -677,7 +677,7 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 팀 실력 */}
-              <div className="border rounded-2xl pb-3 overflow-hidden">
+              <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
                   className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
@@ -690,32 +690,19 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>
-                <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {`${
-                        TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
-                      } - 
+                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
+                  {`${TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]} - 
                         ${
                           TEAM_LEVEL_DESCRIPTION[
                             data.data
                               .level as keyof typeof TEAM_LEVEL_DESCRIPTION
                           ]
                         }`}
-                    </div>
-                    {/* <Label className="text-muted-foreground">
-                      {
-                        TEAM_LEVEL_DESCRIPTION[
-                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                        ]
-                      }
-                    </Label> */}
-                  </div>
                 </div>
               </div>
 
               {/* 실력 분포 */}
-              <div className="border rounded-2xl pb-3 overflow-hidden">
+              <div className="border rounded-2xl pb-3 overflow-hidden mx-4">
                 <div
                   className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
@@ -765,12 +752,12 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 소개 */}
-              <div className="border rounded-2xl pb-3">
+              <div className="border rounded-2xl mx-4">
                 <div className="w-full flex items-center justify-start px-4 py-3 border-b bg-gray-50 space-x-3">
                   <Text className={`w-5 h-5 text-gray-600`} />
                   <span className="font-medium">소개</span>
                 </div>
-                <p className="px-4 py-4 bg-white rounded-2xl">
+                <p className="px-4 py-6 bg-white rounded-2xl">
                   {data?.data?.description ?? "소개 없음"}
                 </p>
               </div>

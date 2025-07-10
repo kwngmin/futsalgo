@@ -104,7 +104,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       )}
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
       <div className="grid grid-cols-3 items-center shrink-0 px-3 h-16">
-        <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+        <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
           <ArrowLeft
             style={{ width: "24px", height: "24px" }}
             onClick={handleGoBack}
@@ -119,10 +119,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           }
         </span>
         <div className="flex items-center justify-end gap-2">
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
           </button>
         </div>
@@ -152,9 +152,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div> */}
             {/* 팀 정보 */}
-            <div className="grid grid-cols-3 px-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-3">
               {/* 호스트 */}
-              <div className="flex flex-col items-center border py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+              <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
                   팀매치 신청한 팀
                 </span> */}
@@ -177,7 +177,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </span>
               </div>
               {/* 공통 */}
-              <div className="flex flex-col items-center justify-center">
+              <div className="hidden sm:flex flex-col items-center justify-center">
                 <span className="hidden sm:h-10 sm:flex items-center justify-center font-semibold text-xl sm:text-3xl tracking-tight">
                   {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
@@ -246,7 +246,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div> */}
               </div>
               {/* 게스트 */}
-              <div className="flex flex-col items-center border py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+              <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
                   신청 받은 팀
                 </span> */}

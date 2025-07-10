@@ -84,9 +84,9 @@ const PlayerContent = ({ id }: { id: string }) => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between h-16 shrink-0 px-6 gap-3">
+      <div className="flex items-center justify-between h-16 shrink-0 px-3 gap-3">
         <button
-          className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
+          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
@@ -99,17 +99,17 @@ const PlayerContent = ({ id }: { id: string }) => {
               </Button>
             </div>
           )}
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
           </button>
         </div>
       </div>
       {data ? (
-        <div className="px-3 space-y-3">
-          <div className="bg-white rounded-2xl">
+        <div className="space-y-3">
+          <div className="border-b border-gray-300 ">
             <div className="flex flex-col sm:flex-row items-center gap-2 px-6 pt-8">
               {/* 프로필 사진 */}
               <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -179,7 +179,9 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             <MannerBar score={Math.floor(Math.random() * 100)} />
             {data?.data?.teams[0]?.team && (
-              <TeamCard team={data?.data?.teams[0]?.team} />
+              <div className="mx-4 border overflow-hidden rounded-lg">
+                <TeamCard team={data?.data?.teams[0]?.team} />
+              </div>
             )}
             {/* {data?.data?.teams[0]?.team ? (
               <TeamCard team={data?.data?.teams[0]?.team} />
@@ -304,7 +306,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 기본 정보 */}
-          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl">
+          <div className="grid grid-cols-3 gap-3 p-4 bg-white rounded-2xl border mx-4">
             <div className="flex flex-col gap-1 items-center my-4">
               <div className="font-semibold">
                 {GENDER[data?.data?.gender as keyof typeof GENDER]}
@@ -347,7 +349,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 선호 포지션 */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl p-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 bg-white rounded-2xl p-3 gap-3 border mx-4">
             <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
               <div className="font-semibold">
                 {
@@ -425,9 +427,9 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 실력 */}
-          <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+          <div className="border rounded-2xl overflow-hidden mx-4">
             <div
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
               onClick={() => {
                 alert("실력");
               }}
@@ -438,30 +440,19 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <ChevronRight className="size-5 text-gray-400" />
             </div>
-            <div className="grid grid-cols-1 gap-3 bg-white rounded-2xl p-4">
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">
-                  {
-                    SKILL_LEVEL_OPTIONS.find(
-                      (option) => option.value === data.data.skillLevel
-                    )?.label
-                  }
-                </div>
-                {/* <Label className="text-muted-foreground">
-                      {
-                        TEAM_LEVEL_DESCRIPTION[
-                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                        ]
-                      }
-                    </Label> */}
-              </div>
+            <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
+              {
+                SKILL_LEVEL_OPTIONS.find(
+                  (option) => option.value === data.data.skillLevel
+                )?.label
+              }
             </div>
           </div>
 
           {/* 경기 통계 */}
-          <div className="bg-white rounded-2xl pb-3 overflow-hidden">
+          <div className="border rounded-2xl overflow-hidden mx-4">
             <div
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
               onClick={() => {
                 alert("통계");
               }}
