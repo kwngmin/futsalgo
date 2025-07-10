@@ -242,7 +242,7 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-semibold">{data?.data?.name}</h1>
-                  <div className="h-5 flex items-center sm:text-base text-sm font-normal pb-0.5">
+                  <div className="h-5 flex items-center font-normal pb-0.5">
                     #{data.data.code}
                   </div>
                 </div>
