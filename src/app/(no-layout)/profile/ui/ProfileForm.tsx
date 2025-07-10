@@ -94,7 +94,7 @@ const ProfileForm = ({ data }: { data: User }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-white rounded-2xl pt-6"
+      className="border mx-4 space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
       {/* 몸 상태 */}
       <div className="space-y-3">
@@ -188,6 +188,7 @@ const ProfileForm = ({ data }: { data: User }) => {
           type="submit"
           disabled={isLoading}
           className="w-full font-semibold text-base"
+          size="lg"
         >
           {isLoading ? (
             <>
@@ -203,10 +204,10 @@ const ProfileForm = ({ data }: { data: User }) => {
         <Button
           type="button"
           disabled={isLoading}
-          className="w-full font-medium text-base text-muted-foreground"
+          className="w-full font-medium text-base h-11"
           onClick={() => router.push("/more")}
           variant="secondary"
-          size="sm"
+          size="lg"
         >
           취소
         </Button>

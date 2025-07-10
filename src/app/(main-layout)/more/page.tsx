@@ -103,9 +103,9 @@ const MorePage = () => {
           <Search className="w-5 h-5" />
         </button> */}
       </div>
-      <div className="px-4 space-y-3">
+      <div className="space-y-3">
         {!session.data && (
-          <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
+          <div className="text-center py-8 bg-gray-200 rounded-2xl p-4 mx-4 mb-6">
             <h3 className="font-semibold text-gray-900">
               원활한 서비스 이용을 위해 로그인이 필요합니다
             </h3>
@@ -128,18 +128,19 @@ const MorePage = () => {
           .map((section, sectionIndex) => (
             <div key={sectionIndex} className="mb-6">
               {section.category && (
-                <h3 className="text-sm font-medium mb-3 px-2 text-gray-600">
+                <h3 className="text-sm font-medium mb-3 px-4 text-gray-600">
                   {section.category}
                 </h3>
               )}
-              <div className="bg-white rounded-lg overflow-hidden border">
+              <div className="">
                 {section.items.map((item, itemIndex) => (
                   <button
                     key={itemIndex}
                     onClick={item.action}
-                    className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors ${
-                      itemIndex !== section.items.length - 1 ? `border-b` : ""
-                    }`}
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 sm:hover:rounded-lg transition-colors cursor-pointer"
+                    // className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 hover:rounded-lg transition-colors cursor-pointer ${
+                    //   itemIndex !== section.items.length - 1 ? `border-b` : ""
+                    // }`}
                   >
                     <div className="flex items-center space-x-3">
                       <item.icon className="size-5 text-gray-600" />
@@ -154,26 +155,18 @@ const MorePage = () => {
 
         {/* 로그아웃 버튼 */}
         {session.data && (
-          <div
-            className={`${
-              false ? "bg-gray-800" : "bg-white"
-            } rounded-lg overflow-hidden`}
+          <button
+            onClick={() => {
+              setIsLoading(true);
+              signOut();
+            }}
+            className="w-full flex items-center justify-between px-4 py-3 cursor-pointer sm:hover:bg-red-500/5 transition-colors text-red-500"
           >
-            <button
-              onClick={() => {
-                setIsLoading(true);
-                signOut();
-              }}
-              className={`w-full flex items-center justify-between px-4 py-3 hover:${
-                false ? "bg-red-900" : "bg-red-50"
-              } transition-colors text-red-500`}
-            >
-              <div className="flex items-center space-x-3">
-                <LogOut className="w-5 h-5" />
-                <span className="font-medium">로그아웃</span>
-              </div>
-            </button>
-          </div>
+            <div className="flex items-center space-x-3">
+              <LogOut className="w-5 h-5" />
+              <span className="font-medium">로그아웃</span>
+            </div>
+          </button>
         )}
       </div>
     </div>
