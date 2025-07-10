@@ -110,7 +110,7 @@ const PlayerContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 회원 정보 */}
-          <div className="border-b border-gray-300 ">
+          <div className="border-b border-gray-300 space-y-4">
             <div className="flex items-center gap-4 px-4 h-20">
               {/* 프로필 사진 */}
               <div className="size-20 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -178,7 +178,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 )} */}
               </div>
             </div>
-            <div className="m-4 bg-gray-50 rounded-lg">
+            <div className="mx-4">
               <MannerBar score={Math.floor(Math.random() * 100)} />
             </div>
             {/* {data?.data?.teams[0]?.team ? (

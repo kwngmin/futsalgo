@@ -86,10 +86,10 @@ const MannerBar = ({ score }: { score: number }) => {
   const { bgColor, textColor } = transformColor(color);
 
   return (
-    <div className="flex justify-between items-center p-4 space-y-4 rounded-lg overflow-hidden">
+    <div className="flex justify-between items-center h-12 px-4 space-y-4 rounded-lg overflow-hidden border">
       <Tooltip>
         <TooltipTrigger className="flex items-center gap-1 my-auto">
-          <Label className="font-semibold">
+          <Label className="font-medium text-base">
             {/* <Label className="font-semibold underline underline-offset-4"> */}
             매너 점수
           </Label>
