@@ -8,9 +8,9 @@ const SkeletonTeamCard = ({
   description?: string;
 }) => {
   return (
-    <div className="px-3 py-4 border-t border-gray-100 first:border-t-0">
+    <div className="px-4 py-2 border-t border-gray-100 first:border-t-0">
       <div className="flex gap-3">
-        <div className="size-12 bg-gray-200 rounded-lg animate-pulse" />
+        <div className="size-14 bg-gray-200 rounded-lg animate-pulse" />
         <div className="flex-1 flex flex-col justify-center space-y-3">
           <div
             className={cn(

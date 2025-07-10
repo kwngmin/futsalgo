@@ -2,7 +2,7 @@ import SkeletonTeamCard from "./SkeletonTeamCard";
 
 const SkeletonTeamContent = () => {
   return (
-    <div className="flex flex-col bg-white rounded-2xl mx-3">
+    <div className="flex flex-col">
       <SkeletonTeamCard teamName="w-36" description="w-42" />
       <SkeletonTeamCard />
       <SkeletonTeamCard teamName="w-32" description="w-56" />

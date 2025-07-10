@@ -408,7 +408,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 height={306}
                 className="rounded-2xl overflow-hidden"
               />
-              <div className="absolute w-full h-full top-0 left-0 flex flex-col pt-3 pb-5">
+              <div className="absolute w-full h-full top-0 left-0 flex flex-col py-4">
                 <div className="w-full h-1/4 flex items-center justify-center">
                   <div
                     className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
