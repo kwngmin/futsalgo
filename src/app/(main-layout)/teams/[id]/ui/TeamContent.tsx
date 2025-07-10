@@ -221,9 +221,9 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 팀 정보 */}
-          <div className="border-b border-gray-300 space-y-3">
-            <div className="space-y-4 px-4">
-              <div className="flex items-center gap-4 h-20">
+          <div className="border-b border-gray-300 space-y-2">
+            <div className="space-y-2 px-4">
+              <div className="flex items-center gap-4 h-24">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
