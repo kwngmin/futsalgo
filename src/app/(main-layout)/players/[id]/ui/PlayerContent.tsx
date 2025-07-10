@@ -11,6 +11,7 @@ import {
   ChevronRight,
   EllipsisVertical,
   Share,
+  Shirt,
   Sparkles,
 } from "lucide-react";
 import {
@@ -29,6 +30,7 @@ import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { useState } from "react";
+import { TShirtIcon } from "@phosphor-icons/react";
 
 const tabs = [
   {
@@ -301,9 +303,12 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div> */}
 
           {/* 팀 */}
-          {data?.data?.teams[0]?.team && (
-            <div className="mx-4 border overflow-hidden rounded-2xl">
-              <TeamCard team={data?.data?.teams[0]?.team} />
+
+          {data?.data?.teams[0]?.team ? (
+            <TeamCard team={data?.data?.teams[0]?.team} />
+          ) : (
+            <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-medium text-muted-foreground">
+              소속 팀이 존재하지 않습니다
             </div>
           )}
 
