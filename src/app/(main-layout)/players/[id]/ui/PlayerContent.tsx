@@ -110,9 +110,9 @@ const PlayerContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           <div className="border-b border-gray-300 ">
-            <div className="flex flex-col sm:flex-row items-center gap-2 px-6 pt-8">
+            <div className="flex flex-col sm:flex-row items-center gap-4 px-6 pt-8">
               {/* 프로필 사진 */}
-              <div className="size-20 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="size-20 bg-gray-100 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <Image
                   width={80}
                   height={80}
