@@ -104,7 +104,7 @@ const PlayersPage = () => {
         <div className="space-y-3">
           {/* 내 프로필 섹션 */}
           {isLoggedIn && data?.data?.user ? (
-            <div className="space-y-3 mx-4 bg-gray-100 rounded-2xl">
+            <div className="space-y-3 mx-4 bg-blue-50/50 rounded-2xl">
               <PlayerCard
                 player={data?.data?.user}
                 isCurrentUser={true}
