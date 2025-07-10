@@ -119,7 +119,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   height={80}
                   src={data?.data?.image ?? ""}
                   alt="profile_image"
-                  className="object-cover"
+                  className="object-cover scale-105"
                 />
               </div>
               <div className="flex flex-col">
