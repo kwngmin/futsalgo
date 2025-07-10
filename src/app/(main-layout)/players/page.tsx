@@ -104,22 +104,19 @@ const PlayersPage = () => {
         <div className="space-y-3">
           {/* 내 프로필 섹션 */}
           {isLoggedIn && data?.data?.user ? (
-            <div className="space-y-3 mx-4 bg-blue-50/50 rounded-2xl">
-              <PlayerCard
-                player={data?.data?.user}
-                isCurrentUser={true}
-                teamName={data?.data?.user?.teams[0]?.team?.name}
-                teamLogoUrl={
-                  data?.data?.user?.teams[0]?.team?.logoUrl || undefined
-                }
-              />
-            </div>
+            <PlayerCard
+              player={data?.data?.user}
+              isCurrentUser={true}
+              teamName={data?.data?.user?.teams[0]?.team?.name}
+              teamLogoUrl={
+                data?.data?.user?.teams[0]?.team?.logoUrl || undefined
+              }
+            />
           ) : null}
 
           {/* 필터 섹션 */}
-          <div className="flex flex-col gap-2">
-            {/* 필터 칩들 */}
-            {/* <div className="flex items-center gap-2 justify-between">
+          {/* <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 justify-between">
               <div className="flex gap-1 bg-gray-100 rounded-full p-1">
                 {filterOptions.map((option) => (
                   <button
@@ -135,19 +132,19 @@ const PlayersPage = () => {
                   </button>
                 ))}
               </div>
-            </div> */}
-
-            {/* 회원 목록 */}
-            <div className="bg-white rounded-2xl">
-              {filteredPlayers?.map((player) => (
-                <PlayerCard
-                  key={player.id}
-                  player={player}
-                  teamName={player.teams[0]?.team?.name}
-                  teamLogoUrl={player.teams[0]?.team?.logoUrl || undefined}
-                />
-              ))}
             </div>
+          </div> */}
+
+          {/* 회원 목록 */}
+          <div className="bg-white rounded-2xl">
+            {filteredPlayers?.map((player) => (
+              <PlayerCard
+                key={player.id}
+                player={player}
+                teamName={player.teams[0]?.team?.name}
+                teamLogoUrl={player.teams[0]?.team?.logoUrl || undefined}
+              />
+            ))}
           </div>
 
           {/* 회원이 없는 경우 */}

@@ -59,15 +59,12 @@ const TeamsPage = () => {
       </div>
       {data ? (
         <div className="space-y-3">
+          {/* 내 팀 섹션 */}
           {isLoggedIn ? (
             data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
-              <div className="space-y-3">
-                {data?.data?.myTeams.map((team) => (
-                  <div key={team.id} className="mx-4 bg-blue-50/50 rounded-2xl">
-                    <TeamCard team={team} />
-                  </div>
-                ))}
-              </div>
+              data?.data?.myTeams.map((team) => (
+                <TeamCard team={team} key={team.id} />
+              ))
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
                 <div className="flex gap-2 justify-center">
@@ -88,9 +85,9 @@ const TeamsPage = () => {
             )
           ) : null}
 
-          <div className="flex flex-col gap-2">
-            {/* 하단: 필터 칩들 */}
-            {/* <div className="flex items-center gap-2 justify-between hidden">
+          {/* 필터 섹션 */}
+          {/* <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 justify-between hidden">
               <div className="flex gap-1 bg-gray-100 rounded-full p-1">
                 {filterOptions.map((option) => (
                   <button
@@ -106,13 +103,14 @@ const TeamsPage = () => {
                   </button>
                 ))}
               </div>
-            </div> */}
-
-            <div className="bg-white rounded-2xl">
-              {data?.data?.teams.map((team) => (
-                <TeamCard key={team.id} team={team} />
-              ))}
             </div>
+          </div> */}
+
+          {/* 팀 목록 */}
+          <div className="bg-white rounded-2xl">
+            {data?.data?.teams.map((team) => (
+              <TeamCard key={team.id} team={team} />
+            ))}
           </div>
         </div>
       ) : (
