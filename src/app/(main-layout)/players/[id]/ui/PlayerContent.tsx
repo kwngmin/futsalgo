@@ -11,7 +11,6 @@ import {
   ChevronRight,
   EllipsisVertical,
   Share,
-  Shirt,
   Sparkles,
 } from "lucide-react";
 import {
@@ -30,7 +29,6 @@ import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { useState } from "react";
-import { TShirtIcon } from "@phosphor-icons/react";
 
 const tabs = [
   {
