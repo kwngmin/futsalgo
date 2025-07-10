@@ -1,6 +1,6 @@
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER } from "@/entities/user/model/constants";
-import { Separator } from "@/shared/components/ui/separator";
+// import { Separator } from "@/shared/components/ui/separator";
 import { User } from "@prisma/client";
 // import { Mars, Venus } from "lucide-react";
 import Image from "next/image";
@@ -57,8 +57,8 @@ const PlayerCard = ({
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {player.nickname}
           </h3>
-          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight text-slate-500 gap-2">
-            <Separator orientation="vertical" />
+          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight text-muted-foreground gap-2">
+            {/* <Separator orientation="vertical" /> */}
             <div className="flex items-center gap-1">
               {/* {player.birthDate
                 ? age.success
@@ -112,7 +112,7 @@ const PlayerCard = ({
           {teamName || "소속 팀 없음"}
         </p> */}
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-          <div className="w-full sm:text-sm font-medium tracking-tight flex items-center gap-1 text-muted-foreground">
+          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1">
             {teamLogoUrl ? (
               <div className="size-5 sm:size-4 text-gray-700">
                 <Image
