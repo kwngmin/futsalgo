@@ -588,20 +588,6 @@ const TeamContent = ({ id }: { id: string }) => {
             </Select>
           </div> */}
 
-              {/* 주요 활동 지역 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
-                <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
-                  <div className="flex items-center space-x-3">
-                    <MapPinned className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">주요 활동 지역</span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
-                  {data.data.city}
-                  {data.data.district && ` ${data.data.district}`}
-                </div>
-              </div>
-
               {/* 팀 실력 */}
               <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
@@ -674,6 +660,20 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                     <Label className="text-muted-foreground">세미프로</Label>
                   </div>
+                </div>
+              </div>
+
+              {/* 주요 활동 지역 */}
+              <div className="border rounded-2xl overflow-hidden mx-4">
+                <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <MapPinned className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">주요 활동 지역</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
+                  {data.data.city}
+                  {data.data.district && ` ${data.data.district}`}
                 </div>
               </div>
 

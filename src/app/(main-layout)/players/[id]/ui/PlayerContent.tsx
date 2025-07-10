@@ -367,95 +367,88 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 선호 포지션 */}
-          <div className="border rounded-2xl overflow-hidden mx-4">
-            <div
-              className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-              onClick={() => {
-                alert("선호 포지션");
-              }}
-            >
-              <div className="flex items-center space-x-3">
-                <Flame className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">선호 포지션</span>
-              </div>
-              <ChevronRight className="size-5 text-gray-400" />
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 p-3 gap-3">
-              <div className="sm:col-span-2 flex flex-col gap-1 items-center justify-center my-3">
-                <div className="font-semibold">
-                  {/* {`${data?.data?.position} - ${
-                    FUTSAL_POSITIONS[
-                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }`} */}
-                  {
-                    FUTSAL_POSITIONS[
-                      data?.data?.position as keyof typeof FUTSAL_POSITIONS
-                    ]
-                  }
+          <div className="grid grid-cols-2 sm:grid-cols-3 mx-4 gap-2">
+            <div className="border rounded-2xl overflow-hidden sm:col-span-2 flex flex-col">
+              <div
+                className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                onClick={() => {
+                  alert("선호 포지션");
+                }}
+              >
+                <div className="flex items-center space-x-3">
+                  <Flame className={`w-5 h-5 text-gray-600`} />
+                  <span className="font-medium">선호 포지션</span>
                 </div>
+                <ChevronRight className="size-5 text-gray-400" />
               </div>
-              <div className="relative">
-                <Image
-                  src="/half_pitch.svg"
-                  alt="position"
-                  width={306}
-                  height={306}
-                  className="rounded-lg overflow-hidden"
-                />
-                <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
-                  <div className="w-full h-1/4 flex items-start justify-center">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "PIVO"
-                          ? "bg-white shadow-md"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      PIVO
-                    </div>
+              <div className="grow flex items-center justify-center font-semibold">
+                {
+                  FUTSAL_POSITIONS[
+                    data?.data?.position as keyof typeof FUTSAL_POSITIONS
+                  ]
+                }
+              </div>
+            </div>
+            <div className="relative">
+              <Image
+                src="/half_pitch.svg"
+                alt="position"
+                width={306}
+                height={306}
+                className="rounded-2xl overflow-hidden"
+              />
+              <div className="absolute w-full h-full top-0 left-0 flex flex-col py-2">
+                <div className="w-full h-1/4 flex items-start justify-center">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "PIVO"
+                        ? "bg-white shadow-md"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    PIVO
                   </div>
-                  <div className="w-full h-1/4 flex justify-between items-start px-3">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "ALA"
-                          ? "bg-white shadow-md"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      ALA
-                    </div>
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "ALA"
-                          ? "bg-white shadow-md"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      ALA
-                    </div>
+                </div>
+                <div className="w-full h-1/4 flex justify-between items-start px-3">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "ALA"
+                        ? "bg-white shadow-md"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    ALA
                   </div>
-                  <div className="w-full h-1/4 flex items-start justify-center">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "FIXO"
-                          ? "bg-white shadow-md"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      FIXO
-                    </div>
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "ALA"
+                        ? "bg-white shadow-md"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    ALA
                   </div>
-                  <div className="w-full h-1/4 flex items-end justify-center">
-                    <div
-                      className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
-                        data.data.position === "GOLEIRO"
-                          ? "bg-white shadow-md"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      GOLEIRO
-                    </div>
+                </div>
+                <div className="w-full h-1/4 flex items-start justify-center">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "FIXO"
+                        ? "bg-white shadow-md"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    FIXO
+                  </div>
+                </div>
+                <div className="w-full h-1/4 flex items-end justify-center">
+                  <div
+                    className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                      data.data.position === "GOLEIRO"
+                        ? "bg-white shadow-md"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    GOLEIRO
                   </div>
                 </div>
               </div>
