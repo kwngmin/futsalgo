@@ -368,7 +368,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 선호 포지션 */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 mx-4 gap-3 sm:h-[212px]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 mx-4 gap-3">
             <div className="border rounded-2xl overflow-hidden sm:col-span-2 flex flex-col">
               <div
                 className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
