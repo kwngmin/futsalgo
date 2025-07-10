@@ -25,9 +25,7 @@ const PlayerCard = ({
 
   return (
     <div
-      className={`bg-white rounded-2xl p-3 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2 ${
-        isCurrentUser ? "ring ring-border" : ""
-      }`}
+      className="p-4 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2"
       onClick={() => router.push(`/players/${player.id}`)}
     >
       {/* 프로필 이미지 */}
