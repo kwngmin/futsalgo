@@ -221,47 +221,49 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 팀 정보 */}
-          <div className="border-b border-gray-300 space-y-4">
-            <div className="flex items-center gap-4 px-4 h-20">
-              {/* 프로필 사진 */}
-              <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                {data?.data?.logoUrl ? (
-                  <Image
-                    width={80}
-                    height={80}
-                    src={data?.data?.logoUrl}
-                    alt="profile_image"
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="size-16 bg-gray-100 text-2xl flex items-center justify-center">
-                    {data?.data?.name.charAt(0)}
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-semibold">{data?.data?.name}</h1>
-                  <div className="h-5 flex items-center font-normal pb-0.5">
-                    #{data.data.code}
-                  </div>
+          <div className="border-b border-gray-300 space-y-3">
+            <div className="space-y-4 px-4">
+              <div className="flex items-center gap-4 h-20">
+                {/* 프로필 사진 */}
+                <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {data?.data?.logoUrl ? (
+                    <Image
+                      width={80}
+                      height={80}
+                      src={data?.data?.logoUrl}
+                      alt="profile_image"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="size-16 bg-gray-100 text-2xl flex items-center justify-center">
+                      {data?.data?.name.charAt(0)}
+                    </div>
+                  )}
                 </div>
-                <span className="text-sm text-muted-foreground tracking-tight">
-                  {data?.data?.createdAt
-                    ? `등록일: ${new Date(
-                        data?.data?.createdAt
-                      ).toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}`
-                    : "데이터 없음"}
-                </span>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-semibold">
+                      {data?.data?.name}
+                    </h1>
+                    <div className="h-5 flex items-center font-normal pb-0.5">
+                      #{data.data.code}
+                    </div>
+                  </div>
+                  <span className="text-sm text-muted-foreground tracking-tight">
+                    {data?.data?.createdAt
+                      ? `등록일: ${new Date(
+                          data?.data?.createdAt
+                        ).toLocaleDateString("ko-KR", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}`
+                      : "데이터 없음"}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* 가입하기 */}
-            <div className="px-4">
+              {/* 가입하기 */}
               {data.data.currentUserMembership.role === "MANAGER" ||
               data.data.currentUserMembership.role === "OWNER" ? (
                 <Button

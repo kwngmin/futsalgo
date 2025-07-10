@@ -97,13 +97,13 @@ const MorePage = () => {
         </div>
       )}
       {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-6 h-16 shrink-0">
+      <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <h1 className="text-2xl font-bold">더보기</h1>
         {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
           <Search className="w-5 h-5" />
         </button> */}
       </div>
-      <div className="px-3 space-y-3">
+      <div className="px-4 space-y-3">
         {!session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <h3 className="font-semibold text-gray-900">
@@ -132,15 +132,13 @@ const MorePage = () => {
                   {section.category}
                 </h3>
               )}
-              <div className="bg-white rounded-lg overflow-hidden">
+              <div className="bg-white rounded-lg overflow-hidden border">
                 {section.items.map((item, itemIndex) => (
                   <button
                     key={itemIndex}
                     onClick={item.action}
                     className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors ${
-                      itemIndex !== section.items.length - 1
-                        ? `border-b border-gray-100`
-                        : ""
+                      itemIndex !== section.items.length - 1 ? `border-b` : ""
                     }`}
                   >
                     <div className="flex items-center space-x-3">
@@ -158,7 +156,7 @@ const MorePage = () => {
         {session.data && (
           <div
             className={`${
-              false ? "bg-gray-800" : "bg-white"
+              false ? "bg-gray-800" : "bg-muted"
             } rounded-lg overflow-hidden`}
           >
             <button

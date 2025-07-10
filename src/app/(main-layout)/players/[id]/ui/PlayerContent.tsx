@@ -110,35 +110,36 @@ const PlayerContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 회원 정보 */}
-          <div className="border-b border-gray-300 space-y-4">
-            <div className="flex items-center gap-4 px-4 h-20">
-              {/* 프로필 사진 */}
-              <div className="size-20 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <Image
-                  width={80}
-                  height={80}
-                  src={data?.data?.image ?? ""}
-                  alt="profile_image"
-                  className="object-cover scale-105"
-                />
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-xl font-semibold">
-                  {data?.data?.nickname}
-                </h1>
-                <span className="text-sm text-muted-foreground tracking-tight">
-                  {data?.data?.createdAt
-                    ? `시작일: ${new Date(
-                        data?.data?.createdAt
-                      ).toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}}`
-                    : "데이터 없음"}
-                  {/* • ${data.data. */}
-                </span>
-                {/* {data.data.teams && data.data.teams.length > 0 ? (
+          <div className="border-b border-gray-300 space-y-3">
+            <div className="space-y-4 px-4">
+              <div className="flex items-center gap-4 h-20">
+                {/* 프로필 사진 */}
+                <div className="size-20 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <Image
+                    width={80}
+                    height={80}
+                    src={data?.data?.image ?? ""}
+                    alt="profile_image"
+                    className="object-cover scale-105"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <h1 className="text-xl font-semibold">
+                    {data?.data?.nickname}
+                  </h1>
+                  <span className="text-sm text-muted-foreground tracking-tight">
+                    {data?.data?.createdAt
+                      ? `시작일: ${new Date(
+                          data?.data?.createdAt
+                        ).toLocaleDateString("ko-KR", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}}`
+                      : "데이터 없음"}
+                    {/* • ${data.data. */}
+                  </span>
+                  {/* {data.data.teams && data.data.teams.length > 0 ? (
                   <button
                     onClick={() =>
                       router.push(`/teams/${data.data.teams[0].team.id}`)
@@ -176,9 +177,8 @@ const PlayerContent = ({ id }: { id: string }) => {
                     소속 팀 없음
                   </span>
                 )} */}
+                </div>
               </div>
-            </div>
-            <div className="mx-4">
               <MannerBar score={Math.floor(Math.random() * 100)} />
             </div>
             {/* {data?.data?.teams[0]?.team ? (
