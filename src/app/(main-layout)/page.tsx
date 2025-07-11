@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-// import { MapPinSimpleIcon } from "@phosphor-icons/react";
+import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
 // import { Countdown } from "./schedule/[id]/ui/CountDown";
@@ -71,20 +71,26 @@ const HomePage = () => {
 
           return (
             <div className="" key={schedule.id}>
-              <div className="flex items-center border-b px-4 pb-2 gap-2">
-                {/* <MapPinSimpleIcon
-                  className="text-gray-600 mr-3"
-                  size={20}
-                  weight="fill"
-                /> */}
-                <span className="font-bold">
-                  {schedule.startTime?.toLocaleDateString("ko-KR", {
-                    // year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-                <span className="text-sm font-medium">{schedule.place}</span>
+              <div className="flex justify-between items-center border-b px-4 pb-2 gap-1 tracking-tight">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold">
+                    {schedule.startTime?.toLocaleDateString("ko-KR", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPinSimpleIcon
+                    className="text-gray-600 ml-3"
+                    size={18}
+                    weight="fill"
+                  />
+                  <span className="text-sm font-medium">{schedule.place}</span>
+                </div>
               </div>
 
               {schedule.matchType !== "TEAM" ? (
