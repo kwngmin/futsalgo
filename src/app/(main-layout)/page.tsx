@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { MapPinSimpleIcon } from "@phosphor-icons/react";
+// import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
 // import { Countdown } from "./schedule/[id]/ui/CountDown";
@@ -32,20 +32,19 @@ const HomePage = () => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-bold">홈</h1>
+        <div className="flex gap-3">
+          <h1 className="text-2xl font-bold">홈</h1>
+          <h1 className="text-2xl font-bold opacity-30">지난 경기</h1>
+        </div>
         {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
           <Search className="w-5 h-5" />
         </button> */}
       </div>
       {/* MatchesPage */}
-      <div className="px-4 space-y-3">
-        {session.data && (
+      <div className="space-y-6">
+        {/* {session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-            <h3 className="font-semibold text-gray-900">
-              {/* 원활한 서비스 이용을 위해 로그인이 필요합니다 */}
-            </h3>
             <div className="flex gap-2 justify-center">
-              {/* <div className="flex gap-2 justify-center mt-3"> */}
               <button
                 className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
                 onClick={() => router.push("/schedule/new")}
@@ -54,7 +53,7 @@ const HomePage = () => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
         {data?.data?.hostSchedules.map((schedule) => {
           // const timeRange = formatTimeRange({
           //   time: {
@@ -71,28 +70,30 @@ const HomePage = () => {
             .split(" ");
 
           return (
-            <div
-              className="overflow-hidden bg-white rounded-2xl border hover:shadow-lg shadow-accent transition-shadow duration-300"
-              key={schedule.id}
-            >
-              <div
-                className="flex items-center h-11 border-b px-3 bg-gray-50 cursor-pointer"
-                onClick={() => handleScheduleClick(schedule.id)}
-              >
-                <MapPinSimpleIcon
+            <div className="" key={schedule.id}>
+              <div className="flex items-center border-b px-4 pb-2 gap-2">
+                {/* <MapPinSimpleIcon
                   className="text-gray-600 mr-3"
                   size={20}
                   weight="fill"
-                />
-                <span className="font-medium">{schedule.place}</span>
+                /> */}
+                <span className="font-bold">
+                  {schedule.startTime?.toLocaleDateString("ko-KR", {
+                    // year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="text-sm font-medium">{schedule.place}</span>
               </div>
 
               {schedule.matchType !== "TEAM" ? (
                 <div className="flex flex-col sm:flex-row sm:items-stretch">
                   <div
-                    className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer"
+                    className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer bg-gray-50"
                     onClick={() => handleScheduleClick(schedule.id)}
                   >
+                    {/* 주최팀 */}
                     <div className="flex flex-col items-end gap-2">
                       {/* <div>HOME</div> */}
                       <div className="flex items-center gap-1">
@@ -114,7 +115,6 @@ const HomePage = () => {
                         {/* <div>HOME</div> */}
                       </div>
                     </div>
-                    {/* <div className="font-bold">VS</div> */}
                     {/* 공통 */}
                     <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center">
                       <span className="h-4 flex items-center justify-center font-medium text-sm sm:text-base tracking-tight text-muted-foreground">
@@ -174,6 +174,7 @@ const HomePage = () => {
                   VS
                 </div> */}
                     </div>
+                    {/* 초청팀 */}
                     <div className="flex flex-col gap-2">
                       {/* <div>AWAY</div> */}
                       <div className="flex items-center gap-1">
@@ -197,12 +198,13 @@ const HomePage = () => {
                       </div>
                     </div>
                   </div>
+                  {/* 참가 여부 */}
                   {schedule.attendances
                     .map((attendance) => attendance.userId)
                     .includes(session.data?.user?.id ?? "") ? (
                     <div>hello</div>
                   ) : (
-                    <div className="w-full sm:w-32 grid grid-cols-2 sm:flex flex-col border-t sm:border-t-0 sm:border-l h-11 sm:h-full *:cursor-pointer">
+                    <div className="w-full sm:w-32 grid grid-cols-2 sm:flex flex-col border-y sm:border-t-0 sm:border-l h-11 sm:h-full *:cursor-pointer">
                       <button className="sm:h-10 font-semibold text-blue-600 hover:bg-blue-600/5">
                         참가
                       </button>
