@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { MapPinSimpleIcon } from "@phosphor-icons/react";
+// import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
 // import { Countdown } from "./schedule/[id]/ui/CountDown";
@@ -41,7 +41,7 @@ const HomePage = () => {
         </button> */}
       </div>
       {/* MatchesPage */}
-      <div className="space-y-6">
+      <div className="space-y-9">
         {/* {session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <div className="flex gap-2 justify-center">
@@ -79,17 +79,18 @@ const HomePage = () => {
                       day: "numeric",
                     })}
                   </span>
-                  <span className="text-muted-foreground">
-                    {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
-                  </span>
+                  <span className="font-medium">{schedule.place}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <MapPinSimpleIcon
+                  {/* <MapPinSimpleIcon
                     className="text-gray-600 ml-3"
                     size={18}
                     weight="fill"
-                  />
-                  <span className="text-sm font-medium">{schedule.place}</span>
+                  /> */}
+
+                  <span className="text-sm text-muted-foreground">
+                    {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
+                  </span>
                 </div>
               </div>
 
@@ -204,8 +205,24 @@ const HomePage = () => {
                       </div>
                     </div>
                   </div>
+
                   {/* 참가 여부 */}
-                  {schedule.attendances
+                  <div className="grid grid-cols-4 h-8 items-center gap-2">
+                    <div className="text-sm font-medium text-center">
+                      참가 0
+                    </div>
+                    <div className="text-sm font-medium text-center">
+                      불참 0
+                    </div>
+                    <div className="text-sm font-medium text-center">
+                      미정 0
+                    </div>
+                    <div className="text-sm font-medium text-center">
+                      결정완료
+                    </div>
+                  </div>
+
+                  {/* {schedule.attendances
                     .map((attendance) => attendance.userId)
                     .includes(session.data?.user?.id ?? "") ? (
                     <div>hello</div>
@@ -218,7 +235,7 @@ const HomePage = () => {
                         불참
                       </button>
                     </div>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 schedule.guestTeam?.name
