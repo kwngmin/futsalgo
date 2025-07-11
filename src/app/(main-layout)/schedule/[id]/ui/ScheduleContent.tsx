@@ -151,9 +151,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
             {/* 팀 정보 */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-28 sm:gap-3 relative">
+            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-24 sm:gap-3 relative">
               {/* 주최팀 */}
-              <div className="flex flex-col items-center border rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+              <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-indigo-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
                   <div className="size-3 bg-indigo-500 rounded-full" />
                   주최팀
@@ -207,7 +207,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div>
               </div>
               {/* 초청팀 */}
-              <div className="flex flex-col items-center border rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+              <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-emerald-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
                   <div className="size-3 bg-emerald-500 rounded-full" />
                   초청팀
