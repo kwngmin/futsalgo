@@ -30,7 +30,7 @@ import TeamMemberList from "./TeamMemberList";
 
 const tabs = [
   {
-    label: "개요",
+    label: "프로필",
     value: "overview",
     isDisabled: false,
   },
@@ -510,7 +510,7 @@ const TeamContent = ({ id }: { id: string }) => {
             />
           )}
 
-          {/* 개요 */}
+          {/* 프로필 */}
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}

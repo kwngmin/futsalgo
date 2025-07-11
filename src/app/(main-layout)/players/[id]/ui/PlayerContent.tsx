@@ -35,7 +35,7 @@ import { useState } from "react";
 
 const tabs = [
   {
-    label: "요약",
+    label: "프로필",
     value: "overview",
     isDisabled: false,
   },

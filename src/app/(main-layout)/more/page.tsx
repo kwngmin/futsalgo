@@ -28,7 +28,7 @@ const MorePage = () => {
       items: [
         {
           icon: CircleUserRound,
-          label: "프로필",
+          label: "내 계정",
           action: () => {
             setIsLoading(true);
             router.push("/profile");

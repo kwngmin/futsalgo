@@ -443,7 +443,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           <div className="">
             {/* 안내 사항 */}
             <div className="mb-4">
-              <div className="w-full flex items-center justify-start px-4 py-3 space-x-3">
+              <div className="w-full flex items-center justify-start px-4 py-3 border-t border-gray-100 space-x-3">
                 <Text className={`w-5 h-5 text-gray-600`} />
                 <span className="font-medium">안내 사항</span>
               </div>
@@ -558,130 +558,6 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               refetch={refetch}
               teamId={id}
             />
-          )} */}
-
-          {/* 개요 */}
-          {/* {selectedTab === "overview" && (
-            <Fragment>
-              <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
-                  <div className="flex items-center space-x-3">
-                    <BookText className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">기본 정보</span>
-                  </div>
-                  <Info
-                    className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
-                    onClick={() => {
-                      alert("기본 정보");
-                    }}
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-3 px-4 py-2 bg-white rounded-2xl">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {
-                        TEAM_GENDER[
-                          data?.data?.gender as keyof typeof TEAM_GENDER
-                        ]
-                      }
-                    </div>
-                    <Label className="text-muted-foreground">구분</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.professionalCount
-                        ? `${data.data.stats.professionalCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">선수 출신</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.members.approved.length}명
-                    </div>
-                    <Label className="text-muted-foreground">팀원</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageAge}살
-                    </div>
-                    <Label className="text-muted-foreground">평균 연령</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageHeight}cm
-                    </div>
-                    <Label className="text-muted-foreground">평균 키</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-           
-                      {TEAM_LEVEL[data?.data?.level as keyof typeof TEAM_LEVEL]}
-                    </div>
-                    <Label className="text-muted-foreground">실력</Label>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100 gap-3">
-                  <div className="flex items-center space-x-3">
-                    <ChartPie className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">팀원 실력</span>
-                  </div>
-                  <Info
-                    className="size-5 text-indigo-600 cursor-pointer active:scale-98 transition-transform"
-                    onClick={() => {
-                      alert("팀원 실력");
-                    }}
-                  />
-                </div>
-                <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.beginnerCount
-                        ? `${data.data.stats.beginnerCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">스타터</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.amateurCount
-                        ? `${data.data.stats.amateurCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">아마추어</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.aceCount
-                        ? `${data.data.stats.aceCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">에이스</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.semiproCount
-                        ? `${data.data.stats.semiproCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">세미프로</Label>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl pb-3">
-                <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                  <Text className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">소개</span>
-                </div>
-                <p className="px-4 py-4 bg-white rounded-2xl">
-                  {data?.data?.description ?? "소개 없음"}
-                </p>
-              </div>
-            </Fragment>
           )} */}
         </div>
       ) : null}
