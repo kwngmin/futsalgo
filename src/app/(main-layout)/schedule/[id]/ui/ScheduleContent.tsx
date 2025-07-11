@@ -603,8 +603,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
           </div>
 
-          <p className="text-center text-sm text-gray-500 mt-3">
-            일정 만든 날짜:{" "}
+          <p className="text-center text-sm text-gray-500 mt-6">
+            만든 날짜:{" "}
             {data?.data?.schedule?.startTime
               ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
                   "ko-KR",
