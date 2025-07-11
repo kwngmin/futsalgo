@@ -5,6 +5,7 @@ import { getSchedule } from "../actions/get-schedule";
 import {
   ArrowLeft,
   Calendar,
+  ChartPie,
   ChevronRight,
   Clock,
   EllipsisVertical,
@@ -18,6 +19,7 @@ import Image from "next/image";
 import { Button } from "@/shared/components/ui/button";
 import { MapPinSimpleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
+import { Label } from "@/shared/components/ui/label";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -399,6 +401,41 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                       {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
                     </div>
                   ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 참가자 현황 */}
+          <div className="border rounded-2xl overflow-hidden mx-4">
+            <div
+              className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              onClick={() => {
+                alert("참가자 현황");
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <ChartPie className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">참가자 현황</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-medium text-gray-500">
+                  자세히 보기
+                </span>
+                <ChevronRight className="size-5 text-gray-400" />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">참가</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">1</div>
+                <Label className="text-muted-foreground">미정</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">불참</Label>
               </div>
             </div>
           </div>

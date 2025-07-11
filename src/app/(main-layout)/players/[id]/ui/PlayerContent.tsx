@@ -489,12 +489,12 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div>
 
-          {/* 경기 통계 */}
+          {/* 참가한 경기 통계 */}
           <div className="border rounded-2xl overflow-hidden mx-4">
             <div
               className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
               onClick={() => {
-                alert("통계");
+                alert("참가한 경기 통계");
               }}
             >
               <div className="flex items-center space-x-3">
