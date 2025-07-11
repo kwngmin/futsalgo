@@ -207,19 +207,11 @@ const HomePage = () => {
                   </div>
 
                   {/* 참가 여부 */}
-                  <div className="grid grid-cols-4 h-8 items-center gap-2">
-                    <div className="text-sm font-medium text-center">
-                      참가 0
-                    </div>
-                    <div className="text-sm font-medium text-center">
-                      불참 0
-                    </div>
-                    <div className="text-sm font-medium text-center">
-                      미정 0
-                    </div>
-                    <div className="text-sm font-medium text-center">
-                      결정완료
-                    </div>
+                  <div className="px-4 grid grid-cols-5 h-10 items-center gap-2">
+                    <div className="text-sm font-medium">참가 0</div>
+                    <div className="text-sm font-medium">불참 0</div>
+                    <div className="text-sm font-medium">미정 0</div>
+                    <div className="text-sm font-medium">결정완료</div>
                   </div>
 
                   {/* {schedule.attendances
