@@ -89,7 +89,10 @@ const PlayersPage = () => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-bold">회원</h1>
+        <div className="flex gap-3">
+          <h1 className="text-2xl font-bold">회원</h1>
+          <h1 className="text-2xl font-bold opacity-30">팔로잉 회원</h1>
+        </div>
         <div className="flex items-center gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
