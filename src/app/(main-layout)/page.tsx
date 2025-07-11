@@ -5,6 +5,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+// import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
+import { Circle, Triangle, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
@@ -207,11 +209,23 @@ const HomePage = () => {
                   </div>
 
                   {/* 참가 여부 */}
-                  <div className="px-4 grid grid-cols-5 h-10 items-center gap-2">
-                    <div className="text-sm font-medium">참가 0</div>
-                    <div className="text-sm font-medium">불참 0</div>
-                    <div className="text-sm font-medium">미정 0</div>
-                    <div className="text-sm font-medium">결정완료</div>
+                  <div className="px-4 flex h-10 items-center gap-4">
+                    <div className="text-sm font-medium flex items-center gap-0.5">
+                      <Circle className="size-4" strokeWidth={2.5} />
+                      참가 0
+                    </div>
+                    <div className="text-sm font-medium flex items-center gap-0.5">
+                      <X className="size-5" strokeWidth={2} />
+                      불참 0
+                    </div>
+                    <div className="text-sm font-medium flex items-center gap-0.5">
+                      <Triangle className="size-4" strokeWidth={2.5} />
+                      미정 0
+                    </div>
+                    <div className="text-sm font-medium flex items-center gap-0.5">
+                      {/* <CircleCheckBig className="size-4 text-green-500" /> */}
+                      결정완료
+                    </div>
                   </div>
 
                   {/* {schedule.attendances
