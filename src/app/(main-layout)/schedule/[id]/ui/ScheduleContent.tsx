@@ -151,7 +151,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
             {/* 팀 정보 */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-32 sm:gap-3 relative">
+            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-28 sm:gap-3 relative">
               {/* 주최팀 */}
               <div className="flex flex-col items-center border rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-indigo-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
@@ -193,13 +193,13 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 모바일 공통 */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center pb-3">
-                <span className="h-6 flex items-center justify-center font-semibold text-lg tracking-tight">
+                <span className="h-5 flex items-center justify-center font-semibold text-lg tracking-tight">
                   {period}
                 </span>
-                <span className="h-8 flex items-center justify-center font-semibold text-2xl tracking-tight">
+                <span className="h-8 flex items-center justify-center font-semibold text-xl tracking-tight">
                   {time}
                 </span>
-                <div className="w-full flex flex-col items-center">
+                <div className="text-sm w-full flex flex-col items-center">
                   {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
                     month: "long",
                     day: "numeric",
