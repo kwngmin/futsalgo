@@ -158,7 +158,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-indigo-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
                   <div className="size-3 bg-indigo-500 rounded-full" />
-                  주최팀
+                  {/* 주최팀 */}
+                  {data?.data?.schedule?.matchType === "SQUAD"
+                    ? "홈"
+                    : "주최팀"}
                 </div>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
@@ -212,7 +215,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-emerald-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
                   <div className="size-3 bg-emerald-500 rounded-full" />
-                  초청팀
+                  {/* 초청팀 */}
+                  {data?.data?.schedule?.matchType === "SQUAD"
+                    ? "어웨이"
+                    : "초청팀"}
                 </div>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
