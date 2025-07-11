@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Clock,
   EllipsisVertical,
-  // Info,
   Loader2,
   Share,
   Text,
@@ -16,7 +15,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { MATCH_TYPE } from "@/entities/team/model/constants";
+// import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
 import { MapPinSimpleIcon } from "@phosphor-icons/react";
@@ -133,12 +132,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           />
         </button>
         <span className="text-center font-bold">
-          {/* {data?.data?.schedule?.place} */}
-          {
+          {data?.data?.schedule?.place}
+          {/* {
             MATCH_TYPE[
               data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
             ]
-          }
+          } */}
         </span>
         <div className="flex items-center justify-end gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -176,10 +175,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             {/* 팀 정보 */}
             <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-32 sm:gap-3 relative">
               {/* 호스트 팀 */}
-              <div className="flex flex-col items-center hover:ring py-6 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                {/* <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
-                  호스트 팀
-                </span> */}
+              <div className="flex flex-col items-center ring ring-border rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-gray-100 flex items-center justify-center">
+                  주최팀
+                </div>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -207,59 +206,11 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   })}
                 </span>
                 <div className="w-full flex flex-col items-center">
-                  {data.data.schedule?.status === "PENDING" ? (
-                    <div>상대팀 대전신청 대기중</div>
-                  ) : data.data.schedule?.status === "REJECTED" ? (
-                    <div>상대팀 대전신청 거절됨</div>
-                  ) : data.data.schedule?.status === "READY" ? (
-                    <button
-                      className={`flex items-center gap-1 text-lg font-medium tracking-tight ${
-                        dDay > 0 ? "text-muted-foreground" : "bg-green-600"
-                      }`}
-                    >
-                      {dDay > 1 ? (
-                        data.data.schedule.startTime?.toLocaleDateString(
-                          "ko-KR",
-                          {
-                            // year: "numeric",
-                            // weekday: "long",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )
-                      ) : dDay === 1 ? (
-                        "내일"
-                      ) : dDay === 0 ? (
-                        <Countdown
-                          date={data.data.schedule.startTime as Date}
-                        />
-                      ) : (
-                        "경기 종료"
-                      )}
-                    </button>
-                  ) : data.data.schedule?.status === "PLAY" ? (
-                    <div>경기중</div>
-                  ) : (
-                    <div>경기 종료</div>
-                  )}
-                  {/* <span>
-                {calculateDday(data.data.schedule?.date as Date) > 0
-                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
-                  : "D-day"}
-              </span> */}
-                </div>
-                {/* <span>{timeRange}</span> */}
-                {/* <span>
-                  {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
-                    year: "numeric",
+                  {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
                     month: "long",
                     day: "numeric",
                   })}
-                </span>
-                <span className="">{timeRange}</span> */}
-                {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
-                  VS
-                </div> */}
+                </div>
               </div>
               {/* 모바일 공통 */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center">
@@ -270,46 +221,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   {time}
                 </span>
                 <div className="w-full flex flex-col items-center">
-                  {data.data.schedule?.status === "PENDING" ? (
-                    <div>상대팀 대전신청 대기중</div>
-                  ) : data.data.schedule?.status === "REJECTED" ? (
-                    <div>상대팀 대전신청 거절됨</div>
-                  ) : data.data.schedule?.status === "READY" ? (
-                    <button
-                      className={`flex items-center gap-1 text-lg font tracking-tight ${
-                        dDay > 0 ? "text-muted-foreground" : "bg-green-600"
-                      }`}
-                    >
-                      {dDay > 1 ? (
-                        data.data.schedule.startTime?.toLocaleDateString(
-                          "ko-KR",
-                          {
-                            // year: "numeric",
-                            // weekday: "long",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )
-                      ) : dDay === 1 ? (
-                        "내일"
-                      ) : dDay === 0 ? (
-                        <Countdown
-                          date={data.data.schedule.startTime as Date}
-                        />
-                      ) : (
-                        "경기 종료"
-                      )}
-                    </button>
-                  ) : data.data.schedule?.status === "PLAY" ? (
-                    <div>경기중</div>
-                  ) : (
-                    <div>경기 종료</div>
-                  )}
-                  {/* <span>
-                {calculateDday(data.data.schedule?.date as Date) > 0
-                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
-                  : "D-day"}
-              </span> */}
+                  {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </div>
                 {/* <span>{timeRange}</span> */}
                 {/* <span>
@@ -325,10 +240,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div> */}
               </div>
               {/* 상대 팀 */}
-              <div className="flex flex-col items-center hover:ring py-6 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                {/* <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
-                  상대 팀
-                </span> */}
+              <div className="flex flex-col items-center ring ring-border rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-gray-100 flex items-center justify-center">
+                  초청팀
+                </div>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -345,31 +260,52 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
 
+            {/* 경기 시작 버튼 */}
+            {/* <div className="w-full flex flex-col items-center">
+                  {data.data.schedule?.status === "PENDING" ? (
+                    <div>상대팀 대전신청 대기중</div>
+                  ) : data.data.schedule?.status === "REJECTED" ? (
+                    <div>상대팀 대전신청 거절됨</div>
+                  ) : data.data.schedule?.status === "READY" ? (
+                    <button
+                      className={`flex items-center gap-1 text-lg font tracking-tight ${
+                        dDay > 0 ? "text-muted-foreground" : "bg-green-600"
+                      }`}
+                    >
+                      {dDay > 1 ? (
+                        data.data.schedule.startTime?.toLocaleDateString(
+                          "ko-KR",
+                          {
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      ) : dDay === 1 ? (
+                        "내일"
+                      ) : dDay === 0 ? (
+                        <Countdown
+                          date={data.data.schedule.startTime as Date}
+                        />
+                      ) : (
+                        "경기 종료"
+                      )}
+                    </button>
+                  ) : data.data.schedule?.status === "PLAY" ? (
+                    <div>경기중</div>
+                  ) : (
+                    <div>경기 종료</div>
+                  )}
+                  <span>
+                    {calculateDday(data.data.schedule?.date as Date) > 0
+                      ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+                      : "D-day"}
+                  </span>
+                </div> */}
+
             <div className="p-4">
               <Button
-                // className="w-full text-base font-semibold bg-indigo-700"
                 className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
                 size="lg"
-                // onClick={async () => {
-                //   if (session.data) {
-                //     try {
-                //       const result = await joinTeam(id);
-                //       console.log(result);
-                //       if (result?.success) {
-                //         alert("가입 신청이 완료되었습니다.");
-                //         refetch();
-                //       } else {
-                //         alert(result?.error);
-                //       }
-                //     } catch (error) {
-                //       console.error(error);
-                //       alert("가입 신청에 실패했습니다.");
-                //     }
-                //   } else {
-                //     alert("로그인이 필요합니다.");
-                //     signIn();
-                //   }
-                // }}
               >
                 경기 시작
               </Button>
@@ -510,8 +446,36 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </div>
 
           <div className="">
+            {/* 안내 사항 */}
+            <div className="mb-4">
+              <div className="w-full flex items-center justify-start px-4 py-3 space-x-3">
+                <Text className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">안내 사항</span>
+              </div>
+              <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40">
+                {data?.data.schedule?.description ?? "안내 사항 없음"}
+              </p>
+            </div>
+
+            {/* 장소 이름 */}
+            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-3">
+                <MapPinSimpleIcon
+                  className="text-gray-600 mr-3"
+                  size={20}
+                  weight="fill"
+                />
+                <span className="font-medium">장소 이름</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.place}
+                </span>
+              </div>
+            </div>
+
             {/* 경기 일자 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 gap-3">
+            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-3">
                 <Calendar className="w-5 h-5 text-gray-600" />
                 <span className="font-medium">경기 일자</span>
@@ -546,34 +510,6 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   })}
                 </span>
               </div>
-            </div>
-
-            {/* 장소 이름 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-3">
-                <MapPinSimpleIcon
-                  className="text-gray-600 mr-3"
-                  size={20}
-                  weight="fill"
-                />
-                <span className="font-medium">장소 이름</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.place}
-                </span>
-              </div>
-            </div>
-
-            {/* 안내 사항 */}
-            <div className="border-t border-gray-100 mb-6">
-              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-                <Text className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">안내 사항</span>
-              </div>
-              <p className="px-4 py-4 bg-white rounded-2xl">
-                {data?.data.schedule?.description ?? "안내 사항 없음"}
-              </p>
             </div>
 
             {/* 만든이 */}
