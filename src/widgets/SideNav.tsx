@@ -20,7 +20,7 @@ const SideNav = () => {
           </div>
 
           {/* 데스크톱 네비게이션 */}
-          <nav className="flex-1 px-4 py-4 space-y-1">
+          <nav className="flex-1 px-4 mb-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeMenu === item.id;
@@ -28,7 +28,7 @@ const SideNav = () => {
                 <button
                   key={item.id}
                   onClick={() => handleClick(item.href)}
-                  className={`w-full flex items-center px-4 py-3 text-lg font-medium rounded-full transition-colors cursor-pointer ${
+                  className={`w-full flex items-center px-4 py-3 text-xl font-semibold rounded-full transition-colors cursor-pointer ${
                     isActive
                       ? "bg-gray-100 text-gray-900 font-bold"
                       : // ? "bg-blue-50 text-blue-600 font-bold"

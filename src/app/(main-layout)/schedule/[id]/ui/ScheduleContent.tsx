@@ -15,10 +15,6 @@ import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
-// import {
-//   MapPinSimpleIcon, //
-// } from "@phosphor-icons/react";
-// import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열

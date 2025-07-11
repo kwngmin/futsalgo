@@ -84,7 +84,7 @@ const HomePage = () => {
                   size={20}
                   weight="fill"
                 />
-                <span className="text-sm font-semibold">{schedule.place}</span>
+                <span className="font-medium">{schedule.place}</span>
               </div>
 
               {schedule.matchType !== "TEAM" ? (
