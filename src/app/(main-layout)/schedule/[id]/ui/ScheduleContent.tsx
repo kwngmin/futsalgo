@@ -242,9 +242,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     상대팀 대전 거절됨
                   </div>
                 ) : data.data.schedule?.status === "READY" && dDay > 1 ? (
-                  <div className="h-12 w-full flex justify-center items-center text-lg border border-amber-500/50 text-amber-600 text-medium rounded-md gap-1.5 tracking-tight">
+                  <div className="h-12 w-full flex justify-center items-center text-lg bg-amber-500/10 text-amber-700 text-medium rounded-md gap-1.5 tracking-tight">
                     경기하는 날까지
-                    <span className="font-extrabold">
+                    <span className="text-amber-600 font-extrabold">
                       {calculateDday(data.data.schedule?.date as Date) > 0
                         ? `D-${calculateDday(data.data.schedule?.date as Date)}`
                         : "D-day"}
@@ -425,7 +425,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div className="flex items-center gap-1">
                 <Image
                   src={data.data.schedule?.createdBy.image ?? ""}
-                  alt="profile"
+                  alt="avatar"
                   width={24}
                   height={24}
                   className="rounded-lg mr-1"
