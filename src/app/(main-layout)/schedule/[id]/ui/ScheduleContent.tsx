@@ -132,8 +132,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           />
         </button>
         <span className="text-center font-bold">
-          {data?.data?.schedule?.place}
-          {/* {
+          {/* {data?.data?.schedule?.place}
+          {
             MATCH_TYPE[
               data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
             ]
@@ -278,7 +278,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     경기 종료
                   </Button>
                 ) : (
-                  <div>경기 종료</div>
+                  <div className="h-12 bg-muted text-muted-foreground w-full flex justify-center items-center rounded-md font-semibold">
+                    경기 종료
+                  </div>
                 )}
               </div>
             </div>
