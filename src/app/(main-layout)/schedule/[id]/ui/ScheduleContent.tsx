@@ -20,6 +20,7 @@ import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
 import { MapPinSimpleIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -39,8 +40,28 @@ export function calculateDday(date: Date): number {
   return diffDays;
 }
 
+const tabs = [
+  {
+    label: "정보",
+    value: "overview",
+    isDisabled: false,
+  },
+  {
+    label: "후기",
+    value: "reviews",
+    isDisabled: true,
+  },
+  {
+    label: "사진",
+    value: "photos",
+    isDisabled: true,
+  },
+];
+
 const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["schedule", scheduleId],
     queryFn: () => getSchedule(scheduleId),
@@ -131,7 +152,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 일정 정보 */}
-          <div className="relative">
+          <div className="relative border-b border-gray-300">
             {/* <div className="flex justify-between items-center px-3 h-10 border-b">
               <div className="flex items-center">
                 <MapPinSimpleIcon
@@ -153,12 +174,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div> */}
             {/* 팀 정보 */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-28 sm:gap-3 relative">
+            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-32 sm:gap-3 relative">
               {/* 호스트 팀 */}
-              <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
+              <div className="flex flex-col items-center hover:ring py-6 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                {/* <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
                   호스트 팀
-                </span>
+                </span> */}
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -304,10 +325,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div> */}
               </div>
               {/* 상대 팀 */}
-              <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
+              <div className="flex flex-col items-center hover:ring py-6 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                {/* <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
                   상대 팀
-                </span>
+                </span> */}
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -455,28 +476,42 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 )
               )}
             </div> */}
+
+            {/* 탭 */}
+            <div className="flex items-center justify-between gap-2 px-4">
+              <div className="flex h-12 space-x-2">
+                {tabs
+                  // .filter(
+                  //   (tab) =>
+                  //     tab.value !== "management" ||
+                  //     (tab.value === "management" &&
+                  //       (data.data.currentUserMembership.role === "MANAGER" ||
+                  //         data.data.currentUserMembership.role === "OWNER") &&
+                  //       data.data.currentUserMembership.status === "APPROVED")
+                  // )
+                  .map((tab) => (
+                    <div
+                      key={tab.value}
+                      className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
+                        selectedTab === tab.value
+                          ? "border-gray-700"
+                          : "border-transparent"
+                      } ${
+                        tab.isDisabled ? "pointer-events-none opacity-50" : ""
+                      }`}
+                      onClick={() => setSelectedTab(tab.value)}
+                    >
+                      {tab.label}
+                      {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
+                    </div>
+                  ))}
+              </div>
+            </div>
           </div>
 
           <div className="">
-            {/* 장소 이름 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 gap-3">
-              <div className="flex items-center space-x-3">
-                <MapPinSimpleIcon
-                  className="text-gray-600 mr-3"
-                  size={20}
-                  weight="fill"
-                />
-                <span className="font-medium">장소 이름</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.place}
-                </span>
-              </div>
-            </div>
-
             {/* 경기 일자 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 border-t gap-3">
+            <div className="w-full flex items-center justify-between px-4 py-3 gap-3">
               <div className="flex items-center space-x-3">
                 <Calendar className="w-5 h-5 text-gray-600" />
                 <span className="font-medium">경기 일자</span>
@@ -493,7 +528,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
 
             {/* 예약 시간 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 border-t gap-3">
+            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-gray-600" />
                 <span className="font-medium">예약 시간</span>
@@ -513,8 +548,25 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
 
+            {/* 장소 이름 */}
+            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-3">
+                <MapPinSimpleIcon
+                  className="text-gray-600 mr-3"
+                  size={20}
+                  weight="fill"
+                />
+                <span className="font-medium">장소 이름</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.place}
+                </span>
+              </div>
+            </div>
+
             {/* 안내 사항 */}
-            <div className="border-t mb-6">
+            <div className="border-t border-gray-100 mb-6">
               <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
                 <Text className={`w-5 h-5 text-gray-600`} />
                 <span className="font-medium">안내 사항</span>
@@ -526,7 +578,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 만든이 */}
             <div
-              className="w-full flex items-center justify-between px-4 py-3 border-t gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
               onClick={() => {
                 router.push(`/players/${data.data.schedule?.createdBy.id}`);
               }}
