@@ -148,8 +148,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div> */}
             {/* 팀 정보 */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-3">
-              {/* 호스트 */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-28 sm:gap-3 relative">
+              {/* 호스트 팀 */}
               <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
                   팀매치 신청한 팀
@@ -172,7 +172,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   {data?.data?.schedule?.hostTeam?.name}
                 </span>
               </div>
-              {/* 공통 */}
+              {/* 데스크탑 공통 */}
               <div className="hidden sm:flex flex-col items-center justify-center">
                 <span className="hidden sm:h-10 sm:flex items-center justify-center font-semibold text-xl sm:text-3xl tracking-tight">
                   {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
@@ -180,10 +180,67 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     minute: "2-digit",
                   })}
                 </span>
-                <span className="h-6 flex sm:hidden items-center justify-center font-semibold text-xl tracking-tight">
+                <div className="w-full flex flex-col items-center">
+                  {data.data.schedule?.status === "PENDING" ? (
+                    <div>상대팀 대전신청 대기중</div>
+                  ) : data.data.schedule?.status === "REJECTED" ? (
+                    <div>상대팀 대전신청 거절됨</div>
+                  ) : data.data.schedule?.status === "READY" ? (
+                    <button
+                      className={`flex items-center gap-1 text-lg font-medium tracking-tight ${
+                        dDay > 0 ? "text-muted-foreground" : "bg-green-600"
+                      }`}
+                    >
+                      {dDay > 1 ? (
+                        data.data.schedule.startTime?.toLocaleDateString(
+                          "ko-KR",
+                          {
+                            // year: "numeric",
+                            // weekday: "long",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      ) : dDay === 1 ? (
+                        "내일"
+                      ) : dDay === 0 ? (
+                        <Countdown
+                          date={data.data.schedule.startTime as Date}
+                        />
+                      ) : (
+                        "경기 종료"
+                      )}
+                    </button>
+                  ) : data.data.schedule?.status === "PLAY" ? (
+                    <div>경기중</div>
+                  ) : (
+                    <div>경기 종료</div>
+                  )}
+                  {/* <span>
+                {calculateDday(data.data.schedule?.date as Date) > 0
+                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+                  : "D-day"}
+              </span> */}
+                </div>
+                {/* <span>{timeRange}</span> */}
+                {/* <span>
+                  {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="">{timeRange}</span> */}
+                {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
+                  VS
+                </div> */}
+              </div>
+              {/* 모바일 공통 */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center">
+                <span className="h-6 flex items-center justify-center font-semibold text-lg tracking-tight">
                   {period}
                 </span>
-                <span className="sm:h-10 flex sm:hidden items-center justify-center font-semibold text-2xl tracking-tight">
+                <span className="h-8 flex items-center justify-center font-semibold text-2xl tracking-tight">
                   {time}
                 </span>
                 <div className="w-full flex flex-col items-center">
@@ -241,7 +298,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   VS
                 </div> */}
               </div>
-              {/* 게스트 */}
+              {/* 상대 팀 */}
               <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
                 {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
                   신청 받은 팀
