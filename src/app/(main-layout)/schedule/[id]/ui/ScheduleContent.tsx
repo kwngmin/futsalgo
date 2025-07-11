@@ -153,8 +153,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             {/* 팀 정보 */}
             <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-32 sm:gap-3 relative">
               {/* 주최팀 */}
-              <div className="flex flex-col items-center hover:ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
-                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 group-hover:bg-gray-100 flex items-center justify-center transition-colors duration-300">
+              <div className="flex flex-col items-center border rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-indigo-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
+                  <div className="size-3 bg-indigo-500 rounded-full" />
                   주최팀
                 </div>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
@@ -191,7 +192,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div>
               </div>
               {/* 모바일 공통 */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center pb-5">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center pb-3">
                 <span className="h-6 flex items-center justify-center font-semibold text-lg tracking-tight">
                   {period}
                 </span>
@@ -204,22 +205,11 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     day: "numeric",
                   })}
                 </div>
-                {/* <span>{timeRange}</span> */}
-                {/* <span>
-                  {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-                <span className="">{timeRange}</span> */}
-                {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
-                  VS
-                </div> */}
               </div>
               {/* 초청팀 */}
-              <div className="flex flex-col items-center hover:ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
-                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 group-hover:bg-gray-100 flex items-center justify-center transition-colors duration-300">
+              <div className="flex flex-col items-center border rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-emerald-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
+                  <div className="size-3 bg-emerald-500 rounded-full" />
                   초청팀
                 </div>
                 {opposingTeam?.logoUrl ? (
