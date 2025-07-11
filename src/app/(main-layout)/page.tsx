@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
-import { Circle, Clock, X } from "lucide-react";
+// import { Circle, Clock, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
@@ -36,7 +36,7 @@ const HomePage = () => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold">홈</h1>
+          <h1 className="text-2xl font-bold">경기</h1>
           <h1 className="text-2xl font-bold opacity-30">지난 경기</h1>
         </div>
         {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
@@ -75,30 +75,16 @@ const HomePage = () => {
           return (
             <div className="" key={schedule.id}>
               <div className="flex justify-between items-center px-4 pb-2 gap-1 tracking-tight">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">
-                    {schedule.startTime?.toLocaleDateString("ko-KR", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
-                  <span className="font-medium">{schedule.place}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {/* <MapPinSimpleIcon
-                    className="text-gray-600 ml-3"
-                    size={18}
-                    weight="fill"
-                  /> */}
-
-                  <span className="text-sm text-muted-foreground">
-                    {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
-                  </span>
-                </div>
+                <span className="font-bold">
+                  {schedule.startTime?.toLocaleDateString("ko-KR", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
               </div>
 
               {schedule.matchType !== "TEAM" ? (
-                <div className="flex flex-col sm:flex-row sm:items-stretch">
+                <div className="flex flex-col sm:flex-row sm:items-stretch border-t">
                   <div
                     className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer bg-gray-50"
                     onClick={() => handleScheduleClick(schedule.id)}
@@ -209,32 +195,6 @@ const HomePage = () => {
                     </div>
                   </div>
 
-                  {/* 참가 여부 */}
-                  <div className="px-4 flex h-11 justify-between items-center gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="text-sm font-medium flex items-center gap-1">
-                        <Circle className="size-4" strokeWidth={2.5} />
-                        참가 0
-                      </div>
-                      <div className="text-sm font-medium flex items-center gap-1">
-                        {/* <XMarkIcon className="size-4" strokeWidth={3} /> */}
-                        <X
-                          className="size-4 scale-[1.3] flex items-center justify-center"
-                          strokeWidth={2}
-                        />{" "}
-                        불참 0
-                      </div>
-                      <div className="text-sm font-medium flex items-center gap-1">
-                        <Clock className="size-4" strokeWidth={2.5} />
-                        미정 0
-                      </div>
-                    </div>
-                    <div className="text-sm font-medium flex items-center gap-1">
-                      {/* <CircleCheckBig className="size-4 text-green-500" /> */}
-                      결정완료
-                    </div>
-                  </div>
-
                   {/* {schedule.attendances
                     .map((attendance) => attendance.userId)
                     .includes(session.data?.user?.id ?? "") ? (
@@ -253,6 +213,30 @@ const HomePage = () => {
               ) : (
                 schedule.guestTeam?.name
               )}
+
+              {/* 참가 여부 */}
+              {/* <div className="px-4 flex h-11 justify-between items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="text-sm font-medium flex items-center gap-1">
+                    <Circle className="size-4" strokeWidth={2.5} />
+                    참가 0
+                  </div>
+                  <div className="text-sm font-medium flex items-center gap-1">
+                    <X
+                      className="size-4 scale-[1.3] flex items-center justify-center"
+                      strokeWidth={2}
+                    />{" "}
+                    불참 0
+                  </div>
+                  <div className="text-sm font-medium flex items-center gap-1">
+                    <Clock className="size-4" strokeWidth={2.5} />
+                    미정 0
+                  </div>
+                </div>
+                <div className="text-sm font-medium flex items-center gap-1">
+                  결정완료
+                </div>
+              </div> */}
             </div>
           );
         })}

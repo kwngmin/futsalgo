@@ -17,19 +17,19 @@ import { usePathname, useRouter } from "next/navigation";
 //   EllipsisHorizontalIcon as EllipsisHorizontalOutline,
 // } from "@heroicons/react/24/outline";
 import {
-  HouseIcon,
+  // HouseIcon,
   TShirtIcon,
   UserIcon,
-  // AddressBookIcon,
   ChatsCircleIcon,
   DotsThreeOutlineIcon,
+  CourtBasketballIcon,
 } from "@phosphor-icons/react";
 
 export const navItems = [
   {
     id: "home",
-    label: "홈",
-    icon: HouseIcon,
+    label: "경기",
+    icon: CourtBasketballIcon,
     href: "/",
   },
   {
