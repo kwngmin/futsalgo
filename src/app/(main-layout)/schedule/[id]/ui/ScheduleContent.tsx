@@ -191,7 +191,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div>
               </div>
               {/* 모바일 공통 */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center pb-5">
                 <span className="h-6 flex items-center justify-center font-semibold text-lg tracking-tight">
                   {period}
                 </span>
