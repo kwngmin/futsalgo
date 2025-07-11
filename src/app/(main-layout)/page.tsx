@@ -6,11 +6,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
-import { Circle, Triangle, X } from "lucide-react";
+import { Circle, Clock, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
 // import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 // import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
 // import { Countdown } from "./schedule/[id]/ui/CountDown";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const HomePage = () => {
   const router = useRouter();
@@ -43,7 +44,7 @@ const HomePage = () => {
         </button> */}
       </div>
       {/* MatchesPage */}
-      <div className="space-y-9">
+      <div className="space-y-6">
         {/* {session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <div className="flex gap-2 justify-center">
@@ -73,7 +74,7 @@ const HomePage = () => {
 
           return (
             <div className="" key={schedule.id}>
-              <div className="flex justify-between items-center border-b px-4 pb-2 gap-1 tracking-tight">
+              <div className="flex justify-between items-center px-4 pb-2 gap-1 tracking-tight">
                 <div className="flex items-center gap-2">
                   <span className="font-bold">
                     {schedule.startTime?.toLocaleDateString("ko-KR", {
@@ -209,18 +210,22 @@ const HomePage = () => {
                   </div>
 
                   {/* 참가 여부 */}
-                  <div className="px-4 flex h-10 justify-between items-center gap-4">
+                  <div className="px-4 flex h-11 justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
                       <div className="text-sm font-medium flex items-center gap-1">
                         <Circle className="size-4" strokeWidth={2.5} />
                         참가 0
                       </div>
                       <div className="text-sm font-medium flex items-center gap-1">
-                        <X className="size-5" strokeWidth={2} />
+                        {/* <XMarkIcon className="size-4" strokeWidth={3} /> */}
+                        <X
+                          className="size-4 scale-[1.3] flex items-center justify-center"
+                          strokeWidth={2}
+                        />{" "}
                         불참 0
                       </div>
                       <div className="text-sm font-medium flex items-center gap-1">
-                        <Triangle className="size-4" strokeWidth={2.5} />
+                        <Clock className="size-4" strokeWidth={2.5} />
                         미정 0
                       </div>
                     </div>
