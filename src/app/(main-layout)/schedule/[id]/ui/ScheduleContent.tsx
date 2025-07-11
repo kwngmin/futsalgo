@@ -242,7 +242,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     상대팀 대전 거절됨
                   </div>
                 ) : data.data.schedule?.status === "READY" && dDay > 1 ? (
-                  <div className="h-12 w-full flex justify-center items-center text-lg bg-amber-500/5 text-amber-700 text-medium rounded-md gap-1.5 tracking-tight">
+                  <div className="h-12 w-full flex justify-center items-center text-lg bg-amber-500/5 border border-amber-500/30 text-amber-700 text-medium rounded-md gap-1.5 tracking-tight">
                     경기하는 날까지
                     <span className="text-amber-600 font-extrabold">
                       {calculateDday(data.data.schedule?.date as Date) > 0
