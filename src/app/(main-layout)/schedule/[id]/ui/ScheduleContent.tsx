@@ -4,17 +4,22 @@ import { useQuery } from "@tanstack/react-query";
 import { getSchedule } from "../actions/get-schedule";
 import {
   ArrowLeft,
+  Calendar,
+  ChevronRight,
+  Clock,
   EllipsisVertical,
   // Info,
   Loader2,
   Share,
   Text,
+  UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MATCH_TYPE } from "@/entities/team/model/constants";
 import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
+import { MapPinSimpleIcon } from "@phosphor-icons/react";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -151,9 +156,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-28 sm:gap-3 relative">
               {/* 호스트 팀 */}
               <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
-                  팀매치 신청한 팀
-                </span> */}
+                <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
+                  호스트 팀
+                </span>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -250,7 +255,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     <div>상대팀 대전신청 거절됨</div>
                   ) : data.data.schedule?.status === "READY" ? (
                     <button
-                      className={`flex items-center gap-1 text-lg font-medium tracking-tight ${
+                      className={`flex items-center gap-1 text-lg font tracking-tight ${
                         dDay > 0 ? "text-muted-foreground" : "bg-green-600"
                       }`}
                     >
@@ -300,9 +305,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               {/* 상대 팀 */}
               <div className="flex flex-col items-center hover:ring py-8 sm:py-10 rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer">
-                {/* <span className="text-slate-500 font-medium text-sm tracking-tight">
-                  신청 받은 팀
-                </span> */}
+                <span className="text-slate-500 sm:text-lg tracking-tight mb-6">
+                  상대 팀
+                </span>
                 {opposingTeam?.logoUrl ? (
                   <div className="">
                     <Image
@@ -450,40 +455,115 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 )
               )}
             </div> */}
+          </div>
 
-            {/* 탭 */}
-            <div className="flex items-center justify-between gap-2 px-3 border-t border-input">
-              <div className="flex h-12 space-x-2">
-                tab
-                {/* {tabs.map((tab) => (
-                  <div
-                    key={tab.value}
-                    className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-2 ${
-                      selectedTab === tab.value
-                        ? "border-gray-500"
-                        : "border-transparent"
-                    } ${
-                      tab.isDisabled ? "pointer-events-none opacity-50" : ""
-                    }`}
-                    onClick={() => setSelectedTab(tab.value)}
-                  >
-                    {tab.label}
-                  </div>
-                ))} */}
+          <div className="">
+            {/* 장소 이름 */}
+            <div className="w-full flex items-center justify-between px-4 py-3 gap-3">
+              <div className="flex items-center space-x-3">
+                <MapPinSimpleIcon
+                  className="text-gray-600 mr-3"
+                  size={20}
+                  weight="fill"
+                />
+                <span className="font-medium">장소 이름</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.place}
+                </span>
+              </div>
+            </div>
+
+            {/* 경기 일자 */}
+            <div className="w-full flex items-center justify-between px-4 py-3 border-t gap-3">
+              <div className="flex items-center space-x-3">
+                <Calendar className="w-5 h-5 text-gray-600" />
+                <span className="font-medium">경기 일자</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+              </div>
+            </div>
+
+            {/* 예약 시간 */}
+            <div className="w-full flex items-center justify-between px-4 py-3 border-t gap-3">
+              <div className="flex items-center space-x-3">
+                <Clock className="w-5 h-5 text-gray-600" />
+                <span className="font-medium">예약 시간</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}{" "}
+                  -{" "}
+                  {data.data.schedule?.endTime?.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+            </div>
+
+            {/* 안내 사항 */}
+            <div className="border-t mb-6">
+              <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
+                <Text className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">안내 사항</span>
+              </div>
+              <p className="px-4 py-4 bg-white rounded-2xl">
+                {data?.data.schedule?.description ?? "안내 사항 없음"}
+              </p>
+            </div>
+
+            {/* 만든이 */}
+            <div
+              className="w-full flex items-center justify-between px-4 py-3 border-t gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              onClick={() => {
+                router.push(`/players/${data.data.schedule?.createdBy.id}`);
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <UserRound className="w-5 h-5 text-gray-600" />
+                <span className="font-medium">만든이</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Image
+                  src={data.data.schedule?.createdBy.image ?? ""}
+                  alt="profile"
+                  width={24}
+                  height={24}
+                  className="rounded-lg mr-1"
+                />
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.createdBy.nickname}
+                </span>
+                <ChevronRight className="size-5 text-gray-400" />
               </div>
             </div>
           </div>
 
-          {/* 소개 */}
-          <div className="bg-white rounded-2xl pb-3">
-            <div className="w-full flex items-center justify-start px-4 py-3 border-b border-gray-100 space-x-3">
-              <Text className={`w-5 h-5 text-gray-600`} />
-              <span className="font-medium">소개</span>
-            </div>
-            <p className="px-4 py-4 bg-white rounded-2xl">
-              {data?.data.schedule?.description ?? "소개 없음"}
-            </p>
-          </div>
+          <p className="text-center text-sm text-gray-500 mt-3">
+            일정 만든 날짜:{" "}
+            {data?.data?.schedule?.startTime
+              ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
+                  "ko-KR",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )
+              : ""}
+          </p>
 
           {/* 팀원 */}
           {/* {selectedTab === "members" && (

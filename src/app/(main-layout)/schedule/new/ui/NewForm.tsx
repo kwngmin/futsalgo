@@ -20,6 +20,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
+import { useRouter } from "next/navigation";
 
 const newFormSchema = z.object({
   title: z.string().optional(),
@@ -43,6 +44,7 @@ const NewForm = ({
   userId: string;
 }) => {
   console.log(userId, "userId");
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
@@ -132,7 +134,7 @@ const NewForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-white rounded-2xl pt-6"
+      className="space-y-6 p-4 bg-white rounded-2xl"
     >
       {/* <div className="space-y-3">
         <Label className="">제목</Label>
@@ -174,7 +176,7 @@ const NewForm = ({
       <div className="flex flex-wrap space-y-6 space-x-2">
         <div className="flex flex-col gap-3 grow sm:grow-0">
           <Label htmlFor="date-picker" className="px-1">
-            대관 일자
+            경기 일자
           </Label>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -221,7 +223,7 @@ const NewForm = ({
         </div>
         <div className="flex flex-col gap-3">
           <Label htmlFor="time-picker" className="px-1">
-            시작 시간 - 종료시간
+            시설 예약 시간 (시작 - 종료)
           </Label>
           <div className="flex gap-2">
             <Input
@@ -246,12 +248,12 @@ const NewForm = ({
       </div>
 
       <div className="space-y-3">
-        <Label className="">안내사항</Label>
+        <Label className="">안내 사항</Label>
         <Textarea
           {...register("description")}
           // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
           className="min-h-24"
-          placeholder="안내사항을 작성해주세요"
+          placeholder="안내 사항을 작성해주세요"
         />
       </div>
 
@@ -311,21 +313,37 @@ const NewForm = ({
         </Alert>
       )}
 
-      {/* 저장 버튼 */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full mt-3 font-semibold text-base"
-      >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            저장 중...
-          </>
-        ) : (
-          "저장"
-        )}
-      </Button>
+      <div className="mt-12 space-y-3 sm:grid grid-cols-3 gap-2">
+        {/* 저장 버튼 */}
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full font-semibold text-base"
+          size="lg"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              저장 중...
+            </>
+          ) : (
+            "저장"
+          )}
+        </Button>
+
+        {/*  취소 버튼 */}
+        <Button
+          type="button"
+          disabled={isLoading}
+          className="w-full font-medium text-base h-11 sm:h-12"
+          onClick={() => router.push("/more")}
+          // variant="ghost"
+          variant="secondary"
+          size="lg"
+        >
+          취소
+        </Button>
+      </div>
 
       {/* 최근 수정일 */}
       <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">

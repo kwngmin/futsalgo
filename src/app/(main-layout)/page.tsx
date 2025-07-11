@@ -80,7 +80,7 @@ const HomePage = () => {
                 onClick={() => handleScheduleClick(schedule.id)}
               >
                 <MapPinSimpleIcon
-                  className="text-gray-600 mr-2"
+                  className="text-gray-600 mr-3"
                   size={20}
                   weight="fill"
                 />

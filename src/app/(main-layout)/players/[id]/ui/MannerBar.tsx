@@ -2,6 +2,7 @@ import {
   Angry,
   ChevronRight,
   Frown,
+  // Gauge,
   Gem,
   Laugh,
   Meh,
@@ -90,14 +91,15 @@ const MannerBar = ({ score }: { score: number }) => {
 
   return (
     <div
-      className="w-full flex items-center justify-between px-4 py-3 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ring ring-border rounded-lg"
+      className="w-full flex items-center justify-between px-4 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ring ring-border rounded-lg h-12"
       onClick={() => {
         alert("통계");
       }}
     >
       <div className="flex items-center space-x-3">
         <Gem className="size-5 text-gray-600" />
-        <span className="font-medium">매너 점수</span>
+        {/* <Gauge className="size-5 text-gray-600" /> */}
+        <span className="font-medium">페어플레이 점수</span>
       </div>
       <div className="flex items-center gap-1">
         <div className="flex items-center gap-2">
@@ -109,7 +111,7 @@ const MannerBar = ({ score }: { score: number }) => {
           </div>
           <div
             className={cn(
-              "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-6",
+              "flex items-center gap-0.5 px-2 py-0.5 rounded font-semibold text-sm text-white leading-none h-7",
               bgColor,
               textColor
             )}

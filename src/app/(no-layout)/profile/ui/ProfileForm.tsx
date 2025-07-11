@@ -182,7 +182,7 @@ const ProfileForm = ({ data }: { data: User }) => {
         </Alert>
       )}
 
-      <div className="mt-3 space-y-3">
+      <div className="mt-12 space-y-3 sm:grid grid-cols-3 gap-2">
         {/* 저장 버튼 */}
         <Button
           type="submit"
@@ -204,7 +204,7 @@ const ProfileForm = ({ data }: { data: User }) => {
         <Button
           type="button"
           disabled={isLoading}
-          className="w-full font-medium text-base h-11"
+          className="w-full font-medium text-base h-11 sm:h-12"
           onClick={() => router.push("/more")}
           variant="secondary"
           size="lg"
