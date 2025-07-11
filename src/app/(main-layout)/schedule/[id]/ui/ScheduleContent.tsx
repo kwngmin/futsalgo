@@ -15,8 +15,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-// import { MATCH_TYPE } from "@/entities/team/model/constants";
-// import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
 import { MapPinSimpleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
@@ -152,31 +150,11 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         <div className="space-y-3">
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
-            {/* <div className="flex justify-between items-center px-3 h-10 border-b">
-              <div className="flex items-center">
-                <MapPinSimpleIcon
-                  className="text-gray-600 mr-2"
-                  size={20}
-                  weight="fill"
-                />
-                <span className="font-bold">{data?.data?.schedule?.place}</span>
-              </div>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <span className="text-sm font-semibold">
-                  {
-                    MATCH_TYPE[
-                      data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-                    ]
-                  }
-                </span>
-                <Info className="size-4" />
-              </div>
-            </div> */}
             {/* 팀 정보 */}
             <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-32 sm:gap-3 relative">
-              {/* 호스트 팀 */}
-              <div className="flex flex-col items-center ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
-                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-gray-100 flex items-center justify-center">
+              {/* 주최팀 */}
+              <div className="flex flex-col items-center hover:ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 group-hover:bg-gray-100 flex items-center justify-center transition-colors duration-300">
                   주최팀
                 </div>
                 {data?.data?.schedule?.hostTeam?.logoUrl ? (
@@ -239,9 +217,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   VS
                 </div> */}
               </div>
-              {/* 상대 팀 */}
-              <div className="flex flex-col items-center ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
-                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-gray-100 flex items-center justify-center">
+              {/* 초청팀 */}
+              <div className="flex flex-col items-center hover:ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 group-hover:bg-gray-100 flex items-center justify-center transition-colors duration-300">
                   초청팀
                 </div>
                 {opposingTeam?.logoUrl ? (
