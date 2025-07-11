@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 // import { MATCH_TYPE } from "@/entities/team/model/constants";
-import { Countdown } from "./CountDown";
+// import { Countdown } from "./CountDown";
 import { Button } from "@/shared/components/ui/button";
 import { MapPinSimpleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
@@ -175,7 +175,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             {/* 팀 정보 */}
             <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-32 sm:gap-3 relative">
               {/* 호스트 팀 */}
-              <div className="flex flex-col items-center ring ring-border rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
+              <div className="flex flex-col items-center ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-gray-100 flex items-center justify-center">
                   주최팀
                 </div>
@@ -240,7 +240,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div> */}
               </div>
               {/* 상대 팀 */}
-              <div className="flex flex-col items-center ring ring-border rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
+              <div className="flex flex-col items-center ring ring-border rounded-lg hover:ring-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-gray-100 flex items-center justify-center">
                   초청팀
                 </div>
@@ -261,54 +261,44 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
 
             {/* 경기 시작 버튼 */}
-            {/* <div className="w-full flex flex-col items-center">
-                  {data.data.schedule?.status === "PENDING" ? (
-                    <div>상대팀 대전신청 대기중</div>
-                  ) : data.data.schedule?.status === "REJECTED" ? (
-                    <div>상대팀 대전신청 거절됨</div>
-                  ) : data.data.schedule?.status === "READY" ? (
-                    <button
-                      className={`flex items-center gap-1 text-lg font tracking-tight ${
-                        dDay > 0 ? "text-muted-foreground" : "bg-green-600"
-                      }`}
-                    >
-                      {dDay > 1 ? (
-                        data.data.schedule.startTime?.toLocaleDateString(
-                          "ko-KR",
-                          {
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )
-                      ) : dDay === 1 ? (
-                        "내일"
-                      ) : dDay === 0 ? (
-                        <Countdown
-                          date={data.data.schedule.startTime as Date}
-                        />
-                      ) : (
-                        "경기 종료"
-                      )}
-                    </button>
-                  ) : data.data.schedule?.status === "PLAY" ? (
-                    <div>경기중</div>
-                  ) : (
-                    <div>경기 종료</div>
-                  )}
-                  <span>
+            <div className="p-4">
+              <div className="w-full flex flex-col items-center">
+                {data.data.schedule?.status === "PENDING" ? (
+                  <div className="h-12 w-full flex justify-center items-center text-lg font-semibold bg-muted text-muted-foreground rounded-md">
+                    초청팀 대전 수락 대기중
+                  </div>
+                ) : data.data.schedule?.status === "REJECTED" ? (
+                  <div className="h-12 w-full flex justify-center items-center text-lg font-semibold bg-muted text-muted-foreground rounded-md">
+                    상대팀 대전 거절됨
+                  </div>
+                ) : data.data.schedule?.status === "READY" && dDay > 1 ? (
+                  <div className="h-12 w-full flex justify-center items-center text-lg font-semibold bg-muted text-muted-foreground rounded-md">
                     {calculateDday(data.data.schedule?.date as Date) > 0
                       ? `D-${calculateDday(data.data.schedule?.date as Date)}`
                       : "D-day"}
-                  </span>
-                </div> */}
-
-            <div className="p-4">
-              <Button
-                className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-                size="lg"
-              >
-                경기 시작
-              </Button>
+                  </div>
+                ) : data.data.schedule?.status === "READY" && dDay === 1 ? (
+                  <div className="h-12 w-full flex justify-center items-center text-lg font-semibold bg-muted text-muted-foreground rounded-md">
+                    내일
+                  </div>
+                ) : data.data.schedule?.status === "READY" && dDay === 0 ? (
+                  <Button
+                    className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+                    size="lg"
+                  >
+                    경기 시작
+                  </Button>
+                ) : data.data.schedule?.status === "PLAY" ? (
+                  <Button
+                    className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+                    size="lg"
+                  >
+                    경기 종료
+                  </Button>
+                ) : (
+                  <div>경기 종료</div>
+                )}
+              </div>
             </div>
 
             {/* <div className="flex items-center gap-4 px-6 h-20">
