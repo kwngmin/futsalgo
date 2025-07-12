@@ -91,7 +91,7 @@ const MannerBar = ({ score = 60 }: { score?: number }) => {
 
   return (
     <div
-      className="w-full flex items-center justify-between px-4 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ring ring-border rounded-lg h-12"
+      className="w-full flex items-center justify-between px-4 gap-3 cursor-pointer hover:bg-gray-50 transition-colors border hover:border-gray-300 rounded-lg h-12"
       onClick={() => {
         alert("페어플레이 점수");
       }}
