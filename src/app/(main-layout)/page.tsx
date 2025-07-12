@@ -74,16 +74,56 @@ const HomePage = () => {
 
           return (
             <div className="" key={schedule.id}>
-              <div className="flex justify-between items-center px-4 pb-2 gap-1 tracking-tight">
-                <span className="font-bold">
+              <div className="flex items-center px-4 gap-2 tracking-tight">
+                <span className="">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
                   })}
                 </span>
+                <span className="text-muted-foreground">
+                  {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  -
+                  ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}`}
+                </span>
               </div>
 
-              {schedule.matchType !== "TEAM" ? (
+              <div className="flex justify-between">
+                <div className="text-lg font-semibold px-4">
+                  {schedule.place}
+                </div>
+                <span className="text-muted-foreground">
+                  {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
+                </span>
+              </div>
+
+              <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground px-4">
+                {schedule.hostTeam.logoUrl ? (
+                  <div className="size-5 sm:size-4 text-gray-700">
+                    <Image
+                      width={24}
+                      height={24}
+                      src={schedule.hostTeam.logoUrl}
+                      alt="team logo"
+                      className="size-5 sm:size-4 rounded-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="size-5 sm:size-4 p-0.5">
+                    <div className="size-full bg-gradient-to-br from-slate-300 to-gray-100 rounded-full" />
+                  </div>
+                )}
+                {schedule.hostTeam.name || "소속 팀 없음"}
+              </div>
+
+              {false ? (
+                // {schedule.matchType !== "TEAM" ? (
                 <div className="flex flex-col sm:flex-row sm:items-stretch border-t">
                   <div
                     className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer bg-gray-50"
