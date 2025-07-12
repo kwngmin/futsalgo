@@ -223,7 +223,7 @@ const TeamContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 팀 정보 */}
-          <div className="border-b border-gray-300 space-y-4">
+          <div className="border-b border-gray-300 space-y-2">
             <div className="space-y-4 px-4">
               <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
@@ -308,7 +308,10 @@ const TeamContent = ({ id }: { id: string }) => {
                   >
                     가입 신청
                   </Button>
-                ) : null
+                ) : (
+                  // 빈 여백 추가
+                  <div />
+                )
               ) : data.data.currentUserMembership.status === "PENDING" ? (
                 // <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
                 //   <div className="flex items-center px-2">

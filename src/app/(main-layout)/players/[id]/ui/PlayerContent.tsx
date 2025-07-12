@@ -113,7 +113,7 @@ const PlayerContent = ({ id }: { id: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 회원 정보 */}
-          <div className="border-b border-gray-300 space-y-4">
+          <div className="border-b border-gray-300 space-y-2">
             <div className="space-y-4 px-4">
               <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
