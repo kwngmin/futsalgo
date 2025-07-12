@@ -73,7 +73,11 @@ const HomePage = () => {
             .split(" ");
 
           return (
-            <div className="" key={schedule.id}>
+            <div
+              className=""
+              key={schedule.id}
+              onClick={() => handleScheduleClick(schedule.id)}
+            >
               <div className="flex items-center px-4 gap-2 tracking-tight">
                 <span className="">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
@@ -136,7 +140,7 @@ const HomePage = () => {
                         <div className="sm:text-lg font-semibold">
                           {schedule.hostTeam.name}
                         </div>
-                        {schedule.hostTeam.logoUrl ? (
+                        {/* {schedule.hostTeam.logoUrl ? (
                           <div className="size-7 sm:size-12">
                             <Image
                               src={schedule.hostTeam.logoUrl}
@@ -147,7 +151,7 @@ const HomePage = () => {
                           </div>
                         ) : (
                           <div className="size-5 sm:size-6 bg-gray-200 rounded-full" />
-                        )}
+                        )} */}
                         {/* <div>HOME</div> */}
                       </div>
                     </div>
@@ -215,7 +219,7 @@ const HomePage = () => {
                       {/* <div>AWAY</div> */}
                       <div className="flex items-center gap-1">
                         {/* <div>AWAY</div> */}
-                        {schedule.hostTeam.logoUrl ? (
+                        {/* {schedule.hostTeam.logoUrl ? (
                           <div className="size-7 sm:size-12">
                             <Image
                               src={schedule.hostTeam.logoUrl}
@@ -226,7 +230,7 @@ const HomePage = () => {
                           </div>
                         ) : (
                           <div className="size-6 bg-gray-200 rounded-full" />
-                        )}
+                        )} */}
                         <div className="sm:text-lg font-semibold">
                           {schedule.hostTeam.name}
                         </div>
