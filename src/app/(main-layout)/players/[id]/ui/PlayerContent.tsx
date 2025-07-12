@@ -132,13 +132,14 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </h1>
                   <span className="text-muted-foreground tracking-tight">
                     {data?.data?.createdAt
-                      ? `시작일: ${new Date(
-                          data?.data?.createdAt
-                        ).toLocaleDateString("ko-KR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}`
+                      ? `${new Date(data?.data?.createdAt).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )} 가입`
                       : "데이터 없음"}
                     {/* • ${data.data. */}
                   </span>
@@ -182,7 +183,8 @@ const PlayerContent = ({ id }: { id: string }) => {
                 )} */}
                 </div>
               </div>
-              <MannerBar score={Math.floor(Math.random() * 100)} />
+              <MannerBar />
+              {/* <MannerBar score={Math.floor(Math.random() * 100)} /> */}
             </div>
             {/* {data?.data?.teams[0]?.team ? (
               <TeamCard team={data?.data?.teams[0]?.team} />
@@ -344,9 +346,13 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">
-                  {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
+                  {getCurrentAge(data?.data?.birthDate as string).age}살
                 </div>
-                <Label className="text-muted-foreground">몸 상태</Label>
+                <Label className="text-muted-foreground">나이</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">{data?.data?.height}cm</div>
+                <Label className="text-muted-foreground">키</Label>
               </div>
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">
@@ -356,13 +362,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">
-                  {getCurrentAge(data?.data?.birthDate as string).age}살
+                  {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
                 </div>
-                <Label className="text-muted-foreground">나이</Label>
-              </div>
-              <div className="flex flex-col gap-1 items-center my-3">
-                <div className="font-semibold">{data?.data?.height}cm</div>
-                <Label className="text-muted-foreground">키</Label>
+                <Label className="text-muted-foreground">몸 상태</Label>
               </div>
             </div>
           </div>

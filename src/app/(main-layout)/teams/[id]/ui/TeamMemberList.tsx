@@ -74,6 +74,28 @@ const TeamMemberList = ({
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
+                  {member.role === "MANAGER" && (
+                    <div className="flex items-center gap-0.5 h-5">
+                      <UserRoundCog
+                        className="size-5 text-indigo-700 p-0.5"
+                        strokeWidth={2}
+                      />
+                      <span className="text-sm text-indigo-700 font-semibold">
+                        매니저
+                      </span>
+                    </div>
+                  )}
+                  {member.role === "OWNER" && (
+                    <div className="flex items-center gap-0.5 h-5">
+                      <Crown
+                        className="size-5 text-amber-700 p-0.5 mb-0.5"
+                        strokeWidth={2}
+                      />
+                      <span className="text-sm text-amber-700 font-semibold">
+                        팀장
+                      </span>
+                    </div>
+                  )}
                 </span>
                 <span className="sm:text-sm text-muted-foreground tracking-tight">
                   {`${GENDER[member.user.gender as keyof typeof GENDER]} • ${
@@ -218,7 +240,7 @@ const TeamMemberList = ({
                   {member.role === "OWNER" && (
                     <div className="flex items-center gap-0.5 h-5">
                       <Crown
-                        className="size-5 text-amber-700 p-0.5"
+                        className="size-5 text-amber-700 p-0.5 mb-0.5"
                         strokeWidth={2}
                       />
                       <span className="text-sm text-amber-700 font-semibold">

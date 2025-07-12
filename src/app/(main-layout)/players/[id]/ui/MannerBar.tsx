@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
-const MannerBar = ({ score }: { score: number }) => {
+const MannerBar = ({ score = 60 }: { score?: number }) => {
   const transformScore = (score: number) => {
     if (score >= 90)
       return {
@@ -93,13 +93,13 @@ const MannerBar = ({ score }: { score: number }) => {
     <div
       className="w-full flex items-center justify-between px-4 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ring ring-border rounded-lg h-12"
       onClick={() => {
-        alert("통계");
+        alert("페어플레이 점수");
       }}
     >
       <div className="flex items-center space-x-3">
         <Gem className="size-5 text-gray-600" />
         {/* <Gauge className="size-5 text-gray-600" /> */}
-        <span className="font-medium">페어플레이 점수</span>
+        <span className="font-medium">페어플레이</span>
       </div>
       <div className="flex items-center gap-1">
         <div className="flex items-center gap-2">

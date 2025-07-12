@@ -253,13 +253,14 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <span className="text-muted-foreground tracking-tight">
                     {data?.data?.createdAt
-                      ? `등록일: ${new Date(
-                          data?.data?.createdAt
-                        ).toLocaleDateString("ko-KR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}`
+                      ? `${new Date(data?.data?.createdAt).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )} 등록`
                       : "데이터 없음"}
                   </span>
                 </div>
@@ -534,6 +535,14 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
+                      {data.data.stats.professionalCount
+                        ? `${data.data.stats.professionalCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">선수 출신</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
                       {data.data.stats.averageAge}살
                     </div>
                     <Label className="text-muted-foreground">평균 연령</Label>
@@ -546,25 +555,17 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.recruitmentStatus === "RECRUITING"
-                        ? "모집중"
-                        : "마감"}
-                    </div>
-                    <Label className="text-muted-foreground">팀원 모집</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
                       {data.data.members.approved.length}명
                     </div>
                     <Label className="text-muted-foreground">팀원 수</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
-                      {data.data.stats.professionalCount
-                        ? `${data.data.stats.professionalCount}명`
-                        : "없음"}
+                      {data.data.recruitmentStatus === "RECRUITING"
+                        ? "모집중"
+                        : "마감"}
                     </div>
-                    <Label className="text-muted-foreground">선수 출신</Label>
+                    <Label className="text-muted-foreground">팀원 모집</Label>
                   </div>
                 </div>
               </div>
