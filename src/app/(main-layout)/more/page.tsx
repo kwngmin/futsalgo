@@ -28,22 +28,22 @@ const MorePage = () => {
       items: [
         {
           icon: CircleUserRound,
-          label: "내 계정",
+          label: "프로필 수정",
           action: () => {
             setIsLoading(true);
             router.push("/profile");
           },
         },
-        {
-          icon: Bookmark,
-          label: "팔로잉 한 팀",
-          action: () => alert("팔로잉 한 팀"),
-        },
-        {
-          icon: Heart,
-          label: "팔로잉 한 회원",
-          action: () => alert("팔로잉 한 회원"),
-        },
+        // {
+        //   icon: Bookmark,
+        //   label: "팔로잉 한 팀",
+        //   action: () => alert("팔로잉 한 팀"),
+        // },
+        // {
+        //   icon: Heart,
+        //   label: "팔로잉 한 회원",
+        //   action: () => alert("팔로잉 한 회원"),
+        // },
       ],
     },
     {
