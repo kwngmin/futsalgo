@@ -111,7 +111,7 @@ const PlayerCard = ({
           {teamName || "소속 팀 없음"}
         </p> */}
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1">
+          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
             {teamLogoUrl ? (
               <div className="size-5 sm:size-4 text-gray-700">
                 <Image
