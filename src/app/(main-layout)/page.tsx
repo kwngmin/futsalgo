@@ -5,6 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { ArrowDownUp, Search } from "lucide-react";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
 // import { Circle, Clock, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
@@ -39,9 +40,14 @@ const HomePage = () => {
           <h1 className="text-2xl font-bold">경기</h1>
           <h1 className="text-2xl font-bold opacity-30">지난 경기</h1>
         </div>
-        {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-          <Search className="w-5 h-5" />
-        </button> */}
+        <div className="flex items-center gap-2">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+            <Search className="w-5 h-5" />
+          </button>
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+            <ArrowDownUp className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       {/* MatchesPage */}
       <div className="space-y-6">
@@ -98,10 +104,8 @@ const HomePage = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between">
-                <div className="text-lg font-semibold px-4">
-                  {schedule.place}
-                </div>
+              <div className="flex justify-between px-4 gap-3">
+                <div className="text-lg font-semibold">{schedule.place}</div>
                 <span className="text-muted-foreground">
                   {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
                 </span>
@@ -124,6 +128,14 @@ const HomePage = () => {
                   </div>
                 )}
                 {schedule.hostTeam.name || "소속 팀 없음"}
+                {/* <span className="text-muted-foreground">
+                  createdAt:{" "}
+                  {schedule.createdAt?.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}{" "}
+                </span> */}
               </div>
 
               {false ? (
