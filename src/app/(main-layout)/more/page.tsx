@@ -9,9 +9,9 @@ import {
   Loader2,
   CircleUserRound,
   ChartPie,
-  Heart,
+  // Heart,
   Bug,
-  Bookmark,
+  // Bookmark,
   Lightbulb,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
