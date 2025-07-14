@@ -4,7 +4,7 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ArrowDownUp, Search, Vote } from "lucide-react";
+import { ArrowDownUp, Clock, Search, Vote } from "lucide-react";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
 // import { Circle, Clock, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
@@ -93,8 +93,12 @@ const HomePage = () => {
                 <div className="grow flex flex-col justify-center">
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
                     {schedule.place}
+                    <span className="text-sm font-medium text-indigo-600 mb-px">
+                      {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
+                    </span>
                   </h3>
                   <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
+                    <Clock className="size-4" />
                     {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -103,9 +107,7 @@ const HomePage = () => {
                   ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
-                  })} • ${
-                      schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"
-                    }`}
+                  })}`}
                   </div>
                 </div>
               </div>
