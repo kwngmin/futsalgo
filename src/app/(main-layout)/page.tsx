@@ -4,7 +4,6 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { ArrowDownUp, Search, Vote } from "lucide-react";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
 // import { Circle, Clock, X } from "lucide-react";
