@@ -195,7 +195,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         <div className="space-y-3">
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
-            {data.data.schedule?.matchType === "SQUAD" ? (
+            {data.data.schedule?.matchType !== "SQUAD" ? (
               <div className="flex flex-col items-center mb-2">
                 <Image
                   src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
@@ -210,26 +210,28 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             ) : (
               <div className="w-full flex items-center justify-center mb-3 gap-3">
-                <div className="flex flex-col items-center mb-2">
+                <div className="flex flex-col items-center mb-2 w-28 sm:w-36">
                   <Image
                     src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
                     alt="hostTeamLogo"
                     width={100}
                     height={100}
+                    className="size-16 sm:size-24"
                   />
-                  <span className="text-lg font-semibold">
+                  <span className="sm:text-lg font-semibold text-center">
                     {data.data.schedule?.hostTeam?.name}
                   </span>
                 </div>
                 <span className="text-2xl font-bold">VS</span>
-                <div className="flex flex-col items-center mb-2">
+                <div className="flex flex-col items-center mb-2 w-28 sm:w-36">
                   <Image
                     src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
                     alt="hostTeamLogo"
                     width={100}
                     height={100}
+                    className="size-16 sm:size-24"
                   />
-                  <span className="text-lg font-semibold">
+                  <span className="sm:text-lg font-semibold">
                     {data.data.schedule?.hostTeam?.name}
                   </span>
                 </div>
