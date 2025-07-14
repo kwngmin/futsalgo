@@ -91,12 +91,12 @@ const HomePage = () => {
                     day: "numeric",
                   })}
                 </div>
-                <div className="grow h-11 flex items-center justify-between gap-3">
+                <div className="grow h-12` flex items-center justify-between gap-3">
                   <div className="flex flex-col">
                     <div className="text-lg font-semibold leading-tight">
                       {schedule.place}
                     </div>
-                    <span className="text-sm text-muted-foreground tracking-tight font-medium">
+                    <span className="text-muted-foreground tracking-tight font-medium">
                       {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -114,7 +114,7 @@ const HomePage = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center pt-1 px-4 gap-4 sm:gap-2">
+              <div className="flex flex-col sm:flex-row items-center px-4 gap-4 sm:gap-2">
                 <div className="font-medium w-full h-11 flex items-center justify-between gap-2 bg-slate-100 rounded-lg px-4">
                   <div className="flex items-center gap-3">
                     <Vote className="size-5 text-muted-foreground" />
