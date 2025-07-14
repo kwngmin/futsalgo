@@ -191,7 +191,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="space-y-2">
               <div className="overflow-hidden rounded-2xl border mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
                   onClick={() => {
                     router.push(`/players/${data.data.schedule?.createdBy.id}`);
                   }}
@@ -206,6 +206,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                       weight="fill"
                     />
                     <span className="font-medium">1 경기</span>
+                    <span className="text-sm text-gray-500">15분</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
@@ -217,7 +218,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               <div className="overflow-hidden rounded-2xl border mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
                   onClick={() => {
                     router.push(`/players/${data.data.schedule?.createdBy.id}`);
                   }}
@@ -232,6 +233,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                       weight="fill"
                     />
                     <span className="font-medium">2 경기</span>
+                    <span className="text-sm text-gray-500">15분</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
@@ -243,7 +245,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               <div className="overflow-hidden rounded-2xl border mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
                   onClick={() => {
                     router.push(`/players/${data.data.schedule?.createdBy.id}`);
                   }}
@@ -258,6 +260,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                       weight="fill"
                     />
                     <span className="font-medium">3 경기</span>
+                    <span className="text-sm text-gray-500">15분</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
