@@ -50,7 +50,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* MatchesPage */}
-      <div className="space-y-6">
+      <div className="space-y-3">
         {/* {session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <div className="flex gap-2 justify-center">
@@ -80,7 +80,7 @@ const HomePage = () => {
 
           return (
             <div
-              className="space-y-2 h-40 sm:h-32 flex flex-col justify-center"
+              className="space-y-2 flex flex-col py-2"
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
@@ -91,12 +91,12 @@ const HomePage = () => {
                     day: "numeric",
                   })}
                 </div>
-                <div className="grow h-12` flex items-center justify-between gap-3">
+                <div className="grow h-12` flex items-center justify-between gap-3 ">
                   <div className="flex flex-col">
-                    <div className="text-lg font-semibold leading-tight">
+                    <div className="text-lg font-semibold leading-none h-6 flex items-center">
                       {schedule.place}
                     </div>
-                    <span className="text-muted-foreground tracking-tight font-medium">
+                    <span className="text-muted-foreground tracking-tight">
                       {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
                         hour: "2-digit",
                         minute: "2-digit",
