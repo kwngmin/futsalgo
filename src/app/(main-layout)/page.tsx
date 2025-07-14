@@ -79,11 +79,13 @@ const HomePage = () => {
 
           return (
             <div
-              className="space-y-2 sm:space-y-1 flex flex-col py-2"
+              className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none"
               key={schedule.id}
-              onClick={() => handleScheduleClick(schedule.id)}
             >
-              <div className="flex px-4 gap-1">
+              <div
+                className="flex px-4 gap-1 cursor-pointer"
+                onClick={() => handleScheduleClick(schedule.id)}
+              >
                 <div className="font-medium flex items-center gap-2 truncate leading-none w-20 h-14 tracking-tight">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
                     month: "short",
@@ -113,14 +115,15 @@ const HomePage = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row items-center px-4 gap-2">
-                <div className="font-medium w-full h-11 flex items-center justify-between gap-2 bg-slate-100 rounded-lg px-4">
-                  <div className="flex items-center gap-3">
-                    <Vote className="size-5 text-muted-foreground" />
-                    <span className="font-medium">참석여부</span>
-                    <span className="text-sm text-muted-foreground">
-                      7월 11일 오전 10:00까지
-                    </span>
-                  </div>
+                <div
+                  className="font-medium w-full h-11 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
+                  onClick={() => handleScheduleClick(schedule.id)}
+                >
+                  <Vote className="size-5 text-muted-foreground" />
+                  <span className="font-medium">참석여부</span>
+                  <span className="text-sm text-muted-foreground">
+                    7월 11일 오전 10:00까지
+                  </span>
                   {/* <span className="text-sm font-medium">미참여</span> */}
                 </div>
                 {schedule.attendances

@@ -5,6 +5,7 @@ import { getSchedule } from "../actions/get-schedule";
 import {
   ArrowLeft,
   Calendar,
+  ChartPie,
   ChevronRight,
   Clock,
   EllipsisVertical,
@@ -12,7 +13,6 @@ import {
   Share,
   Text,
   UserRound,
-  Vote,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -44,16 +44,6 @@ const tabs = [
     label: "정보",
     value: "overview",
     isDisabled: false,
-  },
-  {
-    label: "주최팀",
-    value: "hostTeam",
-    isDisabled: false,
-  },
-  {
-    label: "초청팀",
-    value: "guestTeam",
-    isDisabled: true,
   },
   {
     label: "후기",
@@ -106,21 +96,21 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   //   },
   // });
 
-  // const opposingTeam =
-  //   data.data.schedule?.matchType === "SQUAD"
-  //     ? data.data.schedule.hostTeam
-  //     : data.data.schedule?.guestTeam;
+  const opposingTeam =
+    data.data.schedule?.matchType === "SQUAD"
+      ? data.data.schedule.hostTeam
+      : data.data.schedule?.guestTeam;
 
   const dDay = calculateDday(data.data.schedule?.date as Date);
-  // const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
-  //   "ko-KR",
-  //   {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   }
-  // );
+  const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
+    "ko-KR",
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
 
-  // const [period, time] = timeString?.split(" ") || [];
+  const [period, time] = timeString?.split(" ") || [];
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -163,30 +153,51 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
             {/* 팀 정보 */}
-            <div className="flex px-4 gap-24 sm:gap-3">
-              {/* 공통 */}
-              <div className="w-full flex flex-col items-center justify-center">
-                <span className="h-10 flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
-                  {/* {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
+            <div className="grid grid-cols-2 sm:grid-cols-3 px-4 gap-24 sm:gap-3 relative">
+              {/* 주최팀 */}
+              <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+                <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-indigo-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
+                  <div className="size-3 bg-indigo-500 rounded-full" />
+                  {/* 주최팀 */}
+                  {data?.data?.schedule?.matchType === "SQUAD"
+                    ? "홈"
+                    : "주최팀"}
+                </div>
+                {data?.data?.schedule?.hostTeam?.logoUrl ? (
+                  <div className="">
+                    <Image
+                      src={data?.data?.schedule?.hostTeam?.logoUrl}
+                      alt="logo"
+                      width={64}
+                      height={64}
+                    />
+                  </div>
+                ) : (
+                  <div className="">
+                    {data?.data?.schedule?.hostTeam?.name.charAt(0)}
+                  </div>
+                )}
+                <span className="font-semibold">
+                  {data?.data?.schedule?.hostTeam?.name}
+                </span>
+              </div>
+              {/* 데스크탑 공통 */}
+              <div className="hidden sm:flex flex-col items-center justify-center">
+                <span className="hidden sm:h-10 sm:flex items-center justify-center font-semibold text-xl sm:text-3xl tracking-tight">
+                  {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
-                  })} */}
-                  {data.data.schedule?.matchType === "TEAM"
-                    ? "다른 팀과의 친선 경기"
-                    : "우리 팀끼리 연습 경기"}
+                  })}
                 </span>
-                <div className="w-full flex flex-col items-center text-lg">
+                <div className="w-full flex flex-col items-center">
                   {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
                     month: "long",
                     day: "numeric",
-                    weekday: "long",
-                    hour: "2-digit",
-                    minute: "2-digit",
                   })}
                 </div>
               </div>
               {/* 모바일 공통 */}
-              {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center pb-3">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden flex flex-col items-center justify-center pb-3">
                 <span className="h-5 flex items-center justify-center font-semibold text-lg tracking-tight">
                   {period}
                 </span>
@@ -199,11 +210,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     day: "numeric",
                   })}
                 </div>
-              </div> */}
+              </div>
               {/* 초청팀 */}
-              {/* <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
+              <div className="flex flex-col items-center border border-gray-100 rounded-lg hover:border-gray-400 hover:shadow-lg transition-shadow duration-300 cursor-pointer overflow-hidden pb-6 group">
                 <div className="text-slate-600 sm:text-lg font-medium tracking-tight mb-4 w-full h-9 sm:h-11 bg-emerald-500/5 flex items-center justify-center transition-colors duration-300 gap-2">
                   <div className="size-3 bg-emerald-500 rounded-full" />
+                  {/* 초청팀 */}
                   {data?.data?.schedule?.matchType === "SQUAD"
                     ? "어웨이"
                     : "초청팀"}
@@ -221,7 +233,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   <div className="">{opposingTeam?.name.charAt(0)}</div>
                 )}
                 <span className="font-semibold">{opposingTeam?.name}</span>
-              </div> */}
+              </div>
             </div>
 
             {/* 경기 시작 버튼 */}
@@ -277,13 +289,14 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <div className="flex items-center justify-between gap-2 px-4">
               <div className="flex h-12 space-x-2">
                 {tabs
-                  .filter(
-                    (tab) =>
-                      !(
-                        tab.value === "guestTeam" &&
-                        data.data.schedule?.matchType === "SQUAD"
-                      )
-                  )
+                  // .filter(
+                  //   (tab) =>
+                  //     tab.value !== "management" ||
+                  //     (tab.value === "management" &&
+                  //       (data.data.currentUserMembership.role === "MANAGER" ||
+                  //         data.data.currentUserMembership.role === "OWNER") &&
+                  //       data.data.currentUserMembership.status === "APPROVED")
+                  // )
                   .map((tab) => (
                     <div
                       key={tab.value}
@@ -303,42 +316,41 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
           </div>
-          {/* 참석 현황 */}
-          {selectedTab === "hostTeam" && (
-            <div className="border rounded-2xl overflow-hidden mx-4">
-              <div
-                className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-                onClick={() => {
-                  alert("참석 현황");
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <Vote className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">참석 현황</span>
-                </div>
-                {/* <div className="flex items-center gap-1">
+
+          {/* 참가자 현황 */}
+          <div className="border rounded-2xl overflow-hidden mx-4">
+            <div
+              className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              onClick={() => {
+                alert("참가자 현황");
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <ChartPie className={`w-5 h-5 text-gray-600`} />
+                <span className="font-medium">참가자 현황</span>
+              </div>
+              {/* <div className="flex items-center gap-1">
                 <span className="text-sm font-medium text-gray-500">
                   자세히 보기
                 </span>
               </div> */}
-                <ChevronRight className="size-5 text-gray-400" />
+              <ChevronRight className="size-5 text-gray-400" />
+            </div>
+            <div className="grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">참가</Label>
               </div>
-              <div className="grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
-                <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">0</div>
-                  <Label className="text-muted-foreground">참가</Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">0</div>
-                  <Label className="text-muted-foreground">불참</Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">1</div>
-                  <Label className="text-muted-foreground">미참여</Label>
-                </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">0</div>
+                <Label className="text-muted-foreground">불참</Label>
+              </div>
+              <div className="flex flex-col gap-1 items-center my-3">
+                <div className="font-semibold">1</div>
+                <Label className="text-muted-foreground">미정</Label>
               </div>
             </div>
-          )}
+          </div>
 
           <div className="">
             {/* 안내 사항 */}
