@@ -50,7 +50,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* MatchesPage */}
-      <div className="space-y-6">
+      <div className="space-y-12">
         {/* {session.data && (
           <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
             <div className="flex gap-2 justify-center">
@@ -80,7 +80,7 @@ const HomePage = () => {
 
           return (
             <div
-              className=""
+              className="space-y-2"
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
