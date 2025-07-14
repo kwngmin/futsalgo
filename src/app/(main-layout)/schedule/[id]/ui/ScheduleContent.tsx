@@ -171,7 +171,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </button>
         </div>
       </div>
-      <div className="h-8 flex items-center justify-center bg-slate-100 sm:rounded-lg text-muted-foreground text-sm font-semibold">
+      <div className="h-9 flex items-center justify-center bg-slate-100 sm:rounded-lg text-muted-foreground text-sm font-semibold">
         {calculateDday(data.data.schedule?.date as Date) > 0
           ? `경기하는 날까지 D-${calculateDday(
               data.data.schedule?.date as Date
@@ -218,7 +218,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     router.push(`/players/${data.data.schedule?.createdBy.id}`);
                   }}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     {/* <CourtBasketballIcon
                     className="w-5 h-5 text-gray-600"
                     // weight="fill"
@@ -245,7 +245,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     router.push(`/players/${data.data.schedule?.createdBy.id}`);
                   }}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     {/* <CourtBasketballIcon
                     className="w-5 h-5 text-gray-600"
                     // weight="fill"
@@ -272,7 +272,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     router.push(`/players/${data.data.schedule?.createdBy.id}`);
                   }}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     {/* <CourtBasketballIcon
                     className="w-5 h-5 text-gray-600"
                     // weight="fill"
@@ -391,7 +391,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   alert("참석 현황");
                 }}
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                   <Vote className={`w-5 h-5 text-gray-600`} />
                   <span className="font-medium">참석 현황</span>
                 </div>
@@ -433,7 +433,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 장소 이름 */}
             <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <MapPinSimpleIcon
                   className="text-gray-600 mr-3"
                   size={20}
@@ -450,7 +450,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 경기 일자 */}
             <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <Calendar className="w-5 h-5 text-gray-600" />
                 <span className="font-medium">경기 일자</span>
               </div>
@@ -467,7 +467,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 예약 시간 */}
             <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <Clock className="w-5 h-5 text-gray-600" />
                 <span className="font-medium">예약 시간</span>
               </div>
@@ -488,12 +488,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 만든이 */}
             <div
-              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
               onClick={() => {
                 router.push(`/players/${data.data.schedule?.createdBy.id}`);
               }}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <UserRound className="w-5 h-5 text-gray-600" />
                 <span className="font-medium">만든이</span>
               </div>
