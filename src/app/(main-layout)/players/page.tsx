@@ -110,7 +110,14 @@ const PlayersPage = () => {
             <PlayerCard
               player={data?.data?.user}
               isCurrentUser={true}
-              teamName={data?.data?.user?.teams[0]?.team?.name}
+              // teamName={data?.data?.user?.teams[0]?.team?.name}
+              teamName={
+                data?.data?.user?.teams.length > 1
+                  ? `${data?.data?.user?.teams[0]?.team?.name} 외 ${
+                      data?.data?.user?.teams.length - 1
+                    }개 팀`
+                  : data?.data?.user?.teams[0]?.team?.name
+              }
               teamLogoUrl={
                 data?.data?.user?.teams[0]?.team?.logoUrl || undefined
               }
@@ -144,7 +151,13 @@ const PlayersPage = () => {
               <PlayerCard
                 key={player.id}
                 player={player}
-                teamName={player.teams[0]?.team?.name}
+                teamName={
+                  player.teams.length > 1
+                    ? `${player.teams[0]?.team?.name} 외 ${
+                        player.teams.length - 1
+                      }개 팀`
+                    : player.teams[0]?.team?.name
+                }
                 teamLogoUrl={player.teams[0]?.team?.logoUrl || undefined}
               />
             ))}

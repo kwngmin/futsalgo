@@ -65,9 +65,11 @@ const TeamsPage = () => {
           {/* 내 팀 섹션 */}
           {isLoggedIn ? (
             data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
-              data?.data?.myTeams.map((team) => (
-                <TeamCard team={team} key={team.id} />
-              ))
+              <div>
+                {data?.data?.myTeams.map((team) => (
+                  <TeamCard team={team} key={team.id} />
+                ))}
+              </div>
             ) : (
               <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
                 <div className="flex gap-2 justify-center">

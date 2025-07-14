@@ -77,7 +77,7 @@ const TeamMemberList = ({
                   {member.role === "MANAGER" && (
                     <div className="flex items-center gap-0.5 h-5">
                       <UserRoundCog
-                        className="size-5 text-indigo-700 p-0.5"
+                        className="size-5 text-indigo-700 p-0.5 mb-0.5"
                         strokeWidth={2}
                       />
                       <span className="text-sm text-indigo-700 font-semibold">
@@ -229,7 +229,7 @@ const TeamMemberList = ({
                   {member.role === "MANAGER" && (
                     <div className="flex items-center gap-0.5 h-5">
                       <UserRoundCog
-                        className="size-5 text-indigo-700 p-0.5"
+                        className="size-5 text-indigo-700 p-0.5 mb-0.5"
                         strokeWidth={2}
                       />
                       <span className="text-sm text-indigo-700 font-semibold">
