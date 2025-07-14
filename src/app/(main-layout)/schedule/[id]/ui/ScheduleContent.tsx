@@ -106,10 +106,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   //   },
   // });
 
-  // const opposingTeam =
-  //   data.data.schedule?.matchType === "SQUAD"
-  //     ? data.data.schedule.hostTeam
-  //     : data.data.schedule?.guestTeam;
+  const opposingTeam =
+    data.data.schedule?.matchType === "SQUAD"
+      ? data.data.schedule.hostTeam
+      : data.data.schedule?.guestTeam;
 
   const dDay = calculateDday(data.data.schedule?.date as Date);
   // const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
@@ -163,10 +163,10 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
             {/* 팀 정보 */}
-            <div className="flex px-4 gap-24 sm:gap-3">
+            <div className="flex px-4 gap-24 sm:gap-3 mb-9">
               {/* 공통 */}
               <div className="w-full flex flex-col items-center justify-center">
-                <span className="h-10 flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
+                <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
                   {/* {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -175,7 +175,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     ? "다른 팀과의 친선경기"
                     : "우리 팀끼리 연습경기"}
                 </span>
-                <div className="w-full flex flex-col items-center text-lg">
+                <div className="w-full flex flex-col items-center text-lg sm:text-base">
                   {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
                     month: "long",
                     day: "numeric",
@@ -222,6 +222,112 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 )}
                 <span className="font-semibold">{opposingTeam?.name}</span>
               </div> */}
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-stretch border-t">
+              <div className="relative sm:grow grid grid-cols-2 items-center gap-16 h-14 cursor-pointer hover:bg-gray-50 transition-colors">
+                {/* 주최팀 */}
+                <div className="flex flex-col items-end gap-2">
+                  {/* <div>HOME</div> */}
+                  <div className="flex items-center gap-1">
+                    <div className="sm:text-lg font-semibold">
+                      {data.data.schedule?.hostTeam.name}
+                    </div>
+                    {data.data.schedule?.hostTeam.logoUrl ? (
+                      <div className="size-7 sm:size-12">
+                        <Image
+                          src={data.data.schedule?.hostTeam.logoUrl}
+                          alt={data.data.schedule?.hostTeam.name}
+                          width={48}
+                          height={48}
+                        />
+                      </div>
+                    ) : (
+                      <div className="size-5 sm:size-6 bg-gray-200 rounded-full" />
+                    )}
+                    {/* <div>HOME</div> */}
+                  </div>
+                </div>
+                {/* 공통 */}
+                <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center">
+                  <span className="h-5 sm:h-6 flex items-center justify-center font-semibold text-lg sm:text-xl tracking-tight">
+                    0:0
+                  </span>
+                  <div className="w-full flex flex-col items-center">
+                    {/* {schedule?.status === "PENDING" ? (
+                          <div>대기중</div>
+                        ) : schedule?.status === "REJECTED" ? (
+                          <div>거절됨</div>
+                        ) : schedule?.status === "READY" ? (
+                          <div
+                            className={`flex items-center gap-1 text-sm sm:text-lg font-medium tracking-tight ${
+                              dDay > 0
+                                ? "text-muted-foreground"
+                                : "bg-green-600"
+                            }`}
+                          >
+                            {dDay > 1 ? (
+                              schedule.startTime?.toLocaleDateString("ko-KR", {
+                           
+                                month: "long",
+                                day: "numeric",
+                              })
+                            ) : dDay === 1 ? (
+                              "내일"
+                            ) : dDay === 0 ? (
+                              <Countdown date={schedule.startTime as Date} />
+                            ) : (
+                              "경기 종료"
+                            )}
+                          </div>
+                        ) : schedule?.status === "PLAY" ? (
+                          <div>경기중</div>
+                        ) : (
+                          <div>경기 종료</div>
+                        )} */}
+                    {/* <span>
+                {calculateDday(data.data.schedule?.date as Date) > 0
+                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+                  : "D-day"}
+              </span> */}
+                  </div>
+                  {/* <span>{timeRange}</span> */}
+                  {/* <span>
+                  {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="">{timeRange}</span> */}
+                  {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
+                  VS
+                </div> */}
+                </div>
+                {/* 초청팀 */}
+                <div className="flex flex-col gap-2">
+                  {/* <div>AWAY</div> */}
+                  <div className="flex items-center gap-1">
+                    {/* <div>AWAY</div> */}
+                    {opposingTeam?.logoUrl ? (
+                      <div className="size-7 sm:size-12">
+                        <Image
+                          src={opposingTeam.logoUrl}
+                          alt={opposingTeam.name}
+                          width={48}
+                          height={48}
+                        />
+                      </div>
+                    ) : (
+                      <div className="size-6 bg-gray-200 rounded-full" />
+                    )}
+                    <div className="sm:text-lg font-semibold">
+                      {opposingTeam?.name}
+                    </div>
+                    {/* <div>HOME</div> */}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* 경기 시작 버튼 */}
