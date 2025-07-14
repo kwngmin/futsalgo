@@ -172,8 +172,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     minute: "2-digit",
                   })} */}
                   {data.data.schedule?.matchType === "TEAM"
-                    ? "다른 팀과의 친선 경기"
-                    : "우리 팀끼리 연습 경기"}
+                    ? "다른 팀과의 친선경기"
+                    : "우리 팀끼리 연습경기"}
                 </span>
                 <div className="w-full flex flex-col items-center text-lg">
                   {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {

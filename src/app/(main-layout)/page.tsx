@@ -96,7 +96,7 @@ const HomePage = () => {
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
                     {schedule.place}
                     <span className="text-sm font-medium text-indigo-600 mb-0.5">
-                      {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
+                      {schedule.matchType === "TEAM" ? "친선경기" : "연습경기"}
                     </span>
                   </h3>
                   <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
