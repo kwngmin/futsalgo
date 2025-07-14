@@ -187,9 +187,9 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       {data ? (
         <div className="space-y-3">
           {/* 일정 정보 */}
-          <div className="relative border-b border-gray-300 pt-6">
+          <div className="relative border-b border-gray-300 pt-8">
             {/* 팀 정보 */}
-            <div className="flex px-4 gap-24 sm:gap-3 mb-9">
+            <div className="flex px-4 gap-24 sm:gap-3 mb-10">
               {/* 공통 */}
               <div className="w-full flex flex-col items-center justify-center">
                 <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
@@ -342,7 +342,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 경기 추가 */}
             {dDay >= 0 && (
-              <div className="px-4 py-2">
+              <div className="px-4 py-2 mb-2">
                 <Button
                   className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
                   size="lg"
