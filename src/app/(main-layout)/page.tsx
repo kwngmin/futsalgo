@@ -83,19 +83,19 @@ const HomePage = () => {
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
-              <div className="flex px-4 gap-2 tracking-tight">
-                <div className="px-2 rounded-lg flex items-center text-sm font-semibold min-w-20 h-14">
+              <div className="flex px-4 gap-3 tracking-tight">
+                <div className="flex items-center text-sm font-semibold min-w-16 h-14">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
                   })}
                 </div>
-                <div className="grow h-12` flex items-center justify-between gap-3 ">
+                <div className="grow flex items-center justify-between gap-3 ">
                   <div className="flex flex-col">
-                    <div className="text-lg font-semibold leading-none h-6 flex items-center">
+                    <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
                       {schedule.place}
-                    </div>
-                    <span className="text-muted-foreground tracking-tight">
+                    </h3>
+                    <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
                       {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -105,7 +105,7 @@ const HomePage = () => {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}`}
-                    </span>
+                    </div>
                   </div>
                   <span className="text-sm text-muted-foreground">
                     {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
