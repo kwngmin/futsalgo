@@ -49,11 +49,11 @@ const tabs = [
     value: "matches",
     isDisabled: true,
   },
-  {
-    label: "후기",
-    value: "reviews",
-    isDisabled: true,
-  },
+  // {
+  //   label: "후기",
+  //   value: "reviews",
+  //   isDisabled: true,
+  // },
   {
     label: "사진",
     value: "photos",
@@ -106,11 +106,9 @@ const PlayerContent = ({ id }: { id: string }) => {
         </button>
         <div className="flex justify-end gap-2">
           {id !== session.data?.user.id && (
-            <div className="flex items-center gap-2">
-              <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
-                팔로우
-              </Button>
-            </div>
+            <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
+              팔로우
+            </Button>
           )}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />

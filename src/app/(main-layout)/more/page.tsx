@@ -13,6 +13,7 @@ import {
   Bug,
   // Bookmark,
   Lightbulb,
+  NotebookPen,
 } from "lucide-react";
 import { signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,15 @@ const MorePage = () => {
           action: () => {
             setIsLoading(true);
             router.push("/profile");
+          },
+        },
+        {
+          icon: NotebookPen,
+          label: "작성한 후기",
+          action: () => {
+            alert("작성한 후기");
+            // setIsLoading(true);
+            // router.push("/profile");
           },
         },
       ],
