@@ -93,7 +93,7 @@ const HomePage = () => {
                 <div className="grow flex flex-col justify-center">
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
                     {schedule.place}
-                    <span className="text-sm font-medium text-indigo-600 mb-px">
+                    <span className="text-sm font-medium text-indigo-600 mb-0.5">
                       {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
                     </span>
                   </h3>
@@ -121,7 +121,7 @@ const HomePage = () => {
                       7월 11일 오전 10:00까지
                     </span>
                   </div>
-                  <span className="text-sm font-medium">미참여</span>
+                  {/* <span className="text-sm font-medium">미참여</span> */}
                 </div>
                 {schedule.attendances
                   .map((attendance) => attendance.userId)
