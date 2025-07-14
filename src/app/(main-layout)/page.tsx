@@ -84,31 +84,34 @@ const HomePage = () => {
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
-              <div className="flex items-center px-4 gap-2 tracking-tight">
-                <span className="">
+              <div className="flex px-4 gap-3 tracking-tight">
+                <div className="px-3 h-11 rounded-lg flex items-center justify-center text-sm font-semibold w-20">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
                   })}
-                </span>
-                <span className="text-muted-foreground">
-                  {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                </div>
+                <div className="grow h-11 flex items-center justify-between gap-3">
+                  <div className="flex flex-col">
+                    <div className="text-lg font-semibold leading-tight">
+                      {schedule.place}
+                    </div>
+                    <span className="text-sm text-muted-foreground tracking-tight font-medium">
+                      {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                   -
                   ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}`}
-                </span>
-              </div>
-
-              <div className="h-11 flex items-center justify-between px-4 gap-3">
-                <div className="text-lg font-semibold">{schedule.place}</div>
-                <span className="text-muted-foreground">
-                  {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
-                </span>
+                    </span>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
+                  </span>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center pt-1 px-4 gap-4 sm:gap-2">
