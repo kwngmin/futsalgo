@@ -382,7 +382,8 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
           </div>
-          {/* 참석 현황 */}
+
+          {/* 주최팀 탭 내용 */}
           {selectedTab === "hostTeam" && (
             <div className="border rounded-2xl overflow-hidden mx-4">
               <div
@@ -419,99 +420,108 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
           )}
 
-          <div className="">
-            {/* 안내 사항 */}
-            <div className="mb-3">
-              <div className="w-full flex items-center justify-start px-4 py-3 border-t border-gray-100 space-x-3">
-                <Text className={`w-5 h-5 text-gray-600`} />
-                <span className="font-medium">안내 사항</span>
+          {/* 정보 탭 내용 */}
+          {selectedTab === "overview" && (
+            <div className="">
+              {/* 안내 사항 */}
+              <div className="mb-3">
+                <div className="w-full flex items-center justify-start px-4 py-3 border-t border-gray-100 space-x-3">
+                  <Text className={`w-5 h-5 text-gray-600`} />
+                  <span className="font-medium">안내 사항</span>
+                </div>
+                <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40">
+                  {data?.data.schedule?.description ?? "안내 사항 없음"}
+                </p>
               </div>
-              <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40">
-                {data?.data.schedule?.description ?? "안내 사항 없음"}
-              </p>
-            </div>
 
-            {/* 장소 이름 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
-                <MapPinSimpleIcon
-                  className="text-gray-600 mr-3"
-                  size={20}
-                  weight="fill"
-                />
-                <span className="font-medium">장소 이름</span>
+              {/* 장소 이름 */}
+              <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
+                <div className="flex items-center space-x-2">
+                  <MapPinSimpleIcon
+                    className="text-gray-600 mr-3"
+                    size={20}
+                    weight="fill"
+                  />
+                  <span className="font-medium">장소 이름</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.schedule?.place}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.place}
-                </span>
-              </div>
-            </div>
 
-            {/* 경기 일자 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-5 h-5 text-gray-600" />
-                <span className="font-medium">경기 일자</span>
+              {/* 경기 일자 */}
+              <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
+                <div className="flex items-center space-x-2">
+                  <Calendar className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium">경기 일자</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.schedule?.startTime?.toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-              </div>
-            </div>
 
-            {/* 예약 시간 */}
-            <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-gray-600" />
-                <span className="font-medium">예약 시간</span>
+              {/* 예약 시간 */}
+              <div className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3">
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium">예약 시간</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.schedule?.startTime?.toLocaleTimeString(
+                      "ko-KR",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}{" "}
+                    -{" "}
+                    {data.data.schedule?.endTime?.toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}{" "}
-                  -{" "}
-                  {data.data.schedule?.endTime?.toLocaleTimeString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
-              </div>
-            </div>
 
-            {/* 만든이 */}
-            <div
-              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <UserRound className="w-5 h-5 text-gray-600" />
-                <span className="font-medium">만든이</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image
-                  src={data.data.schedule?.createdBy.image ?? ""}
-                  alt="avatar"
-                  width={24}
-                  height={24}
-                  className="rounded-lg mr-1"
-                />
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.createdBy.nickname}
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
+              {/* 만든이 */}
+              <div
+                className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                onClick={() => {
+                  router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <UserRound className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium">만든이</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Image
+                    src={data.data.schedule?.createdBy.image ?? ""}
+                    alt="avatar"
+                    width={24}
+                    height={24}
+                    className="rounded-lg mr-1"
+                  />
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.schedule?.createdBy.nickname}
+                  </span>
+                  <ChevronRight className="size-5 text-gray-400" />
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <p className="text-center text-sm text-gray-500 mt-6">
             만든 날짜:{" "}
