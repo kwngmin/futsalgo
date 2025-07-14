@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowDownUp, Search } from "lucide-react";
+import { ArrowDownUp, Search, Vote } from "lucide-react";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
 // import { Circle, Clock, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
@@ -111,31 +111,31 @@ const HomePage = () => {
                 </span>
               </div>
 
-              <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground px-4">
-                {schedule.hostTeam.logoUrl ? (
-                  <div className="size-5 sm:size-4 text-gray-700">
-                    <Image
-                      width={24}
-                      height={24}
-                      src={schedule.hostTeam.logoUrl}
-                      alt="team logo"
-                      className="size-5 sm:size-4 rounded-full object-cover"
-                    />
+              <div className="flex flex-col items-center pt-1 px-4">
+                <div className="font-medium w-full h-11 flex items-center justify-between gap-2 bg-slate-100 rounded-lg px-4">
+                  <div className="flex items-center gap-3">
+                    <Vote className="size-5 text-muted-foreground" />
+                    <span className="font-medium">참석여부</span>
+                    <span className="text-sm text-muted-foreground">
+                      7월 11일 오전 10:00까지
+                    </span>
                   </div>
+                  <span className="text-sm font-medium">미참여</span>
+                </div>
+                {schedule.attendances
+                  .map((attendance) => attendance.userId)
+                  .includes(session.data?.user?.id ?? "") ? (
+                  <div>hello</div>
                 ) : (
-                  <div className="size-5 sm:size-4 p-0.5">
-                    <div className="size-full bg-gradient-to-br from-slate-300 to-gray-100 rounded-full" />
+                  <div className="w-full sm:w-32 grid grid-cols-2 sm:flex flex-col h-11 sm:h-full *:cursor-pointer">
+                    <button className="sm:h-10 font-semibold text-blue-600 hover:bg-blue-600/5">
+                      참석
+                    </button>
+                    <button className="sm:h-10 font-medium text-destructive border-l sm:border-l-0 sm:border-t hover:bg-red-600/5">
+                      불참
+                    </button>
                   </div>
                 )}
-                {schedule.hostTeam.name || "소속 팀 없음"}
-                {/* <span className="text-muted-foreground">
-                  createdAt:{" "}
-                  {schedule.createdAt?.toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
-                </span> */}
               </div>
 
               {false ? (
@@ -250,21 +250,6 @@ const HomePage = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* {schedule.attendances
-                    .map((attendance) => attendance.userId)
-                    .includes(session.data?.user?.id ?? "") ? (
-                    <div>hello</div>
-                  ) : (
-                    <div className="w-full sm:w-32 grid grid-cols-2 sm:flex flex-col border-y sm:border-t-0 sm:border-l h-11 sm:h-full *:cursor-pointer">
-                      <button className="sm:h-10 font-semibold text-blue-600 hover:bg-blue-600/5">
-                        참가
-                      </button>
-                      <button className="sm:h-10 font-medium text-destructive border-l sm:border-l-0 sm:border-t hover:bg-red-600/5">
-                        불참
-                      </button>
-                    </div>
-                  )} */}
                 </div>
               ) : (
                 schedule.guestTeam?.name

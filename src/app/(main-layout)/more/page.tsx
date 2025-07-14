@@ -34,16 +34,6 @@ const MorePage = () => {
             router.push("/profile");
           },
         },
-        // {
-        //   icon: Bookmark,
-        //   label: "팔로잉 한 팀",
-        //   action: () => alert("팔로잉 한 팀"),
-        // },
-        // {
-        //   icon: Heart,
-        //   label: "팔로잉 한 회원",
-        //   action: () => alert("팔로잉 한 회원"),
-        // },
       ],
     },
     {
