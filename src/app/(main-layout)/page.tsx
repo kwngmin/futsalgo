@@ -83,33 +83,30 @@ const HomePage = () => {
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
-              <div className="flex px-4 gap-3 tracking-tight">
-                <div className="flex items-center text-sm font-semibold min-w-16 h-14">
+              <div className="flex px-4 gap-2 tracking-tight">
+                <div className="text-lg sm:text-base font-medium flex items-center gap-2 truncate leading-none w-20 h-14">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
                   })}
                 </div>
-                <div className="grow flex items-center justify-between gap-3 ">
-                  <div className="flex flex-col">
-                    <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
-                      {schedule.place}
-                    </h3>
-                    <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
-                      {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                <div className="grow flex flex-col justify-center">
+                  <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+                    {schedule.place}
+                  </h3>
+                  <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
+                    {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   -
                   ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
                     hour: "2-digit",
                     minute: "2-digit",
-                  })}`}
-                    </div>
+                  })} • ${
+                      schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"
+                    }`}
                   </div>
-                  <span className="text-sm text-muted-foreground">
-                    {schedule.matchType === "TEAM" ? "외부팀 대전" : "자체전"}
-                  </span>
                 </div>
               </div>
 
