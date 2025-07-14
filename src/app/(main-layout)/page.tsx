@@ -114,7 +114,7 @@ const HomePage = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center px-4 gap-4 sm:gap-2">
+              <div className="flex flex-col sm:flex-row items-center px-4 gap-1">
                 <div className="font-medium w-full h-11 flex items-center justify-between gap-2 bg-slate-100 rounded-lg px-4">
                   <div className="flex items-center gap-3">
                     <Vote className="size-5 text-muted-foreground" />
@@ -130,11 +130,11 @@ const HomePage = () => {
                   .includes(session.data?.user?.id ?? "") ? (
                   <div>hello</div>
                 ) : (
-                  <div className="w-full sm:w-48 shrink-0 flex h-6 items-center *:cursor-pointer gap-2">
+                  <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1">
                     <button className="grow h-11 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
                       참석
                     </button>
-                    <Separator orientation="vertical" />
+                    <div className="h-6 w-px bg-gray-200" />
                     <button className="grow h-11 font-medium text-destructive bg-red-600/5 hover:bg-red-600/10 rounded-lg">
                       불참
                     </button>
