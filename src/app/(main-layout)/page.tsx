@@ -83,8 +83,8 @@ const HomePage = () => {
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
-              <div className="flex px-4 gap-2 tracking-tight">
-                <div className="font-medium flex items-center gap-2 truncate leading-none w-20 h-14">
+              <div className="flex px-4 gap-1">
+                <div className="font-medium flex items-center gap-2 truncate leading-none w-20 h-14 tracking-tight">
                   {schedule.startTime?.toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
