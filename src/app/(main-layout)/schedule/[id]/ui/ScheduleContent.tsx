@@ -6,6 +6,8 @@ import {
   ArrowLeft,
   BookmarkIcon,
   Calendar,
+  // CalendarPlus,
+  CalendarPlus2,
   ChevronRight,
   Clock,
   EllipsisVertical,
@@ -51,14 +53,9 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "주최팀",
-    value: "hostTeam",
+    label: "참석 인원",
+    value: "attendance",
     isDisabled: false,
-  },
-  {
-    label: "초청팀",
-    value: "guestTeam",
-    isDisabled: true,
   },
   {
     label: "MVP",
@@ -181,7 +178,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </button>
         </div>
       </div>
-      <div className="h-9 flex items-center justify-center bg-slate-100 sm:rounded-lg text-muted-foreground text-sm font-semibold">
+      {/* <div className="h-9 flex items-center justify-center bg-slate-100 sm:rounded-lg text-muted-foreground text-sm font-semibold">
         {calculateDday(data.data.schedule?.date as Date) > 0
           ? `경기하는 날까지 D-${calculateDday(
               data.data.schedule?.date as Date
@@ -193,11 +190,51 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           : data.data.schedule?.status === "PLAY"
           ? "경기 중"
           : "경기 종료"}
-      </div>
+      </div> */}
       {data ? (
         <div className="space-y-3">
           {/* 일정 정보 */}
-          <div className="relative border-b border-gray-300 pt-8">
+          <div className="relative border-b border-gray-300">
+            {data.data.schedule?.matchType === "SQUAD" ? (
+              <div className="flex flex-col items-center mb-2">
+                <Image
+                  src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+                  alt="hostTeamLogo"
+                  width={100}
+                  height={100}
+                  // className="mb-2 mx-auto"
+                />
+                <span className="text-lg font-semibold">
+                  {data.data.schedule?.hostTeam?.name}
+                </span>
+              </div>
+            ) : (
+              <div className="w-full flex items-center justify-center mb-3 gap-3">
+                <div className="flex flex-col items-center mb-2">
+                  <Image
+                    src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+                    alt="hostTeamLogo"
+                    width={100}
+                    height={100}
+                  />
+                  <span className="text-lg font-semibold">
+                    {data.data.schedule?.hostTeam?.name}
+                  </span>
+                </div>
+                <span className="text-2xl font-bold">VS</span>
+                <div className="flex flex-col items-center mb-2">
+                  <Image
+                    src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+                    alt="hostTeamLogo"
+                    width={100}
+                    height={100}
+                  />
+                  <span className="text-lg font-semibold">
+                    {data.data.schedule?.hostTeam?.name}
+                  </span>
+                </div>
+              </div>
+            )}
             {/* 팀 정보 */}
             <div className="flex px-4 gap-24 sm:gap-3 mb-10">
               {/* 공통 */}
@@ -399,17 +436,17 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </div>
 
           {/* 주최팀 탭 내용 */}
-          {selectedTab === "hostTeam" && (
+          {selectedTab === "attendance" && (
             <div className="border rounded-2xl overflow-hidden mx-4">
               <div
                 className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                 onClick={() => {
-                  alert("참석 현황");
+                  alert("주최팀");
                 }}
               >
                 <div className="flex items-center space-x-2">
                   <Vote className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">참석 현황</span>
+                  <span className="font-medium">주최팀</span>
                 </div>
                 {/* <div className="flex items-center gap-1">
                 <span className="text-sm font-medium text-gray-500">
@@ -507,6 +544,32 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                       minute: "2-digit",
                     })}
                   </span>
+                </div>
+              </div>
+
+              {/* 주최팀 */}
+              <div
+                className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                onClick={() => {
+                  router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <CalendarPlus2 className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium">주최팀</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Image
+                    src={data.data.schedule?.hostTeam.logoUrl ?? ""}
+                    alt="avatar"
+                    width={24}
+                    height={24}
+                    className="rounded-lg"
+                  />
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.schedule?.hostTeam?.name}
+                  </span>
+                  <ChevronRight className="size-5 text-gray-400" />
                 </div>
               </div>
 
