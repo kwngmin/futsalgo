@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSchedule } from "../actions/get-schedule";
 import {
   ArrowLeft,
+  BookmarkIcon,
   Calendar,
   ChevronRight,
   Clock,
@@ -138,16 +139,18 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       )}
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
-      <div className="grid grid-cols-3 items-center shrink-0 px-3 h-16">
+      <div className="grid grid-cols-2 items-center shrink-0 px-3 h-16">
         <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
           <ArrowLeft
             style={{ width: "24px", height: "24px" }}
             onClick={handleGoBack}
           />
         </button>
-        <span className="text-center font-bold">
+        {/* <span className="text-center font-bold">
           {calculateDday(data.data.schedule?.date as Date) > 0
-            ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+            ? `경기하는 날까지 D-${calculateDday(
+                data.data.schedule?.date as Date
+              )}`
             : data.data.schedule?.status === "READY" && dDay === 1
             ? "내일"
             : data.data.schedule?.status === "READY" && dDay === 0
@@ -155,8 +158,11 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             : data.data.schedule?.status === "PLAY"
             ? "경기 중"
             : "경기 종료"}
-        </span>
+        </span> */}
         <div className="flex items-center justify-end gap-2">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+            <BookmarkIcon className="w-5 h-5" />
+          </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>
@@ -165,10 +171,23 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </button>
         </div>
       </div>
+      <div className="h-8 flex items-center justify-center bg-slate-100 sm:rounded-lg text-muted-foreground text-sm font-semibold">
+        {calculateDday(data.data.schedule?.date as Date) > 0
+          ? `경기하는 날까지 D-${calculateDday(
+              data.data.schedule?.date as Date
+            )}`
+          : data.data.schedule?.status === "READY" && dDay === 1
+          ? "내일"
+          : data.data.schedule?.status === "READY" && dDay === 0
+          ? "준비"
+          : data.data.schedule?.status === "PLAY"
+          ? "경기 중"
+          : "경기 종료"}
+      </div>
       {data ? (
         <div className="space-y-3">
           {/* 일정 정보 */}
-          <div className="relative border-b border-gray-300">
+          <div className="relative border-b border-gray-300 pt-6">
             {/* 팀 정보 */}
             <div className="flex px-4 gap-24 sm:gap-3 mb-9">
               {/* 공통 */}
