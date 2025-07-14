@@ -199,7 +199,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             alt="hostTeamLogo"
             width={100}
             height={100}
-            className="size-20 mt-3"
+            className="size-20 mt-4"
           />
           <span className="sm:text-lg font-semibold">
             {data.data.schedule?.hostTeam?.name}
@@ -213,7 +213,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               alt="hostTeamLogo"
               width={100}
               height={100}
-              className="size-20 mt-3"
+              className="size-20 mt-4"
             />
             <span className="sm:text-lg font-semibold text-center">
               {data.data.schedule?.hostTeam?.name}
@@ -226,7 +226,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               alt="hostTeamLogo"
               width={100}
               height={100}
-              className="size-20 mt-3"
+              className="size-20 mt-4"
             />
             <span className="sm:text-lg font-semibold">
               {data.data.schedule?.hostTeam?.name}
