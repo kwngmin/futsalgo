@@ -61,8 +61,13 @@ const tabs = [
     isDisabled: true,
   },
   {
-    label: "후기",
-    value: "reviews",
+    label: "MVP",
+    value: "mvp",
+    isDisabled: true,
+  },
+  {
+    label: "댓글",
+    value: "comments",
     isDisabled: true,
   },
   {

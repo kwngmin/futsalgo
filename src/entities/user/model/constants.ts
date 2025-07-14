@@ -68,13 +68,13 @@ export const GENDER = {
 };
 
 export const CONDITION_OPTIONS = [
-  { value: "NORMAL", label: "정상" },
-  { value: "INJURED", label: "부상" },
+  { value: "NORMAL", label: "없음" },
+  { value: "INJURED", label: "부상 중" },
 ];
 
 export const CONDITION = {
-  NORMAL: "정상",
-  INJURED: "부상",
+  NORMAL: "없음",
+  INJURED: "부상 중",
 };
 
 export const PLAYER_BACKGROUND_OPTIONS = [

@@ -33,7 +33,7 @@ const profileSchema = z.object({
     error: () => "포지션을 선택해주세요",
   }),
   condition: z.enum(["NORMAL", "INJURED"], {
-    error: () => "몸 상태를 선택해주세요",
+    error: () => "부상 여부를 선택해주세요",
   }),
   playerBackground: z.enum(["NON_PROFESSIONAL", "PROFESSIONAL"], {
     error: () => "선수 출신 여부를 선택해주세요",
@@ -96,9 +96,9 @@ const ProfileForm = ({ data }: { data: User }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="border mx-4 space-y-6 p-4 bg-white rounded-2xl pt-6"
     >
-      {/* 몸 상태 */}
+      {/* 부상 여부 */}
       <div className="space-y-3">
-        <Label className="px-1">몸 상태</Label>
+        <Label className="px-1">부상</Label>
         <CustomRadioGroup
           options={CONDITION_OPTIONS}
           value={watch("condition")}

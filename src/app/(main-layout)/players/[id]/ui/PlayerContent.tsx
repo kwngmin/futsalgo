@@ -49,11 +49,16 @@ const tabs = [
     value: "matches",
     isDisabled: true,
   },
-  // {
-  //   label: "후기",
-  //   value: "reviews",
-  //   isDisabled: true,
-  // },
+  {
+    label: "후기",
+    value: "reviews",
+    isDisabled: true,
+  },
+  {
+    label: "사진",
+    value: "photos",
+    isDisabled: true,
+  },
 ];
 
 const PlayerContent = ({ id }: { id: string }) => {
@@ -377,7 +382,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                         ]
                       }
                     </div>
-                    <Label className="text-muted-foreground">몸 상태</Label>
+                    <Label className="text-muted-foreground">부상</Label>
                   </div>
                 </div>
               </div>
