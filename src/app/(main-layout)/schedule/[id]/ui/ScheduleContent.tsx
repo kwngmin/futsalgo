@@ -178,7 +178,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </button>
         </div>
       </div>
-      {/* <div className="h-9 flex items-center justify-center bg-slate-100 sm:rounded-lg text-muted-foreground text-sm font-semibold">
+      <div className="h-9 flex items-center justify-center bg-slate-200 sm:rounded-t-lg text-muted-foreground text-sm font-semibold">
         {calculateDday(data.data.schedule?.date as Date) > 0
           ? `경기하는 날까지 D-${calculateDday(
               data.data.schedule?.date as Date
@@ -190,55 +190,56 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           : data.data.schedule?.status === "PLAY"
           ? "경기 중"
           : "경기 종료"}
-      </div> */}
+      </div>
+      {/* 우리팀 & 주최팀vs초청팀 로고 */}
+      {data.data.schedule?.matchType === "SQUAD" ? (
+        <div className="w-full flex flex-col items-center py-4 bg-gradient-to-b from-slate-100 to-transparent">
+          <Image
+            src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+            alt="hostTeamLogo"
+            width={100}
+            height={100}
+            className="size-16 sm:size-20 mt-3"
+          />
+          <span className="sm:text-lg font-semibold">
+            {data.data.schedule?.hostTeam?.name}
+          </span>
+        </div>
+      ) : (
+        <div className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-b from-slate-100 to-transparent">
+          <div className="flex flex-col items-center w-28 sm:w-36">
+            <Image
+              src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+              alt="hostTeamLogo"
+              width={100}
+              height={100}
+              className="size-16 sm:size-20 mt-3"
+            />
+            <span className="sm:text-lg font-semibold text-center">
+              {data.data.schedule?.hostTeam?.name}
+            </span>
+          </div>
+          <span className="text-2xl font-bold">VS</span>
+          <div className="flex flex-col items-center w-28 sm:w-36">
+            <Image
+              src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+              alt="hostTeamLogo"
+              width={100}
+              height={100}
+              className="size-16 sm:size-20 mt-3"
+            />
+            <span className="sm:text-lg font-semibold">
+              {data.data.schedule?.hostTeam?.name}
+            </span>
+          </div>
+        </div>
+      )}
       {data ? (
         <div className="space-y-3">
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
-            {data.data.schedule?.matchType !== "SQUAD" ? (
-              <div className="flex flex-col items-center mb-2 w-28 sm:w-36">
-                <Image
-                  src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-                  alt="hostTeamLogo"
-                  width={100}
-                  height={100}
-                  className="size-16 sm:size-24"
-                />
-                <span className="sm:text-lg font-semibold">
-                  {data.data.schedule?.hostTeam?.name}
-                </span>
-              </div>
-            ) : (
-              <div className="w-full flex items-center justify-center mb-3 gap-3">
-                <div className="flex flex-col items-center mb-2 w-28 sm:w-36">
-                  <Image
-                    src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-                    alt="hostTeamLogo"
-                    width={100}
-                    height={100}
-                    className="size-16 sm:size-24"
-                  />
-                  <span className="sm:text-lg font-semibold text-center">
-                    {data.data.schedule?.hostTeam?.name}
-                  </span>
-                </div>
-                <span className="text-2xl font-bold">VS</span>
-                <div className="flex flex-col items-center mb-2 w-28 sm:w-36">
-                  <Image
-                    src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-                    alt="hostTeamLogo"
-                    width={100}
-                    height={100}
-                    className="size-16 sm:size-24"
-                  />
-                  <span className="sm:text-lg font-semibold">
-                    {data.data.schedule?.hostTeam?.name}
-                  </span>
-                </div>
-              </div>
-            )}
             {/* 팀 정보 */}
-            <div className="flex px-4 gap-24 sm:gap-3 mb-10">
+            <div className="flex p-4 gap-24 sm:gap-3 mb-8">
               {/* 공통 */}
               <div className="w-full flex flex-col items-center justify-center">
                 <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
