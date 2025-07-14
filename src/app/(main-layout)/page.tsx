@@ -79,7 +79,7 @@ const HomePage = () => {
 
           return (
             <div
-              className="space-y-2 flex flex-col py-2"
+              className="space-y-1 flex flex-col py-2"
               key={schedule.id}
               onClick={() => handleScheduleClick(schedule.id)}
             >
