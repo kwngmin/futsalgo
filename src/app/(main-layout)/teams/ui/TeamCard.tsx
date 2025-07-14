@@ -40,7 +40,7 @@ const TeamCard = ({
       <div className="flex flex-col items-start justify-center grow">
         <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
           {team.name}
-          <span className="sm:text-sm font-medium text-amber-600 mb-px">
+          <span className="sm:text-sm font-medium text-amber-600 mb-0.5">
             {team._count.members}
           </span>
           {/* {isMyTeam && (
