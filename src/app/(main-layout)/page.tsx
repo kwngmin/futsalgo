@@ -129,7 +129,7 @@ const HomePage = () => {
                   .includes(session.data?.user?.id ?? "") ? (
                   <div>hello</div>
                 ) : (
-                  <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-2">
+                  <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1">
                     <button className="grow h-11 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
                       참석
                     </button>
