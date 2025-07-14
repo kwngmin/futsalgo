@@ -71,6 +71,11 @@ const tabs = [
     isDisabled: true,
   },
   {
+    label: "후기",
+    value: "reviews",
+    isDisabled: true,
+  },
+  {
     label: "사진",
     value: "photos",
     isDisabled: true,
@@ -364,8 +369,13 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   .filter(
                     (tab) =>
                       !(
-                        tab.value === "guestTeam" &&
-                        data.data.schedule?.matchType === "SQUAD"
+                        // 연습 경기인 경우 초청팀&후기 탭 비활성화
+                        (
+                          (data.data.schedule?.matchType === "SQUAD" &&
+                            tab.value === "guestTeam") ||
+                          (data.data.schedule?.matchType === "SQUAD" &&
+                            tab.value === "reviews")
+                        )
                       )
                   )
                   .map((tab) => (
