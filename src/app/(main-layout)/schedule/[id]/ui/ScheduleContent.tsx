@@ -196,15 +196,15 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* 일정 정보 */}
           <div className="relative border-b border-gray-300">
             {data.data.schedule?.matchType !== "SQUAD" ? (
-              <div className="flex flex-col items-center mb-2">
+              <div className="flex flex-col items-center mb-2 w-28 sm:w-36">
                 <Image
                   src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
                   alt="hostTeamLogo"
                   width={100}
                   height={100}
-                  // className="mb-2 mx-auto"
+                  className="size-16 sm:size-24"
                 />
-                <span className="text-lg font-semibold">
+                <span className="sm:text-lg font-semibold">
                   {data.data.schedule?.hostTeam?.name}
                 </span>
               </div>
