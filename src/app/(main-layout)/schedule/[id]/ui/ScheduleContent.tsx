@@ -146,12 +146,15 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           />
         </button>
         <span className="text-center font-bold">
-          {/* {data?.data?.schedule?.place}
-          {
-            MATCH_TYPE[
-              data?.data?.schedule?.matchType as keyof typeof MATCH_TYPE
-            ]
-          } */}
+          {calculateDday(data.data.schedule?.date as Date) > 0
+            ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+            : data.data.schedule?.status === "READY" && dDay === 1
+            ? "내일"
+            : data.data.schedule?.status === "READY" && dDay === 0
+            ? "준비"
+            : data.data.schedule?.status === "PLAY"
+            ? "경기 중"
+            : "경기 종료"}
         </span>
         <div className="flex items-center justify-end gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -273,7 +276,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
 
             {/* 경기 시작 버튼 */}
-            <div className="p-4">
+            {/* <div className="p-4">
               <div className="w-full flex flex-col items-center">
                 {data.data.schedule?.status === "PENDING" ? (
                   <div className="h-12 w-full flex justify-center items-center text-lg font-semibold bg-muted text-muted-foreground rounded-md">
@@ -291,9 +294,6 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                         ? `D-${calculateDday(data.data.schedule?.date as Date)}`
                         : "D-day"}
                     </span>
-                    {/* {calculateDday(data.data.schedule?.date as Date) > 0
-                      ? `D-${calculateDday(data.data.schedule?.date as Date)}`
-                      : "D-day"} */}
                   </div>
                 ) : data.data.schedule?.status === "READY" && dDay === 1 ? (
                   <div className="h-12 w-full flex justify-center items-center text-lg font-semibold bg-muted text-muted-foreground rounded-md">
@@ -319,7 +319,19 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
+
+            {/* 경기 추가 */}
+            {dDay >= 0 && (
+              <div className="px-4 py-2">
+                <Button
+                  className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+                  size="lg"
+                >
+                  경기 추가
+                </Button>
+              </div>
+            )}
 
             {/* 탭 */}
             <div className="flex items-center justify-between gap-2 px-4">
