@@ -17,7 +17,11 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/shared/components/ui/button";
-import { MapPinSimpleIcon, SoccerBallIcon } from "@phosphor-icons/react";
+import {
+  // CourtBasketballIcon,
+  MapPinSimpleIcon,
+  SoccerBallIcon,
+} from "@phosphor-icons/react";
 import { useState } from "react";
 import { Label } from "@/shared/components/ui/label";
 
@@ -184,64 +188,84 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
 
             {/* 경기 막대바 */}
-            <div
-              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-3">
-                <SoccerBallIcon
-                  className="w-5 h-5 text-gray-600"
-                  weight="fill"
-                />
-                <span className="font-medium">1 경기</span>
+            <div className="space-y-2">
+              <div className="overflow-hidden rounded-2xl border mx-4">
+                <div
+                  className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    {/* <CourtBasketballIcon
+                    className="w-5 h-5 text-gray-600"
+                    // weight="fill"
+                  /> */}
+                    <SoccerBallIcon
+                      className="w-5 h-5 text-gray-600"
+                      weight="fill"
+                    />
+                    <span className="font-medium">1 경기</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      0 - 0
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  0 - 0
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
+              <div className="overflow-hidden rounded-2xl border mx-4">
+                <div
+                  className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    {/* <CourtBasketballIcon
+                    className="w-5 h-5 text-gray-600"
+                    // weight="fill"
+                  /> */}
+                    <SoccerBallIcon
+                      className="w-5 h-5 text-gray-600"
+                      weight="fill"
+                    />
+                    <span className="font-medium">2 경기</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      0 - 0
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div
-              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointerhover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-3">
-                <SoccerBallIcon
-                  className="w-5 h-5 text-gray-600"
-                  weight="fill"
-                />
-                <span className="font-medium">2 경기</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  0 - 0
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
-              </div>
-            </div>
-            <div
-              className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-3">
-                <SoccerBallIcon
-                  className="w-5 h-5 text-gray-600"
-                  weight="fill"
-                />
-                <span className="font-medium">3 경기</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  0 - 0
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
+              <div className="overflow-hidden rounded-2xl border mx-4">
+                <div
+                  className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    {/* <CourtBasketballIcon
+                    className="w-5 h-5 text-gray-600"
+                    // weight="fill"
+                  /> */}
+                    <SoccerBallIcon
+                      className="w-5 h-5 text-gray-600"
+                      weight="fill"
+                    />
+                    <span className="font-medium">3 경기</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      0 - 0
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div>
+                </div>
               </div>
             </div>
 
