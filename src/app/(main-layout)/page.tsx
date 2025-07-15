@@ -4,7 +4,8 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ArrowDownUp, Clock, Search, Vote } from "lucide-react";
+import { ArrowDownUp, Clock, Plus, Search, Vote } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 // import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
 // import { Circle, Clock, X } from "lucide-react";
 // import { MapPinSimpleIcon } from "@phosphor-icons/react";
@@ -40,6 +41,16 @@ const HomePage = () => {
           <h1 className="text-2xl font-bold opacity-30">북마킹</h1>
         </div>
         <div className="flex items-center gap-2">
+          {data?.data?.manageableTeams &&
+            data?.data?.manageableTeams?.length > 0 && (
+              <Button
+                className="rounded-full font-semibold py-0 !pl-2 !pr-4 text-base h-8"
+                onClick={() => router.push("/schedule/new")}
+              >
+                <Plus className="size-5 text-white" />
+                새로운 일정
+              </Button>
+            )}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
           </button>
@@ -50,18 +61,7 @@ const HomePage = () => {
       </div>
       {/* MatchesPage */}
       <div className="space-y-3">
-        {/* {session.data && (
-          <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-            <div className="flex gap-2 justify-center">
-              <button
-                className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                onClick={() => router.push("/schedule/new")}
-              >
-                경기일정 추가
-              </button>
-            </div>
-          </div>
-        )} */}
+        {/* 대기 중인 일정 */}
         {data?.data?.upcomingSchedules?.map((schedule) => {
           // const timeRange = formatTimeRange({
           //   time: {
@@ -285,6 +285,7 @@ const HomePage = () => {
             </div>
           );
         })}
+        {/* 과거 일정 */}
         {data?.data?.pastSchedules?.map((schedule) => {
           // const timeRange = formatTimeRange({
           //   time: {
