@@ -23,7 +23,7 @@ export async function getSchedules() {
       },
       include: {
         hostTeam: true,
-        guestTeam: true,
+        invitedTeam: true,
         createdBy: true,
       },
       orderBy: {
@@ -79,12 +79,12 @@ export async function getSchedules() {
         },
         OR: [
           { hostTeamId: { in: approvedTeamIds } },
-          { guestTeamId: { in: approvedTeamIds } },
+          { invitedTeamId: { in: approvedTeamIds } },
         ],
       },
       include: {
         hostTeam: true,
-        guestTeam: true,
+        invitedTeam: true,
         attendances: true,
         createdBy: true,
       },

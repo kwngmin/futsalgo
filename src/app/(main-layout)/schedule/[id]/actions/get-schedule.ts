@@ -12,7 +12,7 @@ export async function getSchedule(scheduleId: string) {
       where: { id: scheduleId },
       include: {
         hostTeam: true,
-        guestTeam: true,
+        invitedTeam: true,
         attendances: true,
         createdBy: true,
       },
@@ -65,7 +65,7 @@ export async function getSchedule(scheduleId: string) {
         break;
       }
       if (
-        teamMember.teamId === schedule.guestTeamId &&
+        teamMember.teamId === schedule.invitedTeamId &&
         (teamMember.role === "OWNER" || teamMember.role === "MANAGER")
       ) {
         isManager = "GUEST";

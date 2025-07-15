@@ -256,7 +256,7 @@ const HomePage = () => {
                   </div>
                 </div>
               ) : (
-                schedule.guestTeam?.name
+                schedule.invitedTeam?.name
               )}
 
               {/* 참가 여부 */}
@@ -450,7 +450,7 @@ const HomePage = () => {
                   </div>
                 </div>
               ) : (
-                schedule.guestTeam?.name
+                schedule.invitedTeam?.name
               )}
             </div>
           );

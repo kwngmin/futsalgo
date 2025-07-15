@@ -223,14 +223,14 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           <span className="text-2xl font-bold">VS</span>
           <div className="flex flex-col items-center w-28 sm:w-36">
             <Image
-              src={data.data.schedule?.guestTeam?.logoUrl ?? ""}
+              src={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
               alt="guestTeamLogo"
               width={100}
               height={100}
               className="size-20 mt-4"
             />
             <span className="sm:text-lg font-semibold">
-              {data.data.schedule?.guestTeam?.name}
+              {data.data.schedule?.invitedTeam?.name}
             </span>
           </div>
         </div>
