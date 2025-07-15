@@ -14,7 +14,7 @@ import {
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { ValidationStep } from "../model/types";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { updatePhone } from "@/app/(no-layout)/profile/model/actions";
 import { usePhoneValidation } from "@/features/validation/hooks/use-validation";
 
@@ -25,7 +25,7 @@ export function OnboardingPhone({
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
   initialStep: ValidationStep;
 }) {
-  const router = useRouter();
+  // const router = useRouter();
   const { phone, onChange } = usePhoneValidation();
 
   // 단계별 진행
@@ -79,15 +79,15 @@ export function OnboardingPhone({
           )}
         </div>
         <div className="flex gap-3">
-          {initialStep === "phone" ? (
-            <Button
-              variant="outline"
-              onClick={() => router.push("/")}
-              className="flex-1"
-            >
-              나중에 하기
-            </Button>
-          ) : (
+          {initialStep !== "phone" && (
+            //   <Button
+            //     variant="outline"
+            //     onClick={() => router.push("/")}
+            //     className="flex-1"
+            //   >
+            //     나중에 하기
+            //   </Button>
+            // ) : (
             <Button
               variant="outline"
               onClick={() => setCurrentStep("email")}

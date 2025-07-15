@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -23,7 +23,7 @@ export function OnboardingEmail({
 }: {
   setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
 }) {
-  const router = useRouter();
+  // const router = useRouter();
   const { email, onChange } = useEmailValidation();
 
   // 단계별 진행
@@ -72,13 +72,13 @@ export function OnboardingEmail({
           )}
         </div>
         <div className="flex gap-3">
-          <Button
+          {/* <Button
             variant="outline"
             onClick={() => router.push("/")}
             className="flex-1"
           >
             나중에 하기
-          </Button>
+          </Button> */}
           <Button
             onClick={handleNextStep}
             disabled={email.status !== "valid"}
