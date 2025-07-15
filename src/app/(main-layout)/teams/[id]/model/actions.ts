@@ -712,6 +712,7 @@ export async function approveTeamMember(teamId: string, targetUserId: string) {
     });
 
     revalidatePath(`/teams/${teamId}`);
+    revalidatePath(`/teams`);
 
     return {
       success: true,
