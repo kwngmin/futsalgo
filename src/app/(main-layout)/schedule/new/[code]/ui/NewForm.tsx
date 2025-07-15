@@ -94,7 +94,7 @@ const NewForm = ({
         // alert(result.data.message || "팀 정보가 업데이트되었습니다.");
 
         // 팀 상세 페이지로 리다이렉트 (선택사항)
-        // router.push(`/teams/${teamId}`);
+        router.push(`/schedule/${result.data.id}`);
 
         // 또는 현재 페이지에서 폼 상태만 리셋
         // router.refresh(); // 페이지 데이터 새로고침
@@ -173,7 +173,7 @@ const NewForm = ({
         />
       </div>
 
-      <div className="flex flex-wrap space-y-6 space-x-2">
+      <div className="flex flex-col sm:flex-row space-y-6 space-x-2">
         <div className="flex flex-col gap-3 grow sm:grow-0">
           <Label htmlFor="date-picker" className="px-1">
             경기 일자
@@ -231,7 +231,7 @@ const NewForm = ({
               id="time-picker"
               defaultValue="06:00"
               {...register("startTime")}
-              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
             />
             <div className="flex items-center justify-center">
               <span className="text-sm text-gray-500">~</span>
@@ -241,7 +241,7 @@ const NewForm = ({
               id="time-picker"
               defaultValue="08:00"
               {...register("endTime")}
-              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
             />
           </div>
         </div>

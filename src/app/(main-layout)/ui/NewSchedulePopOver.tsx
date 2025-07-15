@@ -71,7 +71,7 @@ const NewSchedulePopOver = ({ teams }: { teams: Team[] }) => {
         {teams.map((team) => (
           <div
             key={team.id}
-            className="px-4 py-2 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2"
+            className="px-4 h-14 sm:h-12 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2"
             onClick={() => router.push(`/schedule/new/${team.id}`)}
           >
             {/* 팀 로고 */}
