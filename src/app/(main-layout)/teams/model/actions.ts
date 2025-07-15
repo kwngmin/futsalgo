@@ -25,7 +25,8 @@ export interface GetTeamsResponse {
   error?: string;
   data: {
     user?: User | null;
-    myTeams: TeamWithDetails[];
+    myTeams?: TeamWithDetails[];
+    // myTeams: TeamWithDetails[];
     teams: TeamWithDetails[];
   } | null;
 }
@@ -37,22 +38,22 @@ export async function getTeams(): Promise<GetTeamsResponse> {
 
     // 모든 팀 조회 (소속 팀 제외)
     const teams = await prisma.team.findMany({
-      where: userId
-        ? {
-            NOT: {
-              OR: [
-                {
-                  members: {
-                    some: {
-                      userId: userId,
-                      status: "APPROVED",
-                    },
-                  },
-                },
-              ],
-            },
-          }
-        : {},
+      // where: userId
+      //   ? {
+      //       NOT: {
+      //         OR: [
+      //           {
+      //             members: {
+      //               some: {
+      //                 userId: userId,
+      //                 status: "APPROVED",
+      //               },
+      //             },
+      //           },
+      //         ],
+      //       },
+      //     }
+      //   : {},
       include: {
         members: {
           where: {
@@ -92,7 +93,8 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       },
     }));
 
-    if (userId) {
+    if (false) {
+      // if (userId) {
       // 사용자의 소속 팀들 조회
       const myTeams = await prisma.team.findMany({
         where: {
@@ -155,7 +157,7 @@ export async function getTeams(): Promise<GetTeamsResponse> {
     return {
       success: true,
       data: {
-        myTeams: [],
+        // myTeams: [],
         teams: teamsWithStats as TeamWithDetails[],
       },
     };

@@ -38,7 +38,7 @@ const HomePage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1 className="text-2xl font-bold">경기</h1>
-          <h1 className="text-2xl font-bold opacity-30">북마킹</h1>
+          <h1 className="text-2xl font-bold opacity-30">보관함</h1>
         </div>
         <div className="flex items-center gap-2">
           {Array.isArray(data?.data?.manageableTeams) &&

@@ -63,32 +63,27 @@ const TeamsPage = () => {
       {data ? (
         <div className="space-y-3">
           {/* 내 팀 섹션 */}
-          {isLoggedIn ? (
-            data?.data?.myTeams && data?.data?.myTeams.length > 0 ? (
-              <div>
-                {data?.data?.myTeams.map((team) => (
-                  <TeamCard team={team} key={team.id} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
-                <div className="flex gap-2 justify-center">
-                  <button
-                    className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                    onClick={() => router.push("/teams/create")}
-                  >
-                    팀 등록하기
-                  </button>
-                  <button
-                    className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
-                    // onClick={() => signIn()}
-                  >
-                    팀 가입하기
-                  </button>
+          {isLoggedIn
+            ? data?.data?.myTeams &&
+              data?.data?.myTeams.length === 0 && (
+                <div className="text-center py-8 bg-gray-200 rounded-2xl p-4">
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
+                      onClick={() => router.push("/teams/create")}
+                    >
+                      팀 등록하기
+                    </button>
+                    <button
+                      className="text-base bg-white px-6 min-w-28 py-1.5 rounded-full font-semibold cursor-pointer"
+                      // onClick={() => signIn()}
+                    >
+                      팀 가입하기
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )
-          ) : null}
+              )
+            : null}
 
           {/* 필터 섹션 */}
           {/* <div className="flex flex-col gap-2">
