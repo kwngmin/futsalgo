@@ -215,6 +215,8 @@ model User {
   createdSchedules Schedule[]
   attendances     ScheduleAttendance[]
   comments        ScheduleComment[]
+  uploadedPhotos  SchedulePhoto[]      // 업로드한 사진들
+  bookmarkedSchedules ScheduleBookmark[] // 북마크한 일정들
 
   // 매치 관련
   createdMatches  Match[]
@@ -282,9 +284,9 @@ model Team {
   posts         Post[]
   followers     TeamFollow[]  // 팔로워 (기존 likedByUsers 대체)
 
-  // 일정 관련
+  // 일정 관련 (관계명 변경)
   hostedSchedules  Schedule[] @relation("HostTeam")
-  guestSchedules   Schedule[] @relation("GuestTeam")
+  invitedSchedules Schedule[] @relation("InvitedTeam")   // guestSchedules -> invitedSchedules로 변경
   invitations      TeamMatchInvitation[]
 
   // 매치 관련
@@ -336,29 +338,75 @@ model Schedule {
   matchType          MatchType
   status             ScheduleStatus @default(PENDING)
   
+  // 참석 투표 관련 필드
+  enableAttendanceVote Boolean      @default(true)  // 참석 투표 활성화 여부
+  attendanceDeadline   DateTime?                    // 참석 투표 마감 시간
+  
+  // 지역 정보 (team에서 가져오거나 별도 설정)
+  city               String?
+  district           String?
+  
   createdById        String
   hostTeamId         String
-  guestTeamId        String?
+  invitedTeamId      String?        // guestTeamId -> invitedTeamId로 변경
 
   // 관계들
   createdBy          User      @relation(fields: [createdById], references: [id])
   hostTeam           Team      @relation("HostTeam", fields: [hostTeamId], references: [id])
-  guestTeam          Team?     @relation("GuestTeam", fields: [guestTeamId], references: [id])
+  invitedTeam        Team?     @relation("InvitedTeam", fields: [invitedTeamId], references: [id]) // 관계명 변경
   
   invitation         TeamMatchInvitation?
   matches            Match[]
   attendances        ScheduleAttendance[]
   comments           ScheduleComment[]
+  photos             SchedulePhoto[]    // String[] -> 별도 모델로 변경
+  bookmarks          ScheduleBookmark[] // 북마크 관계 추가
   
-  photos             String[]       // 사진 URL 배열
-
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   
   @@index([date, status])
   @@index([hostTeamId])
+  @@index([invitedTeamId])
   @@index([year])
+  @@index([city, district])           // 지역 검색용
+  @@index([attendanceDeadline])       // 투표 마감 시간 검색용
   @@map("schedules")
+}
+
+// 새로운 사진 모델
+model SchedulePhoto {
+  id          String   @id @default(cuid())
+  scheduleId  String
+  uploaderId  String
+  url         String
+  
+  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  uploader    User     @relation(fields: [uploaderId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([scheduleId])
+  @@index([uploaderId])
+  @@index([scheduleId, createdAt])
+  @@map("schedule_photos")
+}
+
+// 북마크 모델 추가
+model ScheduleBookmark {
+  id          String   @id @default(cuid())
+  scheduleId  String
+  userId      String
+  
+  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([scheduleId, userId]) // 같은 사용자가 같은 스케줄을 중복 북마크 방지
+  @@index([userId])              // 사용자별 북마크 조회 최적화
+  @@index([scheduleId])          // 스케줄별 북마크 수 조회 최적화
+  @@map("schedule_bookmarks")
 }
 
 model ScheduleAttendance {
@@ -369,8 +417,8 @@ model ScheduleAttendance {
   side                   TeamSide  @default(UNDECIDED)
 
   // MVP 투표 관련 필드
-  bestPlayerVotedUserId  String?   // 내가 투표한 사람
-  votesReceived          Int       @default(0) // 내가 받은 투표 수
+  mvpToUserId            String?   // 내가 MVP로 투표한 사람
+  mvpReceived            Int       @default(0) // 내가 받은 MVP 투표 수
 
   schedule               Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -470,13 +518,24 @@ model ScheduleComment {
   scheduleId  String
   authorId    String
   content     String
-
+  
+  // 대댓글 관련 필드  
+  parentId    String?              // 부모 댓글 ID (null이면 최상위 댓글, 값이 있으면 대댓글)
+  
+  // 관계 설정
   schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   author      User     @relation(fields: [authorId], references: [id])
   
+  // 자기 참조 관계 (대댓글)
+  parent      ScheduleComment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     ScheduleComment[] @relation("CommentReplies")
+  
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   
   @@index([scheduleId, createdAt])
+  @@index([parentId])
+  @@index([scheduleId, parentId, createdAt]) // 특정 일정의 댓글 조회 최적화
   @@map("schedule_comments")
 }
 
