@@ -52,7 +52,7 @@ const TeamCard = ({
             )} */}
         </h3>
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
+          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
             {team.gender === "MALE" ? (
               <Mars className="size-4 text-sky-700" />
             ) : team.gender === "FEMALE" ? (
