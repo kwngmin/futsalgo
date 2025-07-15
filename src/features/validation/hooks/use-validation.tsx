@@ -133,3 +133,51 @@ export function useEmailValidation() {
     onChange,
   };
 }
+
+export function useTeamCodeValidation() {
+  const [teamCode, setTeamCode] = useState<ValidationField>({
+    value: "",
+    status: "idle",
+  });
+
+  const debouncedTeamCode = useDebounce(teamCode.value, 300);
+
+  useEffect(() => {
+    const teamCodeRegex = /^\d{6}$/;
+    if (debouncedTeamCode) {
+      if (
+        debouncedTeamCode.length === 6 &&
+        teamCodeRegex.test(debouncedTeamCode)
+      ) {
+        validateField("teamCode", debouncedTeamCode, setTeamCode);
+      } else {
+        setTeamCode((prev) => ({
+          ...prev,
+          status: "invalid",
+          error: "사용할 수 없는 팀 코드입니다",
+        }));
+      }
+    } else {
+      setTeamCode({
+        value: "",
+        status: "idle",
+      });
+    }
+  }, [debouncedTeamCode]);
+
+  const onChange = (raw: string) => {
+    const valueWithoutSpaces = raw.replace(/\s/g, ""); // 모든 공백 제거
+    setTeamCode((prev) => ({
+      ...prev,
+      value: valueWithoutSpaces,
+      status: "idle",
+      error: undefined,
+    }));
+  };
+
+  return {
+    teamCode,
+    setTeamCode,
+    onChange,
+  };
+}

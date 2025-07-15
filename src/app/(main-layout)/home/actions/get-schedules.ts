@@ -37,6 +37,7 @@ export async function getSchedules() {
         success: true,
         data: {
           pastSchedules,
+          manageableTeams: [],
         },
       };
     }

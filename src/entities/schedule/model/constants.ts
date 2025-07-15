@@ -12,3 +12,13 @@ export const SCHEDULE_STATUS_LABEL = {
   PLAY: "경기중",
   COMPLETED: "경기종료",
 } as const;
+
+export const MATCH_TYPE_OPTIONS = [
+  { value: "SQUAD", label: "연습경기 - 우리 팀끼리 연습경기" },
+  { value: "TEAM", label: "친선경기 - 다른 팀과의 친선경기" },
+];
+
+export const MATCH_TYPE = {
+  SQUAD: "연습경기",
+  TEAM: "친선경기",
+};

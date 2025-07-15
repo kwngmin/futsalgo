@@ -3,7 +3,7 @@ import { ValidationField } from "./types";
 
 // 중복확인 함수
 export const validateField = async (
-  type: "email" | "phone" | "nickname",
+  type: "email" | "phone" | "nickname" | "teamCode",
   value: string,
   setFieldState: Dispatch<SetStateAction<ValidationField>>
 ) => {
@@ -31,7 +31,13 @@ export const validateField = async (
         ...prev,
         status: "invalid",
         error: `이미 사용 중인 ${
-          type === "email" ? "이메일" : type === "phone" ? "전화번호" : "닉네임"
+          type === "email"
+            ? "이메일"
+            : type === "phone"
+            ? "전화번호"
+            : type === "nickname"
+            ? "닉네임"
+            : "팀 코드"
         }입니다`,
       }));
     }
