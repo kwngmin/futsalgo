@@ -18,10 +18,10 @@ const HomePage = () => {
   const session = useSession();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["schedules"],
+    queryKey: ["schedules", session.data?.user?.id],
     queryFn: getSchedules,
     placeholderData: keepPreviousData,
-    enabled: !!session.data?.user?.id,
+    // enabled: !!session.data?.user?.id,
   });
 
   console.log(data, "data");
@@ -62,7 +62,7 @@ const HomePage = () => {
             </div>
           </div>
         )} */}
-        {data?.data?.hostSchedules.map((schedule) => {
+        {data?.data?.upcomingSchedules?.map((schedule) => {
           // const timeRange = formatTimeRange({
           //   time: {
           //     start: schedule.startTime,
@@ -285,9 +285,175 @@ const HomePage = () => {
             </div>
           );
         })}
-        {/* {data?.data?.guestSchedules.map((schedule) => (
-          <div key={schedule.id}>{schedule.title}</div>
-        ))} */}
+        {data?.data?.pastSchedules?.map((schedule) => {
+          // const timeRange = formatTimeRange({
+          //   time: {
+          //     start: schedule.startTime,
+          //     end: schedule.endTime,
+          //   },
+          // });
+          // const dDay = calculateDday(schedule?.date as Date);
+          const [period, time] = schedule?.startTime
+            ?.toLocaleTimeString("ko-KR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+            .split(" ");
+
+          return (
+            <div
+              className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none"
+              key={schedule.id}
+            >
+              <div
+                className="flex px-4 gap-1 cursor-pointer"
+                onClick={() => handleScheduleClick(schedule.id)}
+              >
+                <div className="font-medium flex items-center gap-2 truncate leading-none w-20 h-14 tracking-tight">
+                  {schedule.startTime?.toLocaleDateString("ko-KR", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </div>
+                <div className="grow flex flex-col justify-center">
+                  <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+                    {schedule.place}
+                    <span className="text-sm font-medium text-indigo-600 mb-0.5">
+                      {schedule.matchType === "TEAM" ? "친선경기" : "연습경기"}
+                    </span>
+                  </h3>
+                  <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
+                    <Clock className="size-4" />
+                    {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  -
+                  ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}`}
+                  </div>
+                </div>
+              </div>
+              {false ? (
+                // {schedule.matchType !== "TEAM" ? (
+                <div className="flex flex-col sm:flex-row sm:items-stretch border-t">
+                  <div
+                    className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer bg-gray-50"
+                    onClick={() => handleScheduleClick(schedule.id)}
+                  >
+                    {/* 주최팀 */}
+                    <div className="flex flex-col items-end gap-2">
+                      {/* <div>HOME</div> */}
+                      <div className="flex items-center gap-1">
+                        <div className="sm:text-lg font-semibold">
+                          {schedule.hostTeam.name}
+                        </div>
+                        {/* {schedule.hostTeam.logoUrl ? (
+                          <div className="size-7 sm:size-12">
+                            <Image
+                              src={schedule.hostTeam.logoUrl}
+                              alt={schedule.hostTeam.name}
+                              width={48}
+                              height={48}
+                            />
+                          </div>
+                        ) : (
+                          <div className="size-5 sm:size-6 bg-gray-200 rounded-full" />
+                        )} */}
+                        {/* <div>HOME</div> */}
+                      </div>
+                    </div>
+                    {/* 공통 */}
+                    <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center">
+                      <span className="h-4 flex items-center justify-center font-medium text-sm sm:text-base tracking-tight text-muted-foreground">
+                        {period}
+                      </span>
+                      <span className="h-5 sm:h-6 flex items-center justify-center font-semibold sm:text-lg tracking-tight">
+                        {time}
+                      </span>
+                      <div className="w-full flex flex-col items-center">
+                        {/* {schedule?.status === "PENDING" ? (
+                          <div>대기중</div>
+                        ) : schedule?.status === "REJECTED" ? (
+                          <div>거절됨</div>
+                        ) : schedule?.status === "READY" ? (
+                          <div
+                            className={`flex items-center gap-1 text-sm sm:text-lg font-medium tracking-tight ${
+                              dDay > 0
+                                ? "text-muted-foreground"
+                                : "bg-green-600"
+                            }`}
+                          >
+                            {dDay > 1 ? (
+                              schedule.startTime?.toLocaleDateString("ko-KR", {
+                           
+                                month: "long",
+                                day: "numeric",
+                              })
+                            ) : dDay === 1 ? (
+                              "내일"
+                            ) : dDay === 0 ? (
+                              <Countdown date={schedule.startTime as Date} />
+                            ) : (
+                              "경기 종료"
+                            )}
+                          </div>
+                        ) : schedule?.status === "PLAY" ? (
+                          <div>경기중</div>
+                        ) : (
+                          <div>경기 종료</div>
+                        )} */}
+                        {/* <span>
+                {calculateDday(data.data.schedule?.date as Date) > 0
+                  ? `D-${calculateDday(data.data.schedule?.date as Date)}`
+                  : "D-day"}
+              </span> */}
+                      </div>
+                      {/* <span>{timeRange}</span> */}
+                      {/* <span>
+                  {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="">{timeRange}</span> */}
+                      {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
+                  VS
+                </div> */}
+                    </div>
+                    {/* 초청팀 */}
+                    <div className="flex flex-col gap-2">
+                      {/* <div>AWAY</div> */}
+                      <div className="flex items-center gap-1">
+                        {/* <div>AWAY</div> */}
+                        {/* {schedule.hostTeam.logoUrl ? (
+                          <div className="size-7 sm:size-12">
+                            <Image
+                              src={schedule.hostTeam.logoUrl}
+                              alt={schedule.hostTeam.name}
+                              width={48}
+                              height={48}
+                            />
+                          </div>
+                        ) : (
+                          <div className="size-6 bg-gray-200 rounded-full" />
+                        )} */}
+                        <div className="sm:text-lg font-semibold">
+                          {schedule.hostTeam.name}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                schedule.guestTeam?.name
+              )}
+            </div>
+          );
+        })}
       </div>
       {/* <Popover>
         <PopoverTrigger className="fixed bottom-20 lg:bottom-6 right-6 flex items-center justify-center bg-indigo-500 rounded-full">

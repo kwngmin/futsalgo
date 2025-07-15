@@ -7,20 +7,41 @@ export async function getSchedule(scheduleId: string) {
   try {
     const session = await auth();
 
-    if (!session?.user?.id) {
+    // 1. 일정 정보는 로그인 여부와 관계없이 항상 조회
+    const schedule = await prisma.schedule.findUnique({
+      where: { id: scheduleId },
+      include: {
+        hostTeam: true,
+        guestTeam: true,
+        attendances: true,
+        createdBy: true,
+      },
+    });
+
+    if (!schedule) {
       return {
         success: false,
-        error: "사용자를 찾을 수 없습니다",
+        error: "일정을 찾을 수 없습니다",
       };
     }
 
+    // 2. 로그인하지 않은 경우 → 일정만 리턴
+    if (!session?.user?.id) {
+      return {
+        success: true,
+        data: {
+          schedule,
+        },
+      };
+    }
+
+    // 3. 사용자와 승인된 소속 팀 정보 조회
     const player = await prisma.user.findUnique({
-      where: { id: session?.user?.id },
+      where: { id: session.user.id },
       include: {
         teams: {
-          include: {
-            team: true,
-          },
+          where: { status: "APPROVED" },
+          include: { team: true },
         },
       },
     });
@@ -32,38 +53,35 @@ export async function getSchedule(scheduleId: string) {
       };
     }
 
-    const myTeams = player.teams.filter(
-      (team) =>
-        team.team.status === "ACTIVE" &&
-        (team.role === "MANAGER" || team.role === "OWNER")
-    );
+    // 4. 내가 관리자 권한을 가진 팀인지 확인
+    let isManager: "HOST" | "GUEST" | null = null;
 
-    if (myTeams.length === 0) {
-      return {
-        success: false,
-        error: "내 팀이 없습니다",
-      };
+    for (const teamMember of player.teams) {
+      if (
+        teamMember.teamId === schedule.hostTeamId &&
+        (teamMember.role === "OWNER" || teamMember.role === "MANAGER")
+      ) {
+        isManager = "HOST";
+        break;
+      }
+      if (
+        teamMember.teamId === schedule.guestTeamId &&
+        (teamMember.role === "OWNER" || teamMember.role === "MANAGER")
+      ) {
+        isManager = "GUEST";
+        break;
+      }
     }
 
-    // const teamId = myTeams[0].teamId;
-
-    const schedule = await prisma.schedule.findUnique({
-      where: { id: scheduleId },
-      include: {
-        hostTeam: true,
-        guestTeam: true,
-        attendances: true,
-        createdBy: true,
-      },
-    });
-
-    // 세션이 없는 경우: user 없이 players만 전달
     return {
       success: true,
-      data: { schedule, myTeam: myTeams },
+      data: {
+        schedule,
+        isManager, // "HOST" | "GUEST" | null
+      },
     };
   } catch (error) {
-    console.error("회원 데이터 조회 실패:", error);
+    console.error("스케줄 데이터 조회 실패:", error);
     return { success: false, error: "서버 오류가 발생했습니다" };
   }
 }

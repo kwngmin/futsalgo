@@ -6,10 +6,49 @@ import { prisma } from "@/shared/lib/prisma";
 export async function getSchedules() {
   try {
     const session = await auth();
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    // 1. 과거 일정 조회 (어제 이전 날짜 + PENDING, REJECTED 제외)
+    const pastSchedules = await prisma.schedule.findMany({
+      where: {
+        date: { lt: today }, // ← 어제 날짜까지 포함
+        NOT: {
+          status: { in: ["PENDING", "REJECTED"] },
+        },
+      },
+      include: {
+        hostTeam: true,
+        guestTeam: true,
+        createdBy: true,
+      },
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    // 로그인하지 않은 경우 → pastSchedules만 반환
+    if (!session?.user?.id) {
+      return {
+        success: true,
+        data: {
+          pastSchedules,
+        },
+      };
+    }
+
+    // 2. 사용자 + 소속 팀 정보 조회
     const player = await prisma.user.findUnique({
-      where: { id: session?.user?.id },
+      where: { id: session.user.id },
       include: {
         teams: {
+          where: {
+            status: "APPROVED", // 승인된 팀만
+          },
           include: {
             team: true,
           },
@@ -24,17 +63,24 @@ export async function getSchedules() {
       };
     }
 
-    const myTeams = player.teams.filter(
-      (team) =>
-        team.team.status === "ACTIVE" &&
-        (team.role === "MANAGER" || team.role === "OWNER")
-    );
+    // 3. 내가 속한 팀 ID 목록 (APPROVED 상태)
+    const approvedTeamIds = player.teams.map((t) => t.teamId);
 
-    const teamId = myTeams[0].teamId;
+    // 4. 그중 OWNER 또는 MANAGER 권한이 있는 팀
+    const manageableTeams = player.teams
+      .filter((t) => t.role === "OWNER" || t.role === "MANAGER")
+      .map((t) => t.team);
 
-    const hostSchedules = await prisma.schedule.findMany({
+    // 5. 오늘부터 이후 일정만 조회 (APPROVED 된 팀 기준)
+    const upcomingSchedules = await prisma.schedule.findMany({
       where: {
-        OR: [{ hostTeamId: teamId }],
+        date: {
+          gte: today, // ← 오늘 포함
+        },
+        OR: [
+          { hostTeamId: { in: approvedTeamIds } },
+          { guestTeamId: { in: approvedTeamIds } },
+        ],
       },
       include: {
         hostTeam: true,
@@ -46,28 +92,17 @@ export async function getSchedules() {
         createdAt: "desc",
       },
     });
-    const guestSchedules = await prisma.schedule.findMany({
-      where: {
-        OR: [{ guestTeamId: teamId }],
-      },
-      include: {
-        hostTeam: true,
-        guestTeam: true,
-        attendances: true,
-        createdBy: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
 
-    // 세션이 없는 경우: user 없이 players만 전달
     return {
       success: true,
-      data: { hostSchedules, guestSchedules },
+      data: {
+        pastSchedules,
+        upcomingSchedules,
+        manageableTeams,
+      },
     };
   } catch (error) {
-    console.error("회원 데이터 조회 실패:", error);
+    console.error("일정 목록 조회 실패:", error);
     return { success: false, error: "서버 오류가 발생했습니다" };
   }
 }

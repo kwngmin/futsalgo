@@ -82,6 +82,7 @@ const tabs = [
 const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
+  console.log(scheduleId, "scheduleId");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["schedule", scheduleId],
@@ -392,7 +393,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
             {/* 경기 추가 */}
             {dDay >= 0 && (
-              <div className="px-4 py-2">
+              <div className="px-4 py-2 mb-2">
                 <Button
                   className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
                   size="lg"
