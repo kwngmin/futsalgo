@@ -62,10 +62,10 @@ const NewSchedulePopOver = ({ teams }: { teams: Team[] }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="rounded-full font-semibold py-0 !pl-3 !pr-4 text-base h-8">
+        <button className="rounded-full font-semibold py-0 pl-2 pr-3 text-base h-8 gap-1 flex items-center bg-black text-white">
           <Plus className="size-5 text-white" />
           일정
-        </Button>
+        </button>
       </PopoverTrigger>
       <PopoverContent className="w-64 px-0 py-2">
         {teams.map((team) => (
@@ -92,7 +92,7 @@ const NewSchedulePopOver = ({ teams }: { teams: Team[] }) => {
 
             {/* 팀 정보 */}
             <div className="flex flex-col items-start justify-center grow">
-              <h3 className="text-sm font-semibold flex items-center gap-2 truncate leading-none h-6">
+              <h3 className="sm:text-sm font-semibold flex items-center gap-2 truncate leading-none h-6">
                 {team.name}
               </h3>
             </div>

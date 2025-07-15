@@ -336,7 +336,7 @@ const NewForm = ({
           type="button"
           disabled={isLoading}
           className="w-full font-medium text-base h-11 sm:h-12"
-          onClick={() => router.push("/more")}
+          onClick={() => router.back()}
           // variant="ghost"
           variant="secondary"
           size="lg"

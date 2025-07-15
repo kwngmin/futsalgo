@@ -9,6 +9,7 @@ import { getMyTeam } from "@/features/add-schedule/model/actions/get-my-team";
 const NewContent = ({ id, code }: { id: string; code: string }) => {
   const router = useRouter();
   console.log(code, "code");
+
   const { data } = useQuery({
     queryKey: ["myTeam", id],
     queryFn: () => getMyTeam(id),
