@@ -284,9 +284,9 @@ model Team {
   posts         Post[]
   followers     TeamFollow[]  // 팔로워 (기존 likedByUsers 대체)
 
-  // 일정 관련 (관계명 변경)
+  // 일정 관련
   hostedSchedules  Schedule[] @relation("HostTeam")
-  invitedSchedules Schedule[] @relation("InvitedTeam")   // guestSchedules -> invitedSchedules로 변경
+  invitedSchedules Schedule[] @relation("InvitedTeam")
   invitations      TeamMatchInvitation[]
 
   // 매치 관련
