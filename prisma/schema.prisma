@@ -62,7 +62,7 @@ enum TeamMemberStatus {
 
 enum TeamMemberRole {
   OWNER     // 팀장
-  MANAGER   // 매니저  
+  MANAGER   // 부팀장  
   MEMBER    // 일반 멤버
 }
 

@@ -81,7 +81,7 @@ const TeamMemberList = ({
                         strokeWidth={2}
                       />
                       <span className="text-sm text-indigo-700 font-semibold">
-                        매니저
+                        부팀장
                       </span>
                     </div>
                   )}
@@ -233,7 +233,7 @@ const TeamMemberList = ({
                         strokeWidth={2}
                       />
                       <span className="text-sm text-indigo-700 font-semibold">
-                        매니저
+                        부팀장
                       </span>
                     </div>
                   )}
