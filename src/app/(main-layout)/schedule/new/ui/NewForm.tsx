@@ -135,7 +135,7 @@ const NewForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 px-4 py-2 bg-white rounded-2xl"
+      className="space-y-6 px-4 bg-white rounded-2xl"
     >
       {/* <div className="space-y-3">
         <Label className="">제목</Label>
@@ -149,15 +149,15 @@ const NewForm = ({
         />
       </div> */}
 
-      <div className="flex flex-col sm:grid grid-cols-2 gap-x-3 gap-y-6">
-        <div className="flex flex-col gap-3 grow">
-          <Label htmlFor="date-picker" className="px-1">
+      <div className="flex flex-col gap-x-4 gap-y-6">
+        <div className="flex flex-col gap-3 grow pb-3">
+          {/* <Label htmlFor="date-picker" className="px-1">
             경기 일자
-          </Label>
+          </Label> */}
           <Calendar
             mode="single"
             selected={date}
-            className="border rounded-md w-full [--cell-size:--spacing(12)] md:[--cell-size:--spacing(10)]"
+            className="md:hidden rounded-md border w-full [--cell-size:--spacing(13)] sm:[--cell-size:--spacing(10)] mx-auto"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
@@ -175,12 +175,12 @@ const NewForm = ({
               setDate(date);
             }}
           />
-          {/* <Calendar
+          <Calendar
             mode="single"
             numberOfMonths={2}
             selected={date}
             // onSelect={setDate}
-            className="border rounded-md hidden md:block"
+            className="border rounded-md hidden md:block w-full"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
@@ -199,7 +199,7 @@ const NewForm = ({
               setDate(date);
               // setOpen(false);
             }}
-          /> */}
+          />
         </div>
         <div className="flex flex-col gap-6">
           {/* 매치 타입 */}
