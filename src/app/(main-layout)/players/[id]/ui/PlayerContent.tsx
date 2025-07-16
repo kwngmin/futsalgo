@@ -11,7 +11,7 @@ import {
   ChevronRight,
   EllipsisVertical,
   Flame,
-  List,
+  // List,
   Share,
   Sparkles,
 } from "lucide-react";
@@ -331,7 +331,48 @@ const PlayerContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
+              <div className="border rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {GENDER[data?.data?.gender as keyof typeof GENDER]}
+                  </div>
+                  <Label className="text-muted-foreground">성별</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {
+                      PLAYER_BACKGROUND[
+                        data?.data
+                          ?.playerBackground as keyof typeof PLAYER_BACKGROUND
+                      ]
+                    }
+                  </div>
+                  <Label className="text-muted-foreground">출신</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {getCurrentAge(data?.data?.birthDate as string).age}살
+                  </div>
+                  <Label className="text-muted-foreground">나이</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">{data?.data?.height}cm</div>
+                  <Label className="text-muted-foreground">키</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {FOOT[data?.data?.foot as keyof typeof FOOT]}
+                  </div>
+                  <Label className="text-muted-foreground">사용하는 발</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {CONDITION[data?.data?.condition as keyof typeof CONDITION]}
+                  </div>
+                  <Label className="text-muted-foreground">부상</Label>
+                </div>
+              </div>
+              {/* <div className="border rounded-2xl overflow-hidden mx-4">
                 <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
                   <div className="flex items-center space-x-3">
                     <List className={`w-5 h-5 text-gray-600`} />
@@ -383,10 +424,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                     <Label className="text-muted-foreground">부상</Label>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* 선호 포지션 */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 mx-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 mx-4">
                 <div className="border rounded-2xl overflow-hidden sm:col-span-2 flex flex-col">
                   <div
                     className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
@@ -507,17 +548,17 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
               </div>
 
-              {/* 참가한 경기 통계 */}
+              {/* 통계 */}
               <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
                   className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
-                    alert("참가한 경기 통계");
+                    alert("통계");
                   }}
                 >
                   <div className="flex items-center space-x-3">
                     <ChartPie className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">참가한 경기 통계</span>
+                    <span className="font-medium">통계</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">

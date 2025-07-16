@@ -9,7 +9,6 @@ import {
   ChevronRight,
   CircleX,
   EllipsisVertical,
-  List,
   Loader2,
   MapPinned,
   ScrollText,
@@ -44,14 +43,14 @@ const tabs = [
     value: "matches",
     isDisabled: true,
   },
-  // {
-  //   label: "후기",
-  //   value: "reviews",
-  //   isDisabled: true,
-  // },
   {
     label: "사진",
     value: "photos",
+    isDisabled: true,
+  },
+  {
+    label: "통계",
+    value: "statistics",
     isDisabled: true,
   },
 ];
@@ -518,7 +517,53 @@ const TeamContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
+              <div className="border rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {
+                      TEAM_GENDER[
+                        data?.data?.gender as keyof typeof TEAM_GENDER
+                      ]
+                    }
+                  </div>
+                  <Label className="text-muted-foreground">구분</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.stats.professionalCount
+                      ? `${data.data.stats.professionalCount}명`
+                      : "없음"}
+                  </div>
+                  <Label className="text-muted-foreground">선수 출신</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.stats.averageAge}살
+                  </div>
+                  <Label className="text-muted-foreground">평균 연령</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.stats.averageHeight}cm
+                  </div>
+                  <Label className="text-muted-foreground">평균 키</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.members.approved.length}명
+                  </div>
+                  <Label className="text-muted-foreground">팀원 수</Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center my-3">
+                  <div className="font-semibold">
+                    {data.data.recruitmentStatus === "RECRUITING"
+                      ? "모집중"
+                      : "마감"}
+                  </div>
+                  <Label className="text-muted-foreground">팀원 모집</Label>
+                </div>
+              </div>
+              {/* <div className="border rounded-2xl overflow-hidden mx-4">
                 <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
                   <div className="flex items-center space-x-3">
                     <List className={`w-5 h-5 text-gray-600`} />
@@ -571,7 +616,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <Label className="text-muted-foreground">팀원 모집</Label>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* 통계 */}
               {/* <div className="bg-white rounded-lg overflow-hidden">
@@ -627,7 +672,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 >
                   <div className="flex items-center space-x-3">
                     <ChartPie className={`w-5 h-5 text-gray-600`} />
-                    <span className="font-medium">팀원 실력 통계</span>
+                    <span className="font-medium">팀원 실력</span>
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>

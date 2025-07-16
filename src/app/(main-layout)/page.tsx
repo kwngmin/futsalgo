@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowDownUp, Clock, Plus, Search, Vote } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+// import { Button } from "@/shared/components/ui/button";
 
 const HomePage = () => {
   const router = useRouter();
@@ -36,13 +36,21 @@ const HomePage = () => {
         <div className="flex items-center gap-2">
           {Array.isArray(data?.data?.manageableTeams) &&
             data?.data?.manageableTeams.length > 0 && (
-              <Button
-                className="rounded-full font-semibold py-0 !pl-3 !pr-4 text-base h-8"
+              // <Button
+              //   className="rounded-full font-semibold py-0 !pl-3 !pr-4 text-base h-8"
+              //   onClick={() => router.push("/schedule/new")}
+              // >
+              //   <Plus className="size-5 text-white" />
+              //   일정
+              // </Button>
+              <button
+                type="button"
                 onClick={() => router.push("/schedule/new")}
+                className="shrink-0 h-9 pl-3 pr-4 gap-1.5 flex items-center justify-center text-white bg-black hover:bg-black/80 rounded-full transition-colors cursor-pointer font-semibold"
               >
-                <Plus className="size-5 text-white" />
+                <Plus className="w-5 h-5" strokeWidth={2.5} />
                 일정
-              </Button>
+              </button>
             )}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />
