@@ -229,7 +229,7 @@ const NewForm = ({
             mode="single"
             selected={date}
             // onSelect={setDate}
-            className="border rounded-md md:hidden w-full h-fit"
+            className="border rounded-md md:hidden w-full shrink-0"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
