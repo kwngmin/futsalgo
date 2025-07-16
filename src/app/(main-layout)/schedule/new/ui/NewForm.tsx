@@ -282,7 +282,7 @@ const NewForm = ({
         </div>
 
         {watch("enableAttendanceVote") && (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="hidden sm:grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-3 grow sm:grow-0">
               <Label htmlFor="date-picker" className="px-1">
                 투표 종료 일자
@@ -293,6 +293,7 @@ const NewForm = ({
                     variant="outline"
                     id="date-picker"
                     className="min-w-48 justify-between font-normal !h-11 sm:!h-10"
+                    disabled={!date}
                   >
                     <div className="flex items-center gap-3">
                       <CalendarIcon />
@@ -338,6 +339,54 @@ const NewForm = ({
                 id="time-picker"
                 defaultValue="06:00"
                 {...register("startTime")}
+                disabled={!date}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
+              />
+            </div>
+          </div>
+        )}
+
+        {watch("enableAttendanceVote") && (
+          <div className="flex flex-col gap-6 sm:hidden">
+            <div className="flex flex-col gap-3 pb-3 sm:pb-0">
+              <Label htmlFor="date-picker" className="px-1">
+                투표 종료 일자
+              </Label>
+              <Calendar
+                mode="single"
+                selected={date}
+                className={`rounded-md border pb-10 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
+                  !date ? "opacity-50 pointer-events-none" : ""
+                }`}
+                disabled={(date) => date < new Date()}
+                locale={ko}
+                onSelect={(date) => {
+                  console.log(date, "date");
+                  if (!date) return;
+                  const dateData = new Date(date);
+                  const year = dateData.getFullYear();
+                  setValue(
+                    "date",
+                    `${year}-${String(dateData.getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    )}-${String(dateData.getDate()).padStart(2, "0")}`
+                  );
+                  setDate(date);
+                }}
+              />
+            </div>
+            {/* 시간 */}
+            <div className="flex flex-col gap-3 w-1/2">
+              <Label htmlFor="time-picker" className="px-1">
+                투표 종료 시간
+              </Label>
+              <Input
+                type="time"
+                id="time-picker"
+                defaultValue="06:00"
+                {...register("startTime")}
+                disabled={!date}
                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
               />
             </div>
