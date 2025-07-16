@@ -30,7 +30,7 @@ const PlayerCard = ({
     >
       {/* 프로필 이미지 */}
       {player.image ? (
-        <div className="size-14 flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <div className="size-14 flex items-center justify-center flex-shrink-0 relative">
           <Image
             width={56}
             height={56}
@@ -40,6 +40,11 @@ const PlayerCard = ({
             priority={isCurrentUser}
             loading={isCurrentUser ? "eager" : "lazy"}
           />
+          {isCurrentUser && (
+            <div className="absolute -top-0.5 -left-0.25 w-5 h-5 bg-black rounded-lg flex items-center justify-center">
+              <span className="text-white text-xs font-bold">나</span>
+            </div>
+          )}
         </div>
       ) : (
         <div className="size-14 bg-gray-400" />
