@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/shared/components/ui/label";
-import { CalendarIcon, ChevronDownIcon, Loader2 } from "lucide-react";
+import { CalendarIcon, Check, ChevronDownIcon, Loader2, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
+import { useTeamCodeValidation } from "@/features/validation/hooks/use-validation";
 // import Image from "next/image";
 
 const newFormSchema = z.object({
@@ -57,6 +58,8 @@ const NewForm = ({
   const [open, setOpen] = useState(false);
   const [matchDate, setMatchDate] = useState<Date>();
   const [deadlineDate, setDeadlineDate] = useState<Date>();
+
+  const { teamCode, onChange } = useTeamCodeValidation();
 
   const {
     register,
@@ -155,7 +158,7 @@ const NewForm = ({
             <Calendar
               mode="single"
               selected={matchDate}
-              className="rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
+              className="rounded-md border pb-12 sm:pb-7 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto shadow-xs"
               disabled={(date) => date < new Date()}
               locale={ko}
               onSelect={(date) => {
@@ -228,7 +231,7 @@ const NewForm = ({
 
           {/* 매치 타입 */}
           <div className="space-y-3">
-            <Label className="px-1">경기</Label>
+            <Label className="px-1">경기 구분</Label>
             <CustomRadioGroup
               options={MATCH_TYPE_OPTIONS}
               value={watch("matchType")}
@@ -239,6 +242,39 @@ const NewForm = ({
               direction="vertical"
             />
           </div>
+
+          {/* 팀 코드 */}
+          {watch("matchType") === "TEAM" && (
+            <div className="space-y-3">
+              <Label htmlFor="nickname">초청팀 코드</Label>
+              <div className="relative">
+                <Input
+                  id="nickname"
+                  type="text"
+                  value={teamCode.value}
+                  onChange={(e) => onChange(e.target.value)}
+                  placeholder="초청팀 코드를 입력하세요"
+                />
+                {teamCode.status === "checking" && (
+                  <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin" />
+                )}
+                {teamCode.status === "valid" && (
+                  <Check className="absolute right-3 top-2.5 h-4 w-4 text-green-600" />
+                )}
+                {teamCode.status === "invalid" && (
+                  <X className="absolute right-3 top-2.5 h-4 w-4 text-red-600" />
+                )}
+              </div>
+              {teamCode.error && (
+                <Alert
+                  variant="destructive"
+                  className="bg-destructive/5 border-none"
+                >
+                  <AlertDescription>{teamCode.error}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
