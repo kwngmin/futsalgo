@@ -309,6 +309,7 @@ const NewForm = ({
                     mode="single"
                     selected={date}
                     locale={ko}
+                    disabled={(date) => date < new Date()}
                     onSelect={(date) => {
                       console.log(date, "date");
                       if (!date) return;
@@ -344,30 +345,7 @@ const NewForm = ({
         )}
       </div>
 
-      {/* <div className="space-y-3">
-        <Label className="px-1">팀 구분</Label>
-        <CustomRadioGroup
-          options={TEAM_GENDER_OPTIONS}
-          value={watch("gender")}
-          onValueChange={(value) =>
-            setValue("gender", value as "MALE" | "FEMALE")
-          }
-          error={errors.gender?.message}
-        />
-      </div>
-
-      <div className="space-y-3">
-        <Label className="px-1">팀 실력</Label>
-        <CustomRadioGroup
-          options={TEAM_LEVEL_OPTIONS}
-          value={watch("level")}
-          onValueChange={(value) => setValue("level", value as TeamLevel)}
-          error={errors.level?.message}
-          direction="vertical"
-        />
-      </div>
-
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-3">
             <Label className="px-1">시/도</Label>
