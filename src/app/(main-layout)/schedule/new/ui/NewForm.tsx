@@ -149,7 +149,7 @@ const NewForm = ({
         />
       </div> */}
 
-      <div className="flex flex-col gap-x-4 gap-y-6">
+      <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
         <div className="flex flex-col gap-3 grow pb-3">
           {/* <Label htmlFor="date-picker" className="px-1">
             경기 일자
@@ -157,7 +157,7 @@ const NewForm = ({
           <Calendar
             mode="single"
             selected={date}
-            className="md:hidden rounded-md border pb-10 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
+            className="rounded-md border pb-10 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
@@ -175,7 +175,7 @@ const NewForm = ({
               setDate(date);
             }}
           />
-          <Calendar
+          {/* <Calendar
             mode="single"
             numberOfMonths={2}
             selected={date}
@@ -199,7 +199,7 @@ const NewForm = ({
               setDate(date);
               // setOpen(false);
             }}
-          />
+          /> */}
         </div>
         <div className="flex flex-col gap-6">
           {/* 매치 타입 */}
