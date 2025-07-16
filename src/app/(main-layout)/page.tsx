@@ -4,15 +4,8 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ArrowDownUp, Clock, Search, Vote } from "lucide-react";
-import NewSchedulePopOver from "./ui/NewSchedulePopOver";
-// import { CircleIcon, TriangleIcon, XIcon } from "@phosphor-icons/react";
-// import { Circle, Clock, X } from "lucide-react";
-// import { MapPinSimpleIcon } from "@phosphor-icons/react";
-// import formatTimeRange from "@/entities/schedule/lib/format-time-range";
-// import { calculateDday } from "./schedule/[id]/ui/ScheduleContent";
-// import { Countdown } from "./schedule/[id]/ui/CountDown";
-// import { XMarkIcon } from "@heroicons/react/24/solid";
+import { ArrowDownUp, Clock, Plus, Search, Vote } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 
 const HomePage = () => {
   const router = useRouter();
@@ -43,7 +36,13 @@ const HomePage = () => {
         <div className="flex items-center gap-2">
           {Array.isArray(data?.data?.manageableTeams) &&
             data?.data?.manageableTeams.length > 0 && (
-              <NewSchedulePopOver teams={data?.data?.manageableTeams} />
+              <Button
+                className="rounded-full font-semibold py-0 !pl-3 !pr-4 text-base h-8"
+                onClick={() => router.push("/schedule/new")}
+              >
+                <Plus className="size-5 text-white" />
+                일정
+              </Button>
             )}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Search className="w-5 h-5" />

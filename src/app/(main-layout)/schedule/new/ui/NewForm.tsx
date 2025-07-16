@@ -40,23 +40,13 @@ const newFormSchema = z.object({
 
 export type NewFormData = z.infer<typeof newFormSchema>;
 
-const NewForm = ({
-  data,
-  teamId,
-  userId,
-}: {
-  data: Team;
-  teamId: string;
-  userId: string;
-}) => {
+const NewForm = ({ teams, userId }: { teams: Team[]; userId: string }) => {
   console.log(userId, "userId");
+  console.log(teams, "teams");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   // const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
-
-  console.log(data, "data");
-  console.log(teamId, "teamId");
 
   const {
     register,
@@ -69,8 +59,8 @@ const NewForm = ({
     resolver: zodResolver(newFormSchema),
     defaultValues: {
       matchType: "SQUAD",
-      city: data.city,
-      district: data.district,
+      // city: data.city,
+      // district: data.district,
       enableAttendanceVote: false,
     },
   });
@@ -84,7 +74,7 @@ const NewForm = ({
 
       const result = await addNewSchedule({
         userId,
-        teamId,
+        teamId: "skdjksjd", // 임시
         data: {
           place: formData.place,
           date: formData.date,
@@ -233,7 +223,7 @@ const NewForm = ({
             mode="single"
             selected={date}
             // onSelect={setDate}
-            className="border rounded-md md:hidden w-full"
+            className="border rounded-md md:hidden w-full h-fit"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
@@ -497,14 +487,14 @@ const NewForm = ({
       </div>
 
       {/* 최근 수정일 */}
-      <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
+      {/* <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
         최근 수정일:{" "}
         {data.updatedAt.toLocaleDateString("ko-KR", {
           year: "numeric",
           month: "long",
           day: "numeric",
         })}
-      </div>
+      </div> */}
     </form>
   );
 };
