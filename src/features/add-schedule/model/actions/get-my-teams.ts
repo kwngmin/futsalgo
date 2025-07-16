@@ -1,39 +1,46 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-// import { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-// type PlayerWithTeams = Prisma.UserGetPayload<{
-//   include: {
-//     teams: {
-//       include: {
-//         team: true;
-//       };
-//     };
-//   };
-// }>;
+// 팀 데이터 select 구조 정의
+const teamSelect = Prisma.validator<Prisma.TeamMemberFindManyArgs>()({
+  select: {
+    team: {
+      select: {
+        id: true,
+        name: true,
+        logoUrl: true,
+      },
+    },
+  },
+});
 
-// export async function getMyTeam(
-//   id: string
-// ): Promise<
-//   { success: true; data: PlayerWithTeams } | { success: false; error: string }
-// > {
-export async function getTeams(id: string) {
+// 팀 데이터 응답 타입
+export type TeamWithBasicInfo = Prisma.TeamMemberGetPayload<typeof teamSelect>;
+
+// 반환 타입 정의
+export type GetTeamsReturn =
+  | {
+      success: true;
+      data: {
+        teams: TeamWithBasicInfo[];
+      };
+    }
+  | {
+      success: false;
+      error: string;
+    };
+
+// 실제 함수
+export async function getTeams(id: string): Promise<GetTeamsReturn> {
   try {
     const teams = await prisma.teamMember.findMany({
       where: { userId: id, status: "APPROVED" },
-      select: {
-        team: {
-          select: {
-            id: true,
-            name: true,
-            logoUrl: true,
-          },
-        },
-      },
+      select: teamSelect.select,
     });
 
-    if (!teams) {
+    if (!teams.length) {
       return {
         success: false,
         error: "팀을 찾을 수 없습니다",

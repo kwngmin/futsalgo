@@ -6,14 +6,17 @@ import { useRouter } from "next/navigation";
 import NewForm from "./NewForm";
 // import { getTeam } from "@/features/add-schedule/model/actions/get-my-team";
 // import { Team } from "@prisma/client";
-import { getTeams } from "@/features/add-schedule/model/actions/get-my-teams";
+import {
+  getTeams,
+  GetTeamsReturn,
+} from "@/features/add-schedule/model/actions/get-my-teams";
 
 const NewContent = ({ userId }: { userId: string }) => {
   const router = useRouter();
 
   const { data } = useQuery({
     queryKey: ["myTeams", userId],
-    queryFn: () => getTeams(userId),
+    queryFn: () => getTeams(userId) as Promise<GetTeamsReturn>,
     enabled: !!userId, // id 없으면 fetch 안 함
   });
 

@@ -7,7 +7,6 @@ import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Team } from "@prisma/client";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -22,6 +21,7 @@ import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
 import { useRouter } from "next/navigation";
 import { ko } from "date-fns/locale";
+import { TeamWithBasicInfo } from "@/features/add-schedule/model/actions/get-my-teams";
 
 const newFormSchema = z.object({
   title: z.string().optional(),
@@ -40,7 +40,13 @@ const newFormSchema = z.object({
 
 export type NewFormData = z.infer<typeof newFormSchema>;
 
-const NewForm = ({ teams, userId }: { teams: Team[]; userId: string }) => {
+const NewForm = ({
+  teams,
+  userId,
+}: {
+  teams: TeamWithBasicInfo[];
+  userId: string;
+}) => {
   console.log(userId, "userId");
   console.log(teams, "teams");
   const router = useRouter();
