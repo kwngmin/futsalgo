@@ -12,11 +12,6 @@ import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { MATCH_TYPE_OPTIONS } from "@/entities/team/model/constants";
 import { Input } from "@/shared/components/ui/input";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/shared/components/ui/popover";
 import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
 import { useRouter } from "next/navigation";
@@ -172,64 +167,18 @@ const NewForm = ({
           type="text"
           placeholder="장소를 입력하세요"
           {...register("place")}
-          // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
-          // className="min-h-24"
-          // placeholder="일정에 대한 간단한 소개를 작성해주세요"
         />
       </div>
 
       <div className="flex flex-col md:flex-row gap-x-3 gap-y-6">
-        <div className="flex flex-col gap-3 grow md:grow-0">
+        <div className="flex flex-col gap-3 grow md:grow-0 bg-red-200">
           <Label htmlFor="date-picker" className="px-1">
             경기 일자
           </Label>
-          {/* <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                id="date-picker"
-                className="min-w-48 justify-between font-normal !h-10"
-                // size="lg"
-              >
-                <div className="flex items-center gap-3">
-                  <CalendarIcon />
-                  {date ? date.toLocaleDateString() : "일자를 선택하세요"}
-                </div>
-                <ChevronDownIcon />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-auto overflow-hidden p-0"
-              align="start"
-            >
-              <Calendar
-                mode="single"
-                selected={date}
-                captionLayout="dropdown"
-                onSelect={(date) => {
-                  console.log(date, "date");
-                  if (!date) return;
-                  const dateData = new Date(date);
-                  const year = dateData.getFullYear();
-                  setValue(
-                    "date",
-                    `${year}-${String(dateData.getMonth() + 1).padStart(
-                      2,
-                      "0"
-                    )}-${String(dateData.getDate()).padStart(2, "0")}`
-                  );
-                  // setValue("date", date?.toISOString() || "");
-                  setDate(date);
-                  setOpen(false);
-                }}
-              />
-            </PopoverContent>
-          </Popover> */}
           <Calendar
             mode="single"
             selected={date}
-            // onSelect={setDate}
-            className="border rounded-md md:hidden w-full shrink-0"
+            className="border rounded-md md:hidden w-full shrink-0 h-fit"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
