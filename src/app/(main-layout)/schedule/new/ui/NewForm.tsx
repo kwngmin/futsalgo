@@ -154,7 +154,7 @@ const NewForm = ({
             <Calendar
               mode="single"
               selected={date}
-              className="rounded-md border pb-10 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
+              className="rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
               disabled={(date) => date < new Date()}
               locale={ko}
               onSelect={(date) => {
@@ -255,7 +255,7 @@ const NewForm = ({
         {/* 참석여부 투표 */}
         <div className="space-y-3">
           <Label className="">참석여부 투표</Label>
-          <div className="flex items-center gap-2 p-0.5 bg-muted w-fit rounded-lg">
+          <div className="flex items-center p-0.5 bg-muted w-fit rounded-lg">
             <button
               type="button"
               className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
@@ -355,7 +355,7 @@ const NewForm = ({
               <Calendar
                 mode="single"
                 selected={date}
-                className={`rounded-md border pb-10 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
+                className={`rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
                   !date ? "opacity-50 pointer-events-none" : ""
                 }`}
                 disabled={(date) => date < new Date()}
