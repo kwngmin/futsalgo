@@ -149,48 +149,7 @@ const NewForm = ({
         />
       </div> */}
 
-      {/* 주최팀 */}
-      <div className="space-y-3">
-        <Label className="px-1">주최팀</Label>
-        <CustomSelect
-          hasPlaceholder
-          options={teams.map((t) => (
-            <option key={t.team.id} value={t.team.id}>
-              {t.team.name}
-            </option>
-          ))}
-          value={watch("city")}
-          onChange={(e) => setValue("city", e.target.value)}
-        />
-      </div>
-
-      {/* 매치 타입 */}
-      <div className="space-y-3 hidden sm:block">
-        <Label className="px-1">매치 타입</Label>
-        <CustomRadioGroup
-          options={MATCH_TYPE_OPTIONS}
-          value={watch("matchType")}
-          onValueChange={(value) =>
-            setValue("matchType", value as "TEAM" | "SQUAD")
-          }
-          error={errors.matchType?.message}
-          // direction="vertical"
-        />
-      </div>
-      <div className="space-y-3 sm:hidden">
-        <Label className="px-1">매치 타입</Label>
-        <CustomRadioGroup
-          options={MATCH_TYPE_OPTIONS}
-          value={watch("matchType")}
-          onValueChange={(value) =>
-            setValue("matchType", value as "TEAM" | "SQUAD")
-          }
-          error={errors.matchType?.message}
-          direction="vertical"
-        />
-      </div>
-
-      <div className="flex flex-col md:grid grid-cols-2 gap-x-3 gap-y-6">
+      <div className="flex flex-col sm:grid grid-cols-2 gap-x-3 gap-y-6">
         <div className="flex flex-col gap-3 grow">
           <Label htmlFor="date-picker" className="px-1">
             경기 일자
@@ -198,7 +157,7 @@ const NewForm = ({
           <Calendar
             mode="single"
             selected={date}
-            className="border rounded-md w-full md:w-auto"
+            className="border rounded-md w-full"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
@@ -243,7 +202,20 @@ const NewForm = ({
           /> */}
         </div>
         <div className="flex flex-col gap-6">
-          <div className="space-y-3 w-full md:w-auto">
+          {/* 매치 타입 */}
+          <div className="space-y-3">
+            <Label className="px-1">매치 타입</Label>
+            <CustomRadioGroup
+              options={MATCH_TYPE_OPTIONS}
+              value={watch("matchType")}
+              onValueChange={(value) =>
+                setValue("matchType", value as "TEAM" | "SQUAD")
+              }
+              error={errors.matchType?.message}
+              direction="vertical"
+            />
+          </div>
+          <div className="space-y-3">
             <Label className="">장소</Label>
             <Input
               type="text"
@@ -251,7 +223,7 @@ const NewForm = ({
               {...register("place")}
             />
           </div>
-          <div className="flex md:flex-col gap-x-3 gap-y-6 grow">
+          <div className="grid grid-cols-3 sm:grid-cols-2 gap-x-3 gap-y-6">
             <div className="flex flex-col gap-3">
               <Label htmlFor="time-picker" className="px-1">
                 시작 시간
@@ -277,6 +249,24 @@ const NewForm = ({
               />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 주최팀 & 초청팀 */}
+      <div className="grid sm:grid-cols-2 gap-x-3 gap-y-6">
+        {/* 주최팀 */}
+        <div className="space-y-3">
+          <Label className="px-1">주최팀</Label>
+          <CustomSelect
+            hasPlaceholder
+            options={teams.map((t) => (
+              <option key={t.team.id} value={t.team.id}>
+                {t.team.name}
+              </option>
+            ))}
+            value={watch("city")}
+            onChange={(e) => setValue("city", e.target.value)}
+          />
         </div>
       </div>
 
