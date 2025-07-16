@@ -208,9 +208,15 @@ const TeamContent = ({ id }: { id: string }) => {
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
         <div className="flex items-center justify-end gap-2">
-          <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
+          {/* <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
             팔로우
-          </Button>
+          </Button> */}
+          <button
+            type="button"
+            className="shrink-0 h-8 px-3 gap-1.5 flex items-center justify-center text-white bg-black hover:bg-black/80 rounded-full transition-colors cursor-pointer font-semibold"
+          >
+            팔로우
+          </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
           </button>

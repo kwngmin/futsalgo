@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getPlayer } from "../model/actions";
-import { Button } from "@/shared/components/ui/button";
+// import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -104,11 +104,17 @@ const PlayerContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end items-center gap-2">
           {id !== session.data?.user.id && (
-            <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
+            // <Button className="rounded-full font-semibold py-0 px-4 text-base h-8">
+            //   팔로우
+            // </Button>
+            <button
+              type="button"
+              className="shrink-0 h-8 px-3 gap-1.5 flex items-center justify-center text-white bg-black hover:bg-black/80 rounded-full transition-colors cursor-pointer font-semibold"
+            >
               팔로우
-            </Button>
+            </button>
           )}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />
