@@ -135,7 +135,7 @@ const NewForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-white rounded-2xl"
+      className="space-y-6 px-4 py-2 bg-white rounded-2xl"
     >
       {/* <div className="space-y-3">
         <Label className="">제목</Label>
@@ -157,7 +157,7 @@ const NewForm = ({
           <Calendar
             mode="single"
             selected={date}
-            className="border rounded-md w-full"
+            className="border rounded-md"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
