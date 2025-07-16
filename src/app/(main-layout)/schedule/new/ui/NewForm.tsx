@@ -18,8 +18,10 @@ import { useRouter } from "next/navigation";
 import { ko } from "date-fns/locale";
 import { TeamWithBasicInfo } from "@/features/add-schedule/model/actions/get-my-teams";
 import CustomSelect from "@/shared/components/ui/custom-select";
+// import Image from "next/image";
 
 const newFormSchema = z.object({
+  hostTeamId: z.string().min(1),
   title: z.string().optional(),
   place: z.string().min(1),
   description: z.string().optional(),
@@ -64,6 +66,7 @@ const NewForm = ({
       // city: data.city,
       // district: data.district,
       enableAttendanceVote: false,
+      hostTeamId: teams.length === 1 ? teams[0].team.id : "",
     },
   });
   console.log(watch("date"), "watch");
@@ -76,7 +79,7 @@ const NewForm = ({
 
       const result = await addNewSchedule({
         userId,
-        teamId: "skdjksjd", // 임시
+        teamId: formData.hostTeamId, // 임시
         data: {
           place: formData.place,
           date: formData.date,
@@ -227,8 +230,9 @@ const NewForm = ({
                   {t.team.name}
                 </option>
               ))}
-              value={watch("city")}
-              onChange={(e) => setValue("city", e.target.value)}
+              value={watch("hostTeamId")}
+              onChange={(e) => setValue("hostTeamId", e.target.value)}
+              disabled={teams.length === 1}
             />
           </div>
 
@@ -261,13 +265,13 @@ const NewForm = ({
       {/* 참석여부 투표 */}
       <div className="space-y-3">
         <Label className="">참석여부 투표</Label>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 p-1 bg-muted w-fit rounded-lg">
           <button
             type="button"
-            className={`h-12 sm:h-10 border rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+            className={`h-11 sm:h-10 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
               watch("enableAttendanceVote")
-                ? "border-blue-500 text-blue-600"
-                : "border-input text-gray-500"
+                ? "bg-white shadow"
+                : "text-muted-foreground"
             }`}
             onClick={() => setValue("enableAttendanceVote", true)}
           >
@@ -275,10 +279,10 @@ const NewForm = ({
           </button>
           <button
             type="button"
-            className={`h-12 sm:h-10 border rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+            className={`h-11 sm:h-10 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
               !watch("enableAttendanceVote")
-                ? "border-blue-500 text-blue-600"
-                : "border-input text-gray-500"
+                ? "bg-white shadow"
+                : "text-muted-foreground"
             }`}
             onClick={() => setValue("enableAttendanceVote", false)}
           >
