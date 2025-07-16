@@ -1,26 +1,27 @@
 "use client";
 
 import { Label } from "@/shared/components/ui/label";
-import { CalendarIcon, ChevronDownIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { TeamMember } from "@prisma/client";
+import { Team } from "@prisma/client";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { MATCH_TYPE_OPTIONS } from "@/entities/team/model/constants";
 import { Input } from "@/shared/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/shared/components/ui/popover";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "@/shared/components/ui/popover";
 import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
 import { useRouter } from "next/navigation";
+import { ko } from "date-fns/locale";
 
 const newFormSchema = z.object({
   title: z.string().optional(),
@@ -30,6 +31,11 @@ const newFormSchema = z.object({
   startTime: z.string().min(1),
   endTime: z.string().min(1),
   matchType: z.string().min(1),
+  city: z.string().min(1),
+  district: z.string().min(1),
+  enableAttendanceVote: z.boolean(),
+  attendanceDeadline: z.string().min(1),
+  attendanceEndTime: z.string().min(1),
 });
 
 export type NewFormData = z.infer<typeof newFormSchema>;
@@ -39,14 +45,14 @@ const NewForm = ({
   teamId,
   userId,
 }: {
-  data: TeamMember;
+  data: Team;
   teamId: string;
   userId: string;
 }) => {
   console.log(userId, "userId");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
   console.log(data, "data");
@@ -63,6 +69,9 @@ const NewForm = ({
     resolver: zodResolver(newFormSchema),
     defaultValues: {
       matchType: "SQUAD",
+      city: data.city,
+      district: data.district,
+      enableAttendanceVote: false,
     },
   });
   console.log(watch("date"), "watch");
@@ -173,12 +182,12 @@ const NewForm = ({
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row space-y-6 space-x-2">
-        <div className="flex flex-col gap-3 grow sm:grow-0">
+      <div className="flex flex-col md:flex-row gap-x-3 gap-y-6">
+        <div className="flex flex-col gap-3 grow md:grow-0">
           <Label htmlFor="date-picker" className="px-1">
             경기 일자
           </Label>
-          <Popover open={open} onOpenChange={setOpen}>
+          {/* <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -219,13 +228,62 @@ const NewForm = ({
                 }}
               />
             </PopoverContent>
-          </Popover>
+          </Popover> */}
+          <Calendar
+            mode="single"
+            selected={date}
+            // onSelect={setDate}
+            className="border rounded-md md:hidden w-full"
+            disabled={(date) => date < new Date()}
+            locale={ko}
+            onSelect={(date) => {
+              console.log(date, "date");
+              if (!date) return;
+              const dateData = new Date(date);
+              const year = dateData.getFullYear();
+              setValue(
+                "date",
+                `${year}-${String(dateData.getMonth() + 1).padStart(
+                  2,
+                  "0"
+                )}-${String(dateData.getDate()).padStart(2, "0")}`
+              );
+              // setValue("date", date?.toISOString() || "");
+              setDate(date);
+              // setOpen(false);
+            }}
+          />
+          <Calendar
+            mode="single"
+            numberOfMonths={2}
+            selected={date}
+            // onSelect={setDate}
+            className="border rounded-md hidden md:block"
+            disabled={(date) => date < new Date()}
+            locale={ko}
+            onSelect={(date) => {
+              console.log(date, "date");
+              if (!date) return;
+              const dateData = new Date(date);
+              const year = dateData.getFullYear();
+              setValue(
+                "date",
+                `${year}-${String(dateData.getMonth() + 1).padStart(
+                  2,
+                  "0"
+                )}-${String(dateData.getDate()).padStart(2, "0")}`
+              );
+              // setValue("date", date?.toISOString() || "");
+              setDate(date);
+              // setOpen(false);
+            }}
+          />
         </div>
-        <div className="flex flex-col gap-3">
-          <Label htmlFor="time-picker" className="px-1">
-            시설 예약 시간 (시작 - 종료)
-          </Label>
-          <div className="flex gap-2">
+        <div className="flex md:flex-col gap-x-3 gap-y-6 grow">
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="time-picker" className="px-1">
+              시작 시간
+            </Label>
             <Input
               type="time"
               id="time-picker"
@@ -233,9 +291,11 @@ const NewForm = ({
               {...register("startTime")}
               className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
             />
-            <div className="flex items-center justify-center">
-              <span className="text-sm text-gray-500">~</span>
-            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="time-picker" className="px-1">
+              종료 시간
+            </Label>
             <Input
               type="time"
               id="time-picker"
@@ -256,6 +316,97 @@ const NewForm = ({
           placeholder="안내 사항을 작성해주세요"
         />
       </div>
+
+      {/* 참석여부 투표 */}
+      <div className="space-y-3">
+        <Label className="">참석여부 투표</Label>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className={`h-12 sm:h-10 border rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+              watch("enableAttendanceVote")
+                ? "border-blue-500 text-blue-600"
+                : "border-input text-gray-500"
+            }`}
+            onClick={() => setValue("enableAttendanceVote", true)}
+          >
+            사용
+          </button>
+          <button
+            type="button"
+            className={`h-12 sm:h-10 border rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+              !watch("enableAttendanceVote")
+                ? "border-blue-500 text-blue-600"
+                : "border-input text-gray-500"
+            }`}
+            onClick={() => setValue("enableAttendanceVote", false)}
+          >
+            사용 안 함
+          </button>
+        </div>
+      </div>
+
+      {/* {watch("enableAttendanceVote") && (
+        <div className="flex flex-col sm:flex-row space-y-6 space-x-2">
+          <div className="flex flex-col gap-3 grow sm:grow-0">
+            <Label htmlFor="date-picker" className="px-1">
+              투표 종료 일자
+            </Label>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  id="date-picker"
+                  className="min-w-48 justify-between font-normal !h-10"
+                >
+                  <div className="flex items-center gap-3">
+                    <CalendarIcon />
+                    {date ? date.toLocaleDateString() : "일자를 선택하세요"}
+                  </div>
+                  <ChevronDownIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto overflow-hidden p-0"
+                align="start"
+              >
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  captionLayout="dropdown"
+                  onSelect={(date) => {
+                    console.log(date, "date");
+                    if (!date) return;
+                    const dateData = new Date(date);
+                    const year = dateData.getFullYear();
+                    setValue(
+                      "date",
+                      `${year}-${String(dateData.getMonth() + 1).padStart(
+                        2,
+                        "0"
+                      )}-${String(dateData.getDate()).padStart(2, "0")}`
+                    );
+                    setDate(date);
+                    setOpen(false);
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="time-picker" className="px-1">
+              투표 종료 시간
+            </Label>
+            <Input
+              type="time"
+              id="time-picker"
+              defaultValue="06:00"
+              {...register("startTime")}
+              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
+            />
+          </div>
+        </div>
+      )} */}
 
       {/* <div className="space-y-3">
         <Label className="px-1">팀 구분</Label>

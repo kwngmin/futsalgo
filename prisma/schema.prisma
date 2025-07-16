@@ -298,6 +298,9 @@ model Team {
 
   @@index([city, district])  // 지역 검색을 위한 인덱스
   @@index([level, gender])  // 종목별 검색을 위한 인덱스
+  @@index([status, recruitmentStatus])
+  @@index([name])
+  @@index([createdAt])
   @@map("teams")
 }
 
@@ -339,7 +342,7 @@ model Schedule {
   status             ScheduleStatus @default(PENDING)
   
   // 참석 투표 관련 필드
-  enableAttendanceVote Boolean      @default(true)  // 참석 투표 활성화 여부
+  enableAttendanceVote Boolean      @default(false)  // 참석 투표 활성화 여부
   attendanceDeadline   DateTime?                    // 참석 투표 마감 시간
   
   // 지역 정보 (team에서 가져오거나 별도 설정)
@@ -477,6 +480,8 @@ model Match {
   @@unique([scheduleId, order])
   @@index([scheduleId])
   @@index([isEnded])
+  @@index([homeTeamId])
+  @@index([awayTeamId])
   @@map("matches")
 }
 

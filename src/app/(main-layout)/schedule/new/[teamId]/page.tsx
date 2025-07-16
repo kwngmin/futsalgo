@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 // import { useSession } from "next-auth/react";
 // import { useRouter } from "next/navigation";
 
-const NewPage = async ({ params }: { params: Promise<{ code: string }> }) => {
-  const { code } = await params;
+const NewPage = async ({ params }: { params: Promise<{ teamId: string }> }) => {
+  const { teamId } = await params;
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -15,7 +15,7 @@ const NewPage = async ({ params }: { params: Promise<{ code: string }> }) => {
     return redirect("/");
   }
 
-  return <NewContent id={session.user.id} code={code} />;
+  return <NewContent userId={session.user.id} hostTeamId={teamId} />;
 };
 
 export default NewPage;

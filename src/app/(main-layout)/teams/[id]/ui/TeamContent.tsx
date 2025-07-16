@@ -44,11 +44,11 @@ const tabs = [
     value: "matches",
     isDisabled: true,
   },
-  {
-    label: "후기",
-    value: "reviews",
-    isDisabled: true,
-  },
+  // {
+  //   label: "후기",
+  //   value: "reviews",
+  //   isDisabled: true,
+  // },
   {
     label: "사진",
     value: "photos",

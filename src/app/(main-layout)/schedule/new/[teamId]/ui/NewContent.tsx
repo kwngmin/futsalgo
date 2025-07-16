@@ -4,20 +4,26 @@ import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import NewForm from "./NewForm";
-import { getMyTeam } from "@/features/add-schedule/model/actions/get-my-team";
+import { getTeam } from "@/features/add-schedule/model/actions/get-my-team";
+import { Team } from "@prisma/client";
 
-const NewContent = ({ id, code }: { id: string; code: string }) => {
+const NewContent = ({
+  userId,
+  hostTeamId,
+}: {
+  userId: string;
+  hostTeamId: string;
+}) => {
   const router = useRouter();
-  console.log(code, "code");
+  console.log(hostTeamId, "hostTeamId");
 
   const { data } = useQuery({
-    queryKey: ["myTeam", id],
-    queryFn: () => getMyTeam(id),
-    enabled: !!id, // id 없으면 fetch 안 함
+    queryKey: ["myTeam", hostTeamId, userId],
+    queryFn: () => getTeam(hostTeamId),
+    enabled: !!hostTeamId && !!userId, // id 없으면 fetch 안 함
   });
 
   console.log(data, "data");
-  console.log(id, "id");
 
   const handleGoBack = () => {
     router.back();
@@ -31,12 +37,13 @@ const NewContent = ({ id, code }: { id: string; code: string }) => {
     return <div>Error: {data.error}</div>;
   }
 
-  const myTeam = data.data.teams.filter(
-    (team) =>
-      team.status === "APPROVED" &&
-      (team.role === "OWNER" || team.role === "MANAGER")
-  );
-  console.log(myTeam, "myTeam");
+  // const myTeam = data.data.teams.filter(
+  //   (team) =>
+  //     team.status === "APPROVED" &&
+  //     (team.role === "OWNER" || team.role === "MANAGER")
+  // );
+  // console.log(myTeam, "myTeam");
+  // console.
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -51,7 +58,11 @@ const NewContent = ({ id, code }: { id: string; code: string }) => {
         </button>
       </div>
       <div className="space-y-6">
-        <NewForm data={myTeam[0]} teamId={myTeam[0].teamId} userId={id} />
+        <NewForm
+          data={data.data?.team as Team}
+          teamId={hostTeamId}
+          userId={userId}
+        />
       </div>
       {/* <Popover>
         <PopoverTrigger className="fixed bottom-20 lg:bottom-6 right-6 flex items-center justify-center bg-indigo-500 rounded-full">

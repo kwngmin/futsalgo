@@ -4,6 +4,7 @@ import "./globals.css";
 import { auth } from "@/shared/lib/auth";
 import { SessionProviderWrapper } from "@/shared/components/providers/session-provider";
 import { QueryProvider } from "@/shared/components/providers/query-provider";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default async function RootLayout({
         <SessionProviderWrapper session={session}>
           <QueryProvider>{children}</QueryProvider>
         </SessionProviderWrapper>
+        <Analytics />
       </body>
     </html>
   );
