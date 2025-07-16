@@ -295,10 +295,10 @@ const NewForm = ({
           <div className="flex items-center p-0.5 bg-muted w-fit rounded-lg">
             <button
               type="button"
-              className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+              className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer transition-all duration-200 border ${
                 watch("enableAttendanceVote")
-                  ? "bg-white shadow"
-                  : "text-muted-foreground"
+                  ? "bg-white shadow-xs"
+                  : "text-muted-foreground border-transparent"
               }`}
               onClick={() => setValue("enableAttendanceVote", true)}
             >
@@ -306,10 +306,10 @@ const NewForm = ({
             </button>
             <button
               type="button"
-              className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+              className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer transition-all duration-200  border ${
                 !watch("enableAttendanceVote")
-                  ? "bg-white shadow"
-                  : "text-muted-foreground"
+                  ? "bg-white shadow-xs"
+                  : "text-muted-foreground border-transparent"
               }`}
               onClick={() => setValue("enableAttendanceVote", false)}
             >
