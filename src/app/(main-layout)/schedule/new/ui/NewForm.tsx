@@ -135,7 +135,7 @@ const NewForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 px-4 bg-white rounded-2xl"
+      className="space-y-6 px-4 py-2 bg-white rounded-2xl"
     >
       {/* <div className="space-y-3">
         <Label className="">제목</Label>
@@ -150,79 +150,34 @@ const NewForm = ({
       </div> */}
 
       <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
-        <div className="flex flex-col gap-3 grow pb-3">
-          {/* <Label htmlFor="date-picker" className="px-1">
-            경기 일자
-          </Label> */}
-          <Calendar
-            mode="single"
-            selected={date}
-            className="rounded-md border pb-10 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
-            disabled={(date) => date < new Date()}
-            locale={ko}
-            onSelect={(date) => {
-              console.log(date, "date");
-              if (!date) return;
-              const dateData = new Date(date);
-              const year = dateData.getFullYear();
-              setValue(
-                "date",
-                `${year}-${String(dateData.getMonth() + 1).padStart(
-                  2,
-                  "0"
-                )}-${String(dateData.getDate()).padStart(2, "0")}`
-              );
-              setDate(date);
-            }}
-          />
-          {/* <Calendar
-            mode="single"
-            numberOfMonths={2}
-            selected={date}
-            // onSelect={setDate}
-            className="border rounded-md hidden md:block w-full"
-            disabled={(date) => date < new Date()}
-            locale={ko}
-            onSelect={(date) => {
-              console.log(date, "date");
-              if (!date) return;
-              const dateData = new Date(date);
-              const year = dateData.getFullYear();
-              setValue(
-                "date",
-                `${year}-${String(dateData.getMonth() + 1).padStart(
-                  2,
-                  "0"
-                )}-${String(dateData.getDate()).padStart(2, "0")}`
-              );
-              // setValue("date", date?.toISOString() || "");
-              setDate(date);
-              // setOpen(false);
-            }}
-          /> */}
-        </div>
         <div className="flex flex-col gap-6">
-          {/* 매치 타입 */}
-          <div className="space-y-3">
-            <Label className="px-1">매치 타입</Label>
-            <CustomRadioGroup
-              options={MATCH_TYPE_OPTIONS}
-              value={watch("matchType")}
-              onValueChange={(value) =>
-                setValue("matchType", value as "TEAM" | "SQUAD")
-              }
-              error={errors.matchType?.message}
-              direction="vertical"
+          <div className="flex flex-col gap-3 pb-3 sm:pb-0">
+            <Label htmlFor="date-picker" className="px-1">
+              날짜
+            </Label>
+            <Calendar
+              mode="single"
+              selected={date}
+              className="rounded-md border pb-10 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
+              disabled={(date) => date < new Date()}
+              locale={ko}
+              onSelect={(date) => {
+                console.log(date, "date");
+                if (!date) return;
+                const dateData = new Date(date);
+                const year = dateData.getFullYear();
+                setValue(
+                  "date",
+                  `${year}-${String(dateData.getMonth() + 1).padStart(
+                    2,
+                    "0"
+                  )}-${String(dateData.getDate()).padStart(2, "0")}`
+                );
+                setDate(date);
+              }}
             />
           </div>
-          <div className="space-y-3">
-            <Label className="">장소</Label>
-            <Input
-              type="text"
-              placeholder="장소를 입력하세요"
-              {...register("place")}
-            />
-          </div>
+          {/* 시간 */}
           <div className="grid grid-cols-3 sm:grid-cols-2 gap-x-3 gap-y-6">
             <div className="flex flex-col gap-3">
               <Label htmlFor="time-picker" className="px-1">
@@ -250,23 +205,46 @@ const NewForm = ({
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 주최팀 & 초청팀 */}
-      <div className="grid sm:grid-cols-2 gap-x-3 gap-y-6">
-        {/* 주최팀 */}
-        <div className="space-y-3">
-          <Label className="px-1">주최팀</Label>
-          <CustomSelect
-            hasPlaceholder
-            options={teams.map((t) => (
-              <option key={t.team.id} value={t.team.id}>
-                {t.team.name}
-              </option>
-            ))}
-            value={watch("city")}
-            onChange={(e) => setValue("city", e.target.value)}
-          />
+        <div className="flex flex-col gap-6 grow">
+          {/* 장소 */}
+          <div className="space-y-3">
+            <Label className="">장소</Label>
+            <Input
+              type="text"
+              placeholder="장소를 입력하세요"
+              {...register("place")}
+            />
+          </div>
+
+          {/* 주최팀 */}
+          <div className="space-y-3">
+            <Label className="px-1">주최팀</Label>
+            <CustomSelect
+              hasPlaceholder
+              options={teams.map((t) => (
+                <option key={t.team.id} value={t.team.id}>
+                  {t.team.name}
+                </option>
+              ))}
+              value={watch("city")}
+              onChange={(e) => setValue("city", e.target.value)}
+            />
+          </div>
+
+          {/* 매치 타입 */}
+          <div className="space-y-3">
+            <Label className="px-1">매치 타입</Label>
+            <CustomRadioGroup
+              options={MATCH_TYPE_OPTIONS}
+              value={watch("matchType")}
+              onValueChange={(value) =>
+                setValue("matchType", value as "TEAM" | "SQUAD")
+              }
+              error={errors.matchType?.message}
+              direction="vertical"
+            />
+          </div>
         </div>
       </div>
 
