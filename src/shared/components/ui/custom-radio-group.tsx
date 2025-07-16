@@ -27,7 +27,7 @@ const CustomRadioGroup = ({
       {options.map((option) => (
         <label
           key={option.value}
-          className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-11 sm:h-10 pt-0.5"
+          className="flex items-center space-x-2 rounded-md px-3 pb-0.5 cursor-pointer min-w-24 border border-input h-11 sm:h-10 pt-0.5 shadow-xs"
           htmlFor={name ? `${name}-${option.value}` : option.value}
         >
           <RadioGroupItem
