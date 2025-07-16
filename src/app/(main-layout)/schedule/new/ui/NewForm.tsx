@@ -165,7 +165,19 @@ const NewForm = ({
       </div>
 
       {/* 매치 타입 */}
-      <div className="space-y-3">
+      <div className="space-y-3 hidden sm:block">
+        <Label className="px-1">매치 타입</Label>
+        <CustomRadioGroup
+          options={MATCH_TYPE_OPTIONS}
+          value={watch("matchType")}
+          onValueChange={(value) =>
+            setValue("matchType", value as "TEAM" | "SQUAD")
+          }
+          error={errors.matchType?.message}
+          // direction="vertical"
+        />
+      </div>
+      <div className="space-y-3 sm:hidden">
         <Label className="px-1">매치 타입</Label>
         <CustomRadioGroup
           options={MATCH_TYPE_OPTIONS}
@@ -178,15 +190,7 @@ const NewForm = ({
         />
       </div>
 
-      <div className="space-y-3">
-        <Label className="">장소</Label>
-        <Input
-          type="text"
-          placeholder="장소를 입력하세요"
-          {...register("place")}
-        />
-      </div>
-      <div className="flex flex-col md:flex-row gap-x-3 gap-y-6">
+      <div className="flex flex-col md:grid grid-cols-2 gap-x-3 gap-y-6">
         <div className="flex flex-col gap-3 grow">
           <Label htmlFor="date-picker" className="px-1">
             경기 일자
@@ -194,7 +198,7 @@ const NewForm = ({
           <Calendar
             mode="single"
             selected={date}
-            className="border rounded-md md:hidden w-full shrink-0 h-auto"
+            className="border rounded-md w-full md:w-auto"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
@@ -209,12 +213,10 @@ const NewForm = ({
                   "0"
                 )}-${String(dateData.getDate()).padStart(2, "0")}`
               );
-              // setValue("date", date?.toISOString() || "");
               setDate(date);
-              // setOpen(false);
             }}
           />
-          <Calendar
+          {/* <Calendar
             mode="single"
             numberOfMonths={2}
             selected={date}
@@ -238,32 +240,42 @@ const NewForm = ({
               setDate(date);
               // setOpen(false);
             }}
-          />
+          /> */}
         </div>
-        <div className="flex md:flex-col gap-x-3 gap-y-6 grow">
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="time-picker" className="px-1">
-              시작 시간
-            </Label>
+        <div className="flex flex-col gap-6">
+          <div className="space-y-3 w-full md:w-auto">
+            <Label className="">장소</Label>
             <Input
-              type="time"
-              id="time-picker"
-              defaultValue="06:00"
-              {...register("startTime")}
-              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
+              type="text"
+              placeholder="장소를 입력하세요"
+              {...register("place")}
             />
           </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="time-picker" className="px-1">
-              종료 시간
-            </Label>
-            <Input
-              type="time"
-              id="time-picker"
-              defaultValue="08:00"
-              {...register("endTime")}
-              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
-            />
+          <div className="flex md:flex-col gap-x-3 gap-y-6 grow">
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="time-picker" className="px-1">
+                시작 시간
+              </Label>
+              <Input
+                type="time"
+                id="time-picker"
+                defaultValue="06:00"
+                {...register("startTime")}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="time-picker" className="px-1">
+                종료 시간
+              </Label>
+              <Input
+                type="time"
+                id="time-picker"
+                defaultValue="08:00"
+                {...register("endTime")}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
+              />
+            </div>
           </div>
         </div>
       </div>
