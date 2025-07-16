@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/shared/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { CalendarIcon, ChevronDownIcon, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
@@ -18,6 +18,11 @@ import { useRouter } from "next/navigation";
 import { ko } from "date-fns/locale";
 import { TeamWithBasicInfo } from "@/features/add-schedule/model/actions/get-my-teams";
 import CustomSelect from "@/shared/components/ui/custom-select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/shared/components/ui/popover";
 // import Image from "next/image";
 
 const newFormSchema = z.object({
@@ -49,7 +54,7 @@ const NewForm = ({
   console.log(teams, "teams");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
   const {
@@ -140,18 +145,6 @@ const NewForm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 px-4 py-2 bg-white rounded-2xl"
     >
-      {/* <div className="space-y-3">
-        <Label className="">제목</Label>
-        <Input
-          type="text"
-          placeholder="제목을 입력하세요"
-          {...register("title")}
-          // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
-          // className="min-h-24"
-          // placeholder="일정에 대한 간단한 소개를 작성해주세요"
-        />
-      </div> */}
-
       <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3 pb-3 sm:pb-0">
@@ -181,11 +174,11 @@ const NewForm = ({
             />
           </div>
           {/* 시간 */}
-          <div className="grid grid-cols-3 sm:grid-cols-2 gap-x-3 gap-y-6">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="time-picker" className="px-1">
-                시작 시간
-              </Label>
+          <div className="flex flex-col gap-3">
+            <Label htmlFor="time-picker" className="px-1">
+              시간 (시작 - 종료)
+            </Label>
+            <div className="flex items-center gap-2">
               <Input
                 type="time"
                 id="time-picker"
@@ -193,11 +186,7 @@ const NewForm = ({
                 {...register("startTime")}
                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
               />
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="time-picker" className="px-1">
-                종료 시간
-              </Label>
+              -
               <Input
                 type="time"
                 id="time-picker"
@@ -238,7 +227,7 @@ const NewForm = ({
 
           {/* 매치 타입 */}
           <div className="space-y-3">
-            <Label className="px-1">매치 타입</Label>
+            <Label className="px-1">경기</Label>
             <CustomRadioGroup
               options={MATCH_TYPE_OPTIONS}
               value={watch("matchType")}
@@ -262,96 +251,98 @@ const NewForm = ({
         />
       </div>
 
-      {/* 참석여부 투표 */}
-      <div className="space-y-3">
-        <Label className="">참석여부 투표</Label>
-        <div className="flex items-center gap-2 p-1 bg-muted w-fit rounded-lg">
-          <button
-            type="button"
-            className={`h-11 sm:h-10 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
-              watch("enableAttendanceVote")
-                ? "bg-white shadow"
-                : "text-muted-foreground"
-            }`}
-            onClick={() => setValue("enableAttendanceVote", true)}
-          >
-            사용
-          </button>
-          <button
-            type="button"
-            className={`h-11 sm:h-10 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
-              !watch("enableAttendanceVote")
-                ? "bg-white shadow"
-                : "text-muted-foreground"
-            }`}
-            onClick={() => setValue("enableAttendanceVote", false)}
-          >
-            사용 안 함
-          </button>
+      <div className="flex flex-col sm:flex-row gap-y-6 gap-x-2">
+        {/* 참석여부 투표 */}
+        <div className="space-y-3">
+          <Label className="">참석여부 투표</Label>
+          <div className="flex items-center gap-2 p-0.5 bg-muted w-fit rounded-lg">
+            <button
+              type="button"
+              className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+                watch("enableAttendanceVote")
+                  ? "bg-white shadow"
+                  : "text-muted-foreground"
+              }`}
+              onClick={() => setValue("enableAttendanceVote", true)}
+            >
+              사용
+            </button>
+            <button
+              type="button"
+              className={`h-10 sm:h-9 rounded-md px-4 min-w-24 text-sm font-semibold cursor-pointer ${
+                !watch("enableAttendanceVote")
+                  ? "bg-white shadow"
+                  : "text-muted-foreground"
+              }`}
+              onClick={() => setValue("enableAttendanceVote", false)}
+            >
+              사용 안 함
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* {watch("enableAttendanceVote") && (
-        <div className="flex flex-col sm:flex-row space-y-6 space-x-2">
-          <div className="flex flex-col gap-3 grow sm:grow-0">
-            <Label htmlFor="date-picker" className="px-1">
-              투표 종료 일자
-            </Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  id="date-picker"
-                  className="min-w-48 justify-between font-normal !h-10"
+        {watch("enableAttendanceVote") && (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col gap-3 grow sm:grow-0">
+              <Label htmlFor="date-picker" className="px-1">
+                투표 종료 일자
+              </Label>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="date-picker"
+                    className="min-w-48 justify-between font-normal !h-11 sm:!h-10"
+                  >
+                    <div className="flex items-center gap-3">
+                      <CalendarIcon />
+                      {date ? date.toLocaleDateString() : "일자를 선택하세요"}
+                    </div>
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-auto overflow-hidden p-0"
+                  align="start"
                 >
-                  <div className="flex items-center gap-3">
-                    <CalendarIcon />
-                    {date ? date.toLocaleDateString() : "일자를 선택하세요"}
-                  </div>
-                  <ChevronDownIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto overflow-hidden p-0"
-                align="start"
-              >
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  captionLayout="dropdown"
-                  onSelect={(date) => {
-                    console.log(date, "date");
-                    if (!date) return;
-                    const dateData = new Date(date);
-                    const year = dateData.getFullYear();
-                    setValue(
-                      "date",
-                      `${year}-${String(dateData.getMonth() + 1).padStart(
-                        2,
-                        "0"
-                      )}-${String(dateData.getDate()).padStart(2, "0")}`
-                    );
-                    setDate(date);
-                    setOpen(false);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    locale={ko}
+                    onSelect={(date) => {
+                      console.log(date, "date");
+                      if (!date) return;
+                      const dateData = new Date(date);
+                      const year = dateData.getFullYear();
+                      setValue(
+                        "date",
+                        `${year}-${String(dateData.getMonth() + 1).padStart(
+                          2,
+                          "0"
+                        )}-${String(dateData.getDate()).padStart(2, "0")}`
+                      );
+                      setDate(date);
+                      setOpen(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="time-picker" className="px-1">
+                투표 종료 시간
+              </Label>
+              <Input
+                type="time"
+                id="time-picker"
+                defaultValue="06:00"
+                {...register("startTime")}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="time-picker" className="px-1">
-              투표 종료 시간
-            </Label>
-            <Input
-              type="time"
-              id="time-picker"
-              defaultValue="06:00"
-              {...register("startTime")}
-              className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
-            />
-          </div>
-        </div>
-      )} */}
+        )}
+      </div>
 
       {/* <div className="space-y-3">
         <Label className="px-1">팀 구분</Label>
