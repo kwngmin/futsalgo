@@ -170,8 +170,8 @@ const NewForm = ({
         />
       </div>
 
-      <div className="flex flex-col md:flex-row gap-x-3 gap-y-6 shrink-0">
-        <div className="flex flex-col gap-3 grow md:grow-0 bg-red-200 overflow-hidden shrink-0">
+      <div className="flex flex-col md:flex-row gap-x-3 gap-y-6">
+        <div className="flex flex-col gap-3 grow">
           <Label htmlFor="date-picker" className="px-1">
             경기 일자
           </Label>
