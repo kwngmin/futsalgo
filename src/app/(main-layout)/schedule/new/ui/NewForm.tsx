@@ -55,7 +55,8 @@ const NewForm = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date>();
+  const [matchDate, setMatchDate] = useState<Date>();
+  const [deadlineDate, setDeadlineDate] = useState<Date>();
 
   const {
     register,
@@ -153,7 +154,7 @@ const NewForm = ({
             </Label>
             <Calendar
               mode="single"
-              selected={date}
+              selected={matchDate}
               className="rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto"
               disabled={(date) => date < new Date()}
               locale={ko}
@@ -169,7 +170,7 @@ const NewForm = ({
                     "0"
                   )}-${String(dateData.getDate()).padStart(2, "0")}`
                 );
-                setDate(date);
+                setMatchDate(date);
               }}
             />
           </div>
@@ -293,11 +294,13 @@ const NewForm = ({
                     variant="outline"
                     id="date-picker"
                     className="min-w-48 justify-between font-normal !h-11 sm:!h-10"
-                    disabled={!date}
+                    disabled={!matchDate}
                   >
                     <div className="flex items-center gap-3">
                       <CalendarIcon />
-                      {date ? date.toLocaleDateString() : "일자를 선택하세요"}
+                      {deadlineDate
+                        ? deadlineDate.toLocaleDateString()
+                        : "일자를 선택하세요"}
                     </div>
                     <ChevronDownIcon />
                   </Button>
@@ -308,22 +311,35 @@ const NewForm = ({
                 >
                   <Calendar
                     mode="single"
-                    selected={date}
+                    selected={deadlineDate}
                     locale={ko}
-                    disabled={(date) => date < new Date()}
+                    disabled={(date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // 오늘 00:00
+
+                      if (matchDate) {
+                        const match = new Date(matchDate);
+                        match.setDate(match.getDate() - 1); // 하루 전
+                        match.setHours(23, 59, 59, 999); // 그날의 끝 시간
+
+                        return date < today || date > match;
+                      }
+
+                      return date < today;
+                    }}
                     onSelect={(date) => {
                       console.log(date, "date");
                       if (!date) return;
                       const dateData = new Date(date);
                       const year = dateData.getFullYear();
                       setValue(
-                        "date",
+                        "attendanceDeadline",
                         `${year}-${String(dateData.getMonth() + 1).padStart(
                           2,
                           "0"
                         )}-${String(dateData.getDate()).padStart(2, "0")}`
                       );
-                      setDate(date);
+                      setDeadlineDate(date);
                       setOpen(false);
                     }}
                   />
@@ -339,7 +355,7 @@ const NewForm = ({
                 id="time-picker"
                 defaultValue="06:00"
                 {...register("startTime")}
-                disabled={!date}
+                disabled={!matchDate}
                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
               />
             </div>
@@ -354,11 +370,24 @@ const NewForm = ({
               </Label>
               <Calendar
                 mode="single"
-                selected={date}
+                selected={deadlineDate}
                 className={`rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
-                  !date ? "opacity-50 pointer-events-none" : ""
+                  !matchDate ? "opacity-50 pointer-events-none" : ""
                 }`}
-                disabled={(date) => date < new Date()}
+                disabled={(date) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0); // 오늘 00:00
+
+                  if (matchDate) {
+                    const match = new Date(matchDate);
+                    match.setDate(match.getDate() - 1); // 하루 전
+                    match.setHours(23, 59, 59, 999); // 그날의 끝 시간
+
+                    return date < today || date > match;
+                  }
+
+                  return date < today;
+                }}
                 locale={ko}
                 onSelect={(date) => {
                   console.log(date, "date");
@@ -366,13 +395,13 @@ const NewForm = ({
                   const dateData = new Date(date);
                   const year = dateData.getFullYear();
                   setValue(
-                    "date",
+                    "attendanceDeadline",
                     `${year}-${String(dateData.getMonth() + 1).padStart(
                       2,
                       "0"
                     )}-${String(dateData.getDate()).padStart(2, "0")}`
                   );
-                  setDate(date);
+                  setDeadlineDate(date);
                 }}
               />
             </div>
@@ -386,7 +415,7 @@ const NewForm = ({
                 id="time-picker"
                 defaultValue="06:00"
                 {...register("startTime")}
-                disabled={!date}
+                disabled={!matchDate}
                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
               />
             </div>
