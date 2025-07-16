@@ -17,6 +17,7 @@ import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-sc
 import { useRouter } from "next/navigation";
 import { ko } from "date-fns/locale";
 import { TeamWithBasicInfo } from "@/features/add-schedule/model/actions/get-my-teams";
+import CustomSelect from "@/shared/components/ui/custom-select";
 
 const newFormSchema = z.object({
   title: z.string().optional(),
@@ -148,6 +149,22 @@ const NewForm = ({
         />
       </div> */}
 
+      {/* 주최팀 */}
+      <div className="space-y-3">
+        <Label className="px-1">주최팀</Label>
+        <CustomSelect
+          hasPlaceholder
+          options={teams.map((t) => (
+            <option key={t.team.id} value={t.team.id}>
+              {t.team.name}
+            </option>
+          ))}
+          value={watch("city")}
+          onChange={(e) => setValue("city", e.target.value)}
+        />
+      </div>
+
+      {/* 매치 타입 */}
       <div className="space-y-3">
         <Label className="px-1">매치 타입</Label>
         <CustomRadioGroup
@@ -169,29 +186,6 @@ const NewForm = ({
           {...register("place")}
         />
       </div>
-      <Calendar
-        mode="single"
-        selected={date}
-        className="border rounded-md md:hidden w-full shrink-0 h-fit"
-        disabled={(date) => date < new Date()}
-        locale={ko}
-        onSelect={(date) => {
-          console.log(date, "date");
-          if (!date) return;
-          const dateData = new Date(date);
-          const year = dateData.getFullYear();
-          setValue(
-            "date",
-            `${year}-${String(dateData.getMonth() + 1).padStart(
-              2,
-              "0"
-            )}-${String(dateData.getDate()).padStart(2, "0")}`
-          );
-          // setValue("date", date?.toISOString() || "");
-          setDate(date);
-          // setOpen(false);
-        }}
-      />
       <div className="flex flex-col md:flex-row gap-x-3 gap-y-6">
         <div className="flex flex-col gap-3 grow">
           <Label htmlFor="date-picker" className="px-1">
@@ -200,7 +194,7 @@ const NewForm = ({
           <Calendar
             mode="single"
             selected={date}
-            className="border rounded-md md:hidden w-full shrink-0 h-fit"
+            className="border rounded-md md:hidden w-full shrink-0 h-auto"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
