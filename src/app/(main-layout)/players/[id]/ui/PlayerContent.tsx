@@ -28,7 +28,7 @@ import {
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { Fragment, useState } from "react";
@@ -63,7 +63,7 @@ const tabs = [
 
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
-  const session = useSession();
+  // const session = useSession();
 
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
 
@@ -468,7 +468,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     height={306}
                     className="rounded-2xl overflow-hidden"
                   />
-                  <div className="absolute w-full h-full top-0 left-0 flex flex-col py-4">
+                  <div className="absolute w-full h-full top-0 left-0 flex flex-col py-4 pr-0.5 sm:pr-1">
                     <div className="w-full h-1/4 flex items-center justify-center">
                       <div
                         className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
