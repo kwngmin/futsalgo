@@ -157,7 +157,7 @@ const NewForm = ({
           <Calendar
             mode="single"
             selected={date}
-            className="border rounded-md w-full [--cell-size:--spacing(11)] md:[--cell-size:--spacing(10)]"
+            className="border rounded-md w-full [--cell-size:--spacing(12)] md:[--cell-size:--spacing(10)]"
             disabled={(date) => date < new Date()}
             locale={ko}
             onSelect={(date) => {
