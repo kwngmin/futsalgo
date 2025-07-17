@@ -193,12 +193,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       </div>
       {/* 우리팀 & 주최팀vs초청팀 로고 */}
       {data.data.schedule?.matchType === "SQUAD" ? (
-        <div
-          className="w-full flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent cursor-pointer"
-          onClick={() => {
-            router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
-          }}
-        >
+        <div className="w-full flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent">
           <Image
             src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             alt="hostTeamLogo"
@@ -212,12 +207,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       ) : (
         <div className="w-full flex items-center justify-center gap-3 pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent">
-          <div
-            className="flex flex-col items-center w-28 sm:w-36 cursor-pointer"
-            onClick={() => {
-              router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
-            }}
-          >
+          <div className="flex flex-col items-center w-28 sm:w-36">
             <Image
               src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               alt="hostTeamLogo"
@@ -230,12 +220,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </span>
           </div>
           <span className="text-2xl font-bold">VS</span>
-          <div
-            className="flex flex-col items-center w-28 sm:w-36 cursor-pointer"
-            onClick={() => {
-              router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
-            }}
-          >
+          <div className="flex flex-col items-center w-28 sm:w-36">
             <Image
               src={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
               alt="guestTeamLogo"
@@ -474,7 +459,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div className="border overflow-hidden mx-4 grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">0</div>
-                  <Label className="text-muted-foreground">참가</Label>
+                  <Label className="text-muted-foreground">참석</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">0</div>
