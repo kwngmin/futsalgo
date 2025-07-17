@@ -152,7 +152,7 @@ const NewForm = ({
               mode="single"
               selected={matchDate}
               className="rounded-md border pb-12 sm:pb-7 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto shadow-xs"
-              // disabled={(date) => date < new Date()}
+              disabled={(date) => date < new Date()}
               locale={ko}
               onSelect={(date) => {
                 console.log(date, "date");
