@@ -163,7 +163,8 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         createdBy: true,
       },
       orderBy: {
-        createdAt: "desc",
+        date: "asc",
+        // createdAt: "desc",
       },
     });
 

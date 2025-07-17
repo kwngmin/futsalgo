@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -24,6 +24,7 @@ import {
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
 import { useTeamCodeValidation } from "@/features/validation/hooks/use-validation";
+import { getInvitedTeam } from "../action/getInvitedTeam";
 // import Image from "next/image";
 
 const newFormSchema = z.object({
@@ -60,6 +61,12 @@ const NewForm = ({
   const [deadlineDate, setDeadlineDate] = useState<Date>();
 
   const { teamCode, onChange } = useTeamCodeValidation();
+  const [invitedTeam, setInvitedTeam] = useState<{
+    name: string;
+    id: string;
+  } | null>(null);
+  const [invitedTeamLoading, setInvitedTeamLoading] = useState(false);
+  const [invitedTeamError, setInvitedTeamError] = useState<string | null>(null);
 
   const {
     register,
@@ -79,6 +86,43 @@ const NewForm = ({
     },
   });
   console.log(watch("date"), "watch");
+
+  // ✅ 초청팀 코드가 유효하면 팀 정보 조회
+  useEffect(() => {
+    const fetchInvitedTeam = async () => {
+      setInvitedTeamLoading(true);
+      setInvitedTeamError(null);
+
+      try {
+        const result = await getInvitedTeam(teamCode.value);
+        console.log(result, "result");
+        if (result.success) {
+          setInvitedTeam({
+            name: result.data?.name as string,
+            id: result.data?.id as string,
+          });
+          setValue("invitedTeamId", result.data?.id as string);
+        } else {
+          setInvitedTeam(null);
+          setInvitedTeamError(result.error as string);
+          setValue("invitedTeamId", "");
+        }
+      } catch (error) {
+        console.warn(error, "error");
+        setInvitedTeam(null);
+        setInvitedTeamError("네트워크 오류가 발생했습니다.");
+      } finally {
+        setInvitedTeamLoading(false);
+      }
+    };
+
+    if (teamCode.status === "valid") {
+      fetchInvitedTeam();
+    } else {
+      setInvitedTeam(null); // 코드가 유효하지 않으면 초기화
+    }
+  }, [teamCode.status, teamCode.value]);
+
   const onSubmit = async (formData: NewFormData) => {
     setIsLoading(true);
     console.log(formData, "formData");
@@ -242,7 +286,7 @@ const NewForm = ({
               <Label htmlFor="nickname">초청팀 코드</Label>
               <div className="relative">
                 <Input
-                  id="nickname"
+                  id="invitedTeamCode"
                   type="text"
                   value={teamCode.value}
                   onChange={(e) => onChange(e.target.value)}
@@ -267,6 +311,23 @@ const NewForm = ({
                 </Alert>
               )}
             </div>
+          )}
+
+          {/* 초청팀 정보 */}
+          {teamCode.status === "valid" && (
+            <>
+              {invitedTeamLoading && <p>초청팀 정보를 불러오는 중...</p>}
+              {invitedTeamError && (
+                <Alert variant="destructive">
+                  <AlertDescription>{invitedTeamError}</AlertDescription>
+                </Alert>
+              )}
+              {invitedTeam && (
+                <div className="text-sm text-muted-foreground">
+                  초청팀: <strong>{invitedTeam.name}</strong>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -489,8 +550,11 @@ const NewForm = ({
         {/* 저장 버튼 */}
         <Button
           type="submit"
-          disabled={isLoading}
-          className="w-full font-semibold text-base"
+          disabled={
+            isLoading ||
+            (watch("matchType") === "TEAM" && teamCode.status !== "valid")
+          }
+          className="w-full font-semibold text-base disabled:opacity-50 disabled:pointer-events-none"
           size="lg"
         >
           {isLoading ? (

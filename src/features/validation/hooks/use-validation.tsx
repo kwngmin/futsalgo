@@ -149,7 +149,12 @@ export function useTeamCodeValidation() {
         debouncedTeamCode.length === 6 &&
         teamCodeRegex.test(debouncedTeamCode)
       ) {
-        validateField("teamCode", debouncedTeamCode, setTeamCode);
+        const result = validateField(
+          "teamCode",
+          debouncedTeamCode,
+          setTeamCode
+        );
+        console.log(result, "result");
       } else {
         setTeamCode((prev) => ({
           ...prev,
