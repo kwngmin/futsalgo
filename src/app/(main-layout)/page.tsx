@@ -115,33 +115,35 @@ const HomePage = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center px-4 gap-2">
-                <div
-                  className="font-medium w-full h-11 sm:h-10 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
-                  onClick={() => handleScheduleClick(schedule.id)}
-                >
-                  <Vote className="size-5 text-muted-foreground" />
-                  <span className="font-medium">참석여부</span>
-                  <span className="text-sm text-muted-foreground">
-                    7월 11일 오전 10:00까지
-                  </span>
-                  {/* <span className="text-sm font-medium">미참여</span> */}
-                </div>
-                {schedule.attendances
-                  .map((attendance) => attendance.userId)
-                  .includes(session.data?.user?.id ?? "") ? (
-                  <div>hello</div>
-                ) : (
-                  <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1">
-                    <button className="grow h-11 sm:h-10 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
-                      참석
-                    </button>
-                    <button className="grow h-11 sm:h-10 font-medium text-destructive bg-red-600/5 hover:bg-red-600/10 rounded-lg">
-                      불참
-                    </button>
+              {schedule.enableAttendanceVote && (
+                <div className="flex flex-col sm:flex-row items-center px-4 gap-2">
+                  <div
+                    className="font-medium w-full h-11 sm:h-10 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
+                    onClick={() => handleScheduleClick(schedule.id)}
+                  >
+                    <Vote className="size-5 text-muted-foreground" />
+                    <span className="font-medium">참석여부</span>
+                    <span className="text-sm text-muted-foreground">
+                      7월 11일 오전 10:00까지
+                    </span>
+                    {/* <span className="text-sm font-medium">미참여</span> */}
                   </div>
-                )}
-              </div>
+                  {schedule.attendances
+                    .map((attendance) => attendance.userId)
+                    .includes(session.data?.user?.id ?? "") ? (
+                    <div>hello</div>
+                  ) : (
+                    <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1">
+                      <button className="grow h-11 sm:h-10 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
+                        참석
+                      </button>
+                      <button className="grow h-11 sm:h-10 font-medium text-destructive bg-red-600/5 hover:bg-red-600/10 rounded-lg">
+                        불참
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {false ? (
                 // {schedule.matchType !== "TEAM" ? (
