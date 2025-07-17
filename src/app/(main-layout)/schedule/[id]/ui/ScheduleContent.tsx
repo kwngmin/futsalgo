@@ -457,12 +457,19 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {selectedTab === "attendance" && (
             <div className="space-y-3">
               {/* 주최팀&초청팀 탭 */}
-              <div className="mx-4 grid grid-cols-2 p-0.5 bg-gray-100 rounded-lg">
-                <div className="bg-white h-11 flex items-center justify-center border rounded-lg shadow-xs font-medium">
-                  주최팀
+              {data.data.schedule.matchType === "TEAM" && (
+                <div className="mx-4 grid grid-cols-2 p-0.5 bg-gray-100 rounded-full">
+                  <div className="bg-white h-11 flex items-center justify-center border rounded-full shadow-xs font-medium">
+                    {data.data.schedule.hostTeam.name}
+                  </div>
+                  <div
+                    className=" h-11 flex items-center justify-center font-medium text-muted-foreground"
+                    // className="bg-white h-11 flex items-center justify-center border rounded-lg shadow-xs font-medium"
+                  >
+                    {data.data.schedule.invitedTeam?.name}
+                  </div>
                 </div>
-                {data.data.schedule.matchType === "TEAM" && <div>초청팀</div>}
-              </div>
+              )}
               {/* 참석 현황 */}
               <div className="border overflow-hidden mx-4 grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
