@@ -15,7 +15,6 @@ import {
   Share,
   Text,
   UserRound,
-  Vote,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -81,7 +80,7 @@ const tabs = [
 
 const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
-  const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
+  const [selectedTab, setSelectedTab] = useState<string>(tabs[1].value);
   console.log(scheduleId, "scheduleId");
 
   const { data, isLoading, error } = useQuery({
@@ -454,27 +453,18 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </div>
           </div>
 
-          {/* 주최팀 탭 내용 */}
+          {/* 참석 인원 탭 내용 */}
           {selectedTab === "attendance" && (
-            <div className="border rounded-2xl overflow-hidden mx-4">
-              <div
-                className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-                onClick={() => {
-                  alert("주최팀");
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <Vote className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">주최팀</span>
+            <div className="space-y-3">
+              {/* 주최팀&초청팀 탭 */}
+              <div className="mx-4 grid grid-cols-2 p-0.5 bg-gray-100 rounded-lg">
+                <div className="bg-white h-11 flex items-center justify-center border rounded-lg shadow-xs font-medium">
+                  주최팀
                 </div>
-                {/* <div className="flex items-center gap-1">
-                <span className="text-sm font-medium text-gray-500">
-                  자세히 보기
-                </span>
-              </div> */}
-                <ChevronRight className="size-5 text-gray-400" />
+                {data.data.schedule.matchType === "TEAM" && <div>초청팀</div>}
               </div>
-              <div className="grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
+              {/* 참석 현황 */}
+              <div className="border overflow-hidden mx-4 grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">0</div>
                   <Label className="text-muted-foreground">참가</Label>
@@ -485,8 +475,16 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">1</div>
-                  <Label className="text-muted-foreground">미참여</Label>
+                  <Label className="text-muted-foreground">미정</Label>
                 </div>
+              </div>
+
+              <div>
+                {data.data.schedule.hostTeam.members.map((member) => (
+                  <div key={member.id} className="mx-4">
+                    {member.user.nickname}
+                  </div>
+                ))}
               </div>
             </div>
           )}
