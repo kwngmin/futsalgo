@@ -2,8 +2,55 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
+import {
+  // Prisma,
+  Team,
+  Schedule,
+  ScheduleAttendance,
+  User,
+} from "@prisma/client";
 
-export async function getSchedules() {
+export interface ScheduleWithDetails extends Schedule {
+  hostTeam: Team;
+  invitedTeam: Team | null;
+  attendances: ScheduleAttendance[];
+  createdBy: User;
+}
+
+// const scheduleWithDetails = Prisma.validator<Prisma.ScheduleDefaultArgs>()({
+//   include: {
+//     hostTeam: true,
+//     invitedTeam: true,
+//     attendances: true,
+//     createdBy: true,
+//   },
+// });
+
+// export const scheduleWithDetails = {
+//   include: {
+//     hostTeam: true,
+//     invitedTeam: true,
+//     attendances: true,
+//     createdBy: true,
+//   },
+// } as const;
+
+// export type ScheduleWithDetails = Prisma.ScheduleGetPayload<
+//   typeof scheduleWithDetails
+// >;
+
+export interface GetSchedulesResponse {
+  success: boolean;
+  error?: string;
+  data?: {
+    todaysSchedules: ScheduleWithDetails[];
+    upcomingSchedules: ScheduleWithDetails[];
+    pastSchedules: ScheduleWithDetails[];
+    manageableTeams: Team[];
+  };
+}
+
+export async function getSchedules(): Promise<GetSchedulesResponse> {
   try {
     const session = await auth();
 
@@ -24,6 +71,7 @@ export async function getSchedules() {
       include: {
         hostTeam: true,
         invitedTeam: true,
+        attendances: true,
         createdBy: true,
       },
       orderBy: {
@@ -36,6 +84,8 @@ export async function getSchedules() {
       return {
         success: true,
         data: {
+          todaysSchedules: [],
+          upcomingSchedules: [],
           pastSchedules,
           manageableTeams: [],
         },
@@ -72,11 +122,34 @@ export async function getSchedules() {
       .filter((t) => t.role === "OWNER" || t.role === "MANAGER")
       .map((t) => t.team);
 
-    // 5. 오늘부터 이후 일정만 조회 (APPROVED 된 팀 기준)
+    // 5. 오늘 일정
+    const todaysSchedules = await prisma.schedule.findMany({
+      where: {
+        date: {
+          gte: today,
+          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+        },
+        OR: [
+          { hostTeamId: { in: approvedTeamIds } },
+          { invitedTeamId: { in: approvedTeamIds } },
+        ],
+      },
+      include: {
+        hostTeam: true,
+        invitedTeam: true,
+        attendances: true,
+        createdBy: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // 6. 예정된 일정 (내일 이후)
     const upcomingSchedules = await prisma.schedule.findMany({
       where: {
         date: {
-          gte: today, // ← 오늘 포함
+          gt: new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1),
         },
         OR: [
           { hostTeamId: { in: approvedTeamIds } },
@@ -98,6 +171,7 @@ export async function getSchedules() {
       success: true,
       data: {
         pastSchedules,
+        todaysSchedules,
         upcomingSchedules,
         manageableTeams,
       },

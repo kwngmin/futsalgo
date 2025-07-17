@@ -194,7 +194,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       </div>
       {/* 우리팀 & 주최팀vs초청팀 로고 */}
       {data.data.schedule?.matchType === "SQUAD" ? (
-        <div className="w-full flex flex-col items-center py-4 bg-gradient-to-b from-slate-100 to-transparent">
+        <div className="w-full flex flex-col items-center pt-4 bg-gradient-to-b from-slate-100 to-transparent">
           <Image
             src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             alt="hostTeamLogo"
@@ -207,7 +207,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </span>
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-b from-slate-100 to-transparent">
+        <div className="w-full flex items-center justify-center gap-3 pt-4 bg-gradient-to-b from-slate-100 to-transparent">
           <div className="flex flex-col items-center w-28 sm:w-36">
             <Image
               src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
@@ -555,7 +555,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div
                 className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
                 onClick={() => {
-                  router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                  router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
                 }}
               >
                 <div className="flex items-center space-x-2">
