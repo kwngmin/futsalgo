@@ -6,11 +6,11 @@ import {
   ArrowLeft,
   BookmarkIcon,
   Calendar,
-  // CalendarPlus,
-  CalendarPlus2,
   ChevronRight,
+  CircleCheckBig,
   Clock,
   EllipsisVertical,
+  Flag,
   Loader2,
   Share,
   Text,
@@ -67,11 +67,11 @@ const tabs = [
     value: "comments",
     isDisabled: true,
   },
-  {
-    label: "후기",
-    value: "reviews",
-    isDisabled: true,
-  },
+  // {
+  //   label: "후기",
+  //   value: "reviews",
+  //   isDisabled: true,
+  // },
   {
     label: "사진",
     value: "photos",
@@ -194,7 +194,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       </div>
       {/* 우리팀 & 주최팀vs초청팀 로고 */}
       {data.data.schedule?.matchType === "SQUAD" ? (
-        <div className="w-full flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent">
+        <div
+          className="w-full flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent cursor-pointer"
+          onClick={() => {
+            router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
+          }}
+        >
           <Image
             src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             alt="hostTeamLogo"
@@ -208,7 +213,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       ) : (
         <div className="w-full flex items-center justify-center gap-3 pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent">
-          <div className="flex flex-col items-center w-28 sm:w-36">
+          <div
+            className="flex flex-col items-center w-28 sm:w-36 cursor-pointer"
+            onClick={() => {
+              router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
+            }}
+          >
             <Image
               src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               alt="hostTeamLogo"
@@ -221,7 +231,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             </span>
           </div>
           <span className="text-2xl font-bold">VS</span>
-          <div className="flex flex-col items-center w-28 sm:w-36">
+          <div
+            className="flex flex-col items-center w-28 sm:w-36 cursor-pointer"
+            onClick={() => {
+              router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
+            }}
+          >
             <Image
               src={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
               alt="guestTeamLogo"
@@ -480,14 +495,23 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {selectedTab === "overview" && (
             <div className="">
               {/* 안내 사항 */}
-              <div className="mb-3">
-                <div className="w-full flex items-center justify-start px-4 py-3 border-t border-gray-100 space-x-3">
-                  <Text className={`w-5 h-5 text-gray-600`} />
-                  <span className="font-medium">안내 사항</span>
+              <div>
+                <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Text className={`w-5 h-5 text-gray-600`} />
+                    <span className="font-medium">안내 사항</span>
+                  </div>
+                  {!Boolean(data?.data.schedule?.description) && (
+                    <span className="text-base font-medium text-gray-500">
+                      없음
+                    </span>
+                  )}
                 </div>
-                <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line">
-                  {data?.data.schedule?.description ?? "안내 사항 없음"}
-                </p>
+                {Boolean(data?.data.schedule?.description) && (
+                  <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3">
+                    {data?.data.schedule?.description ?? "안내 사항 없음"}
+                  </p>
+                )}
               </div>
 
               {/* 장소 이름 */}
@@ -498,7 +522,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                     size={20}
                     weight="fill"
                   />
-                  <span className="font-medium">장소 이름</span>
+                  <span className="font-medium">장소</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
@@ -511,7 +535,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3">
                 <div className="flex items-center space-x-2">
                   <Calendar className="w-5 h-5 text-gray-600" />
-                  <span className="font-medium">경기 일자</span>
+                  <span className="font-medium">일자</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
@@ -531,7 +555,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
               <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-5 h-5 text-gray-600" />
-                  <span className="font-medium">예약 시간</span>
+                  <span className="font-medium">시간</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
@@ -559,7 +583,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 }}
               >
                 <div className="flex items-center space-x-2">
-                  <CalendarPlus2 className="w-5 h-5 text-gray-600" />
+                  <Flag className="w-5 h-5 text-gray-600" />
                   <span className="font-medium">주최팀</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -576,6 +600,34 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>
               </div>
+
+              {/* 초청팀 */}
+              {data.data.schedule.invitedTeam && (
+                <div
+                  className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
+                  }}
+                >
+                  <div className="flex items-center space-x-2">
+                    <CircleCheckBig className="w-5 h-5 text-gray-600" />
+                    <span className="font-medium">초청팀</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Image
+                      src={data.data.schedule?.invitedTeam.logoUrl ?? ""}
+                      alt="avatar"
+                      width={24}
+                      height={24}
+                      className="rounded-lg"
+                    />
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.schedule?.invitedTeam?.name}
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div>
+                </div>
+              )}
 
               {/* 만든이 */}
               <div

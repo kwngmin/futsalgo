@@ -121,7 +121,7 @@ const NewForm = ({
     } else {
       setInvitedTeam(null); // 코드가 유효하지 않으면 초기화
     }
-  }, [teamCode.status, teamCode.value]);
+  }, [teamCode.status, teamCode.value, setValue]);
 
   const onSubmit = async (formData: NewFormData) => {
     setIsLoading(true);
