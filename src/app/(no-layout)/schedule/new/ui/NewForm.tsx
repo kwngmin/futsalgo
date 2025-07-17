@@ -28,18 +28,18 @@ import { useTeamCodeValidation } from "@/features/validation/hooks/use-validatio
 
 const newFormSchema = z.object({
   hostTeamId: z.string().min(1),
-  title: z.string().optional(),
+  invitedTeamId: z.string().optional(),
   place: z.string().min(1),
   description: z.string().optional(),
   date: z.string().min(1),
   startTime: z.string().min(1),
   endTime: z.string().min(1),
   matchType: z.string().min(1),
-  city: z.string().min(1),
-  district: z.string().min(1),
+  city: z.string().min(1).optional(),
+  district: z.string().min(1).optional(),
   enableAttendanceVote: z.boolean(),
-  attendanceDeadline: z.string().min(1),
-  attendanceEndTime: z.string().min(1),
+  attendanceDeadline: z.string().min(1).optional(),
+  attendanceEndTime: z.string().min(1).optional(),
 });
 
 export type NewFormData = z.infer<typeof newFormSchema>;
@@ -87,15 +87,8 @@ const NewForm = ({
       console.log("🚀 Submitting team update:", formData);
 
       const result = await addNewSchedule({
-        userId,
-        teamId: formData.hostTeamId, // 임시
-        data: {
-          place: formData.place,
-          date: formData.date,
-          startTime: formData.startTime,
-          endTime: formData.endTime,
-          matchType: formData.matchType,
-        },
+        createdById: userId,
+        formData,
       });
       console.log(result, "result");
 
@@ -107,7 +100,7 @@ const NewForm = ({
         // alert(result.data.message || "팀 정보가 업데이트되었습니다.");
 
         // 팀 상세 페이지로 리다이렉트 (선택사항)
-        router.push(`/schedule/${result.data.id}`);
+        router.push(`/`);
 
         // 또는 현재 페이지에서 폼 상태만 리셋
         // router.refresh(); // 페이지 데이터 새로고침

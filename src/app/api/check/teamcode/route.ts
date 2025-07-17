@@ -3,9 +3,9 @@ import { prisma } from "@/shared/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
-    const { code } = await request.json();
+    const { teamCode } = await request.json();
 
-    if (!code) {
+    if (!teamCode) {
       return NextResponse.json(
         { error: "팀 코드가 필요합니다" },
         { status: 400 }
@@ -13,10 +13,10 @@ export async function POST(request: NextRequest) {
     }
 
     const existingTeam = await prisma.team.findUnique({
-      where: { code },
+      where: { code: teamCode },
     });
 
-    return NextResponse.json({ available: !existingTeam });
+    return NextResponse.json({ available: existingTeam });
   } catch (error) {
     console.error("Team code check error:", error);
     return NextResponse.json({ error: "서버 오류" }, { status: 500 });

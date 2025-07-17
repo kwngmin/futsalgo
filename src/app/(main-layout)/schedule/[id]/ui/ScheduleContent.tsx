@@ -485,7 +485,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                   <Text className={`w-5 h-5 text-gray-600`} />
                   <span className="font-medium">안내 사항</span>
                 </div>
-                <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40">
+                <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line">
                   {data?.data.schedule?.description ?? "안내 사항 없음"}
                 </p>
               </div>

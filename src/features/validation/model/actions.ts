@@ -30,15 +30,25 @@ export const validateField = async (
       setFieldState((prev) => ({
         ...prev,
         status: "invalid",
-        error: `이미 사용 중인 ${
-          type === "email"
-            ? "이메일"
-            : type === "phone"
-            ? "전화번호"
-            : type === "nickname"
-            ? "닉네임"
-            : "팀 코드"
-        }입니다`,
+        error:
+          type === "teamCode"
+            ? `존재하지 않는 팀 코드입니다`
+            : `이미 사용 중인 ${
+                type === "email"
+                  ? "이메일"
+                  : type === "phone"
+                  ? "전화번호"
+                  : "닉네임"
+              }입니다`,
+        // error: `이미 사용 중인 ${
+        //   type === "email"
+        //     ? "이메일"
+        //     : type === "phone"
+        //     ? "전화번호"
+        //     : type === "nickname"
+        //     ? "닉네임"
+        //     : "팀 코드"
+        // }입니다`,
       }));
     }
   } catch (error) {
