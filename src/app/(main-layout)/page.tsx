@@ -50,7 +50,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* MatchesPage */}
-      <div className="space-y-3">
+      <div className="">
         {/* 오늘 경기 */}
         {data?.data?.todaysSchedules?.map((schedule) => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;

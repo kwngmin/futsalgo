@@ -5,6 +5,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
+import {
+  // ChatBubbleOvalLeftIcon,
+  BookmarkIcon,
+} from "@heroicons/react/24/outline";
+// import Image from "next/image";
 
 const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
   const router = useRouter();
@@ -17,24 +22,21 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
   //   },
   // });
 
-  const dDay = calculateDday(schedule?.date as Date);
+  // const [period, time] = schedule?.startTime
+  //   ?.toLocaleTimeString("ko-KR", {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   })
+  //   .split(" ");
 
-  const [period, time] = schedule?.startTime
-    ?.toLocaleTimeString("ko-KR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-    .split(" ");
+  const dDay = calculateDday(schedule?.date as Date);
 
   const handleScheduleClick = (scheduleId: string) => {
     router.push(`/schedule/${scheduleId}`);
   };
 
   return (
-    <div
-      className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none"
-      key={schedule.id}
-    >
+    <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
       <div
         className="flex px-4 gap-1 cursor-pointer"
         onClick={() => handleScheduleClick(schedule.id)}
@@ -77,7 +79,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         </div>
       </div>
 
-      {schedule.enableAttendanceVote && (
+      {schedule.enableAttendanceVote ? (
         <div className="flex flex-col sm:flex-row items-center px-4 gap-2">
           <div
             className="font-medium w-full h-11 sm:h-10 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
@@ -105,123 +107,13 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
             </div>
           )}
         </div>
-      )}
-
-      {false ? (
-        // {schedule.matchType !== "TEAM" ? (
-        <div className="flex flex-col sm:flex-row sm:items-stretch border-t">
-          <div
-            className="relative sm:grow grid grid-cols-2 items-center gap-16 h-20 cursor-pointer bg-gray-50"
-            onClick={() => handleScheduleClick(schedule.id)}
-          >
-            {/* 주최팀 */}
-            <div className="flex flex-col items-end gap-2">
-              {/* <div>HOME</div> */}
-              <div className="flex items-center gap-1">
-                <div className="sm:text-lg font-semibold">
-                  {schedule.hostTeam.name}
-                </div>
-                {/* {schedule.hostTeam.logoUrl ? (
-              <div className="size-7 sm:size-12">
-                <Image
-                  src={schedule.hostTeam.logoUrl}
-                  alt={schedule.hostTeam.name}
-                  width={48}
-                  height={48}
-                />
-              </div>
-            ) : (
-              <div className="size-5 sm:size-6 bg-gray-200 rounded-full" />
-            )} */}
-                {/* <div>HOME</div> */}
-              </div>
-            </div>
-            {/* 공통 */}
-            <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center justify-center">
-              <span className="h-4 flex items-center justify-center font-medium text-sm sm:text-base tracking-tight text-muted-foreground">
-                {period}
-              </span>
-              <span className="h-5 sm:h-6 flex items-center justify-center font-semibold sm:text-lg tracking-tight">
-                {time}
-              </span>
-              <div className="w-full flex flex-col items-center">
-                {/* {schedule?.status === "PENDING" ? (
-              <div>대기중</div>
-            ) : schedule?.status === "REJECTED" ? (
-              <div>거절됨</div>
-            ) : schedule?.status === "READY" ? (
-              <div
-                className={`flex items-center gap-1 text-sm sm:text-lg font-medium tracking-tight ${
-                  dDay > 0
-                    ? "text-muted-foreground"
-                    : "bg-green-600"
-                }`}
-              >
-                {dDay > 1 ? (
-                  schedule.startTime?.toLocaleDateString("ko-KR", {
-               
-                    month: "long",
-                    day: "numeric",
-                  })
-                ) : dDay === 1 ? (
-                  "내일"
-                ) : dDay === 0 ? (
-                  <Countdown date={schedule.startTime as Date} />
-                ) : (
-                  "경기 종료"
-                )}
-              </div>
-            ) : schedule?.status === "PLAY" ? (
-              <div>경기중</div>
-            ) : (
-              <div>경기 종료</div>
-            )} */}
-                {/* <span>
-    {calculateDday(data.data.schedule?.date as Date) > 0
-      ? `D-${calculateDday(data.data.schedule?.date as Date)}`
-      : "D-day"}
-  </span> */}
-              </div>
-              {/* <span>{timeRange}</span> */}
-              {/* <span>
-      {data?.data?.schedule?.date?.toLocaleDateString("ko-KR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })}
-    </span>
-    <span className="">{timeRange}</span> */}
-              {/* <div className="h-16 flex items-center justify-center font-extrabold text-3xl text-muted-foreground">
-      VS
-    </div> */}
-            </div>
-            {/* 초청팀 */}
-            <div className="flex flex-col gap-2">
-              {/* <div>AWAY</div> */}
-              <div className="flex items-center gap-1">
-                {/* <div>AWAY</div> */}
-                {/* {schedule.hostTeam.logoUrl ? (
-              <div className="size-7 sm:size-12">
-                <Image
-                  src={schedule.hostTeam.logoUrl}
-                  alt={schedule.hostTeam.name}
-                  width={48}
-                  height={48}
-                />
-              </div>
-            ) : (
-              <div className="size-6 bg-gray-200 rounded-full" />
-            )} */}
-                <div className="sm:text-lg font-semibold">
-                  {schedule.hostTeam.name}
-                </div>
-                {/* <div>HOME</div> */}
-              </div>
-            </div>
+      ) : (
+        <div className="bg-slate-50 rounded-md h-9 text-sm text-muted-foreground font-medium mx-4 px-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">{`3경기 • 댓글 2개`}</div>
+          <div className="flex items-center gap-2">
+            <BookmarkIcon className="size-5" strokeWidth={2} />
           </div>
         </div>
-      ) : (
-        schedule.invitedTeam?.name
       )}
 
       {/* 참가 여부 */}
@@ -248,6 +140,12 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
     </div>
   </div> */}
     </div>
+    // <div className="bg-slate-50 rounded-md h-9 text-sm text-muted-foreground font-medium mx-4 px-4 flex justify-between items-center">
+    //   <div className="flex items-center gap-2">{`3경기 • 댓글 2개`}</div>
+    //   <div className="flex items-center gap-2">
+    //     <BookmarkIcon className="size-5" strokeWidth={2} />
+    //   </div>
+    // </div>
   );
 };
 
