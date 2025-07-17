@@ -93,8 +93,7 @@ export async function getTeams(): Promise<GetTeamsResponse> {
       },
     }));
 
-    if (false) {
-      // if (userId) {
+    if (userId) {
       // 사용자의 소속 팀들 조회
       const myTeams = await prisma.team.findMany({
         where: {

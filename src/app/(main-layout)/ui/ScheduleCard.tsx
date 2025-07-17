@@ -40,8 +40,10 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         onClick={() => handleScheduleClick(schedule.id)}
       >
         <div className="font-medium flex items-center gap-2 truncate leading-none w-20 h-14 tracking-tight">
-          {dDay > 0
+          {dDay > 1
             ? `D-${dDay}`
+            : dDay === 1
+            ? "내일"
             : dDay === 0
             ? "오늘"
             : schedule.startTime?.toLocaleDateString("ko-KR", {

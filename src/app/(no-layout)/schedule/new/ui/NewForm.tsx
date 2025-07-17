@@ -100,7 +100,7 @@ const NewForm = ({
         // alert(result.data.message || "팀 정보가 업데이트되었습니다.");
 
         // 팀 상세 페이지로 리다이렉트 (선택사항)
-        router.push(`/`);
+        router.replace(`/`);
 
         // 또는 현재 페이지에서 폼 상태만 리셋
         // router.refresh(); // 페이지 데이터 새로고침
@@ -152,7 +152,7 @@ const NewForm = ({
               mode="single"
               selected={matchDate}
               className="rounded-md border pb-12 sm:pb-7 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto shadow-xs"
-              disabled={(date) => date < new Date()}
+              // disabled={(date) => date < new Date()}
               locale={ko}
               onSelect={(date) => {
                 console.log(date, "date");
