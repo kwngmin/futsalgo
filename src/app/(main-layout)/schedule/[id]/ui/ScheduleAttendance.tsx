@@ -70,27 +70,24 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             name={team?.name ?? ""}
           />
         )}
-        <div className="flex items-center mt-2 justify-between text-sm text-muted-foreground font-medium h-12 px-1 border-b mb-2">
-          <span className="text-center">팀원 닉네임</span>
-          <span className="text-center">참석 여부</span>
-        </div>
+
         {attandances && attandances?.length > 0 ? (
           attandances.map((attendance) => (
             <div
               key={attendance.user.id}
-              className="flex items-center justify-between h-11 border-b border-gray-200 last:border-b-0"
+              className="flex items-center justify-between h-14 border-b border-gray-200 last:border-b-0"
             >
               <div className="flex items-center gap-2">
                 {attendance.user.image ? (
                   <Image
                     src={attendance.user.image ?? ""}
                     alt="user_image"
-                    width={24}
-                    height={24}
-                    className="rounded-full object-cover size-6"
+                    width={32}
+                    height={32}
+                    className="rounded-full object-cover size-8"
                   />
                 ) : (
-                  <div className="size-6 rounded-full bg-gray-200" />
+                  <div className="size-8 rounded-full bg-gray-200" />
                 )}
                 <span className="font-medium">{attendance.user.nickname}</span>
               </div>
