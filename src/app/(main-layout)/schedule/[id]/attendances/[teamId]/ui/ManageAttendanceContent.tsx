@@ -102,16 +102,16 @@ const ManageAttendanceContent = ({
                 {index + 1}
               </div>
               <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
-                <div className="flex gap-1 items-center">
+                <div className="flex gap-2 items-center">
                   <span className="font-semibold">
                     {attendance.user.nickname}
                   </span>
-                  <span className="font-medium text-sm leading-tight text-muted-foreground mb-0.5">
+                  <span className="font-medium text-muted-foreground">
                     {attendance.user.name}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 sm:min-w-72">
-                  <div className="grow grid grid-cols-3 p-0.5 rounded-md bg-slate-100">
+                  <div className="grow grid grid-cols-3 p-0.5 rounded-md bg-gray-100">
                     <div
                       className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
                         attendance.attendanceStatus === "ATTENDING"
@@ -140,8 +140,8 @@ const ManageAttendanceContent = ({
                       미정
                     </div>
                   </div>
-                  <div className="flex items-center justify-center size-10 rounded-md bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer">
-                    <Trash className="size-4 text-destructive" />
+                  <div className="flex items-center justify-center w-12 h-10 rounded-md bg-gray-50 hover:bg-red-500/10 transition-colors cursor-pointer group">
+                    <Trash className="size-4 text-gray-600 group-hover:text-destructive transition-colors" />
                   </div>
                 </div>
               </div>
