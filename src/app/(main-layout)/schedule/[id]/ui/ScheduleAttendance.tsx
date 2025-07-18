@@ -2,11 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleAttendance } from "../actions/get-schedule-attendance";
-import { ChevronRight } from "lucide-react";
-import Image from "next/image";
+import ManageAttendance from "./ManageAttendance";
+import { useRouter } from "next/navigation";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
-  console.log(scheduleId, "scheduleId");
+  const router = useRouter();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["scheduleAttendance", scheduleId],
@@ -34,30 +34,27 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
     return (
       <div className="mt-4 px-4">
-        <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-          <div className="flex items-center gap-2">
-            {team?.logoUrl ? (
-              <Image
-                src={team?.logoUrl ?? ""}
-                alt="team_logo"
-                width={24}
-                height={24}
-                className="rounded-lg"
-              />
-            ) : (
-              <div className="size-6 rounded-lg bg-gray-200" />
-            )}
-            <span className="text-base font-medium">{team?.name}</span>
-          </div>
-          {data?.data?.manageableTeams.includes(teamType) && (
-            <div className="flex items-center gap-1">
-              <span className="text-base font-medium text-gray-500">
-                등록관리
-              </span>
-              <ChevronRight className="size-5 text-gray-400" />
-            </div>
-          )}
-        </div>
+        {data?.data?.manageableTeams.includes(teamType) ? (
+          <ManageAttendance
+            logoUrl={team?.logoUrl ?? ""}
+            name={team?.name ?? ""}
+            isManageableTeam
+            onClick={() => {
+              router.push(
+                `/schedule/${scheduleId}/${
+                  teamType === "host"
+                    ? data.data.schedule.hostTeamId
+                    : data.data.schedule.invitedTeamId
+                }`
+              );
+            }}
+          />
+        ) : (
+          <ManageAttendance
+            logoUrl={team?.logoUrl ?? ""}
+            name={team?.name ?? ""}
+          />
+        )}
         <div className="flex items-center mt-2 justify-between text-sm text-muted-foreground font-medium h-12 px-1 border-b">
           <span className="text-center">닉네임</span>
           <div className="grid grid-cols-3 items-center gap-2 ">

@@ -22,7 +22,7 @@ export async function getScheduleAttendance(scheduleId: string) {
     const schedule = await prisma.schedule.findUnique({
       where: { id: scheduleId },
       select: {
-        matchType: true,
+        // matchType: true,
         hostTeamId: true,
         invitedTeamId: true,
       },
@@ -108,6 +108,7 @@ export async function getScheduleAttendance(scheduleId: string) {
         invitedTeam,
         attendances,
         manageableTeams,
+        schedule,
       },
     };
   } catch (error) {
