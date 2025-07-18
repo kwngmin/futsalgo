@@ -13,7 +13,6 @@ type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
     user: {
       select: {
         nickname: true;
-        image: true;
         name: true;
       };
     };

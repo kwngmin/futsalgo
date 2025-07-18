@@ -31,7 +31,6 @@ const ManageAttendancePage = async ({
       user: {
         select: {
           nickname: true,
-          image: true,
           name: true,
         },
       },
