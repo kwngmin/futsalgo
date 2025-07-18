@@ -282,7 +282,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               )}
             </div>
             {Boolean(data?.data.schedule?.description) && (
-              <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3">
+              <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
                 {data?.data.schedule?.description ?? "안내 사항 없음"}
               </p>
             )}

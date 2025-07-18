@@ -47,9 +47,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             ) : (
               <div className="size-6 rounded-lg bg-gray-200" />
             )}
-            <span className="text-base font-medium text-gray-500">
-              {team?.name}
-            </span>
+            <span className="text-base font-medium">{team?.name}</span>
           </div>
           {data?.data?.manageableTeams.includes(teamType) && (
             <div className="flex items-center gap-1">
