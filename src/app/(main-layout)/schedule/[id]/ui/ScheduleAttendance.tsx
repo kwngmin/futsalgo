@@ -81,7 +81,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             </div>
           ))
         ) : (
-          <div className="flex items-center justify-center h-32 text-muted-foreground">
+          <div className="flex items-center justify-center h-40 text-muted-foreground">
             참석자가 없습니다.
           </div>
         )}

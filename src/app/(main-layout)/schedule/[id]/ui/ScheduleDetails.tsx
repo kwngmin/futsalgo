@@ -102,7 +102,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
 
       {/* 경기 일정 탭*/}
-      <div className="relative border-b border-gray-300">
+      <div className="relative">
         {/* 참가팀 정보 */}
         <div className="flex p-4 gap-24 sm:gap-3 mb-8">
           {/* 공통 */}
