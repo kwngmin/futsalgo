@@ -52,8 +52,6 @@ export interface GetSchedulesResponse {
 
 export async function getSchedules(): Promise<GetSchedulesResponse> {
   try {
-    const session = await auth();
-
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -78,6 +76,8 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         date: "desc",
       },
     });
+
+    const session = await auth();
 
     // 로그인하지 않은 경우 → pastSchedules만 반환
     if (!session?.user?.id) {
