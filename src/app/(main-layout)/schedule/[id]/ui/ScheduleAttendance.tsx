@@ -126,7 +126,15 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                 )}
                 <span className="font-medium">{attendance.user.nickname}</span>
               </div>
-              <span className="font-medium text-muted-foreground">
+              <span
+                className={`font-medium mx-2 ${
+                  attendance.attendanceStatus === "ATTENDING"
+                    ? "text-emerald-600"
+                    : attendance.attendanceStatus === "NOT_ATTENDING"
+                    ? "text-destructive"
+                    : "text-muted-foreground"
+                }`}
+              >
                 {getStatus(attendance.attendanceStatus)}
               </span>
             </div>
