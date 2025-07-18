@@ -110,7 +110,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           attandances.map((attendance) => (
             <div
               key={attendance.user.id}
-              className="flex items-center justify-between h-14 border-b border-gray-200 last:border-b-0"
+              className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0"
             >
               <div className="flex items-center gap-2">
                 {attendance.user.image ? (
