@@ -60,7 +60,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             </div>
           )}
         </div>
-        <div className="flex items-center justify-between text-sm text-muted-foreground font-medium h-12 px-1 border-b">
+        <div className="flex items-center mt-2 justify-between text-sm text-muted-foreground font-medium h-12 px-1 border-b">
           <span className="text-center">닉네임</span>
           <div className="grid grid-cols-3 items-center gap-2 ">
             <span className="text-center">나이</span>
