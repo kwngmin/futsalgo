@@ -55,7 +55,7 @@ const ManageAttendanceContent = ({
       </div>
       <div className="px-4">
         {/* 전체 참석처리, 팀원 업데이트 */}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
           <div
             className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
             // onClick={onClick}
@@ -96,7 +96,7 @@ const ManageAttendanceContent = ({
           {data.map((attendance, index) => (
             <div
               key={attendance.id}
-              className="flex items-center gap-4 py-3 border-t border-l border-gray-100"
+              className="flex items-center gap-4 py-3 border-t border-gray-100"
             >
               <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
                 {index + 1}
