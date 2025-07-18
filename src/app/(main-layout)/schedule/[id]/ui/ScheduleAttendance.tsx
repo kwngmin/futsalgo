@@ -43,8 +43,8 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
               router.push(
                 `/schedule/${scheduleId}/${
                   teamType === "host"
-                    ? data.data.schedule.hostTeamId
-                    : data.data.schedule.invitedTeamId
+                    ? data?.data?.schedule?.hostTeamId
+                    : data?.data?.schedule?.invitedTeamId
                 }`
               );
             }}
