@@ -2,18 +2,20 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
+import { AttendanceStatus } from "@prisma/client";
 
 export interface Attendance {
   teamType: "HOST" | "INVITED";
+  attendanceStatus: AttendanceStatus;
   user: {
     id: string;
     nickname: string;
-    gender: string;
     image: string;
-    position: string;
-    skillLevel: string;
-    birthDate: string;
-    height: number;
+    // gender: string;
+    // position: string;
+    // skillLevel: string;
+    // birthDate: string;
+    // height: number;
   };
 }
 
@@ -36,16 +38,17 @@ export async function getScheduleAttendance(scheduleId: string) {
       where: { scheduleId },
       select: {
         teamType: true,
+        attendanceStatus: true,
         user: {
           select: {
             id: true,
             nickname: true,
-            gender: true,
             image: true,
-            position: true,
-            skillLevel: true,
-            birthDate: true,
-            height: true,
+            // gender: true,
+            // position: true,
+            // skillLevel: true,
+            // birthDate: true,
+            // height: true,
           },
         },
       },

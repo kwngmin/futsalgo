@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getScheduleAttendance } from "../actions/get-schedule-attendance";
 import ManageAttendance from "./ManageAttendance";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { AttendanceStatus } from "@prisma/client";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -32,6 +34,19 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     const team =
       teamType === "host" ? data?.data?.hostTeam : data?.data?.invitedTeam;
 
+    const getStatus = (attendance: AttendanceStatus) => {
+      switch (attendance) {
+        case "ATTENDING":
+          return "참석";
+        case "NOT_ATTENDING":
+          return "불참";
+        case "UNDECIDED":
+          return "미정";
+        default:
+          return "미정";
+      }
+    };
+
     return (
       <div className="mt-4 px-4">
         {data?.data?.manageableTeams.includes(teamType) ? (
@@ -41,7 +56,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             isManageableTeam
             onClick={() => {
               router.push(
-                `/schedule/${scheduleId}/${
+                `/schedule/${scheduleId}/attendances/${
                   teamType === "host"
                     ? data?.data?.schedule?.hostTeamId
                     : data?.data?.schedule?.invitedTeamId
@@ -55,24 +70,33 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             name={team?.name ?? ""}
           />
         )}
-        <div className="flex items-center mt-2 justify-between text-sm text-muted-foreground font-medium h-12 px-1 border-b">
-          <span className="text-center">닉네임</span>
-          <div className="grid grid-cols-3 items-center gap-2 ">
-            <span className="text-center">나이</span>
-            <span className="text-center">키</span>
-            <span className="text-center">성별</span>
-          </div>
+        <div className="flex items-center mt-2 justify-between text-sm text-muted-foreground font-medium h-12 px-1 border-b mb-2">
+          <span className="text-center">팀원 닉네임</span>
+          <span className="text-center">참석 여부</span>
         </div>
         {attandances && attandances?.length > 0 ? (
           attandances.map((attendance) => (
             <div
               key={attendance.user.id}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between h-11 border-b border-gray-200 last:border-b-0"
             >
-              <div>{attendance.user.nickname}</div>
-              <div>{attendance.user.birthDate}</div>
-              <div>{attendance.user.height}</div>
-              <div>{attendance.user.gender}</div>
+              <div className="flex items-center gap-2">
+                {attendance.user.image ? (
+                  <Image
+                    src={attendance.user.image ?? ""}
+                    alt="user_image"
+                    width={24}
+                    height={24}
+                    className="rounded-full object-cover size-6"
+                  />
+                ) : (
+                  <div className="size-6 rounded-full bg-gray-200" />
+                )}
+                <span className="font-medium">{attendance.user.nickname}</span>
+              </div>
+              <span className="font-medium text-muted-foreground">
+                {getStatus(attendance.attendanceStatus)}
+              </span>
             </div>
           ))
         ) : (

@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, BookmarkIcon, EllipsisVertical, Share } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import ScheduleDetails from "./ScheduleDetails";
@@ -26,12 +26,12 @@ export function calculateDday(date: Date): number {
 
 const tabs = [
   {
-    label: "경기 일정",
+    label: "일정",
     value: "overview",
     isDisabled: false,
   },
   {
-    label: "참석 인원",
+    label: "참석자",
     value: "attendance",
     isDisabled: false,
   },
@@ -59,10 +59,16 @@ const tabs = [
 
 const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
-  const [selectedTab, setSelectedTab] = useState<string>(tabs[1].value);
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
+  const validTab = tabs.find((t) => t.value === tab);
+  const [selectedTab, setSelectedTab] = useState<string>(
+    validTab ? validTab.value : tabs[0].value
+  );
 
   const handleGoBack = () => {
-    router.back();
+    // router.back();
+    router.push("/");
   };
 
   // const timeRange = formatTimeRange({
