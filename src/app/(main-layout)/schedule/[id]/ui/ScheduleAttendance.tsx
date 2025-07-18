@@ -34,8 +34,8 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
     return (
       <div className="mt-4 px-4">
-        <div className="rounded-md px-4 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-          <div className="flex items-center gap-1">
+        <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+          <div className="flex items-center gap-2">
             {team?.logoUrl ? (
               <Image
                 src={team?.logoUrl ?? ""}
