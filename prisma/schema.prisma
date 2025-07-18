@@ -146,6 +146,18 @@ enum TeamSide {
   UNDECIDED
 }
 
+enum TeamType {
+  HOST    // 호스트 팀
+  INVITED // 초대받은 팀
+}
+
+// 참석 상태 enum 추가
+enum AttendanceStatus {
+  UNDECIDED     // 미정/투표하지 않음 (기본값)
+  ATTENDING     // 참석
+  NOT_ATTENDING // 불참
+}
+
 // ========== AUTHENTICATION MODELS ==========
 
 model Account {
@@ -161,7 +173,8 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -173,7 +186,7 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+   
   @@map("sessions")
 }
 
@@ -235,12 +248,12 @@ model User {
 // 유저 간 팔로잉 관계
 model UserFollow {
   id          String   @id @default(cuid())
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
   createdAt   DateTime @default(now())
-  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
-  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
-
+  
   @@unique([followerId, followingId])
   @@index([followerId])
   @@index([followingId])
@@ -250,12 +263,12 @@ model UserFollow {
 // 팀 팔로잉 (기존 TeamLike 대체)
 model TeamFollow {
   id        String   @id @default(cuid())
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   createdAt DateTime @default(now())
-  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   @@unique([teamId, userId])
   @@index([userId])
   @@index([teamId])
@@ -263,29 +276,37 @@ model TeamFollow {
 }
 
 model Team {
-  id                String                @id @default(cuid())
-  name              String
-  code              String                @unique
-  logoUrl           String?
-  coverUrl          String?
-  city              String
-  district          String
-  description       String?
-  status            TeamStatus            @default(ACTIVE)
-  recruitmentStatus RecruitmentStatus     @default(RECRUITING)
-  gender            TeamGender
-  level             TeamLevel             @default(MID)
-  activityFrequency ActivityFrequency     @default(WEEKLY)
-  createdAt         DateTime              @default(now())
-  updatedAt         DateTime              @updatedAt
-  awayMatches       Match[]               @relation("MatchAwayTeam")
-  homeMatches       Match[]               @relation("MatchHomeTeam")
-  posts             Post[]
-  hostedSchedules   Schedule[]            @relation("HostTeam")
-  invitedSchedules  Schedule[]            @relation("InvitedTeam")
-  followers         TeamFollow[]
-  invitations       TeamMatchInvitation[]
-  members           TeamMember[]
+  id            String    @id @default(cuid())
+  name          String
+  code          String    @unique // 가입 코드
+  logoUrl       String?
+  coverUrl      String?
+  city          String
+  district      String
+  description   String?
+
+  status        TeamStatus @default(ACTIVE)
+  recruitmentStatus RecruitmentStatus @default(RECRUITING)
+
+  gender        TeamGender
+  level         TeamLevel @default(MID)
+  activityFrequency ActivityFrequency @default(WEEKLY)
+
+  members       TeamMember[]  // TeamManager 제거하고 TeamMember로 통합
+  posts         Post[]
+  followers     TeamFollow[]  // 팔로워 (기존 likedByUsers 대체)
+
+  // 일정 관련
+  hostedSchedules  Schedule[] @relation("HostTeam")
+  invitedSchedules Schedule[] @relation("InvitedTeam")
+  invitations      TeamMatchInvitation[]
+
+  // 매치 관련
+  homeMatches      Match[]    @relation("MatchHomeTeam")
+  awayMatches      Match[]    @relation("MatchAwayTeam")
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@index([city, district])  // 지역 검색을 위한 인덱스
   @@index([level, gender])  // 종목별 검색을 위한 인덱스
@@ -297,19 +318,19 @@ model Team {
 
 // TeamManager 모델 제거하고 TeamMember로 통합
 model TeamMember {
-  id        String           @id @default(cuid())
+  id        String   @id @default(cuid())
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   status    TeamMemberStatus @default(PENDING)
-  role      TeamMemberRole   @default(MEMBER)
-  banned    Boolean          @default(false)
-  joinedAt  DateTime?
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  role      TeamMemberRole   @default(MEMBER)   // 역할 추가
+  banned    Boolean @default(false)
+  joinedAt  DateTime?        // 실제 승인된 날짜
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   bannedAt  DateTime?
-  team      Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  
   @@unique([teamId, userId], map: "team_user_unique")
   @@index([userId, status], map: "user_status_idx")
   @@index([teamId, status], map: "team_status_idx")
@@ -321,35 +342,43 @@ model TeamMember {
 // ========== SCHEDULE & MATCH MODELS ==========
 
 model Schedule {
-  id                   String               @id @default(cuid())
-  title                String?
-  place                String
-  description          String?
-  date                 DateTime
-  year                 Int
-  startTime            DateTime
-  endTime              DateTime
-  matchType            MatchType
-  status               ScheduleStatus       @default(PENDING)
-  enableAttendanceVote Boolean              @default(true)
-  attendanceDeadline   DateTime?
-  city                 String?
-  district             String?
-  createdById          String
-  hostTeamId           String
-  invitedTeamId        String?
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  matches              Match[]
-  attendances          ScheduleAttendance[]
-  bookmarks            ScheduleBookmark[]
-  comments             ScheduleComment[]
-  photos               SchedulePhoto[]
-  createdBy            User                 @relation(fields: [createdById], references: [id])
-  hostTeam             Team                 @relation("HostTeam", fields: [hostTeamId], references: [id])
-  invitedTeam          Team?                @relation("InvitedTeam", fields: [invitedTeamId], references: [id])
-  invitation           TeamMatchInvitation?
+  id                 String         @id @default(cuid())
+  place              String
+  description        String?
+  date               DateTime
+  year               Int            // 연도 기반 통계용
+  startTime          DateTime
+  endTime            DateTime
+  matchType          MatchType
+  status             ScheduleStatus @default(PENDING)
+  
+  // 참석 투표 관련 필드
+  enableAttendanceVote Boolean      @default(false)  // 참석 투표 활성화 여부
+  attendanceDeadline   DateTime?                    // 참석 투표 마감 시간
+  
+  // 지역 정보 (team에서 가져오거나 별도 설정)
+  city               String?
+  district           String?
+  
+  createdById        String
+  hostTeamId         String
+  invitedTeamId      String?        // guestTeamId -> invitedTeamId로 변경
 
+  // 관계들
+  createdBy          User      @relation(fields: [createdById], references: [id])
+  hostTeam           Team      @relation("HostTeam", fields: [hostTeamId], references: [id])
+  invitedTeam        Team?     @relation("InvitedTeam", fields: [invitedTeamId], references: [id]) // 관계명 변경
+  
+  invitation         TeamMatchInvitation?
+  matches            Match[]
+  attendances        ScheduleAttendance[]
+  comments           ScheduleComment[]
+  photos             SchedulePhoto[]    // String[] -> 별도 모델로 변경
+  bookmarks          ScheduleBookmark[] // 북마크 관계 추가
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
   @@index([date, status])
   @@index([hostTeamId])
   @@index([invitedTeamId])
@@ -361,14 +390,16 @@ model Schedule {
 
 // 새로운 사진 모델
 model SchedulePhoto {
-  id         String   @id @default(cuid())
-  scheduleId String
-  uploaderId String
-  url        String
-  createdAt  DateTime @default(now())
-  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  uploader   User     @relation(fields: [uploaderId], references: [id])
-
+  id          String   @id @default(cuid())
+  scheduleId  String
+  uploaderId  String
+  url         String
+  
+  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  uploader    User     @relation(fields: [uploaderId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  
   @@index([scheduleId])
   @@index([uploaderId])
   @@index([scheduleId, createdAt])
@@ -377,71 +408,95 @@ model SchedulePhoto {
 
 // 북마크 모델 추가
 model ScheduleBookmark {
-  id         String   @id @default(cuid())
-  scheduleId String
-  userId     String
-  createdAt  DateTime @default(now())
-  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([scheduleId, userId])
-  @@index([userId])
-  @@index([scheduleId])
+  id          String   @id @default(cuid())
+  scheduleId  String
+  userId      String
+  
+  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([scheduleId, userId]) // 같은 사용자가 같은 스케줄을 중복 북마크 방지
+  @@index([userId])              // 사용자별 북마크 조회 최적화
+  @@index([scheduleId])          // 스케줄별 북마크 수 조회 최적화
   @@map("schedule_bookmarks")
 }
 
 model ScheduleAttendance {
-  id          String   @id @default(cuid())
-  scheduleId  String
-  userId      String
-  isAttending Boolean  @default(false)
-  side        TeamSide
-  mvpToUserId String?
-  mvpReceived Int      @default(0)
-  createdAt   DateTime @default(now())
-  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                     String   @id @default(cuid())
+  scheduleId             String
+  userId                 String
+  
+  // 참석 여부 - enum으로 변경
+  attendanceStatus       AttendanceStatus  @default(UNDECIDED)
+  
+  // 팀 소속 - 호스트 팀 또는 초대받은 팀 중 하나
+  teamType               TeamType  @default(HOST)
 
+  // 투표 시간 추가 (투표 현황 파악용)
+  votedAt                DateTime?
+
+  // MVP 투표 관련 필드
+  mvpToUserId            String?   // 내가 MVP로 투표한 사람
+  mvpReceived            Int       @default(0) // 내가 받은 MVP 투표 수
+
+  schedule               Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt              DateTime @default(now())
+  
   @@unique([scheduleId, userId])
-  @@index([scheduleId, isAttending])
+  @@index([scheduleId, attendanceStatus])
+  @@index([scheduleId, teamType])
+  @@index([scheduleId, votedAt])  // 투표 현황 조회용
   @@map("schedule_attendances")
 }
 
 model TeamMatchInvitation {
-  id            String           @id @default(cuid())
-  scheduleId    String           @unique
-  invitedTeamId String
-  status        InvitationStatus @default(PENDING)
-  reason        String?
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  invitedTeam   Team             @relation(fields: [invitedTeamId], references: [id])
-  schedule      Schedule         @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  id              String           @id @default(cuid())
+  scheduleId      String           @unique
+  invitedTeamId   String
+  status          InvitationStatus @default(PENDING)
+  reason          String?          // 거절 사유
 
+  schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  invitedTeam     Team     @relation(fields: [invitedTeamId], references: [id])
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
   @@index([invitedTeamId, status])
   @@map("team_match_invitations")
 }
 
 model Match {
-  id              String       @id @default(cuid())
+  id              String   @id @default(cuid())
   scheduleId      String
-  order           Int
+  order           Int      // 몇 번째 경기인지
   durationMinutes Int
-  isEnded         Boolean      @default(false)
-  homeScore       Int          @default(0)
-  awayScore       Int          @default(0)
+  isEnded         Boolean  @default(false)
+  
+  // 점수
+  homeScore       Int      @default(0)
+  awayScore       Int      @default(0)
+  
   createdById     String
   homeTeamId      String
   awayTeamId      String
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  goals           GoalRecord[]
-  lineups         Lineup[]
-  awayTeam        Team         @relation("MatchAwayTeam", fields: [awayTeamId], references: [id])
-  createdBy       User         @relation(fields: [createdById], references: [id])
-  homeTeam        Team         @relation("MatchHomeTeam", fields: [homeTeamId], references: [id])
-  schedule        Schedule     @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 
+  // 관계들
+  schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  createdBy       User     @relation(fields: [createdById], references: [id])
+  homeTeam        Team     @relation("MatchHomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam        Team     @relation("MatchAwayTeam", fields: [awayTeamId], references: [id])
+
+  lineups         Lineup[]
+  goals           GoalRecord[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
   @@unique([scheduleId, order])
   @@index([scheduleId])
   @@index([isEnded])
@@ -451,30 +506,33 @@ model Match {
 }
 
 model Lineup {
-  id      String   @id @default(cuid())
-  matchId String
-  userId  String
-  side    TeamSide
-  match   Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  matchId   String
+  userId    String
+  side      TeamSide
 
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@unique([matchId, userId])
   @@index([matchId, side])
   @@map("lineups")
 }
 
 model GoalRecord {
-  id        String   @id @default(cuid())
-  matchId   String
-  scorerId  String
-  assistId  String?
-  side      TeamSide
-  order     Int
-  createdAt DateTime @default(now())
-  assist    User?    @relation("Assist", fields: [assistId], references: [id])
-  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  scorer    User     @relation("Scorer", fields: [scorerId], references: [id])
+  id          String   @id @default(cuid())
+  matchId     String
+  scorerId    String
+  assistId    String?
+  side        TeamSide
+  order       Int
 
+  match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  scorer      User     @relation("Scorer", fields: [scorerId], references: [id])
+  assist      User?    @relation("Assist", fields: [assistId], references: [id])
+
+  createdAt   DateTime @default(now())
+  
   @@index([matchId])
   @@index([scorerId])
   @@map("goal_records")
@@ -509,17 +567,17 @@ model ScheduleComment {
 // ========== BOARD MODELS ==========
 
 model Post {
-  id        String    @id @default(cuid())
+  id        String   @id @default(cuid())
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
+  team      Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId    String?
   title     String
   content   String
-  type      BoardType
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  team      Team?     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-
+  type      BoardType   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
   @@index([teamId, type])
   @@index([authorId])
   @@index([createdAt])

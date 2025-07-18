@@ -52,6 +52,12 @@ CREATE TYPE "InvitationStatus" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED');
 -- CreateEnum
 CREATE TYPE "TeamSide" AS ENUM ('HOME', 'AWAY', 'UNDECIDED');
 
+-- CreateEnum
+CREATE TYPE "TeamType" AS ENUM ('HOST', 'INVITED');
+
+-- CreateEnum
+CREATE TYPE "AttendanceStatus" AS ENUM ('UNDECIDED', 'ATTENDING', 'NOT_ATTENDING');
+
 -- CreateTable
 CREATE TABLE "accounts" (
     "id" TEXT NOT NULL,
@@ -173,7 +179,7 @@ CREATE TABLE "schedules" (
     "endTime" TIMESTAMP(3) NOT NULL,
     "matchType" "MatchType" NOT NULL,
     "status" "ScheduleStatus" NOT NULL DEFAULT 'PENDING',
-    "enableAttendanceVote" BOOLEAN NOT NULL DEFAULT true,
+    "enableAttendanceVote" BOOLEAN NOT NULL DEFAULT false,
     "attendanceDeadline" TIMESTAMP(3),
     "city" TEXT,
     "district" TEXT,
@@ -212,8 +218,9 @@ CREATE TABLE "schedule_attendances" (
     "id" TEXT NOT NULL,
     "scheduleId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "isAttending" BOOLEAN NOT NULL DEFAULT false,
-    "side" "TeamSide" NOT NULL DEFAULT 'UNDECIDED',
+    "attendanceStatus" "AttendanceStatus" NOT NULL DEFAULT 'UNDECIDED',
+    "teamType" "TeamType" NOT NULL DEFAULT 'HOST',
+    "votedAt" TIMESTAMP(3),
     "mvpToUserId" TEXT,
     "mvpReceived" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -345,6 +352,15 @@ CREATE INDEX "teams_city_district_idx" ON "teams"("city", "district");
 CREATE INDEX "teams_level_gender_idx" ON "teams"("level", "gender");
 
 -- CreateIndex
+CREATE INDEX "teams_status_recruitmentStatus_idx" ON "teams"("status", "recruitmentStatus");
+
+-- CreateIndex
+CREATE INDEX "teams_name_idx" ON "teams"("name");
+
+-- CreateIndex
+CREATE INDEX "teams_createdAt_idx" ON "teams"("createdAt");
+
+-- CreateIndex
 CREATE INDEX "user_status_idx" ON "team_members"("userId", "status");
 
 -- CreateIndex
@@ -396,7 +412,13 @@ CREATE INDEX "schedule_bookmarks_scheduleId_idx" ON "schedule_bookmarks"("schedu
 CREATE UNIQUE INDEX "schedule_bookmarks_scheduleId_userId_key" ON "schedule_bookmarks"("scheduleId", "userId");
 
 -- CreateIndex
-CREATE INDEX "schedule_attendances_scheduleId_isAttending_idx" ON "schedule_attendances"("scheduleId", "isAttending");
+CREATE INDEX "schedule_attendances_scheduleId_attendanceStatus_idx" ON "schedule_attendances"("scheduleId", "attendanceStatus");
+
+-- CreateIndex
+CREATE INDEX "schedule_attendances_scheduleId_teamType_idx" ON "schedule_attendances"("scheduleId", "teamType");
+
+-- CreateIndex
+CREATE INDEX "schedule_attendances_scheduleId_votedAt_idx" ON "schedule_attendances"("scheduleId", "votedAt");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "schedule_attendances_scheduleId_userId_key" ON "schedule_attendances"("scheduleId", "userId");
@@ -412,6 +434,12 @@ CREATE INDEX "matches_scheduleId_idx" ON "matches"("scheduleId");
 
 -- CreateIndex
 CREATE INDEX "matches_isEnded_idx" ON "matches"("isEnded");
+
+-- CreateIndex
+CREATE INDEX "matches_homeTeamId_idx" ON "matches"("homeTeamId");
+
+-- CreateIndex
+CREATE INDEX "matches_awayTeamId_idx" ON "matches"("awayTeamId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "matches_scheduleId_order_key" ON "matches"("scheduleId", "order");
