@@ -6,6 +6,7 @@ import ManageAttendance from "./ManageAttendance";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AttendanceStatus } from "@prisma/client";
+import { Label } from "@/shared/components/ui/label";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -70,6 +71,40 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             name={team?.name ?? ""}
           />
         )}
+
+        <div className="bg-gray-50 overflow-hidden my-2 grid grid-cols-3 gap-3 rounded-2xl p-4">
+          <div className="flex flex-col gap-1 items-center my-3">
+            <div className="font-semibold">
+              {
+                attandances?.filter(
+                  (attendance) => attendance.attendanceStatus === "ATTENDING"
+                ).length
+              }
+            </div>
+            <Label className="text-muted-foreground">참석</Label>
+          </div>
+          <div className="flex flex-col gap-1 items-center my-3">
+            <div className="font-semibold">
+              {
+                attandances?.filter(
+                  (attendance) =>
+                    attendance.attendanceStatus === "NOT_ATTENDING"
+                ).length
+              }
+            </div>
+            <Label className="text-muted-foreground">불참</Label>
+          </div>
+          <div className="flex flex-col gap-1 items-center my-3">
+            <div className="font-semibold">
+              {
+                attandances?.filter(
+                  (attendance) => attendance.attendanceStatus === "UNDECIDED"
+                ).length
+              }
+            </div>
+            <Label className="text-muted-foreground">미정</Label>
+          </div>
+        </div>
 
         {attandances && attandances?.length > 0 ? (
           attandances.map((attendance) => (
@@ -138,20 +173,7 @@ export default ScheduleAttendance;
   /* 참석 현황 */
 }
 {
-  /* <div className="border overflow-hidden mx-4 grid grid-cols-3 gap-3 bg-white rounded-2xl p-4">
-  <div className="flex flex-col gap-1 items-center my-3">
-    <div className="font-semibold">0</div>
-    <Label className="text-muted-foreground">참석</Label>
-  </div>
-  <div className="flex flex-col gap-1 items-center my-3">
-    <div className="font-semibold">0</div>
-    <Label className="text-muted-foreground">불참</Label>
-  </div>
-  <div className="flex flex-col gap-1 items-center my-3">
-    <div className="font-semibold">1</div>
-    <Label className="text-muted-foreground">미정</Label>
-  </div>
-</div>
+  /* 
 
 <div>
   {data.data.schedule.hostTeam.members.map((member) => (
