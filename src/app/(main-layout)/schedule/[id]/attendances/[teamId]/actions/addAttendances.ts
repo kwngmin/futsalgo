@@ -13,31 +13,56 @@ export async function addAttendances({
   teamType: "HOST" | "INVITED";
 }) {
   try {
-    const teamMembers = await prisma.teamMember.findMany({
-      where: {
-        teamId,
-        status: "APPROVED",
-      },
-    });
+    const userIds = (
+      await prisma.teamMember.findMany({
+        where: {
+          teamId,
+          status: "APPROVED",
+        },
+        select: {
+          userId: true,
+        },
+      })
+    ).map((m) => m.userId);
 
-    if (teamMembers.length === 0) {
+    if (userIds.length === 0) {
       return {
         success: false,
         error: "팀원이 없습니다",
       };
     }
 
-    await prisma.scheduleAttendance.createMany({
-      data: teamMembers.map((member) => ({
+    // 이미 등록된 참석자 조회
+    const existingAttendances = await prisma.scheduleAttendance.findMany({
+      where: {
         scheduleId,
-        userId: member.userId,
-        teamType,
-        attendanceStatus: "UNDECIDED",
-      })),
+        userId: {
+          in: userIds,
+        },
+      },
+      select: {
+        userId: true,
+      },
     });
 
+    const existingUserIds = new Set(existingAttendances.map((a) => a.userId));
+
+    const newAttendances = userIds.filter(
+      (userId) => !existingUserIds.has(userId)
+    );
+
+    if (newAttendances.length > 0) {
+      await prisma.scheduleAttendance.createMany({
+        data: newAttendances.map((userId) => ({
+          scheduleId,
+          userId,
+          teamType,
+          attendanceStatus: "UNDECIDED",
+        })),
+      });
+    }
+
     revalidatePath(`/schedule/${scheduleId}/attendances/${teamId}`);
-    // revalidatePath(`/schedule/${scheduleId}/attendances/${teamId}`);
 
     return {
       success: true,

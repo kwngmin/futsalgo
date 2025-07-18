@@ -1,9 +1,10 @@
 "use client";
 
 import { Prisma } from "@prisma/client";
-import { RefreshCcw, SquareCheckBig, X } from "lucide-react";
+import { RefreshCcw, SquareCheckBig, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { addAttendances } from "../actions/addAttendances";
+// import Image from "next/image";
 
 type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
   select: {
@@ -13,6 +14,7 @@ type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
       select: {
         nickname: true;
         image: true;
+        name: true;
       };
     };
   };
@@ -52,6 +54,7 @@ const ManageAttendanceContent = ({
         </div>
       </div>
       <div className="px-4">
+        {/* 전체 참석처리, 팀원 업데이트 */}
         <div className="grid grid-cols-2 gap-2">
           <div
             className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
@@ -88,8 +91,65 @@ const ManageAttendanceContent = ({
             </div>
           </div>
         </div>
+        {/* 참석자 목록 */}
+        <div className="mt-4">
+          {data.map((attendance, index) => (
+            <div
+              key={attendance.id}
+              className="flex items-center gap-4 py-3 border-t border-l border-gray-100"
+            >
+              <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
+                {index + 1}
+              </div>
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
+                <div className="flex gap-1 items-center">
+                  <span className="font-semibold">
+                    {attendance.user.nickname}
+                  </span>
+                  <span className="font-medium text-sm leading-tight text-muted-foreground mb-0.5">
+                    {attendance.user.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 sm:min-w-72">
+                  <div className="grow grid grid-cols-3 p-0.5 rounded-md bg-slate-100">
+                    <div
+                      className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
+                        attendance.attendanceStatus === "ATTENDING"
+                          ? "bg-white border shadow-xs font-semibold"
+                          : "text-muted-foreground font-medium"
+                      }`}
+                    >
+                      참석
+                    </div>
+                    <div
+                      className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
+                        attendance.attendanceStatus === "NOT_ATTENDING"
+                          ? "bg-white border shadow-xs font-semibold"
+                          : "text-muted-foreground font-medium"
+                      }`}
+                    >
+                      불참
+                    </div>
+                    <div
+                      className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
+                        attendance.attendanceStatus === "UNDECIDED"
+                          ? "bg-white border shadow-xs font-semibold"
+                          : "text-muted-foreground font-medium"
+                      }`}
+                    >
+                      미정
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center size-10 rounded-md bg-red-500/10 hover:bg-red-500/20 transition-colors cursor-pointer">
+                    <Trash className="size-4 text-destructive" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      ManageAttendanceContent
+      {/* ManageAttendanceContent */}
     </div>
   );
 };
