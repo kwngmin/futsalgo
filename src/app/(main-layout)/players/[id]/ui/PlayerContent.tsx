@@ -332,7 +332,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+              <div className="bg-gray-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">
                     {GENDER[data?.data?.gender as keyof typeof GENDER]}
