@@ -126,7 +126,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       </div> */}
 
       {/* 탭 */}
-      <div className="bg-slate-200 flex h-12 border-t border-slate-700">
+      <div className="bg-slate-200 flex h-12">
         {tabs.map((tab) => (
           <div
             key={tab.value}
