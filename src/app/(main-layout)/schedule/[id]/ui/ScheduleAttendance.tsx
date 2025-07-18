@@ -2,7 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getScheduleAttendance } from "../actions/get-schedule-attendance";
-import { Button } from "@/shared/components/ui/button";
+import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   console.log(scheduleId, "scheduleId");
@@ -16,7 +17,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   console.log(isLoading, "isLoading");
   console.log(error, "error");
 
-  const renderAttendance = ({ team }: { team: "host" | "invited" }) => {
+  const renderAttendance = ({ teamType }: { teamType: "host" | "invited" }) => {
     const hostAttendances = data?.data?.attendances.filter(
       (attendance) => attendance.teamType === "HOST"
     );
@@ -25,13 +26,39 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
       (attendance) => attendance.teamType === "INVITED"
     );
 
-    const attandances = team === "host" ? hostAttendances : invitedAttendances;
+    const attandances =
+      teamType === "host" ? hostAttendances : invitedAttendances;
+
+    const team =
+      teamType === "host" ? data?.data?.hostTeam : data?.data?.invitedTeam;
 
     return (
-      <div className="px-4">
-        <div className="flex items-center justify-between">
-          <div>{data?.data?.hostTeam?.name}</div>
-          <div className="grid grid-cols-3 items-center gap-2 text-sm text-muted-foreground ">
+      <div className="mt-4 px-4">
+        <div className="rounded-md px-4 w-full flex items-center justify-between h-11 sm:h-10 gap-3 cursor-pointer bg-gray-50 transition-colors">
+          <div className="flex items-center gap-1">
+            <Image
+              src={team?.logoUrl ?? ""}
+              alt="avatar"
+              width={24}
+              height={24}
+              className="rounded-lg"
+            />
+            <span className="text-base font-medium text-gray-500">
+              {team?.name}
+            </span>
+          </div>
+          {data?.data?.manageableTeams.includes(teamType) && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm font-medium text-gray-500">
+                등록 관리
+              </span>
+              <ChevronRight className="size-5 text-gray-400" />
+            </div>
+          )}
+        </div>
+        <div className="flex items-center justify-between text-sm text-muted-foreground font-medium h-12 mt-3 px-1 border-b">
+          <span className="text-center">닉네임</span>
+          <div className="grid grid-cols-3 items-center gap-2 ">
             <span className="text-center">나이</span>
             <span className="text-center">키</span>
             <span className="text-center">성별</span>
@@ -50,31 +77,18 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             </div>
           ))
         ) : (
-          <div className="flex items-center justify-center h-32">
+          <div className="flex items-center justify-center h-32 text-muted-foreground">
             참석자가 없습니다.
           </div>
-        )}
-        {data?.data?.manageableTeams.includes(team) && (
-          <Button
-            //   className="h-11 sm:h-10 flex items-center justify-center text-white bg-black rounded-md font-medium"
-            size="lg"
-            className="w-full"
-            variant="secondary"
-          >
-            참석자 관리
-          </Button>
-          //   <div className="h-11 sm:h-10 flex items-center justify-center text-white bg-black rounded-md font-medium">
-          //     참석자 관리
-          //   </div>
         )}
       </div>
     );
   };
 
   return (
-    <div>
-      {renderAttendance({ team: "host" })}
-      {data?.data?.invitedTeam && renderAttendance({ team: "invited" })}
+    <div className="space-y-6">
+      {renderAttendance({ teamType: "host" })}
+      {data?.data?.invitedTeam && renderAttendance({ teamType: "invited" })}
     </div>
   );
 };

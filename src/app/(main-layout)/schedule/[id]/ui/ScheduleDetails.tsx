@@ -257,7 +257,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
         {/* 경기 추가 */}
         {dDay >= 0 && (
-          <div className="px-4 py-2 mb-2">
+          <div className="px-4 py-2">
             <Button
               className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
               size="lg"

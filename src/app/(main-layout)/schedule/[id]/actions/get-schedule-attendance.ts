@@ -58,6 +58,7 @@ export async function getScheduleAttendance(scheduleId: string) {
         where: { id: schedule?.hostTeamId },
         select: {
           name: true,
+          logoUrl: true,
         },
       }),
       schedule?.invitedTeamId
@@ -65,6 +66,7 @@ export async function getScheduleAttendance(scheduleId: string) {
             where: { id: schedule.invitedTeamId },
             select: {
               name: true,
+              logoUrl: true,
             },
           })
         : null,
