@@ -1,8 +1,7 @@
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER } from "@/entities/user/model/constants";
-// import { Separator } from "@/shared/components/ui/separator";
+import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 import { User } from "@prisma/client";
-// import { Mars, Venus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -45,6 +44,7 @@ const PlayerCard = ({
               <span className="text-white text-xs font-bold">나</span>
             </div>
           )}
+          {player.condition === "INJURED" && <InjuredBadge />}
         </div>
       ) : (
         <div className="size-14 bg-gray-400" />

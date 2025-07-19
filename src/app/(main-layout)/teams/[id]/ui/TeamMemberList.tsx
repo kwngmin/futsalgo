@@ -13,6 +13,7 @@ import { ChevronRight, Crown, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
+import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 
 interface TeamMemberWithUser extends TeamMember {
   user: Pick<
@@ -27,6 +28,7 @@ interface TeamMemberWithUser extends TeamMember {
     | "birthDate"
     | "height"
     | "gender"
+    | "condition"
   >;
 }
 
@@ -63,14 +65,19 @@ const TeamMemberList = ({
             className={`w-full flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
-              <Image
-                src={member.user.image || "/assets/images/default-profile.png"}
-                alt="profile"
-                width={56}
-                height={56}
-                loading="lazy"
-                className="size-14 p-0.5 rounded-3xl object-cover"
-              />
+              <div className="relative">
+                <Image
+                  src={
+                    member.user.image || "/assets/images/default-profile.png"
+                  }
+                  alt="profile"
+                  width={56}
+                  height={56}
+                  loading="lazy"
+                  className="size-14 p-0.5 rounded-3xl object-cover"
+                />
+                {member.user.condition === "INJURED" && <InjuredBadge />}
+              </div>
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
@@ -139,16 +146,19 @@ const TeamMemberList = ({
               className="flex items-center justify-between gap-3 cursor-pointer sm:grow px-4 py-2 hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center space-x-3 grow">
-                <Image
-                  src={
-                    member.user.image || "/assets/images/default-profile.png"
-                  }
-                  alt="profile"
-                  width={56}
-                  height={56}
-                  loading="lazy"
-                  className="size-14 p-0.5 rounded-3xl object-cover"
-                />
+                <div className="relative">
+                  <Image
+                    src={
+                      member.user.image || "/assets/images/default-profile.png"
+                    }
+                    alt="profile"
+                    width={56}
+                    height={56}
+                    loading="lazy"
+                    className="size-14 p-0.5 rounded-3xl object-cover"
+                  />
+                  {member.user.condition === "INJURED" && <InjuredBadge />}
+                </div>
                 <div className="flex flex-col items-start grow">
                   <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                     {member.user.nickname || "닉네임 없음"}
@@ -215,14 +225,19 @@ const TeamMemberList = ({
             className={`w-full flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer`}
           >
             <div className="flex items-center space-x-3">
-              <Image
-                src={member.user.image || "/assets/images/default-profile.png"}
-                alt="profile"
-                width={56}
-                height={56}
-                loading="lazy"
-                className="size-14 p-0.5 rounded-3xl object-cover"
-              />
+              <div className="relative">
+                <Image
+                  src={
+                    member.user.image || "/assets/images/default-profile.png"
+                  }
+                  alt="profile"
+                  width={56}
+                  height={56}
+                  loading="lazy"
+                  className="size-14 p-0.5 rounded-3xl object-cover"
+                />
+                {member.user.condition === "INJURED" && <InjuredBadge />}
+              </div>
               <div className="flex flex-col items-start">
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}

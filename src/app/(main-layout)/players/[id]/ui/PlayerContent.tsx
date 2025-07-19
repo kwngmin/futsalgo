@@ -32,6 +32,7 @@ import { Label } from "@/shared/components/ui/label";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { Fragment, useState } from "react";
+import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 
 const tabs = [
   {
@@ -126,14 +127,17 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="space-y-4 px-4">
               <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
-                <div className="size-20 rounded-4xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="size-20 flex items-center justify-center flex-shrink-0 relative">
                   <Image
                     width={80}
                     height={80}
                     src={data?.data?.image ?? ""}
                     alt="profile_image"
-                    className="object-cover scale-105"
+                    className="object-cover scale-105 rounded-4xl"
                   />
+                  {data?.data?.condition === "INJURED" && (
+                    <InjuredBadge size="lg" />
+                  )}
                 </div>
                 <div className="flex flex-col">
                   <h1 className="text-xl font-semibold">

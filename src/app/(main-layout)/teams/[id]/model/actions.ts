@@ -33,6 +33,7 @@ export async function getTeam(id: string) {
                 birthDate: true,
                 height: true,
                 gender: true,
+                condition: true,
               },
             },
           },
