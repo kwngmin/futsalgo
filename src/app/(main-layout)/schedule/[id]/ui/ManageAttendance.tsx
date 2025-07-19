@@ -33,7 +33,7 @@ const ManageAttendance = ({
       </div>
       {isManageableTeam && (
         <div className="flex items-center gap-1">
-          <span className="text-base font-medium text-gray-500">등록 관리</span>
+          <span className="text-base font-medium text-gray-500">수정</span>
           <ChevronRight className="size-5 text-gray-400" />
         </div>
       )}
