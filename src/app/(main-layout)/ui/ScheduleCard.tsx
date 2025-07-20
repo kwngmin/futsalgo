@@ -78,9 +78,11 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
       })}`}
             </div>
             •
-            <span className="font-medium text-muted-foreground">
-              {schedule.matchType === "TEAM" ? "친선경기" : "연습경기"}
-            </span>
+            {schedule.matchType === "TEAM" ? (
+              <span className="font-medium text-amber-600">자체전</span>
+            ) : (
+              <span className="font-medium text-sky-600">친선전</span>
+            )}
           </div>
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {schedule.place}
