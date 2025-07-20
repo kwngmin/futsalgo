@@ -217,7 +217,7 @@ const NewForm = ({
           {/* 시간 */}
           <div className="flex flex-col gap-3">
             <Label htmlFor="time-picker" className="px-1">
-              시간 (시작 - 종료)
+              시작 시간 - 종료 시간
             </Label>
             <div className="flex items-center gap-2">
               <Input
