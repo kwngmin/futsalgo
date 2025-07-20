@@ -60,7 +60,7 @@ const TeamsPage = () => {
               <button
                 type="button"
                 onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")} // 로그인 안되어있으면 로그인 페이지로 이동
-                className="shrink-0 h-10 pl-3 pr-4 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
+                className="shrink-0 h-9 pl-3 pr-4 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
               >
                 <Plus className="w-5 h-5" strokeWidth={2} />팀 등록
               </button>

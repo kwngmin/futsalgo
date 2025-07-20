@@ -36,7 +36,7 @@ const HomePage = () => {
               <button
                 type="button"
                 onClick={() => router.push("/schedule/new")}
-                className="shrink-0 h-10 pl-3 pr-4 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
+                className="shrink-0 h-9 pl-3 pr-4 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
               >
                 <Plus className="w-5 h-5" strokeWidth={2} />
                 일정
