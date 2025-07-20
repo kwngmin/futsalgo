@@ -96,7 +96,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
-      <div className="grid grid-cols-2 items-center shrink-0 px-3 h-16">
+      <div className="grid grid-cols-2 items-center shrink-0 px-4 h-16">
         <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
           <ArrowLeft
             style={{ width: "24px", height: "24px" }}
