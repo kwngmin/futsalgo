@@ -108,8 +108,15 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             <BookmarkIcon className="w-5 h-5" />
           </button> */}
 
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <HeartIcon className="size-5" strokeWidth={2} />
+          </button> */}
+          <button
+            type="button"
+            className="shrink-0 h-9 pl-2 pr-3 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
+          >
+            <HeartIcon className="size-5" strokeWidth={2} />
+            좋아요
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
