@@ -110,7 +110,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           <button
             type="button"
             onClick={() => router.push("/schedule/new")}
-            className="shrink-0 h-9 px-3 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-10 px-4 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
           >
             {/* <ArchiveBoxIcon className="size-5" strokeWidth={1.75} /> */}
             {/* <Plus className="w-5 h-5" strokeWidth={2} /> */}
