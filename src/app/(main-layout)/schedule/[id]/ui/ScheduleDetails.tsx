@@ -110,7 +110,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
               {data.data.schedule?.matchType === "TEAM"
                 ? "다른 팀과의 친선경기"
-                : "우리 팀끼리 연습경기"}
+                : "우리 팀끼리 자체경기"}
             </span>
             <div className="w-full flex justify-center items-center gap-1">
               {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
