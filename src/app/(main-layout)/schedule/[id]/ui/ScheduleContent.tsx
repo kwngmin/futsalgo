@@ -31,7 +31,7 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "참석자",
+    label: "스쿼드",
     value: "attendance",
     isDisabled: false,
   },
@@ -116,11 +116,11 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
       </div>
 
       {/* 탭 */}
-      <div className="bg-slate-200 flex h-12">
+      <div className="flex items-center px-4 h-12">
         {tabs.map((tab) => (
           <div
             key={tab.value}
-            className={`flex justify-center items-center font-semibold text-base px-4 cursor-pointer ${
+            className={`flex justify-center items-center font-semibold text-base px-4 cursor-pointer h-9 rounded-full ${
               selectedTab === tab.value ? "bg-black text-white" : ""
             } ${tab.isDisabled ? "pointer-events-none opacity-50" : ""}`}
             onClick={() => setSelectedTab(tab.value)}

@@ -59,7 +59,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
       {/* 우리팀 & 주최팀vs초청팀 로고 */}
       {data?.data?.schedule?.matchType === "SQUAD" ? (
-        <div className="w-full flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent">
+        <div className="w-full flex flex-col items-center pt-6 pb-3">
           <Image
             src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             alt="hostTeamLogo"
@@ -72,7 +72,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           </span>
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center gap-3 pt-6 pb-3 bg-gradient-to-b from-slate-100 to-transparent px-4">
+        <div className="w-full flex items-center justify-center gap-3 pt-6 pb-3 px-4">
           <div className="grow flex flex-col items-center w-28 sm:w-36 max-w-40">
             <Image
               src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
