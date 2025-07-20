@@ -38,7 +38,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         className="flex px-4 gap-1 cursor-pointer"
         onClick={() => handleScheduleClick(schedule.id)}
       >
-        <div className="grow flex flex-col justify-center h-14">
+        <div className="grow flex flex-col justify-center">
           <div className="flex items-center gap-2">
             <div className="font-medium flex items-center gap-2 truncate leading-none tracking-tight">
               {dDay > 1
@@ -62,6 +62,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
             </div>
           </div>
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+            {/* <CourtBasketballIcon className="size-4" /> */}
             {schedule.place}
           </h3>
         </div>
