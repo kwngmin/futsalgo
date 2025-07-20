@@ -1,26 +1,23 @@
 "use client";
 
-import {
-  // Clock,
-  Vote, //
-} from "lucide-react";
+import { Vote } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
-// import Image from "next/image";
+import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
   const router = useRouter();
   const session = useSession();
 
-  // const timeRange = formatTimeRange({
-  //   time: {
-  //     start: schedule.startTime,
-  //     end: schedule.endTime,
-  //   },
-  // });
+  const timeRange = formatTimeRange({
+    time: {
+      start: schedule.startTime,
+      end: schedule.endTime,
+    },
+  });
 
   // const [period, time] = schedule?.startTime
   //   ?.toLocaleTimeString("ko-KR", {
@@ -41,17 +38,6 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         className="flex px-4 gap-1 cursor-pointer"
         onClick={() => handleScheduleClick(schedule.id)}
       >
-        {/* <div className="font-medium flex items-center gap-2 truncate leading-none w-14 tracking-tight">
-          {dDay > 1
-            ? `D-${dDay}`
-            : dDay === 1
-            ? "내일"
-            : dDay === 0
-            ? "오늘"
-            : `${String(schedule.date.getMonth() + 1)}.${String(
-                schedule.date.getDate()
-              )}`}
-        </div> */}
         <div className="grow flex flex-col justify-center h-14">
           <div className="flex items-center gap-2">
             <div className="font-medium flex items-center gap-2 truncate leading-none tracking-tight">
@@ -61,30 +47,18 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
                 ? "내일"
                 : dDay === 0
                 ? "오늘"
-                : // : `${String(schedule.date.getMonth() + 1)}.${String(
-                  //     schedule.date.getDate()
-                  //   )}`}
-                  schedule.date.toLocaleDateString("ko-KR", {
+                : schedule.date.toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
                   })}
             </div>
             {schedule.matchType === "TEAM" ? (
-              <span className="font-medium text-amber-600">자체전</span>
+              <span className="font-medium text-orange-600">자체전</span>
             ) : (
-              <span className="font-medium text-sky-600">친선전</span>
+              <span className="font-medium text-cyan-600">친선전</span>
             )}
-            <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
-              {/* <Clock className="size-4" /> */}
-              {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-      -
-      ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      })}`}
+            <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
+              {timeRange}
             </div>
           </div>
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">

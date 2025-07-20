@@ -67,7 +67,6 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   );
 
   const handleGoBack = () => {
-    // router.back();
     router.push("/");
   };
 
@@ -116,21 +115,6 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       </div>
 
-      {/* 경기 일정 및 상태 보기 */}
-      {/* <div className="h-9 flex items-center justify-center bg-slate-100 text-muted-foreground text-sm font-semibold">
-        {calculateDday(data.data.schedule?.date as Date) > 1
-          ? `경기하는 날까지 D-${calculateDday(
-              data.data.schedule?.date as Date
-            )}`
-          : data.data.schedule?.status === "READY" && dDay === 1
-          ? "내일"
-          : data.data.schedule?.status === "READY" && dDay === 0
-          ? "준비"
-          : data.data.schedule?.status === "PLAY"
-          ? "경기 중"
-          : "경기 종료"}
-      </div> */}
-
       {/* 탭 */}
       <div className="bg-slate-200 flex h-12">
         {tabs.map((tab) => (
@@ -142,7 +126,6 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
             onClick={() => setSelectedTab(tab.value)}
           >
             {tab.label}
-            {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
           </div>
         ))}
       </div>
