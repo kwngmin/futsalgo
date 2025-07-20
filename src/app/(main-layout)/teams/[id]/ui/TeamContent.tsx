@@ -213,7 +213,7 @@ const TeamContent = ({ id }: { id: string }) => {
           </Button> */}
           <button
             type="button"
-            className="shrink-0 h-9 px-5 gap-1.5 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
           >
             팔로우
           </button>
