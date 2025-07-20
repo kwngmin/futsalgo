@@ -28,7 +28,8 @@ const HomePage = () => {
         <div className="flex gap-3">
           <h1 className="text-2xl font-bold">경기</h1>
           {/* <h1 className="text-2xl font-bold opacity-30">북마크</h1> */}
-          <h1 className="text-2xl font-bold opacity-30">보관함</h1>
+          <h1 className="text-2xl font-bold opacity-30">좋아요</h1>
+          {/* <h1 className="text-2xl font-bold opacity-30">보관함</h1> */}
         </div>
         <div className="flex items-center gap-2">
           {Array.isArray(data?.data?.manageableTeams) &&
