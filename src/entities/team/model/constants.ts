@@ -55,13 +55,3 @@ export const TEAM_RECRUITMENT_STATUS = {
   RECRUITING: "모집중",
   NOT_RECRUITING: "모집마감",
 };
-
-export const MATCH_TYPE_OPTIONS = [
-  { value: "SQUAD", label: "스쿼드 매치 - 팀원끼리 하는 경기" },
-  { value: "TEAM", label: "팀 매치 - 외부 팀과의 경기" },
-];
-
-export const MATCH_TYPE = {
-  TEAM: "팀 매치",
-  SQUAD: "스쿼드 매치",
-};

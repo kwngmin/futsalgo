@@ -14,11 +14,11 @@ export const SCHEDULE_STATUS_LABEL = {
 } as const;
 
 export const MATCH_TYPE_OPTIONS = [
-  { value: "SQUAD", label: "연습경기 - 우리 팀끼리 연습경기" },
-  { value: "TEAM", label: "친선경기 - 다른 팀과의 친선경기" },
+  { value: "SQUAD", label: "자체전 - 우리 팀끼리 자체경기" },
+  { value: "TEAM", label: "친선전 - 다른 팀과의 친선경기" },
 ];
 
 export const MATCH_TYPE = {
-  SQUAD: "연습경기",
-  TEAM: "친선경기",
+  SQUAD: "자체전",
+  TEAM: "친선전",
 };

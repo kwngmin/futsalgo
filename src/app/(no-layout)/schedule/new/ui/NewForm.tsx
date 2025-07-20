@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { MATCH_TYPE_OPTIONS } from "@/entities/team/model/constants";
 import { Input } from "@/shared/components/ui/input";
 import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
@@ -25,6 +24,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { useTeamCodeValidation } from "@/features/validation/hooks/use-validation";
 import { getInvitedTeam } from "../action/getInvitedTeam";
+import { MATCH_TYPE_OPTIONS } from "@/entities/schedule/model/constants";
 // import Image from "next/image";
 
 const newFormSchema = z.object({
