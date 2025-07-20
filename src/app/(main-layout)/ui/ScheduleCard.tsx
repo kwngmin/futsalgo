@@ -1,14 +1,14 @@
 "use client";
 
-import { Clock, Vote } from "lucide-react";
+import {
+  // Clock,
+  Vote,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
-import {
-  // ChatBubbleOvalLeftIcon,
-  BookmarkIcon,
-} from "@heroicons/react/24/outline";
+// import { BookmarkIcon } from "@heroicons/react/24/outline";
 // import Image from "next/image";
 
 const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
@@ -41,43 +41,54 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         className="flex px-4 gap-1 cursor-pointer"
         onClick={() => handleScheduleClick(schedule.id)}
       >
-        <div className="font-medium flex items-center gap-2 truncate leading-none w-14 h-14 tracking-tight">
-          {
-            dDay > 1
-              ? `D-${dDay}`
-              : dDay === 1
-              ? "내일"
-              : dDay === 0
-              ? "오늘"
-              : `${String(schedule.date.getMonth() + 1)}.${String(
-                  schedule.date.getDate()
-                )}`
-            // schedule.startTime?.toLocaleDateString("ko-KR", {
-            //     month: "short",
-            //     day: "numeric",
-            //   })
-          }
-        </div>
-        <div className="grow flex flex-col justify-center">
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
-            {schedule.place}
-            <span className="text-sm font-medium text-indigo-600 mb-0.5">
-              {schedule.matchType === "TEAM" ? "친선경기" : "연습경기"}
-            </span>
-          </h3>
-          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
-            <Clock className="size-4" />
-            {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+        {/* <div className="font-medium flex items-center gap-2 truncate leading-none w-14 tracking-tight">
+          {dDay > 1
+            ? `D-${dDay}`
+            : dDay === 1
+            ? "내일"
+            : dDay === 0
+            ? "오늘"
+            : `${String(schedule.date.getMonth() + 1)}.${String(
+                schedule.date.getDate()
+              )}`}
+        </div> */}
+        <div className="grow flex flex-col justify-center h-14">
+          <div className="flex items-center gap-2">
+            <div className="font-medium flex items-center gap-2 truncate leading-none tracking-tight">
+              {dDay > 1
+                ? `D-${dDay}`
+                : dDay === 1
+                ? "내일"
+                : dDay === 0
+                ? "오늘"
+                : `${String(schedule.date.getMonth() + 1)}.${String(
+                    schedule.date.getDate()
+                  )}`}
+            </div>
+            <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
+              {/* <Clock className="size-4" /> */}
+              {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
       -
       ${schedule?.endTime?.toLocaleTimeString("ko-KR", {
         hour: "2-digit",
         minute: "2-digit",
       })}`}
+            </div>
+            •
+            <span className="font-medium text-muted-foreground">
+              {schedule.matchType === "TEAM" ? "친선경기" : "연습경기"}
+            </span>
           </div>
+          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+            {schedule.place}
+          </h3>
         </div>
+        {/* <div className="flex items-center justify-center gap-2 hover:bg-gray-100 rounded-lg size-14">
+          <BookmarkIcon className="size-5" strokeWidth={2} />
+        </div> */}
       </div>
 
       {schedule.enableAttendanceVote ? (
@@ -108,14 +119,15 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
             </div>
           )}
         </div>
-      ) : (
+      ) : null}
+      {/* ) : (
         <div className="bg-slate-50 rounded-md h-9 text-sm text-muted-foreground font-medium mx-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">{`3경기 • 댓글 2개`}</div>
           <div className="flex items-center gap-2">
             <BookmarkIcon className="size-5" strokeWidth={2} />
           </div>
         </div>
-      )}
+      )} */}
 
       {/* 참가 여부 */}
       {/* <div className="px-4 flex h-11 justify-between items-center gap-4">
