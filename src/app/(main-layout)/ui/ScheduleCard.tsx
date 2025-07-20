@@ -2,7 +2,7 @@
 
 import {
   // Clock,
-  Vote,
+  Vote, //
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -61,10 +61,19 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
                 ? "내일"
                 : dDay === 0
                 ? "오늘"
-                : `${String(schedule.date.getMonth() + 1)}.${String(
-                    schedule.date.getDate()
-                  )}`}
+                : // : `${String(schedule.date.getMonth() + 1)}.${String(
+                  //     schedule.date.getDate()
+                  //   )}`}
+                  schedule.date.toLocaleDateString("ko-KR", {
+                    month: "short",
+                    day: "numeric",
+                  })}
             </div>
+            {schedule.matchType === "TEAM" ? (
+              <span className="font-medium text-amber-600">자체전</span>
+            ) : (
+              <span className="font-medium text-sky-600">친선전</span>
+            )}
             <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground">
               {/* <Clock className="size-4" /> */}
               {`${schedule?.startTime?.toLocaleTimeString("ko-KR", {
@@ -77,12 +86,6 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         minute: "2-digit",
       })}`}
             </div>
-            •
-            {schedule.matchType === "TEAM" ? (
-              <span className="font-medium text-amber-600">자체전</span>
-            ) : (
-              <span className="font-medium text-sky-600">친선전</span>
-            )}
           </div>
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {schedule.place}
