@@ -91,7 +91,7 @@ const TeamCard = ({
       )} */}
 
       {team.recruitmentStatus === "RECRUITING" && (
-        <div className="flex justify-center items-center gap-0.5 bg-indigo-500/5 rounded-full px-1.5 h-12 sm:size-14">
+        <div className="flex justify-center items-center gap-0.5 px-1.5 h-12 sm:size-14">
           {/* <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
             팀전 신청 가능
           </span> */}

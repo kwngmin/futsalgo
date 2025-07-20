@@ -103,8 +103,17 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           />
         </button>
         <div className="flex items-center justify-end gap-2">
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <BookmarkIcon className="w-5 h-5" />
+          </button> */}
+          <button
+            type="button"
+            onClick={() => router.push("/schedule/new")}
+            className="shrink-0 h-9 pl-2 pr-3 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
+          >
+            <BookmarkIcon className="w-5 h-5" />
+            {/* <Plus className="w-5 h-5" strokeWidth={2} /> */}
+            북마크
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="w-5 h-5" />

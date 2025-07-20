@@ -5,7 +5,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
-import { BookmarkIcon } from "@heroicons/react/24/outline";
+import {
+  ArchiveBoxIcon, //
+  // BookmarkIcon,
+} from "@heroicons/react/24/outline";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 
 const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
@@ -67,7 +70,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
           </h3>
         </div>
         <div className="flex items-center justify-center gap-2 hover:bg-gray-100 rounded-lg w-10 h-14">
-          <BookmarkIcon className="size-5" strokeWidth={2} />
+          {/* <Download className="size-5" /> */}
+          <ArchiveBoxIcon className="size-5" strokeWidth={1.75} />
+          {/* <BookmarkIcon className="size-5" strokeWidth={2} /> */}
         </div>
       </div>
 
