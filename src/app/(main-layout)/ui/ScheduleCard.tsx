@@ -41,21 +41,22 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
         className="flex px-4 gap-1 cursor-pointer"
         onClick={() => handleScheduleClick(schedule.id)}
       >
-        <div className="font-medium flex items-center gap-2 truncate leading-none w-20 h-14 tracking-tight">
-          {dDay > 1
-            ? `D-${dDay}`
-            : dDay === 1
-            ? "내일"
-            : dDay === 0
-            ? "오늘"
-            : schedule.startTime?.toLocaleDateString("ko-KR", {
-                month: "short",
-                day: "numeric",
-              })}
-          {/* {schedule.startTime?.toLocaleDateString("ko-KR", {
-            month: "short",
-            day: "numeric",
-          })} */}
+        <div className="font-medium flex items-center gap-2 truncate leading-none w-14 h-14 tracking-tight">
+          {
+            dDay > 1
+              ? `D-${dDay}`
+              : dDay === 1
+              ? "내일"
+              : dDay === 0
+              ? "오늘"
+              : `${String(schedule.date.getMonth() + 1)}.${String(
+                  schedule.date.getDate()
+                )}`
+            // schedule.startTime?.toLocaleDateString("ko-KR", {
+            //     month: "short",
+            //     day: "numeric",
+            //   })
+          }
         </div>
         <div className="grow flex flex-col justify-center">
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
