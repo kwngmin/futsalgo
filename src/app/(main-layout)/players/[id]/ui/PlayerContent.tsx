@@ -127,13 +127,13 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="space-y-4 px-4">
               <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
-                <div className="size-20 flex items-center justify-center flex-shrink-0 relative">
+                <div className="size-20 flex items-center justify-center shrink-0 relative overflow-hidden rounded-4xl">
                   <Image
                     width={80}
                     height={80}
                     src={data?.data?.image ?? ""}
                     alt="profile_image"
-                    className="object-cover scale-105 rounded-4xl"
+                    className="object-cover scale-105"
                   />
                   {data?.data?.condition === "INJURED" && (
                     <InjuredBadge size="lg" />
