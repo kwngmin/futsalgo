@@ -6,6 +6,8 @@ import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import ScheduleDetails from "./ScheduleDetails";
 import { HeartIcon } from "@phosphor-icons/react";
+import { likeSchedule } from "@/app/(main-layout)/actions/like-schedule";
+import { useQueryClient } from "@tanstack/react-query";
 // import { HeartIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -59,40 +61,40 @@ const tabs = [
   },
 ];
 
-const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
+const ScheduleContent = ({
+  scheduleId,
+  isLikedSchedule,
+}: {
+  scheduleId: string;
+  isLikedSchedule?: boolean;
+}) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
   const validTab = tabs.find((t) => t.value === tab);
   const [selectedTab, setSelectedTab] = useState<string>(
     validTab ? validTab.value : tabs[0].value
   );
+  const [isLiked, setIsLiked] = useState(isLikedSchedule);
 
   const handleGoBack = () => {
     router.push("/");
   };
 
-  // const timeRange = formatTimeRange({
-  //   time: {
-  //     start: data.data.schedule?.startTime as Date,
-  //     end: data.data.schedule?.endTime as Date,
-  //   },
-  // });
-
-  // const opposingTeam =
-  //   data.data.schedule?.matchType === "SQUAD"
-  //     ? data.data.schedule.hostTeam
-  //     : data.data.schedule?.guestTeam;
-
-  // const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
-  //   "ko-KR",
-  //   {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   }
-  // );
-
-  // const [period, time] = timeString?.split(" ") || [];
+  const handleLikeClick = async (scheduleId: string) => {
+    const result = await likeSchedule({ scheduleId });
+    console.log(result);
+    if (result.success) {
+      queryClient.invalidateQueries({ queryKey: ["schedules"] });
+      // toast.success(result.message);
+      setIsLiked(true);
+    } else {
+      console.warn(result.error);
+      // toast.error(result.error);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -112,10 +114,14 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <HeartIcon className="size-5" strokeWidth={2} />
           </button> */}
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button
+            className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+            onClick={() => handleLikeClick(scheduleId)}
+          >
             <HeartIcon
-              className="size-5" //
-              weight="bold"
+              // className="size-5" //
+              className={`size-5 ${isLiked ? "text-rose-500" : ""}`} //
+              weight={isLiked ? "fill" : "bold"}
               // weight="fill"
             />
           </button>
