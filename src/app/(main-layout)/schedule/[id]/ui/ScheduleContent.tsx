@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import ScheduleDetails from "./ScheduleDetails";
-import { HeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon } from "@phosphor-icons/react";
+// import { HeartIcon } from "@heroicons/react/24/outline";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -32,7 +33,7 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "스쿼드",
+    label: "명단",
     value: "attendance",
     isDisabled: false,
   },
@@ -111,12 +112,12 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <HeartIcon className="size-5" strokeWidth={2} />
           </button> */}
-          <button
-            type="button"
-            className="shrink-0 h-9 pl-2 pr-3 gap-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
-          >
-            <HeartIcon className="size-5" strokeWidth={2} />
-            좋아요
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+            <HeartIcon
+              className="size-5" //
+              weight="bold"
+              // weight="fill"
+            />
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />

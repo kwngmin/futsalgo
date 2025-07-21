@@ -5,8 +5,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
-import { HeartIcon } from "@heroicons/react/24/outline";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
+import { HeartIcon } from "@phosphor-icons/react";
 
 const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
   const router = useRouter();
@@ -67,7 +67,11 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
           </h3>
         </div>
         <div className="flex items-center justify-center gap-2 hover:bg-gray-100 rounded-lg w-10 h-14">
-          <HeartIcon className="size-5" strokeWidth={2} />
+          <HeartIcon
+            className="size-5" //
+            weight="bold"
+            // weight="fill"
+          />{" "}
         </div>
       </div>
 
