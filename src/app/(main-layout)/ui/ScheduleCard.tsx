@@ -102,7 +102,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
         >
           <HeartIcon
             // className="size-5" //
-            className={`size-5 ${isLiked ? "text-rose-500" : ""}`} //
+            className={`size-5 ${isLiked ? "text-zinc-600" : ""}`} //
+            // className={`size-5 ${isLiked ? "text-rose-500" : ""}`} //
             weight={isLiked ? "fill" : "bold"}
           />
         </div>
