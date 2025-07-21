@@ -362,7 +362,11 @@ model Schedule {
   
   createdById        String
   hostTeamId         String
-  invitedTeamId      String?        // guestTeamId -> invitedTeamId로 변경
+  invitedTeamId      String?        
+
+  // 팀에 배정된 용병 수
+  hostTeamMercenaryCount    Int  @default(0)
+  invitedTeamMercenaryCount Int? @default(0)
 
   // 관계들
   createdBy          User      @relation(fields: [createdById], references: [id])
