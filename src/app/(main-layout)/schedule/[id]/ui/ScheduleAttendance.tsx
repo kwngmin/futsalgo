@@ -48,6 +48,27 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
       }
     };
 
+    if (isLoading) {
+      return (
+        <div className="mt-4 px-4">
+          <div className="h-12 rounded-md bg-gray-100 animate-pulse" />
+          <div className="h-[98px] rounded-2xl bg-gray-100 animate-pulse my-2" />
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0"
+            >
+              <div className="flex items-center gap-2">
+                <div className="size-8 rounded-full bg-gray-200 animate-pulse" />
+                <div className="h-4 w-20 bg-gray-100 animate-pulse" />
+              </div>
+              <div className="h-4 w-16 bg-gray-100 animate-pulse" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div className="mt-4 px-4">
         {data?.data?.manageableTeams.includes(teamType) ? (
