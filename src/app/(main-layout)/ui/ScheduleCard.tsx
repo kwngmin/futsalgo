@@ -72,9 +72,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
                   })}
             </div>
             {schedule.matchType === "TEAM" ? (
-              <span className="font-medium text-orange-600">자체전</span>
+              <span className="font-medium text-indigo-600">친선전</span>
             ) : (
-              <span className="font-medium text-cyan-600">친선전</span>
+              <span className="font-medium text-orange-600">자체전</span>
             )}
             <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
               {timeRange}
