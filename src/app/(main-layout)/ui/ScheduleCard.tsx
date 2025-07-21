@@ -3,14 +3,25 @@
 import { Vote } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ScheduleWithDetails } from "../home/actions/get-schedules";
+// import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 import { HeartIcon } from "@phosphor-icons/react";
 import { likeSchedule } from "../actions/like-schedule";
 import { useQueryClient } from "@tanstack/react-query";
+import { Prisma } from "@prisma/client";
 
-const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
+type ScheduleCardProps = Prisma.ScheduleGetPayload<{
+  include: {
+    hostTeam: true;
+    invitedTeam: true;
+    attendances: true;
+    createdBy: true;
+    likes: true;
+  };
+}>;
+
+const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   const router = useRouter();
   const session = useSession();
   const queryClient = useQueryClient();

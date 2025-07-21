@@ -1,19 +1,19 @@
 "use client";
 
-import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowDownUp, Plus, Search } from "lucide-react";
-import ScheduleCard from "./ui/ScheduleCard";
+import ScheduleCard from "../ui/ScheduleCard";
+import { getLikedSchedules } from "./actions/get-liked-schedules";
 
-const HomePage = () => {
+const LikedPage = () => {
   const router = useRouter();
   const session = useSession();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["schedules", session.data?.user?.id],
-    queryFn: getSchedules,
+    queryKey: ["liked-schedules", session.data?.user?.id],
+    queryFn: getLikedSchedules,
     placeholderData: keepPreviousData,
   });
 
@@ -26,14 +26,14 @@ const HomePage = () => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold">경기</h1>
-          {/* <h1 className="text-2xl font-bold opacity-30">북마크</h1> */}
           <h1
             className="text-2xl font-bold opacity-30"
-            onClick={() => router.push("/liked")}
+            onClick={() => router.push("/")}
           >
-            좋아요
+            경기
           </h1>
+          {/* <h1 className="text-2xl font-bold opacity-30">북마크</h1> */}
+          <h1 className="text-2xl font-bold">좋아요</h1>
           {/* <h1 className="text-2xl font-bold opacity-30">보관함</h1> */}
         </div>
         <div className="flex items-center gap-2">
@@ -58,16 +58,8 @@ const HomePage = () => {
       </div>
       {/* MatchesPage */}
       <div className="">
-        {/* 오늘 경기 */}
-        {data?.data?.todaysSchedules?.map((schedule) => {
-          return <ScheduleCard schedule={schedule} key={schedule.id} />;
-        })}
-        {/* 예정된 경기 */}
-        {data?.data?.upcomingSchedules?.map((schedule) => {
-          return <ScheduleCard schedule={schedule} key={schedule.id} />;
-        })}
-        {/* 지난 경기 */}
-        {data?.data?.pastSchedules?.map((schedule) => {
+        {/* 좋아요 한 경기 */}
+        {data?.data?.likedSchedules?.map((schedule) => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;
         })}
       </div>
@@ -75,4 +67,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default LikedPage;
