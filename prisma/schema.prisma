@@ -228,7 +228,7 @@ model User {
   attendances     ScheduleAttendance[]
   comments        ScheduleComment[]
   uploadedPhotos  SchedulePhoto[]      // 업로드한 사진들
-  bookmarkedSchedules ScheduleBookmark[] // 북마크한 일정들
+  likedSchedules  ScheduleLike[] // 좋아요한 일정들
 
   // 매치 관련
   createdMatches  Match[]
@@ -374,7 +374,7 @@ model Schedule {
   attendances        ScheduleAttendance[]
   comments           ScheduleComment[]
   photos             SchedulePhoto[]    // String[] -> 별도 모델로 변경
-  bookmarks          ScheduleBookmark[] // 북마크 관계 추가
+  likes              ScheduleLike[] // 좋아요 관계 추가
   
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
@@ -407,7 +407,7 @@ model SchedulePhoto {
 }
 
 // 북마크 모델 추가
-model ScheduleBookmark {
+model ScheduleLike {
   id          String   @id @default(cuid())
   scheduleId  String
   userId      String
@@ -420,7 +420,7 @@ model ScheduleBookmark {
   @@unique([scheduleId, userId]) // 같은 사용자가 같은 스케줄을 중복 북마크 방지
   @@index([userId])              // 사용자별 북마크 조회 최적화
   @@index([scheduleId])          // 스케줄별 북마크 수 조회 최적화
-  @@map("schedule_bookmarks")
+  @@map("schedule_likes")
 }
 
 model ScheduleAttendance {
