@@ -49,7 +49,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   return (
     <div className="space-y-3">
       {isLoading && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 backdrop-blur-lg rounded-lg">
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 rounded-lg">
           <Loader2
             className="w-4 h-4 animate-spin"
             style={{ width: "40px", height: "40px", color: "gray" }}
@@ -59,7 +59,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
       {/* 우리팀 & 주최팀vs초청팀 로고 */}
       {data?.data?.schedule?.matchType === "SQUAD" ? (
-        <div className="w-full flex flex-col items-center pt-6 bg-gradient-to-b from-slate-100 to-transparent">
+        <div className="w-full flex flex-col items-center pt-6 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
           <Image
             src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             alt="hostTeamLogo"
@@ -72,7 +72,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           </span>
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center gap-3 pt-6 bg-gradient-to-b from-slate-100 to-transparent px-4">
+        <div className="w-full flex items-center justify-center gap-3 pt-6 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
           <div className="grow flex flex-col items-center w-28 sm:w-36 max-w-40">
             <Image
               src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
