@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowDownUp, Plus, Search } from "lucide-react";
 import ScheduleCard from "../ui/ScheduleCard";
 import { getLikedSchedules } from "./actions/get-liked-schedules";
+import LikedPageLoading from "./loading";
 
 const LikedPage = () => {
   const router = useRouter();
@@ -17,9 +18,9 @@ const LikedPage = () => {
     placeholderData: keepPreviousData,
   });
 
-  console.log(data, "data");
-  console.log(isLoading, "isLoading");
-  console.log(error, "error");
+  if (isLoading) {
+    return <LikedPageLoading />;
+  }
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -27,14 +28,12 @@ const LikedPage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1
-            className="text-2xl font-bold opacity-30"
+            className="text-2xl font-bold opacity-30 cursor-pointer"
             onClick={() => router.push("/")}
           >
             경기
           </h1>
-          {/* <h1 className="text-2xl font-bold opacity-30">북마크</h1> */}
-          <h1 className="text-2xl font-bold">좋아요</h1>
-          {/* <h1 className="text-2xl font-bold opacity-30">보관함</h1> */}
+          <h1 className="text-2xl font-bold cursor-default">좋아요</h1>
         </div>
         <div className="flex items-center gap-2">
           {Array.isArray(data?.data?.manageableTeams) &&
@@ -56,12 +55,13 @@ const LikedPage = () => {
           </button>
         </div>
       </div>
-      {/* MatchesPage */}
+      {/* LikedContent */}
       <div className="">
         {/* 좋아요 한 경기 */}
         {data?.data?.likedSchedules?.map((schedule) => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;
         })}
+        {error && <div className="text-red-500">{error.message}</div>}
       </div>
     </div>
   );

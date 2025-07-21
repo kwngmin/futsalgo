@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowDownUp, Plus, Search } from "lucide-react";
 import ScheduleCard from "./ui/ScheduleCard";
+import SchedulePageLoading from "./ui/loading";
 
 const HomePage = () => {
   const router = useRouter();
@@ -18,23 +19,23 @@ const HomePage = () => {
   });
 
   console.log(data, "data");
-  console.log(isLoading, "isLoading");
-  console.log(error, "error");
+
+  if (isLoading) {
+    return <SchedulePageLoading />;
+  }
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold">경기</h1>
-          {/* <h1 className="text-2xl font-bold opacity-30">북마크</h1> */}
+          <h1 className="text-2xl font-bold cursor-default">경기</h1>
           <h1
-            className="text-2xl font-bold opacity-30"
+            className="text-2xl font-bold opacity-30 cursor-pointer"
             onClick={() => router.push("/liked")}
           >
             좋아요
           </h1>
-          {/* <h1 className="text-2xl font-bold opacity-30">보관함</h1> */}
         </div>
         <div className="flex items-center gap-2">
           {Array.isArray(data?.data?.manageableTeams) &&
@@ -56,7 +57,7 @@ const HomePage = () => {
           </button>
         </div>
       </div>
-      {/* MatchesPage */}
+      {/* SchedulePage */}
       <div className="">
         {/* 오늘 경기 */}
         {data?.data?.todaysSchedules?.map((schedule) => {
@@ -70,6 +71,7 @@ const HomePage = () => {
         {data?.data?.pastSchedules?.map((schedule) => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;
         })}
+        {error && <div className="text-red-500">{error.message}</div>}
       </div>
     </div>
   );
