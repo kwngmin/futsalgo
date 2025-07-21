@@ -72,9 +72,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
                   })}
             </div>
             {schedule.matchType === "TEAM" ? (
-              <span className="font-medium text-indigo-600">친선전</span>
+              <span className="font-medium text-sky-600">친선전</span>
             ) : (
-              <span className="font-medium text-orange-600">자체전</span>
+              <span className="font-medium text-teal-600">자체전</span>
             )}
             <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
               {timeRange}
@@ -90,10 +90,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
           onClick={() => handleLikeClick(schedule.id)}
         >
           <HeartIcon
+            // className="size-5" //
             className={`size-5 ${isLiked ? "text-rose-500" : ""}`} //
             weight={isLiked ? "fill" : "bold"}
-            // weight="bold"
-            // weight="fill"
           />
         </div>
       </div>
