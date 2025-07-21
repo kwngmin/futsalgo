@@ -1,10 +1,11 @@
 "use client";
 
-import { Prisma } from "@prisma/client";
+import { AttendanceStatus, Prisma } from "@prisma/client";
 import { RefreshCcw, SquareCheckBig, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { addAttendances } from "../actions/addAttendances";
 import { updateAttendance } from "../actions/updateAttendance";
+import { useQueryClient } from "@tanstack/react-query";
 // import Image from "next/image";
 
 type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
@@ -32,9 +33,32 @@ const ManageAttendanceContent = ({
   teamType: "HOST" | "INVITED";
 }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   console.log(data, "data");
   console.log(teamId, "teamId");
   console.log(teamType, "teamType");
+
+  const handleUpdate = async ({
+    attendanceId,
+    attendanceStatus,
+  }: {
+    attendanceId: string;
+    attendanceStatus: AttendanceStatus;
+  }) => {
+    try {
+      await updateAttendance({
+        scheduleId,
+        teamId,
+        teamType,
+        attendanceId,
+        attendanceStatus,
+      });
+      queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // console.log(scheduleId, teamId, "scheduleId, teamId");
   return (
@@ -119,10 +143,7 @@ const ManageAttendanceContent = ({
                           : "text-muted-foreground font-medium"
                       }`}
                       onClick={() =>
-                        updateAttendance({
-                          scheduleId,
-                          teamId,
-                          teamType,
+                        handleUpdate({
                           attendanceId: attendance.id,
                           attendanceStatus: "ATTENDING",
                         })
@@ -137,10 +158,7 @@ const ManageAttendanceContent = ({
                           : "text-muted-foreground font-medium"
                       }`}
                       onClick={() =>
-                        updateAttendance({
-                          scheduleId,
-                          teamId,
-                          teamType,
+                        handleUpdate({
                           attendanceId: attendance.id,
                           attendanceStatus: "NOT_ATTENDING",
                         })
@@ -155,10 +173,7 @@ const ManageAttendanceContent = ({
                           : "text-muted-foreground font-medium"
                       }`}
                       onClick={() =>
-                        updateAttendance({
-                          scheduleId,
-                          teamId,
-                          teamType,
+                        handleUpdate({
                           attendanceId: attendance.id,
                           attendanceStatus: "UNDECIDED",
                         })
