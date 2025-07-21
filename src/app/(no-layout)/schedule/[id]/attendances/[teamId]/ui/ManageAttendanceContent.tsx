@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { RefreshCcw, SquareCheckBig, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { addAttendances } from "../actions/addAttendances";
+import { updateAttendance } from "../actions/updateAttendance";
 // import Image from "next/image";
 
 type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
@@ -40,7 +41,7 @@ const ManageAttendanceContent = ({
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-bold">참석자 등록 관리</h1>
+        <h1 className="text-2xl font-bold">참석자 명단 관리</h1>
         <div className="flex items-center gap-2">
           <button
             className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
@@ -117,6 +118,15 @@ const ManageAttendanceContent = ({
                           ? "bg-white border shadow-xs font-semibold"
                           : "text-muted-foreground font-medium"
                       }`}
+                      onClick={() =>
+                        updateAttendance({
+                          scheduleId,
+                          teamId,
+                          teamType,
+                          attendanceId: attendance.id,
+                          attendanceStatus: "ATTENDING",
+                        })
+                      }
                     >
                       참석
                     </div>
@@ -126,6 +136,15 @@ const ManageAttendanceContent = ({
                           ? "bg-white border shadow-xs font-semibold"
                           : "text-muted-foreground font-medium"
                       }`}
+                      onClick={() =>
+                        updateAttendance({
+                          scheduleId,
+                          teamId,
+                          teamType,
+                          attendanceId: attendance.id,
+                          attendanceStatus: "NOT_ATTENDING",
+                        })
+                      }
                     >
                       불참
                     </div>
@@ -135,6 +154,15 @@ const ManageAttendanceContent = ({
                           ? "bg-white border shadow-xs font-semibold"
                           : "text-muted-foreground font-medium"
                       }`}
+                      onClick={() =>
+                        updateAttendance({
+                          scheduleId,
+                          teamId,
+                          teamType,
+                          attendanceId: attendance.id,
+                          attendanceStatus: "UNDECIDED",
+                        })
+                      }
                     >
                       미정
                     </div>
