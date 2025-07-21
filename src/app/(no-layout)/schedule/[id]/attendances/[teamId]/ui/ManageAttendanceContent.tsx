@@ -3,8 +3,8 @@
 import { AttendanceStatus, Prisma } from "@prisma/client";
 import { RefreshCcw, SquareCheckBig, Trash, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { addAttendances } from "../actions/addAttendances";
-import { updateAttendance } from "../actions/updateAttendance";
+import { addAttendances } from "../actions/add-attendances";
+import { updateAttendance } from "../actions/update-attendance";
 import { useQueryClient } from "@tanstack/react-query";
 // import Image from "next/image";
 

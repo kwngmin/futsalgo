@@ -3,11 +3,11 @@
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import {
-  // Prisma,
   Team,
   Schedule,
   ScheduleAttendance,
   User,
+  ScheduleLike,
 } from "@prisma/client";
 
 export interface ScheduleWithDetails extends Schedule {
@@ -15,16 +15,8 @@ export interface ScheduleWithDetails extends Schedule {
   invitedTeam: Team | null;
   attendances: ScheduleAttendance[];
   createdBy: User;
+  likes: ScheduleLike[];
 }
-
-// const scheduleWithDetails = Prisma.validator<Prisma.ScheduleDefaultArgs>()({
-//   include: {
-//     hostTeam: true,
-//     invitedTeam: true,
-//     attendances: true,
-//     createdBy: true,
-//   },
-// });
 
 // export const scheduleWithDetails = {
 //   include: {
@@ -47,6 +39,7 @@ export interface GetSchedulesResponse {
     upcomingSchedules: ScheduleWithDetails[];
     pastSchedules: ScheduleWithDetails[];
     manageableTeams: Team[];
+    likes: ScheduleLike[];
   };
 }
 
@@ -71,6 +64,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         invitedTeam: true,
         attendances: true,
         createdBy: true,
+        likes: true,
       },
       orderBy: {
         date: "desc",
@@ -88,6 +82,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
           upcomingSchedules: [],
           pastSchedules,
           manageableTeams: [],
+          likes: [],
         },
       };
     }
@@ -139,6 +134,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         invitedTeam: true,
         attendances: true,
         createdBy: true,
+        likes: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -161,6 +157,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         invitedTeam: true,
         attendances: true,
         createdBy: true,
+        likes: true,
       },
       orderBy: {
         date: "asc",
@@ -175,6 +172,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         todaysSchedules,
         upcomingSchedules,
         manageableTeams,
+        likes: [],
       },
     };
   } catch (error) {

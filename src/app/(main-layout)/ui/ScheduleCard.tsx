@@ -7,10 +7,13 @@ import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 import { HeartIcon } from "@phosphor-icons/react";
+import { likeSchedule } from "../actions/like-schedule";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
   const router = useRouter();
   const session = useSession();
+  const queryClient = useQueryClient();
 
   const timeRange = formatTimeRange({
     time: {
@@ -32,13 +35,29 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
     router.push(`/schedule/${scheduleId}`);
   };
 
+  const handleLikeClick = async (scheduleId: string) => {
+    const result = await likeSchedule({ scheduleId });
+    console.log(result);
+    if (result.success) {
+      queryClient.invalidateQueries({ queryKey: ["schedules"] });
+      // toast.success(result.message);
+    } else {
+      console.warn(result.error);
+      // toast.error(result.error);
+    }
+  };
+
+  const isLiked = schedule.likes.some(
+    (like) => like.userId === session.data?.user?.id
+  );
+
   return (
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
-      <div
-        className="flex px-4 gap-1 cursor-pointer"
-        onClick={() => handleScheduleClick(schedule.id)}
-      >
-        <div className="grow flex flex-col justify-center">
+      <div className="flex px-4 gap-1 cursor-pointer">
+        <div
+          className="grow flex flex-col justify-center"
+          onClick={() => handleScheduleClick(schedule.id)}
+        >
           <div className="flex items-center gap-2">
             <div className="font-medium flex items-center gap-2 truncate leading-none tracking-tight">
               {dDay > 1
@@ -66,12 +85,16 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleWithDetails }) => {
             {schedule.place}
           </h3>
         </div>
-        <div className="flex items-center justify-center gap-2 hover:bg-gray-100 rounded-lg w-10 h-14">
+        <div
+          className="flex items-center justify-center gap-2 hover:bg-gray-100 rounded-lg w-10 h-14"
+          onClick={() => handleLikeClick(schedule.id)}
+        >
           <HeartIcon
-            className="size-5" //
-            weight="bold"
+            className={`size-5 ${isLiked ? "text-rose-500" : ""}`} //
+            weight={isLiked ? "fill" : "bold"}
+            // weight="bold"
             // weight="fill"
-          />{" "}
+          />
         </div>
       </div>
 
