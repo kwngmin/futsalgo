@@ -90,7 +90,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             matchType={data.data.schedule?.matchType}
           />
         ) : (
-          <div className="w-full flex items-center justify-center gap-1 sm:gap-0 py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+          <div className="w-full flex items-center justify-center sm:gap-0 py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
             <TeamLogo
               logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               teamName={data.data.schedule?.hostTeam?.name}
@@ -110,7 +110,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )}
 
         {/* 공통 */}
-        <div className="w-full flex flex-col items-center justify-center px-4 py-2 mb-8">
+        <div className="w-full flex flex-col items-center justify-center px-4 py-2 mb-6">
           <span className="flex items-center justify-center font-semibold text-2xl tracking-tight">
             {data.data.schedule?.matchType === "TEAM"
               ? "다른 팀과의 친선경기"

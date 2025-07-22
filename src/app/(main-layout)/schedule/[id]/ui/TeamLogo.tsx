@@ -24,8 +24,8 @@ const TeamLogo = ({
       <Image
         src={logoUrl ?? ""}
         alt={`${teamType === "HOST" ? "Host" : "Invited"} Team Logo`}
-        width={88}
-        height={88}
+        width={80}
+        height={80}
         className="sm:size-16 mt-4"
       />
       {/* <span className="sm:text-lg font-semibold">{teamName}</span> */}
