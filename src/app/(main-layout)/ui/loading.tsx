@@ -3,7 +3,7 @@ const SchedulePageLoading = () => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold cursor-default">경기</h1>
+          <h1 className="text-2xl font-bold cursor-default">경기일정</h1>
           <h1 className="text-2xl font-bold opacity-30 cursor-default">
             좋아요
           </h1>
