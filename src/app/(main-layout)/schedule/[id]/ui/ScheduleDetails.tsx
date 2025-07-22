@@ -97,7 +97,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               teamType="HOST"
               matchType={data.data.schedule?.matchType}
             />
-            <span className="text-center text-2xl font-bold shrink-0 w-9">
+            <span className="text-center text-2xl sm:text-xl font-bold shrink-0 w-9 mt-4">
               VS
             </span>
             <TeamLogo
@@ -110,7 +110,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )}
 
         {/* 공통 */}
-        <div className="w-full flex flex-col items-center justify-center px-4 py-3 mb-6">
+        <div className="w-full flex flex-col items-center justify-center px-4 mb-6">
           <span className="flex items-center justify-center font-semibold text-2xl tracking-tight">
             {data.data.schedule?.matchType === "TEAM"
               ? "다른 팀과의 친선경기"

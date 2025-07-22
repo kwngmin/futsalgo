@@ -12,22 +12,23 @@ const TeamLogo = ({
   teamType: TeamType;
   matchType: MatchType;
 }) => {
+  console.log(teamName);
   return (
     <div
       className={
         matchType === "TEAM"
-          ? "grow flex flex-col items-center gap-2 w-28 sm:w-36 sm:max-w-56"
+          ? "flex flex-col items-center gap-2 w-28 sm:w-24"
           : "w-full flex flex-col items-center gap-2 py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent"
       }
     >
       <Image
         src={logoUrl ?? ""}
         alt={`${teamType === "HOST" ? "Host" : "Invited"} Team Logo`}
-        width={64}
-        height={64}
-        className="size-16 mt-4"
+        width={80}
+        height={80}
+        className="size-20 sm:size-16 mt-4"
       />
-      <span className="sm:text-lg font-semibold">{teamName}</span>
+      {/* <span className="sm:text-lg font-semibold">{teamName}</span> */}
     </div>
   );
 };
