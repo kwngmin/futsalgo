@@ -79,51 +79,52 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           <div className="text-base text-muted-foreground">로딩 중입니다.</div>
         </div>
       )}
-      {/* 우리팀 & 주최팀vs초청팀 로고 */}
-      {data?.data?.schedule?.matchType === "SQUAD" ? (
-        <TeamLogo
-          logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-          teamName={data.data.schedule?.hostTeam?.name ?? ""}
-          teamType="HOST"
-          matchType={data.data.schedule?.matchType}
-        />
-      ) : (
-        <div className="w-full flex items-center justify-center pt-6 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+
+      <div className="relative">
+        {/* 우리팀 & 주최팀vs초청팀 로고 */}
+        {data?.data?.schedule?.matchType === "SQUAD" ? (
           <TeamLogo
             logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-            teamName={data.data.schedule?.hostTeam?.name}
+            teamName={data.data.schedule?.hostTeam?.name ?? ""}
             teamType="HOST"
             matchType={data.data.schedule?.matchType}
           />
-          <span className="text-2xl font-bold">VS</span>
-          <TeamLogo
-            logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
-            teamName={data.data.schedule?.invitedTeam?.name ?? ""}
-            teamType="INVITED"
-            matchType={data.data.schedule?.matchType}
-          />
-        </div>
-      )}
+        ) : (
+          <div className="w-full flex items-center justify-center py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+            <TeamLogo
+              logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+              teamName={data.data.schedule?.hostTeam?.name}
+              teamType="HOST"
+              matchType={data.data.schedule?.matchType}
+            />
+            <span className="text-2xl font-bold">VS</span>
+            <TeamLogo
+              logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
+              teamName={data.data.schedule?.invitedTeam?.name ?? ""}
+              teamType="INVITED"
+              matchType={data.data.schedule?.matchType}
+            />
+          </div>
+        )}
 
-      {/* 공통 */}
-      <div className="w-full flex flex-col items-center justify-center p-4">
-        <span className="flex items-center justify-center font-semibold text-2xl tracking-tight">
-          {data.data.schedule?.matchType === "TEAM"
-            ? "다른 팀과의 친선경기"
-            : "우리 팀끼리 자체경기"}
-        </span>
-        <div className="w-full flex justify-center items-center gap-1 text-lg">
-          {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-            month: "long",
-            day: "numeric",
-            weekday: "long",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+        {/* 공통 */}
+        <div className="w-full flex flex-col items-center justify-center p-4 mb-4">
+          <span className="flex items-center justify-center font-semibold text-2xl tracking-tight">
+            {data.data.schedule?.matchType === "TEAM"
+              ? "다른 팀과의 친선경기"
+              : "우리 팀끼리 자체경기"}
+          </span>
+          <div className="w-full flex justify-center items-center gap-1 text-lg">
+            {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
         </div>
-      </div>
 
-      <div className="relative">
         {/* 경기 시작 버튼 */}
         {/* <div className="p-4">
       <div className="w-full flex flex-col items-center">
@@ -400,7 +401,6 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             : ""}
         </p>
       </div>
-
       {/* 팀원 */}
       {/* {selectedTab === "members" && (
     <TeamMemberList
