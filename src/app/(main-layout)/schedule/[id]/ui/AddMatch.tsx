@@ -83,7 +83,9 @@ const AddMatch = ({
                   ) : (
                     <div className="w-10 h-10 bg-gray-200 rounded-full" />
                   )}
-                  <span className="text-xs sm:text-sm">{homeTeam.name}</span>
+                  <span className="text-sm tracking-tight">
+                    {homeTeam.name}
+                  </span>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center gap-2 w-12 sm:w-16 shrink-0">
@@ -117,7 +119,9 @@ const AddMatch = ({
                   ) : (
                     <div className="w-10 h-10 bg-gray-200 rounded-full" />
                   )}
-                  <span className="text-xs sm:text-sm">{awayTeam.name}</span>
+                  <span className="text-sm tracking-tight">
+                    {awayTeam.name}
+                  </span>
                 </div>
               </div>
             </div>
