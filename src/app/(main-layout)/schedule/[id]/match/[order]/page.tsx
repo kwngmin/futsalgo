@@ -8,7 +8,7 @@ const MatchPage = async ({
   const { order } = await params;
   const session = await auth();
   console.log(session);
-  return <div>MatchPag {order}</div>;
+  return <div>MatchPage {order}</div>;
 };
 
 export default MatchPage;

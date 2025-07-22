@@ -14,12 +14,13 @@ import {
   UserRound,
 } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/shared/components/ui/button";
+// import { Button } from "@/shared/components/ui/button";
 // import {
 //   CourtBasketballIcon,
 //   SoccerBallIcon,
 // } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
+import AddMatch from "./AddMatch";
 // import { calculateDday } from "./ScheduleContent";
 
 const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
@@ -29,7 +30,6 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
     queryKey: ["schedule", scheduleId],
     queryFn: () => getSchedule(scheduleId),
   });
-  console.warn(error, "error");
 
   if (!data) {
     return (
@@ -46,6 +46,12 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       </div>
     );
   }
+
+  if (error) {
+    console.warn(error, "error");
+  }
+
+  console.log(data, "data");
 
   // const dDay = calculateDday(data.data.schedule?.date as Date);
 
@@ -243,8 +249,25 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
     </div> */}
 
         {/* 경기 추가 */}
-
-        <div className="px-4 py-2">
+        <AddMatch
+          scheduleId={scheduleId}
+          matchType={data.data.schedule?.matchType}
+          hostTeam={{
+            id: data.data.schedule?.hostTeamId,
+            name: data.data.schedule?.hostTeam?.name,
+            logoUrl: data.data.schedule?.hostTeam?.logoUrl,
+          }}
+          invitedTeam={
+            data.data.schedule?.matchType === "TEAM"
+              ? {
+                  id: data.data.schedule?.invitedTeamId as string,
+                  name: data.data.schedule?.invitedTeam?.name as string,
+                  logoUrl: data.data.schedule?.invitedTeam?.logoUrl,
+                }
+              : undefined
+          }
+        />
+        {/* <div className="px-4 py-2">
           <Button
             type="button"
             className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
@@ -255,7 +278,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           >
             경기 추가
           </Button>
-        </div>
+        </div> */}
 
         <div className="">
           {/* 안내 사항 */}

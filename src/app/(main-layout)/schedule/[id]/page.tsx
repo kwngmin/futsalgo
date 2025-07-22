@@ -2,7 +2,11 @@ import { auth } from "@/shared/lib/auth";
 import ScheduleContent from "./ui/ScheduleContent";
 import { prisma } from "@/shared/lib/prisma";
 
-const MatchesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+const SchedulePage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
   const { id } = await params;
   const session = await auth();
   const userId = session?.user.id;
@@ -23,4 +27,4 @@ const MatchesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   return <ScheduleContent scheduleId={id} />;
 };
 
-export default MatchesPage;
+export default SchedulePage;
