@@ -90,7 +90,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             matchType={data.data.schedule?.matchType}
           />
         ) : (
-          <div className="w-full flex items-center justify-center py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+          <div className="w-full flex items-center justify-center gap-4 sm:gap-2 py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
             <TeamLogo
               logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               teamName={data.data.schedule?.hostTeam?.name}
