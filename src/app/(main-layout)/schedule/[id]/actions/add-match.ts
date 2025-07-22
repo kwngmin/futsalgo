@@ -61,6 +61,28 @@ export async function addMatch(scheduleId: string) {
       },
     });
 
+    if (schedule.matchType === "TEAM") {
+      // 로그인 및 유저 확인
+      const attendances = await prisma.scheduleAttendance.findMany({
+        where: {
+          scheduleId,
+          attendanceStatus: "ATTENDING",
+        },
+        select: {
+          userId: true,
+          teamType: true,
+        },
+      });
+
+      await prisma.lineup.createMany({
+        data: attendances.map((attendance) => ({
+          matchId: match.id,
+          userId: attendance.userId,
+          side: attendance.teamType === "HOST" ? "HOME" : "AWAY",
+        })),
+      });
+    }
+
     return {
       success: true,
       data: match,
