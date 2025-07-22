@@ -97,7 +97,9 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               teamType="HOST"
               matchType={data.data.schedule?.matchType}
             />
-            <span className="text-2xl font-bold">VS</span>
+            <span className="text-center text-2xl font-bold shrink-0 w-9">
+              VS
+            </span>
             <TeamLogo
               logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
               teamName={data.data.schedule?.invitedTeam?.name ?? ""}
