@@ -478,7 +478,7 @@ model Match {
   id              String   @id @default(cuid())
   scheduleId      String
   order           Int      @default(autoincrement())// 몇 번째 경기인지
-  durationMinutes Int
+  durationMinutes Int?
   
   // 점수
   homeScore       Int      @default(0)
