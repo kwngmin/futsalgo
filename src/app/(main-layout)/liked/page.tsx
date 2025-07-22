@@ -31,7 +31,7 @@ const LikedPage = () => {
             className="text-2xl font-bold opacity-30 cursor-pointer"
             onClick={() => router.push("/")}
           >
-            경기
+            경기일정
           </h1>
           <h1 className="text-2xl font-bold cursor-default">좋아요</h1>
         </div>

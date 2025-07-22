@@ -118,6 +118,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
           </button>
+          ㅡ
         </div>
       </div>
       {data ? (
@@ -127,14 +128,16 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="space-y-4 px-4">
               <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
-                <div className="size-20 flex items-center justify-center shrink-0 relative overflow-hidden rounded-4xl">
-                  <Image
-                    width={80}
-                    height={80}
-                    src={data?.data?.image ?? ""}
-                    alt="profile_image"
-                    className="object-cover scale-105"
-                  />
+                <div className="relative">
+                  <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl">
+                    <Image
+                      width={80}
+                      height={80}
+                      src={data?.data?.image ?? ""}
+                      alt="profile_image"
+                      className="object-cover scale-105"
+                    />
+                  </div>
                   {data?.data?.condition === "INJURED" && (
                     <InjuredBadge size="lg" />
                   )}

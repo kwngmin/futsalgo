@@ -1,35 +1,22 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-// import { Users, Shirt, MoreHorizontal, Newspaper, Home } from "lucide-react";
-// import {
-//   HomeIcon,
-//   TrophyIcon,
-//   FaceSmileIcon,
-//   ChatBubbleOvalLeftIcon,
-//   EllipsisHorizontalCircleIcon,
-// } from "@heroicons/react/24/solid";
-// import {
-//   HomeIcon as HomeIconOutline,
-//   TrophyIcon as TrophyIconOutline,
-//   FaceSmileIcon as FaceSmileIconOutline,
-//   ChatBubbleOvalLeftIcon as ChatBubbleOvalLeftOutline,
-//   EllipsisHorizontalIcon as EllipsisHorizontalOutline,
-// } from "@heroicons/react/24/outline";
 import {
   // HouseIcon,
+  // CourtBasketballIcon,
+  CalendarIcon,
   TShirtIcon,
   UserIcon,
   ChatsCircleIcon,
   DotsThreeOutlineIcon,
-  CourtBasketballIcon,
 } from "@phosphor-icons/react";
 
 export const navItems = [
   {
     id: "home",
-    label: "경기",
-    icon: CourtBasketballIcon,
+    label: "경기일정",
+    // icon: CourtBasketballIcon,
+    icon: CalendarIcon,
     href: "/",
   },
   {
