@@ -173,7 +173,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         {/* 경기 정보 */}
         {data.data.schedule.matches.length > 0 && (
           <div className="space-y-2 mb-2">
-            {data.data.schedule.matches.map((match) => (
+            {data.data.schedule.matches.map((match, index) => (
               <div
                 className="overflow-hidden rounded-lg border mx-4"
                 key={match.id}
@@ -189,7 +189,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
                       className="size-5 text-gray-600"
                       weight="fill"
                     />
-                    <span className="font-medium">{match.order} 경기</span>
+                    <span className="font-medium">{index + 1} 경기</span>
                     {match.durationMinutes && (
                       <span className="text-sm text-gray-500">
                         {match.durationMinutes}분
