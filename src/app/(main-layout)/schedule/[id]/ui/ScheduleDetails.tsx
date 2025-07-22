@@ -111,12 +111,12 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
         {/* 공통 */}
         <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
-          <span className="flex items-center justify-center font-semibold text-2xl">
+          <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl">
             {data.data.schedule?.matchType === "TEAM"
               ? "다른 팀과의 친선경기"
               : "우리 팀끼리 자체경기"}
           </span>
-          <div className="w-full flex justify-center items-center gap-1 text-lg tracking-tight">
+          <div className="w-full flex justify-center items-center gap-1 text-lg tracking-tight text-muted-foreground">
             {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
               month: "long",
               day: "numeric",
