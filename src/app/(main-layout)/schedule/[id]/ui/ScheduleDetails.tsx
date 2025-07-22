@@ -209,32 +209,29 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )}
 
         {/* 경기 추가 버튼 */}
-        {currentUserId &&
-          attendanceIds.some(
-            (attendance) => attendance.userId === currentUserId
-          ) && (
-            <div className="px-4 py-2">
-              <Button
-                type="button"
-                className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-                size="lg"
-                onClick={async () => {
-                  const result = await addMatch(scheduleId);
-                  if (result.success) {
-                    refetch();
-                  } else {
-                    console.log(result.error, "result.error");
-                    // toast.error(result.error);
-                  }
-                }}
-                // onClick={() => {
-                //   router.push(`/schedule/${scheduleId}/match/add`);
-                // }}
-              >
-                경기 추가
-              </Button>
-            </div>
-          )}
+        {currentUserId && data.data.schedule.createdBy.id === currentUserId && (
+          <div className="px-4 py-2">
+            <Button
+              type="button"
+              className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+              size="lg"
+              onClick={async () => {
+                const result = await addMatch(scheduleId);
+                if (result.success) {
+                  refetch();
+                } else {
+                  console.log(result.error, "result.error");
+                  // toast.error(result.error);
+                }
+              }}
+              // onClick={() => {
+              //   router.push(`/schedule/${scheduleId}/match/add`);
+              // }}
+            >
+              경기 추가
+            </Button>
+          </div>
+        )}
 
         <div className="">
           {/* 안내 사항 */}
