@@ -32,6 +32,8 @@ const AddMatch = ({
   const [duration, setDuration] = useState(DURATION_OPTIONS[0]);
   const [homeTeam, setHomeTeam] = useState(hostTeam);
   const [awayTeam, setAwayTeam] = useState(invitedTeam);
+  //   const [isLoading, setIsLoading] = useState(false);
+  console.log(scheduleId, "scheduleId");
 
   return (
     <FieldModal
