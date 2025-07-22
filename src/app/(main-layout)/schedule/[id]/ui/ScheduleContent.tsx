@@ -30,7 +30,7 @@ export function calculateDday(date: Date): number {
 
 const tabs = [
   {
-    label: "일정",
+    label: "개요",
     value: "overview",
     isDisabled: false,
   },
@@ -42,7 +42,12 @@ const tabs = [
   {
     label: "MVP",
     value: "mvp",
-    isDisabled: true,
+    isDisabled: false,
+  },
+  {
+    label: "사진",
+    value: "photos",
+    isDisabled: false,
   },
   {
     label: "댓글",
@@ -54,11 +59,6 @@ const tabs = [
   //   value: "reviews",
   //   isDisabled: true,
   // },
-  {
-    label: "사진",
-    value: "photos",
-    isDisabled: true,
-  },
 ];
 
 const ScheduleContent = ({
@@ -108,7 +108,7 @@ const ScheduleContent = ({
         </button>
         <div className="flex items-center justify-end gap-2">
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <BookmarkIcon className="w-5 h-5" />
+            <BookmarkIcon className="size-5" />
           </button> */}
 
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">

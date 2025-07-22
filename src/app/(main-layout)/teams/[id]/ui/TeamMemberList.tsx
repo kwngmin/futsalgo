@@ -182,7 +182,7 @@ const TeamMemberList = ({
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-400 sm:hidden" />
+              <ChevronRight className="size-5 text-gray-400 sm:hidden" />
             </button>
             <div className="grid grid-cols-2 gap-2 px-3 pt-1.5 mb-4 sm:mb-0 sm:py-0 items-center">
               <Button

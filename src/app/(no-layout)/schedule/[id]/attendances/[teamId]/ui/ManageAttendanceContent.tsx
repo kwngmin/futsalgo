@@ -73,7 +73,7 @@ const ManageAttendanceContent = ({
               router.push(`/schedule/${scheduleId}?tab=attendance`)
             }
           >
-            <X className="w-5 h-5" />
+            <X className="size-5" />
           </button>
         </div>
       </div>

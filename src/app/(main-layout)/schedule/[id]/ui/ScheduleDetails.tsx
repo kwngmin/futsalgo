@@ -9,15 +9,18 @@ import {
   Clock,
   Flag,
   Loader2,
+  MapPin,
   Text,
   UserRound,
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/shared/components/ui/button";
-import { MapPinSimpleIcon, SoccerBallIcon } from "@phosphor-icons/react";
+// import {
+//   CourtBasketballIcon,
+//   SoccerBallIcon,
+// } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import { calculateDday } from "./ScheduleContent";
-// import { useState } from "react";
+// import { calculateDday } from "./ScheduleContent";
 
 const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -44,7 +47,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
     );
   }
 
-  const dDay = calculateDday(data.data.schedule?.date as Date);
+  // const dDay = calculateDday(data.data.schedule?.date as Date);
 
   return (
     <div className="space-y-3">
@@ -101,31 +104,27 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         </div>
       )}
 
-      {/* 경기 일정 탭*/}
-      <div className="relative">
-        {/* 참가팀 정보 */}
-        <div className="flex p-4 gap-24 sm:gap-3 mb-8">
-          {/* 공통 */}
-          <div className="w-full flex flex-col items-center justify-center">
-            <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
-              {data.data.schedule?.matchType === "TEAM"
-                ? "다른 팀과의 친선경기"
-                : "우리 팀끼리 자체경기"}
-            </span>
-            <div className="w-full flex justify-center items-center gap-1">
-              {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-                month: "long",
-                day: "numeric",
-                weekday: "long",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </div>
-          </div>
+      {/* 공통 */}
+      <div className="w-full flex flex-col items-center justify-center p-4">
+        <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
+          {data.data.schedule?.matchType === "TEAM"
+            ? "다른 팀과의 친선경기"
+            : "우리 팀끼리 자체경기"}
+        </span>
+        <div className="w-full flex justify-center items-center gap-1">
+          {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+            month: "long",
+            day: "numeric",
+            weekday: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </div>
+      </div>
 
+      <div className="relative">
         {/* 경기 정보 */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <div className="overflow-hidden rounded-lg border mx-4">
             <div
               className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
@@ -134,12 +133,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               }}
             >
               <div className="flex items-center space-x-2">
-                {/* <CourtBasketballIcon
-            className="w-5 h-5 text-gray-600"
-            // weight="fill"
-          /> */}
                 <SoccerBallIcon
-                  className="w-5 h-5 text-gray-600"
+                  className="size-5 text-gray-600"
                   weight="fill"
                 />
                 <span className="font-medium">1 경기</span>
@@ -161,12 +156,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               }}
             >
               <div className="flex items-center space-x-2">
-                {/* <CourtBasketballIcon
-            className="w-5 h-5 text-gray-600"
-            // weight="fill"
-          /> */}
                 <SoccerBallIcon
-                  className="w-5 h-5 text-gray-600"
+                  className="size-5 text-gray-600"
                   weight="fill"
                 />
                 <span className="font-medium">2 경기</span>
@@ -188,12 +179,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               }}
             >
               <div className="flex items-center space-x-2">
-                {/* <CourtBasketballIcon
-            className="w-5 h-5 text-gray-600"
-            // weight="fill"
-          /> */}
                 <SoccerBallIcon
-                  className="w-5 h-5 text-gray-600"
+                  className="size-5 text-gray-600"
                   weight="fill"
                 />
                 <span className="font-medium">3 경기</span>
@@ -207,7 +194,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 경기 시작 버튼 */}
         {/* <div className="p-4">
@@ -256,23 +243,26 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
     </div> */}
 
         {/* 경기 추가 */}
-        {dDay >= 0 && (
-          <div className="px-4 py-2">
-            <Button
-              className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-              size="lg"
-            >
-              경기 추가
-            </Button>
-          </div>
-        )}
+
+        <div className="px-4 py-2">
+          <Button
+            type="button"
+            className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+            size="lg"
+            onClick={() => {
+              router.push(`/schedule/${scheduleId}/match/add`);
+            }}
+          >
+            경기 추가
+          </Button>
+        </div>
 
         <div className="">
           {/* 안내 사항 */}
           <div>
             <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3">
               <div className="flex items-center space-x-2">
-                <Text className={`w-5 h-5 text-gray-600`} />
+                <Text className={`size-5 text-gray-600`} />
                 <span className="font-medium">안내 사항</span>
               </div>
               {!Boolean(data?.data.schedule?.description) && (
@@ -291,11 +281,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           {/* 장소 이름 */}
           <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3">
             <div className="flex items-center space-x-2">
-              <MapPinSimpleIcon
-                className="text-gray-600"
-                size={20}
-                weight="fill"
-              />
+              <MapPin className="size-5 text-gray-600" />
               <span className="font-medium">장소</span>
             </div>
             <div className="flex items-center gap-1">
@@ -308,7 +294,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           {/* 경기 일자 */}
           <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3">
             <div className="flex items-center space-x-2">
-              <Calendar className="w-5 h-5 text-gray-600" />
+              <Calendar className="size-5 text-gray-600" />
               <span className="font-medium">일자</span>
             </div>
             <div className="flex items-center gap-1">
@@ -325,7 +311,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           {/* 예약 시간 */}
           <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 border-t border-gray-100 gap-3">
             <div className="flex items-center space-x-2">
-              <Clock className="w-5 h-5 text-gray-600" />
+              <Clock className="size-5 text-gray-600" />
               <span className="font-medium">시간</span>
             </div>
             <div className="flex items-center gap-1">
@@ -351,7 +337,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             }}
           >
             <div className="flex items-center space-x-2">
-              <Flag className="w-5 h-5 text-gray-600" />
+              <Flag className="size-5 text-gray-600" />
               <span className="font-medium">주최팀</span>
             </div>
             <div className="flex items-center gap-1">
@@ -378,7 +364,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               }}
             >
               <div className="flex items-center space-x-2">
-                <CircleCheckBig className="w-5 h-5 text-gray-600" />
+                <CircleCheckBig className="size-5 text-gray-600" />
                 <span className="font-medium">초청팀</span>
               </div>
               <div className="flex items-center gap-1">
@@ -405,7 +391,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             }}
           >
             <div className="flex items-center space-x-2">
-              <UserRound className="w-5 h-5 text-gray-600" />
+              <UserRound className="size-5 text-gray-600" />
               <span className="font-medium">만든이</span>
             </div>
             <div className="flex items-center gap-1">

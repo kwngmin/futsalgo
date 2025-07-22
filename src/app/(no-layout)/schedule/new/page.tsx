@@ -1,10 +1,6 @@
-// "use client";
-
 import { auth } from "@/shared/lib/auth";
 import NewContent from "./ui/NewContent";
 import { redirect } from "next/navigation";
-// import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
 
 const NewPage = async () => {
   const session = await auth();

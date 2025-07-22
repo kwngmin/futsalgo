@@ -73,7 +73,7 @@ const PlayersPage = () => {
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
           onClick={() => openModal(field)}
         >
-          <ArrowDownUp className="w-5 h-5" />
+          <ArrowDownUp className="size-5" />
         </button>
       }
     >
@@ -95,10 +95,10 @@ const PlayersPage = () => {
         </div>
         <div className="flex items-center gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <Search className="w-5 h-5" />
+            <Search className="size-5" />
           </button>
           {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer bg-gray-100">
-            <ArrowDownUp className="w-5 h-5" />
+            <ArrowDownUp className="size-5" />
           </button> */}
           {renderFieldModal("sort")}
         </div>

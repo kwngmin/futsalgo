@@ -100,7 +100,7 @@ const MorePage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <h1 className="text-2xl font-bold">더보기</h1>
         {/* <button className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer">
-          <Search className="w-5 h-5" />
+          <Search className="size-5" />
         </button> */}
       </div>
       <div className="space-y-3">
@@ -163,7 +163,7 @@ const MorePage = () => {
             className="w-full flex items-center justify-between px-4 py-3 cursor-pointer sm:hover:bg-red-500/5 transition-colors text-red-500"
           >
             <div className="flex items-center space-x-3">
-              <LogOut className="w-5 h-5" />
+              <LogOut className="size-5" />
               <span className="font-medium">로그아웃</span>
             </div>
           </button>

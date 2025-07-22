@@ -151,7 +151,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
           <div className="bg-white rounded-lg overflow-hidden">
             <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
-                <ScrollText className="w-5 h-5" />
+                <ScrollText className="size-5" />
                 <span className="font-medium">기본 정보</span>
               </div>
             </div>
@@ -220,7 +220,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
           <div className="bg-white rounded-lg overflow-hidden">
             <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
-                <MapPin className="w-5 h-5" />
+                <MapPin className="size-5" />
                 <span className="font-medium">활동 지역</span>
               </div>
             </div>

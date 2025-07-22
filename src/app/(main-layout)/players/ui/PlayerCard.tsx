@@ -40,7 +40,7 @@ const PlayerCard = ({
             loading={isCurrentUser ? "eager" : "lazy"}
           />
           {isCurrentUser && (
-            <div className="absolute -top-0.5 -left-0.25 w-5 h-5 bg-black rounded-lg flex items-center justify-center">
+            <div className="absolute -top-0.5 -left-0.25 size-5 bg-black rounded-lg flex items-center justify-center">
               <span className="text-white text-xs font-bold">나</span>
             </div>
           )}
@@ -50,7 +50,7 @@ const PlayerCard = ({
         <div className="size-14 bg-gray-400" />
       )}
       {/* {isCurrentUser && (
-              <div className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+              <div className="absolute -top-0.5 -right-0.5 size-5 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-[10px] font-extrabold">나</span>
               </div>
             )} */}

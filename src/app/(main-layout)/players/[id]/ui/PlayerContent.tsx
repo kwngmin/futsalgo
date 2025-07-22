@@ -113,7 +113,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             팔로우
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <Share className="w-5 h-5" />
+            <Share className="size-5" />
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
@@ -308,7 +308,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors`}
             >
               <div className="flex items-center space-x-3">
-                <User2 className={`w-5 h-5 text-gray-600`} />
+                <User2 className={`size-5 text-gray-600`} />
                 <span className="font-medium">{`${
                   data?.data?.gender
                     ? `${GENDER[data?.data?.gender as keyof typeof GENDER]}`
@@ -383,7 +383,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               {/* <div className="border rounded-2xl overflow-hidden mx-4">
                 <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
                   <div className="flex items-center space-x-3">
-                    <List className={`w-5 h-5 text-gray-600`} />
+                    <List className={`size-5 text-gray-600`} />
                     <span className="font-medium">기본 정보</span>
                   </div>
                 </div>
@@ -444,7 +444,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     }}
                   >
                     <div className="flex items-center space-x-3">
-                      <Flame className={`w-5 h-5 text-gray-600`} />
+                      <Flame className={`size-5 text-gray-600`} />
                       <span className="font-medium">선호 포지션</span>
                     </div>
                     <ChevronRight className="size-5 text-gray-400" />
@@ -542,7 +542,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   }}
                 >
                   <div className="flex items-center space-x-3">
-                    <Sparkles className={`w-5 h-5 text-gray-600`} />
+                    <Sparkles className={`size-5 text-gray-600`} />
                     <span className="font-medium">실력</span>
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
@@ -565,7 +565,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   }}
                 >
                   <div className="flex items-center space-x-3">
-                    <ChartPie className={`w-5 h-5 text-gray-600`} />
+                    <ChartPie className={`size-5 text-gray-600`} />
                     <span className="font-medium">통계</span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -604,7 +604,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 cursor-pointer"
             >
               <div className="flex items-center space-x-3">
-                <Volleyball className={`w-5 h-5 text-gray-600`} />
+                <Volleyball className={`size-5 text-gray-600`} />
                 <span className="font-medium">2025년</span>
               </div>
               <ChevronRight className="size-5 text-gray-400" />

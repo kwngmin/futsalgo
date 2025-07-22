@@ -58,13 +58,13 @@ export default function ProfileContent({ data }: { data: User }) {
         >
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
-              <IdCard className={`w-5 h-5 text-gray-600`} />
+              <IdCard className={`size-5 text-gray-600`} />
             ) : field === "email" ? (
-              <Mail className={`w-5 h-5 text-gray-600`} />
+              <Mail className={`size-5 text-gray-600`} />
             ) : field === "phone" ? (
-              <Phone className={`w-5 h-5 text-gray-600`} />
+              <Phone className={`size-5 text-gray-600`} />
             ) : (
-              <User2 className="w-5 h-5 text-gray-600" />
+              <User2 className="size-5 text-gray-600" />
             )}
             <span className="font-medium">
               {field === "basic"
@@ -82,7 +82,7 @@ export default function ProfileContent({ data }: { data: User }) {
                 : data[field] || "설정되지 않음"}
             </span>
           </div>
-          <ChevronRight className="w-5 h-5 text-gray-400" />
+          <ChevronRight className="size-5 text-gray-400" />
         </div>
       }
     >
@@ -126,7 +126,7 @@ export default function ProfileContent({ data }: { data: User }) {
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
         >
-          <X className="w-5 h-5" />
+          <X className="size-5" />
         </button>
       </div>
 

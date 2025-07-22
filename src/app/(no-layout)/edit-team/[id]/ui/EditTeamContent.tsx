@@ -45,13 +45,13 @@ export default function EditTeamContent({
           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100"
         >
           <div className="flex items-center space-x-3">
-            <Flame className="w-5 h-5 text-gray-600" />
+            <Flame className="size-5 text-gray-600" />
             {/* <span className="font-medium">팀 이름</span> */}
             <span className="font-medium">{data.name}</span>
           </div>
           <div className="flex items-center gap-2">
             {/* <span className="font-medium">{data.name}</span> */}
-            <ChevronRight className="w-5 h-5 text-gray-400" />
+            <ChevronRight className="size-5 text-gray-400" />
           </div>
         </div>
       }
@@ -96,7 +96,7 @@ export default function EditTeamContent({
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
         >
-          <X className="w-5 h-5" />
+          <X className="size-5" />
         </button>
       </div>
 

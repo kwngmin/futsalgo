@@ -113,13 +113,13 @@ const TeamContent = ({ id }: { id: string }) => {
   //         >
   //           <div className="flex items-center space-x-3">
   //             {/* {field === "nickname" ? (
-  //             <IdCard className={`w-5 h-5 text-gray-600`} />
+  //             <IdCard className={`size-5 text-gray-600`} />
   //           ) : field === "email" ? (
-  //             <Mail className={`w-5 h-5 text-gray-600`} />
+  //             <Mail className={`size-5 text-gray-600`} />
   //           ) : field === "phone" ? (
-  //             <Phone className={`w-5 h-5 text-gray-600`} />
+  //             <Phone className={`size-5 text-gray-600`} />
   //           ) : (
-  //             <User2 className="w-5 h-5 text-gray-600" />
+  //             <User2 className="size-5 text-gray-600" />
   //           )} */}
   //             <span className="font-medium">
   //               {/* {field === "basic"
@@ -137,7 +137,7 @@ const TeamContent = ({ id }: { id: string }) => {
   //               : data[field] || "설정되지 않음"} */}
   //             </span>
   //           </div>
-  //           <ChevronRight className="w-5 h-5 text-gray-400" />
+  //           <ChevronRight className="size-5 text-gray-400" />
   //         </div>
   //       )
   //     }
@@ -215,7 +215,7 @@ const TeamContent = ({ id }: { id: string }) => {
             팔로우
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <Share className="w-5 h-5" />
+            <Share className="size-5" />
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
@@ -317,7 +317,7 @@ const TeamContent = ({ id }: { id: string }) => {
               ) : data.data.currentUserMembership.status === "PENDING" ? (
                 // <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
                 //   <div className="flex items-center px-2">
-                //     {/* <Hourglass className="w-5 h-5 mr-3 stroke-indigo-700" /> */}
+                //     {/* <Hourglass className="size-5 mr-3 stroke-indigo-700" /> */}
                 //     <span className="font-medium text-slate-700">
                 //       승인 대기중
                 //     </span>
@@ -356,7 +356,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 data.data.currentUserMembership.status === "REJECTED" && (
                   <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
                     <div className="flex items-center px-2">
-                      <CircleX className="w-5 h-5 text-red-600 mr-3" />
+                      <CircleX className="size-5 text-red-600 mr-3" />
                       <span className="font-medium text-red-600">
                         가입 신청이 거절되었습니다.
                       </span>
@@ -445,7 +445,7 @@ const TeamContent = ({ id }: { id: string }) => {
           ) : data.data.currentUserMembership.status === "PENDING" ? (
             <div className="flex items-center justify-between bg-white rounded-lg p-2">
               <div className="flex items-center px-2">
-                <Hourglass className="w-5 h-5 mr-3" />
+                <Hourglass className="size-5 mr-3" />
                 <span className="font-medium">가입 대기중</span>
               </div>
               <Button
@@ -460,7 +460,7 @@ const TeamContent = ({ id }: { id: string }) => {
             data.data.currentUserMembership.status === "REJECTED" && (
               <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
                 <div className="flex items-center px-2">
-                  <CircleX className="w-5 h-5 text-red-600 mr-3" />
+                  <CircleX className="size-5 text-red-600 mr-3" />
                   <span className="font-medium text-red-600">
                     가입 신청이 거절되었습니다.
                   </span>
@@ -569,7 +569,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* <div className="border rounded-2xl overflow-hidden mx-4">
                 <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
                   <div className="flex items-center space-x-3">
-                    <List className={`w-5 h-5 text-gray-600`} />
+                    <List className={`size-5 text-gray-600`} />
                     <span className="font-medium">기본 정보</span>
                   </div>
                 </div>
@@ -649,7 +649,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   }}
                 >
                   <div className="flex items-center space-x-3">
-                    <Sparkles className={`w-5 h-5 text-gray-600`} />
+                    <Sparkles className={`size-5 text-gray-600`} />
                     <span className="font-medium">팀 실력</span>
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
@@ -674,7 +674,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   }}
                 >
                   <div className="flex items-center space-x-3">
-                    <ChartPie className={`w-5 h-5 text-gray-600`} />
+                    <ChartPie className={`size-5 text-gray-600`} />
                     <span className="font-medium">팀원 실력</span>
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
@@ -719,7 +719,7 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="border rounded-2xl overflow-hidden mx-4">
                 <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
                   <div className="flex items-center space-x-3">
-                    <MapPinned className={`w-5 h-5 text-gray-600`} />
+                    <MapPinned className={`size-5 text-gray-600`} />
                     <span className="font-medium">주요 활동 지역</span>
                   </div>
                 </div>
@@ -732,7 +732,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 소개 */}
               <div className="border rounded-2xl mx-4">
                 <div className="w-full flex items-center justify-start px-4 py-3 border-b bg-gray-50 space-x-3">
-                  <ScrollText className={`w-5 h-5 text-gray-600`} />
+                  <ScrollText className={`size-5 text-gray-600`} />
                   <span className="font-medium">소개</span>
                 </div>
                 <p className="px-4 py-6 my-3 sm:my-0">
