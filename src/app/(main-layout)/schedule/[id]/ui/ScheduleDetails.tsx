@@ -20,13 +20,20 @@ import Image from "next/image";
 //   SoccerBallIcon,
 // } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import AddMatch from "./AddMatch";
+// import AddMatch from "./AddMatch";
+import { Button } from "@/shared/components/ui/button";
+import { useSession } from "next-auth/react";
+import TeamLogo from "./TeamLogo";
+import { addMatch } from "../actions/add-match";
+import { SoccerBallIcon } from "@phosphor-icons/react";
 // import { calculateDday } from "./ScheduleContent";
 
 const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
+  const session = useSession();
+  const currentUserId = session.data?.user?.id;
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["schedule", scheduleId],
     queryFn: () => getSchedule(scheduleId),
   });
@@ -54,6 +61,12 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   console.log(data, "data");
 
   // const dDay = calculateDday(data.data.schedule?.date as Date);
+  const attendanceIds = data.data.schedule.attendances.map((attendance) => {
+    return {
+      userId: attendance.userId,
+    };
+  });
+  console.log(attendanceIds, "attendances");
 
   return (
     <div className="space-y-3">
@@ -68,56 +81,38 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
       {/* 우리팀 & 주최팀vs초청팀 로고 */}
       {data?.data?.schedule?.matchType === "SQUAD" ? (
-        <div className="w-full flex flex-col items-center pt-6 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
-          <Image
-            src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-            alt="hostTeamLogo"
-            width={100}
-            height={100}
-            className="size-20 mt-4"
-          />
-          <span className="sm:text-lg font-semibold">
-            {data.data.schedule?.hostTeam?.name}
-          </span>
-        </div>
+        <TeamLogo
+          logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+          teamName={data.data.schedule?.hostTeam?.name ?? ""}
+          teamType="HOST"
+          matchType={data.data.schedule?.matchType}
+        />
       ) : (
-        <div className="w-full flex items-center justify-center gap-3 pt-6 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
-          <div className="grow flex flex-col items-center w-28 sm:w-36 max-w-40">
-            <Image
-              src={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-              alt="hostTeamLogo"
-              width={100}
-              height={100}
-              className="size-20 mt-4"
-            />
-            <span className="sm:text-lg font-semibold text-center">
-              {data.data.schedule?.hostTeam?.name}
-            </span>
-          </div>
+        <div className="w-full flex items-center justify-center pt-6 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+          <TeamLogo
+            logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+            teamName={data.data.schedule?.hostTeam?.name}
+            teamType="HOST"
+            matchType={data.data.schedule?.matchType}
+          />
           <span className="text-2xl font-bold">VS</span>
-          <div className="grow flex flex-col items-center w-28 sm:w-36 max-w-40">
-            <Image
-              src={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
-              alt="guestTeamLogo"
-              width={100}
-              height={100}
-              className="size-20 mt-4"
-            />
-            <span className="sm:text-lg font-semibold">
-              {data.data.schedule?.invitedTeam?.name}
-            </span>
-          </div>
+          <TeamLogo
+            logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
+            teamName={data.data.schedule?.invitedTeam?.name ?? ""}
+            teamType="INVITED"
+            matchType={data.data.schedule?.matchType}
+          />
         </div>
       )}
 
       {/* 공통 */}
       <div className="w-full flex flex-col items-center justify-center p-4">
-        <span className="flex items-center justify-center font-semibold text-xl sm:text-2xl tracking-tight">
+        <span className="flex items-center justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.matchType === "TEAM"
             ? "다른 팀과의 친선경기"
             : "우리 팀끼리 자체경기"}
         </span>
-        <div className="w-full flex justify-center items-center gap-1">
+        <div className="w-full flex justify-center items-center gap-1 text-lg">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
             day: "numeric",
@@ -129,79 +124,6 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       </div>
 
       <div className="relative">
-        {/* 경기 정보 */}
-        {/* <div className="space-y-2">
-          <div className="overflow-hidden rounded-lg border mx-4">
-            <div
-              className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <SoccerBallIcon
-                  className="size-5 text-gray-600"
-                  weight="fill"
-                />
-                <span className="font-medium">1 경기</span>
-                <span className="text-sm text-gray-500">15분</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  0 - 0
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
-              </div>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg border mx-4">
-            <div
-              className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <SoccerBallIcon
-                  className="size-5 text-gray-600"
-                  weight="fill"
-                />
-                <span className="font-medium">2 경기</span>
-                <span className="text-sm text-gray-500">15분</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  0 - 0
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
-              </div>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg border mx-4">
-            <div
-              className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/players/${data.data.schedule?.createdBy.id}`);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <SoccerBallIcon
-                  className="size-5 text-gray-600"
-                  weight="fill"
-                />
-                <span className="font-medium">3 경기</span>
-                <span className="text-sm text-gray-500">15분</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-base font-medium text-gray-500">
-                  0 - 0
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
-              </div>
-            </div>
-          </div>
-        </div> */}
-
         {/* 경기 시작 버튼 */}
         {/* <div className="p-4">
       <div className="w-full flex flex-col items-center">
@@ -248,37 +170,71 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       </div>
     </div> */}
 
-        {/* 경기 추가 */}
-        <AddMatch
-          scheduleId={scheduleId}
-          matchType={data.data.schedule?.matchType}
-          hostTeam={{
-            id: data.data.schedule?.hostTeamId,
-            name: data.data.schedule?.hostTeam?.name,
-            logoUrl: data.data.schedule?.hostTeam?.logoUrl,
-          }}
-          invitedTeam={
-            data.data.schedule?.matchType === "TEAM"
-              ? {
-                  id: data.data.schedule?.invitedTeamId as string,
-                  name: data.data.schedule?.invitedTeam?.name as string,
-                  logoUrl: data.data.schedule?.invitedTeam?.logoUrl,
-                }
-              : undefined
-          }
-        />
-        {/* <div className="px-4 py-2">
-          <Button
-            type="button"
-            className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-            size="lg"
-            onClick={() => {
-              router.push(`/schedule/${scheduleId}/match/add`);
-            }}
-          >
-            경기 추가
-          </Button>
-        </div> */}
+        {/* 경기 정보 */}
+        {data.data.schedule.matches.length > 0 && (
+          <div className="space-y-2 mb-2">
+            {data.data.schedule.matches.map((match) => (
+              <div
+                className="overflow-hidden rounded-lg border mx-4"
+                key={match.id}
+              >
+                <div
+                  className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    router.push(`/schedule/${scheduleId}/match/${match.id}`);
+                  }}
+                >
+                  <div className="flex items-center space-x-2">
+                    <SoccerBallIcon
+                      className="size-5 text-gray-600"
+                      weight="fill"
+                    />
+                    <span className="font-medium">{match.order} 경기</span>
+                    {match.durationMinutes && (
+                      <span className="text-sm text-gray-500">
+                        {match.durationMinutes}분
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {match.homeScore} - {match.awayScore}
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* 경기 추가 버튼 */}
+        {currentUserId &&
+          attendanceIds.some(
+            (attendance) => attendance.userId === currentUserId
+          ) && (
+            <div className="px-4 py-2">
+              <Button
+                type="button"
+                className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+                size="lg"
+                onClick={async () => {
+                  const result = await addMatch(scheduleId);
+                  if (result.success) {
+                    refetch();
+                  } else {
+                    console.log(result.error, "result.error");
+                    // toast.error(result.error);
+                  }
+                }}
+                // onClick={() => {
+                //   router.push(`/schedule/${scheduleId}/match/add`);
+                // }}
+              >
+                경기 추가
+              </Button>
+            </div>
+          )}
 
         <div className="">
           {/* 안내 사항 */}

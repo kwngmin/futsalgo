@@ -30,6 +30,7 @@ export async function getSchedule(scheduleId: string) {
           },
         },
         attendances: true,
+        matches: true,
         createdBy: true,
       },
     });

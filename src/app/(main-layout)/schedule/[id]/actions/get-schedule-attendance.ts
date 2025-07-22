@@ -11,11 +11,6 @@ export interface Attendance {
     id: string;
     nickname: string;
     image: string;
-    // gender: string;
-    // position: string;
-    // skillLevel: string;
-    // birthDate: string;
-    // height: number;
   };
 }
 
