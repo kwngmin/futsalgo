@@ -477,7 +477,6 @@ model TeamMatchInvitation {
 model Match {
   id              String   @id @default(cuid())
   scheduleId      String
-  order           Int      @unique // 몇 번째 경기인지
   durationMinutes Int?
   
   // 점수
