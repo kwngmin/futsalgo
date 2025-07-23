@@ -14,19 +14,12 @@ import {
   UserRound,
 } from "lucide-react";
 import Image from "next/image";
-// import { Button } from "@/shared/components/ui/button";
-// import {
-//   CourtBasketballIcon,
-//   SoccerBallIcon,
-// } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-// import AddMatch from "./AddMatch";
 import { Button } from "@/shared/components/ui/button";
 import { useSession } from "next-auth/react";
 import TeamLogo from "./TeamLogo";
 import { addMatch } from "../actions/add-match";
 import { SoccerBallIcon } from "@phosphor-icons/react";
-// import { calculateDday } from "./ScheduleContent";
 
 const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -83,38 +76,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
 
       <div className="relative">
-        {/* 우리팀 & 주최팀vs초청팀 로고 */}
-        {/* {data?.data?.schedule?.matchType === "SQUAD" ? (
-          <TeamLogo
-            logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-            teamName={data.data.schedule?.hostTeam?.name ?? ""}
-            teamType="HOST"
-            matchType={data.data.schedule?.matchType}
-          />
-        ) : (
-          <div className="w-full flex items-center justify-center sm:gap-0 py-4 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
-            <TeamLogo
-              logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-              teamName={data.data.schedule?.hostTeam?.name}
-              teamType="HOST"
-              matchType={data.data.schedule?.matchType}
-            />
-            <span className="text-center text-2xl sm:text-xl font-bold shrink-0 w-9 mt-4">
-              VS
-            </span>
-            {data?.data?.schedule?.matchType === "TEAM" && (
-              <TeamLogo
-                logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
-                teamName={data.data.schedule?.invitedTeam?.name ?? ""}
-                teamType="INVITED"
-                matchType={data.data.schedule?.matchType}
-              />
-            )}
-          </div>
-        )} */}
-
         {/* 공통 */}
-        <div className="flex justify-center gap-4 px-4 py-12 sm:max-w-sm mx-auto bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
+        <div className="flex justify-center gap-6 px-4 py-12 sm:max-w-sm mx-auto bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
           <TeamLogo
             logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             teamType="HOST"
