@@ -28,8 +28,14 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold">{data?.matchOrder} 경기</h1>
-          <h1 className="text-2xl font-bold opacity-30">수정</h1>
+          <h1 className="text-2xl font-bold">
+            {`${
+              data.match.homeTeamId === data.match.awayTeamId
+                ? "자체전"
+                : "친선전"
+            } ${data?.matchOrder}경기`}
+          </h1>
+          {/* <h1 className="text-2xl font-bold opacity-30">수정</h1> */}
         </div>
         <div className="flex items-center gap-2">
           <button

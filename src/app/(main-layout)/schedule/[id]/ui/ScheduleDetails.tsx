@@ -113,8 +113,10 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
           <span className="flex items-center justify-center font-semibold text-2xl">
             {data.data.schedule?.matchType === "TEAM"
-              ? "다른 팀과의 친선경기"
-              : "우리 팀끼리 자체경기"}
+              ? "다른 팀과의 친선전"
+              : "우리 팀끼리 자체전"}
+            {/* ? "다른 팀과의 친선경기"
+              : "우리 팀끼리 자체경기"} */}
           </span>
           <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight text-muted-foreground">
             {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
@@ -192,7 +194,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
                       className="size-5 text-gray-600"
                       weight="fill"
                     />
-                    <span className="font-medium">{index + 1} 경기</span>
+                    <span className="font-medium">{index + 1}경기</span>
                     {match.durationMinutes && (
                       <span className="text-sm text-gray-500">
                         {match.durationMinutes}분
