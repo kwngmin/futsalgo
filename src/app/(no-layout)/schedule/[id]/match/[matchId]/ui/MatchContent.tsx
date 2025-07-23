@@ -19,6 +19,11 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
   console.log(data, "data");
 
+  const currentIndex = data?.allMatches.findIndex(
+    (match) => match.id === data.match.id
+  );
+  console.log(currentIndex, "currentIndex");
+
   // 해결책 1: 타입 가드 함수 사용
   if (!data) {
     return <div>데이터를 찾을 수 없습니다.</div>;
@@ -39,11 +44,43 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           <h1 className="text-2xl font-bold">{data?.matchOrder}경기</h1>
         </div>
         <div className="flex items-center gap-2">
-          <button className="shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button
+            className={`shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors  ${
+              currentIndex === 0
+                ? "opacity-50 cursor-default pointer-events-none"
+                : "cursor-pointer"
+            }`}
+            onClick={() => {
+              if (currentIndex === 0 || currentIndex === undefined) return;
+              router.push(
+                `/schedule/${data?.match.scheduleId}/match/${
+                  data.allMatches[currentIndex - 1]?.id
+                }`
+              );
+            }}
+          >
             <ChevronUp className="size-5" strokeWidth={2.5} />
             이전
           </button>
-          <button className="shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button
+            className={`shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors  ${
+              currentIndex === data?.allMatches.length - 1
+                ? "opacity-50 cursor-default pointer-events-none"
+                : "cursor-pointer"
+            }`}
+            onClick={() => {
+              if (
+                currentIndex === data?.allMatches.length - 1 ||
+                currentIndex === undefined
+              )
+                return;
+              router.push(
+                `/schedule/${data?.match.scheduleId}/match/${
+                  data.allMatches[currentIndex + 1]?.id
+                }`
+              );
+            }}
+          >
             <ChevronDown className="size-5" strokeWidth={2.5} />
             다음
           </button>
