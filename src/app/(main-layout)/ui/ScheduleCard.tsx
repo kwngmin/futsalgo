@@ -97,11 +97,19 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           </h3>
         </div>
         <div
-          className="flex items-center justify-center gap-2 hover:bg-gray-100 rounded-lg w-10 h-14"
+          className="flex items-center justify-center gap-2 rounded-lg w-10 h-14 group"
           onClick={() => handleLikeClick(schedule.id)}
         >
           <HeartIcon
-            className={`size-6 ${isLiked ? "text-zinc-600" : "text-zinc-300"}`}
+            className={`size-6 group-hover:animate-ping absolute ${
+              isLiked ? "text-zinc-600" : "text-zinc-300"
+            }`}
+            weight="fill"
+          />
+          <HeartIcon
+            className={`size-6 group-hover: ${
+              isLiked ? "text-zinc-600" : "text-zinc-300"
+            }`}
             weight="fill"
           />
         </div>
