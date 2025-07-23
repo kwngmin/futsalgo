@@ -5,6 +5,7 @@ import { ArrowLeftRight, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
+import { Button } from "@/shared/components/ui/button";
 
 const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
@@ -41,17 +42,24 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </button>
         </div>
       </div>
-      <div className="flex justify-between p-4 gap-3 bg-gradient-to-b from-slate-100 to-white border-b border-slate-200">
+      <div className="flex justify-between p-4 gap-3 bg-gradient-to-b from-slate-100 to-white">
         <TeamSide
           side="home"
           logoUrl={data?.match.homeTeam.logoUrl}
           name={data?.match.homeTeam.name}
         />
         <div className="flex flex-col items-center gap-1 shrink-0 w-20">
-          <div className="flex justify-center items-center gap-1 text-sm font-medium text-slate-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-3 h-8 bg-slate-50 border border-slate-400">
+          <button
+            className="flex justify-center items-center gap-1 text-sm font-medium text-slate-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-3 h-8 bg-slate-50 border border-slate-400 disabled:opacity-30 disabled:cursor-default"
+            type="button"
+            onClick={() => {
+              console.log("변경");
+            }}
+            disabled={data.match.awayTeamId === data.match.homeTeamId}
+          >
             <ArrowLeftRight className="size-4 text-slate-600" />
             <span className="font-medium">변경</span>
-          </div>
+          </button>
           <div className="flex items-center gap-2 text-2xl font-semibold tracking-tighter my-auto pb-8">
             <span>{data?.match.homeScore}</span>
             <span>-</span>
@@ -63,6 +71,23 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           logoUrl={data?.match.awayTeam.logoUrl}
           name={data?.match.awayTeam.name}
         />
+      </div>
+      <div className="px-4">
+        <Button
+          type="button"
+          className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+          size="lg"
+          // onClick={async () => {
+          //   const result = await addMatch(scheduleId);
+          //   if (result.success) {
+          //     refetch();
+          //   } else {
+          //     console.log(result.error, "result.error");
+          //   }
+          // }}
+        >
+          GOAL !
+        </Button>
       </div>
       <div className="px-4">
         <div className="grid grid-cols-2 gap-8 py-4">
