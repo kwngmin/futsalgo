@@ -26,9 +26,11 @@ const TeamLogo = ({
         alt={`${teamType === "HOST" ? "Host" : "Invited"} Team Logo`}
         width={72}
         height={72}
-        className={`mt-4 ${
-          matchType === "TEAM" ? "size-16 mb-2" : "sm:size-16"
-        }`}
+        className={
+          matchType === "TEAM"
+            ? "size-16 mt-5 mb-1 sm:mt-4 sm:mb-0"
+            : "mt-4 sm:size-16"
+        }
       />
       {/* <span className="sm:text-lg font-semibold">{teamName}</span> */}
     </div>
