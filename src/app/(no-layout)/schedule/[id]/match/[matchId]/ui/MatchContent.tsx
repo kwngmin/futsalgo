@@ -1,7 +1,7 @@
 "use client";
 
 import { MatchDataResult } from "@/entities/match/model/types";
-import { ArrowLeftRight, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -42,14 +42,14 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </button>
         </div>
       </div>
-      <div className="flex justify-between p-4 gap-3 bg-gradient-to-b from-slate-100 to-white">
+      <div className="relative grid grid-cols-2 p-4 gap-4 bg-gradient-to-b from-slate-100 to-white">
         <TeamSide
           side="home"
           logoUrl={data?.match.homeTeam.logoUrl}
           name={data?.match.homeTeam.name}
         />
-        <div className="flex flex-col items-center gap-1 shrink-0 w-20">
-          <button
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20">
+          {/* <button
             className="flex justify-center items-center gap-1 text-sm font-medium text-slate-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-3 h-8 bg-slate-50 border border-slate-400 disabled:opacity-30 disabled:cursor-default"
             type="button"
             onClick={() => {
@@ -59,8 +59,8 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           >
             <ArrowLeftRight className="size-4 text-slate-600" />
             <span className="font-medium">변경</span>
-          </button>
-          <div className="flex items-center gap-2 text-2xl font-semibold tracking-tighter my-auto pb-8">
+          </button> */}
+          <div className="flex items-center gap-2 text-2xl font-semibold tracking-tighter my-auto">
             <span>{data?.match.homeScore}</span>
             <span>-</span>
             <span>{data?.match.awayScore}</span>
@@ -90,7 +90,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
-        <div className="grid grid-cols-2 gap-8 py-4">
+        <div className="grid grid-cols-2 py-8 gap-4">
           <Lineup lineups={homeLineup} />
           <Lineup lineups={awayLineup} />
         </div>

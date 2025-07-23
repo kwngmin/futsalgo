@@ -10,8 +10,8 @@ const TeamSide = ({
   name?: string;
 }) => {
   return (
-    <div className="grow flex flex-col items-center gap-2 min-w-28 pb-4 bg-white rounded-md shadow-sm">
-      <h3 className="border-b border-slate-200 font-medium px-2 py-1 w-full text-center bg-slate-50">
+    <div className="grow flex flex-col items-center gap-2 min-w-28 pb-4">
+      <h3 className="font-medium px-2 py-1 w-full text-center">
         {/* {side === "home" ? "HOME" : "AWAY"} */}
         {side === "home" ? "홈" : "어웨이"}
       </h3>
