@@ -14,6 +14,7 @@ export const matchDataValidator =
           endTime: true,
           status: true,
           description: true,
+          matchType: true,
         },
       },
       lineups: {

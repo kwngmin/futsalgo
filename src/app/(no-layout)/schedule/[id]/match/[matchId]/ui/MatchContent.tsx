@@ -1,7 +1,15 @@
 "use client";
 
 import { MatchDataResult } from "@/entities/match/model/types";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import {
+  ArrowLeftRight,
+  ChevronDown,
+  ChevronUp,
+  Dices,
+  RefreshCcw,
+  UserRoundPen,
+  X,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -97,6 +105,43 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
+        {/* 전체 참석처리, 팀원 업데이트 */}
+        {data.match.schedule.matchType === "SQUAD" ? (
+          <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
+            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+              <div className="flex items-center gap-2">
+                <UserRoundPen className="size-5 text-gray-400" />
+                <span className="text-base font-medium text-center">
+                  팀 배정하기
+                </span>
+              </div>
+            </div>
+            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+              <div className="flex items-center gap-2">
+                <Dices className="size-5 text-gray-400" />
+                <span className="text-base font-medium">무작위 팀 배정</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
+            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+              <div className="flex items-center gap-2">
+                <ArrowLeftRight className="size-5 text-gray-400" />
+                <span className="text-base font-medium text-center">
+                  사이드 바꾸기
+                </span>
+              </div>
+            </div>
+            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+              <div className="flex items-center gap-2">
+                <RefreshCcw className="size-5 text-gray-400" />
+                <span className="text-base font-medium">명단 업데이트</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-4">
           <Lineup lineups={homeLineup} />
           <Lineup lineups={awayLineup} />

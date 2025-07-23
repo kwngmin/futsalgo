@@ -27,12 +27,12 @@ const Lineup = ({ lineups }: { lineups: Lineup }) => {
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
             )}
-            <span className="text-sm">{player.user.nickname}</span>
+            <span className="text-sm font-medium">{player.user.nickname}</span>
           </div>
         ))
       ) : (
-        <div className="text-center text-sm font-medium text-muted-foreground">
-          미정
+        <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14">
+          명단이 없습니다.
         </div>
       )}
     </div>
