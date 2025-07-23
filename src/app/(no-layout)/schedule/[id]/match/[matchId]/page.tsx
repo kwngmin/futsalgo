@@ -1,6 +1,8 @@
 import { auth } from "@/shared/lib/auth";
-import { prisma } from "@/shared/lib/prisma";
-import { notFound } from "next/navigation";
+// import { prisma } from "@/shared/lib/prisma";
+// import { notFound } from "next/navigation";
+import MatchContent from "./ui/MatchContent";
+import { getMatchData } from "./actions/get-match-data";
 
 const MatchPage = async ({
   params,
@@ -11,36 +13,11 @@ const MatchPage = async ({
   const session = await auth();
   console.log(session);
 
-  const match = await prisma.match.findUnique({
-    where: {
-      id: matchId,
-    },
-  });
+  const response = await getMatchData(matchId, id);
+  console.log(response, "data");
 
-  if (!match) {
-    return notFound();
-  }
-
-  const schedule = await prisma.schedule.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      matches: true,
-    },
-  });
-
-  if (!schedule) {
-    return notFound();
-  }
-
-  const matchIndex = schedule?.matches.findIndex(
-    (match) => match.id === matchId
-  );
-
-  const matchOrder = matchIndex ? matchIndex + 1 : 1;
-
-  return <div>MatchPage {matchOrder}</div>;
+  //   return <div>MatchPage</div>;
+  return <MatchContent data={response} />;
 };
 
 export default MatchPage;

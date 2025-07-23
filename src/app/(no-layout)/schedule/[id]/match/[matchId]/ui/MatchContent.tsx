@@ -1,88 +1,66 @@
 "use client";
 
-import { AttendanceStatus, Prisma } from "@prisma/client";
-import { RefreshCcw, SquareCheckBig, Trash, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { addAttendances } from "../actions/add-attendances";
-import { updateAttendance } from "../actions/update-attendance";
-import { useQueryClient } from "@tanstack/react-query";
+import { MatchDataResult } from "@/entities/match/model/types";
+import { ArrowLeftRight, X } from "lucide-react";
 // import Image from "next/image";
+import { useRouter } from "next/navigation";
+import TeamSide from "./TeamSide";
 
-type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
-  select: {
-    id: true;
-    attendanceStatus: true;
-    user: {
-      select: {
-        nickname: true;
-        name: true;
-      };
-    };
-  };
-}>;
-
-const ManageAttendanceContent = ({
-  scheduleId,
-  data,
-  teamId,
-  teamType,
-}: {
-  scheduleId: string;
-  data: AttendanceWithUser[];
-  teamId: string;
-  teamType: "HOST" | "INVITED";
-}) => {
+const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
-
   console.log(data, "data");
-  console.log(teamId, "teamId");
-  console.log(teamType, "teamType");
-
-  const handleUpdate = async ({
-    attendanceId,
-    attendanceStatus,
-  }: {
-    attendanceId: string;
-    attendanceStatus: AttendanceStatus;
-  }) => {
-    try {
-      await updateAttendance({
-        scheduleId,
-        teamId,
-        teamType,
-        attendanceId,
-        attendanceStatus,
-      });
-      queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-bold">참석자 명단 관리</h1>
+        <div className="flex gap-3">
+          <h1 className="text-2xl font-bold">{data?.matchOrder} 경기</h1>
+          <h1 className="text-2xl font-bold opacity-30">수정</h1>
+        </div>
         <div className="flex items-center gap-2">
           <button
             className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() =>
-              router.push(`/schedule/${scheduleId}?tab=attendance`)
+              router.push(`/schedule/${data?.match.scheduleId}?tab=overview`)
             }
           >
             <X className="size-5" />
           </button>
         </div>
       </div>
+      {/* <div className="flex items-center justify-between px-4 h-10 bg-slate-200">
+        <div className="text-sm font-medium text-gray-500">사이드</div>
+        <div className="text-sm font-medium text-gray-500">바꾸기</div>
+      </div> */}
+      <div className="flex justify-between py-4 px-2 bg-gradient-to-b from-slate-100 to-white border-b border-slate-200">
+        <TeamSide
+          side="home"
+          logoUrl={data?.match.homeTeam.logoUrl}
+          name={data?.match.homeTeam.name}
+        />
+        <div className="flex flex-col items-center gap-1 shrink-0">
+          <div className="flex justify-center items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-2 h-7 w-full">
+            <ArrowLeftRight className="size-4 text-gray-600" />
+            <span className="font-medium">변경</span>
+          </div>
+          <div className="flex items-center gap-2 text-3xl font-semibold tracking-tighter">
+            <span>{data?.match.homeScore}</span>
+            <span>-</span>
+            <span>{data?.match.awayScore}</span>
+          </div>
+        </div>
+        <TeamSide
+          side="away"
+          logoUrl={data?.match.awayTeam.logoUrl}
+          name={data?.match.awayTeam.name}
+        />
+      </div>
       <div className="px-4">
+        <div></div>
         {/* 전체 참석처리, 팀원 업데이트 */}
-        <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
-          <div
-            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
-            // onClick={onClick}
-          >
+        {/* <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
+          <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
             <div className="flex items-center gap-2">
               <SquareCheckBig className="size-5 text-gray-400" />
               <span className="text-base font-medium text-center">
@@ -90,11 +68,7 @@ const ManageAttendanceContent = ({
               </span>
             </div>
 
-            <div className="flex items-center gap-1">
-              {/* <span className="text-base font-medium text-gray-500">
-              등록 관리
-            </span> */}
-            </div>
+            <div className="flex items-center gap-1"></div>
           </div>
           <div
             className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
@@ -107,15 +81,11 @@ const ManageAttendanceContent = ({
               <span className="text-base font-medium">팀원 업데이트</span>
             </div>
 
-            <div className="flex items-center gap-1">
-              {/* <span className="text-base font-medium text-gray-500">
-              등록 관리
-            </span> */}
-            </div>
+            <div className="flex items-center gap-1"></div>
           </div>
-        </div>
+        </div> */}
         {/* 참석자 목록 */}
-        <div className="mt-4">
+        {/* <div className="mt-4">
           {data.map((attendance, index) => (
             <div
               key={attendance.id}
@@ -188,11 +158,10 @@ const ManageAttendanceContent = ({
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
-      {/* ManageAttendanceContent */}
     </div>
   );
 };
 
-export default ManageAttendanceContent;
+export default MatchContent;
