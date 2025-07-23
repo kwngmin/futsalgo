@@ -114,7 +114,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )} */}
 
         {/* 공통 */}
-        <div className="flex justify-center gap-4 px-4 py-12 max-w-sm mx-auto bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
+        <div className="flex justify-center gap-4 px-4 py-12 sm:max-w-sm mx-auto bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
           <TeamLogo
             logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             teamType="HOST"
