@@ -119,8 +119,8 @@ const ScheduleContent = ({
             onClick={() => handleLikeClick(scheduleId)}
           >
             <HeartIcon
-              className={`size-5 scale-105 ${isLiked ? "text-zinc-600" : ""}`} //
-              weight={isLiked ? "fill" : "bold"}
+              className={`size-6 ${isLiked ? "text-zinc-600" : ""}`} //
+              weight={isLiked ? "fill" : "regular"}
             />
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
