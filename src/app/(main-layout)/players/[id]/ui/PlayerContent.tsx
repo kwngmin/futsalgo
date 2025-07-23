@@ -118,7 +118,6 @@ const PlayerContent = ({ id }: { id: string }) => {
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
           </button>
-          ㅡ
         </div>
       </div>
       {data ? (
