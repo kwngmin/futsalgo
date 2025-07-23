@@ -53,7 +53,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           logoUrl={data?.match.homeTeam.logoUrl}
           name={data?.match.homeTeam.name}
         />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
           {/* <button
             className="flex justify-center items-center gap-1 text-sm font-medium text-slate-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-3 h-8 bg-slate-50 border border-slate-400 disabled:opacity-30 disabled:cursor-default"
             type="button"
@@ -65,7 +65,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
             <ArrowLeftRight className="size-4 text-slate-600" />
             <span className="font-medium">변경</span>
           </button> */}
-          <div className="flex items-center gap-2 text-2xl font-semibold tracking-tighter my-auto">
+          <div className="flex items-center gap-2 text-3xl font-semibold tracking-tighter my-auto">
             <span>{data?.match.homeScore}</span>
             <span>-</span>
             <span>{data?.match.awayScore}</span>

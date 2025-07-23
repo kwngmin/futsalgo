@@ -10,15 +10,15 @@ const TeamSide = ({
   name?: string;
 }) => {
   return (
-    <div className="grow flex flex-col items-center gap-2 min-w-28 pb-4">
-      <div className="flex items-center justify-center gap-3 px-3 py-1 text-center bg-white rounded-full mb-2">
+    <div className="grow flex flex-col items-center gap-2 min-w-28">
+      <div className="flex items-center justify-center gap-2 px-3 py-1 text-center bg-white rounded-full mb-2 shadow-xs">
         <div
           className={`size-2.5 rounded-full ${
             side === "home" ? "bg-indigo-600" : "bg-emerald-600"
           }`}
         />
         <span
-          className={`grow font-semibold ${
+          className={`grow font-semibold text-sm tracking-tight ${
             side === "home" ? "text-indigo-700" : "text-emerald-700"
           }`}
         >
@@ -27,7 +27,7 @@ const TeamSide = ({
       </div>
       <div>
         {logoUrl ? (
-          <Image src={logoUrl} alt="home team logo" width={72} height={72} />
+          <Image src={logoUrl} alt="home team logo" width={64} height={64} />
         ) : (
           <div className="size-10 rounded-md bg-gray-100" />
         )}
