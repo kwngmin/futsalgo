@@ -115,13 +115,16 @@ const ScheduleContent = ({
             <HeartIcon className="size-5" strokeWidth={2} />
           </button> */}
           <button
-            className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+            className="shrink-0 h-10 flex items-center justify-center gap-1.5 px-3 text-sm font-semibold text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() => handleLikeClick(scheduleId)}
           >
             <HeartIcon
-              className={`size-6 ${isLiked ? "text-zinc-600" : ""}`} //
-              weight={isLiked ? "fill" : "regular"}
+              className={`size-5 ${
+                isLiked ? "text-zinc-600" : "text-zinc-300"
+              }`}
+              weight="fill"
             />
+            좋아요
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />

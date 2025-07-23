@@ -101,8 +101,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           onClick={() => handleLikeClick(schedule.id)}
         >
           <HeartIcon
-            className={`size-6 ${isLiked ? "text-zinc-600" : ""}`} //
-            weight={isLiked ? "fill" : "regular"}
+            className={`size-6 ${isLiked ? "text-zinc-600" : "text-zinc-300"}`}
+            weight="fill"
           />
         </div>
       </div>
