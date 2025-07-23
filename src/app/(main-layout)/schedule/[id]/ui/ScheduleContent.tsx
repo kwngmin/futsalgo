@@ -115,7 +115,7 @@ const ScheduleContent = ({
             <HeartIcon className="size-5" strokeWidth={2} />
           </button> */}
           <button
-            className="shrink-0 h-10 flex items-center justify-center gap-1.5 px-3 text-sm font-semibold text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+            className="shrink-0 h-10 flex items-center justify-center gap-1.5 px-3 text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() => handleLikeClick(scheduleId)}
           >
             <HeartIcon
