@@ -78,14 +78,14 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       <div className="relative">
         {/* 우리팀 & 주최팀vs초청팀 로고 */}
         {data?.data?.schedule?.matchType === "SQUAD" ? (
-          <div className="w-full flex items-center justify-center sm:gap-0 pt-8 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+          <div className="w-full flex items-center justify-center sm:gap-0 pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
             <TeamLogo
               logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               teamType="HOST"
             />
           </div>
         ) : (
-          <div className="w-full flex items-center justify-center sm:gap-0 pt-8 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+          <div className="w-full flex items-center justify-center sm:gap-0 pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
             <TeamLogo
               logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               teamType="HOST"
