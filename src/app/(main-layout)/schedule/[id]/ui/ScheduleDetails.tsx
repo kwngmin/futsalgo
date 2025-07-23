@@ -61,7 +61,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   });
   console.log(attendanceIds, "attendances");
 
-  const isTeamMatch = data.data.schedule.matchType === "TEAM";
+  // const isTeamMatch = data.data.schedule.matchType === "TEAM";
 
   return (
     <div className="space-y-3">
@@ -76,50 +76,44 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
 
       <div className="relative">
-        {/* 공통 */}
-        <div className="flex justify-center gap-4 px-4 py-12 sm:max-w-sm mx-auto bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent mb-4 sm:mb-0">
-          <TeamLogo
-            logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-            teamType="HOST"
-          />
-          <div
-            className={
-              isTeamMatch
-                ? "flex flex-col items-center justify-center"
-                : "flex flex-col justify-center"
-            }
-          >
-            <span
-              className={`flex items-center font-semibold text-2xl sm:text-xl ${
-                isTeamMatch ? "justify-center" : "justify-start"
-              }`}
-            >
-              {isTeamMatch ? "다른 팀과의 친선전" : "우리 팀끼리 자체전"}
-              {/* ? "다른 팀과의 친선경기"
-              : "우리 팀끼리 자체경기"} */}
-            </span>
-            <div
-              className={
-                isTeamMatch
-                  ? "w-full flex justify-center items-center gap-1 tracking-tight text-muted-foreground h-6"
-                  : "w-full flex items-center gap-1 tracking-tight text-muted-foreground h-6"
-              }
-            >
-              {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-                month: "long",
-                day: "numeric",
-                weekday: "long",
-                hour: "numeric",
-                minute: "numeric",
-              })}
-            </div>
+        {/* 우리팀 & 주최팀vs초청팀 로고 */}
+        {data?.data?.schedule?.matchType === "SQUAD" ? (
+          <div className="w-full flex items-center justify-center sm:gap-0 pt-8 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+            <TeamLogo
+              logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+              teamType="HOST"
+            />
           </div>
-          {isTeamMatch && (
+        ) : (
+          <div className="w-full flex items-center justify-center sm:gap-0 pt-8 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+            <TeamLogo
+              logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+              teamType="HOST"
+            />
+            <span className="text-center text-xl sm:text-lg font-semibold shrink-0 w-12 mt-4">
+              VS
+            </span>
             <TeamLogo
               logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
               teamType="INVITED"
             />
-          )}
+          </div>
+        )}
+
+        {/* 공통 */}
+        <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
+          <span className="flex items-center justify-center font-semibold text-2xl">
+            {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
+          </span>
+          <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight text-muted-foreground">
+            {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+              hour: "numeric",
+              minute: "numeric",
+            })}
+          </div>
         </div>
 
         {/* 경기 시작 버튼 */}
@@ -179,9 +173,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
                 <div
                   className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
                   onClick={() => {
-                    router.push(
-                      `/schedule/${scheduleId}/matches?matchId=${match.id}`
-                    );
+                    router.push(`/schedule/${scheduleId}/match/${match.id}`);
                   }}
                 >
                   <div className="flex items-center space-x-2">

@@ -22,7 +22,7 @@ const TeamLogo = ({
         alt={`${teamType === "HOST" ? "Host" : "Invited"} Team Logo`}
         width={72}
         height={72}
-        className="size-14 sm:size-16"
+        className="size-16 sm:size-14"
         // className={
         //   matchType === "TEAM"
         //     ? "size-16 mt-5 mb-1 sm:mt-4 sm:mb-0"
