@@ -31,11 +31,11 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           <h1 className="text-2xl font-bold">{data?.matchOrder}경기</h1>
         </div>
         <div className="flex items-center gap-2">
-          <button className="shrink-0 px-3 h-10 flex items-center gap-1 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <ChevronUp className="size-5" strokeWidth={2.5} />
             이전
           </button>
-          <button className="shrink-0 px-3 h-10 flex items-center gap-1 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <ChevronDown className="size-5" strokeWidth={2.5} />
             다음
           </button>
