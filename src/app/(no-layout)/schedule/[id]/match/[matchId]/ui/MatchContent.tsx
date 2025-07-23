@@ -2,13 +2,25 @@
 
 import { MatchDataResult } from "@/entities/match/model/types";
 import { ArrowLeftRight, X } from "lucide-react";
-// import Image from "next/image";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
+import Lineup from "./Lineup";
 
 const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
   console.log(data, "data");
+
+  // 해결책 1: 타입 가드 함수 사용
+  if (!data) {
+    return <div>데이터를 찾을 수 없습니다.</div>;
+  }
+
+  // 해결책 2: 기본값 제공 + 명시적 타입 지정
+  const homeLineup =
+    data.match.lineups?.filter((lineup) => lineup.side === "HOME") ?? [];
+
+  const awayLineup =
+    data.match.lineups?.filter((lineup) => lineup.side === "AWAY") ?? [];
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -29,10 +41,6 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </button>
         </div>
       </div>
-      {/* <div className="flex items-center justify-between px-4 h-10 bg-slate-200">
-        <div className="text-sm font-medium text-gray-500">사이드</div>
-        <div className="text-sm font-medium text-gray-500">바꾸기</div>
-      </div> */}
       <div className="flex justify-between p-4 gap-3 bg-gradient-to-b from-slate-100 to-white border-b border-slate-200">
         <TeamSide
           side="home"
@@ -57,7 +65,10 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         />
       </div>
       <div className="px-4">
-        <div></div>
+        <div className="grid grid-cols-2 gap-8 py-4">
+          <Lineup lineups={homeLineup} />
+          <Lineup lineups={awayLineup} />
+        </div>
         {/* 전체 참석처리, 팀원 업데이트 */}
         {/* <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
           <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
