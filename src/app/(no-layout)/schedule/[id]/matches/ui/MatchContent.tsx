@@ -1,15 +1,15 @@
 "use client";
 
-import { Match, Schedule } from "@prisma/client";
+import { Match, MatchType } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { X } from "@phosphor-icons/react";
 
 const MatchContent = ({
-  schedule,
+  matchType,
   scheduleId,
   matches,
 }: {
-  schedule: Schedule;
+  matchType: MatchType;
   scheduleId: string;
   matches: Match[];
 }) => {
@@ -26,7 +26,7 @@ const MatchContent = ({
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1 className="text-2xl font-bold">
-            {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
+            {matchType === "TEAM" ? "친선전" : "자체전"}
           </h1>
         </div>
         <div className="flex items-center gap-2">

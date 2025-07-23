@@ -17,6 +17,10 @@ const MatchPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     },
   });
 
+  if (!schedule) {
+    return notFound();
+  }
+
   console.log(schedule, "schedule");
 
   const matches = await prisma.match.findMany({
@@ -32,7 +36,13 @@ const MatchPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     return notFound();
   }
 
-  return <MatchContent schedule={schedule} scheduleId={id} matches={matches} />;
+  return (
+    <MatchContent
+      matchType={schedule.matchType}
+      scheduleId={id}
+      matches={matches}
+    />
+  );
 };
 
 export default MatchPage;
