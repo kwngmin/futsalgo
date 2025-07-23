@@ -8,8 +8,8 @@ export default function formatTimeRange({
 
   // 시간 포맷 옵션
   const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
   };
 
   // full 문자열 추출 (예: 오전 06:00)

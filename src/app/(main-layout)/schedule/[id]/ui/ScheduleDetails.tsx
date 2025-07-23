@@ -285,13 +285,13 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             <div className="flex items-center gap-1">
               <span className="text-base font-medium text-gray-500">
                 {data.data.schedule?.startTime?.toLocaleTimeString("ko-KR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  hour: "numeric",
+                  minute: "numeric",
                 })}{" "}
                 -{" "}
                 {data.data.schedule?.endTime?.toLocaleTimeString("ko-KR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
+                  hour: "numeric",
+                  minute: "numeric",
                 })}
               </span>
             </div>
