@@ -102,13 +102,13 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
         >
           <HeartIcon
             className={`size-6 group-hover:animate-ping absolute ${
-              isLiked ? "text-zinc-600" : "text-zinc-300"
+              isLiked ? "text-indigo-500" : "text-zinc-300"
             }`}
             weight="fill"
           />
           <HeartIcon
             className={`size-6 group-hover: ${
-              isLiked ? "text-zinc-600" : "text-zinc-300"
+              isLiked ? "text-indigo-500" : "text-zinc-300"
             }`}
             weight="fill"
           />

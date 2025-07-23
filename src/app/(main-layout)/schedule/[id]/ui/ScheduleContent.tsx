@@ -120,7 +120,7 @@ const ScheduleContent = ({
           >
             <HeartIcon
               className={`size-5 ${
-                isLiked ? "text-zinc-600" : "text-zinc-300"
+                isLiked ? "text-indigo-600" : "text-zinc-300"
               }`}
               weight="fill"
             />
