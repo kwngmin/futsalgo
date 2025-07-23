@@ -48,7 +48,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </button>
         </div>
       </div>
-      <div className="relative grid grid-cols-2 p-4 gap-4 bg-gradient-to-b from-slate-100 to-white sm:mx-4 sm:rounded-md">
+      <div className="relative grid grid-cols-2 p-4 gap-8 bg-gradient-to-b from-slate-100 to-white sm:mx-4 sm:rounded-md">
         <TeamSide
           side="home"
           logoUrl={data?.match.homeTeam.logoUrl}

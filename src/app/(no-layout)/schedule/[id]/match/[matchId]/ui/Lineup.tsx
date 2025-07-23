@@ -9,17 +9,20 @@ const Lineup = ({ lineups }: { lineups: Lineup }) => {
   }
 
   return (
-    <div className="space-y-6 border border-gray-100 rounded-md py-6 sm:grid grid-cols-2 sm:px-4">
+    <div className="py-2">
       {lineups.length > 0 ? (
         lineups.map((player) => (
-          <div key={player.id} className="flex flex-col items-center gap-1">
+          <div
+            key={player.id}
+            className="flex items-center gap-2 p-2 border-b border-gray-100 last:border-0"
+          >
             {player.user.image ? (
               <Image
                 src={player.user.image}
                 alt="player image"
-                width={48}
-                height={48}
-                className="overflow-hidden size-12 rounded-[42%]"
+                width={40}
+                height={40}
+                className="overflow-hidden size-10 rounded-[42%]"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
