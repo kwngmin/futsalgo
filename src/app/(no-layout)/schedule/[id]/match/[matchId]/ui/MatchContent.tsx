@@ -1,7 +1,7 @@
 "use client";
 
 import { MatchDataResult } from "@/entities/match/model/types";
-import { X } from "lucide-react";
+import { Users, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -42,7 +42,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </button>
         </div>
       </div>
-      <div className="relative grid grid-cols-2 p-4 gap-4 bg-gradient-to-b from-slate-100 to-white">
+      <div className="relative grid grid-cols-2 p-4 gap-4 bg-gradient-to-b from-slate-100 to-white sm:mx-4 sm:rounded-md">
         <TeamSide
           side="home"
           logoUrl={data?.match.homeTeam.logoUrl}
@@ -72,7 +72,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           name={data?.match.awayTeam.name}
         />
       </div>
-      <div className="px-4">
+      <div className="p-4">
         <Button
           type="button"
           className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
@@ -90,9 +90,26 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
-        <div className="grid grid-cols-2 py-8 gap-4">
+        <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3">
+          <div className="flex items-center space-x-2">
+            <Users className={`size-5 text-gray-600`} />
+            <span className="font-medium">라인업</span>
+          </div>
+          {/* {!Boolean(data?.data.schedule?.description) && (
+              <span className="text-base font-medium text-gray-500">없음</span>
+            )} */}
+        </div>
+        <div className="grid grid-cols-2 gap-4">
           <Lineup lineups={homeLineup} />
           <Lineup lineups={awayLineup} />
+        </div>
+
+        <div>
+          {/* {Boolean(data?.data.schedule?.description) && (
+            <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+              {data?.data.schedule?.description ?? "안내 사항 없음"}
+            </p>
+          )} */}
         </div>
         {/* 전체 참석처리, 팀원 업데이트 */}
         {/* <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">

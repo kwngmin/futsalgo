@@ -17,7 +17,7 @@ const TeamSide = ({
       </h3>
       <div>
         {logoUrl ? (
-          <Image src={logoUrl} alt="home team logo" width={56} height={56} />
+          <Image src={logoUrl} alt="home team logo" width={72} height={72} />
         ) : (
           <div className="size-10 rounded-md bg-gray-100" />
         )}

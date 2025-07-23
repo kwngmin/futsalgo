@@ -9,7 +9,7 @@ const Lineup = ({ lineups }: { lineups: Lineup }) => {
   }
 
   return (
-    <div className="space-y-3 ">
+    <div className="space-y-6 border border-gray-100 rounded-md py-6 sm:grid grid-cols-2 sm:px-4">
       {lineups.length > 0 ? (
         lineups.map((player) => (
           <div key={player.id} className="flex flex-col items-center gap-1">
@@ -17,9 +17,9 @@ const Lineup = ({ lineups }: { lineups: Lineup }) => {
               <Image
                 src={player.user.image}
                 alt="player image"
-                width={56}
-                height={56}
-                className="overflow-hidden size-14 rounded-3xl"
+                width={48}
+                height={48}
+                className="overflow-hidden size-12 rounded-[42%]"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
@@ -28,7 +28,9 @@ const Lineup = ({ lineups }: { lineups: Lineup }) => {
           </div>
         ))
       ) : (
-        <div className="text-center text-sm text-gray-500">미정</div>
+        <div className="text-center text-sm font-medium text-muted-foreground">
+          미정
+        </div>
       )}
     </div>
   );
