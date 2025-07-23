@@ -11,10 +11,20 @@ const TeamSide = ({
 }) => {
   return (
     <div className="grow flex flex-col items-center gap-2 min-w-28 pb-4">
-      <h3 className="font-medium px-2 py-1 w-full text-center">
-        {/* {side === "home" ? "HOME" : "AWAY"} */}
-        {side === "home" ? "홈 팀" : "어웨이 팀"}
-      </h3>
+      <div className="flex items-center justify-center gap-3 px-3 py-1 text-center bg-white rounded-full mb-2">
+        <div
+          className={`size-2.5 rounded-full ${
+            side === "home" ? "bg-indigo-600" : "bg-emerald-600"
+          }`}
+        />
+        <span
+          className={`grow font-semibold ${
+            side === "home" ? "text-indigo-700" : "text-emerald-700"
+          }`}
+        >
+          {side === "home" ? "HOME" : "AWAY"}
+        </span>
+      </div>
       <div>
         {logoUrl ? (
           <Image src={logoUrl} alt="home team logo" width={72} height={72} />
