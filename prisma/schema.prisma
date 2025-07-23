@@ -477,7 +477,7 @@ model TeamMatchInvitation {
 model Match {
   id              String   @id @default(cuid())
   scheduleId      String
-  order           Int      @default(autoincrement())// 몇 번째 경기인지
+  order           Int      @unique // 몇 번째 경기인지
   durationMinutes Int?
   
   // 점수
@@ -507,7 +507,6 @@ model Match {
   @@index([scheduleId])
   @@index([homeTeamId])
   @@index([awayTeamId])
-  @@index([order])
   @@map("matches")
 }
 
