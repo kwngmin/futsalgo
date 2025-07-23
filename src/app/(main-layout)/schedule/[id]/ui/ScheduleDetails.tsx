@@ -68,6 +68,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   });
   console.log(attendanceIds, "attendances");
 
+  const isTeamMatch = data.data.schedule.matchType === "TEAM";
+
   return (
     <div className="space-y-3">
       {isLoading && (
@@ -82,7 +84,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
       <div className="relative">
         {/* 우리팀 & 주최팀vs초청팀 로고 */}
-        {data?.data?.schedule?.matchType === "SQUAD" ? (
+        {/* {data?.data?.schedule?.matchType === "SQUAD" ? (
           <TeamLogo
             logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             teamName={data.data.schedule?.hostTeam?.name ?? ""}
@@ -100,33 +102,61 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             <span className="text-center text-2xl sm:text-xl font-bold shrink-0 w-9 mt-4">
               VS
             </span>
-            <TeamLogo
-              logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
-              teamName={data.data.schedule?.invitedTeam?.name ?? ""}
-              teamType="INVITED"
-              matchType={data.data.schedule?.matchType}
-            />
+            {data?.data?.schedule?.matchType === "TEAM" && (
+              <TeamLogo
+                logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
+                teamName={data.data.schedule?.invitedTeam?.name ?? ""}
+                teamType="INVITED"
+                matchType={data.data.schedule?.matchType}
+              />
+            )}
           </div>
-        )}
+        )} */}
 
         {/* 공통 */}
-        <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
-          <span className="flex items-center justify-center font-semibold text-2xl">
-            {data.data.schedule?.matchType === "TEAM"
-              ? "다른 팀과의 친선전"
-              : "우리 팀끼리 자체전"}
-            {/* ? "다른 팀과의 친선경기"
+        <div
+          className={
+            isTeamMatch
+              ? "flex justify-between px-4 my-8 max-w-sm mx-auto"
+              : "flex justify-center gap-4 px-4 my-8 max-w-sm mx-auto"
+          }
+        >
+          <TeamLogo
+            logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
+            teamType="HOST"
+          />
+          <div
+            className={
+              isTeamMatch
+                ? "flex flex-col items-center justify-center"
+                : "flex flex-col justify-center"
+            }
+          >
+            <span
+              className={`flex items-center font-semibold text-xl ${
+                isTeamMatch ? "justify-center" : "justify-start"
+              }`}
+            >
+              {isTeamMatch ? "다른 팀과의 친선전" : "우리 팀끼리 자체전"}
+              {/* ? "다른 팀과의 친선경기"
               : "우리 팀끼리 자체경기"} */}
-          </span>
-          <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight text-muted-foreground">
-            {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-              month: "long",
-              day: "numeric",
-              weekday: "long",
-              hour: "numeric",
-              minute: "numeric",
-            })}
+            </span>
+            <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight text-muted-foreground h-6">
+              {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+                month: "long",
+                day: "numeric",
+                weekday: "long",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </div>
           </div>
+          {isTeamMatch && (
+            <TeamLogo
+              logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
+              teamType="INVITED"
+            />
+          )}
         </div>
 
         {/* 경기 시작 버튼 */}
