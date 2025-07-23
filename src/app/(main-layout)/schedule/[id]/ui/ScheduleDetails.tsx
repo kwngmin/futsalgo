@@ -114,13 +114,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )} */}
 
         {/* 공통 */}
-        <div
-          className={
-            isTeamMatch
-              ? "flex justify-between px-4 my-8 max-w-sm mx-auto"
-              : "flex justify-center gap-4 px-4 my-8 max-w-sm mx-auto"
-          }
-        >
+        <div className="flex justify-center gap-4 px-4 my-8 max-w-sm mx-auto">
           <TeamLogo
             logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             teamType="HOST"
