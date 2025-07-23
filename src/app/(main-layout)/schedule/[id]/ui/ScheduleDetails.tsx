@@ -116,7 +116,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               ? "다른 팀과의 친선경기"
               : "우리 팀끼리 자체경기"}
           </span>
-          <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight text-muted-foreground">
+          <div className="w-full flex justify-center items-center gap-1 font-medium tracking-tight text-muted-foreground">
             {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
               month: "long",
               day: "numeric",
