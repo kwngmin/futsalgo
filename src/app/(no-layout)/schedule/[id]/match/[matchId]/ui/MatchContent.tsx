@@ -1,7 +1,7 @@
 "use client";
 
 import { MatchDataResult } from "@/entities/match/model/types";
-import { X } from "lucide-react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -28,16 +28,15 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold">
-            {`${
-              data.match.homeTeamId === data.match.awayTeamId
-                ? "자체전"
-                : "친선전"
-            } ${data?.matchOrder}경기`}
-          </h1>
-          {/* <h1 className="text-2xl font-bold opacity-30">수정</h1> */}
+          <h1 className="text-2xl font-bold">{data?.matchOrder}경기</h1>
         </div>
         <div className="flex items-center gap-2">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+            <ChevronUp className="size-5" strokeWidth={2.5} />
+          </button>
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+            <ChevronDown className="size-5" strokeWidth={2.5} />
+          </button>
           <button
             className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() =>
