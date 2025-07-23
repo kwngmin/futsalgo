@@ -114,7 +114,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )} */}
 
         {/* 공통 */}
-        <div className="flex justify-center gap-4 px-4 my-8 max-w-sm mx-auto">
+        <div className="flex justify-center gap-4 px-4 py-12 max-w-sm mx-auto bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent">
           <TeamLogo
             logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
             teamType="HOST"
@@ -135,7 +135,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               {/* ? "다른 팀과의 친선경기"
               : "우리 팀끼리 자체경기"} */}
             </span>
-            <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight text-muted-foreground h-6">
+            <div className="w-full flex justify-center items-center gap-1 tracking-tight text-muted-foreground h-6">
               {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
                 month: "long",
                 day: "numeric",
