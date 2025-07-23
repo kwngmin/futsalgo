@@ -502,7 +502,6 @@ model Match {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   
-  @@unique([scheduleId, order])
   @@index([scheduleId])
   @@index([homeTeamId])
   @@index([awayTeamId])
