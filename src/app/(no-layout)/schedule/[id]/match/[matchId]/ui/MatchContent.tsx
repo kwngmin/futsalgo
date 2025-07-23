@@ -33,18 +33,18 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         <div className="text-sm font-medium text-gray-500">사이드</div>
         <div className="text-sm font-medium text-gray-500">바꾸기</div>
       </div> */}
-      <div className="flex justify-between py-4 px-2 bg-gradient-to-b from-slate-100 to-white border-b border-slate-200">
+      <div className="flex justify-between p-4 gap-3 bg-gradient-to-b from-slate-100 to-white border-b border-slate-200">
         <TeamSide
           side="home"
           logoUrl={data?.match.homeTeam.logoUrl}
           name={data?.match.homeTeam.name}
         />
-        <div className="flex flex-col items-center gap-1 shrink-0">
-          <div className="flex justify-center items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-2 h-7 w-full">
-            <ArrowLeftRight className="size-4 text-gray-600" />
+        <div className="flex flex-col items-center gap-1 shrink-0 w-20">
+          <div className="flex justify-center items-center gap-1 text-sm font-medium text-slate-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer px-3 h-8 bg-slate-50 border border-slate-400">
+            <ArrowLeftRight className="size-4 text-slate-600" />
             <span className="font-medium">변경</span>
           </div>
-          <div className="flex items-center gap-2 text-3xl font-semibold tracking-tighter">
+          <div className="flex items-center gap-2 text-2xl font-semibold tracking-tighter my-auto pb-8">
             <span>{data?.match.homeScore}</span>
             <span>-</span>
             <span>{data?.match.awayScore}</span>

@@ -10,21 +10,19 @@ const TeamSide = ({
   name?: string;
 }) => {
   return (
-    <div className="grow flex flex-col items-center gap-2 min-w-28 pb-4">
-      <h3 className="text-lg text-slate-500">
+    <div className="grow flex flex-col items-center gap-2 min-w-28 pb-4 bg-white rounded-md shadow-sm">
+      <h3 className="border-b border-slate-200 font-medium px-2 py-1 w-full text-center bg-slate-50">
         {/* {side === "home" ? "HOME" : "AWAY"} */}
         {side === "home" ? "홈" : "어웨이"}
       </h3>
       <div>
         {logoUrl ? (
-          <Image src={logoUrl} alt="home team logo" width={32} height={32} />
+          <Image src={logoUrl} alt="home team logo" width={56} height={56} />
         ) : (
           <div className="size-10 rounded-md bg-gray-100" />
         )}
       </div>
-      <span className="text-xs font-medium tracking-tight">
-        {name || "팀 이름 없음"}
-      </span>
+      <span className="text-sm tracking-tight">{name || "팀 이름 없음"}</span>
     </div>
   );
 };
