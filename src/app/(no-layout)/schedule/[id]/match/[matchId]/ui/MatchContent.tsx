@@ -1,7 +1,7 @@
 "use client";
 
 import { MatchDataResult } from "@/entities/match/model/types";
-import { Users, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -90,15 +90,6 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
-        <div className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3">
-          <div className="flex items-center space-x-2">
-            <Users className={`size-5 text-gray-600`} />
-            <span className="font-medium">라인업</span>
-          </div>
-          {/* {!Boolean(data?.data.schedule?.description) && (
-              <span className="text-base font-medium text-gray-500">없음</span>
-            )} */}
-        </div>
         <div className="grid grid-cols-2 gap-4">
           <Lineup lineups={homeLineup} />
           <Lineup lineups={awayLineup} />
