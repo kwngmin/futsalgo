@@ -204,114 +204,25 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </div>
         )}
 
-        <div>
-          {/* {Boolean(data?.data.schedule?.description) && (
-            <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-              {data?.data.schedule?.description ?? "안내 사항 없음"}
-            </p>
-          )} */}
-        </div>
-        {/* 전체 참석처리, 팀원 업데이트 */}
-        {/* <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
-          <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-            <div className="flex items-center gap-2">
-              <SquareCheckBig className="size-5 text-gray-400" />
-              <span className="text-base font-medium text-center">
-                전체 참석처리
-              </span>
-            </div>
+        {/* 삭제 버튼 */}
+        <button
+          type="button"
+          className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium"
+        >
+          경기 삭제
+        </button>
 
-            <div className="flex items-center gap-1"></div>
-          </div>
-          <div
-            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
-            onClick={() => {
-              addAttendances({ scheduleId, teamId, teamType });
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <RefreshCcw className="size-5 text-gray-400" />
-              <span className="text-base font-medium">팀원 업데이트</span>
-            </div>
-
-            <div className="flex items-center gap-1"></div>
-          </div>
-        </div> */}
-        {/* 참석자 목록 */}
-        {/* <div className="mt-4">
-          {data.map((attendance, index) => (
-            <div
-              key={attendance.id}
-              className="flex items-center gap-4 py-3 border-t border-gray-100"
-            >
-              <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
-                {index + 1}
-              </div>
-              <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
-                <div className="flex gap-2 items-center">
-                  <span className="font-semibold">
-                    {attendance.user.nickname}
-                  </span>
-                  <span className="font-medium text-muted-foreground">
-                    {attendance.user.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 sm:min-w-72">
-                  <div className="grow grid grid-cols-3 p-0.5 rounded-md bg-gray-100">
-                    <div
-                      className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
-                        attendance.attendanceStatus === "ATTENDING"
-                          ? "bg-white border shadow-xs font-semibold"
-                          : "text-muted-foreground font-medium"
-                      }`}
-                      onClick={() =>
-                        handleUpdate({
-                          attendanceId: attendance.id,
-                          attendanceStatus: "ATTENDING",
-                        })
-                      }
-                    >
-                      참석
-                    </div>
-                    <div
-                      className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
-                        attendance.attendanceStatus === "NOT_ATTENDING"
-                          ? "bg-white border shadow-xs font-semibold"
-                          : "text-muted-foreground font-medium"
-                      }`}
-                      onClick={() =>
-                        handleUpdate({
-                          attendanceId: attendance.id,
-                          attendanceStatus: "NOT_ATTENDING",
-                        })
-                      }
-                    >
-                      불참
-                    </div>
-                    <div
-                      className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
-                        attendance.attendanceStatus === "UNDECIDED"
-                          ? "bg-white border shadow-xs font-semibold"
-                          : "text-muted-foreground font-medium"
-                      }`}
-                      onClick={() =>
-                        handleUpdate({
-                          attendanceId: attendance.id,
-                          attendanceStatus: "UNDECIDED",
-                        })
-                      }
-                    >
-                      미정
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center w-12 h-10 rounded-md bg-gray-50 hover:bg-red-500/10 transition-colors cursor-pointer group">
-                    <Trash className="size-4 text-gray-600 group-hover:text-destructive transition-colors" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div> */}
+        {/* 만든 날 */}
+        <p className="text-center text-sm text-gray-500 mt-6">
+          만든 날:{" "}
+          {data.match.createdAt
+            ? new Date(data.match.createdAt).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : ""}
+        </p>
       </div>
     </div>
   );
