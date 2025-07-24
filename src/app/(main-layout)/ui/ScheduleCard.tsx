@@ -3,7 +3,6 @@
 import { Vote } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-// import { ScheduleWithDetails } from "../home/actions/get-schedules";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
 import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 import { HeartIcon } from "@phosphor-icons/react";
@@ -64,15 +63,15 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
 
   const getDateStatus = (day: number) => {
     if (day > 1) {
-      return { text: `D-${day}`, color: "bg-slate-200" };
+      return { text: `D-${day}`, style: "bg-slate-100 text-[15px]" };
     } else if (day === 1) {
-      return { text: "내일", color: "bg-sky-600" };
+      return { text: "내일", style: "bg-sky-600" };
     } else if (day === 0) {
-      return { text: "오늘", color: "bg-teal-600" };
+      return { text: "오늘", style: "bg-teal-600" };
     }
     return {
       text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-      color: "bg-muted",
+      style: "bg-muted",
     };
   };
 
@@ -82,7 +81,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
       <div className="flex px-4 gap-2 cursor-pointer">
         <div
-          className={`size-14 rounded-2xl font-medium text-[15px] flex items-center justify-center gap-2 truncate leading-none tracking-tight ${dateStatus.color}`}
+          className={`size-14 rounded-2xl font-medium flex items-center justify-center gap-2 truncate leading-none tracking-tight ${dateStatus.style}`}
         >
           {dateStatus.text}
         </div>
@@ -91,17 +90,17 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           onClick={() => handleScheduleClick(schedule.id)}
         >
           <div className="flex items-center gap-2">
+            {/* <CourtBasketballIcon className="size-5" /> */}
             {schedule.matchType === "TEAM" ? (
               <span className="font-medium text-sky-600">친선전</span>
             ) : (
               <span className="font-medium text-teal-600">자체전</span>
             )}
-            <div className="sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
+            <div className="sm:text-sm tracking-tighter flex items-center gap-1 text-muted-foreground font-medium">
               {timeRange}
             </div>
           </div>
           <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
-            {/* <CourtBasketballIcon className="size-4" /> */}
             {schedule.place}
           </h3>
         </div>
