@@ -71,7 +71,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     }
     return {
       text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-      style: "bg-muted",
+      style: "bg-muted text-muted-foreground",
     };
   };
 
