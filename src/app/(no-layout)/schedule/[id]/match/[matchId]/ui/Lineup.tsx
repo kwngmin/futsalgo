@@ -36,7 +36,7 @@ const Lineup = ({
           </div>
         ))
       ) : (
-        <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14 bg-gray-50 rounded-lg">
+        <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14">
           명단이 없습니다.
         </div>
       )}
