@@ -65,8 +65,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     if (day > 1) {
       return {
         text: `D-${day}`,
-        style:
-          "bg-gradient-to-br from-slate-100 to-zinc-100/50 text-[15px] text-slate-600",
+        style: "bg-gradient-to-br from-slate-100 to-zinc-100/30 text-[15px]",
       };
     } else if (day === 1) {
       return { text: "내일", style: "bg-sky-600" };
@@ -75,7 +74,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     }
     return {
       text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-      style: "bg-gradient-to-br from-muted to-muted/40 text-muted-foreground",
+      style: "bg-gradient-to-br from-muted to-muted/30",
     };
   };
 
