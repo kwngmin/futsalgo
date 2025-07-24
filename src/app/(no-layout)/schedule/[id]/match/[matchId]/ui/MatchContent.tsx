@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Dices,
   RefreshCcw,
+  Trash,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,10 +16,13 @@ import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
 import { Button } from "@/shared/components/ui/button";
 import { shuffleLineupsAdvanced } from "../actions/shuffle-lineups";
+import { useState } from "react";
 
 const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
   console.log(data, "data");
+
+  const [mode, setMode] = useState<"view" | "edit">("view");
 
   const currentIndex = data?.allMatches.findIndex(
     (match) => match.id === data.match.id
@@ -130,14 +134,6 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           type="button"
           className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
           size="lg"
-          // onClick={async () => {
-          //   const result = await addMatch(scheduleId);
-          //   if (result.success) {
-          //     refetch();
-          //   } else {
-          //     console.log(result.error, "result.error");
-          //   }
-          // }}
         >
           GOAL !
         </Button>
@@ -150,15 +146,79 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </div>
           <button
             type="button"
-            className="text-base font-semibold text-blue-600 px-4 bg-blue-50 rounded-full h-9 flex items-center justify-center select-none cursor-pointer"
+            className={`text-base font-semibold  px-4 rounded-full h-9 flex items-center justify-center select-none cursor-pointer ${
+              mode === "view"
+                ? "bg-blue-50 text-blue-600"
+                : "bg-gray-50 text-gray-600"
+            }`}
+            onClick={() => setMode(mode === "view" ? "edit" : "view")}
           >
-            수정
+            {mode === "view" ? "수정" : "완료"}
           </button>
         </div>
-        <div className="grid grid-cols-2">
-          <Lineup lineups={homeLineup} side="home" />
-          <Lineup lineups={awayLineup} side="away" />
-        </div>
+        {mode === "view" ? (
+          <div className="grid grid-cols-2">
+            <Lineup lineups={homeLineup} side="home" />
+            <Lineup lineups={awayLineup} side="away" />
+          </div>
+        ) : (
+          <div>
+            {data.match.lineups.map((lineup, index) => (
+              <div
+                key={lineup.id}
+                className="flex items-center gap-4 py-3 border-t border-gray-100"
+              >
+                <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
+                  {index + 1}
+                </div>
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
+                  <div className="flex gap-2 items-center">
+                    <span className="font-semibold">
+                      {lineup.user.nickname}
+                    </span>
+                    <span className="font-medium text-muted-foreground">
+                      {lineup.user.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 sm:min-w-72">
+                    <div className="grow grid grid-cols-2 p-0.5 rounded-md bg-gray-100">
+                      <div
+                        className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer tracking-tight ${
+                          lineup.side === "HOME"
+                            ? "bg-white border shadow-xs font-semibold text-indigo-700"
+                            : "text-muted-foreground font-medium"
+                        }`}
+                      >
+                        HOME
+                      </div>
+                      <div
+                        className={`text-sm rounded-md flex items-center tracking-tight justify-center h-9 transition-colors cursor-pointer ${
+                          lineup.side === "AWAY"
+                            ? "bg-white border shadow-xs font-semibold text-emerald-700"
+                            : "text-muted-foreground font-medium"
+                        }`}
+                      >
+                        AWAY
+                      </div>
+                      {/* <div
+                        className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer ${
+                          lineup.side === "UNDECIDED"
+                            ? "bg-white border shadow-xs text-gray-600 font-semibold"
+                            : "text-muted-foreground font-medium"
+                        }`}
+                      >
+                        휴식
+                      </div> */}
+                    </div>
+                    <div className="flex items-center justify-center w-12 h-10 rounded-md bg-gray-50 hover:bg-red-500/10 transition-colors cursor-pointer group">
+                      <Trash className="size-4 text-gray-600 group-hover:text-destructive transition-colors" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* 전체 참석처리, 팀원 업데이트 */}
         {data.match.schedule.matchType === "SQUAD" ? (
