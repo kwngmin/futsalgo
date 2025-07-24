@@ -15,7 +15,9 @@ const Lineup = ({
   }
 
   return (
-    <div className={`py-2 ${side === "away" ? "border-l" : ""}`}>
+    <div
+      className={`py-2 ${side === "away" ? "border-l border-gray-100" : ""}`}
+    >
       {lineups.length > 0 ? (
         lineups.map((player) => (
           <div key={player.id} className="flex items-center gap-2 px-3 py-2">

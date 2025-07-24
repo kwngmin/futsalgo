@@ -143,7 +143,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
-        <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-y">
+        <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <ClipboardList className="size-5 text-gray-600" />
             <span className="text-base font-medium">출전자 명단</span>
