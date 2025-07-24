@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-// 1. Match 쿼리 validator 정의
+// 1. Match 쿼리 validator 정의 (lineups 제거 - 별도 쿼리로 분리)
 export const matchDataValidator =
   Prisma.validator<Prisma.MatchFindUniqueArgs>()({
     where: { id: "" },
@@ -15,19 +15,6 @@ export const matchDataValidator =
           status: true,
           description: true,
           matchType: true,
-        },
-      },
-      lineups: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              nickname: true,
-              image: true,
-              position: true,
-            },
-          },
         },
       },
       homeTeam: {
@@ -61,9 +48,57 @@ export const allMatchesValidator = Prisma.validator<Prisma.MatchFindManyArgs>()(
   }
 );
 
-// 3. Goals 쿼리 validator 정의
+// 3. Lineups 쿼리 validator 정의 (기본 - name 필드 없음)
+export const lineupsValidator = Prisma.validator<Prisma.LineupFindManyArgs>()({
+  where: { matchId: "" },
+  include: {
+    user: {
+      select: {
+        id: true,
+        nickname: true,
+        image: true,
+        position: true,
+      },
+    },
+  },
+});
+
+// 4. Lineups 쿼리 validator 정의 (멤버용 - name 필드 포함)
+export const lineupsWithNameValidator =
+  Prisma.validator<Prisma.LineupFindManyArgs>()({
+    where: { matchId: "" },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          nickname: true,
+          image: true,
+          position: true,
+        },
+      },
+    },
+  });
+
+// 5. Goals 쿼리 validator 정의 (기본 - name 필드 없음)
 export const goalsValidator = Prisma.validator<Prisma.GoalRecordFindManyArgs>()(
   {
+    where: { matchId: "" },
+    include: {
+      scorer: {
+        select: { id: true, nickname: true },
+      },
+      assist: {
+        select: { id: true, nickname: true },
+      },
+    },
+    orderBy: { order: "asc" },
+  }
+);
+
+// 6. Goals 쿼리 validator 정의 (멤버용 - name 필드 포함)
+export const goalsWithNameValidator =
+  Prisma.validator<Prisma.GoalRecordFindManyArgs>()({
     where: { matchId: "" },
     include: {
       scorer: {
@@ -74,5 +109,4 @@ export const goalsValidator = Prisma.validator<Prisma.GoalRecordFindManyArgs>()(
       },
     },
     orderBy: { order: "asc" },
-  }
-);
+  });

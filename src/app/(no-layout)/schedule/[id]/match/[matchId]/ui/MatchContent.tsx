@@ -36,10 +36,10 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
 
   // 해결책 2: 기본값 제공 + 명시적 타입 지정
   const homeLineup =
-    data.match.lineups?.filter((lineup) => lineup.side === "HOME") ?? [];
+    data.lineups?.filter((lineup) => lineup.side === "HOME") ?? [];
 
   const awayLineup =
-    data.match.lineups?.filter((lineup) => lineup.side === "AWAY") ?? [];
+    data.lineups?.filter((lineup) => lineup.side === "AWAY") ?? [];
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -129,40 +129,44 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           name={data?.match.awayTeam.name}
         />
       </div>
-      <div className="p-4">
-        <Button
-          type="button"
-          className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-          size="lg"
-        >
-          GOAL !
-        </Button>
-      </div>
+      {data.permissions.isEditable && (
+        <div className="p-4">
+          <Button
+            type="button"
+            className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+            size="lg"
+          >
+            GOAL !
+          </Button>
+        </div>
+      )}
       <div className="px-4">
-        <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-b border-gray-100">
+        <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-t border-gray-100 px-4">
           <div className="flex items-center gap-2">
             <ClipboardList className="size-5 text-gray-600" />
             <span className="text-base font-medium">출전자 명단</span>
           </div>
-          <button
-            type="button"
-            className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-500 select-none cursor-pointer hover:bg-gray-200 hover:text-gray-700 transition-all"
-            onClick={() => setMode(mode === "view" ? "edit" : "view")}
-          >
-            {mode === "view" ? "수정" : "완료"}
-          </button>
+          {data.permissions.isEditable && (
+            <button
+              type="button"
+              className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-500 select-none cursor-pointer hover:bg-gray-200 hover:text-gray-700 transition-all"
+              onClick={() => setMode(mode === "view" ? "edit" : "view")}
+            >
+              {mode === "view" ? "수정" : "완료"}
+            </button>
+          )}
         </div>
         {mode === "view" ? (
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 border-y border-gray-100">
             <Lineup lineups={homeLineup} side="home" />
             <Lineup lineups={awayLineup} side="away" />
           </div>
         ) : (
           <div>
-            {data.match.lineups.map((lineup, index) => (
+            {data.lineups?.map((lineup, index) => (
               <div
                 key={lineup.id}
-                className="flex items-center gap-4 py-3 border-t border-gray-100"
+                className="flex items-center gap-4 py-3 border-y border-gray-100"
               >
                 <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
                   {index + 1}
@@ -172,9 +176,12 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
                     <span className="font-semibold">
                       {lineup.user.nickname}
                     </span>
-                    <span className="font-medium text-muted-foreground">
-                      {lineup.user.name}
-                    </span>
+                    {/* 권한이 있는 경우에만 실명 표시 */}
+                    {data.permissions.isMember && "name" in lineup.user && (
+                      <span className="font-medium text-muted-foreground">
+                        {lineup.user.name}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1 sm:min-w-72">
                     <div className="grow grid grid-cols-2 p-0.5 rounded-md bg-gray-100">
@@ -216,57 +223,61 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </div>
         )}
 
-        {/* 전체 참석처리, 팀원 업데이트 */}
-        {data.match.schedule.matchType === "SQUAD" ? (
-          <div className="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4">
-            <div
-              className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
-              onClick={async () => {
-                // const result = await shuffleLineups(data.match.id);
-                const result = await shuffleLineupsAdvanced(data.match.id);
-                if (result.success) {
-                  alert("랜덤 팀 나누기 완료");
-                } else {
-                  console.log(result.error, "result.error");
-                }
-              }}
+        {data.permissions.isEditable && (
+          <div>
+            {/* 전체 참석처리, 팀원 업데이트 */}
+            {data.match.schedule.matchType === "SQUAD" ? (
+              <div className="grid grid-cols-2 gap-2 pt-4">
+                <div
+                  className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+                  onClick={async () => {
+                    // const result = await shuffleLineups(data.match.id);
+                    const result = await shuffleLineupsAdvanced(data.match.id);
+                    if (result.success) {
+                      alert("랜덤 팀 나누기 완료");
+                    } else {
+                      console.log(result.error, "result.error");
+                    }
+                  }}
+                >
+                  <Dices className="size-5 text-gray-400" />
+                  <span className="text-base font-medium">랜덤 팀 나누기</span>
+                </div>
+                <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+                  <div className="flex items-center gap-2">
+                    <RefreshCcw className="size-5 text-gray-400" />
+                    <span className="text-base font-medium">명단 업데이트</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
+                <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+                  <div className="flex items-center gap-2">
+                    <ArrowLeftRight className="size-5 text-gray-400" />
+                    <span className="text-base font-medium text-center">
+                      사이드 변경
+                    </span>
+                  </div>
+                </div>
+                <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+                  <div className="flex items-center gap-2">
+                    <RefreshCcw className="size-5 text-gray-400" />
+                    <span className="text-base font-medium">명단 업데이트</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 삭제 버튼 */}
+            <button
+              type="button"
+              className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium"
             >
-              <Dices className="size-5 text-gray-400" />
-              <span className="text-base font-medium">랜덤 팀 나누기</span>
-            </div>
-            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-              <div className="flex items-center gap-2">
-                <RefreshCcw className="size-5 text-gray-400" />
-                <span className="text-base font-medium">명단 업데이트</span>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
-            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-              <div className="flex items-center gap-2">
-                <ArrowLeftRight className="size-5 text-gray-400" />
-                <span className="text-base font-medium text-center">
-                  사이드 변경
-                </span>
-              </div>
-            </div>
-            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-              <div className="flex items-center gap-2">
-                <RefreshCcw className="size-5 text-gray-400" />
-                <span className="text-base font-medium">명단 업데이트</span>
-              </div>
-            </div>
+              경기 삭제
+            </button>
           </div>
         )}
-
-        {/* 삭제 버튼 */}
-        <button
-          type="button"
-          className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium"
-        >
-          경기 삭제
-        </button>
 
         {/* 만든 날 */}
         <p className="text-center text-sm text-gray-500 mt-6">

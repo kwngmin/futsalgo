@@ -1,9 +1,13 @@
 "use server";
 
+import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 
 export const getMatchData = async (matchId: string, scheduleId: string) => {
-  // 1. 핵심 데이터는 한 번의 쿼리로
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  // 1. 핵심 데이터 조회
   const match = await prisma.match.findUnique({
     where: { id: matchId },
     include: {
@@ -17,19 +21,6 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           status: true,
           description: true,
           matchType: true,
-        },
-      },
-      lineups: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              nickname: true,
-              image: true,
-              position: true,
-            },
-          },
         },
       },
       homeTeam: {
@@ -53,9 +44,52 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
     return null;
   }
 
-  // 2. 부가 정보는 필요시에만 별도 쿼리 (캐시 활용 가능)
+  // 2. 사용자 권한 확인
+  let isMember = false;
+  let isEditable = false;
+
+  if (userId) {
+    const membershipData = await prisma.teamMember.findFirst({
+      where: {
+        userId,
+        teamId: {
+          in: [match.homeTeamId, match.awayTeamId],
+        },
+        status: "APPROVED",
+        banned: false,
+      },
+      select: {
+        role: true,
+        teamId: true,
+      },
+    });
+
+    if (membershipData) {
+      isMember = true;
+      isEditable =
+        membershipData.role === "OWNER" || membershipData.role === "MANAGER";
+    }
+  }
+
+  // 3. 권한에 따른 라인업 데이터 조회
+  const lineups = await prisma.lineup.findMany({
+    where: { matchId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          nickname: true,
+          image: true,
+          position: true,
+          // 멤버인 경우에만 실명 포함
+          ...(isMember && { name: true }),
+        },
+      },
+    },
+  });
+
+  // 4. 부가 정보 조회
   const [allMatches, goals] = await Promise.all([
-    // 매치 목록 (자주 변하지 않으므로 캐시 가능)
     prisma.match.findMany({
       where: { scheduleId },
       select: {
@@ -67,15 +101,24 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
       orderBy: { createdAt: "asc" },
     }),
 
-    // 골 정보 (실시간성이 중요하므로 별도 조회)
     prisma.goalRecord.findMany({
       where: { matchId },
       include: {
         scorer: {
-          select: { id: true, name: true, nickname: true },
+          select: {
+            id: true,
+            nickname: true,
+            // 멤버인 경우에만 실명 포함
+            ...(isMember && { name: true }),
+          },
         },
         assist: {
-          select: { id: true, name: true, nickname: true },
+          select: {
+            id: true,
+            nickname: true,
+            // 멤버인 경우에만 실명 포함
+            ...(isMember && { name: true }),
+          },
         },
       },
       orderBy: { order: "asc" },
@@ -84,8 +127,13 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
 
   return {
     match,
+    lineups,
     allMatches,
     goals,
     matchOrder: allMatches.findIndex((m) => m.id === matchId) + 1,
+    permissions: {
+      isMember,
+      isEditable,
+    },
   };
 };
