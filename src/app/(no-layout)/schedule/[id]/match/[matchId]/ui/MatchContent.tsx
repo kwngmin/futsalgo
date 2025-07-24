@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
 import { Button } from "@/shared/components/ui/button";
+import { shuffleLineupsAdvanced } from "../actions/shuffle-lineups";
 
 const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
@@ -142,22 +143,34 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <Lineup lineups={homeLineup} />
+          <Lineup lineups={awayLineup} />
+        </div>
+
         {/* 전체 참석처리, 팀원 업데이트 */}
         {data.match.schedule.matchType === "SQUAD" ? (
-          <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
-            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-              <div className="flex items-center gap-2">
-                <UserRoundPen className="size-5 text-gray-400" />
-                <span className="text-base font-medium text-center">
-                  팀 배정하기
-                </span>
-              </div>
+          <div className="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4">
+            <div className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+              <UserRoundPen className="size-5 text-gray-400" />
+              <span className="text-base font-medium text-center">
+                팀 직접 나누기
+              </span>
             </div>
-            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-              <div className="flex items-center gap-2">
-                <Dices className="size-5 text-gray-400" />
-                <span className="text-base font-medium">무작위 팀 배정</span>
-              </div>
+            <div
+              className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+              onClick={async () => {
+                // const result = await shuffleLineups(data.match.id);
+                const result = await shuffleLineupsAdvanced(data.match.id);
+                if (result.success) {
+                  alert("팀 랜덤 나누기 완료");
+                } else {
+                  console.log(result.error, "result.error");
+                }
+              }}
+            >
+              <Dices className="size-5 text-gray-400" />
+              <span className="text-base font-medium">팀 랜덤 나누기</span>
             </div>
           </div>
         ) : (
@@ -178,11 +191,6 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
             </div>
           </div>
         )}
-
-        <div className="grid grid-cols-2 gap-4">
-          <Lineup lineups={homeLineup} />
-          <Lineup lineups={awayLineup} />
-        </div>
 
         <div>
           {/* {Boolean(data?.data.schedule?.description) && (

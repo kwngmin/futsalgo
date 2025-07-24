@@ -31,7 +31,7 @@ const Lineup = ({ lineups }: { lineups: Lineup }) => {
           </div>
         ))
       ) : (
-        <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14">
+        <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14 bg-gray-50 rounded-lg">
           명단이 없습니다.
         </div>
       )}

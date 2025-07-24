@@ -2,26 +2,10 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
+import { TeamSide } from "@prisma/client";
 
 export async function addMatch(scheduleId: string) {
   try {
-    const schedule = await prisma.schedule.findUnique({
-      where: { id: scheduleId },
-      select: {
-        hostTeamId: true,
-        invitedTeamId: true,
-        matchType: true,
-      },
-    });
-
-    if (!schedule) {
-      return { success: false, error: "스케줄을 찾을 수 없습니다" };
-    }
-
-    if (schedule.matchType === "TEAM" && !schedule.invitedTeamId) {
-      return { success: false, error: "초대된 팀이 없습니다" };
-    }
-
     const session = await auth();
     const userId = session?.user?.id;
 
@@ -29,66 +13,92 @@ export async function addMatch(scheduleId: string) {
       return { success: false, error: "로그인이 필요합니다" };
     }
 
-    // 로그인 및 유저 확인
-    const attendance = await prisma.scheduleAttendance.findUnique({
-      where: {
-        scheduleId_userId: {
-          scheduleId,
-          userId,
-        },
-      },
+    // 스케줄과 참석자 정보를 한 번에 조회 (성능 최적화)
+    const scheduleWithAttendances = await prisma.schedule.findUnique({
+      where: { id: scheduleId },
       select: {
-        teamType: true,
+        hostTeamId: true,
+        invitedTeamId: true,
+        matchType: true,
+        attendances: {
+          where: {
+            attendanceStatus: "ATTENDING",
+          },
+          select: {
+            userId: true,
+            teamType: true,
+          },
+        },
       },
     });
 
-    if (!attendance) {
+    if (!scheduleWithAttendances) {
+      return { success: false, error: "스케줄을 찾을 수 없습니다" };
+    }
+
+    const { hostTeamId, invitedTeamId, matchType, attendances } =
+      scheduleWithAttendances;
+
+    // TEAM 매치타입일 때 초대팀 검증
+    if (matchType === "TEAM" && !invitedTeamId) {
+      return { success: false, error: "초대된 팀이 없습니다" };
+    }
+
+    // 참석자 중에 현재 사용자가 있는지 확인
+    const userAttendance = attendances.find(
+      (attendance) => attendance.userId === userId
+    );
+    if (!userAttendance) {
       return { success: false, error: "참석자가 아닙니다" };
     }
 
-    // awayTeamId 결정
-    const awayTeamId =
-      schedule.matchType === "TEAM"
-        ? schedule.invitedTeamId!
-        : schedule.hostTeamId;
+    // awayTeamId 결정 로직 개선
+    const awayTeamId = matchType === "TEAM" ? invitedTeamId! : hostTeamId;
 
-    const match = await prisma.match.create({
-      data: {
-        scheduleId,
-        createdById: userId,
-        homeTeamId: schedule.hostTeamId,
-        awayTeamId, // ← null 불가, 조건에 따라 안전하게 처리됨
-      },
-    });
-
-    if (schedule.matchType === "TEAM") {
-      // 로그인 및 유저 확인
-      const attendances = await prisma.scheduleAttendance.findMany({
-        where: {
+    // 트랜잭션으로 매치 생성과 라인업 추가를 원자적으로 처리
+    const result = await prisma.$transaction(async (tx) => {
+      // 매치 생성
+      const match = await tx.match.create({
+        data: {
           scheduleId,
-          attendanceStatus: "ATTENDING",
-        },
-        select: {
-          userId: true,
-          teamType: true,
+          createdById: userId,
+          homeTeamId: hostTeamId,
+          awayTeamId,
         },
       });
 
-      await prisma.lineup.createMany({
-        data: attendances.map((attendance) => ({
+      // 라인업 데이터 준비
+      const lineupData = attendances.map((attendance) => {
+        let side: TeamSide | undefined;
+
+        if (matchType === "TEAM") {
+          side = attendance.teamType === "HOST" ? "HOME" : "AWAY";
+        }
+        // SQUAD 타입일 때는 side를 undefined로 두어 기본값(UNDECIDED) 사용
+
+        return {
           matchId: match.id,
           userId: attendance.userId,
-          side: attendance.teamType === "HOST" ? "HOME" : "AWAY",
-        })),
+          ...(side && { side }), // side가 있을 때만 포함
+        };
       });
-    }
+
+      // 라인업 일괄 생성
+      if (lineupData.length > 0) {
+        await tx.lineup.createMany({
+          data: lineupData,
+        });
+      }
+
+      return match;
+    });
 
     return {
       success: true,
-      data: match,
+      data: result,
     };
   } catch (error) {
-    console.error("스케줄 데이터 조회 실패:", error);
+    console.error("매치 생성 실패:", error);
     return { success: false, error: "서버 오류가 발생했습니다" };
   }
 }
