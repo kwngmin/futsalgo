@@ -18,10 +18,10 @@ const LikedPageLoading = () => {
         {Array.from({ length: 10 }).map((_, index) => {
           return (
             <div key={index} className="flex items-center gap-2 py-2">
-              <div className="size-14 rounded-2xl bg-gray-100 animate-pulse" />
+              <div className="size-14 rounded-2xl bg-gray-100 animate-pulse shrink-0" />
               <div className="grow flex flex-col gap-2">
-                <div className="w-64 h-4 bg-gray-100 rounded animate-pulse" />
-                <div className="w-36 h-5 bg-gray-100 rounded animate-pulse" />
+                <div className="w-48 h-4 bg-gray-100 rounded animate-pulse" />
+                <div className="w-32 h-5 bg-gray-100 rounded animate-pulse" />
               </div>
               <div className="size-10 flex items-center justify-center">
                 <div className="size-6 bg-gray-100 rounded-full animate-pulse" />
