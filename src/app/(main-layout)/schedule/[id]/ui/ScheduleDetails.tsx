@@ -272,6 +272,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
+                  weekday: "long",
                 })}
               </span>
             </div>
