@@ -63,7 +63,11 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
 
   const getDateStatus = (day: number) => {
     if (day > 1) {
-      return { text: `D-${day}`, style: "bg-slate-100 text-[15px]" };
+      return {
+        text: `D-${day}`,
+        style:
+          "bg-gradient-to-br from-slate-100 to-zinc-100/50 text-[15px] text-slate-600",
+      };
     } else if (day === 1) {
       return { text: "내일", style: "bg-sky-600" };
     } else if (day === 0) {
@@ -71,7 +75,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     }
     return {
       text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-      style: "bg-muted text-muted-foreground",
+      style: "bg-gradient-to-br from-muted to-muted/40 text-muted-foreground",
     };
   };
 
