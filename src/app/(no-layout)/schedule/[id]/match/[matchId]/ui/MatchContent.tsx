@@ -229,14 +229,14 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
                 // const result = await shuffleLineups(data.match.id);
                 const result = await shuffleLineupsAdvanced(data.match.id);
                 if (result.success) {
-                  alert("팀 랜덤 나누기 완료");
+                  alert("랜덤 팀 나누기 완료");
                 } else {
                   console.log(result.error, "result.error");
                 }
               }}
             >
               <Dices className="size-5 text-gray-400" />
-              <span className="text-base font-medium">팀 랜덤 나누기</span>
+              <span className="text-base font-medium">랜덤 팀 나누기</span>
             </div>
             <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
               <div className="flex items-center gap-2">
