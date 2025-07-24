@@ -85,12 +85,12 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             />
           </div>
         ) : (
-          <div className="w-full flex items-center justify-center sm:gap-0 pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
+          <div className="w-full flex items-center justify-center pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
             <TeamLogo
               logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
               teamType="HOST"
             />
-            <span className="text-center text-xl sm:text-lg font-semibold shrink-0 w-12 mt-4">
+            <span className="text-center text-lg sm:text-base font-medium shrink-0 w-10 mt-4">
               VS
             </span>
             <TeamLogo

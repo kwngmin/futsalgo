@@ -17,7 +17,7 @@ const SchedulePageLoading = () => {
       <div className="px-4">
         {Array.from({ length: 10 }).map((_, index) => {
           return (
-            <div key={index} className="flex items-center gap-2 py-2">
+            <div key={index} className="flex items-center gap-3 py-2">
               <div className="size-14 rounded-2xl bg-gray-100 animate-pulse shrink-0" />
               <div className="grow flex flex-col gap-2">
                 <div className="w-48 h-4 bg-gray-100 rounded animate-pulse" />
