@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getScheduleAttendance } from "../actions/get-schedule-attendance";
 import ManageAttendance from "./ManageAttendance";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["scheduleAttendance", scheduleId],
     queryFn: () => getScheduleAttendance(scheduleId),
+    placeholderData: keepPreviousData,
   });
 
   console.log(data, "data scheduleAttendance");

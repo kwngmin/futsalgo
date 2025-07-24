@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getSchedule } from "../actions/get-schedule";
 import {
   Calendar,
@@ -29,6 +29,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["schedule", scheduleId],
     queryFn: () => getSchedule(scheduleId),
+    placeholderData: keepPreviousData,
   });
 
   if (!data) {

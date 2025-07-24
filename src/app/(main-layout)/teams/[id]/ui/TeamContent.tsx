@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { cancelJoinTeam, getTeam, joinTeam } from "../model/actions";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   ChartPie,
@@ -70,6 +70,7 @@ const TeamContent = ({ id }: { id: string }) => {
   const { data, refetch } = useQuery({
     queryKey: ["team", id],
     queryFn: () => getTeam(id),
+    placeholderData: keepPreviousData,
     enabled: !!id, // id 없으면 fetch 안 함
   });
   console.log(data, "team");

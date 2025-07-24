@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getPlayer } from "../model/actions";
 // import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -71,6 +71,7 @@ const PlayerContent = ({ id }: { id: string }) => {
   const { data } = useQuery({
     queryKey: ["player", id],
     queryFn: () => getPlayer(id),
+    placeholderData: keepPreviousData,
     enabled: !!id, // id 없으면 fetch 안 함
   });
   console.log(data, "player");

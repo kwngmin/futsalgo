@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import NewForm from "./NewForm";
@@ -17,6 +17,7 @@ const NewContent = ({ userId }: { userId: string }) => {
   const { data } = useQuery({
     queryKey: ["myTeams", userId],
     queryFn: () => getTeams(userId) as Promise<GetTeamsReturn>,
+    placeholderData: keepPreviousData,
     enabled: !!userId, // id 없으면 fetch 안 함
   });
 
