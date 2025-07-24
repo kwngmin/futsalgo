@@ -82,8 +82,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
 
   return (
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
-      <div className="flex px-4 gap-2 cursor-pointer">
-        <div className="size-14 rounded-2xl font-medium flex items-center justify-center gap-2 truncate leading-none tracking-tight bg-gradient-to-br from-slate-200/50 to-white shadow-lg">
+      <div className="flex px-4 gap-3 cursor-pointer">
+        <div className="size-14 rounded-lg font-medium flex items-center justify-center gap-2 truncate leading-none tracking-tight bg-gradient-to-br from-slate-200/50 to-white shadow-lg">
           {dateStatus.text}
         </div>
         <div

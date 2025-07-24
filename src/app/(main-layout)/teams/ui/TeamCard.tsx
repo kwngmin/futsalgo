@@ -22,7 +22,7 @@ const TeamCard = ({
 
   return (
     <div
-      className="px-4 py-2 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-2"
+      className="px-4 py-2 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-3"
       onClick={() => router.push(`/teams/${team.id}`)}
     >
       {/* 팀 로고 */}
