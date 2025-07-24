@@ -95,9 +95,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           <div className="flex items-center gap-2">
             {/* <CourtBasketballIcon className="size-5" /> */}
             {schedule.matchType === "TEAM" ? (
-              <span className="font-medium text-sky-600">친선전</span>
+              <span className="font-medium text-indigo-700">친선전</span>
             ) : (
-              <span className="font-medium text-teal-600">자체전</span>
+              <span className="font-medium text-emerald-600">자체전</span>
             )}
             <div className="sm:text-sm tracking-tighter flex items-center gap-1 text-muted-foreground font-medium">
               {timeRange}
