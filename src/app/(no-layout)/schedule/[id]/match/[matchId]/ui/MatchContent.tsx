@@ -146,7 +146,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </div>
           <button
             type="button"
-            className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-600 select-none cursor-pointer"
+            className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-500 select-none cursor-pointer hover:bg-gray-200 hover:text-gray-700 transition-all"
             onClick={() => setMode(mode === "view" ? "edit" : "view")}
           >
             {mode === "view" ? "수정" : "완료"}
@@ -182,7 +182,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
                         className={`text-sm rounded-md flex items-center justify-center h-9 transition-colors cursor-pointer tracking-tight ${
                           lineup.side === "HOME"
                             ? "bg-white border shadow-xs font-semibold text-indigo-700"
-                            : "text-muted-foreground font-medium"
+                            : "text-muted-foreground font-medium hover:text-gray-700"
                         }`}
                       >
                         HOME
@@ -191,7 +191,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
                         className={`text-sm rounded-md flex items-center tracking-tight justify-center h-9 transition-colors cursor-pointer ${
                           lineup.side === "AWAY"
                             ? "bg-white border shadow-xs font-semibold text-emerald-700"
-                            : "text-muted-foreground font-medium"
+                            : "text-muted-foreground font-medium hover:text-gray-700"
                         }`}
                       >
                         AWAY
