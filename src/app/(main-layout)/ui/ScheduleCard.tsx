@@ -62,26 +62,35 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     (like) => like.userId === session.data?.user?.id
   );
 
+  const getDateStatus = (day: number) => {
+    if (day > 1) {
+      return { text: `D-${day}`, color: "bg-slate-200" };
+    } else if (day === 1) {
+      return { text: "내일", color: "bg-sky-600" };
+    } else if (day === 0) {
+      return { text: "오늘", color: "bg-teal-600" };
+    }
+    return {
+      text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
+      color: "bg-muted",
+    };
+  };
+
+  const dateStatus = getDateStatus(dDay);
+
   return (
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
-      <div className="flex px-4 gap-1 cursor-pointer">
+      <div className="flex px-4 gap-2 cursor-pointer">
+        <div
+          className={`size-14 rounded-2xl font-medium text-[15px] flex items-center justify-center gap-2 truncate leading-none tracking-tight ${dateStatus.color}`}
+        >
+          {dateStatus.text}
+        </div>
         <div
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
           <div className="flex items-center gap-2">
-            <div className="font-medium flex items-center gap-2 truncate leading-none tracking-tight">
-              {dDay > 1
-                ? `D-${dDay}`
-                : dDay === 1
-                ? "내일"
-                : dDay === 0
-                ? "오늘"
-                : schedule.date.toLocaleDateString("ko-KR", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-            </div>
             {schedule.matchType === "TEAM" ? (
               <span className="font-medium text-sky-600">친선전</span>
             ) : (
