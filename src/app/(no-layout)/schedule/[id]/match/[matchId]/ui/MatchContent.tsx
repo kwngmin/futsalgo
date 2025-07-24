@@ -146,11 +146,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           </div>
           <button
             type="button"
-            className={`text-base font-semibold  px-4 rounded-full h-9 flex items-center justify-center select-none cursor-pointer ${
-              mode === "view"
-                ? "bg-blue-50 text-blue-600"
-                : "bg-gray-50 text-gray-600"
-            }`}
+            className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-600 select-none cursor-pointer"
             onClick={() => setMode(mode === "view" ? "edit" : "view")}
           >
             {mode === "view" ? "수정" : "완료"}
