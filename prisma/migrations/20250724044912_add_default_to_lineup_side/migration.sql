@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "lineups" ALTER COLUMN "side" SET DEFAULT 'UNDECIDED';
