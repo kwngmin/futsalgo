@@ -212,6 +212,10 @@ model User {
   weight          Int?
   condition       Condition @default(NORMAL)
 
+  // SNS 계정
+  instagram       String?
+  youtube         String?
+
   playerBackground PlayerBackground @default(NON_PROFESSIONAL) // 선수 출신 여부
   skillLevel       PlayerSkillLevel @default(BEGINNER) // 실력 수준
 
