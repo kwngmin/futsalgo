@@ -164,14 +164,14 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
         {/* 경기 정보 */}
         {data.data.schedule.matches.length > 0 && (
-          <div className="space-y-2 mb-2">
+          <div className="rounded-md border border-gray-100 mx-4 overflow-hidden">
             {data.data.schedule.matches.map((match, index) => (
               <div
-                className="overflow-hidden rounded-lg border mx-4"
+                className="overflow-hidden border-b border-gray-100 last:border-b-0"
                 key={match.id}
               >
                 <div
-                  className="w-full flex items-center justify-between px-4 h-11 sm:h-10 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
                   onClick={() => {
                     router.push(`/schedule/${scheduleId}/match/${match.id}`);
                   }}
