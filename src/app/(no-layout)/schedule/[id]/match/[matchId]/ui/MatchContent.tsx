@@ -5,9 +5,9 @@ import {
   ArrowLeftRight,
   ChevronDown,
   ChevronUp,
+  ClipboardList,
   Dices,
   RefreshCcw,
-  UserRoundPen,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -143,20 +143,26 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         </Button>
       </div>
       <div className="px-4">
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          <Lineup lineups={homeLineup} />
-          <Lineup lineups={awayLineup} />
+        <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-y">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="size-5 text-gray-600" />
+            <span className="text-base font-medium">출전자 명단</span>
+          </div>
+          <button
+            type="button"
+            className="text-base font-semibold text-blue-600 px-4 bg-blue-50 rounded-full h-9 flex items-center justify-center select-none cursor-pointer"
+          >
+            수정
+          </button>
+        </div>
+        <div className="grid grid-cols-2">
+          <Lineup lineups={homeLineup} side="home" />
+          <Lineup lineups={awayLineup} side="away" />
         </div>
 
         {/* 전체 참석처리, 팀원 업데이트 */}
         {data.match.schedule.matchType === "SQUAD" ? (
           <div className="grid grid-cols-2 gap-2 border-t border-gray-100 pt-4">
-            <div className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
-              <UserRoundPen className="size-5 text-gray-400" />
-              <span className="text-base font-medium text-center">
-                팀 직접 나누기
-              </span>
-            </div>
             <div
               className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
               onClick={async () => {
@@ -172,6 +178,12 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
               <Dices className="size-5 text-gray-400" />
               <span className="text-base font-medium">팀 랜덤 나누기</span>
             </div>
+            <div className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors">
+              <div className="flex items-center gap-2">
+                <RefreshCcw className="size-5 text-gray-400" />
+                <span className="text-base font-medium">명단 업데이트</span>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
@@ -179,7 +191,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
               <div className="flex items-center gap-2">
                 <ArrowLeftRight className="size-5 text-gray-400" />
                 <span className="text-base font-medium text-center">
-                  사이드 바꾸기
+                  사이드 변경
                 </span>
               </div>
             </div>
