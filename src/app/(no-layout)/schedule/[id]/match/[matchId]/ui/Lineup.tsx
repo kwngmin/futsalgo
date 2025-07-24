@@ -27,7 +27,7 @@ const Lineup = ({
                 alt="player image"
                 width={32}
                 height={32}
-                className="overflow-hidden size-8 rounded-[42%]"
+                className="overflow-hidden object-cover size-8 rounded-[42%]"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
