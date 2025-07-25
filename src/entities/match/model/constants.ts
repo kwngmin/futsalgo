@@ -92,7 +92,7 @@ export const goalsValidator = Prisma.validator<Prisma.GoalRecordFindManyArgs>()(
         select: { id: true, nickname: true },
       },
     },
-    orderBy: { order: "asc" },
+    orderBy: { createdAt: "asc" },
   }
 );
 
@@ -108,5 +108,5 @@ export const goalsWithNameValidator =
         select: { id: true, name: true, nickname: true },
       },
     },
-    orderBy: { order: "asc" },
+    orderBy: { createdAt: "asc" },
   });
