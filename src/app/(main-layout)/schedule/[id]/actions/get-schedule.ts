@@ -30,7 +30,11 @@ export async function getSchedule(scheduleId: string) {
           },
         },
         attendances: true,
-        matches: true,
+        matches: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
         createdBy: true,
       },
     });
