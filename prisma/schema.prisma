@@ -529,10 +529,12 @@ model Lineup {
 model GoalRecord {
   id          String   @id @default(cuid())
   matchId     String
-  side        TeamSide
-  order       Int
+  scorerSide  TeamSide // 실제 골을 넣은 선수가 속한 팀
   scorerId    String?
   assistId    String?
+
+  // 자책골 여부
+  isOwnGoal   Boolean   @default(false)
 
   // 용병 여부
   isScoredByMercenary  Boolean @default(false)
@@ -541,13 +543,14 @@ model GoalRecord {
   createdAt   DateTime @default(now())
 
   match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  scorer      User?     @relation("Scorer", fields: [scorerId], references: [id])
+  scorer      User?    @relation("Scorer", fields: [scorerId], references: [id])
   assist      User?    @relation("Assist", fields: [assistId], references: [id])
   
   @@index([matchId])
   @@index([scorerId])
   @@index([assistId])
-  @@index([matchId, order])
+  @@index([matchId, createdAt])  // 골 순서 조회용
+  @@index([matchId, isOwnGoal])  // 자책골 조회용
   @@map("goal_records")
 }
 

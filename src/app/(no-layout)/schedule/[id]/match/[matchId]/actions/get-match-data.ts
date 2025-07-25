@@ -121,7 +121,7 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           },
         },
       },
-      orderBy: { order: "asc" },
+      // orderBy: { order: "asc" },
     }),
   ]);
 

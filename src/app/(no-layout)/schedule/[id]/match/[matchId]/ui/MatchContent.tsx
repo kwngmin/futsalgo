@@ -14,9 +14,10 @@ import {
 import { useRouter } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
-import { Button } from "@/shared/components/ui/button";
+// import { Button } from "@/shared/components/ui/button";
 import { shuffleLineupsAdvanced } from "../actions/shuffle-lineups";
 import { useState } from "react";
+import GoalRecord from "./GoalRecord";
 
 const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
@@ -130,15 +131,16 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         />
       </div>
       {data.permissions.isEditable && (
-        <div className="p-4">
-          <Button
-            type="button"
-            className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-            size="lg"
-          >
-            GOAL !
-          </Button>
-        </div>
+        <GoalRecord matchId={data.match.id} lineups={data.lineups} />
+        // <div className="p-4">
+        //   <Button
+        //     type="button"
+        //     className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+        //     size="lg"
+        //   >
+        //     GOAL !
+        //   </Button>
+        // </div>
       )}
       <div className="px-4">
         <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-t border-gray-100 px-4">
