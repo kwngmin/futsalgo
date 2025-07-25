@@ -144,7 +144,7 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
         <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-t border-gray-100 px-4">
           <div className="flex items-center gap-2">
             <ClipboardList className="size-5 text-gray-600" />
-            <span className="text-base font-medium">출전자 명단</span>
+            <span className="text-base font-medium">출전 명단</span>
           </div>
           {data.permissions.isEditable && (
             <button

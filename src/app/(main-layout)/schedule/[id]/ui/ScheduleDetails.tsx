@@ -165,7 +165,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
         {/* 경기 정보 */}
         {data.data.schedule.matches.length > 0 && (
-          <div className="rounded-md border border-gray-100 mx-4 overflow-hidden">
+          <div className="rounded-md border border-gray-100 m-4 overflow-hidden">
             {data.data.schedule.matches.map((match, index) => (
               <div
                 className="overflow-hidden border-b border-gray-100 last:border-b-0"
