@@ -89,14 +89,14 @@ const GoalRecord = ({
       isOwnGoal: false,
       isScoredByMercenary: false,
       isAssistedByMercenary: false,
-      scorerSide: "HOME",
+      // scorerSide: "HOME",
     },
   });
 
   console.log(watch("scorerId"));
 
   const watchValues = watch();
-  const { isOwnGoal, isScoredByMercenary, isAssistedByMercenary } = watchValues;
+  const { isOwnGoal } = watchValues;
 
   // HOME과 AWAY 팀 라인업 분리
   const homeLineups = lineups.filter((lineup) => lineup.side === "HOME");
@@ -112,9 +112,20 @@ const GoalRecord = ({
     }
   };
 
+  console.log(watchValues.scorerId, "watchValues.scorerId");
+  console.log(
+    watchValues.isScoredByMercenary,
+    "watchValues.isScoredByMercenary"
+  );
+
+  console.log(
+    Boolean(watchValues.scorerId || watchValues.isScoredByMercenary),
+    "watchValues.scorerId || watchValues.isScoredByMercenary"
+  );
+
   return (
     <FieldModal
-      title="골 기록"
+      title="기록"
       trigger={
         <div className="p-4">
           <Button
@@ -128,125 +139,117 @@ const GoalRecord = ({
       }
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 my-2">
-        {/* 어느 팀 득점인지 선택 */}
-        <div className="space-y-3">
-          <Label>득점 팀</Label>
-          <CustomSelect
-            value={watchValues.scorerSide}
-            onChange={(e) =>
-              setValue("scorerSide", e.target.value as "HOME" | "AWAY")
-            }
-            options={
-              <>
-                <option value="HOME">HOME 팀</option>
-                <option value="AWAY">AWAY 팀</option>
-              </>
-            }
-          />
-        </div>
-
         {/* 득점 한 사람 */}
         <div className="space-y-3">
           <div className="flex justify-between gap-3">
-            <Label>득점 한 사람</Label>
-            <div className="flex items-center gap-6">
-              {/* 자책골 여부 */}
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="isOwnGoal"
-                  checked={isOwnGoal}
-                  onCheckedChange={(checked) => {
-                    setValue("isOwnGoal", !!checked);
-                    if (checked) {
-                      // 자책골일 때 어시스트 관련 필드 초기화
-                      setValue("assistId", "");
-                      setValue("isAssistedByMercenary", false);
-                    }
-                  }}
-                />
-                <Label htmlFor="isOwnGoal">자책골</Label>
-              </div>
-
-              {/* 용병 체크박스 */}
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="isScoredByMercenary"
-                  checked={isScoredByMercenary}
-                  onCheckedChange={(checked) => {
-                    setValue("isScoredByMercenary", !!checked);
-                    if (checked) {
-                      setValue("scorerId", "");
-                    }
-                  }}
-                />
-                <Label htmlFor="isScoredByMercenary">용병</Label>
-              </div>
-            </div>
+            <Label>골</Label>
           </div>
           <div className="space-y-3">
-            {/* 선수 선택 (용병이 아닐 때만) */}
-            {!isScoredByMercenary && (
-              <CustomSelect
-                value={watchValues.scorerId || ""}
-                onChange={(e) => setValue("scorerId", e.target.value)}
-                options={
-                  <>
-                    <option value="">선택</option>
-                    {watchValues.scorerSide === "HOME"
-                      ? homeLineups.map((lineup) => (
-                          <option key={lineup.id} value={lineup.userId}>
-                            {`${lineup.user.nickname} ${
-                              "name" in lineup.user
-                                ? `(${lineup.user.name})`
-                                : ""
-                            }`}
-                          </option>
-                        ))
-                      : awayLineups.map((lineup) => (
-                          <option key={lineup.id} value={lineup.userId}>
-                            {`${lineup.user.nickname} ${
-                              "name" in lineup.user
-                                ? `(${lineup.user.name})`
-                                : ""
-                            }`}
-                          </option>
-                        ))}
-                  </>
+            <CustomSelect
+              value={watchValues.scorerId || ""}
+              onChange={(e) => {
+                if (e.target.value === "mercenary_home_side") {
+                  setValue("isScoredByMercenary", true);
+                  setValue("scorerId", "");
+                  setValue("scorerSide", "HOME");
+                } else if (e.target.value === "mercenary_away_side") {
+                  setValue("isScoredByMercenary", true);
+                  setValue("scorerId", "");
+                  setValue("scorerSide", "AWAY");
+                } else {
+                  setValue("isScoredByMercenary", false);
+                  setValue("scorerId", e.target.value);
+                  setValue(
+                    "scorerSide",
+                    lineups.find((lineup) => lineup.userId === e.target.value)
+                      ?.side as "HOME" | "AWAY"
+                  );
                 }
-              />
-            )}
+              }}
+              options={
+                <>
+                  <option value="">선택</option>
+                  <optgroup label="HOME 팀">
+                    {homeLineups.map((lineup) => (
+                      <option key={lineup.id} value={lineup.userId}>
+                        {`${lineup.user.nickname} ${
+                          "name" in lineup.user ? `(${lineup.user.name})` : ""
+                        }`}
+                      </option>
+                    ))}
+                    <option
+                      value="mercenary_home_side"
+                      key="mercenary_home_side"
+                    >
+                      용병
+                    </option>
+                  </optgroup>
+                  <optgroup label="AWAY 팀">
+                    {awayLineups.map((lineup) => (
+                      <option key={lineup.id} value={lineup.userId}>
+                        {`${lineup.user.nickname} ${
+                          "name" in lineup.user ? `(${lineup.user.name})` : ""
+                        }`}
+                      </option>
+                    ))}
+                    <option
+                      value="mercenary_away_side"
+                      key="mercenary_away_side"
+                    >
+                      용병
+                    </option>
+                  </optgroup>
+                </>
+              }
+            />
           </div>
           {errors.scorerId && (
             <p className="text-sm text-red-500">{errors.scorerId.message}</p>
           )}
         </div>
 
+        {/* 자책골 여부 */}
+        {Boolean(watchValues.scorerId || watchValues.isScoredByMercenary) && (
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="isOwnGoal"
+              checked={isOwnGoal}
+              onCheckedChange={(checked) => {
+                setValue("isOwnGoal", !!checked);
+                if (checked) {
+                  // 자책골일 때 어시스트 관련 필드 초기화
+                  setValue("assistId", "");
+                  setValue("isAssistedByMercenary", false);
+                  setValue(
+                    "scorerSide",
+                    watchValues.scorerSide === "HOME" ? "AWAY" : "HOME"
+                  );
+                }
+              }}
+            />
+            <Label htmlFor="isOwnGoal">자책골</Label>
+          </div>
+        )}
+
         {/* 어시스트 (자책골이 아닐 때만) */}
-        {!isOwnGoal && (
-          <div className="space-y-3">
-            <div className="flex justify-between gap-3">
-              <Label>어시스트 한 사람</Label>
-              {/* 어시스트 용병 체크박스 */}
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="isAssistedByMercenary"
-                  checked={isAssistedByMercenary}
-                  onCheckedChange={(checked) => {
-                    setValue("isAssistedByMercenary", !!checked);
-                    if (checked) {
-                      setValue("assistId", "");
-                    }
-                  }}
-                />
-                <Label htmlFor="isAssistedByMercenary">용병</Label>
-              </div>
-            </div>
+        {!isOwnGoal &&
+          Boolean(watchValues.scorerId || watchValues.isScoredByMercenary) && (
             <div className="space-y-3">
-              {/* 어시스트 선수 선택 (용병이 아닐 때만) */}
-              {!isAssistedByMercenary && (
+              <div className="flex justify-between gap-3">
+                <Label>어시스트</Label>
+              </div>
+              <div className="space-y-3">
                 <CustomSelect
                   value={watchValues.assistId || ""}
-                  onChange={(e) => setValue("assistId", e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value === "mercenary_assist") {
+                      setValue("isAssistedByMercenary", true);
+                      setValue("assistId", "");
+                    } else {
+                      setValue("isAssistedByMercenary", false);
+                      setValue("assistId", e.target.value);
+                    }
+                  }}
                   options={
                     <>
                       <option value="">없음</option>
@@ -277,16 +280,18 @@ const GoalRecord = ({
                                 }`}
                               </option>
                             ))}
+                      <option value="mercenary_assist">용병</option>
                     </>
                   }
                 />
+              </div>
+              {errors.assistId && (
+                <p className="text-sm text-red-500">
+                  {errors.assistId.message}
+                </p>
               )}
             </div>
-            {errors.assistId && (
-              <p className="text-sm text-red-500">{errors.assistId.message}</p>
-            )}
-          </div>
-        )}
+          )}
 
         <DialogFooter>
           <Button type="submit" disabled={isSubmitting}>
