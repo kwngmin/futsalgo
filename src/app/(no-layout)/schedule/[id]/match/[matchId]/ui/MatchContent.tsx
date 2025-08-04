@@ -131,74 +131,83 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           name={data?.match.awayTeam.name}
         />
       </div>
-      {data.goals.map((goal) =>
-        goal.scorerSide === "HOME" ? (
-          <div className="flex justify-between items-center py-2" key={goal.id}>
-            <div className="w-full flex flex-col">
-              <div className="flex justify-end items-center gap-1">
-                <span className="text-sm font-medium">
-                  {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {goal.isOwnGoal ? "(자책골)" : ""}
-                </span>
-                <SoccerBallIcon className="size-4" weight="fill" />
-              </div>
-              {(goal.isAssistedByMercenary || goal.assistId) && (
-                <div className="flex justify-end items-center gap-2">
-                  {/* <span>{goal.assist?.nickname}</span> */}
-                  <span className="text-sm">
-                    {goal.isAssistedByMercenary
-                      ? "용병"
-                      : goal.assist?.nickname}
-                  </span>
-                  <SneakerMoveIcon className="size-4" weight="fill" />
+      {data.goals.length > 0 && (
+        <div className="mx-4 border border-gray-100 rounded-md">
+          {data.goals.map((goal) =>
+            goal.scorerSide === "HOME" ? (
+              <div
+                className="flex justify-between py-3 border-b border-gray-100 last:border-b-0"
+                key={goal.id}
+              >
+                <div className="w-full flex flex-col">
+                  <div className="flex justify-end items-center gap-1">
+                    <span className="text-sm font-medium">
+                      {goal.isScoredByMercenary
+                        ? "용병"
+                        : goal.scorer?.nickname}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {goal.isOwnGoal ? "(자책골)" : ""}
+                    </span>
+                    <SoccerBallIcon className="size-4" weight="fill" />
+                  </div>
+                  {(goal.isAssistedByMercenary || goal.assistId) && (
+                    <div className="flex justify-end items-center gap-2">
+                      {/* <span>{goal.assist?.nickname}</span> */}
+                      <span className="text-sm">
+                        {goal.isAssistedByMercenary
+                          ? "용병"
+                          : goal.assist?.nickname}
+                      </span>
+                      <SneakerMoveIcon className="size-4" weight="fill" />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="flex justify-center w-16 shrink-0">0-0</div>
-            <div className="w-full" />
-          </div>
-        ) : (
-          <div className="flex justify-between items-center py-1" key={goal.id}>
-            <div className="w-full" />
-            <div className="flex justify-center w-16 shrink-0">0-0</div>
-            <div className="w-full flex flex-col">
-              <div className="flex justify-start items-center gap-1">
-                <span className="text-sm font-medium">
-                  {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {goal.isOwnGoal ? "(자책골)" : ""}
-                </span>
-                <SoccerBallIcon className="size-4" weight="fill" />
-              </div>
-              {(goal.isAssistedByMercenary || goal.assistId) && (
-                <div className="flex justify-start items-center gap-2">
-                  {/* <span>{goal.assist?.nickname}</span> */}
-                  <span className="text-sm">
-                    {goal.isAssistedByMercenary
-                      ? "용병"
-                      : goal.assist?.nickname}
-                  </span>
-                  <SneakerMoveIcon className="size-4" weight="fill" />
+                <div className="flex justify-center items-center w-16 shrink-0 h-5 leading-none">
+                  0-0
                 </div>
-              )}
-            </div>
-          </div>
-        )
+                <div className="w-full" />
+              </div>
+            ) : (
+              <div
+                className="flex justify-between py-3 border-b border-gray-100 last:border-b-0"
+                key={goal.id}
+              >
+                <div className="w-full" />
+                <div className="flex justify-center items-center w-16 shrink-0 h-5 leading-none">
+                  0-0
+                </div>
+                <div className="w-full flex flex-col">
+                  <div className="flex justify-start items-center gap-1">
+                    <SoccerBallIcon className="size-4" weight="fill" />
+                    <span className="text-sm font-medium">
+                      {goal.isScoredByMercenary
+                        ? "용병"
+                        : goal.scorer?.nickname}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {goal.isOwnGoal ? "(자책골)" : ""}
+                    </span>
+                  </div>
+                  {(goal.isAssistedByMercenary || goal.assistId) && (
+                    <div className="flex justify-start items-center gap-2">
+                      {/* <span>{goal.assist?.nickname}</span> */}
+                      <span className="text-sm">
+                        {goal.isAssistedByMercenary
+                          ? "용병"
+                          : goal.assist?.nickname}
+                      </span>
+                      <SneakerMoveIcon className="size-4" weight="fill" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          )}
+        </div>
       )}
       {data.permissions.isEditable && (
         <GoalRecord matchId={data.match.id} lineups={data.lineups} />
-        // <div className="p-4">
-        //   <Button
-        //     type="button"
-        //     className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-        //     size="lg"
-        //   >
-        //     GOAL !
-        //   </Button>
-        // </div>
       )}
       <div className="px-4">
         <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-t border-gray-100 px-4">
