@@ -29,10 +29,13 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-end items-center gap-2">
-              <span className="">
+              <span className="text-sm">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
               </span>
-              <SneakerMoveIcon className="size-5" weight="fill" />
+              <SneakerMoveIcon
+                className="size-4 text-muted-foreground"
+                weight="fill"
+              />
             </div>
           )}
         </div>
@@ -53,14 +56,17 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
               className={`size-5 ${goal.isOwnGoal ? "text-destructive" : ""}`}
               weight="fill"
             />
-            <span className="">
+            <span className="font-medium">
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-start items-center gap-2">
-              <SneakerMoveIcon className="size-5" weight="fill" />
-              <span className="text-muted-foreground">
+              <SneakerMoveIcon
+                className="size-4 text-muted-foreground"
+                weight="fill"
+              />
+              <span className="text-sm">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
               </span>
             </div>
