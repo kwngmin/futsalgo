@@ -65,16 +65,16 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     if (day > 1) {
       return {
         text: `D-${day}`,
-        style: "bg-gradient-to-br from-slate-200/80 to-zinc-100/50 text-[15px]",
+        style: "bg-slate-500/15 text-slate-600",
       };
     } else if (day === 1) {
-      return { text: "내일", style: "bg-sky-600" };
+      return { text: "내일", style: "bg-indigo-500/15 text-indigo-600" };
     } else if (day === 0) {
-      return { text: "오늘", style: "bg-teal-600" };
+      return { text: "오늘", style: "bg-teal-500/15 text-teal-600" };
     }
     return {
       text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-      style: "bg-gradient-to-br from-muted to-muted/30",
+      style: "bg-muted text-muted-foreground",
     };
   };
 
@@ -83,7 +83,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   return (
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
       <div className="flex px-4 gap-3 cursor-pointer">
-        <div className="size-14 rounded-2xl font-semibold flex items-center justify-center gap-2 truncate leading-none tracking-tight bg-gradient-to-br from-slate-200 to-white shadow-lg">
+        <div
+          className={`size-14 rounded-2xl font-semibold flex items-center justify-center gap-2 truncate leading-none tracking-tight ${dateStatus.style}`}
+        >
           {dateStatus.text}
         </div>
         <div
