@@ -29,14 +29,14 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-end items-center gap-2">
-              <span className="font-medium text-muted-foreground">
+              <span className="">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
               </span>
               <SneakerMoveIcon className="size-5" weight="fill" />
             </div>
           )}
         </div>
-        <div className="flex justify-center items-center w-16 shrink-0 h-6 leading-none">
+        <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none">
           {scoreAtTime}
         </div>
         <div className="w-full" />
@@ -44,7 +44,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
     ) : (
       <>
         <div className="w-full" />
-        <div className="flex justify-center items-center w-16 shrink-0 h-6 leading-none">
+        <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none">
           {scoreAtTime}
         </div>
         <div className="w-full flex flex-col">
@@ -53,14 +53,14 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
               className={`size-5 ${goal.isOwnGoal ? "text-destructive" : ""}`}
               weight="fill"
             />
-            <span className="font-medium">
+            <span className="">
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-start items-center gap-2">
               <SneakerMoveIcon className="size-5" weight="fill" />
-              <span className="font-medium text-muted-foreground">
+              <span className="text-muted-foreground">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
               </span>
             </div>
