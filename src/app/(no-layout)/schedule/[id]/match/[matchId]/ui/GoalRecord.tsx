@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod/v4";
 import { createGoalRecord } from "../actions/create-goal-record";
+import { useMemo } from "react";
 
 export const goalRecordSchema = z
   .object({
@@ -96,11 +97,88 @@ const GoalRecord = ({
   console.log(watch("scorerId"));
 
   const watchValues = watch();
-  const { isOwnGoal } = watchValues;
+  const {
+    isOwnGoal,
+    scorerId,
+    isScoredByMercenary,
+    scorerSide,
+    assistId,
+    isAssistedByMercenary,
+  } = watchValues;
 
   // HOME과 AWAY 팀 라인업 분리
-  const homeLineups = lineups.filter((lineup) => lineup.side === "HOME");
-  const awayLineups = lineups.filter((lineup) => lineup.side === "AWAY");
+  const { homeLineups, awayLineups } = useMemo(
+    () => ({
+      homeLineups: lineups.filter((lineup) => lineup.side === "HOME"),
+      awayLineups: lineups.filter((lineup) => lineup.side === "AWAY"),
+    }),
+    [lineups]
+  );
+
+  // 득점자 select의 현재 value 계산
+  const scorerSelectValue = useMemo(() => {
+    if (scorerId) return scorerId;
+    if (isScoredByMercenary && scorerSide === "HOME")
+      return "mercenary_home_side";
+    if (isScoredByMercenary && scorerSide === "AWAY")
+      return "mercenary_away_side";
+    return "";
+  }, [scorerId, isScoredByMercenary, scorerSide]);
+
+  // 어시스트 select의 현재 value 계산
+  const assistSelectValue = useMemo(() => {
+    if (assistId) return assistId;
+    if (isAssistedByMercenary) return "mercenary_assist";
+    return "";
+  }, [assistId, isAssistedByMercenary]);
+
+  const handleScorerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    if (value === "mercenary_home_side") {
+      setValue("isScoredByMercenary", true);
+      setValue("scorerId", "");
+      setValue("scorerSide", "HOME");
+    } else if (value === "mercenary_away_side") {
+      setValue("isScoredByMercenary", true);
+      setValue("scorerId", "");
+      setValue("scorerSide", "AWAY");
+    } else {
+      setValue("isScoredByMercenary", false);
+      setValue("scorerId", value);
+
+      if (value) {
+        const selectedLineup = lineups.find(
+          (lineup) => lineup.userId === value
+        );
+        if (selectedLineup) {
+          setValue("scorerSide", selectedLineup.side as "HOME" | "AWAY");
+        }
+      }
+    }
+  };
+
+  const handleAssistChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    if (value === "mercenary_assist") {
+      setValue("isAssistedByMercenary", true);
+      setValue("assistId", "");
+    } else {
+      setValue("isAssistedByMercenary", false);
+      setValue("assistId", value);
+    }
+  };
+
+  const handleOwnGoalChange = (checked: boolean | "indeterminate") => {
+    setValue("isOwnGoal", !!checked);
+    if (checked) {
+      // 자책골일 때 어시스트 관련 필드 초기화
+      setValue("assistId", "");
+      setValue("isAssistedByMercenary", false);
+      setValue("scorerSide", scorerSide === "HOME" ? "AWAY" : "HOME");
+    }
+  };
 
   const onSubmit: SubmitHandler<GoalRecordFormData> = async (data) => {
     try {
@@ -111,6 +189,20 @@ const GoalRecord = ({
       console.error(error);
     }
   };
+
+  const renderPlayerOptions = (
+    teamLineups: typeof homeLineups,
+    excludeUserId?: string
+  ) =>
+    teamLineups
+      .filter((lineup) => lineup.userId !== excludeUserId)
+      .map((lineup) => (
+        <option key={lineup.id} value={lineup.userId}>
+          {`${lineup.user.nickname} ${
+            "name" in lineup.user ? `(${lineup.user.name})` : ""
+          }`}
+        </option>
+      ));
 
   console.log(watchValues.scorerId, "watchValues.scorerId");
   console.log(
@@ -146,58 +238,19 @@ const GoalRecord = ({
           </div>
           <div className="space-y-3">
             <CustomSelect
-              value={watchValues.scorerId || ""}
-              onChange={(e) => {
-                if (e.target.value === "mercenary_home_side") {
-                  setValue("isScoredByMercenary", true);
-                  setValue("scorerId", "");
-                  setValue("scorerSide", "HOME");
-                } else if (e.target.value === "mercenary_away_side") {
-                  setValue("isScoredByMercenary", true);
-                  setValue("scorerId", "");
-                  setValue("scorerSide", "AWAY");
-                } else {
-                  setValue("isScoredByMercenary", false);
-                  setValue("scorerId", e.target.value);
-                  setValue(
-                    "scorerSide",
-                    lineups.find((lineup) => lineup.userId === e.target.value)
-                      ?.side as "HOME" | "AWAY"
-                  );
-                }
-              }}
+              // value={watchValues.scorerId || ""}
+              value={scorerSelectValue}
+              onChange={handleScorerChange}
               options={
                 <>
                   <option value="">선택</option>
-                  <optgroup label="HOME 팀">
-                    {homeLineups.map((lineup) => (
-                      <option key={lineup.id} value={lineup.userId}>
-                        {`${lineup.user.nickname} ${
-                          "name" in lineup.user ? `(${lineup.user.name})` : ""
-                        }`}
-                      </option>
-                    ))}
-                    <option
-                      value="mercenary_home_side"
-                      key="mercenary_home_side"
-                    >
-                      용병
-                    </option>
+                  <optgroup label={`HOME`}>
+                    {renderPlayerOptions(homeLineups)}
+                    <option value="mercenary_home_side">용병</option>
                   </optgroup>
-                  <optgroup label="AWAY 팀">
-                    {awayLineups.map((lineup) => (
-                      <option key={lineup.id} value={lineup.userId}>
-                        {`${lineup.user.nickname} ${
-                          "name" in lineup.user ? `(${lineup.user.name})` : ""
-                        }`}
-                      </option>
-                    ))}
-                    <option
-                      value="mercenary_away_side"
-                      key="mercenary_away_side"
-                    >
-                      용병
-                    </option>
+                  <optgroup label="AWAY">
+                    {renderPlayerOptions(awayLineups)}
+                    <option value="mercenary_away_side">용병</option>
                   </optgroup>
                 </>
               }
@@ -209,89 +262,44 @@ const GoalRecord = ({
         </div>
 
         {/* 자책골 여부 */}
-        {Boolean(watchValues.scorerId || watchValues.isScoredByMercenary) && (
+        {Boolean(scorerId || isScoredByMercenary) && (
           <div className="flex items-center space-x-2">
             <Checkbox
               id="isOwnGoal"
               checked={isOwnGoal}
-              onCheckedChange={(checked) => {
-                setValue("isOwnGoal", !!checked);
-                if (checked) {
-                  // 자책골일 때 어시스트 관련 필드 초기화
-                  setValue("assistId", "");
-                  setValue("isAssistedByMercenary", false);
-                  setValue(
-                    "scorerSide",
-                    watchValues.scorerSide === "HOME" ? "AWAY" : "HOME"
-                  );
-                }
-              }}
+              onCheckedChange={handleOwnGoalChange}
             />
             <Label htmlFor="isOwnGoal">자책골</Label>
           </div>
         )}
 
         {/* 어시스트 (자책골이 아닐 때만) */}
-        {!isOwnGoal &&
-          Boolean(watchValues.scorerId || watchValues.isScoredByMercenary) && (
-            <div className="space-y-3">
-              <div className="flex justify-between gap-3">
-                <Label>어시스트</Label>
-              </div>
-              <div className="space-y-3">
-                <CustomSelect
-                  value={watchValues.assistId || ""}
-                  onChange={(e) => {
-                    if (e.target.value === "mercenary_assist") {
-                      setValue("isAssistedByMercenary", true);
-                      setValue("assistId", "");
-                    } else {
-                      setValue("isAssistedByMercenary", false);
-                      setValue("assistId", e.target.value);
-                    }
-                  }}
-                  options={
-                    <>
-                      <option value="">없음</option>
-                      {watchValues.scorerSide === "HOME"
-                        ? homeLineups
-                            .filter(
-                              (lineup) => lineup.userId !== watch("scorerId")
-                            )
-                            .map((lineup) => (
-                              <option key={lineup.id} value={lineup.userId}>
-                                {`${lineup.user.nickname} ${
-                                  "name" in lineup.user
-                                    ? `(${lineup.user.name})`
-                                    : ""
-                                }`}
-                              </option>
-                            ))
-                        : awayLineups
-                            .filter(
-                              (lineup) => lineup.userId !== watch("scorerId")
-                            )
-                            .map((lineup) => (
-                              <option key={lineup.id} value={lineup.userId}>
-                                {`${lineup.user.nickname} ${
-                                  "name" in lineup.user
-                                    ? `(${lineup.user.name})`
-                                    : ""
-                                }`}
-                              </option>
-                            ))}
-                      <option value="mercenary_assist">용병</option>
-                    </>
-                  }
-                />
-              </div>
-              {errors.assistId && (
-                <p className="text-sm text-red-500">
-                  {errors.assistId.message}
-                </p>
-              )}
+        {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
+          <div className="space-y-3">
+            <div className="flex justify-between gap-3">
+              <Label>어시스트</Label>
             </div>
-          )}
+            <div className="space-y-3">
+              <CustomSelect
+                // value={watchValues.assistId || ""}
+                value={assistSelectValue}
+                onChange={handleAssistChange}
+                options={
+                  <>
+                    <option value="">없음</option>
+                    {scorerSide === "HOME"
+                      ? renderPlayerOptions(homeLineups, scorerId)
+                      : renderPlayerOptions(awayLineups, scorerId)}
+                    <option value="mercenary_assist">용병</option>
+                  </>
+                }
+              />
+            </div>
+            {errors.assistId && (
+              <p className="text-sm text-red-500">{errors.assistId.message}</p>
+            )}
+          </div>
+        )}
 
         <DialogFooter>
           <Button type="submit" disabled={isSubmitting}>
