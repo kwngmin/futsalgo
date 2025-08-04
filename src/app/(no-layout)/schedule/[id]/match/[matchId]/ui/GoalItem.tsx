@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  SneakerMoveIcon, //
+  //   SneakerMoveIcon, //
   SoccerBallIcon,
 } from "@phosphor-icons/react";
 import type { GoalWithScore } from "../model/types";
@@ -31,14 +31,14 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             />
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
-            <div className="flex justify-end items-center gap-1 pr-0.5">
+            <div className="flex justify-end items-center gap-1">
               <span className="text-sm">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-                {/* {`${
+                {/* {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname} */}
+                {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`} */}
+                } 어시스트`}
               </span>
-              <SneakerMoveIcon className="size-4" weight="fill" />
+              {/* <SneakerMoveIcon className="size-4" weight="fill" /> */}
             </div>
           )}
         </div>
@@ -64,13 +64,13 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             </span>
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
-            <div className="flex justify-start items-center gap-1 pl-0.5">
-              <SneakerMoveIcon className="size-4" weight="fill" />
+            <div className="flex justify-start items-center gap-1">
+              {/* <SneakerMoveIcon className="size-4" weight="fill" /> */}
               <span className="text-sm">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-                {/* {`${
+                {/* {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname} */}
+                {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`} */}
+                } 어시스트`}
               </span>
             </div>
           )}
