@@ -90,11 +90,8 @@ const GoalRecord = ({
       isOwnGoal: false,
       isScoredByMercenary: false,
       isAssistedByMercenary: false,
-      // scorerSide: "HOME",
     },
   });
-
-  console.log(watch("scorerId"));
 
   const watchValues = watch();
   const {
@@ -177,6 +174,8 @@ const GoalRecord = ({
       setValue("assistId", "");
       setValue("isAssistedByMercenary", false);
       setValue("scorerSide", scorerSide === "HOME" ? "AWAY" : "HOME");
+    } else {
+      setValue("scorerSide", scorerSide);
     }
   };
 

@@ -27,16 +27,12 @@ export async function createGoalRecord(
       throw new Error("매치를 찾을 수 없습니다.");
     }
 
-    // scorer의 실제 팀 확인 (용병이 아닌 경우)
-    let actualScorerSide: TeamSide;
+    // 1. 실제 골 넣은 선수가 속한 팀 확인
+    let actualPlayerSide: TeamSide;
 
     if (data.isScoredByMercenary) {
-      // 용병인 경우 scorerSide는 득점팀과 반대
-      actualScorerSide = data.isOwnGoal
-        ? data.scorerSide // 자책골이면 득점팀과 같은 편 용병
-        : data.scorerSide === "HOME"
-        ? "AWAY"
-        : "HOME"; // 일반골이면 득점팀 반대편 용병
+      // 용병인 경우 scorerSide 사용 (UI에서 설정한 용병이 속한 팀)
+      actualPlayerSide = data.scorerSide;
     } else {
       // 팀 소속 선수인 경우 라인업에서 확인
       const scorerLineup = match.lineups.find(
@@ -47,14 +43,22 @@ export async function createGoalRecord(
         throw new Error("골 넣은 선수가 라인업에 없습니다.");
       }
 
-      actualScorerSide = scorerLineup.side;
+      actualPlayerSide = scorerLineup.side;
     }
 
-    // 자책골 여부 결정
-    const isOwnGoal = data.isOwnGoal || actualScorerSide !== data.scorerSide;
+    // 2. 자책골 여부에 따른 득점팀 결정
+    let benefitingTeam: TeamSide; // 실제 득점을 얻는 팀
 
-    // 어시스트 검증 (자책골이 아닌 경우만)
-    if (!isOwnGoal && data.assistId && !data.isAssistedByMercenary) {
+    if (data.isOwnGoal) {
+      // 자책골: 골 넣은 선수의 반대팀이 득점
+      benefitingTeam = actualPlayerSide === "HOME" ? "AWAY" : "HOME";
+    } else {
+      // 일반골: 골 넣은 선수의 팀이 득점
+      benefitingTeam = actualPlayerSide;
+    }
+
+    // 3. 어시스트 검증 (자책골이 아닌 경우만)
+    if (!data.isOwnGoal && data.assistId && !data.isAssistedByMercenary) {
       const assistLineup = match.lineups.find(
         (lineup) => lineup.userId === data.assistId
       );
@@ -62,19 +66,26 @@ export async function createGoalRecord(
       if (!assistLineup) {
         throw new Error("어시스트 선수가 라인업에 없습니다.");
       }
+
+      // 어시스트한 선수가 득점팀과 같은 팀인지 확인
+      if (assistLineup.side !== benefitingTeam) {
+        throw new Error("어시스트 선수는 득점팀과 같은 팀이어야 합니다.");
+      }
     }
 
-    // 골 기록 생성
+    // 4. 골 기록 생성
     const goalRecord = await prisma.goalRecord.create({
       data: {
         matchId,
-        scorerSide: actualScorerSide,
+        scorerSide: actualPlayerSide, // 실제 골 넣은 선수의 팀
         scorerId: data.isScoredByMercenary ? null : data.scorerId,
         assistId:
-          !isOwnGoal && !data.isAssistedByMercenary ? data.assistId : null,
-        isOwnGoal,
+          !data.isOwnGoal && !data.isAssistedByMercenary ? data.assistId : null,
+        isOwnGoal: data.isOwnGoal,
         isScoredByMercenary: data.isScoredByMercenary,
-        isAssistedByMercenary: !isOwnGoal ? data.isAssistedByMercenary : false,
+        isAssistedByMercenary: !data.isOwnGoal
+          ? data.isAssistedByMercenary
+          : false,
       },
       include: {
         scorer: true,
@@ -88,14 +99,8 @@ export async function createGoalRecord(
       },
     });
 
-    // 매치 점수 업데이트
-    const goalTeam = isOwnGoal
-      ? actualScorerSide === "HOME"
-        ? "AWAY"
-        : "HOME"
-      : actualScorerSide;
-
-    if (goalTeam === "HOME") {
+    // 5. 매치 점수 업데이트 (실제 득점팀 기준)
+    if (benefitingTeam === "HOME") {
       await prisma.match.update({
         where: { id: matchId },
         data: {
@@ -141,12 +146,12 @@ export async function deleteGoalRecord(goalRecordId: string) {
       throw new Error("골 기록을 찾을 수 없습니다.");
     }
 
-    // 득점팀 계산
-    const goalTeam = goalRecord.isOwnGoal
+    // 실제 득점팀 계산 (골 기록 생성 시와 동일한 로직)
+    const benefitingTeam = goalRecord.isOwnGoal
       ? goalRecord.scorerSide === "HOME"
         ? "AWAY"
-        : "HOME"
-      : goalRecord.scorerSide;
+        : "HOME" // 자책골: 반대팀 득점
+      : goalRecord.scorerSide; // 일반골: 골 넣은 팀 득점
 
     // 골 기록 삭제
     await prisma.goalRecord.delete({
@@ -154,7 +159,7 @@ export async function deleteGoalRecord(goalRecordId: string) {
     });
 
     // 매치 점수 차감
-    if (goalTeam === "HOME") {
+    if (benefitingTeam === "HOME") {
       await prisma.match.update({
         where: { id: goalRecord.matchId },
         data: {

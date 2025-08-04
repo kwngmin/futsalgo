@@ -121,16 +121,19 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           },
         },
       },
-      // orderBy: { order: "asc" },
+      orderBy: { createdAt: "asc" },
     }),
   ]);
+
+  // 현재 매치의 순서 계산
+  const matchOrder = allMatches.findIndex((m) => m.id === matchId) + 1;
 
   return {
     match,
     lineups,
     allMatches,
     goals,
-    matchOrder: allMatches.findIndex((m) => m.id === matchId) + 1,
+    matchOrder,
     permissions: {
       isMember,
       isEditable,

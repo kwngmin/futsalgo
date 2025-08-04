@@ -20,19 +20,22 @@ const Lineup = ({
     >
       {lineups.length > 0 ? (
         lineups.map((player) => (
-          <div key={player.id} className="flex items-center gap-3 px-3 h-14">
+          <div
+            key={player.id}
+            className="flex flex-col justify-center items-center gap-1 px-3 h-24"
+          >
             {player.user.image ? (
               <Image
                 src={player.user.image}
                 alt="player image"
                 width={48}
                 height={48}
-                className="overflow-hidden object-cover size-10 rounded-[42%]"
+                className="overflow-hidden object-cover size-10 rounded-[42%] shrink-0"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
             )}
-            <div className="flex flex-col">
+            <div className="flex flex-col justify-center items-center">
               <span className="text-sm font-medium leading-tight">
                 {player.user.nickname}
               </span>
