@@ -31,11 +31,12 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             />
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
-            <div className="flex justify-end items-center gap-2">
-              <span className="text-sm tracking-tight">
-                {`${
+            <div className="flex justify-end items-center gap-1 pr-0.5">
+              <span className="text-sm">
+                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+                {/* {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`}
+                } 어시스트`} */}
               </span>
               <SneakerMoveIcon className="size-4" weight="fill" />
             </div>
@@ -63,12 +64,13 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             </span>
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
-            <div className="flex justify-start items-center gap-2">
+            <div className="flex justify-start items-center gap-1 pl-0.5">
               <SneakerMoveIcon className="size-4" weight="fill" />
-              <span className="text-sm tracking-tight">
-                {`${
+              <span className="text-sm">
+                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+                {/* {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`}
+                } 어시스트`} */}
               </span>
             </div>
           )}
