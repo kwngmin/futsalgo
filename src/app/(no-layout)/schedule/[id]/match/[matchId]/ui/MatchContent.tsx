@@ -137,7 +137,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           name={data.match.homeTeam.name}
         />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
-          <div className="flex items-center gap-2 text-3xl font-semibold tracking-tighter my-auto">
+          <div className="flex items-center gap-2 text-3xl font-bold tracking-tighter my-auto">
             <span>{data.match.homeScore}</span>
             <span>-</span>
             <span>{data.match.awayScore}</span>

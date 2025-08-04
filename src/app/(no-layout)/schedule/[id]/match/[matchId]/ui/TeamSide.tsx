@@ -32,7 +32,9 @@ const TeamSide = ({
           <div className="size-10 rounded-md bg-gray-100" />
         )}
       </div>
-      <span className="text-sm tracking-tight">{name || "팀 이름 없음"}</span>
+      <span className="text-sm tracking-tight font-medium">
+        {name || "팀 이름 없음"}
+      </span>
     </div>
   );
 };
