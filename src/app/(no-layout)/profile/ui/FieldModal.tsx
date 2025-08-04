@@ -5,6 +5,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
+import { useEffect, useRef } from "react";
 
 // 개별 필드 모달 컴포넌트 (DRY 원칙 적용)
 export const FieldModal = ({
@@ -20,6 +21,24 @@ export const FieldModal = ({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open && contentRef.current) {
+      // 모달이 열릴 때 첫 번째 select 요소의 자동 포커스를 방지
+      const timer = setTimeout(() => {
+        const firstSelect = contentRef.current?.querySelector("select");
+        if (firstSelect && document.activeElement === firstSelect) {
+          // select에서 포커스를 제거하고 모달 자체에 포커스
+          firstSelect.blur();
+          contentRef.current?.focus();
+        }
+      }, 10);
+
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
