@@ -16,27 +16,27 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
       <>
         <div className="w-full flex flex-col">
           <div className="flex justify-end items-center gap-1">
-            <span className="text-sm font-medium">
+            <span className="font-medium">
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {/* <span className="text-sm text-muted-foreground">
               {goal.isOwnGoal ? "(자책골)" : ""}
             </span> */}
             <SoccerBallIcon
-              className={`size-4 ${goal.isOwnGoal ? "text-destructive" : ""}`}
+              className={`size-5 ${goal.isOwnGoal ? "text-destructive" : ""}`}
               weight="fill"
             />
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-end items-center gap-2">
-              <span className="text-sm">
+              <span className="font-medium text-muted-foreground">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
               </span>
-              <SneakerMoveIcon className="size-4" weight="fill" />
+              <SneakerMoveIcon className="size-5" weight="fill" />
             </div>
           )}
         </div>
-        <div className="flex justify-center items-center w-16 shrink-0 h-5 leading-none">
+        <div className="flex justify-center items-center w-16 shrink-0 h-6 leading-none">
           {scoreAtTime}
         </div>
         <div className="w-full" />
@@ -44,25 +44,25 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
     ) : (
       <>
         <div className="w-full" />
-        <div className="flex justify-center items-center w-16 shrink-0 h-5 leading-none">
+        <div className="flex justify-center items-center w-16 shrink-0 h-6 leading-none">
           {scoreAtTime}
         </div>
         <div className="w-full flex flex-col">
           <div className="flex justify-start items-center gap-1">
             <SoccerBallIcon
-              className={`size-4 ${goal.isOwnGoal ? "text-destructive" : ""}`}
+              className={`size-5 ${goal.isOwnGoal ? "text-destructive" : ""}`}
               weight="fill"
             />
-            <span className="text-sm font-medium">
+            <span className="font-medium">
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-start items-center gap-2">
-              <span className="text-sm">
+              <SneakerMoveIcon className="size-5" weight="fill" />
+              <span className="font-medium text-muted-foreground">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
               </span>
-              <SneakerMoveIcon className="size-4" weight="fill" />
             </div>
           )}
         </div>
