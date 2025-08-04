@@ -152,7 +152,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
       {/* 골 기록 */}
       {goalsWithScore.length > 0 && (
-        <div className="mx-4 border border-gray-100 rounded-md">
+        <div className="mx-4">
           {goalsWithScore.map((goal) => (
             <GoalItem
               key={goal.id}
