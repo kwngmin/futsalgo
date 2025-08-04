@@ -14,10 +14,10 @@ interface GoalItemProps {
 }
 
 export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
-  <div className="flex justify-between py-3 border-t border-gray-100">
+  <div className="flex justify-between items-center py-3 border-t border-gray-100">
     {isHome ? (
       <>
-        <div className="w-full flex flex-col justify-center">
+        <div className="w-full flex flex-col">
           <div className="flex justify-end items-center gap-1">
             <span className="font-medium">
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
@@ -53,7 +53,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
         <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none">
           {scoreAtTime}
         </div>
-        <div className="w-full flex flex-col justify-center">
+        <div className="w-full flex flex-col">
           <div className="flex justify-start items-center gap-1">
             <SoccerBallIcon
               className={`size-5 ${goal.isOwnGoal ? "text-destructive" : ""}`}
