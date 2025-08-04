@@ -1,6 +1,9 @@
 "use client";
 
-import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
+import {
+  SneakerMoveIcon, //
+  SoccerBallIcon,
+} from "@phosphor-icons/react";
 import type { GoalWithScore } from "../model/types";
 
 // 골 기록 컴포넌트 (DRY 원칙 적용)
@@ -29,13 +32,12 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-end items-center gap-2">
-              <span className="text-sm">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+              <span className="text-sm tracking-tight">
+                {`${
+                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
+                } 어시스트`}
               </span>
-              <SneakerMoveIcon
-                className="size-4 text-muted-foreground"
-                weight="fill"
-              />
+              <SneakerMoveIcon className="size-4" weight="fill" />
             </div>
           )}
         </div>
@@ -62,12 +64,11 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
           </div>
           {(goal.isAssistedByMercenary || goal.assistId) && (
             <div className="flex justify-start items-center gap-2">
-              <SneakerMoveIcon
-                className="size-4 text-muted-foreground"
-                weight="fill"
-              />
-              <span className="text-sm">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+              <SneakerMoveIcon className="size-4" weight="fill" />
+              <span className="text-sm tracking-tight">
+                {`${
+                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
+                } 어시스트`}
               </span>
             </div>
           )}
