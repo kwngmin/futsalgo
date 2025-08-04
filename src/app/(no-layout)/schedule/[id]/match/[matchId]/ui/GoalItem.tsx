@@ -42,7 +42,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             </div>
           )}
         </div>
-        <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none">
+        <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-semibold text-muted-foreground">
           {scoreAtTime}
         </div>
         <div className="w-full" />
@@ -50,7 +50,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
     ) : (
       <>
         <div className="w-full" />
-        <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none">
+        <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-semibold text-muted-foreground">
           {scoreAtTime}
         </div>
         <div className="w-full flex flex-col">
