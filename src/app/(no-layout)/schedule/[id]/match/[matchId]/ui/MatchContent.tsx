@@ -18,6 +18,7 @@ import Lineup from "./Lineup";
 import { shuffleLineupsAdvanced } from "../actions/shuffle-lineups";
 import { useState } from "react";
 import GoalRecord from "./GoalRecord";
+import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
 
 const MatchContent = ({ data }: { data: MatchDataResult }) => {
   const router = useRouter();
@@ -130,6 +131,63 @@ const MatchContent = ({ data }: { data: MatchDataResult }) => {
           name={data?.match.awayTeam.name}
         />
       </div>
+      {data.goals.map((goal) =>
+        goal.scorerSide === "HOME" ? (
+          <div className="flex justify-between items-center py-2" key={goal.id}>
+            <div className="w-full flex flex-col">
+              <div className="flex justify-end items-center gap-1">
+                <span className="text-sm font-medium">
+                  {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {goal.isOwnGoal ? "(자책골)" : ""}
+                </span>
+                <SoccerBallIcon className="size-4" weight="fill" />
+              </div>
+              {(goal.isAssistedByMercenary || goal.assistId) && (
+                <div className="flex justify-end items-center gap-2">
+                  {/* <span>{goal.assist?.nickname}</span> */}
+                  <span className="text-sm">
+                    {goal.isAssistedByMercenary
+                      ? "용병"
+                      : goal.assist?.nickname}
+                  </span>
+                  <SneakerMoveIcon className="size-4" weight="fill" />
+                </div>
+              )}
+            </div>
+            <div className="flex justify-center w-16 shrink-0">0-0</div>
+            <div className="w-full" />
+          </div>
+        ) : (
+          <div className="flex justify-between items-center py-1" key={goal.id}>
+            <div className="w-full" />
+            <div className="flex justify-center w-16 shrink-0">0-0</div>
+            <div className="w-full flex flex-col">
+              <div className="flex justify-start items-center gap-1">
+                <span className="text-sm font-medium">
+                  {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {goal.isOwnGoal ? "(자책골)" : ""}
+                </span>
+                <SoccerBallIcon className="size-4" weight="fill" />
+              </div>
+              {(goal.isAssistedByMercenary || goal.assistId) && (
+                <div className="flex justify-start items-center gap-2">
+                  {/* <span>{goal.assist?.nickname}</span> */}
+                  <span className="text-sm">
+                    {goal.isAssistedByMercenary
+                      ? "용병"
+                      : goal.assist?.nickname}
+                  </span>
+                  <SneakerMoveIcon className="size-4" weight="fill" />
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      )}
       {data.permissions.isEditable && (
         <GoalRecord matchId={data.match.id} lineups={data.lineups} />
         // <div className="p-4">
