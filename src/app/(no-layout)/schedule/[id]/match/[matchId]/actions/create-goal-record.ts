@@ -3,6 +3,7 @@
 import { prisma } from "@/shared/lib/prisma";
 import { TeamSide } from "@prisma/client";
 import { GoalRecordFormData } from "../ui/GoalRecord";
+import { revalidatePath } from "next/cache";
 
 export async function createGoalRecord(
   matchId: string,
@@ -12,6 +13,9 @@ export async function createGoalRecord(
     // 매치 정보 조회
     const match = await prisma.match.findUnique({
       where: { id: matchId },
+      // select: {
+      //   scheduleId: true,
+      // },
       include: {
         homeTeam: true,
         awayTeam: true,
@@ -119,6 +123,8 @@ export async function createGoalRecord(
         },
       });
     }
+
+    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
 
     return {
       success: true,
