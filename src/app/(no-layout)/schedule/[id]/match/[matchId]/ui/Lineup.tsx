@@ -16,13 +16,11 @@ const Lineup = ({
 
   return (
     <div
-      className={`py-3 ${
-        side === "away" ? "border-l border-gray-100 pl-3" : "pr-3"
-      }`}
+      className={`py-2 ${side === "away" ? "border-l border-gray-100" : ""}`}
     >
       {lineups.length > 0 ? (
         lineups.map((player) => (
-          <div key={player.id} className="flex items-center gap-2 h-14">
+          <div key={player.id} className="flex items-center gap-2 px-3 h-14">
             {player.user.image ? (
               <Image
                 src={player.user.image}
