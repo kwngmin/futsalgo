@@ -18,7 +18,7 @@ import type { MatchDataResult, GoalWithScore } from "../model/types";
 import { NavigationButton } from "./NavigationButton";
 import { GoalItem } from "./GoalItem";
 import { LineupEditItem } from "./LineupEditItem";
-import { SoccerBallIcon } from "@phosphor-icons/react";
+// import { SoccerBallIcon } from "@phosphor-icons/react";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -170,7 +170,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
               </div> */}
             </div>
           ))}
-          <div className="flex justify-center items-center h-10 gap-6">
+          {/* <div className="flex justify-center items-center h-10 gap-6">
             <div className="flex items-center gap-1">
               <SoccerBallIcon className="size-4 text-gray-600" weight="fill" />
               <span className="text-sm font-medium">골</span>
@@ -182,7 +182,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
               />
               <span className="text-sm font-medium">자책골</span>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
 
