@@ -4,17 +4,19 @@ import { LineupsData, LineupsWithNameData } from "@/entities/match/model/types";
 import { Button } from "@/shared/components/ui/button";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Label } from "@/shared/components/ui/label";
+// import { Checkbox } from "@/shared/components/ui/checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod/v4";
 import { createGoalRecord } from "../actions/create-goal-record";
 import { useMemo } from "react";
+import { Switch } from "@/shared/components/ui/switch";
 
 export const goalRecordSchema = z
   .object({
     scorerId: z.string().optional(),
     assistId: z.string().optional(),
-    // isOwnGoal: z.boolean(),
+    isOwnGoal: z.boolean(),
     isScoredByMercenary: z.boolean(),
     isAssistedByMercenary: z.boolean(),
     scorerSide: z.enum(["HOME", "AWAY"]),
@@ -39,22 +41,22 @@ export const goalRecordSchema = z
     }
 
     // 자책골일 때는 assistId나 isAssistedByMercenary가 있으면 안됨
-    // if (data.isOwnGoal) {
-    //   if (data.assistId) {
-    //     ctx.addIssue({
-    //       code: z.ZodIssueCode.custom,
-    //       message: "자책골에는 어시스트가 있을 수 없습니다",
-    //       path: ["assistId"],
-    //     });
-    //   }
-    //   if (data.isAssistedByMercenary) {
-    //     ctx.addIssue({
-    //       code: z.ZodIssueCode.custom,
-    //       message: "자책골에는 어시스트가 있을 수 없습니다",
-    //       path: ["isAssistedByMercenary"],
-    //     });
-    //   }
-    // }
+    if (data.isOwnGoal) {
+      if (data.assistId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "자책골에는 어시스트가 있을 수 없습니다",
+          path: ["assistId"],
+        });
+      }
+      if (data.isAssistedByMercenary) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "자책골에는 어시스트가 있을 수 없습니다",
+          path: ["isAssistedByMercenary"],
+        });
+      }
+    }
 
     // assistId와 isAssistedByMercenary 둘 다 있으면 안됨
     if (data.assistId && data.isAssistedByMercenary) {
@@ -84,7 +86,7 @@ const GoalRecord = ({
   } = useForm<GoalRecordFormData>({
     resolver: zodResolver(goalRecordSchema),
     defaultValues: {
-      // isOwnGoal: false,
+      isOwnGoal: false,
       isScoredByMercenary: false,
       isAssistedByMercenary: false,
     },
@@ -92,6 +94,7 @@ const GoalRecord = ({
 
   const watchValues = watch();
   const {
+    isOwnGoal,
     scorerId,
     isScoredByMercenary,
     scorerSide,
@@ -163,17 +166,17 @@ const GoalRecord = ({
     }
   };
 
-  // const handleOwnGoalChange = (checked: boolean | "indeterminate") => {
-  //   setValue("isOwnGoal", !!checked);
-  //   if (checked) {
-  //     // 자책골일 때 어시스트 관련 필드 초기화
-  //     setValue("assistId", "");
-  //     setValue("isAssistedByMercenary", false);
-  //     setValue("scorerSide", scorerSide === "HOME" ? "AWAY" : "HOME");
-  //   } else {
-  //     setValue("scorerSide", scorerSide);
-  //   }
-  // };
+  const handleOwnGoalChange = (checked: boolean | "indeterminate") => {
+    setValue("isOwnGoal", !!checked);
+    if (checked) {
+      // 자책골일 때 어시스트 관련 필드 초기화
+      setValue("assistId", "");
+      setValue("isAssistedByMercenary", false);
+      setValue("scorerSide", scorerSide === "HOME" ? "AWAY" : "HOME");
+    } else {
+      setValue("scorerSide", scorerSide);
+    }
+  };
 
   const onSubmit: SubmitHandler<GoalRecordFormData> = async (data) => {
     try {
@@ -236,14 +239,30 @@ const GoalRecord = ({
               </>
             }
           />
+
+          {/* 자책골 여부 */}
+          {Boolean(scorerId || isScoredByMercenary) && (
+            <div className="flex justify-between items-center space-x-2 h-11 bg-gray-50 rounded-md px-2">
+              <Label htmlFor="isOwnGoal" className="px-1">
+                자책골
+              </Label>
+              <Switch
+                id="isOwnGoal"
+                checked={isOwnGoal}
+                onCheckedChange={handleOwnGoalChange}
+                className="scale-110"
+              />
+            </div>
+          )}
         </div>
+
         {errors.scorerId && (
           <p className="text-sm text-red-500">{errors.scorerId.message}</p>
         )}
       </div>
 
       {/* 어시스트 (자책골이 아닐 때만) */}
-      {Boolean(scorerId || isScoredByMercenary) && (
+      {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
         <div className="space-y-3">
           <div className="flex justify-between gap-3">
             <Label>어시스트</Label>
