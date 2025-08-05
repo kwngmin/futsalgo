@@ -14,7 +14,7 @@ interface GoalItemProps {
 }
 
 export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
-  <div className="flex justify-between items-center py-3 border-t border-gray-100">
+  <div className="flex justify-between items-center py-3 border-b border-gray-100 w-full">
     {isHome ? (
       <>
         <div className="w-full flex flex-col">

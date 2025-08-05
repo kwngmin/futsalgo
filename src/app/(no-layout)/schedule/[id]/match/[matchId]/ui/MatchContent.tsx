@@ -5,6 +5,7 @@ import {
   ClipboardList,
   Dices,
   RefreshCcw,
+  Trash2,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ import type { MatchDataResult, GoalWithScore } from "../model/types";
 import { NavigationButton } from "./NavigationButton";
 import { GoalItem } from "./GoalItem";
 import { LineupEditItem } from "./LineupEditItem";
+import { SoccerBallIcon } from "@phosphor-icons/react";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -152,15 +154,35 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
       {/* 골 기록 */}
       {goalsWithScore.length > 0 && (
-        <div className="mx-4">
-          {goalsWithScore.map((goal) => (
-            <GoalItem
-              key={goal.id}
-              goal={goal}
-              scoreAtTime={goal.scoreAtTime}
-              isHome={goal.scorerSide === "HOME"}
-            />
+        <div className="px-4">
+          {goalsWithScore.map((goal, index) => (
+            <div key={goal.id} className="flex items-center">
+              <div className="text-sm font-medium size-10 flex items-center">
+                {index + 1}
+              </div>
+              <GoalItem
+                goal={goal}
+                scoreAtTime={goal.scoreAtTime}
+                isHome={goal.scorerSide === "HOME"}
+              />
+              <div className="text-sm font-medium size-10 flex justify-center items-center">
+                <Trash2 className="size-4 text-gray-600" />
+              </div>
+            </div>
           ))}
+          <div className="flex items-center gap-4 h-10">
+            <div className="flex items-center gap-1">
+              <SoccerBallIcon className="size-4 text-gray-600" weight="fill" />
+              <span className="text-sm font-medium">골</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <SoccerBallIcon
+                className="size-4 text-destructive"
+                weight="fill"
+              />
+              <span className="text-sm font-medium">자책골</span>
+            </div>
+          </div>
         </div>
       )}
 
