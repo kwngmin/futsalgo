@@ -132,7 +132,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
       </div>
 
       {/* 팀 정보 및 점수 */}
-      <div className="relative grid grid-cols-2 px-4 py-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-100 sm:mx-4 sm:rounded-md">
+      <div className="relative grid grid-cols-2 px-4 pt-6 pb-10 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-100 sm:mx-4 sm:rounded-md">
         <TeamSide
           side="home"
           logoUrl={data.match.homeTeam.logoUrl}
