@@ -11,7 +11,6 @@ import { z } from "zod/v4";
 import { createGoalRecord } from "../actions/create-goal-record";
 import { useMemo } from "react";
 import { Switch } from "@/shared/components/ui/switch";
-import { Signpost } from "lucide-react";
 
 export const goalRecordSchema = z
   .object({
@@ -242,8 +241,8 @@ const GoalRecord = ({
           {/* 자책골 여부 */}
           {Boolean(scorerId || isScoredByMercenary) && (
             <div className="flex justify-between items-center space-x-2 h-11 bg-gray-50 rounded-md px-2">
-              <Label htmlFor="isOwnGoal" className="px-1 flex items-center">
-                <Signpost className="size-4" />
+              <Label htmlFor="isOwnGoal" className="px-1.5 flex items-center">
+                {/* <Signpost className="size-4" /> */}
                 자책골
               </Label>
               <Switch
