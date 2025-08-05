@@ -16,14 +16,13 @@ const Lineup = ({
 
   return (
     <div
-      className={`py-2 ${side === "away" ? "border-l border-gray-100" : ""}`}
+      className={`py-3 ${
+        side === "away" ? "border-l border-gray-100 pl-3" : "pr-3"
+      }`}
     >
       {lineups.length > 0 ? (
         lineups.map((player) => (
-          <div
-            key={player.id}
-            className="flex flex-col justify-center items-center gap-1 px-3 h-24"
-          >
+          <div key={player.id} className="flex items-center gap-2 h-14">
             {player.user.image ? (
               <Image
                 src={player.user.image}
@@ -35,7 +34,7 @@ const Lineup = ({
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
             )}
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center">
               <span className="text-sm font-medium leading-tight">
                 {player.user.nickname}
               </span>
