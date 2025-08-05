@@ -35,13 +35,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
     return data.goals.map((goal) => {
       if (goal.scorerSide === "HOME") {
-        if (goal.isOwnGoal) {
+        if (!goal.isOwnGoal) {
           homeScore++;
         } else {
           awayScore++;
         }
       } else {
-        if (goal.isOwnGoal) {
+        if (!goal.isOwnGoal) {
           awayScore++;
         } else {
           homeScore++;
