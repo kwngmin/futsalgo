@@ -219,7 +219,7 @@ const GoalRecord = ({
       {/* 득점 */}
       <div className="space-y-3">
         <div className="flex justify-between gap-3">
-          <Label>득점</Label>
+          <Label>골 넣은 사람</Label>
         </div>
         <div className="space-y-3">
           <CustomSelect
@@ -267,7 +267,7 @@ const GoalRecord = ({
       {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
         <div className="space-y-3">
           <div className="flex justify-between gap-3">
-            <Label>어시스트</Label>
+            <Label>어시스트 한 사람</Label>
           </div>
           <div className="space-y-3">
             <CustomSelect
