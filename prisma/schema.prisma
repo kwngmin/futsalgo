@@ -533,8 +533,8 @@ model GoalRecord {
   scorerId    String?
   assistId    String?
 
-  // 자책골 여부
-  isOwnGoal   Boolean   @default(false)
+  // // 자책골 여부
+  // isOwnGoal   Boolean?
 
   // 용병 여부
   isScoredByMercenary  Boolean @default(false)
@@ -550,7 +550,7 @@ model GoalRecord {
   @@index([scorerId])
   @@index([assistId])
   @@index([matchId, createdAt])  // 골 순서 조회용
-  @@index([matchId, isOwnGoal])  // 자책골 조회용
+  // @@index([matchId, isOwnGoal])  // 자책골 조회용
   @@map("goal_records")
 }
 

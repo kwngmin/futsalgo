@@ -14,7 +14,7 @@ export const goalRecordSchema = z
   .object({
     scorerId: z.string().optional(),
     assistId: z.string().optional(),
-    isOwnGoal: z.boolean(),
+    // isOwnGoal: z.boolean(),
     isScoredByMercenary: z.boolean(),
     isAssistedByMercenary: z.boolean(),
     scorerSide: z.enum(["HOME", "AWAY"]),
@@ -39,22 +39,22 @@ export const goalRecordSchema = z
     }
 
     // 자책골일 때는 assistId나 isAssistedByMercenary가 있으면 안됨
-    if (data.isOwnGoal) {
-      if (data.assistId) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "자책골에는 어시스트가 있을 수 없습니다",
-          path: ["assistId"],
-        });
-      }
-      if (data.isAssistedByMercenary) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "자책골에는 어시스트가 있을 수 없습니다",
-          path: ["isAssistedByMercenary"],
-        });
-      }
-    }
+    // if (data.isOwnGoal) {
+    //   if (data.assistId) {
+    //     ctx.addIssue({
+    //       code: z.ZodIssueCode.custom,
+    //       message: "자책골에는 어시스트가 있을 수 없습니다",
+    //       path: ["assistId"],
+    //     });
+    //   }
+    //   if (data.isAssistedByMercenary) {
+    //     ctx.addIssue({
+    //       code: z.ZodIssueCode.custom,
+    //       message: "자책골에는 어시스트가 있을 수 없습니다",
+    //       path: ["isAssistedByMercenary"],
+    //     });
+    //   }
+    // }
 
     // assistId와 isAssistedByMercenary 둘 다 있으면 안됨
     if (data.assistId && data.isAssistedByMercenary) {
@@ -84,7 +84,7 @@ const GoalRecord = ({
   } = useForm<GoalRecordFormData>({
     resolver: zodResolver(goalRecordSchema),
     defaultValues: {
-      isOwnGoal: false,
+      // isOwnGoal: false,
       isScoredByMercenary: false,
       isAssistedByMercenary: false,
     },
