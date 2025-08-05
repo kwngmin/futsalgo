@@ -132,7 +132,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
       </div>
 
       {/* 팀 정보 및 점수 */}
-      <div className="relative grid grid-cols-2 p-4 gap-8 bg-gradient-to-b from-slate-100 to-white sm:mx-4 sm:rounded-md">
+      <div className="relative grid grid-cols-2 px-4 py-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-100 sm:mx-4 sm:rounded-md">
         <TeamSide
           side="home"
           logoUrl={data.match.homeTeam.logoUrl}
@@ -154,7 +154,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
       {/* 골 기록 */}
       {goalsWithScore.length > 0 && (
-        <div className="px-4">
+        <div className="px-4 sm:py-4">
           {goalsWithScore.map((goal) => (
             <div key={goal.id} className="flex items-center">
               {/* <div className="text-sm font-medium size-10 flex items-center">

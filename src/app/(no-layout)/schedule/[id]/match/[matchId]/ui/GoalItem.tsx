@@ -50,7 +50,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
     ) : (
       <>
         <div className="w-full" />
-        <div className="flex justify-center items-center w-16 shrink-0 h-6 leading-none font-medium text-muted-foreground">
+        <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-medium text-muted-foreground">
           {scoreAtTime}
         </div>
         <div className="w-full flex justify-start items-center gap-1.5">
