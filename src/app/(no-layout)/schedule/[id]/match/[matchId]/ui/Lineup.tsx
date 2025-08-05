@@ -20,20 +20,23 @@ const Lineup = ({
     >
       {lineups.length > 0 ? (
         lineups.map((player) => (
-          <div key={player.id} className="flex items-center gap-2 px-3 h-14">
+          <div
+            key={player.id}
+            className="flex flex-col sm:flex-row justify-center sm:justify-start items-center gap-1 sm:gap-2 px-3 py-2"
+          >
             {player.user.image ? (
               <Image
                 src={player.user.image}
                 alt="player image"
-                width={36}
-                height={36}
-                className="overflow-hidden object-cover size-9 rounded-[42%] shrink-0"
+                width={40}
+                height={40}
+                className="overflow-hidden object-cover size-9 sm:size-10 rounded-[42%] shrink-0"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
             )}
-            <div className="flex flex-col justify-center">
-              <span className="text-sm font-semibold tracking-tight leading-tight">
+            <div className="flex flex-col justify-center items-center sm:items-start">
+              <span className="text-base font-semibold tracking-tight leading-tight">
                 {player.user.nickname}
               </span>
               {/* 권한이 있는 경우에만 실명 표시 */}
