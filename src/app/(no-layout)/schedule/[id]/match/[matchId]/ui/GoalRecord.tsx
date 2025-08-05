@@ -218,9 +218,7 @@ const GoalRecord = ({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
       {/* 득점 */}
       <div className="space-y-3">
-        <div className="flex justify-between gap-3">
-          <Label>GOAL !</Label>
-        </div>
+        <Label>골 넣은 사람</Label>
         <div className="space-y-3">
           <CustomSelect
             // value={watchValues.scorerId || ""}
@@ -267,7 +265,7 @@ const GoalRecord = ({
       {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
         <div className="space-y-3">
           <div className="flex justify-between gap-3">
-            <Label>어시스트</Label>
+            <Label>어시스트 한 사람</Label>
           </div>
           <div className="space-y-3">
             <CustomSelect
