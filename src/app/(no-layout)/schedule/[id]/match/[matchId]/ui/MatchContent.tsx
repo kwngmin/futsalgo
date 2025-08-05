@@ -5,7 +5,7 @@ import {
   ClipboardList,
   Dices,
   RefreshCcw,
-  Trash2,
+  // Trash2,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -139,7 +139,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           name={data.match.homeTeam.name}
         />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
-          <div className="flex items-center gap-2 text-3xl font-bold tracking-tighter my-auto">
+          <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
             <span>{data.match.homeScore}</span>
             <span>-</span>
             <span>{data.match.awayScore}</span>
@@ -155,22 +155,22 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 골 기록 */}
       {goalsWithScore.length > 0 && (
         <div className="px-4">
-          {goalsWithScore.map((goal, index) => (
+          {goalsWithScore.map((goal) => (
             <div key={goal.id} className="flex items-center">
-              <div className="text-sm font-medium size-10 flex items-center">
+              {/* <div className="text-sm font-medium size-10 flex items-center">
                 {index + 1}
-              </div>
+              </div> */}
               <GoalItem
                 goal={goal}
                 scoreAtTime={goal.scoreAtTime}
                 isHome={goal.scorerSide === "HOME"}
               />
-              <div className="text-sm font-medium size-10 flex justify-center items-center">
+              {/* <div className="text-sm font-medium size-10 flex justify-center items-center">
                 <Trash2 className="size-4 text-gray-600" />
-              </div>
+              </div> */}
             </div>
           ))}
-          <div className="flex items-center gap-4 h-10">
+          <div className="flex justify-center items-center h-10 gap-6">
             <div className="flex items-center gap-1">
               <SoccerBallIcon className="size-4 text-gray-600" weight="fill" />
               <span className="text-sm font-medium">골</span>
