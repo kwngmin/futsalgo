@@ -20,7 +20,7 @@ export const GoalItem = ({
   isHome,
   hasPermission,
 }: GoalItemProps) => (
-  <div className="flex justify-between items-center py-3 border-b border-gray-100 w-full min-h-16">
+  <div className="flex justify-between items-center py-3 border-t border-gray-100 w-full min-h-16">
     {isHome ? (
       <>
         <div className="w-full flex justify-end items-center gap-1.5">
