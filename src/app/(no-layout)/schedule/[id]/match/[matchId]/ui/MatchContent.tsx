@@ -166,7 +166,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 className="px-2 flex items-center border-t border-gray-100 relative"
               >
                 {/* 순서 */}
-                <div className="text-sm font-medium size-9 sm:size-8 flex items-center text-gray-400 shrink-0 absolute left-0">
+                <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0">
                   {index + 1}
                 </div>
 
