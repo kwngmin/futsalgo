@@ -137,14 +137,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 콘텐트 영역 */}
       <div className="space-y-3">
         {/* 팀 정보 및 점수 */}
-        <div className="relative grid grid-cols-2 px-4 pt-6 pb-10 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
+        <div className="relative grid grid-cols-2 px-4 py-6 sm:pb-10 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
           <TeamSide
             side="home"
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
-            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
+            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto sm:mb-4">
               <span>{data.match.homeScore}</span>
               <span>-</span>
               <span>{data.match.awayScore}</span>
@@ -221,13 +221,35 @@ const MatchContent = ({ data }: MatchContentProps) => {
               <span className="text-base font-medium">팀 명단</span>
             </div>
             {data.permissions.isEditable && (
-              <button
-                type="button"
-                className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-500 select-none cursor-pointer hover:bg-gray-200 hover:text-gray-700 transition-all"
-                onClick={() => setMode(mode === "view" ? "edit" : "view")}
-              >
-                {mode === "view" ? "수정" : "완료"}
-              </button>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-500">모드</span>
+                <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
+                  <button
+                    type="button"
+                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer  transition-all ${
+                      mode === "view"
+                        ? "bg-white shadow-xs"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
+                  >
+                    {/* {mode === "view" ? "보기" : "수정"} */}
+                    보기
+                  </button>
+                  <button
+                    type="button"
+                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer  transition-all ${
+                      mode === "edit"
+                        ? "bg-white shadow-xs"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
+                  >
+                    {/* {mode === "view" ? "보기" : "수정"} */}
+                    수정
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 
