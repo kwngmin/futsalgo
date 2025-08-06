@@ -160,15 +160,17 @@ const MatchContent = ({ data }: MatchContentProps) => {
         <div className="px-4 sm:py-4">
           {goalsWithScore.map((goal, index) => (
             <div key={goal.id} className="flex items-center">
-              <div className="text-sm font-medium size-10 sm:size-9 flex items-center text-gray-400 shrink-0">
-                {index + 1}
-              </div>
+              {data.permissions.isEditable && (
+                <div className="text-sm font-medium size-10 sm:size-9 flex items-center text-gray-400 shrink-0">
+                  {index + 1}
+                </div>
+              )}
               <GoalItem
                 goal={goal}
                 scoreAtTime={goal.scoreAtTime}
                 isHome={goal.scorerSide === "HOME"}
               />
-              {data.permissions.isEditable ? (
+              {data.permissions.isEditable && (
                 <button
                   type="button"
                   className="text-sm font-medium size-10 sm:size-9 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -186,8 +188,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 >
                   <Trash2 className="size-4.5 text-destructive" />
                 </button>
-              ) : (
-                <div className="size-10 sm:size-9 shrink-0" />
               )}
             </div>
           ))}
