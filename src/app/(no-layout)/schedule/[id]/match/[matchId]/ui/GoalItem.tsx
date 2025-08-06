@@ -31,21 +31,9 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
                 {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-                {/* {`${
-                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`} */}
-                {/* {`${
-                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                }${!hasPermission ? " 어시스트" : ""}`} */}
               </span>
             )}
           </div>
-          {/* <SoccerBallIcon
-            className={`size-5 sm:size-4 ${
-              goal.isOwnGoal ? "text-destructive" : ""
-            }`}
-            weight="fill"
-          /> */}
         </div>
 
         <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-medium text-muted-foreground">
@@ -67,7 +55,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             weight="fill"
           /> */}
           <div className="flex flex-col">
-            <span className="text-sm font-semibold leading-tight">
+            <span className="font-semibold leading-tight">
               {/* <span className="text-sm sm:text-base font-semibold leading-tight"> */}
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
