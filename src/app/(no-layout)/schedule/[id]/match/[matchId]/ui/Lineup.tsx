@@ -27,13 +27,13 @@ const Lineup = ({
                 alt="player image"
                 width={36}
                 height={36}
-                className="overflow-hidden object-cover size-9 rounded-[42%] shrink-0"
+                className="overflow-hidden object-cover size-8 sm:size-9 rounded-[42%] shrink-0"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
             )}
             <div className="flex flex-col justify-center">
-              <span className="text-sm font-medium leading-tight">
+              <span className="text-sm font-semibold leading-tight">
                 {player.user.nickname}
               </span>
               {/* 권한이 있는 경우에만 실명 표시 */}
