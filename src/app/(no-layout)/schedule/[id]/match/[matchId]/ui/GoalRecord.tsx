@@ -220,7 +220,7 @@ const GoalRecord = ({
       <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
         <div className="flex items-center gap-2">
           <ClipboardPenLine className="size-5 text-gray-600" />
-          <span className="text-base font-medium">골 & 어시스트 기록</span>
+          <span className="text-base font-medium">새로운 골 & 어시스트</span>
         </div>
       </div>
       <form
