@@ -37,7 +37,9 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             )}
           </div>
           <SoccerBallIcon
-            className={`size-4 ${goal.isOwnGoal ? "text-destructive" : ""}`}
+            className={`size-5 sm:size-4 ${
+              goal.isOwnGoal ? "text-destructive" : ""
+            }`}
             weight="fill"
           />
         </div>
@@ -55,7 +57,9 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
         </div>
         <div className="w-full flex justify-start items-center gap-1.5">
           <SoccerBallIcon
-            className={`size-4 ${goal.isOwnGoal ? "text-destructive" : ""}`}
+            className={`size-5 sm:size-4 ${
+              goal.isOwnGoal ? "text-destructive" : ""
+            }`}
             weight="fill"
           />
           <div className="flex flex-col">
