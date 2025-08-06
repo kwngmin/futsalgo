@@ -19,7 +19,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
       <>
         <div className="w-full flex justify-end items-center gap-1.5">
           <div className="flex flex-col items-end">
-            <span className="text-sm font-semibold leading-tight">
+            <span className="font-semibold leading-tight">
               {/* <span className="text-sm sm:text-base font-semibold leading-tight"> */}
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
@@ -30,10 +30,10 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-                {/* {`${
-                    goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                  } 어시스트`} */}
+                {/* {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname} */}
+                {`${
+                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
+                } 어시스트`}
               </span>
             )}
           </div>
@@ -75,10 +75,10 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-                {/* {`${
-                    goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                  } 어시스트`} */}
+                {/* {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname} */}
+                {`${
+                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
+                } 어시스트`}
               </span>
             )}
           </div>
