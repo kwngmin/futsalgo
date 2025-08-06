@@ -135,7 +135,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
       </div>
 
       {/* 팀 정보 및 점수 */}
-      <div className="relative grid grid-cols-2 px-4 pt-6 pb-10 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-100 sm:mx-4 sm:rounded-md">
+      <div className="relative grid grid-cols-2 px-4 pt-6 pb-10 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
         <TeamSide
           side="home"
           logoUrl={data.match.homeTeam.logoUrl}
@@ -170,7 +170,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
               />
               <button
                 type="button"
-                className="text-sm font-medium size-10 flex justify-center items-center cursor-pointer bg-destructive/10 rounded-md sm:hover:bg-destructive/20 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-sm font-medium size-10 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isLoading}
                 onClick={async () => {
                   setIsLoading(true);
@@ -183,7 +183,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   }
                 }}
               >
-                <Trash2 className="size-4 text-destructive" />
+                <Trash2 className="size-4.5 text-destructive" />
               </button>
             </div>
           ))}
