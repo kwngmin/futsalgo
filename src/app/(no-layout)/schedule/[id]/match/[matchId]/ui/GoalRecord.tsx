@@ -296,7 +296,7 @@ const GoalRecord = ({
         size="lg"
       >
         {/* GOAL ! */}
-        {isSubmitting ? "기록하는 중..." : "기록하기"}
+        {isSubmitting ? "기록하는 중..." : "골 & 어시스트 저장"}
       </Button>
     </form>
   );

@@ -185,6 +185,10 @@ export async function deleteGoalRecord(goalRecordId: string) {
       });
     }
 
+    revalidatePath(
+      `/schedule/${goalRecord.match.scheduleId}/match/${goalRecord.matchId}`
+    );
+
     return { success: true };
   } catch (error) {
     console.error("골 기록 삭제 실패:", error);

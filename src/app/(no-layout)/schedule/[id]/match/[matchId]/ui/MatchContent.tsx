@@ -5,7 +5,7 @@ import {
   ClipboardList,
   Dices,
   RefreshCcw,
-  // Trash2,
+  Trash2,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import type { MatchDataResult, GoalWithScore } from "../model/types";
 import { NavigationButton } from "./NavigationButton";
 import { GoalItem } from "./GoalItem";
 import { LineupEditItem } from "./LineupEditItem";
+import { deleteGoalRecord } from "../actions/create-goal-record";
 // import { SoccerBallIcon } from "@phosphor-icons/react";
 
 interface MatchContentProps {
@@ -27,6 +28,8 @@ interface MatchContentProps {
 const MatchContent = ({ data }: MatchContentProps) => {
   const router = useRouter();
   const [mode, setMode] = useState<"view" | "edit">("view");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // 골 기록을 기반으로 각 시점의 점수 계산 (useMemo로 최적화)
   const goalsWithScore = useMemo((): GoalWithScore[] => {
@@ -165,9 +168,23 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 scoreAtTime={goal.scoreAtTime}
                 isHome={goal.scorerSide === "HOME"}
               />
-              {/* <div className="text-sm font-medium size-10 flex justify-center items-center">
-                <Trash2 className="size-4 text-gray-600" />
-              </div> */}
+              <button
+                type="button"
+                className="text-sm font-medium size-10 flex justify-center items-center cursor-pointer bg-destructive/10 rounded-md sm:hover:bg-destructive/20 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading}
+                onClick={async () => {
+                  setIsLoading(true);
+                  try {
+                    await deleteGoalRecord(goal.id);
+                  } catch (error) {
+                    console.error("골 기록 삭제 실패:", error);
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+              >
+                <Trash2 className="size-4 text-destructive" />
+              </button>
             </div>
           ))}
           {/* <div className="flex justify-center items-center h-10 gap-6">
