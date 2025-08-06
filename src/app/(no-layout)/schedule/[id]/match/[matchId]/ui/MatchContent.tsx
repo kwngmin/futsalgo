@@ -163,18 +163,21 @@ const MatchContent = ({ data }: MatchContentProps) => {
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
-                className="flex items-center border-t border-gray-100 relative"
+                className="px-2 flex items-center border-t border-gray-100 relative"
               >
-                {data.permissions.isEditable && (
-                  <div className="text-sm font-medium size-9 sm:size-8 flex items-center text-gray-400 shrink-0 absolute left-0">
-                    {index + 1}
-                  </div>
-                )}
+                {/* 순서 */}
+                <div className="text-sm font-medium size-9 sm:size-8 flex items-center text-gray-400 shrink-0 absolute left-0">
+                  {index + 1}
+                </div>
+
+                {/* 골 기록 */}
                 <GoalItem
                   goal={goal}
                   scoreAtTime={goal.scoreAtTime}
                   isHome={goal.scorerSide === "HOME"}
                 />
+
+                {/* 삭제 버튼 */}
                 {data.permissions.isEditable && (
                   <button
                     type="button"
