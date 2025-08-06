@@ -13,7 +13,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
       <SideNav />
 
       {/* 콘텐츠 */}
-      <main className="lg:pl-20 xl:pl-72 pb-16 lg:pb-0">{children}</main>
+      <main className="md:pl-20 lg:pl-72 pb-16 md:pb-0">{children}</main>
 
       {/* 모바일 하단 네비게이션 */}
       <BottomNav />
