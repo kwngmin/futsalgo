@@ -38,7 +38,7 @@ const SideNav = () => {
                 <button
                   key={item.id}
                   onClick={() => handleClick(item.href)}
-                  className={`w-full flex items-center px-4 py-3 text-xl rounded-full transition-colors cursor-pointer ${
+                  className={`w-full flex items-center px-4 py-3 text-xl rounded-lg transition-colors cursor-pointer ${
                     isActive
                       ? "bg-gray-100 text-gray-900 font-bold"
                       : // ? "bg-blue-50 text-blue-600 font-bold"
@@ -49,7 +49,7 @@ const SideNav = () => {
                   <Icon
                     className="mr-4"
                     weight={isActive ? "fill" : "regular"}
-                    size={28}
+                    size={32}
                   />
                   {item.label}
                 </button>

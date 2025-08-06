@@ -2,13 +2,11 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import {
-  // HouseIcon,
-  // CourtBasketballIcon,
   CalendarIcon,
   TShirtIcon,
   UserIcon,
-  ChatsCircleIcon,
   DotsThreeOutlineIcon,
+  NewspaperClippingIcon,
 } from "@phosphor-icons/react";
 
 export const navItems = [
@@ -34,7 +32,8 @@ export const navItems = [
   {
     id: "board",
     label: "게시판",
-    icon: ChatsCircleIcon,
+    icon: NewspaperClippingIcon,
+    // icon: ChatsCircleIcon,
     href: "/boards",
   },
   {
