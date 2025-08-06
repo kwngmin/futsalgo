@@ -1,5 +1,8 @@
+"use client";
+
 import { LineupsData, LineupsWithNameData } from "@/entities/match/model/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type Lineup = LineupsData | LineupsWithNameData;
 
@@ -10,6 +13,8 @@ const Lineup = ({
   lineups: Lineup;
   side: "home" | "away";
 }) => {
+  const router = useRouter();
+
   if (!lineups) {
     return <div className="text-center text-sm text-gray-500">미정</div>;
   }
@@ -20,7 +25,11 @@ const Lineup = ({
     >
       {lineups.length > 0 ? (
         lineups.map((player) => (
-          <div key={player.id} className="flex items-center gap-2 px-3 h-14">
+          <div
+            key={player.id}
+            className="flex items-center gap-2 px-3 h-14"
+            onClick={() => router.push(`/players/${player.user.id}`)}
+          >
             {player.user.image ? (
               <Image
                 src={player.user.image}
