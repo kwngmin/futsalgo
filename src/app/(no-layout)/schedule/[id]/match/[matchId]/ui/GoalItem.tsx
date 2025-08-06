@@ -1,9 +1,9 @@
 "use client";
 
-import {
-  //   SneakerMoveIcon, //
-  SoccerBallIcon,
-} from "@phosphor-icons/react";
+// import {
+//     SneakerMoveIcon, //
+//   SoccerBallIcon,
+// } from "@phosphor-icons/react";
 import type { GoalWithScore } from "../model/types";
 
 // 골 기록 컴포넌트 (DRY 원칙 적용)
@@ -19,7 +19,8 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
       <>
         <div className="w-full flex justify-end items-center gap-1.5">
           <div className="flex flex-col items-end">
-            <span className="text-sm sm:text-base font-semibold leading-tight">
+            <span className="font-semibold leading-tight">
+              {/* <span className="text-sm sm:text-base font-semibold leading-tight"> */}
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {goal.isOwnGoal && (
@@ -36,12 +37,12 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
               </span>
             )}
           </div>
-          <SoccerBallIcon
+          {/* <SoccerBallIcon
             className={`size-5 sm:size-4 ${
               goal.isOwnGoal ? "text-destructive" : ""
             }`}
             weight="fill"
-          />
+          /> */}
         </div>
 
         <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-medium text-muted-foreground">
@@ -56,14 +57,15 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
           {scoreAtTime}
         </div>
         <div className="w-full flex justify-start items-center gap-1.5">
-          <SoccerBallIcon
+          {/* <SoccerBallIcon
             className={`size-5 sm:size-4 ${
               goal.isOwnGoal ? "text-destructive" : ""
             }`}
             weight="fill"
-          />
+          /> */}
           <div className="flex flex-col">
-            <span className="text-sm sm:text-base font-semibold leading-tight">
+            <span className="font-semibold leading-tight">
+              {/* <span className="text-sm sm:text-base font-semibold leading-tight"> */}
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {goal.isOwnGoal && (

@@ -11,6 +11,7 @@ import { z } from "zod/v4";
 import { createGoalRecord } from "../actions/create-goal-record";
 import { useMemo } from "react";
 import { Switch } from "@/shared/components/ui/switch";
+import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
 
 export const goalRecordSchema = z
   .object({
@@ -217,7 +218,10 @@ const GoalRecord = ({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-4">
       {/* 득점 */}
       <div className="space-y-3">
-        <Label>골 넣은 사람</Label>
+        <div className="flex items-center gap-2">
+          <SoccerBallIcon className="size-4" weight="fill" />
+          <Label>골 넣은 사람</Label>
+        </div>
         <div className="space-y-3">
           <CustomSelect
             // value={watchValues.scorerId || ""}
@@ -241,10 +245,13 @@ const GoalRecord = ({
           {/* 자책골 여부 */}
           {Boolean(scorerId || isScoredByMercenary) && (
             <div className="flex justify-between items-center space-x-2 h-11 bg-gray-50 rounded-md px-2">
-              <Label htmlFor="isOwnGoal" className="px-1.5 flex items-center">
-                {/* <Signpost className="size-4" /> */}
-                자책골
-              </Label>
+              <div className="flex items-center gap-2 px-1">
+                <SoccerBallIcon
+                  className="size-4 text-destructive"
+                  weight="fill"
+                />
+                <Label htmlFor="isOwnGoal">자책골</Label>
+              </div>
               <Switch
                 id="isOwnGoal"
                 checked={isOwnGoal}
@@ -263,7 +270,8 @@ const GoalRecord = ({
       {/* 어시스트 (자책골이 아닐 때만) */}
       {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
         <div className="space-y-3">
-          <div className="flex justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <SneakerMoveIcon className="size-4" weight="fill" />
             <Label>어시스트 한 사람</Label>
           </div>
           <div className="space-y-3">
