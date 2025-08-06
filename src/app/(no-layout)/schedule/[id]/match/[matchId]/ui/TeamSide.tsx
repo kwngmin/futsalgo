@@ -18,7 +18,7 @@ const TeamSide = ({
           }`}
         />
         <span
-          className={`grow font-semibold text-sm tracking-tight ${
+          className={`grow font-bold text-sm tracking-tight ${
             side === "home" ? "text-indigo-700" : "text-emerald-700"
           }`}
         >

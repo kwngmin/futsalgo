@@ -159,11 +159,17 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
         {/* 골 기록 */}
         {goalsWithScore.length > 0 && (
-          <div className="px-4 sm:py-4">
+          <div className="px-4">
+            {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
+              <div className="flex items-center gap-2">
+                <History className="size-5 text-gray-600" />
+                <span className="text-base font-medium">골 & 어시스트</span>
+              </div>
+            </div> */}
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
-                className="px-2 flex items-center border-t border-gray-100 relative"
+                className="px-2 flex items-center border-b last:border-b-0 border-gray-100 relative"
               >
                 {/* 순서 */}
                 <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0">
@@ -199,19 +205,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 )}
               </div>
             ))}
-            {/* <div className="flex justify-center items-center h-10 gap-6">
-            <div className="flex items-center gap-1">
-              <SoccerBallIcon className="size-4 text-gray-600" weight="fill" />
-              <span className="text-sm font-medium">골</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <SoccerBallIcon
-                className="size-4 text-destructive"
-                weight="fill"
-              />
-              <span className="text-sm font-medium">자책골</span>
-            </div>
-          </div> */}
           </div>
         )}
 
@@ -220,12 +213,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
           <GoalRecord matchId={data.match.id} lineups={data.lineups} />
         )}
 
-        {/* 출전 명단 */}
+        {/* 팀 명단 */}
         <div className="px-4">
           <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
             <div className="flex items-center gap-2">
               <ClipboardList className="size-5 text-gray-600" />
-              <span className="text-base font-medium">출전 명단</span>
+              <span className="text-base font-medium">팀 명단</span>
             </div>
             {data.permissions.isEditable && (
               <button

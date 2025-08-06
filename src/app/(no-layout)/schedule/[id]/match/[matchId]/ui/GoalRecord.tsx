@@ -12,7 +12,7 @@ import { createGoalRecord } from "../actions/create-goal-record";
 import { useMemo } from "react";
 import { Switch } from "@/shared/components/ui/switch";
 import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
-import { NotebookPen } from "lucide-react";
+import { ClipboardPenLine } from "lucide-react";
 
 export const goalRecordSchema = z
   .object({
@@ -219,18 +219,9 @@ const GoalRecord = ({
     <div className="px-4">
       <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
         <div className="flex items-center gap-2">
-          <NotebookPen className="size-5 text-gray-600" />
-          <span className="text-base font-medium">공격 포인트</span>
+          <ClipboardPenLine className="size-5 text-gray-600" />
+          <span className="text-base font-medium">골 & 어시스트 기록</span>
         </div>
-        {/* {data.permissions.isEditable && (
-          <button
-            type="button"
-            className="font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center bg-gray-100 text-gray-500 select-none cursor-pointer hover:bg-gray-200 hover:text-gray-700 transition-all"
-            onClick={() => setMode(mode === "view" ? "edit" : "view")}
-          >
-            {mode === "view" ? "수정" : "완료"}
-          </button>
-        )} */}
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -324,7 +315,7 @@ const GoalRecord = ({
           size="lg"
         >
           {/* GOAL ! */}
-          {isSubmitting ? "기록하는 중..." : "골 & 어시스트 저장"}
+          {isSubmitting ? "저장하는 중..." : "저장"}
         </Button>
       </form>
     </div>
