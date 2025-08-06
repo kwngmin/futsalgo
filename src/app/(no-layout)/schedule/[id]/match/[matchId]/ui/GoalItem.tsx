@@ -11,9 +11,15 @@ interface GoalItemProps {
   goal: GoalWithScore;
   scoreAtTime: string;
   isHome: boolean;
+  hasPermission: boolean;
 }
 
-export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
+export const GoalItem = ({
+  goal,
+  scoreAtTime,
+  isHome,
+  hasPermission,
+}: GoalItemProps) => (
   <div className="flex justify-between items-center py-3 border-b border-gray-100 w-full min-h-16">
     {isHome ? (
       <>
@@ -30,10 +36,9 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
-                {/* {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname} */}
                 {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`}
+                }${!hasPermission ? " 어시스트" : ""}`}
               </span>
             )}
           </div>
@@ -75,10 +80,9 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
-                {/* {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname} */}
                 {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                } 어시스트`}
+                }${!hasPermission ? " 어시스트" : ""}`}
               </span>
             )}
           </div>

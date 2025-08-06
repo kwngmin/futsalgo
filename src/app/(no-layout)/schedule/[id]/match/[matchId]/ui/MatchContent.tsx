@@ -171,6 +171,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   goal={goal}
                   scoreAtTime={goal.scoreAtTime}
                   isHome={goal.scorerSide === "HOME"}
+                  hasPermission={data.permissions.isEditable}
                 />
                 {data.permissions.isEditable && (
                   <button
