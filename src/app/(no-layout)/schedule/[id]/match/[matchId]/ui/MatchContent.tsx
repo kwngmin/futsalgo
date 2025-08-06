@@ -168,23 +168,25 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 scoreAtTime={goal.scoreAtTime}
                 isHome={goal.scorerSide === "HOME"}
               />
-              <button
-                type="button"
-                className="text-sm font-medium size-10 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isLoading}
-                onClick={async () => {
-                  setIsLoading(true);
-                  try {
-                    await deleteGoalRecord(goal.id);
-                  } catch (error) {
-                    console.error("골 기록 삭제 실패:", error);
-                  } finally {
-                    setIsLoading(false);
-                  }
-                }}
-              >
-                <Trash2 className="size-4.5 text-destructive" />
-              </button>
+              {data.permissions.isEditable && (
+                <button
+                  type="button"
+                  className="text-sm font-medium size-10 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setIsLoading(true);
+                    try {
+                      await deleteGoalRecord(goal.id);
+                    } catch (error) {
+                      console.error("골 기록 삭제 실패:", error);
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  }}
+                >
+                  <Trash2 className="size-4.5 text-destructive" />
+                </button>
+              )}
             </div>
           ))}
           {/* <div className="flex justify-center items-center h-10 gap-6">
