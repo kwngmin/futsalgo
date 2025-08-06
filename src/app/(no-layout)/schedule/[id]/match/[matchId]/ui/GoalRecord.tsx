@@ -306,17 +306,18 @@ const GoalRecord = ({
             )}
           </div>
         )}
-
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          // type="button"
-          className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-          size="lg"
-        >
-          {/* GOAL ! */}
-          {isSubmitting ? "저장하는 중..." : "저장"}
-        </Button>
+        {watchValues.scorerId && (
+          <Button
+            type="submit"
+            disabled={isSubmitting || !watchValues.scorerId}
+            // type="button"
+            className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg disabled:opacity-50 disabled:pointer-events-none"
+            size="lg"
+          >
+            {/* GOAL ! */}
+            {isSubmitting ? "저장하는 중..." : "저장"}
+          </Button>
+        )}
       </form>
     </div>
   );

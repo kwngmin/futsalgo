@@ -1,6 +1,7 @@
 "use client";
 
 import { LineupsData, LineupsWithNameData } from "@/entities/match/model/types";
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -27,7 +28,7 @@ const Lineup = ({
         lineups.map((player) => (
           <div
             key={player.id}
-            className="flex items-center gap-2 px-3 h-14"
+            className="flex items-center gap-2 px-3 h-14 select-none group cursor-pointer hover:bg-gray-50"
             onClick={() => router.push(`/players/${player.user.id}`)}
           >
             {player.user.image ? (
@@ -41,8 +42,8 @@ const Lineup = ({
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>
             )}
-            <div className="flex flex-col justify-center">
-              <span className="text-sm font-semibold leading-tight">
+            <div className="w-full flex flex-col justify-center">
+              <span className="text-sm font-semibold leading-tight group-hover:underline">
                 {player.user.nickname}
               </span>
               {/* 권한이 있는 경우에만 실명 표시 */}
@@ -52,11 +53,7 @@ const Lineup = ({
                 </span>
               )}
             </div>
-            {/* {data.permissions.isMember && "name" in player.user && (
-              <span className="font-medium text-muted-foreground">
-                {player.user.name}
-              </span>
-            )} */}
+            <ChevronRight className="hidden md:block size-4 text-gray-500 group-hover:text-gray-700 shrink-0" />
           </div>
         ))
       ) : (
