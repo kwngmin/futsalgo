@@ -161,9 +161,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {goalsWithScore.length > 0 && (
           <div className="px-4 sm:py-4">
             {goalsWithScore.map((goal, index) => (
-              <div key={goal.id} className="flex items-center">
+              <div
+                key={goal.id}
+                className="flex items-center border-t border-gray-100 relative"
+              >
                 {data.permissions.isEditable && (
-                  <div className="text-sm font-medium size-9 sm:size-8 flex items-center text-gray-400 shrink-0">
+                  <div className="text-sm font-medium size-9 sm:size-8 flex items-center text-gray-400 shrink-0 absolute left-0">
                     {index + 1}
                   </div>
                 )}
@@ -171,12 +174,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   goal={goal}
                   scoreAtTime={goal.scoreAtTime}
                   isHome={goal.scorerSide === "HOME"}
-                  hasPermission={data.permissions.isEditable}
                 />
                 {data.permissions.isEditable && (
                   <button
                     type="button"
-                    className="text-sm font-medium size-9 sm:size-8 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute right-0 text-sm font-medium size-9 sm:size-8 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur z-10"
                     disabled={isLoading}
                     onClick={async () => {
                       setIsLoading(true);
@@ -189,7 +191,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       }
                     }}
                   >
-                    <Trash2 className="size-4.5 text-destructive" />
+                    <Trash2 className="size-4.5 sm:size-4 text-destructive" />
                   </button>
                 )}
               </div>

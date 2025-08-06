@@ -11,16 +11,10 @@ interface GoalItemProps {
   goal: GoalWithScore;
   scoreAtTime: string;
   isHome: boolean;
-  hasPermission: boolean;
 }
 
-export const GoalItem = ({
-  goal,
-  scoreAtTime,
-  isHome,
-  hasPermission,
-}: GoalItemProps) => (
-  <div className="flex justify-between items-center py-3 border-t border-gray-100 w-full min-h-16">
+export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
+  <div className="flex justify-between items-center py-3 w-full min-h-14">
     {isHome ? (
       <>
         <div className="w-full flex justify-end items-center gap-1.5">
@@ -36,9 +30,13 @@ export const GoalItem = ({
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
-                {`${
+                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+                {/* {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                }${!hasPermission ? " 어시스트" : ""}`}
+                } 어시스트`} */}
+                {/* {`${
+                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
+                }${!hasPermission ? " 어시스트" : ""}`} */}
               </span>
             )}
           </div>
@@ -80,9 +78,13 @@ export const GoalItem = ({
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <span className="text-sm text-muted-foreground font-medium">
-                {`${
+                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+                {/* {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
-                }${!hasPermission ? " 어시스트" : ""}`}
+                } 어시스트`} */}
+                {/* {`${
+                  goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
+                }${!hasPermission ? " 어시스트" : ""}`} */}
               </span>
             )}
           </div>
