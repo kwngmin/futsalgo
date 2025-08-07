@@ -102,12 +102,21 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )} */}
 
         {/* 공통 */}
-        <div className="w-full flex flex-col items-center justify-center px-4 my-10">
+        <div className="w-full flex flex-col items-center justify-center px-4 mb-10 mt-6">
+          <span
+            className={`flex items-center justify-center font-medium text-lg sm:text-base ${
+              data.data.schedule?.matchType === "TEAM"
+                ? "text-indigo-600"
+                : "text-emerald-600"
+            }`}
+          >
+            {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
+          </span>
           <span className="flex items-center justify-center font-bold text-2xl">
             {/* {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"} */}
             {data.data.schedule?.place}
           </span>
-          <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight">
+          <div className="w-full flex justify-center items-center gap-1 text-xl sm:text-lg tracking-tight">
             {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
               month: "long",
               day: "numeric",

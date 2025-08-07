@@ -10,7 +10,6 @@ import { likeSchedule } from "@/app/(main-layout)/actions/like-schedule";
 import { useQueryClient } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
-// import { HeartIcon } from "@heroicons/react/24/outline";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -66,12 +65,15 @@ const tabs = [
 const ScheduleContent = ({
   scheduleId,
   isLikedSchedule,
+  startTime,
   matchType,
 }: {
   scheduleId: string;
   isLikedSchedule?: boolean;
+  startTime?: Date;
   matchType?: MatchType;
 }) => {
+  console.log(startTime, "startTime");
   console.log(matchType, "matchType");
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -106,14 +108,20 @@ const ScheduleContent = ({
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
       <div className="flex justify-between items-center shrink-0 px-4 h-16">
         <button
-          className="flex items-center cursor-pointer select-none hover:bg-gray-100 rounded-full pr-4 group"
+          className="flex items-center cursor-pointer select-none hover:bg-gray-100 rounded-full group pr-4"
           onClick={handleGoBack}
         >
           <div className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 rounded-full transition-colors">
             <ArrowLeft style={{ width: "24px", height: "24px" }} />
           </div>
-          <h1 className="text-xl font-bold">
-            {matchType === MatchType.SQUAD ? "자체전" : "친선전"}
+          <h1 className="text-xl font-semibold">
+            일정 상세
+            {/* {matchType === MatchType.SQUAD ? "자체전" : "친선전"} */}
+            {/* {startTime?.toLocaleDateString("ko-KR", {
+              month: "long",
+              day: "numeric",
+            })}
+            {startTime && `${startTime.getMonth() + 1}.${startTime.getDate()}`} */}
           </h1>
         </button>
         <div className="flex items-center justify-end gap-2">

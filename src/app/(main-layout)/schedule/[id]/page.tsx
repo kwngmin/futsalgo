@@ -16,6 +16,7 @@ const SchedulePage = async ({
       id,
     },
     select: {
+      startTime: true,
       matchType: true,
     },
   });
@@ -34,11 +35,18 @@ const SchedulePage = async ({
       <ScheduleContent
         scheduleId={id}
         isLikedSchedule={Boolean(isLiked)}
+        startTime={schedule?.startTime}
         matchType={schedule?.matchType}
       />
     );
   }
-  return <ScheduleContent scheduleId={id} matchType={schedule?.matchType} />;
+  return (
+    <ScheduleContent
+      scheduleId={id}
+      startTime={schedule?.startTime}
+      matchType={schedule?.matchType}
+    />
+  );
 };
 
 export default SchedulePage;
