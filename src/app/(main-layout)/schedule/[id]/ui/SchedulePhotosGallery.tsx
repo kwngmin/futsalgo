@@ -90,38 +90,39 @@ export const SchedulePhotosGallery = ({
           <div className="flex flex-col gap-4">
             {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"> */}
             {photos.map((photo, index) => (
-              <div
-                key={photo.id}
-                className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-100"
-                onClick={() => handleImageClick(index)}
-              >
-                <Image
-                  src={photo.url}
-                  alt={`경기 사진 ${index + 1}`}
-                  fill
-                  className="object-cover transition-transform scale-105"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                />
-
-                {/* 호버 오버레이 */}
-                {/* <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" /> */}
-
+              <div key={photo.id} className="">
                 {/* 업로더 정보 */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 text-white transition-opacity rounded-lg">
+                <div className="flex justify-between items-center h-10 cursor-pointer group select-none">
                   <div className="flex items-center gap-2">
                     {photo.uploader.image && (
                       <Image
                         src={photo.uploader.image}
                         alt={photo.uploader.name || ""}
-                        width={24}
-                        height={24}
+                        width={32}
+                        height={32}
                         className="rounded-full"
                       />
                     )}
-                    <span className="text-sm font-medium">
+                    <span className="sm:text-sm font-semibold">
                       {photo.uploader.nickname || photo.uploader.name}
                     </span>
                   </div>
+                  <span className="text-sm text-muted-foreground">
+                    {new Date(photo.createdAt).toLocaleDateString("ko-KR")}
+                  </span>
+                </div>
+
+                <div
+                  className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-100 ml-8"
+                  onClick={() => handleImageClick(index)}
+                >
+                  <Image
+                    src={photo.url}
+                    alt={`경기 사진 ${index + 1}`}
+                    fill
+                    className="object-cover transition-transform"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  />
                 </div>
               </div>
             ))}
