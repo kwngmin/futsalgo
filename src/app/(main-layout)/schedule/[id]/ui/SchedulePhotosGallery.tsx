@@ -1,38 +1,24 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-
 import { Loader2, RefreshCw, AlertCircle, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import SchedulePhotoUpload from "./SchedulePhotoUpload";
-import useSchedulePhotos from "../lib/use-schedule-photos";
+import { useSchedulePhotos } from "../lib/use-schedule-photos";
 
 interface SchedulePhotosGalleryProps {
   scheduleId: string;
-  autoRefresh?: boolean;
-  className?: string;
 }
 
 export const SchedulePhotosGallery = ({
   scheduleId,
-  autoRefresh = false,
-  className = "",
 }: SchedulePhotosGalleryProps) => {
-  const {
-    photos,
-    canUpload,
-    // totalCount,
-    isLoading,
-    error,
-    hasMore,
-    refresh,
-    loadMore,
-  } = useSchedulePhotos({
-    scheduleId,
-    limit: 20,
-    autoRefresh,
-  });
+  const { photos, canUpload, isLoading, error, hasMore, refresh, loadMore } =
+    useSchedulePhotos({
+      scheduleId,
+      limit: 20,
+    });
 
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null
@@ -63,7 +49,7 @@ export const SchedulePhotosGallery = ({
 
   if (error) {
     return (
-      <div className={`p-6 text-center ${className}`}>
+      <div className="p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <p className="text-red-600 mb-4">{error}</p>
         <Button onClick={refresh} variant="outline">
@@ -75,7 +61,7 @@ export const SchedulePhotosGallery = ({
   }
 
   return (
-    <div className={`space-y-4 mt-4 px-4 ${className}`}>
+    <div className="space-y-4 mt-4 px-4">
       {/* 업로드 폼 */}
       {canUpload && (
         <SchedulePhotoUpload
@@ -88,7 +74,6 @@ export const SchedulePhotosGallery = ({
       {photos.length > 0 ? (
         <div className="space-y-6">
           <div className="flex flex-col gap-4">
-            {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"> */}
             {photos.map((photo, index) => (
               <div key={photo.id} className="">
                 {/* 업로더 정보 */}
@@ -203,7 +188,6 @@ export const SchedulePhotosGallery = ({
             <button
               onClick={() => setSelectedImageIndex(null)}
               className="fixed top-2 right-2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-11 transition-colors text-white/80 text-xl font-medium overflow-hidden"
-              //   className="fixed right-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-10 transition-colors text-white/80 text-xl font-medium overflow-hidden"
             >
               ✕
             </button>

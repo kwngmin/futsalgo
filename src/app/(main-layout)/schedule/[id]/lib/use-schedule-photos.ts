@@ -1,6 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   getSchedulePhotos,
   type GetSchedulePhotosResult,
@@ -10,8 +15,7 @@ import {
 interface UseSchedulePhotosOptions {
   scheduleId: string;
   limit?: number;
-  autoRefresh?: boolean; // 자동 새로고침 여부
-  refreshInterval?: number; // 새로고침 간격 (ms)
+  enabled?: boolean; // 쿼리 실행 여부 제어
 }
 
 interface UseSchedulePhotosReturn {
@@ -21,117 +25,104 @@ interface UseSchedulePhotosReturn {
   isLoading: boolean;
   error: string | null;
   hasMore: boolean;
-  refresh: () => Promise<void>;
+  refresh: () => void;
   loadMore: () => Promise<void>;
-  reset: () => void;
 }
 
 export const useSchedulePhotos = ({
   scheduleId,
   limit = 20,
-  autoRefresh = false,
-  refreshInterval = 30000, // 30초
+  enabled = true,
 }: UseSchedulePhotosOptions): UseSchedulePhotosReturn => {
-  const [photos, setPhotos] = useState<SchedulePhotoWithUploader[]>([]);
-  const [canUpload, setCanUpload] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [offset, setOffset] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const queryClient = useQueryClient();
 
-  // 사진 목록 조회 함수
-  const fetchPhotos = useCallback(
-    async (currentOffset: number = 0, append: boolean = false) => {
-      if (!scheduleId) return;
+  // 기본 사진 목록 조회
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["schedulePhotos", scheduleId],
+    queryFn: () => getSchedulePhotos({ scheduleId, limit, offset: 0 }),
+    enabled: enabled && !!scheduleId,
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000, // 5분간 fresh 상태 유지
+    gcTime: 10 * 60 * 1000, // 10분간 캐시 유지 (구 cacheTime)
+  });
 
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const result: GetSchedulePhotosResult = await getSchedulePhotos({
-          scheduleId,
-          limit,
-          offset: currentOffset,
-        });
-
-        if (result.success) {
-          if (append) {
-            setPhotos((prev) => [...prev, ...result.photos]);
-          } else {
-            setPhotos(result.photos);
-          }
-
-          setCanUpload(result.canUpload);
-          setTotalCount(result.totalCount);
-          setHasMore(currentOffset + result.photos.length < result.totalCount);
-        } else {
-          setError(result.message || "사진을 불러오는데 실패했습니다.");
-        }
-      } catch (err) {
-        console.error("Failed to fetch schedule photos:", err);
-        setError("사진을 불러오는데 실패했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [scheduleId, limit]
-  );
-
-  // 새로고침
-  const refresh = useCallback(async () => {
-    setOffset(0);
-    await fetchPhotos(0, false);
-  }, [fetchPhotos]);
-
-  // 더 불러오기
+  // 추가 사진 로딩을 위한 쿼리 (무한 스크롤)
   const loadMore = useCallback(async () => {
-    if (!hasMore || isLoading) return;
+    if (!data?.success || !data.hasMore) return;
 
-    const newOffset = offset + limit;
-    setOffset(newOffset);
-    await fetchPhotos(newOffset, true);
-  }, [fetchPhotos, hasMore, isLoading, offset, limit]);
+    const currentOffset = data.photos.length;
 
-  // 초기화
-  const reset = useCallback(() => {
-    setPhotos([]);
-    setCanUpload(false);
-    setTotalCount(0);
-    setOffset(0);
-    setHasMore(true);
-    setError(null);
-  }, []);
+    try {
+      const morePhotos = await getSchedulePhotos({
+        scheduleId,
+        limit,
+        offset: currentOffset,
+      });
 
-  // 초기 로딩
-  useEffect(() => {
-    if (scheduleId) {
-      fetchPhotos(0, false);
+      if (morePhotos.success && morePhotos.photos.length > 0) {
+        // 기존 캐시 데이터에 새로운 사진들을 추가
+        queryClient.setQueryData(
+          ["schedulePhotos", scheduleId],
+          (oldData: GetSchedulePhotosResult | undefined) => {
+            if (!oldData?.success) return oldData;
+
+            return {
+              ...oldData,
+              photos: [...oldData.photos, ...morePhotos.photos],
+              hasMore:
+                currentOffset + morePhotos.photos.length <
+                morePhotos.totalCount,
+            };
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Failed to load more photos:", error);
     }
-  }, [scheduleId, fetchPhotos]);
+  }, [data, scheduleId, limit, queryClient]);
 
-  // 자동 새로고침 설정
-  useEffect(() => {
-    if (!autoRefresh || !scheduleId) return;
+  // 새로고침 함수
+  const refresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
-    const interval = setInterval(() => {
-      refresh();
-    }, refreshInterval);
-
-    return () => clearInterval(interval);
-  }, [autoRefresh, refreshInterval, scheduleId, refresh]);
+  // 반환 데이터 가공
+  const photos = data?.success ? data.photos : [];
+  const canUpload = data?.success ? data.canUpload : false;
+  const totalCount = data?.success ? data.totalCount : 0;
+  const hasMore = data?.success ? data.photos.length < data.totalCount : false;
+  const errorMessage = error
+    ? error instanceof Error
+      ? error.message
+      : "사진을 불러오는데 실패했습니다."
+    : !data?.success
+    ? data?.message || null
+    : null;
 
   return {
     photos,
     canUpload,
     totalCount,
     isLoading,
-    error,
+    error: errorMessage,
     hasMore,
     refresh,
     loadMore,
-    reset,
   };
+};
+
+// 사진 업로드 완료 후 캐시 무효화를 위한 헬퍼 함수
+export const useInvalidateSchedulePhotos = () => {
+  const queryClient = useQueryClient();
+
+  return useCallback(
+    (scheduleId: string) => {
+      queryClient.invalidateQueries({
+        queryKey: ["schedulePhotos", scheduleId],
+      });
+    },
+    [queryClient]
+  );
 };
 
 export default useSchedulePhotos;

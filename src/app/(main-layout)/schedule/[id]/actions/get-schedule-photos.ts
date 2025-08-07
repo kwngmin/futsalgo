@@ -20,6 +20,7 @@ export interface GetSchedulePhotosResult {
   photos: SchedulePhotoWithUploader[];
   canUpload: boolean; // 사진 업로드 권한 여부
   totalCount: number;
+  hasMore: boolean; // 더 가져올 데이터가 있는지
   message?: string;
 }
 
@@ -63,6 +64,7 @@ export const getSchedulePhotos = async ({
         photos: [],
         canUpload: false,
         totalCount: 0,
+        hasMore: false,
         message: "존재하지 않는 스케줄입니다.",
       };
     }
@@ -110,6 +112,7 @@ export const getSchedulePhotos = async ({
       photos,
       canUpload,
       totalCount,
+      hasMore: offset + photos.length < totalCount, // hasMore 계산 추가
     };
   } catch (error) {
     console.error("Get schedule photos failed:", {
@@ -122,6 +125,7 @@ export const getSchedulePhotos = async ({
       photos: [],
       canUpload: false,
       totalCount: 0,
+      hasMore: false,
       message: "사진 조회 중 오류가 발생했습니다.",
     };
   }
