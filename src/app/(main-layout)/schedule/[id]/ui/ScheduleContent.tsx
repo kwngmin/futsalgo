@@ -9,6 +9,7 @@ import { HeartIcon } from "@phosphor-icons/react";
 import { likeSchedule } from "@/app/(main-layout)/actions/like-schedule";
 import { useQueryClient } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
+import { MatchType } from "@prisma/client";
 // import { HeartIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -65,10 +66,13 @@ const tabs = [
 const ScheduleContent = ({
   scheduleId,
   isLikedSchedule,
+  matchType,
 }: {
   scheduleId: string;
   isLikedSchedule?: boolean;
+  matchType?: MatchType;
 }) => {
+  console.log(matchType, "matchType");
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -100,21 +104,19 @@ const ScheduleContent = ({
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
-      <div className="grid grid-cols-2 items-center shrink-0 px-4 h-16">
-        <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-          <ArrowLeft
-            style={{ width: "24px", height: "24px" }}
-            onClick={handleGoBack}
-          />
+      <div className="flex justify-between items-center shrink-0 px-4 h-16">
+        <button
+          className="flex items-center cursor-pointer select-none hover:bg-gray-100 rounded-full pr-4 group"
+          onClick={handleGoBack}
+        >
+          <div className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 rounded-full transition-colors">
+            <ArrowLeft style={{ width: "24px", height: "24px" }} />
+          </div>
+          <h1 className="text-xl font-bold">
+            {matchType === MatchType.SQUAD ? "자체전" : "친선전"}
+          </h1>
         </button>
         <div className="flex items-center justify-end gap-2">
-          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <BookmarkIcon className="size-5" />
-          </button> */}
-
-          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <HeartIcon className="size-5" strokeWidth={2} />
-          </button> */}
           <button
             className={`shrink-0 size-10 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
               isLiked ? "hover:bg-indigo-600/10" : "hover:bg-gray-100 group"

@@ -10,6 +10,16 @@ const SchedulePage = async ({
   const { id } = await params;
   const session = await auth();
   const userId = session?.user.id;
+
+  const schedule = await prisma.schedule.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      matchType: true,
+    },
+  });
+
   if (userId) {
     // 이미 좋아요 되어있는지 확인
     const isLiked = await prisma.scheduleLike.findUnique({
@@ -21,10 +31,14 @@ const SchedulePage = async ({
       },
     });
     return (
-      <ScheduleContent scheduleId={id} isLikedSchedule={Boolean(isLiked)} />
+      <ScheduleContent
+        scheduleId={id}
+        isLikedSchedule={Boolean(isLiked)}
+        matchType={schedule?.matchType}
+      />
     );
   }
-  return <ScheduleContent scheduleId={id} />;
+  return <ScheduleContent scheduleId={id} matchType={schedule?.matchType} />;
 };
 
 export default SchedulePage;
