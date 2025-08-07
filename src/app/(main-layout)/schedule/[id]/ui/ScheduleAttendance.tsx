@@ -94,7 +94,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           />
         )}
 
-        <div className="bg-gray-50 overflow-hidden my-2 grid grid-cols-3 gap-3 rounded-2xl p-4">
+        <div className="bg-gray-50 overflow-hidden my-2 grid grid-cols-4 gap-3 rounded-2xl p-4">
           <div className="flex flex-col gap-1 items-center my-3">
             <div className="font-semibold">
               {
@@ -125,6 +125,10 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
               }
             </div>
             <Label className="text-muted-foreground">미정</Label>
+          </div>
+          <div className="flex flex-col gap-1 items-center my-3">
+            <div className="font-semibold">0</div>
+            <Label className="text-muted-foreground">용병</Label>
           </div>
         </div>
 
