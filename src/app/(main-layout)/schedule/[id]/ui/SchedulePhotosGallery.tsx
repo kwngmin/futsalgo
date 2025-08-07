@@ -103,7 +103,7 @@ export const SchedulePhotosGallery = ({
                         className="rounded-full"
                       />
                     )}
-                    <span className="sm:text-sm font-semibold">
+                    <span className="sm:text-sm font-medium">
                       {photo.uploader.nickname || photo.uploader.name}
                     </span>
                   </div>
