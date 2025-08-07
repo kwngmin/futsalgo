@@ -4,9 +4,10 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   CalendarIcon,
   TShirtIcon,
-  UserIcon,
+  // UserIcon,
   DotsThreeOutlineIcon,
   NewspaperClippingIcon,
+  AddressBookIcon,
 } from "@phosphor-icons/react";
 
 export const navItems = [
@@ -26,7 +27,8 @@ export const navItems = [
   {
     id: "player",
     label: "회원",
-    icon: UserIcon,
+    icon: AddressBookIcon,
+    // icon: UserIcon,
     href: "/players",
   },
   {
