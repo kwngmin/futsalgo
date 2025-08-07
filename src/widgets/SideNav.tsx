@@ -49,7 +49,7 @@ const SideNav = () => {
                   <Icon
                     className="mr-4"
                     weight={isActive ? "fill" : "regular"}
-                    size={32}
+                    size={28}
                   />
                   {item.label}
                 </button>
