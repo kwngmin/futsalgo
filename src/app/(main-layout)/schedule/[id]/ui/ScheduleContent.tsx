@@ -8,6 +8,7 @@ import ScheduleDetails from "./ScheduleDetails";
 import { HeartIcon } from "@phosphor-icons/react";
 import { likeSchedule } from "@/app/(main-layout)/actions/like-schedule";
 import { useQueryClient } from "@tanstack/react-query";
+import SchedulePhotos from "./SchedulePhotos";
 // import { HeartIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -162,6 +163,8 @@ const ScheduleContent = ({
       {selectedTab === "overview" && (
         <ScheduleDetails scheduleId={scheduleId} />
       )}
+
+      {selectedTab === "photos" && <SchedulePhotos scheduleId={scheduleId} />}
     </div>
   );
 };
