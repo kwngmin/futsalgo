@@ -17,7 +17,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { useSession } from "next-auth/react";
-import TeamLogo from "./TeamLogo";
+// import TeamLogo from "./TeamLogo";
 import { addMatch } from "../actions/add-match";
 import { SoccerBallIcon } from "@phosphor-icons/react";
 
@@ -78,7 +78,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
       <div className="relative">
         {/* 우리팀 & 주최팀vs초청팀 로고 */}
-        {data?.data?.schedule?.matchType === "SQUAD" ? (
+        {/* {data?.data?.schedule?.matchType === "SQUAD" ? (
           <div className="w-full flex items-center justify-center sm:gap-0 pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
             <TeamLogo
               logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
@@ -99,10 +99,10 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               teamType="INVITED"
             />
           </div>
-        )}
+        )} */}
 
         {/* 공통 */}
-        <div className="w-full flex flex-col items-center justify-center px-4 mb-10">
+        <div className="w-full flex flex-col items-center justify-center px-4 my-10">
           <span className="flex items-center justify-center font-bold text-2xl">
             {/* {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"} */}
             {data.data.schedule?.place}
