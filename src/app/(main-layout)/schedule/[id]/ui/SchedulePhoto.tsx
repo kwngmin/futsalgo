@@ -3,177 +3,311 @@
 import { Button } from "@/shared/components/ui/button";
 import { createUploadUrl } from "@/shared/lib/cloudflare/create-upload-url";
 import { uploadImage } from "@/shared/lib/cloudflare/upload-image";
-import { Camera, Loader2 } from "lucide-react";
+import { Camera, Loader2, X } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import uploadSchedulePhotos from "../actions/upload-schedule-photos";
+
+interface FileWithPreview {
+  file: File;
+  previewUrl: string;
+  uploadUrl?: string;
+  id: string;
+}
 
 const SchedulePhoto = ({
   scheduleId,
-  userId,
+  onUploadComplete,
 }: {
   scheduleId: string;
-  userId: string;
+  onUploadComplete?: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadURL, setUploadURL] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<Record<string, boolean>>(
+    {}
+  );
 
+  const MAX_FILES = 10;
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+  // 파일 검증 함수
+  const validateFile = useCallback((file: File): string | null => {
+    if (file.size > MAX_FILE_SIZE) {
+      return "파일 크기가 10MB를 초과합니다.";
+    }
+    if (!file.type.startsWith("image/")) {
+      return "이미지 파일만 업로드 가능합니다.";
+    }
+    return null;
+  }, []);
+
+  // 개별 파일 제거
+  const removeFile = useCallback((fileId: string) => {
+    setFiles((prevFiles) => {
+      const fileToRemove = prevFiles.find((f) => f.id === fileId);
+      if (fileToRemove) {
+        URL.revokeObjectURL(fileToRemove.previewUrl);
+      }
+      return prevFiles.filter((f) => f.id !== fileId);
+    });
+  }, []);
+
+  // 파일 선택 핸들러
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      // 파일 크기 및 형식 검증
-      if (selectedFile.size > 10 * 1024 * 1024) {
-        // 10MB 제한
-        alert("파일 크기가 10MB를 초과합니다.");
-        return;
+    const selectedFiles = Array.from(e.target.files || []);
+
+    if (files.length + selectedFiles.length > MAX_FILES) {
+      alert(`최대 ${MAX_FILES}장까지만 업로드할 수 있습니다.`);
+      return;
+    }
+
+    const validFiles: FileWithPreview[] = [];
+
+    for (const file of selectedFiles) {
+      const error = validateFile(file);
+      if (error) {
+        alert(`${file.name}: ${error}`);
+        continue;
       }
 
-      if (!selectedFile.type.startsWith("image/")) {
-        alert("이미지 파일만 업로드 가능합니다.");
-        return;
+      // 중복 파일 체크 (파일명과 크기로 간단 체크)
+      const isDuplicate = files.some(
+        (existingFile) =>
+          existingFile.file.name === file.name &&
+          existingFile.file.size === file.size
+      );
+
+      if (isDuplicate) {
+        alert(`${file.name}은 이미 선택된 파일입니다.`);
+        continue;
       }
 
-      setFile(selectedFile);
       try {
         const response = await createUploadUrl();
-        console.log(response, "response");
         if (response.success) {
-          setUploadURL(response.result.uploadURL);
-
-          // 미리보기 URL 생성
-          const objectUrl = URL.createObjectURL(selectedFile);
-          setPreviewUrl(objectUrl);
+          const fileWithPreview: FileWithPreview = {
+            file,
+            previewUrl: URL.createObjectURL(file),
+            uploadUrl: response.result.uploadURL,
+            id: `${file.name}-${Date.now()}-${Math.random()}`,
+          };
+          validFiles.push(fileWithPreview);
         } else {
-          alert(response.errors[0].message);
+          alert(`${file.name}: ${response.errors[0].message}`);
         }
       } catch (error) {
-        console.error("Upload error:", error);
-        alert(
-          error instanceof Error ? error.message : "업로드에 실패했습니다."
-        );
+        console.error("Upload URL creation error:", error);
+        alert(`${file.name}: 업로드 URL 생성에 실패했습니다.`);
       }
     }
-  };
 
-  const handleUpload = async () => {
-    if (!file || !uploadURL) return;
-
-    setIsLoading(true);
-
-    try {
-      const response = await uploadImage(file, uploadURL);
-
-      if (response.success) {
-        const result = await uploadSchedulePhotos({
-          scheduleId,
-          userId,
-          url: response.result.variants[0],
-        });
-        console.log(result, "result");
-
-        if (result.success) {
-          alert("사진이 성공적으로 업로드되었습니다.");
-        } else {
-          alert(result.message);
-        }
-      }
-
-      // 임시 파일 상태 초기화
-      setFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert(error instanceof Error ? error.message : "업로드에 실패했습니다.");
-
-      // 에러 시 미리보기 초기화
-      if (file) {
-        URL.revokeObjectURL(previewUrl || "");
-        setPreviewUrl(null);
-        setFile(null);
-      }
-    } finally {
-      setIsLoading(false);
+    if (validFiles.length > 0) {
+      setFiles((prevFiles) => [...prevFiles, ...validFiles]);
     }
-  };
 
-  const handleCancel = () => {
-    if (file && previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
-    setFile(null);
-    setPreviewUrl(null);
-
+    // 파일 인풋 초기화
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
+  // 전체 업로드 핸들러
+  const handleUpload = async () => {
+    if (files.length === 0) return;
+
+    setIsLoading(true);
+    // const uploadResults: string[] = [];
+    const failedUploads: string[] = [];
+
+    try {
+      // 병렬 업로드 처리
+      const uploadPromises = files.map(async (fileWithPreview) => {
+        const { file, uploadUrl, id } = fileWithPreview;
+
+        if (!uploadUrl) {
+          failedUploads.push(file.name);
+          return null;
+        }
+
+        try {
+          setUploadProgress((prev) => ({ ...prev, [id]: true }));
+
+          const response = await uploadImage(file, uploadUrl);
+
+          if (response.success && response.result.variants[0]) {
+            return response.result.variants[0];
+          } else {
+            failedUploads.push(file.name);
+            return null;
+          }
+        } catch (error) {
+          console.error(`Upload failed for ${file.name}:`, error);
+          failedUploads.push(file.name);
+          return null;
+        } finally {
+          setUploadProgress((prev) => ({ ...prev, [id]: false }));
+        }
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
+      const successfulUrls = uploadedUrls.filter(
+        (url): url is string => url !== null
+      );
+
+      // DB에 업로드된 이미지들 저장
+      if (successfulUrls.length > 0) {
+        const result = await uploadSchedulePhotos({
+          scheduleId,
+          urls: successfulUrls,
+        });
+
+        if (result.success) {
+          const successCount = successfulUrls.length;
+          const failedCount = failedUploads.length;
+
+          let message = `${successCount}장의 사진이 성공적으로 업로드되었습니다.`;
+          if (failedCount > 0) {
+            message += ` (${failedCount}장 실패)`;
+          }
+          alert(message);
+
+          // 성공적으로 업로드된 후 전체 초기화
+          clearAllFiles();
+
+          // 부모 컴포넌트에 업로드 완료 알림
+          onUploadComplete?.();
+        } else {
+          alert(result.message || "DB 저장 중 오류가 발생했습니다.");
+        }
+      } else {
+        alert("모든 파일 업로드에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert(error instanceof Error ? error.message : "업로드에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+      setUploadProgress({});
+    }
+  };
+
+  // 전체 파일 초기화
+  const clearAllFiles = useCallback(() => {
+    files.forEach((fileWithPreview) => {
+      URL.revokeObjectURL(fileWithPreview.previewUrl);
+    });
+    setFiles([]);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }, [files]);
+
   return (
-    <div className="p-4 flex flex-col justify-center items-center gap-3">
+    <div className="p-4 flex flex-col justify-center items-center gap-4">
+      {/* 로딩 오버레이 */}
       {isLoading && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 backdrop-blur-lg rounded-lg">
-          <Loader2
-            className="w-4 h-4 animate-spin"
-            style={{ width: "40px", height: "40px", color: "gray" }}
-          />
-          <div className="text-base text-muted-foreground">로딩 중입니다.</div>
-        </div>
-      )}
-      {previewUrl && (
-        <Image
-          width={80}
-          height={80}
-          src={previewUrl || ""}
-          alt="profile_image"
-          className="size-20 object-cover rounded-full mt-2"
-        />
-      )}
-      {file ? (
-        <div className="flex flex-col gap-2">
-          <h3 className="font-medium">사진을 업로드 하시겠습니까?</h3>
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              className="rounded-full flex items-center gap-2 min-w-20 font-bold"
-              onClick={handleUpload}
-              disabled={isLoading}
-            >
-              예
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full flex items-center gap-2 min-w-20 font-semibold"
-              onClick={handleCancel}
-              disabled={isLoading}
-            >
-              아니요
-            </Button>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
+            <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+            <div className="text-base text-gray-700">
+              사진을 업로드하는 중입니다...
+            </div>
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* 선택된 파일들 미리보기 */}
+      {files.length > 0 && (
+        <div className="w-full max-w-2xl">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+            {files.map((fileWithPreview) => (
+              <div key={fileWithPreview.id} className="relative group">
+                <div className="relative w-full aspect-square">
+                  <Image
+                    src={fileWithPreview.previewUrl}
+                    alt={fileWithPreview.file.name}
+                    fill
+                    className="object-cover rounded-lg"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  />
+                  {uploadProgress[fileWithPreview.id] && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
+                      <Loader2 className="w-6 h-6 animate-spin text-white" />
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={() => removeFile(fileWithPreview.id)}
+                  disabled={isLoading}
+                  className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white rounded-full p-1 shadow-md transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <p className="text-xs text-gray-600 mt-1 truncate">
+                  {fileWithPreview.file.name}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* 업로드/취소 버튼 */}
+          <div className="flex flex-col gap-3 items-center">
+            <div className="text-sm text-gray-600">
+              선택된 파일: {files.length}/{MAX_FILES}장
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={handleUpload}
+                disabled={isLoading || files.length === 0}
+                className="rounded-full px-6 font-semibold"
+              >
+                {isLoading ? "업로드 중..." : `${files.length}장 업로드`}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={clearAllFiles}
+                disabled={isLoading}
+                className="rounded-full px-6 font-semibold"
+              >
+                전체 취소
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 파일 선택 버튼 */}
+      {files.length < MAX_FILES && (
         <label
-          htmlFor="avatar"
-          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-3 h-8 font-semibold"
+          htmlFor="schedule-photos"
+          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-4 py-2 font-semibold hover:bg-gray-50 transition-colors"
         >
-          <Camera className="size-5 text-gray-600" />
-          <span className="font-medium">
-            {isLoading ? "로딩중..." : "경기 사진 업로드"}
+          <Camera className="w-5 h-5 text-gray-600" />
+          <span>
+            {files.length === 0
+              ? "경기 사진 업로드"
+              : `사진 추가 (${MAX_FILES - files.length}장 더)`}
           </span>
           <input
-            id="avatar"
+            id="schedule-photos"
+            ref={fileInputRef}
             type="file"
             multiple
             className="hidden"
             accept="image/*"
             onChange={handleFileChange}
+            disabled={isLoading}
           />
         </label>
+      )}
+
+      {files.length >= MAX_FILES && (
+        <p className="text-sm text-gray-500">
+          최대 {MAX_FILES}장까지 업로드할 수 있습니다.
+        </p>
       )}
     </div>
   );
