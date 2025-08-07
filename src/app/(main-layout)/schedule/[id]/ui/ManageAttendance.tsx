@@ -14,7 +14,11 @@ const ManageAttendance = ({
 }) => {
   return (
     <div
-      className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+      className={`rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 ${
+        onClick
+          ? "hover:bg-gray-100 border transition-colors cursor-pointer"
+          : ""
+      }`}
       onClick={onClick}
     >
       <div className="flex items-center gap-2">
