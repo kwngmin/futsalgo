@@ -14,10 +14,10 @@ const ManageAttendance = ({
 }) => {
   return (
     <div
-      className={`rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 ${
+      className={`rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 ${
         onClick
-          ? "hover:bg-gray-100 border transition-colors cursor-pointer"
-          : ""
+          ? "hover:bg-gray-100 border border-input shadow-xs hover:shadow-sm transition-colors cursor-pointer"
+          : "bg-gray-50"
       }`}
       onClick={onClick}
     >
