@@ -83,9 +83,9 @@ export const SchedulePhotosGallery = ({
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Camera className="w-6 h-6 text-gray-600" />
+          {/* <Camera className="w-6 h-6 text-gray-600" /> */}
           <h3 className="text-lg font-semibold">
-            경기 사진 {totalCount > 0 && `(${totalCount}장)`}
+            전체 {totalCount > 0 && `${totalCount}장`}
           </h3>
         </div>
 
@@ -137,7 +137,8 @@ export const SchedulePhotosGallery = ({
       {/* 사진 갤러리 */}
       {photos.length > 0 ? (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="flex flex-col gap-4">
+            {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"> */}
             {photos.map((photo, index) => (
               <div
                 key={photo.id}
@@ -229,7 +230,7 @@ export const SchedulePhotosGallery = ({
                   e.stopPropagation();
                   handlePrevImage();
                 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
+                className="fixed left-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-10 transition-colors text-white/80 text-xl font-medium overflow-hidden"
               >
                 ←
               </button>
@@ -241,7 +242,7 @@ export const SchedulePhotosGallery = ({
                   e.stopPropagation();
                   handleNextImage();
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
+                className="fixed right-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-10 transition-colors text-white/80 text-xl font-medium overflow-hidden"
               >
                 →
               </button>
@@ -250,13 +251,14 @@ export const SchedulePhotosGallery = ({
             {/* 닫기 버튼 */}
             <button
               onClick={() => setSelectedImageIndex(null)}
-              className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
+              className="fixed top-1 right-1 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-10 transition-colors text-white/80 text-xl font-medium overflow-hidden"
+              //   className="fixed right-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-10 transition-colors text-white/80 text-xl font-medium overflow-hidden"
             >
               ✕
             </button>
 
             {/* 이미지 정보 */}
-            <div className="absolute bottom-4 left-4 right-4 bg-black/50 text-white p-4 rounded-lg">
+            <div className="fixed bottom-4 left-4 right-4 bg-black/20 text-white p-4 rounded-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {photos[selectedImageIndex].uploader.image && (
