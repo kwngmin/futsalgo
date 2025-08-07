@@ -210,7 +210,7 @@ const SchedulePhotoUpload = ({
     return (
       <label
         htmlFor="schedule-photos"
-        className="cursor-pointer rounded-lg flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm"
+        className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm"
       >
         <Camera className="w-5 h-5 text-gray-600" />
         <span>
