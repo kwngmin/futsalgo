@@ -65,7 +65,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     if (day > 1) {
       return {
         text: `D-${day}`,
-        style: "bg-slate-500/15 text-slate-600",
+        // style: "bg-slate-500/15 text-slate-600",
+        style: "bg-muted",
       };
     } else if (day === 1) {
       return { text: "내일", style: "bg-indigo-500/15 text-indigo-600" };

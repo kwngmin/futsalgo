@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ArrowDownUp, Plus, Search } from "lucide-react";
 import ScheduleCard from "./ui/ScheduleCard";
 import SchedulePageLoading from "./ui/loading";
+import { Separator } from "@/shared/components/ui/separator";
 
 const HomePage = () => {
   const router = useRouter();
@@ -67,6 +68,14 @@ const HomePage = () => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;
         })}
         {/* 지난 경기 */}
+        {session.data?.user?.id && (
+          <div className="flex items-center gap-2 mt-4 overflow-hidden px-4 relative h-6">
+            <div className="absolute left-0 bg-white px-4 text-sm text-muted-foreground font-semibold shrink-0">
+              지난 경기
+            </div>
+            <Separator />
+          </div>
+        )}
         {data?.data?.pastSchedules?.map((schedule) => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;
         })}
