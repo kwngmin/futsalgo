@@ -88,8 +88,8 @@ const ScheduleContent = ({
     console.log(result);
     if (result.success) {
       queryClient.invalidateQueries({ queryKey: ["schedules"] });
-      // toast.success(result.message);
-      setIsLiked(true);
+      setIsLiked(result.liked);
+      alert(result.message);
     } else {
       console.warn(result.error);
       // toast.error(result.error);
@@ -115,16 +115,20 @@ const ScheduleContent = ({
             <HeartIcon className="size-5" strokeWidth={2} />
           </button> */}
           <button
-            className="shrink-0 h-10 flex items-center justify-center gap-1.5 px-3 font-medium text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+            className={`shrink-0 size-10 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
+              isLiked ? "hover:bg-indigo-600/10" : "hover:bg-gray-100 group"
+            }`}
             onClick={() => handleLikeClick(scheduleId)}
           >
             <HeartIcon
-              className={`size-5 ${
-                isLiked ? "text-indigo-600" : "text-zinc-300"
+              className={`size-5 transition-colors ${
+                isLiked
+                  ? "text-indigo-600"
+                  : "text-zinc-300 group-hover:text-zinc-400"
               }`}
               weight="fill"
             />
-            좋아요
+            {/* 좋아요 */}
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
