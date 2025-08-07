@@ -2,7 +2,13 @@
 
 import { Button } from "@/shared/components/ui/button";
 
-import { Camera, Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import {
+  Camera,
+  Loader2,
+  RefreshCw,
+  AlertCircle,
+  ImageIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import SchedulePhoto from "./SchedulePhoto";
@@ -145,7 +151,7 @@ export const SchedulePhotosGallery = ({
         </div>
       ) : !isLoading ? (
         <div className="text-center py-12 text-gray-500">
-          <Camera className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+          <ImageIcon className="w-16 h-16 mx-auto mb-4 text-gray-300" />
           <p className="text-lg mb-2">아직 업로드된 사진이 없습니다.</p>
           {canUpload && (
             <p className="text-sm">첫 번째 사진을 업로드해보세요!</p>
