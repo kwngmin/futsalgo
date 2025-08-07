@@ -15,7 +15,7 @@ interface FileWithPreview {
   id: string;
 }
 
-const SchedulePhoto = ({
+const SchedulePhotoUpload = ({
   scheduleId,
   onUploadComplete,
 }: {
@@ -205,6 +205,34 @@ const SchedulePhoto = ({
     }
   }, [files]);
 
+  // 파일 선택 버튼
+  if (files.length === 0) {
+    return (
+      <label
+        htmlFor="schedule-photos"
+        className="cursor-pointer rounded-lg flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-gray-50 shadow-xs"
+      >
+        <Camera className="w-5 h-5 text-gray-600" />
+        <span>
+          사진 업로드
+          {/* {files.length === 0
+        ? "사진 업로드"
+        : `사진 추가 (${MAX_FILES - files.length}장 더)`} */}
+        </span>
+        <input
+          id="schedule-photos"
+          ref={fileInputRef}
+          type="file"
+          multiple
+          className="hidden"
+          accept="image/*"
+          onChange={handleFileChange}
+          disabled={isLoading}
+        />
+      </label>
+    );
+  }
+
   return (
     <div className="p-4 flex flex-col justify-center items-center gap-4 bg-gray-50 rounded-lg">
       {/* 로딩 오버레이 */}
@@ -279,33 +307,6 @@ const SchedulePhoto = ({
         </div>
       )}
 
-      {/* 파일 선택 버튼 */}
-      {files.length === 0 && (
-        // {files.length < MAX_FILES && (
-        <label
-          htmlFor="schedule-photos"
-          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-4 py-2 font-semibold hover:bg-gray-50 transition-colors bg-white"
-        >
-          <Camera className="w-5 h-5 text-gray-600" />
-          <span>
-            사진 업로드
-            {/* {files.length === 0
-              ? "사진 업로드"
-              : `사진 추가 (${MAX_FILES - files.length}장 더)`} */}
-          </span>
-          <input
-            id="schedule-photos"
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className="hidden"
-            accept="image/*"
-            onChange={handleFileChange}
-            disabled={isLoading}
-          />
-        </label>
-      )}
-
       {files.length >= MAX_FILES && (
         <p className="text-sm text-gray-500">
           최대 {MAX_FILES}장까지 업로드할 수 있습니다.
@@ -315,4 +316,4 @@ const SchedulePhoto = ({
   );
 };
 
-export default SchedulePhoto;
+export default SchedulePhotoUpload;

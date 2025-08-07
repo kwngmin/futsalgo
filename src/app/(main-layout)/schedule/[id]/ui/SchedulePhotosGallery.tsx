@@ -5,7 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Loader2, RefreshCw, AlertCircle, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import SchedulePhoto from "./SchedulePhoto";
+import SchedulePhotoUpload from "./SchedulePhotoUpload";
 import useSchedulePhotos from "../lib/use-schedule-photos";
 
 interface SchedulePhotosGalleryProps {
@@ -78,7 +78,7 @@ export const SchedulePhotosGallery = ({
     <div className={`space-y-4 mt-4 px-4 ${className}`}>
       {/* 업로드 폼 */}
       {canUpload && (
-        <SchedulePhoto
+        <SchedulePhotoUpload
           scheduleId={scheduleId}
           onUploadComplete={handleUploadComplete}
         />
