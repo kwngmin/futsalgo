@@ -2,13 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 
-import {
-  Camera,
-  Loader2,
-  RefreshCw,
-  AlertCircle,
-  ImageIcon,
-} from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import SchedulePhoto from "./SchedulePhoto";
@@ -175,7 +169,7 @@ export const SchedulePhotosGallery = ({
               alt={`경기 사진 ${selectedImageIndex + 1}`}
               width={800}
               height={600}
-              className="max-w-full max-h-full object-contain"
+              className="max-w-full max-h-dvh object-contain sm:object-cover"
               onClick={(e) => e.stopPropagation()}
             />
 
