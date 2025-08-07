@@ -99,15 +99,15 @@ export const SchedulePhotosGallery = ({
                   src={photo.url}
                   alt={`경기 사진 ${index + 1}`}
                   fill
-                  className="object-cover transition-transform group-hover:scale-105"
+                  className="object-cover transition-transform scale-105"
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
 
                 {/* 호버 오버레이 */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                {/* <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" /> */}
 
                 {/* 업로더 정보 */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4 text-white transition-opacity rounded-lg">
                   <div className="flex items-center gap-2">
                     {photo.uploader.image && (
                       <Image
