@@ -10,21 +10,21 @@ import useSchedulePhotos from "../lib/use-schedule-photos";
 
 interface SchedulePhotosGalleryProps {
   scheduleId: string;
-  showUploadButton?: boolean;
+  //   showUploadButton?: boolean;
   autoRefresh?: boolean;
   className?: string;
 }
 
 export const SchedulePhotosGallery = ({
   scheduleId,
-  showUploadButton = true,
+  //   showUploadButton = true,
   autoRefresh = false,
   className = "",
 }: SchedulePhotosGalleryProps) => {
   const {
     photos,
     canUpload,
-    totalCount,
+    // totalCount,
     isLoading,
     error,
     hasMore,
@@ -79,11 +79,10 @@ export const SchedulePhotosGallery = ({
   }
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-4 mt-4 px-4 ${className}`}>
       {/* 헤더 */}
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* <Camera className="w-6 h-6 text-gray-600" /> */}
           <h3 className="text-lg font-semibold">
             전체 {totalCount > 0 && `${totalCount}장`}
           </h3>
@@ -112,7 +111,8 @@ export const SchedulePhotosGallery = ({
             </Button>
           )}
         </div>
-      </div>
+      </div> */}
+      {canUpload && <SchedulePhoto scheduleId={scheduleId} />}
 
       {/* 업로드 폼 */}
       {showUploadForm && canUpload && (
