@@ -10,14 +10,12 @@ import useSchedulePhotos from "../lib/use-schedule-photos";
 
 interface SchedulePhotosGalleryProps {
   scheduleId: string;
-  //   showUploadButton?: boolean;
   autoRefresh?: boolean;
   className?: string;
 }
 
 export const SchedulePhotosGallery = ({
   scheduleId,
-  //   showUploadButton = true,
   autoRefresh = false,
   className = "",
 }: SchedulePhotosGalleryProps) => {
@@ -39,7 +37,6 @@ export const SchedulePhotosGallery = ({
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null
   );
-  const [showUploadForm, setShowUploadForm] = useState(false);
 
   // 이미지 클릭 핸들러 (모달 또는 확대 보기)
   const handleImageClick = (index: number) => {
@@ -61,7 +58,6 @@ export const SchedulePhotosGallery = ({
 
   // 업로드 완료 후 새로고침
   const handleUploadComplete = () => {
-    setShowUploadForm(false);
     refresh();
   };
 
@@ -80,58 +76,12 @@ export const SchedulePhotosGallery = ({
 
   return (
     <div className={`space-y-4 mt-4 px-4 ${className}`}>
-      {/* 헤더 */}
-      {/* <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h3 className="text-lg font-semibold">
-            전체 {totalCount > 0 && `${totalCount}장`}
-          </h3>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={refresh}
-            variant="ghost"
-            size="sm"
-            disabled={isLoading}
-          >
-            <RefreshCw
-              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
-            />
-          </Button>
-
-          {showUploadButton && canUpload && !showUploadForm && (
-            <Button
-              onClick={() => setShowUploadForm(true)}
-              variant="outline"
-              size="sm"
-            >
-              <Camera className="w-4 h-4 mr-2" />
-              사진 업로드
-            </Button>
-          )}
-        </div>
-      </div> */}
-      {canUpload && <SchedulePhoto scheduleId={scheduleId} />}
-
       {/* 업로드 폼 */}
-      {showUploadForm && canUpload && (
-        <div className="border rounded-lg p-4 bg-gray-50">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="font-medium">사진 업로드</h4>
-            <Button
-              onClick={() => setShowUploadForm(false)}
-              variant="ghost"
-              size="sm"
-            >
-              취소
-            </Button>
-          </div>
-          <SchedulePhoto
-            scheduleId={scheduleId}
-            onUploadComplete={handleUploadComplete}
-          />
-        </div>
+      {canUpload && (
+        <SchedulePhoto
+          scheduleId={scheduleId}
+          onUploadComplete={handleUploadComplete}
+        />
       )}
 
       {/* 사진 갤러리 */}
