@@ -206,7 +206,7 @@ const SchedulePhoto = ({
   }, [files]);
 
   return (
-    <div className="p-4 flex flex-col justify-center items-center gap-4">
+    <div className="p-4 flex flex-col justify-center items-center gap-4 bg-gray-50 rounded-lg">
       {/* 로딩 오버레이 */}
       {isLoading && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -242,7 +242,7 @@ const SchedulePhoto = ({
                 <button
                   onClick={() => removeFile(fileWithPreview.id)}
                   disabled={isLoading}
-                  className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white rounded-full p-1 shadow-md transition-colors"
+                  className="absolute -top-2 -right-2 bg-gray-500 hover:bg-gray-600 disabled:opacity-50 text-white rounded-full p-1 shadow-md transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -280,16 +280,18 @@ const SchedulePhoto = ({
       )}
 
       {/* 파일 선택 버튼 */}
-      {files.length < MAX_FILES && (
+      {files.length === 0 && (
+        // {files.length < MAX_FILES && (
         <label
           htmlFor="schedule-photos"
-          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-4 py-2 font-semibold hover:bg-gray-50 transition-colors"
+          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-4 py-2 font-semibold hover:bg-gray-50 transition-colors bg-white"
         >
           <Camera className="w-5 h-5 text-gray-600" />
           <span>
-            {files.length === 0
-              ? "경기 사진 업로드"
-              : `사진 추가 (${MAX_FILES - files.length}장 더)`}
+            사진 업로드
+            {/* {files.length === 0
+              ? "사진 업로드"
+              : `사진 추가 (${MAX_FILES - files.length}장 더)`} */}
           </span>
           <input
             id="schedule-photos"

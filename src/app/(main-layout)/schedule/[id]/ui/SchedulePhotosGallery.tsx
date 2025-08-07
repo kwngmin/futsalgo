@@ -230,7 +230,7 @@ export const SchedulePhotosGallery = ({
                   e.stopPropagation();
                   handlePrevImage();
                 }}
-                className="fixed -left-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-11 transition-colors text-white/80 text-xl font-medium overflow-hidden"
+                className="fixed -left-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-12 transition-colors text-white/80 text-xl font-medium overflow-hidden"
               >
                 ←
               </button>
@@ -242,7 +242,7 @@ export const SchedulePhotosGallery = ({
                   e.stopPropagation();
                   handleNextImage();
                 }}
-                className="fixed -right-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-11 transition-colors text-white/80 text-xl font-medium overflow-hidden"
+                className="fixed -right-1 top-1/2 -translate-y-1/2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-12 transition-colors text-white/80 text-xl font-medium overflow-hidden"
               >
                 →
               </button>
