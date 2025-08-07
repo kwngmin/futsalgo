@@ -125,7 +125,7 @@ const ScheduleContent = ({
               className={`size-6 transition-colors ${
                 isLiked
                   ? "text-indigo-600"
-                  : "text-zinc-200 group-hover:text-zinc-400"
+                  : "text-zinc-300 group-hover:text-zinc-400"
               }`}
               weight="fill"
             />
