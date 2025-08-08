@@ -426,7 +426,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   <button
                     onClick={() => setReplyingTo(comment.id)}
                     disabled={addCommentMutation.isPending}
-                    className="sm:text-sm hover:underline underline-offset-2 flex items-center justify-center disabled:opacity-50 cursor-pointer font-semibold"
+                    className="sm:text-sm hover:underline underline-offset-2 flex items-center justify-center disabled:opacity-50 cursor-pointer font-medium"
                   >
                     답글 쓰기
                   </button>
