@@ -312,79 +312,80 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
     return (
       <div key={comment.id} className={`relative ${isReply ? "ml-10" : ""}`}>
-        <div className={`z-10 ${isOptimistic ? "opacity-60" : ""}`}>
-          <div className="flex items-stretch gap-2 px-4 sm:px-0 py-3">
-            <div className="w-8 flex flex-col z-20">
-              {comment.author.image ? (
-                <Image
-                  src={comment.author.image}
-                  alt={comment.author.name || ""}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                  <User size={16} className="text-gray-500" />
-                </div>
-              )}
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-col mb-1.5">
-                <div className="flex justify-between items-center gap-2">
-                  <span className="sm:text-sm font-medium text-gray-700 leading-tight">
-                    {comment.author.nickname || comment.author.name}
-                  </span>
-                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
-                    {isOptimistic ? (
-                      <span className="flex items-center gap-1">
-                        <Loader2 size={12} className="animate-spin" />
-                        전송 중...
-                      </span>
-                    ) : (
-                      new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                        // year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                      })
-                    )}
-                  </span>
-                </div>
-                {renderTeamBadge(comment.author.id)}
+        <div
+          className={`z-10 flex items-stretch gap-2 p-4 sm:px-0 ${
+            isOptimistic ? "opacity-60" : ""
+          }`}
+        >
+          <div className="w-8 flex flex-col z-20">
+            {comment.author.image ? (
+              <Image
+                src={comment.author.image}
+                alt={comment.author.name || ""}
+                width={32}
+                height={32}
+                className="w-8 h-8 rounded-full"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                <User size={16} className="text-gray-500" />
               </div>
-
-              <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium">
-                {comment.content}
-              </p>
-
-              {!isReply && !isOptimistic && (
-                <div className="flex items-center gap-1 mt-2">
-                  <MessageCircle className="size-4 text-gray-500" />
-                  {comment.replies.length > 0 && (
-                    <span className="text-sm font-medium text-gray-500">
-                      답글 {comment.replies.length}개 •
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col mb-1.5">
+              <div className="flex justify-between items-center gap-2">
+                <span className="sm:text-sm font-medium text-gray-700 leading-tight">
+                  {comment.author.nickname || comment.author.name}
+                </span>
+                <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                  {isOptimistic ? (
+                    <span className="flex items-center gap-1">
+                      <Loader2 size={12} className="animate-spin" />
+                      전송 중...
                     </span>
+                  ) : (
+                    new Date(comment.createdAt).toLocaleDateString("ko-KR", {
+                      // year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    })
                   )}
-                  {currentUser && (
-                    <button
-                      onClick={() => setReplyingTo(comment.id)}
-                      disabled={addCommentMutation.isPending}
-                      className="text-sm hover:underline underline-offset-2 flex items-center justify-center disabled:opacity-50 cursor-pointer font-semibold"
-                    >
-                      답글 추가
-                    </button>
-                  )}
-                </div>
-              )}
+                </span>
+              </div>
+              {renderTeamBadge(comment.author.id)}
             </div>
+
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium">
+              {comment.content}
+            </p>
+
+            {!isReply && !isOptimistic && (
+              <div className="flex items-center gap-1 mt-2">
+                <MessageCircle className="size-4 text-gray-500" />
+                {comment.replies.length > 0 && (
+                  <span className="text-sm font-medium text-gray-500">
+                    답글 {comment.replies.length}개 •
+                  </span>
+                )}
+                {currentUser && (
+                  <button
+                    onClick={() => setReplyingTo(comment.id)}
+                    disabled={addCommentMutation.isPending}
+                    className="text-sm hover:underline underline-offset-2 flex items-center justify-center disabled:opacity-50 cursor-pointer font-semibold"
+                  >
+                    답글 추가
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {!isReply && (
-          <div className="absolute top-3 bottom-0 left-4 sm:left-0 border-r w-4 z-0" />
+          <div className="absolute top-4 bottom-0 left-4 sm:left-0 border-r w-4 z-0" />
         )}
 
         {/* 답글 작성 폼 */}
