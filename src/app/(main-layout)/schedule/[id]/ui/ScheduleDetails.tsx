@@ -174,39 +174,41 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
         {/* 경기 정보 */}
         {data.data.schedule.matches.length > 0 && (
-          <div className="rounded-md border m-4 overflow-hidden">
-            {data.data.schedule.matches.map((match, index) => (
-              <div
-                className="overflow-hidden border-b last:border-b-0"
-                key={match.id}
-              >
+          <div className="px-4 py-2">
+            <div className="rounded-md border overflow-hidden">
+              {data.data.schedule.matches.map((match, index) => (
                 <div
-                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => {
-                    router.push(`/schedule/${scheduleId}/match/${match.id}`);
-                  }}
+                  className="overflow-hidden border-b last:border-b-0"
+                  key={match.id}
                 >
-                  <div className="flex items-center space-x-2">
-                    <SoccerBallIcon
-                      className="size-5 text-gray-600"
-                      weight="fill"
-                    />
-                    <span className="font-medium">{index + 1}경기</span>
-                    {match.durationMinutes && (
-                      <span className="text-sm text-gray-500">
-                        {match.durationMinutes}분
+                  <div
+                    className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => {
+                      router.push(`/schedule/${scheduleId}/match/${match.id}`);
+                    }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <SoccerBallIcon
+                        className="size-5 text-gray-600"
+                        weight="fill"
+                      />
+                      <span className="font-medium">{index + 1}경기</span>
+                      {match.durationMinutes && (
+                        <span className="text-sm text-gray-500">
+                          {match.durationMinutes}분
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-base font-medium text-gray-500">
+                        {match.homeScore} - {match.awayScore}
                       </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {match.homeScore} - {match.awayScore}
-                    </span>
-                    <ChevronRight className="size-5 text-gray-400" />
+                      <ChevronRight className="size-5 text-gray-400" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
 
