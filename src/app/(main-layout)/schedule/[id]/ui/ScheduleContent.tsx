@@ -10,6 +10,7 @@ import { likeSchedule } from "@/app/(main-layout)/actions/like-schedule";
 import { useQueryClient } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
+import ScheduleComments from "./ScheduleComments";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -53,7 +54,7 @@ const tabs = [
   {
     label: "댓글",
     value: "comments",
-    isDisabled: true,
+    isDisabled: false,
   },
   // {
   //   label: "후기",
@@ -182,6 +183,10 @@ const ScheduleContent = ({
 
       {selectedTab === "photos" && (
         <SchedulePhotosGallery scheduleId={scheduleId} />
+      )}
+
+      {selectedTab === "comments" && (
+        <ScheduleComments scheduleId={scheduleId} />
       )}
     </div>
   );
