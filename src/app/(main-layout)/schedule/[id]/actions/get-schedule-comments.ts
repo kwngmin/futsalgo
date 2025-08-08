@@ -119,7 +119,7 @@ export async function getScheduleComments(
         },
       }),
 
-      // 댓글 조회 (최상위 댓글만, 대댓글은 replies로 포함)
+      // 댓글 조회 (최상위 댓글만, 답글은 replies로 포함)
       prisma.scheduleComment.findMany({
         where: {
           scheduleId,
@@ -145,7 +145,7 @@ export async function getScheduleComments(
                 },
               },
             },
-            orderBy: { createdAt: "asc" }, // 대댓글은 작성 순서대로
+            orderBy: { createdAt: "asc" }, // 답글은 작성 순서대로
           },
         },
         orderBy: { createdAt: "asc" }, // 댓글도 작성 순서대로 (오래된 것부터)
@@ -273,14 +273,14 @@ export async function addComment(
       throw new Error("존재하지 않는 스케줄입니다");
     }
 
-    // 부모 댓글 존재 확인 (대댓글인 경우)
+    // 부모 댓글 존재 확인 (답글인 경우)
     if (parentId) {
       const parentComment = await prisma.scheduleComment.findUnique({
         where: { id: parentId },
         select: {
           id: true,
           scheduleId: true,
-          parentId: true, // 대댓글의 대댓글 방지
+          parentId: true, // 답글의 답글 방지
         },
       });
 
@@ -292,7 +292,7 @@ export async function addComment(
         throw new Error("잘못된 댓글 참조입니다");
       }
 
-      // 대댓글의 대댓글 방지 (2단계 depth만 허용)
+      // 답글의 답글 방지 (2단계 depth만 허용)
       if (parentComment.parentId) {
         throw new Error("답글에는 답글을 달 수 없습니다");
       }
@@ -376,7 +376,7 @@ export async function deleteComment(commentId: string): Promise<void> {
       throw new Error("댓글 작성자만 삭제할 수 있습니다");
     }
 
-    // 대댓글이 있는 경우 삭제 방지
+    // 답글이 있는 경우 삭제 방지
     if (comment.replies.length > 0) {
       throw new Error("답글이 있는 댓글은 삭제할 수 없습니다");
     }

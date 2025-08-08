@@ -6,7 +6,7 @@ import { MessageCircle, Reply, User, Loader2, AlertCircle } from "lucide-react";
 import {
   addComment,
   getScheduleComments,
-} from "../actions/get_schedule_comments";
+} from "../actions/get-schedule-comments";
 import Image from "next/image";
 
 // 타입 정의
@@ -311,13 +311,10 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const isOptimistic = comment.id.startsWith("temp-");
 
     return (
-      <div
-        key={comment.id}
-        className={`${isReply ? "bg-gray-50 border-l-4 border-gray-200" : ""}`}
-      >
+      <div key={comment.id} className={`${isReply ? "ml-8 border-l" : ""}`}>
         <div className={` ${isOptimistic ? "opacity-60" : ""}`}>
-          <div className="flex items-start gap-2 p-4 border-t">
-            <div className="flex-shrink-0 mt-0.5 sm:mt-0">
+          <div className="flex gap-2 px-4 py-2">
+            <div className="flex-shrink-0 mt-0.5 sm:mt-0 flex flex-col h-full">
               {comment.author.image ? (
                 <Image
                   src={comment.author.image}
@@ -331,6 +328,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   <User size={16} className="text-gray-500" />
                 </div>
               )}
+              <div className="flex-1 border-r w-4" />
             </div>
 
             <div className="flex-1 min-w-0">
@@ -435,7 +433,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     <div className="max-w-4xl py-4 sm:px-4">
       {/* 댓글 작성 폼 */}
       {currentUser && (
-        <div className="px-4 pb-4">
+        <div className="px-4 pb-4 border-b mb-4">
           <div className="flex items-start gap-2">
             <div className="flex-shrink-0">
               {currentUser.image ? (
