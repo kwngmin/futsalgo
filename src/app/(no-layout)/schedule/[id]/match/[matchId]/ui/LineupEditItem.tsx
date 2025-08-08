@@ -31,7 +31,7 @@ export const LineupEditItem = ({
       <div className="flex items-center gap-1 sm:min-w-72">
         <div className="grow grid grid-cols-2 p-0.5 rounded-md bg-gray-100">
           <div
-            className={`text-sm rounded-sm flex items-center justify-center h-8 transition-colors cursor-pointer tracking-tight ${
+            className={`text-sm rounded-sm flex items-center justify-center h-9 sm:h-8 transition-colors cursor-pointer tracking-tight ${
               lineup.side === "HOME"
                 ? "bg-white border shadow-xs font-semibold text-indigo-700"
                 : "text-muted-foreground font-medium hover:text-gray-700"
@@ -40,7 +40,7 @@ export const LineupEditItem = ({
             홈{/* HOME */}
           </div>
           <div
-            className={`text-sm rounded-sm flex items-center tracking-tight justify-center h-8 transition-colors cursor-pointer ${
+            className={`text-sm rounded-sm flex items-center tracking-tight justify-center h-9 sm:h-8 transition-colors cursor-pointer ${
               lineup.side === "AWAY"
                 ? "bg-white border shadow-xs font-semibold text-emerald-700"
                 : "text-muted-foreground font-medium hover:text-gray-700"
@@ -50,7 +50,7 @@ export const LineupEditItem = ({
             {/* AWAY */}
           </div>
         </div>
-        <div className="flex items-center justify-center size-9 bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors cursor-pointer group">
+        <div className="flex items-center justify-center size-10 sm:size-9 bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors cursor-pointer group">
           <Minus className="size-4.5 sm:size-4 text-destructive" />
         </div>
       </div>

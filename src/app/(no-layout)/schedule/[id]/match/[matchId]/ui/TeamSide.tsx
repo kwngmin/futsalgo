@@ -11,14 +11,14 @@ const TeamSide = ({
 }) => {
   return (
     <div className="grow flex flex-col items-center gap-2 min-w-28">
-      <div className="flex items-center justify-center gap-2 px-3 py-1 text-center bg-white rounded-full mb-2 shadow-xs">
+      <div className="flex items-center justify-center gap-2 pl-3 pr-4 py-1 text-center bg-white rounded-full mb-2">
         <div
           className={`size-2.5 rounded-full ${
             side === "home" ? "bg-indigo-600" : "bg-emerald-600"
           }`}
         />
         <span
-          className={`grow font-medium text-sm tracking-tight ${
+          className={`grow font-medium text-lg tracking-tight ${
             side === "home" ? "text-indigo-700" : "text-emerald-700"
           }`}
         >
