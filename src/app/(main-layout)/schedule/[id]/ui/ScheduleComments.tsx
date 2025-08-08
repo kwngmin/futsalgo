@@ -488,9 +488,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <p className="text-sm">첫 번째 댓글을 달아보세요!</p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {optimisticComments.map((comment) => renderComment(comment))}
-        </div>
+        optimisticComments.map((comment) => renderComment(comment))
       )}
     </div>
   );
