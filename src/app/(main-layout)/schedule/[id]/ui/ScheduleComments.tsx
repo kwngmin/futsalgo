@@ -320,10 +320,10 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     return (
       <div
         key={comment.id}
-        className={`${isReply ? "bg-gray-50 border-t border-gray-200" : ""}`}
+        className={`${isReply ? "bg-gray-50 border-l-4 border-gray-200" : ""}`}
       >
         <div className={` ${isOptimistic ? "opacity-60" : ""}`}>
-          <div className="flex items-start gap-2 p-4">
+          <div className="flex items-start gap-2 p-4 border-t">
             <div className="flex-shrink-0">
               {comment.author.image ? (
                 <Image
@@ -346,7 +346,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   <span className="sm:text-sm font-medium text-gray-700 leading-tight">
                     {comment.author.nickname || comment.author.name}
                   </span>
-                  <span className="text-sm sm:text-xs text-gray-500">
+                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
                     {isOptimistic ? (
                       <span className="flex items-center gap-1">
                         <Loader2 size={12} className="animate-spin" />
@@ -354,11 +354,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                       </span>
                     ) : (
                       new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                        year: "numeric",
+                        // year: "numeric",
                         month: "short",
                         day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
+                        hour: "numeric",
+                        minute: "numeric",
                       })
                     )}
                   </span>
@@ -374,7 +374,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 <button
                   onClick={() => setReplyingTo(comment.id)}
                   disabled={addCommentMutation.isPending}
-                  className="mt-2 sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-gray-50 hover:bg-blue-50 pl-2 pr-3 py-1 rounded-full"
+                  className="mt-2 sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-blue-50 hover:bg-blue-100 pl-2 pr-3 rounded-full h-9 sm:h-8"
                 >
                   <Reply size={16} />
                   답글
@@ -448,7 +448,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       </div> */}
 
       {/* 댓글 작성 폼 */}
-      <div className="border-b px-4 pb-4">
+      <div className="px-4 pb-4">
         <div className="flex items-start gap-2">
           <div className="flex-shrink-0">
             {currentUser.image ? (
