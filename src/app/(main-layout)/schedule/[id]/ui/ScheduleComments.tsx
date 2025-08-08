@@ -1,13 +1,26 @@
 "use client";
 
-import React, { useState, useOptimistic, useTransition } from "react";
+import React, {
+  useState,
+  useOptimistic,
+  useTransition,
+  useRef,
+  useEffect,
+} from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageCircle, User, Loader2, AlertCircle } from "lucide-react";
+import {
+  MessageCircle,
+  User,
+  Loader2,
+  AlertCircle,
+  PencilLine,
+} from "lucide-react";
 import {
   addComment,
   getScheduleComments,
 } from "../actions/get-schedule-comments";
 import Image from "next/image";
+import { ChatsIcon } from "@phosphor-icons/react";
 
 // 타입 정의
 interface User {
@@ -64,8 +77,22 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [isPending, startTransition] = useTransition();
+  const [focusNewComment, setFocusNewComment] = useState(false);
+
+  // useRef로 textarea 참조
+  const newCommentRef = useRef<HTMLTextAreaElement>(null);
 
   const queryClient = useQueryClient();
+
+  // focusNewComment가 true로 변경될 때 포커스 처리
+  useEffect(() => {
+    if (focusNewComment && newCommentRef.current) {
+      // 다음 tick에서 포커스 설정
+      setTimeout(() => {
+        newCommentRef.current?.focus();
+      }, 0);
+    }
+  }, [focusNewComment]);
 
   // 댓글 데이터 조회
   const { data, isLoading, error, refetch } = useQuery({
@@ -346,7 +373,6 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                     </span>
                   ) : (
                     new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                      // year: "numeric",
                       month: "short",
                       day: "numeric",
                       hour: "numeric",
@@ -436,31 +462,45 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   return (
     <div className="max-w-4xl py-4 sm:px-4">
       {/* 댓글 작성 폼 */}
-      {currentUser && (
-        <div className="px-4 sm:px-0 pb-4 border-b mb-2">
-          <div className="flex items-start gap-2">
-            {/* kj */}
 
-            <div className="flex-1 space-y-1">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
-                placeholder="댓글을 입력하세요..."
-                className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                rows={3}
+      {currentUser && !focusNewComment ? (
+        <button
+          type="button"
+          className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full mb-4"
+          onClick={() => setFocusNewComment(true)}
+        >
+          <PencilLine className="w-5 h-5 text-gray-600" />
+          <span>댓글 쓰기</span>
+        </button>
+      ) : (
+        <div className="px-4 sm:px-0 pb-4 border-b mb-2 flex items-start gap-2">
+          <div className="flex-1 space-y-1">
+            <textarea
+              ref={newCommentRef}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
+              placeholder="댓글을 입력하세요..."
+              className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              rows={3}
+              disabled={isSubmitting}
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setFocusNewComment(false)}
                 disabled={isSubmitting}
-              />
-
-              <div className="flex justify-end">
-                <button
-                  onClick={handleSubmitComment}
-                  disabled={!newComment.trim() || isSubmitting}
-                  className="px-4 h-11 sm:h-9  bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium"
-                >
-                  {isSubmitting ? "댓글 저장 중..." : "댓글 추가"}
-                </button>
-              </div>
+                className="px-4 h-11 sm:h-9 text-gray-500 rounded-full hover:bg-gray-100 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium cursor-pointer"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleSubmitComment}
+                disabled={!newComment.trim() || isSubmitting}
+                className="px-4 h-11 sm:h-9 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium cursor-pointer"
+              >
+                {isSubmitting ? "댓글 저장 중..." : "저장"}
+              </button>
             </div>
           </div>
         </div>
@@ -468,10 +508,12 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          <MessageCircle size={48} className="mx-auto mb-2 opacity-50" />
-          <p>아직 댓글이 없습니다.</p>
-          <p className="text-sm">첫 번째 댓글을 달아보세요!</p>
+        <div className="text-center min-h-[50vh] flex flex-col items-center justify-center text-gray-500">
+          <ChatsIcon
+            className="w-16 h-16 mx-auto mb-4 text-gray-300"
+            weight="duotone"
+          />
+          <p className="text-lg mb-2 font-medium">댓글이 없습니다.</p>
         </div>
       ) : (
         optimisticComments.map((comment) => renderComment(comment))

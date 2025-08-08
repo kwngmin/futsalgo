@@ -142,7 +142,7 @@ export const SchedulePhotosGallery = ({
             className="w-16 h-16 mx-auto mb-4 text-gray-300"
             weight="duotone"
           />
-          <p className="text-lg mb-2 font-medium">업로드된 사진이 없습니다.</p>
+          <p className="text-lg mb-2 font-medium">사진이 없습니다.</p>
           {/* {canUpload && (
             <p className="text-sm">첫 번째 사진을 업로드해보세요!</p>
           )} */}
