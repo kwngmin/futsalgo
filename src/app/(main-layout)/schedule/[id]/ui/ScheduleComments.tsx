@@ -162,11 +162,9 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow-sm border">
-          <div className="p-8 text-center">
-            <Loader2 className="animate-spin mx-auto mb-4" size={48} />
-            <p className="text-gray-500">댓글을 불러오는 중...</p>
-          </div>
+        <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">
+          <Loader2 className="animate-spin mx-auto mb-4" size={48} />
+          <p className="text-gray-500">댓글을 불러오는 중...</p>
         </div>
       </div>
     );
