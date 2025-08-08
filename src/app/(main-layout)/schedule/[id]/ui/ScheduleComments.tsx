@@ -2,14 +2,7 @@
 
 import React, { useState, useOptimistic, useTransition } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  MessageCircle,
-  Reply,
-  Send,
-  User,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
+import { MessageCircle, Reply, User, Loader2, AlertCircle } from "lucide-react";
 import {
   addComment,
   getScheduleComments,
@@ -324,7 +317,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       >
         <div className={` ${isOptimistic ? "opacity-60" : ""}`}>
           <div className="flex items-start gap-2 p-4 border-t">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mt-0.5 sm:mt-0">
               {comment.author.image ? (
                 <Image
                   src={comment.author.image}
@@ -377,7 +370,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   className="mt-2 sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-blue-50 hover:bg-blue-100 pl-2 pr-3 rounded-full h-9 sm:h-8"
                 >
                   <Reply size={16} />
-                  답글
+                  대댓글
                 </button>
               )}
             </div>
@@ -393,7 +386,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               onKeyPress={(e) =>
                 handleKeyPress(e, () => handleSubmitReply(comment.id))
               }
-              placeholder="답글을 입력하세요..."
+              placeholder="대댓글을 입력하세요..."
               className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={2}
               disabled={addCommentMutation.isPending}
@@ -405,21 +398,18 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   setReplyContent("");
                 }}
                 disabled={addCommentMutation.isPending}
-                className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 disabled:opacity-50 cursor-pointer hover:bg-gray-50 rounded-md"
+                className="px-4 py-1 text-sm text-gray-600 hover:text-gray-800 disabled:opacity-50 cursor-pointer hover:bg-gray-50 rounded-full"
               >
                 취소
               </button>
               <button
                 onClick={() => handleSubmitReply(comment.id)}
                 disabled={!replyContent.trim() || addCommentMutation.isPending}
-                className="px-3 py-1 sm:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-1"
+                className="px-4 h-11 sm:h-9 sm:text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-1 font-semibold"
               >
-                {addCommentMutation.isPending ? (
-                  <Loader2 size={20} className="animate-spin" />
-                ) : (
-                  <Send size={20} />
-                )}
-                답글 달기
+                {addCommentMutation.isPending
+                  ? "대댓글 저장 중..."
+                  : "대댓글 달기"}
               </button>
             </div>
           </div>
@@ -466,7 +456,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             )}
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 space-y-1">
             <textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
@@ -477,18 +467,13 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               disabled={isSubmitting}
             />
 
-            <div className="flex justify-end mt-2">
+            <div className="flex justify-end">
               <button
                 onClick={handleSubmitComment}
                 disabled={!newComment.trim() || isSubmitting}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-4 h-11 sm:h-9  bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium"
               >
-                {isSubmitting ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  <Send size={16} />
-                )}
-                댓글 달기
+                {isSubmitting ? "댓글 저장 중..." : "댓글 달기"}
               </button>
             </div>
           </div>
