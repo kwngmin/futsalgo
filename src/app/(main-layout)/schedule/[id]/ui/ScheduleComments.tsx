@@ -374,7 +374,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <div className="flex-1 min-w-0">
             <div className="flex flex-col">
               <div className="flex justify-between items-center gap-2">
-                <div className="flex items-center gap-1 h-10">
+                <div className="flex items-center gap-1.5 h-10">
                   <span
                     className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
                     onClick={() => {

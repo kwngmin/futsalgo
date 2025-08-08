@@ -92,7 +92,7 @@ export const SchedulePhotosGallery = ({
                         className="size-8 rounded-full"
                       />
                     )}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5">
                       <span
                         className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
                         onClick={() =>
