@@ -221,21 +221,24 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     );
   }
 
-  const { schedule, currentUser } = data;
+  const {
+    // schedule, //
+    currentUser,
+  } = data;
 
   // 사용자가 어떤 팀에 속하는지 확인
-  const getUserTeamType = (userId: string) => {
-    const isHostTeamMember = schedule.hostTeam.members.some(
-      (member) => member.userId === userId
-    );
-    const isInvitedTeamMember = schedule.invitedTeam?.members.some(
-      (member) => member.userId === userId
-    );
+  // const getUserTeamType = (userId: string) => {
+  //   const isHostTeamMember = schedule.hostTeam.members.some(
+  //     (member) => member.userId === userId
+  //   );
+  //   const isInvitedTeamMember = schedule.invitedTeam?.members.some(
+  //     (member) => member.userId === userId
+  //   );
 
-    if (isHostTeamMember) return "HOST";
-    if (isInvitedTeamMember) return "INVITED";
-    return null;
-  };
+  //   if (isHostTeamMember) return "HOST";
+  //   if (isInvitedTeamMember) return "INVITED";
+  //   return null;
+  // };
 
   // 댓글 제출
   const handleSubmitComment = async () => {
@@ -310,27 +313,27 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   };
 
   // 팀 배지 렌더링
-  const renderTeamBadge = (userId: string) => {
-    const teamType = getUserTeamType(userId);
+  // const renderTeamBadge = (userId: string) => {
+  //   const teamType = getUserTeamType(userId);
 
-    if (teamType === "HOST") {
-      return (
-        <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
-          {`${schedule.hostTeam.name} • 주최팀`}
-        </span>
-      );
-    }
+  //   if (teamType === "HOST") {
+  //     return (
+  //       <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
+  //         {`${schedule.hostTeam.name} • 주최팀`}
+  //       </span>
+  //     );
+  //   }
 
-    if (teamType === "INVITED" && schedule.invitedTeam) {
-      return (
-        <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
-          {`${schedule.invitedTeam.name} • 초청팀`}
-        </span>
-      );
-    }
+  //   if (teamType === "INVITED" && schedule.invitedTeam) {
+  //     return (
+  //       <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
+  //         {`${schedule.invitedTeam.name} • 초청팀`}
+  //       </span>
+  //     );
+  //   }
 
-    return null;
-  };
+  //   return null;
+  // };
 
   // 댓글 아이템 렌더링
   const renderComment = (comment: Comment, isReply = false) => {
@@ -355,7 +358,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   alt={comment.author.name || ""}
                   width={32}
                   height={32}
-                  className="w-8 h-8 rounded-full"
+                  className="size-8 rounded-full"
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
@@ -368,11 +371,12 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             <div className="flex flex-col">
               <div className="flex justify-between items-center gap-2">
                 <div className="flex items-center gap-1 h-10">
-                  <span className="sm:text-sm font-medium text-gray-700 leading-tight">
+                  <span className="sm:text-sm font-medium group-hover:underline group-hover:underline-offset-2">
                     {comment.author.nickname || comment.author.name}
                   </span>
                   <span className="text-gray-500">•</span>
-                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                  {/* <span className="text-sm sm:text-xs text-gray-500 tracking-tight"> */}
+                  <span className="text-sm text-muted-foreground">
                     {isOptimistic ? (
                       <span className="flex items-center gap-1">
                         <Loader2 size={12} className="animate-spin" />

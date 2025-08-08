@@ -85,23 +85,35 @@ export const SchedulePhotosGallery = ({
                   className="flex justify-between items-center h-10 cursor-pointer group select-none"
                   onClick={() => router.push(`/players/${photo.uploader.id}`)}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     {photo.uploader.image && (
                       <Image
                         src={photo.uploader.image}
                         alt={photo.uploader.name || ""}
                         width={32}
                         height={32}
-                        className="rounded-full"
+                        className="size-8 rounded-full"
                       />
                     )}
-                    <span className="sm:text-sm font-medium group-hover:underline group-hover:underline-offset-2">
-                      {photo.uploader.nickname || photo.uploader.name}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="sm:text-sm font-medium group-hover:underline group-hover:underline-offset-2">
+                        {photo.uploader.nickname || photo.uploader.name}
+                      </span>
+                      <span className="text-gray-500">•</span>
+                      <span className="text-sm text-muted-foreground">
+                        {/* <span className="text-sm sm:text-xs text-gray-500 tracking-tight"> */}
+                        {new Date(photo.createdAt).toLocaleDateString("ko-KR", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  {/* <span className="text-sm text-muted-foreground">
                     {new Date(photo.createdAt).toLocaleDateString("ko-KR")}
-                  </span>
+                  </span> */}
                 </div>
 
                 <div
