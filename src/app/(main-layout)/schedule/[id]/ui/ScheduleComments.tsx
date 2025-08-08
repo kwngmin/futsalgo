@@ -343,10 +343,10 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     return (
       <div
         key={comment.id}
-        className={`relative ${isReply ? "ml-10 px-4 mt-2" : ""}`}
+        className={`relative ${isReply ? "ml-6 px-4 mt-2" : ""}`}
       >
         <div
-          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 ${
+          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 mb-4 ${
             isOptimistic ? "opacity-60" : ""
           }`}
         >
@@ -401,7 +401,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             </p>
 
             {!isReply && !isOptimistic && (
-              <div className="flex items-center gap-1 my-2">
+              <div className="flex items-center gap-1 mt-2">
                 <MessageCircle className="size-4 text-gray-500" />
                 {comment.replies.length > 0 && (
                   <span className="text-sm font-medium text-gray-500">
@@ -423,7 +423,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         </div>
 
         {!isReply && (
-          <div className="absolute top-4 -bottom-1 left-4 sm:left-0 border-r w-4 z-0" />
+          <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
         )}
 
         {/* 답글 작성 폼 */}
