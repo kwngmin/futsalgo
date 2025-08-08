@@ -377,7 +377,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
         {/* 대댓글 작성 폼 */}
         {replyingTo === comment.id && (
-          <div className="px-4 space-y-1 mb-4">
+          <div className="p-4 space-y-1 border-t">
             <textarea
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
