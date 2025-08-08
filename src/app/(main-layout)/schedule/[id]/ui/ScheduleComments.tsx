@@ -438,21 +438,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       {currentUser && (
         <div className="px-4 sm:px-0 pb-4 border-b mb-2">
           <div className="flex items-start gap-2">
-            <div className="flex-shrink-0">
-              {currentUser.image ? (
-                <Image
-                  src={currentUser.image}
-                  alt={currentUser.name || ""}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-full"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                  <User size={16} className="text-gray-500" />
-                </div>
-              )}
-            </div>
+            {/* kj */}
 
             <div className="flex-1 space-y-1">
               <textarea
