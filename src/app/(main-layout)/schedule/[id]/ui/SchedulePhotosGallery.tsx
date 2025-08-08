@@ -81,10 +81,7 @@ export const SchedulePhotosGallery = ({
             {photos.map((photo, index) => (
               <div key={photo.id} className="">
                 {/* 업로더 정보 */}
-                <div
-                  className="flex justify-between items-center h-10 cursor-pointer group select-none"
-                  onClick={() => router.push(`/players/${photo.uploader.id}`)}
-                >
+                <div className="flex justify-between items-center h-10 select-none">
                   <div className="flex items-center gap-2 shrink-0">
                     {photo.uploader.image && (
                       <Image
@@ -96,12 +93,17 @@ export const SchedulePhotosGallery = ({
                       />
                     )}
                     <div className="flex items-center gap-1">
-                      <span className="sm:text-sm font-medium group-hover:underline group-hover:underline-offset-2">
+                      <span
+                        className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
+                        onClick={() =>
+                          router.push(`/players/${photo.uploader.id}`)
+                        }
+                      >
                         {photo.uploader.nickname || photo.uploader.name}
                       </span>
-                      <span className="text-gray-500">•</span>
-                      <span className="text-sm text-muted-foreground">
-                        {/* <span className="text-sm sm:text-xs text-gray-500 tracking-tight"> */}
+                      {/* <span className="text-gray-500">•</span> */}
+                      {/* <span className="text-sm text-muted-foreground"> */}
+                      <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
                         {new Date(photo.createdAt).toLocaleDateString("ko-KR", {
                           month: "short",
                           day: "numeric",

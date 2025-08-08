@@ -23,6 +23,7 @@ import {
 } from "../actions/get-schedule-comments";
 import Image from "next/image";
 import { ChatsIcon } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
 
 // 타입 정의
 interface User {
@@ -80,6 +81,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const [replyContent, setReplyContent] = useState("");
   const [isPending, startTransition] = useTransition();
   const [focusNewComment, setFocusNewComment] = useState(false);
+  const router = useRouter();
 
   // useRef로 textarea 참조
   const newCommentRef = useRef<HTMLTextAreaElement>(null);
@@ -348,7 +350,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         className={`relative ${isReply ? "ml-6 px-4 mt-2" : ""}`}
       >
         <div
-          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 mb-4 ${
+          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 mb-3 ${
             isOptimistic ? "opacity-60" : ""
           }`}
         >
@@ -373,12 +375,17 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             <div className="flex flex-col">
               <div className="flex justify-between items-center gap-2">
                 <div className="flex items-center gap-1 h-10">
-                  <span className="sm:text-sm font-medium group-hover:underline group-hover:underline-offset-2">
+                  <span
+                    className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
+                    onClick={() => {
+                      router.push(`/players/${comment.author.id}`);
+                    }}
+                  >
                     {comment.author.nickname || comment.author.name}
                   </span>
-                  <span className="text-gray-500">•</span>
-                  {/* <span className="text-sm sm:text-xs text-gray-500 tracking-tight"> */}
-                  <span className="text-sm text-muted-foreground">
+                  {/* <span className="text-gray-500">•</span> */}
+                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                    {/* <span className="text-sm text-muted-foreground"> */}
                     {isOptimistic ? (
                       <span className="flex items-center gap-1">
                         <Loader2 size={12} className="animate-spin" />
