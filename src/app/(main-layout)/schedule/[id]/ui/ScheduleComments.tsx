@@ -377,7 +377,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
         {/* 대댓글 작성 폼 */}
         {replyingTo === comment.id && (
-          <div className="py-4 border-t">
+          <div className="px-4 space-y-1 mb-4">
             <textarea
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
@@ -389,7 +389,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               rows={2}
               disabled={addCommentMutation.isPending}
             />
-            <div className="flex justify-end gap-2 mt-2">
+            <div className="flex justify-end gap-2">
               <button
                 onClick={() => {
                   setReplyingTo(null);
