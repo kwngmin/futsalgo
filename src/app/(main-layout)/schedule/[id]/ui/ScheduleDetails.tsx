@@ -238,7 +238,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )}
 
         <div className="">
-          {/* 안내 사항 */}
+          {/* 공지사항 */}
           <div>
             <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
               <div className="flex items-center space-x-2">
@@ -257,6 +257,60 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               </p>
             )}
           </div>
+
+          {/* 주최팀 */}
+          <div
+            className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onClick={() => {
+              router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
+            }}
+          >
+            <div className="flex items-center space-x-2">
+              <Flag className="size-5 text-gray-600" />
+              <span className="font-medium">주최팀</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Image
+                src={data.data.schedule?.hostTeam.logoUrl ?? ""}
+                alt="avatar"
+                width={24}
+                height={24}
+                className="rounded-lg"
+              />
+              <span className="text-base font-medium text-gray-500">
+                {data.data.schedule?.hostTeam?.name}
+              </span>
+              <ChevronRight className="size-5 text-gray-400" />
+            </div>
+          </div>
+
+          {/* 초청팀 */}
+          {data.data.schedule.invitedTeam && (
+            <div
+              className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+              onClick={() => {
+                router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
+              }}
+            >
+              <div className="flex items-center space-x-2">
+                <CircleCheckBig className="size-5 text-gray-600" />
+                <span className="font-medium">초청팀</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Image
+                  src={data.data.schedule?.invitedTeam.logoUrl ?? ""}
+                  alt="avatar"
+                  width={24}
+                  height={24}
+                  className="rounded-lg"
+                />
+                <span className="text-base font-medium text-gray-500">
+                  {data.data.schedule?.invitedTeam?.name}
+                </span>
+                <ChevronRight className="size-5 text-gray-400" />
+              </div>
+            </div>
+          )}
 
           {/* 장소 이름 */}
           <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
@@ -309,60 +363,6 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               </span>
             </div>
           </div>
-
-          {/* 주최팀 */}
-          <div
-            className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-            onClick={() => {
-              router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
-            }}
-          >
-            <div className="flex items-center space-x-2">
-              <Flag className="size-5 text-gray-600" />
-              <span className="font-medium">주최팀</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Image
-                src={data.data.schedule?.hostTeam.logoUrl ?? ""}
-                alt="avatar"
-                width={24}
-                height={24}
-                className="rounded-lg"
-              />
-              <span className="text-base font-medium text-gray-500">
-                {data.data.schedule?.hostTeam?.name}
-              </span>
-              <ChevronRight className="size-5 text-gray-400" />
-            </div>
-          </div>
-
-          {/* 초청팀 */}
-          {data.data.schedule.invitedTeam && (
-            <div
-              className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-              onClick={() => {
-                router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <CircleCheckBig className="size-5 text-gray-600" />
-                <span className="font-medium">초청팀</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image
-                  src={data.data.schedule?.invitedTeam.logoUrl ?? ""}
-                  alt="avatar"
-                  width={24}
-                  height={24}
-                  className="rounded-lg"
-                />
-                <span className="text-base font-medium text-gray-500">
-                  {data.data.schedule?.invitedTeam?.name}
-                </span>
-                <ChevronRight className="size-5 text-gray-400" />
-              </div>
-            </div>
-          )}
 
           {/* 만든이 */}
           <div
