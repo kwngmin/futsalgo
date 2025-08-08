@@ -108,6 +108,12 @@ const ScheduleContent = ({
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
       <div className="flex justify-between items-center shrink-0 px-4 h-16">
         <button
+          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+          onClick={handleGoBack}
+        >
+          <ArrowLeft style={{ width: "24px", height: "24px" }} />
+        </button>
+        {/* <button
           className="flex items-center cursor-pointer select-none hover:bg-gray-100 rounded-full group pr-4"
           onClick={handleGoBack}
         >
@@ -116,14 +122,14 @@ const ScheduleContent = ({
           </div>
           <h1 className="text-xl font-semibold">
             일정 상세
-            {/* {matchType === MatchType.SQUAD ? "자체전" : "친선전"} */}
-            {/* {startTime?.toLocaleDateString("ko-KR", {
+            {matchType === MatchType.SQUAD ? "자체전" : "친선전"}
+            {startTime?.toLocaleDateString("ko-KR", {
               month: "long",
               day: "numeric",
             })}
-            {startTime && `${startTime.getMonth() + 1}.${startTime.getDate()}`} */}
+            {startTime && `${startTime.getMonth() + 1}.${startTime.getDate()}`}
           </h1>
-        </button>
+        </button> */}
         <div className="flex items-center justify-end gap-2">
           <button
             className={`shrink-0 size-10 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
