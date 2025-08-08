@@ -7,6 +7,7 @@ import { useState } from "react";
 import SchedulePhotoUpload from "./SchedulePhotoUpload";
 import { useSchedulePhotos } from "../lib/use-schedule-photos";
 import { ImagesIcon } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
 
 interface SchedulePhotosGalleryProps {
   scheduleId: string;
@@ -15,6 +16,8 @@ interface SchedulePhotosGalleryProps {
 export const SchedulePhotosGallery = ({
   scheduleId,
 }: SchedulePhotosGalleryProps) => {
+  const router = useRouter();
+
   const { photos, canUpload, isLoading, error, hasMore, refresh, loadMore } =
     useSchedulePhotos({
       scheduleId,
@@ -78,7 +81,10 @@ export const SchedulePhotosGallery = ({
             {photos.map((photo, index) => (
               <div key={photo.id} className="">
                 {/* 업로더 정보 */}
-                <div className="flex justify-between items-center h-10 cursor-pointer group select-none">
+                <div
+                  className="flex justify-between items-center h-10 cursor-pointer group select-none"
+                  onClick={() => router.push(`/players/${photo.uploader.id}`)}
+                >
                   <div className="flex items-center gap-2">
                     {photo.uploader.image && (
                       <Image
@@ -89,7 +95,7 @@ export const SchedulePhotosGallery = ({
                         className="rounded-full"
                       />
                     )}
-                    <span className="sm:text-sm font-medium">
+                    <span className="sm:text-sm font-medium group-hover:underline group-hover:underline-offset-2">
                       {photo.uploader.nickname || photo.uploader.name}
                     </span>
                   </div>
