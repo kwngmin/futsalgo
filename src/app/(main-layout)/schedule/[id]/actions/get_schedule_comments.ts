@@ -295,7 +295,7 @@ export async function addComment(
 
       // 대댓글의 대댓글 방지 (2단계 depth만 허용)
       if (parentComment.parentId) {
-        throw new Error("대댓글에는 답글을 달 수 없습니다");
+        throw new Error("답글에는 답글을 달 수 없습니다");
       }
     }
 

@@ -93,7 +93,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           if (!oldData) return oldData;
 
           if (newComment.parentId) {
-            // 대댓글 추가
+            // 답글 추가
             const updateComments = (comments: Comment[]): Comment[] => {
               return comments.map((comment) => {
                 if (comment.id === newComment.parentId) {
@@ -138,7 +138,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     data?.comments || [],
     (state: Comment[], newComment: Comment) => {
       if (newComment.parentId) {
-        // 대댓글 추가
+        // 답글 추가
         const updateComments = (comments: Comment[]): Comment[] => {
           return comments.map((comment) => {
             if (comment.id === newComment.parentId) {
@@ -238,7 +238,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     });
   };
 
-  // 대댓글 제출
+  // 답글 제출
   const handleSubmitReply = async (parentId: string) => {
     if (!replyContent.trim() || addCommentMutation.isPending) return;
 
@@ -264,7 +264,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           parentId,
         });
       } catch (error) {
-        console.error("대댓글 작성 실패:", error);
+        console.error("답글 작성 실패:", error);
         // 실패 시 상태 복원
         setReplyContent(currentContent);
         setReplyingTo(parentId);
@@ -368,14 +368,14 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   className="mt-2 sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-blue-50 hover:bg-blue-100 pl-2 pr-3 rounded-full h-9 sm:h-8"
                 >
                   <Reply size={16} />
-                  대댓글
+                  답글 달기
                 </button>
               )}
             </div>
           </div>
         </div>
 
-        {/* 대댓글 작성 폼 */}
+        {/* 답글 작성 폼 */}
         {replyingTo === comment.id && (
           <div className="p-4 space-y-1 border-t">
             <textarea
@@ -384,7 +384,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               onKeyPress={(e) =>
                 handleKeyPress(e, () => handleSubmitReply(comment.id))
               }
-              placeholder="대댓글을 입력하세요..."
+              placeholder="답글을 입력하세요..."
               className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={2}
               disabled={addCommentMutation.isPending}
@@ -405,15 +405,13 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 disabled={!replyContent.trim() || addCommentMutation.isPending}
                 className="px-4 h-11 sm:h-9 sm:text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-1 font-semibold"
               >
-                {addCommentMutation.isPending
-                  ? "대댓글 저장 중..."
-                  : "대댓글 달기"}
+                {addCommentMutation.isPending ? "답글 저장 중..." : "저장"}
               </button>
             </div>
           </div>
         )}
 
-        {/* 대댓글 목록 */}
+        {/* 답글 목록 */}
         {comment.replies.length > 0 &&
           comment.replies.map((reply) => renderComment(reply, true))}
       </div>
