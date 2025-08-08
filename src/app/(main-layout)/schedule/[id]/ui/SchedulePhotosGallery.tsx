@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { Loader2, RefreshCw, AlertCircle, ImageIcon } from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import SchedulePhotoUpload from "./SchedulePhotoUpload";
 import { useSchedulePhotos } from "../lib/use-schedule-photos";
+import { ImagesIcon } from "@phosphor-icons/react";
 
 interface SchedulePhotosGalleryProps {
   scheduleId: string;
@@ -130,12 +131,15 @@ export const SchedulePhotosGallery = ({
           )}
         </div>
       ) : !isLoading ? (
-        <div className="text-center py-12 text-gray-500">
-          <ImageIcon className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-          <p className="text-lg mb-2">아직 업로드된 사진이 없습니다.</p>
-          {canUpload && (
+        <div className="text-center min-h-[50vh] flex flex-col items-center justify-center text-gray-500">
+          <ImagesIcon
+            className="w-16 h-16 mx-auto mb-4 text-gray-300"
+            weight="duotone"
+          />
+          <p className="text-lg mb-2 font-medium">업로드된 사진이 없습니다.</p>
+          {/* {canUpload && (
             <p className="text-sm">첫 번째 사진을 업로드해보세요!</p>
-          )}
+          )} */}
         </div>
       ) : (
         <div className="flex justify-center py-8">

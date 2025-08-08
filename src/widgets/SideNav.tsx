@@ -30,7 +30,7 @@ const SideNav = () => {
           </button>
 
           {/* 데스크톱 네비게이션 */}
-          <nav className="flex-1 px-4 mb-4 space-y-1">
+          <nav className="flex-1 px-4 mb-4 space-y-1 overflow-y-auto">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeMenu === item.id;
