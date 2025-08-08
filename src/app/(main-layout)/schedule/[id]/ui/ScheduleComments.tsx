@@ -338,58 +338,66 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const isOptimistic = comment.id.startsWith("temp-");
 
     return (
-      <div key={comment.id} className={`relative ${isReply ? "ml-10" : ""}`}>
+      <div
+        key={comment.id}
+        className={`relative ${isReply ? "ml-10 px-4 mt-2" : ""}`}
+      >
         <div
-          className={`z-10 flex items-stretch gap-2 p-4 sm:px-0 ${
+          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 ${
             isOptimistic ? "opacity-60" : ""
           }`}
         >
-          <div className="w-8 flex flex-col z-20">
-            {comment.author.image ? (
-              <Image
-                src={comment.author.image}
-                alt={comment.author.name || ""}
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-full"
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                <User size={16} className="text-gray-500" />
-              </div>
-            )}
+          <div className="h-10 flex items-center">
+            <div className="w-8 flex flex-col z-20">
+              {comment.author.image ? (
+                <Image
+                  src={comment.author.image}
+                  alt={comment.author.name || ""}
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded-full"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                  <User size={16} className="text-gray-500" />
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex flex-col mb-1.5">
+            <div className="flex flex-col">
               <div className="flex justify-between items-center gap-2">
-                <span className="sm:text-sm font-medium text-gray-700 leading-tight">
-                  {comment.author.nickname || comment.author.name}
-                </span>
-                <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
-                  {isOptimistic ? (
-                    <span className="flex items-center gap-1">
-                      <Loader2 size={12} className="animate-spin" />
-                      전송 중...
-                    </span>
-                  ) : (
-                    new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                      month: "short",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "numeric",
-                    })
-                  )}
-                </span>
+                <div className="flex items-center gap-1 h-10">
+                  <span className="sm:text-sm font-medium text-gray-700 leading-tight">
+                    {comment.author.nickname || comment.author.name}
+                  </span>
+                  <span className="text-gray-500">•</span>
+                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                    {isOptimistic ? (
+                      <span className="flex items-center gap-1">
+                        <Loader2 size={12} className="animate-spin" />
+                        전송 중...
+                      </span>
+                    ) : (
+                      new Date(comment.createdAt).toLocaleDateString("ko-KR", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })
+                    )}
+                  </span>
+                </div>
               </div>
-              {renderTeamBadge(comment.author.id)}
+              {/* {renderTeamBadge(comment.author.id)} */}
             </div>
 
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium">
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 p-4 rounded-md">
               {comment.content}
             </p>
 
             {!isReply && !isOptimistic && (
-              <div className="flex items-center gap-1 mt-2">
+              <div className="flex items-center gap-1 my-2">
                 <MessageCircle className="size-4 text-gray-500" />
                 {comment.replies.length > 0 && (
                   <span className="text-sm font-medium text-gray-500">
@@ -411,7 +419,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         </div>
 
         {!isReply && (
-          <div className="absolute top-4 bottom-0 left-4 sm:left-0 border-r w-4 z-0" />
+          <div className="absolute top-4 -bottom-1 left-4 sm:left-0 border-r w-4 z-0" />
         )}
 
         {/* 답글 작성 폼 */}
@@ -464,14 +472,16 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       {/* 댓글 작성 폼 */}
 
       {currentUser && !focusNewComment ? (
-        <button
-          type="button"
-          className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full mb-4"
-          onClick={() => setFocusNewComment(true)}
-        >
-          <PencilLine className="w-5 h-5 text-gray-600" />
-          <span>댓글 쓰기</span>
-        </button>
+        <div className="px-4 sm:px-0 mb-4">
+          <button
+            type="button"
+            className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+            onClick={() => setFocusNewComment(true)}
+          >
+            <PencilLine className="w-5 h-5 text-gray-600" />
+            <span>댓글 쓰기</span>
+          </button>
+        </div>
       ) : (
         <div className="px-4 sm:px-0 pb-4 border-b mb-2 flex items-start gap-2">
           <div className="flex-1 space-y-1">
