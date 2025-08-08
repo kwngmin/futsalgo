@@ -102,7 +102,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
         )} */}
 
         {/* 공통 */}
-        <div className="w-full flex flex-col items-center justify-center px-4 mb-10 mt-8">
+        <div className="w-full flex flex-col items-center justify-center px-4 my-8">
           <span
             className={`flex items-center justify-center font-semibold ${
               data.data.schedule?.matchType === "TEAM"
