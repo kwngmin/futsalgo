@@ -18,11 +18,12 @@ const TeamSide = ({
           }`}
         />
         <span
-          className={`grow font-bold text-sm tracking-tight ${
+          className={`grow font-medium text-sm tracking-tight ${
             side === "home" ? "text-indigo-700" : "text-emerald-700"
           }`}
         >
-          {side === "home" ? "HOME" : "AWAY"}
+          {side === "home" ? "홈" : "어웨이"}
+          {/* {side === "home" ? "HOME" : "AWAY"} */}
         </span>
       </div>
       <div>

@@ -230,7 +230,7 @@ const GoalRecord = ({
         {/* 득점 */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <SoccerBallIcon className="size-4" weight="fill" />
+            <SoccerBallIcon className="size-5" weight="fill" />
             <Label>골 넣은 사람</Label>
           </div>
           <div className="space-y-3">
@@ -258,7 +258,7 @@ const GoalRecord = ({
               <div className="flex justify-between items-center space-x-2 h-11 bg-white rounded-md px-2">
                 <div className="flex items-center gap-2 px-1">
                   <SoccerBallIcon
-                    className="size-4 text-destructive"
+                    className="size-5 text-destructive"
                     weight="fill"
                   />
                   <Label htmlFor="isOwnGoal">자책골</Label>
@@ -267,7 +267,7 @@ const GoalRecord = ({
                   id="isOwnGoal"
                   checked={isOwnGoal}
                   onCheckedChange={handleOwnGoalChange}
-                  className="scale-125 sm:scale-110"
+                  className="scale-125 sm:scale-110 cursor-pointer"
                 />
               </div>
             )}
@@ -282,7 +282,7 @@ const GoalRecord = ({
         {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <SneakerMoveIcon className="size-4" weight="fill" />
+              <SneakerMoveIcon className="size-5" weight="fill" />
               <Label>어시스트 한 사람</Label>
             </div>
             <div className="space-y-3">
@@ -307,16 +307,28 @@ const GoalRecord = ({
           </div>
         )}
         {watchValues.scorerId && (
-          <Button
-            type="submit"
-            disabled={isSubmitting || !watchValues.scorerId}
-            // type="button"
-            className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg disabled:opacity-50 disabled:pointer-events-none"
-            size="lg"
-          >
-            {/* GOAL ! */}
-            {isSubmitting ? "저장하는 중..." : "저장"}
-          </Button>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center gap-2">
+            <Button
+              type="button"
+              disabled={isSubmitting || !watchValues.scorerId}
+              className="w-full font-medium tracking-tight disabled:opacity-50 disabled:pointer-events-none"
+              size="lg"
+              variant="secondary"
+              onClick={() => reset({})}
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !watchValues.scorerId}
+              // type="button"
+              className="w-full font-bold bg-black text-white tracking-tight disabled:opacity-50 disabled:pointer-events-none"
+              size="lg"
+            >
+              {/* GOAL ! */}
+              {isSubmitting ? "저장하는 중..." : "저장"}
+            </Button>
+          </div>
         )}
       </form>
     </div>

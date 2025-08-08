@@ -4,8 +4,9 @@ import {
   ArrowLeftRight,
   ClipboardList,
   Dices,
+  Minus,
   RefreshCcw,
-  Trash2,
+  // Trash2,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -200,7 +201,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       }
                     }}
                   >
-                    <Trash2 className="size-4.5 sm:size-4 text-destructive" />
+                    <Minus className="size-4.5 sm:size-4 text-destructive" />
                   </button>
                 )}
               </div>
