@@ -2,7 +2,14 @@
 
 import React, { useState, useOptimistic, useTransition } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { MessageCircle, Reply, User, Loader2, AlertCircle } from "lucide-react";
+import {
+  MessageCircle,
+  //   Reply,
+  User,
+  Loader2,
+  AlertCircle,
+  //   MessageCircleMore,
+} from "lucide-react";
 import {
   addComment,
   getScheduleComments,
@@ -311,10 +318,10 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const isOptimistic = comment.id.startsWith("temp-");
 
     return (
-      <div key={comment.id} className={`${isReply ? "ml-8 border-l" : ""}`}>
-        <div className={` ${isOptimistic ? "opacity-60" : ""}`}>
-          <div className="flex gap-2 px-4 py-2">
-            <div className="flex-shrink-0 mt-0.5 sm:mt-0 flex flex-col h-full">
+      <div key={comment.id} className={`relative ${isReply ? "ml-10" : ""}`}>
+        <div className={`z-10 ${isOptimistic ? "opacity-60" : ""}`}>
+          <div className="flex items-stretch gap-2 px-4 py-2">
+            <div className="w-8 flex flex-col z-20">
               {comment.author.image ? (
                 <Image
                   src={comment.author.image}
@@ -328,7 +335,6 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   <User size={16} className="text-gray-500" />
                 </div>
               )}
-              <div className="flex-1 border-r w-4" />
             </div>
 
             <div className="flex-1 min-w-0">
@@ -362,20 +368,19 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               </p>
 
               {!isReply && !isOptimistic && (
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center gap-1 mt-2">
                   {comment.replies.length > 0 && (
-                    <span className="text-sm text-gray-500">
-                      답글 {comment.replies.length}개
+                    <span className="text-sm font-medium text-gray-500">
+                      답글 {comment.replies.length}개 •
                     </span>
                   )}
                   {currentUser && (
                     <button
                       onClick={() => setReplyingTo(comment.id)}
                       disabled={addCommentMutation.isPending}
-                      className="sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-blue-50 hover:bg-blue-100 pl-2 pr-3 rounded-full h-9 sm:h-8"
+                      className="sm:text-sm text-blue-700 hover:text-blue-800 flex items-center justify-center disabled:opacity-50 cursor-pointer font-semibold"
                     >
-                      <Reply size={16} />
-                      답글 달기
+                      답글 추가
                     </button>
                   )}
                 </div>
@@ -384,9 +389,13 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           </div>
         </div>
 
+        {!isReply && (
+          <div className="absolute top-2 bottom-2 left-4 border-r w-4 z-0" />
+        )}
+
         {/* 답글 작성 폼 */}
         {replyingTo === comment.id && currentUser && (
-          <div className="p-4 space-y-1 border-t">
+          <div className="ml-9 px-4 py-2 space-y-1 mb-2">
             <textarea
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
@@ -468,7 +477,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   disabled={!newComment.trim() || isSubmitting}
                   className="px-4 h-11 sm:h-9  bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium"
                 >
-                  {isSubmitting ? "댓글 저장 중..." : "댓글 달기"}
+                  {isSubmitting ? "댓글 저장 중..." : "댓글 추가"}
                 </button>
               </div>
             </div>
