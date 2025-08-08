@@ -9,11 +9,13 @@ import React, {
 } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  MessageCircle,
+  // MessageCircle,
+  // Reply,
   User,
   Loader2,
   AlertCircle,
   PencilLine,
+  CornerDownRight,
 } from "lucide-react";
 import {
   addComment,
@@ -396,14 +398,14 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               {/* {renderTeamBadge(comment.author.id)} */}
             </div>
 
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 p-4 rounded-md">
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 px-4 py-3 rounded-md">
               {comment.content}
             </p>
 
             {!isReply && !isOptimistic && (
               <div className="flex items-center gap-1 mt-2">
                 {(comment.replies.length > 0 || currentUser) && (
-                  <MessageCircle className="size-4.5 sm:size-4 text-gray-500" />
+                  <CornerDownRight className="size-4.5 sm:size-4 text-gray-500" />
                 )}
                 {comment.replies.length > 0 && (
                   <span className="sm:text-sm font-medium text-gray-500">
