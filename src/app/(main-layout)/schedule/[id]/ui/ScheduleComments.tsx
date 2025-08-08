@@ -313,7 +313,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     return (
       <div key={comment.id} className={`relative ${isReply ? "ml-10" : ""}`}>
         <div className={`z-10 ${isOptimistic ? "opacity-60" : ""}`}>
-          <div className="flex items-stretch gap-2 px-4 sm:px-0 py-2">
+          <div className="flex items-stretch gap-2 px-4 sm:px-0 py-3">
             <div className="w-8 flex flex-col z-20">
               {comment.author.image ? (
                 <Image
@@ -384,7 +384,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         </div>
 
         {!isReply && (
-          <div className="absolute top-2 bottom-2 left-4 sm:left-0 border-r w-4 z-0" />
+          <div className="absolute top-3 bottom-0 left-4 sm:left-0 border-r w-4 z-0" />
         )}
 
         {/* 답글 작성 폼 */}
@@ -436,7 +436,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     <div className="max-w-4xl py-4 sm:px-4">
       {/* 댓글 작성 폼 */}
       {currentUser && (
-        <div className="px-4 sm:px-0 pb-4 border-b mb-4">
+        <div className="px-4 sm:px-0 pb-4 border-b mb-2">
           <div className="flex items-start gap-2">
             <div className="flex-shrink-0">
               {currentUser.image ? (
