@@ -121,7 +121,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               minute: "numeric",
             })}
           </span>
-          <div className="w-full flex justify-center items-center gap-1 text-lg tracking-tight">
+          <div className="w-full flex justify-center items-center gap-1 text-xl tracking-tight">
             {data.data.schedule?.place}
           </div>
         </div>
