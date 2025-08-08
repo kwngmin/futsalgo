@@ -151,7 +151,7 @@ export async function getScheduleComments(
             orderBy: { createdAt: "asc" }, // 대댓글은 시간순 정렬
           },
         },
-        orderBy: { createdAt: "desc" }, // 최신 댓글 먼저
+        orderBy: { createdAt: "asc" }, // 최신 댓글 먼저
       }),
     ]);
 
