@@ -409,8 +409,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 )}
                 {comment.replies.length > 0 && (
                   <span className="sm:text-sm font-medium text-gray-500">
-                    답글 {comment.replies.length}개 •
+                    답글 {comment.replies.length}
                   </span>
+                )}
+                {comment.replies.length > 0 && currentUser && (
+                  <span className="text-gray-500 leading-tight">•</span>
                 )}
                 {currentUser && (
                   <button
@@ -418,7 +421,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                     disabled={addCommentMutation.isPending}
                     className="sm:text-sm hover:underline underline-offset-2 flex items-center justify-center disabled:opacity-50 cursor-pointer font-semibold"
                   >
-                    답글 추가
+                    답글 쓰기
                   </button>
                 )}
               </div>
