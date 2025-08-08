@@ -52,7 +52,7 @@ interface Schedule {
 interface ScheduleCommentsData {
   schedule: Schedule;
   comments: Comment[];
-  currentUser: User;
+  currentUser?: User; // 로그인하지 않은 경우 undefined
 }
 
 interface ScheduleCommentsProps {
@@ -212,7 +212,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
   // 댓글 제출
   const handleSubmitComment = async () => {
-    if (!newComment.trim() || addCommentMutation.isPending) return;
+    if (!currentUser || !newComment.trim() || addCommentMutation.isPending)
+      return;
 
     const optimisticNewComment: Comment = {
       id: `temp-${Date.now()}`,
@@ -240,7 +241,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
   // 답글 제출
   const handleSubmitReply = async (parentId: string) => {
-    if (!replyContent.trim() || addCommentMutation.isPending) return;
+    if (!currentUser || !replyContent.trim() || addCommentMutation.isPending)
+      return;
 
     const optimisticReply: Comment = {
       id: `temp-${Date.now()}`,
@@ -295,7 +297,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     if (teamType === "INVITED" && schedule.invitedTeam) {
       return (
         <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
-          {`${schedule.hostTeam.name} • 초청팀`}
+          {`${schedule.invitedTeam.name} • 초청팀`}
         </span>
       );
     }
@@ -362,21 +364,30 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               </p>
 
               {!isReply && !isOptimistic && (
-                <button
-                  onClick={() => setReplyingTo(comment.id)}
-                  disabled={addCommentMutation.isPending}
-                  className="mt-2 sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-blue-50 hover:bg-blue-100 pl-2 pr-3 rounded-full h-9 sm:h-8"
-                >
-                  <Reply size={16} />
-                  답글 달기
-                </button>
+                <div className="flex items-center gap-2 mt-2">
+                  {comment.replies.length > 0 && (
+                    <span className="text-sm text-gray-500">
+                      답글 {comment.replies.length}개
+                    </span>
+                  )}
+                  {currentUser && (
+                    <button
+                      onClick={() => setReplyingTo(comment.id)}
+                      disabled={addCommentMutation.isPending}
+                      className="sm:text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 disabled:opacity-50 cursor-pointer font-semibold bg-blue-50 hover:bg-blue-100 pl-2 pr-3 rounded-full h-9 sm:h-8"
+                    >
+                      <Reply size={16} />
+                      답글 달기
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           </div>
         </div>
 
         {/* 답글 작성 폼 */}
-        {replyingTo === comment.id && (
+        {replyingTo === comment.id && currentUser && (
           <div className="p-4 space-y-1 border-t">
             <textarea
               value={replyContent}
@@ -422,59 +433,50 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
   return (
     <div className="max-w-4xl py-4 sm:px-4">
-      {/* 헤더 */}
-      {/* <div className="p-4 border-b">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          <MessageCircle size={20} />
-          댓글 ({optimisticComments.length})
-        </h3>
-        <p className="text-sm text-gray-600 mt-1">
-          {schedule.hostTeam.name} vs {schedule.invitedTeam?.name || "미정"}
-        </p>
-      </div> */}
-
       {/* 댓글 작성 폼 */}
-      <div className="px-4 pb-4">
-        <div className="flex items-start gap-2">
-          <div className="flex-shrink-0">
-            {currentUser.image ? (
-              <Image
-                src={currentUser.image}
-                alt={currentUser.name || ""}
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-full"
+      {currentUser && (
+        <div className="px-4 pb-4">
+          <div className="flex items-start gap-2">
+            <div className="flex-shrink-0">
+              {currentUser.image ? (
+                <Image
+                  src={currentUser.image}
+                  alt={currentUser.name || ""}
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 rounded-full"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                  <User size={16} className="text-gray-500" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 space-y-1">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
+                placeholder="댓글을 입력하세요..."
+                className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={3}
+                disabled={isSubmitting}
               />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                <User size={16} className="text-gray-500" />
+
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSubmitComment}
+                  disabled={!newComment.trim() || isSubmitting}
+                  className="px-4 h-11 sm:h-9  bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium"
+                >
+                  {isSubmitting ? "댓글 저장 중..." : "댓글 달기"}
+                </button>
               </div>
-            )}
-          </div>
-
-          <div className="flex-1 space-y-1">
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
-              placeholder="댓글을 입력하세요..."
-              className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows={3}
-              disabled={isSubmitting}
-            />
-
-            <div className="flex justify-end">
-              <button
-                onClick={handleSubmitComment}
-                disabled={!newComment.trim() || isSubmitting}
-                className="px-4 h-11 sm:h-9  bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium"
-              >
-                {isSubmitting ? "댓글 저장 중..." : "댓글 달기"}
-              </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (

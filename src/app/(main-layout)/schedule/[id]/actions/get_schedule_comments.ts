@@ -47,7 +47,7 @@ interface Schedule {
 interface ScheduleCommentsData {
   schedule: Schedule;
   comments: Comment[];
-  currentUser: User;
+  currentUser?: User; // 로그인하지 않은 경우 undefined
 }
 
 /**
@@ -57,11 +57,8 @@ export async function getScheduleComments(
   scheduleId: string
 ): Promise<ScheduleCommentsData> {
   try {
-    // 현재 사용자 확인
+    // 현재 사용자 확인 (로그인하지 않아도 댓글 조회 가능)
     const session = await auth();
-    if (!session?.user) {
-      throw new Error("로그인이 필요합니다");
-    }
 
     // 스케줄 정보와 댓글 데이터를 병렬로 조회
     const [schedule, comments] = await Promise.all([
@@ -148,10 +145,10 @@ export async function getScheduleComments(
                 },
               },
             },
-            orderBy: { createdAt: "asc" }, // 대댓글은 시간순 정렬
+            orderBy: { createdAt: "asc" }, // 대댓글은 작성 순서대로
           },
         },
-        orderBy: { createdAt: "asc" }, // 최신 댓글 먼저
+        orderBy: { createdAt: "asc" }, // 댓글도 작성 순서대로 (오래된 것부터)
       }),
     ]);
 
@@ -227,12 +224,14 @@ export async function getScheduleComments(
     return {
       schedule: transformedSchedule,
       comments: transformedComments,
-      currentUser: {
-        id: session.user.id,
-        name: session.user.name || "",
-        nickname: session.user.nickname || undefined,
-        image: session.user.image || undefined,
-      },
+      currentUser: session?.user
+        ? {
+            id: session.user.id,
+            name: session.user.name || "",
+            nickname: session.user.nickname || undefined,
+            image: session.user.image || undefined,
+          }
+        : undefined,
     };
   } catch (error) {
     console.error("댓글 데이터 조회 실패:", error);
