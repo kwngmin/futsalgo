@@ -14,6 +14,7 @@ import {
   AlertCircle,
   PencilLine,
   ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import {
   addComment,
@@ -79,12 +80,28 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const [replyContent, setReplyContent] = useState("");
   const [isPending, startTransition] = useTransition();
   const [focusNewComment, setFocusNewComment] = useState(false);
+  const [expandedReplies, setExpandedReplies] = useState<Set<string>>(
+    new Set()
+  );
   const router = useRouter();
 
   // useRef로 textarea 참조
   const newCommentRef = useRef<HTMLTextAreaElement>(null);
 
   const queryClient = useQueryClient();
+
+  // 답글 펼치기/접기 토글 함수
+  const toggleReplies = (commentId: string) => {
+    setExpandedReplies((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(commentId)) {
+        newSet.delete(commentId);
+      } else {
+        newSet.add(commentId);
+      }
+      return newSet;
+    });
+  };
 
   // focusNewComment가 true로 변경될 때 포커스 처리
   useEffect(() => {
@@ -115,6 +132,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       parentId?: string;
     }) => addComment(scheduleId, content, parentId),
     onSuccess: (newComment) => {
+      // 답글 추가 시 해당 댓글의 답글을 자동으로 펼치기
+      if (newComment.parentId) {
+        setExpandedReplies((prev) => new Set(prev).add(newComment.parentId!));
+      }
+
       // 캐시 업데이트
       queryClient.setQueryData(
         ["schedule-comments", scheduleId],
@@ -341,6 +363,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const renderComment = (comment: Comment, isReply = false) => {
     // 임시 댓글인지 확인 (Optimistic update)
     const isOptimistic = comment.id.startsWith("temp-");
+    const isExpanded = expandedReplies.has(comment.id);
 
     return (
       <div key={comment.id} className={`${isReply ? "ml-6 px-4 mt-2" : ""}`}>
@@ -421,12 +444,15 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 )}
                 {comment.replies.length > 0 && (
                   <button
-                    // onClick={() => setReplyingTo(comment.id)}
-                    // disabled={addCommentMutation.isPending}
-                    className="sm:text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                    onClick={() => toggleReplies(comment.id)}
+                    className="sm:text-sm flex items-center gap-1 justify-center cursor-pointer font-medium hover:text-blue-600 transition-colors"
                   >
                     답글 {comment.replies.length}개
-                    <ChevronDown className="size-4.5 sm:size-4 text-gray-500" />
+                    {isExpanded ? (
+                      <ChevronUp className="size-4.5 sm:size-4 text-gray-500" />
+                    ) : (
+                      <ChevronDown className="size-4.5 sm:size-4 text-gray-500" />
+                    )}
                   </button>
                 )}
               </div>
@@ -474,8 +500,9 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           </div>
         )}
 
-        {/* 답글 목록 */}
+        {/* 답글 목록 - 펼쳐진 경우에만 표시 */}
         {comment.replies.length > 0 &&
+          isExpanded &&
           comment.replies.map((reply) => renderComment(reply, true))}
       </div>
     );
