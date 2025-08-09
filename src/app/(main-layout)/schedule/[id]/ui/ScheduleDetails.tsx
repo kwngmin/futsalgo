@@ -5,7 +5,6 @@ import { getSchedule } from "../actions/get-schedule";
 import {
   Calendar,
   ChevronRight,
-  CircleCheckBig,
   Clock,
   Flag,
   Loader2,
