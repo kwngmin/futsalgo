@@ -345,10 +345,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const isOptimistic = comment.id.startsWith("temp-");
 
     return (
-      <div
-        key={comment.id}
-        className={`relative ${isReply ? "ml-6 px-4 mt-2" : ""}`}
-      >
+      <div key={comment.id} className={`${isReply ? "ml-6 px-4 mt-2" : ""}`}>
         <div
           className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 mb-3 ${
             isOptimistic ? "opacity-60" : ""
@@ -405,7 +402,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               {/* {renderTeamBadge(comment.author.id)} */}
             </div>
 
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 px-4 py-3 rounded-md">
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-100 px-4 py-3 rounded-md">
               {comment.content}
             </p>
 
@@ -436,9 +433,9 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           </div>
         </div>
 
-        {!isReply && (
+        {/* {!isReply && (
           <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
-        )}
+        )} */}
 
         {/* 답글 작성 폼 */}
         {replyingTo === comment.id && currentUser && (
@@ -545,7 +542,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <p className="text-lg mb-2 font-medium">댓글이 없습니다.</p>
         </div>
       ) : (
-        optimisticComments.map((comment) => renderComment(comment))
+        <div className="relative">
+          {optimisticComments.map((comment) => renderComment(comment))}
+          <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
+          <div className="absolute translate-x-1/2 -bottom-5 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
+        </div>
       )}
     </div>
   );
