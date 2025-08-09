@@ -9,6 +9,7 @@ import {
   Clock,
   Flag,
   Loader2,
+  MailOpen,
   MapPin,
   Megaphone,
   UserRound,
@@ -293,7 +294,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
               }}
             >
               <div className="flex items-center space-x-2">
-                <CircleCheckBig className="size-5 text-gray-600" />
+                <MailOpen className="size-5 text-gray-600" />
                 <span className="font-medium">초청팀</span>
               </div>
               <div className="flex items-center gap-1">

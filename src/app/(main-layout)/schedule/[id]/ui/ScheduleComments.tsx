@@ -9,13 +9,11 @@ import React, {
 } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  // MessageCircle,
-  // Reply,
   User,
   Loader2,
   AlertCircle,
   PencilLine,
-  CornerDownRight,
+  MessageSquareText,
 } from "lucide-react";
 import {
   addComment,
@@ -408,25 +406,26 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
             {!isReply && !isOptimistic && (
               <div className="flex items-center gap-1 mt-2">
-                {(comment.replies.length > 0 || currentUser) && (
-                  <CornerDownRight className="size-4.5 sm:size-4 text-gray-500" />
-                )}
-                {comment.replies.length > 0 && (
-                  <span className="sm:text-sm font-medium text-gray-500">
-                    답글 {comment.replies.length}
-                  </span>
-                )}
-                {comment.replies.length > 0 && currentUser && (
-                  <span className="text-gray-500 leading-tight">•</span>
-                )}
                 {currentUser && (
                   <button
                     onClick={() => setReplyingTo(comment.id)}
                     disabled={addCommentMutation.isPending}
-                    className="sm:text-sm hover:underline underline-offset-2 flex items-center justify-center disabled:opacity-50 cursor-pointer font-medium"
+                    className="sm:text-sm hover:underline underline-offset-2 flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
                   >
+                    <PencilLine className="size-4.5 sm:size-4 text-gray-500" />
                     답글 쓰기
                   </button>
+                )}
+                {comment.replies.length > 0 && currentUser && (
+                  <span className="text-gray-500 leading-tight">•</span>
+                )}
+                {comment.replies.length > 0 && (
+                  <div className="flex items-center gap-1">
+                    <MessageSquareText className="size-4.5 sm:size-4 text-gray-500" />
+                    <span className="sm:text-sm font-medium text-gray-500">
+                      답글 {comment.replies.length}개
+                    </span>
+                  </div>
                 )}
               </div>
             )}
