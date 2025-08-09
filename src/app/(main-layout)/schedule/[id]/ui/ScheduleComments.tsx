@@ -367,9 +367,12 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const isExpanded = !expandedReplies.has(comment.id);
 
     return (
-      <div key={comment.id} className={`${isReply ? "ml-6 px-4 mt-2" : ""}`}>
+      <div
+        key={comment.id}
+        className={`${isReply ? "ml-6 px-4 my-2" : "mb-2"}`}
+      >
         <div
-          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 mb-3 ${
+          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 ${
             isOptimistic ? "opacity-60" : ""
           }`}
         >
@@ -431,7 +434,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             {!isReply &&
               !isOptimistic &&
               (comment.replies.length > 0 || currentUser) && (
-                <div className="flex items-center gap-3 mt-2 h-4">
+                <div className="flex items-center gap-3 my-2 h-4">
                   {currentUser && (
                     <button
                       onClick={() => setReplyingTo(comment.id)}
