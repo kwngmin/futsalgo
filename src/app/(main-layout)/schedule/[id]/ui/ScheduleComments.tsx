@@ -363,7 +363,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const renderComment = (comment: Comment, isReply = false) => {
     // 임시 댓글인지 확인 (Optimistic update)
     const isOptimistic = comment.id.startsWith("temp-");
-    const isExpanded = expandedReplies.has(comment.id);
+    const isExpanded = !expandedReplies.has(comment.id);
 
     return (
       <div key={comment.id} className={`${isReply ? "ml-6 px-4 mt-2" : ""}`}>
@@ -445,7 +445,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 {comment.replies.length > 0 && (
                   <button
                     onClick={() => toggleReplies(comment.id)}
-                    className="sm:text-sm flex items-center gap-1 justify-center cursor-pointer font-medium hover:text-blue-600 transition-colors"
+                    className="sm:text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
                   >
                     답글 {comment.replies.length}개
                     {isExpanded ? (
