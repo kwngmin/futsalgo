@@ -34,8 +34,9 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
 
   if (!data) {
     return (
-      <div className="text-center text-gray-500 pt-10">
-        일정 정보를 불러오는 중입니다.
+      <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">
+        <Loader2 className="animate-spin mx-auto mb-4" size={48} />
+        <p className="text-gray-500">개요를 불러오는 중...</p>
       </div>
     );
   }

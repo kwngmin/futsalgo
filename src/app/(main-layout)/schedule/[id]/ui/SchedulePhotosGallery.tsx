@@ -162,8 +162,9 @@ export const SchedulePhotosGallery = ({
           )} */}
         </div>
       ) : (
-        <div className="flex justify-center py-8">
-          <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+        <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">
+          <Loader2 className="animate-spin mx-auto mb-4" size={48} />
+          <p className="text-gray-500">사진을 불러오는 중...</p>
         </div>
       )}
 
