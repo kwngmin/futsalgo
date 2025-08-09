@@ -13,7 +13,7 @@ import {
   Loader2,
   AlertCircle,
   PencilLine,
-  MessageSquareText,
+  ChevronDown,
 } from "lucide-react";
 import {
   addComment,
@@ -410,7 +410,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   <button
                     onClick={() => setReplyingTo(comment.id)}
                     disabled={addCommentMutation.isPending}
-                    className="sm:text-sm hover:underline underline-offset-2 flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                    className="sm:text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
                   >
                     <PencilLine className="size-4.5 sm:size-4 text-gray-500" />
                     답글 쓰기
@@ -420,12 +420,14 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                   <span className="text-gray-500 leading-tight">•</span>
                 )}
                 {comment.replies.length > 0 && (
-                  <div className="flex items-center gap-1">
-                    <MessageSquareText className="size-4.5 sm:size-4 text-gray-500" />
-                    <span className="sm:text-sm font-medium text-gray-500">
-                      답글 {comment.replies.length}개
-                    </span>
-                  </div>
+                  <button
+                    // onClick={() => setReplyingTo(comment.id)}
+                    // disabled={addCommentMutation.isPending}
+                    className="sm:text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                  >
+                    답글 {comment.replies.length}개
+                    <ChevronDown className="size-4.5 sm:size-4 text-gray-500" />
+                  </button>
                 )}
               </div>
             )}
