@@ -428,37 +428,39 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               {comment.content}
             </p>
 
-            {!isReply && !isOptimistic && (
-              <div className="flex items-center gap-3 mt-2 h-4">
-                {currentUser && (
-                  <button
-                    onClick={() => setReplyingTo(comment.id)}
-                    disabled={addCommentMutation.isPending}
-                    className="text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
-                  >
-                    <PencilLine className="size-4 text-gray-500" />
-                    답글 쓰기
-                  </button>
-                )}
-                {/* {comment.replies.length > 0 && currentUser && (
+            {!isReply &&
+              !isOptimistic &&
+              (comment.replies.length > 0 || currentUser) && (
+                <div className="flex items-center gap-3 mt-2 h-4">
+                  {currentUser && (
+                    <button
+                      onClick={() => setReplyingTo(comment.id)}
+                      disabled={addCommentMutation.isPending}
+                      className="text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                    >
+                      <PencilLine className="size-4 text-gray-500" />
+                      답글 쓰기
+                    </button>
+                  )}
+                  {/* {comment.replies.length > 0 && currentUser && (
                   <span className="text-gray-500 leading-tight">•</span>
                 )} */}
-                {comment.replies.length > 0 && (
-                  <button
-                    onClick={() => toggleReplies(comment.id)}
-                    className="text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
-                  >
-                    <MessageSquareText className="size-4 text-gray-500" />
-                    답글 {comment.replies.length}개
-                    {isExpanded ? (
-                      <ChevronUp className="size-4 text-gray-500" />
-                    ) : (
-                      <ChevronDown className="size-4 text-gray-500" />
-                    )}
-                  </button>
-                )}
-              </div>
-            )}
+                  {comment.replies.length > 0 && (
+                    <button
+                      onClick={() => toggleReplies(comment.id)}
+                      className="text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
+                    >
+                      <MessageSquareText className="size-4 text-gray-500" />
+                      답글 {comment.replies.length}개
+                      {isExpanded ? (
+                        <ChevronUp className="size-4 text-gray-500" />
+                      ) : (
+                        <ChevronDown className="size-4 text-gray-500" />
+                      )}
+                    </button>
+                  )}
+                </div>
+              )}
           </div>
         </div>
 
