@@ -489,50 +489,51 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     <div className="max-w-4xl py-4 sm:px-4">
       {/* 댓글 작성 폼 */}
 
-      {currentUser && !focusNewComment ? (
-        <div className="px-4 sm:px-0 mb-4">
-          <button
-            type="button"
-            className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
-            onClick={() => setFocusNewComment(true)}
-          >
-            <PencilLine className="w-5 h-5 text-gray-600" />
-            <span>댓글 쓰기</span>
-          </button>
-        </div>
-      ) : (
-        <div className="px-4 sm:px-0 pb-4 border-b mb-2 flex items-start gap-2">
-          <div className="flex-1 space-y-1">
-            <textarea
-              ref={newCommentRef}
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
-              placeholder="댓글을 입력하세요..."
-              className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows={3}
-              disabled={isSubmitting}
-            />
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setFocusNewComment(false)}
+      {currentUser &&
+        (!focusNewComment ? (
+          <div className="px-4 sm:px-0 mb-4">
+            <button
+              type="button"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+              onClick={() => setFocusNewComment(true)}
+            >
+              <PencilLine className="w-5 h-5 text-gray-600" />
+              <span>댓글 쓰기</span>
+            </button>
+          </div>
+        ) : (
+          <div className="px-4 sm:px-0 pb-4 border-b mb-2 flex items-start gap-2">
+            <div className="flex-1 space-y-1">
+              <textarea
+                ref={newCommentRef}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
+                placeholder="댓글을 입력하세요..."
+                className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={3}
                 disabled={isSubmitting}
-                className="px-4 h-11 sm:h-9 text-gray-500 rounded-full hover:bg-gray-100 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium cursor-pointer"
-              >
-                취소
-              </button>
-              <button
-                onClick={handleSubmitComment}
-                disabled={!newComment.trim() || isSubmitting}
-                className="px-4 h-11 sm:h-9 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium cursor-pointer"
-              >
-                {isSubmitting ? "댓글 저장 중..." : "저장"}
-              </button>
+              />
+
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setFocusNewComment(false)}
+                  disabled={isSubmitting}
+                  className="px-4 h-11 sm:h-9 text-gray-500 rounded-full hover:bg-gray-100 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium cursor-pointer"
+                >
+                  취소
+                </button>
+                <button
+                  onClick={handleSubmitComment}
+                  disabled={!newComment.trim() || isSubmitting}
+                  className="px-4 h-11 sm:h-9 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-default flex items-center gap-2 font-medium cursor-pointer"
+                >
+                  {isSubmitting ? "댓글 저장 중..." : "저장"}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        ))}
 
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (
