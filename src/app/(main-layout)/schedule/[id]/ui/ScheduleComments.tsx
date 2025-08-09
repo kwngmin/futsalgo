@@ -15,6 +15,7 @@ import {
   PencilLine,
   ChevronDown,
   ChevronUp,
+  MessageSquareText,
 } from "lucide-react";
 import {
   addComment,
@@ -428,30 +429,31 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             </p>
 
             {!isReply && !isOptimistic && (
-              <div className="flex items-center gap-1 mt-2">
+              <div className="flex items-center gap-3 mt-2 h-4">
                 {currentUser && (
                   <button
                     onClick={() => setReplyingTo(comment.id)}
                     disabled={addCommentMutation.isPending}
-                    className="sm:text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                    className="text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
                   >
-                    <PencilLine className="size-4.5 sm:size-4 text-gray-500" />
+                    <PencilLine className="size-4 text-gray-500" />
                     답글 쓰기
                   </button>
                 )}
-                {comment.replies.length > 0 && currentUser && (
+                {/* {comment.replies.length > 0 && currentUser && (
                   <span className="text-gray-500 leading-tight">•</span>
-                )}
+                )} */}
                 {comment.replies.length > 0 && (
                   <button
                     onClick={() => toggleReplies(comment.id)}
-                    className="sm:text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
+                    className="text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
                   >
+                    <MessageSquareText className="size-4 text-gray-500" />
                     답글 {comment.replies.length}개
                     {isExpanded ? (
-                      <ChevronUp className="size-4.5 sm:size-4 text-gray-500" />
+                      <ChevronUp className="size-4 text-gray-500" />
                     ) : (
-                      <ChevronDown className="size-4.5 sm:size-4 text-gray-500" />
+                      <ChevronDown className="size-4 text-gray-500" />
                     )}
                   </button>
                 )}
@@ -466,7 +468,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
         {/* 답글 작성 폼 */}
         {replyingTo === comment.id && currentUser && (
-          <div className="ml-9 px-4 py-2 space-y-1 mb-2">
+          <div className="ml-6 px-4 space-y-1 mb-2">
             <textarea
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
