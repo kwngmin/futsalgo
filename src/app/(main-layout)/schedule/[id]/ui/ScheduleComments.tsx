@@ -586,7 +586,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         <div className="relative space-y-4">
           {optimisticComments.map((comment) => renderComment(comment))}
           <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
-          <div className="absolute translate-x-1/2 -bottom-5 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
+          <div className="absolute translate-x-1/2 -bottom-3 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
         </div>
       )}
     </div>
