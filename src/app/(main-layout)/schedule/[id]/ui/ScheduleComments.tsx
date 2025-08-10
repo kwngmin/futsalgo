@@ -367,13 +367,24 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const isExpanded = !expandedReplies.has(comment.id);
 
     return (
-      <div key={comment.id} className={`${isReply ? "ml-10 my-2" : "mb-2"}`}>
+      <div
+        key={comment.id} //
+        className="space-y-2"
+        // className={`${isReply ? "mt-2" : ""}`}
+      >
+        {/* <div key={comment.id} className={`${isReply ? "ml-10 my-2" : "mb-2"}`}> */}
         <div
-          className={`z-10 flex items-stretch gap-2 px-4 sm:px-0 ${
+          className={`z-10 flex flex-col px-4 sm:px-0 ${
             isOptimistic ? "opacity-60" : ""
           }`}
         >
-          <div className="h-10 flex items-center">
+          {/* 프로필 이미지, 닉네임, 작성일시 */}
+          <div
+            className={`h-10 flex items-center gap-2 mb-0.5 ${
+              isReply ? "ml-10" : ""
+            }`}
+          >
+            {/* 프로필 이미지 */}
             <div className="w-8 flex flex-col z-20">
               {comment.author.image ? (
                 <Image
@@ -389,41 +400,39 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 </div>
               )}
             </div>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-col">
-              <div className="flex justify-between items-center gap-2">
-                <div className="flex items-center gap-1.5 h-10">
-                  <span
-                    className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
-                    onClick={() => {
-                      router.push(`/players/${comment.author.id}`);
-                    }}
-                  >
-                    {comment.author.nickname || comment.author.name}
+            {/* 닉네임, 작성일시 */}
+            <div className="flex items-center gap-1.5 h-10">
+              <span
+                className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
+                onClick={() => {
+                  router.push(`/players/${comment.author.id}`);
+                }}
+              >
+                {comment.author.nickname || comment.author.name}
+              </span>
+              {/* <span className="text-gray-500">•</span> */}
+              <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                {isOptimistic ? (
+                  <span className="flex items-center gap-1">
+                    <Loader2 size={12} className="animate-spin" />
+                    전송 중...
                   </span>
-                  {/* <span className="text-gray-500">•</span> */}
-                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
-                    {/* <span className="text-sm text-muted-foreground"> */}
-                    {isOptimistic ? (
-                      <span className="flex items-center gap-1">
-                        <Loader2 size={12} className="animate-spin" />
-                        전송 중...
-                      </span>
-                    ) : (
-                      new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                      })
-                    )}
-                  </span>
-                </div>
-              </div>
-              {/* {renderTeamBadge(comment.author.id)} */}
+                ) : (
+                  new Date(comment.createdAt).toLocaleDateString("ko-KR", {
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })
+                )}
+              </span>
             </div>
+          </div>
+          {/* 댓글 내용, 답글 버튼, 답글 수 */}
+          <div className="ml-10 flex-1 min-w-0">
+            {/* {renderTeamBadge(comment.author.id)} */}
 
+            {/* 댓글 내용 */}
             <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 px-3 py-2 rounded-md">
               {comment.content}
             </p>
@@ -574,7 +583,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <p className="text-lg mb-2 font-medium">댓글이 없습니다.</p>
         </div>
       ) : (
-        <div className="relative">
+        <div className="relative space-y-2">
           {optimisticComments.map((comment) => renderComment(comment))}
           <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
           <div className="absolute translate-x-1/2 -bottom-5 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
