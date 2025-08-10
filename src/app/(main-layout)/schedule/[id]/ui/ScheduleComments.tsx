@@ -440,7 +440,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             {!isReply &&
               !isOptimistic &&
               (comment.replies.length > 0 || currentUser) && (
-                <div className="flex items-center gap-3 my-3 h-4">
+                <div className="flex items-center gap-3 mt-3 h-4">
                   {currentUser && (
                     <button
                       onClick={() => setReplyingTo(comment.id)}
