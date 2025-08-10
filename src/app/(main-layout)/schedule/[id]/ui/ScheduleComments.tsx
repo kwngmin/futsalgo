@@ -369,7 +369,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     return (
       <div
         key={comment.id} //
-        className="space-y-2"
+        className="space-y-3"
         // className={`${isReply ? "mt-2" : ""}`}
       >
         {/* <div key={comment.id} className={`${isReply ? "ml-10 my-2" : "mb-2"}`}> */}
@@ -381,7 +381,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           {/* 프로필 이미지, 닉네임, 작성일시 */}
           <div
             className={`h-10 flex items-center gap-2 mb-0.5 ${
-              isReply ? "ml-10" : ""
+              isReply ? "ml-8" : ""
             }`}
           >
             {/* 프로필 이미지 */}
@@ -440,7 +440,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             {!isReply &&
               !isOptimistic &&
               (comment.replies.length > 0 || currentUser) && (
-                <div className="flex items-center gap-3 my-2 h-4">
+                <div className="flex items-center gap-2 my-3 h-4">
                   {currentUser && (
                     <button
                       onClick={() => setReplyingTo(comment.id)}
@@ -583,7 +583,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <p className="text-lg mb-2 font-medium">댓글이 없습니다.</p>
         </div>
       ) : (
-        <div className="relative space-y-2">
+        <div className="relative space-y-3">
           {optimisticComments.map((comment) => renderComment(comment))}
           <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
           <div className="absolute translate-x-1/2 -bottom-5 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
