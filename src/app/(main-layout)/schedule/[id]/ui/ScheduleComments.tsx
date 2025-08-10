@@ -433,7 +433,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             {/* {renderTeamBadge(comment.author.id)} */}
 
             {/* 댓글 내용 */}
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 px-3 py-2 rounded-md">
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-100 px-3 py-2 rounded-md">
               {comment.content}
             </p>
 
