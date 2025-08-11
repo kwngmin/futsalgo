@@ -262,6 +262,31 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
 
+            {/* 통계 */}
+            <div className="border rounded-2xl overflow-hidden mx-4">
+              <div
+                className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                onClick={() => alert("통계")}
+              >
+                <div className="flex items-center space-x-3">
+                  <ChartPie className="size-5 text-gray-600" />
+                  <span className="font-medium">통계</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {new Date().getFullYear()}년
+                  </span>
+                  <ChevronRight className="size-5 text-gray-400" />
+                </div>
+              </div>
+              <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
+                <StatCard label="경기" value={playerData.stats.matches} />
+                <StatCard label="득점" value={playerData.stats.goals} />
+                <StatCard label="어시스트" value={playerData.stats.assists} />
+                <StatCard label="MVP" value={playerData.stats.mvp} />
+              </div>
+            </div>
+
             {/* 선호 포지션 */}
             <div className="grid grid-cols-5 sm:grid-cols-4 mx-4">
               <div className="border rounded-2xl overflow-hidden col-span-3 sm:col-span-3 flex flex-col">
@@ -362,31 +387,6 @@ const PlayerContent = ({ id }: { id: string }) => {
               }
               icon={Sparkles}
             />
-
-            {/* 통계 */}
-            <div className="border rounded-2xl overflow-hidden mx-4">
-              <div
-                className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                onClick={() => alert("통계")}
-              >
-                <div className="flex items-center space-x-3">
-                  <ChartPie className="size-5 text-gray-600" />
-                  <span className="font-medium">통계</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium text-gray-500">
-                    {new Date().getFullYear()}년
-                  </span>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </div>
-              </div>
-              <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
-                <StatCard label="경기" value={playerData.stats.matches} />
-                <StatCard label="득점" value={playerData.stats.goals} />
-                <StatCard label="어시스트" value={playerData.stats.assists} />
-                <StatCard label="MVP" value={playerData.stats.mvp} />
-              </div>
-            </div>
           </Fragment>
         )}
       </div>
