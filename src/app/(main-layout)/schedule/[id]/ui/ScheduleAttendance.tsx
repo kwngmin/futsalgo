@@ -148,10 +148,10 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           attandances.map((attendance) => (
             <div
               key={attendance.user.id}
-              className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0"
+              className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none"
             >
               <div
-                className="flex items-center gap-2 group select-none"
+                className="flex items-center gap-2"
                 onClick={() => {
                   router.push(`/players/${attendance.user.id}`);
                 }}
@@ -168,7 +168,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                   <div className="size-8 rounded-full bg-gray-200" />
                 )}
                 <div className="flex items-center gap-1.5">
-                  <span className="font-medium group-hover:underline underline-offset-2 cursor-pointer">
+                  <span className="font-medium hover:underline underline-offset-2 cursor-pointer">
                     {attendance.user.nickname}
                   </span>
                   {attendance.user.name && (

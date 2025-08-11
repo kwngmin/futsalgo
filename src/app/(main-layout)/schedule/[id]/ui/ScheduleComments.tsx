@@ -385,7 +385,12 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             }`}
           >
             {/* 프로필 이미지 */}
-            <div className="w-8 flex flex-col z-20">
+            <div
+              className="w-8 flex flex-col z-20"
+              onClick={() => {
+                router.push(`/players/${comment.author.id}`);
+              }}
+            >
               {comment.author.image ? (
                 <Image
                   src={comment.author.image}

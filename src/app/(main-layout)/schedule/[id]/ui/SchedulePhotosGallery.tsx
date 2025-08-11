@@ -82,7 +82,10 @@ export const SchedulePhotosGallery = ({
               <div key={photo.id} className="">
                 {/* 업로더 정보 */}
                 <div className="flex justify-between items-center h-10 select-none">
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div
+                    className="flex items-center gap-2 shrink-0"
+                    onClick={() => router.push(`/players/${photo.uploader.id}`)}
+                  >
                     {photo.uploader.image && (
                       <Image
                         src={photo.uploader.image}
@@ -94,7 +97,7 @@ export const SchedulePhotosGallery = ({
                     )}
                     <div className="flex items-center gap-1.5">
                       <span
-                        className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
+                        className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
                         onClick={() =>
                           router.push(`/players/${photo.uploader.id}`)
                         }
