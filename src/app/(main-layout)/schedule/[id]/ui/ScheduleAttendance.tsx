@@ -2,11 +2,12 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getScheduleAttendance } from "../actions/get-schedule-attendance";
-import ManageAttendance from "./ManageAttendance";
+// import ManageAttendance from "./ManageAttendance";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
+import { ChevronRight, UserCheck } from "lucide-react";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -52,8 +53,8 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     if (isLoading) {
       return (
         <div className="mt-4 px-4">
-          <div className="h-12 rounded-md bg-gray-100 animate-pulse" />
-          <div className="h-[98px] rounded-2xl bg-gray-100 animate-pulse my-2" />
+          <div className="h-12 rounded-md bg-neutral-100 animate-pulse" />
+          <div className="h-[98px] rounded-2xl bg-neutral-100 animate-pulse my-2" />
           {Array.from({ length: 10 }).map((_, index) => (
             <div
               key={index}
@@ -61,9 +62,9 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             >
               <div className="flex items-center gap-2">
                 <div className="size-8 rounded-full bg-gray-200 animate-pulse" />
-                <div className="h-4 w-20 bg-gray-100 animate-pulse" />
+                <div className="h-4 w-20 bg-neutral-100 animate-pulse" />
               </div>
-              <div className="h-4 w-16 bg-gray-100 animate-pulse" />
+              <div className="h-4 w-16 bg-neutral-100 animate-pulse" />
             </div>
           ))}
         </div>
@@ -71,64 +72,105 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     }
 
     return (
-      <div className="mt-4 px-4">
-        {data?.data?.manageableTeams.includes(teamType) ? (
-          <ManageAttendance
-            logoUrl={team?.logoUrl ?? ""}
-            name={team?.name ?? ""}
-            isManageableTeam
-            onClick={() => {
-              router.push(
-                `/schedule/${scheduleId}/attendances/${
-                  teamType === "host"
-                    ? data?.data?.schedule?.hostTeamId
-                    : data?.data?.schedule?.invitedTeamId
-                }`
-              );
-            }}
-          />
-        ) : (
-          <ManageAttendance
-            logoUrl={team?.logoUrl ?? ""}
-            name={team?.name ?? ""}
-          />
+      <div className="mt-4 px-4 space-y-4">
+        {data?.data?.manageableTeams.includes(teamType) && (
+          // <ManageAttendance
+          //   logoUrl={team?.logoUrl ?? ""}
+          //   name={team?.name ?? ""}
+          //   isManageableTeam
+          //   onClick={() => {
+          //     router.push(
+          //       `/schedule/${scheduleId}/attendances/${
+          //         teamType === "host"
+          //           ? data?.data?.schedule?.hostTeamId
+          //           : data?.data?.schedule?.invitedTeamId
+          //       }`
+          //     );
+          //   }}
+          // />
+
+          <div className="px-4 sm:px-0 mb-4">
+            <button
+              type="button"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+              onClick={() => {
+                router.push(
+                  `/schedule/${scheduleId}/attendances/${
+                    teamType === "host"
+                      ? data?.data?.schedule?.hostTeamId
+                      : data?.data?.schedule?.invitedTeamId
+                  }`
+                );
+              }}
+            >
+              <UserCheck className="w-5 h-5 text-gray-600" />
+              <span>참석자 관리</span>
+            </button>
+          </div>
         )}
 
-        <div className="bg-gray-50 overflow-hidden my-2 grid grid-cols-4 gap-3 rounded-2xl p-4">
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {
-                attandances?.filter(
-                  (attendance) => attendance.attendanceStatus === "ATTENDING"
-                ).length
-              }
+        <div className="bg-neutral-100 overflow-hidden rounded-2xl ">
+          {/* 팀 정보 */}
+          <div
+            className="w-full flex items-center justify-between px-4 h-12 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-200 transition-colors"
+            onClick={() => {
+              alert("선호 포지션");
+            }}
+          >
+            <div className="flex items-center gap-2">
+              {team?.logoUrl ? (
+                <Image
+                  src={team?.logoUrl}
+                  alt="team_logo"
+                  width={24}
+                  height={24}
+                  className="rounded-lg"
+                />
+              ) : (
+                <div className="size-6 rounded-lg bg-gray-200" />
+              )}
+              <span className="text-base font-medium">{team?.name ?? ""}</span>
             </div>
-            <Label className="text-muted-foreground">참석</Label>
+            <ChevronRight className="size-5 text-gray-400" />
           </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {
-                attandances?.filter(
-                  (attendance) =>
-                    attendance.attendanceStatus === "NOT_ATTENDING"
-                ).length
-              }
+
+          {/* 참석 현황 */}
+          <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">
+                {
+                  attandances?.filter(
+                    (attendance) => attendance.attendanceStatus === "ATTENDING"
+                  ).length
+                }
+              </div>
+              <Label className="text-muted-foreground">참석</Label>
             </div>
-            <Label className="text-muted-foreground">불참</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {
-                attandances?.filter(
-                  (attendance) => attendance.attendanceStatus === "UNDECIDED"
-                ).length
-              }
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">
+                {
+                  attandances?.filter(
+                    (attendance) =>
+                      attendance.attendanceStatus === "NOT_ATTENDING"
+                  ).length
+                }
+              </div>
+              <Label className="text-muted-foreground">불참</Label>
             </div>
-            <Label className="text-muted-foreground">미정</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">0</div>
-            <Label className="text-muted-foreground">용병</Label>
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">
+                {
+                  attandances?.filter(
+                    (attendance) => attendance.attendanceStatus === "UNDECIDED"
+                  ).length
+                }
+              </div>
+              <Label className="text-muted-foreground">미정</Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center my-3">
+              <div className="font-semibold">0</div>
+              <Label className="text-muted-foreground">용병</Label>
+            </div>
           </div>
         </div>
 
@@ -183,38 +225,3 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 };
 
 export default ScheduleAttendance;
-
-{
-  /* 주최팀&초청팀 탭 */
-}
-{
-  /* <div className="space-y-3">
-{data.data.schedule.matchType === "TEAM" && (
-  <div className="mx-4 grid grid-cols-2 p-0.5 bg-gray-100 rounded-full">
-    <div className="bg-white h-11 flex items-center justify-center border rounded-full shadow-xs font-medium">
-      {data.data.schedule.hostTeam.name}
-    </div>
-    <div
-      className=" h-11 flex items-center justify-center font-medium text-muted-foreground"
-     
-    >
-      {data.data.schedule.invitedTeam?.name}
-    </div>
-  </div>
-)} */
-}
-{
-  /* 참석 현황 */
-}
-{
-  /* 
-
-<div>
-  {data.data.schedule.hostTeam.members.map((member) => (
-    <div key={member.id} className="mx-4">
-      {member.user.nickname}
-    </div>
-  ))}
-</div>
-</div> */
-}

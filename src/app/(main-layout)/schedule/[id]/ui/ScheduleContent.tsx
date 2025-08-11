@@ -37,7 +37,7 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "명단",
+    label: "참석자",
     value: "attendance",
     isDisabled: false,
   },
