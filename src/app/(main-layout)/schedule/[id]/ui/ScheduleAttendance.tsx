@@ -188,28 +188,29 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
   return (
     <div className="space-y-6">
-      {data?.data?.manageableTeams && (
-        <div className="m-4">
-          <button
-            type="button"
-            className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
-            onClick={() => {
-              router.push(
-                `/schedule/${scheduleId}/attendances/${
-                  data?.data?.manageableTeams.includes("host")
-                    ? data?.data?.schedule?.hostTeamId
-                    : data?.data?.manageableTeams.includes("invited")
-                    ? data?.data?.schedule?.invitedTeamId
-                    : null
-                }`
-              );
-            }}
-          >
-            <UserCheck className="w-5 h-5 text-gray-600" />
-            <span>참석자 관리</span>
-          </button>
-        </div>
-      )}
+      {data?.data?.manageableTeams &&
+        data?.data?.manageableTeams.length > 0 && (
+          <div className="m-4">
+            <button
+              type="button"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+              onClick={() => {
+                router.push(
+                  `/schedule/${scheduleId}/attendances/${
+                    data?.data?.manageableTeams.includes("host")
+                      ? data?.data?.schedule?.hostTeamId
+                      : data?.data?.manageableTeams.includes("invited")
+                      ? data?.data?.schedule?.invitedTeamId
+                      : null
+                  }`
+                );
+              }}
+            >
+              <UserCheck className="w-5 h-5 text-gray-600" />
+              <span>참석자 관리</span>
+            </button>
+          </div>
+        )}
 
       {renderAttendance({ teamType: "host" })}
       {data?.data?.invitedTeam && renderAttendance({ teamType: "invited" })}
