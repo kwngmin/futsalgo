@@ -230,6 +230,8 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
                 className={`font-medium mx-2 ${
                   attendance.mvpReceived === 0
                     ? "text-gray-500"
+                    : index === 0 && attendance.mvpReceived > 0
+                    ? "text-indigo-600 font-bold"
                     : "text-emerald-600"
                 }`}
               >
