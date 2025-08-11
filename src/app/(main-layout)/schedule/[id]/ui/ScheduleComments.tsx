@@ -532,7 +532,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <div className="px-4 sm:px-0 mb-4">
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
               onClick={() => setFocusNewComment(true)}
             >
               <PencilLine className="w-5 h-5 text-gray-600" />

@@ -193,7 +193,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
         <div className="m-4">
           <button
             type="button"
-            className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-11 sm:h-10 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+            className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
             onClick={() => {
               router.push(
                 `/schedule/${scheduleId}/attendances/${

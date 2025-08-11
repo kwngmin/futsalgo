@@ -133,7 +133,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
       {schedule.enableAttendanceVote ? (
         <div className="flex flex-col sm:flex-row items-center px-4 gap-2">
           <div
-            className="font-medium w-full h-11 sm:h-10 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
+            className="font-medium w-full h-12 sm:h-11 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
             onClick={() => handleScheduleClick(schedule.id)}
           >
             <Vote className="size-5 text-muted-foreground" />
@@ -149,10 +149,10 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
             <div>hello</div>
           ) : (
             <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1">
-              <button className="grow h-11 sm:h-10 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
+              <button className="grow h-12 sm:h-11 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
                 참석
               </button>
-              <button className="grow h-11 sm:h-10 font-medium text-destructive bg-red-600/5 hover:bg-red-600/10 rounded-lg">
+              <button className="grow h-12 sm:h-11 font-medium text-destructive bg-red-600/5 hover:bg-red-600/10 rounded-lg">
                 불참
               </button>
             </div>
