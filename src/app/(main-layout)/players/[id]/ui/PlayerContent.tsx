@@ -434,8 +434,8 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div> */}
 
               {/* 선호 포지션 */}
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mx-4">
-                <div className="border rounded-2xl overflow-hidden col-span-2 sm:col-span-3 flex flex-col">
+              <div className="grid grid-cols-5 sm:grid-cols-4 gap-2 mx-4">
+                <div className="border rounded-2xl overflow-hidden col-span-3 sm:col-span-3 flex flex-col">
                   <div
                     className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
                     onClick={() => {
@@ -466,7 +466,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </div>
                 </div>
                 {/* 피치 포지션 */}
-                <div className="relative select-none">
+                <div className="relative select-none col-span-2 sm:col-span-1">
                   <Image
                     src="/half_pitch.svg"
                     alt="position"
