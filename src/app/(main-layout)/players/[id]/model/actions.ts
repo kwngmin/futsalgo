@@ -73,7 +73,7 @@ type AttendanceWithSchedule = Prisma.ScheduleAttendanceGetPayload<{
 
 export async function getPlayer(id: string) {
   try {
-    const currentYear = new Date().getFullYear();
+    // const currentYear = new Date().getFullYear();
 
     // 기본 사용자 정보 조회
     const player = await prisma.user.findUnique({
