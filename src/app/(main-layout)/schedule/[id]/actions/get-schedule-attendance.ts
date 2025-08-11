@@ -57,6 +57,7 @@ export async function getScheduleAttendance(scheduleId: string) {
         select: {
           name: true,
           logoUrl: true,
+          id: true,
         },
       }),
       schedule?.invitedTeamId
@@ -65,6 +66,7 @@ export async function getScheduleAttendance(scheduleId: string) {
             select: {
               name: true,
               logoUrl: true,
+              id: true,
             },
           })
         : null,
