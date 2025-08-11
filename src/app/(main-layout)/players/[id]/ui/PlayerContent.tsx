@@ -10,10 +10,9 @@ import {
   ChartPie,
   ChevronRight,
   EllipsisVertical,
-  Flame,
-  // List,
   Share,
   Sparkles,
+  ThumbsUp,
 } from "lucide-react";
 import {
   getCurrentAge, //
@@ -339,7 +338,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="bg-gray-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+              <div className="bg-neutral-100 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">
                     {GENDER[data?.data?.gender as keyof typeof GENDER]}
@@ -435,16 +434,16 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div> */}
 
               {/* 선호 포지션 */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 mx-4">
-                <div className="border rounded-2xl overflow-hidden sm:col-span-2 flex flex-col">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mx-4">
+                <div className="bg-neutral-50 rounded-2xl overflow-hidden col-span-2 sm:col-span-3 flex flex-col">
                   <div
-                    className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                    className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-100 hover:bg-neutral-200 transition-colors"
                     onClick={() => {
                       alert("선호 포지션");
                     }}
                   >
                     <div className="flex items-center space-x-3">
-                      <Flame className={`size-5 text-gray-600`} />
+                      <ThumbsUp className={`size-5 text-gray-600`} />
                       <span className="font-medium">선호 포지션</span>
                     </div>
                     <ChevronRight className="size-5 text-gray-400" />
@@ -475,10 +474,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                     height={306}
                     className="rounded-2xl overflow-hidden"
                   />
-                  <div className="absolute w-full h-full top-0 left-0 flex flex-col py-4 pr-0.5">
+                  <div className="absolute w-full h-full top-0 left-0 flex flex-col py-3 pr-0.5">
                     <div className="w-full h-1/4 flex items-center justify-center">
                       <div
-                        className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "PIVO"
                             ? "bg-white shadow-md"
                             : "bg-muted text-muted-foreground"
@@ -489,7 +488,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </div>
                     <div className="w-full h-1/4 flex justify-between items-center px-3">
                       <div
-                        className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "ALA"
                             ? "bg-white shadow-md"
                             : "bg-muted text-muted-foreground"
@@ -498,7 +497,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                         ALA
                       </div>
                       <div
-                        className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "ALA"
                             ? "bg-white shadow-md"
                             : "bg-muted text-muted-foreground"
@@ -509,7 +508,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </div>
                     <div className="w-full h-1/4 flex items-center justify-center">
                       <div
-                        className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "FIXO"
                             ? "bg-white shadow-md"
                             : "bg-muted text-muted-foreground"
@@ -520,7 +519,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </div>
                     <div className="w-full h-1/4 flex items-end justify-center">
                       <div
-                        className={`px-3 h-7 rounded-full flex items-center justify-center font-semibold text-sm ${
+                        className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "GOLEIRO"
                             ? "bg-white shadow-md"
                             : "bg-muted text-muted-foreground"
@@ -534,9 +533,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 실력 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
+              <div className="bg-neutral-50 rounded-2xl overflow-hidden mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-100 hover:bg-neutral-200 transition-colors"
                   onClick={() => {
                     alert("실력");
                   }}
@@ -547,7 +546,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </div>
                   <ChevronRight className="size-5 text-gray-400" />
                 </div>
-                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
+                <div className="flex flex-col gap-1 items-center font-semibold px-4 py-8">
                   {
                     SKILL_LEVEL_OPTIONS.find(
                       (option) => option.value === data.data.skillLevel
@@ -557,9 +556,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 통계 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
+              <div className="bg-neutral-50 rounded-2xl overflow-hidden mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-100 hover:bg-neutral-200 transition-colors"
                   onClick={() => {
                     alert("통계");
                   }}
@@ -575,7 +574,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     <ChevronRight className="size-5 text-gray-400" />
                   </div>
                 </div>
-                <div className="grid grid-cols-4 gap-3 bg-white rounded-2xl p-4">
+                <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">2</div>
                     <Label className="text-muted-foreground">경기</Label>
