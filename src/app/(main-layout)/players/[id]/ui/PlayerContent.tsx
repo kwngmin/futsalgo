@@ -2,7 +2,6 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getPlayer } from "../model/actions";
-// import { Button } from "@/shared/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -10,9 +9,9 @@ import {
   ChartPie,
   ChevronRight,
   EllipsisVertical,
+  Shapes,
   Share,
   Sparkles,
-  ThumbsUp,
 } from "lucide-react";
 import {
   getCurrentAge, //
@@ -23,11 +22,9 @@ import {
   FUTSAL_POSITIONS,
   GENDER,
   PLAYER_BACKGROUND,
-  // POSITION_DESCRIPTION,
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
-// import { useSession } from "next-auth/react";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import MannerBar from "./MannerBar";
 import { Fragment, useState } from "react";
@@ -443,7 +440,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     }}
                   >
                     <div className="flex items-center space-x-3">
-                      <ThumbsUp className={`size-5 text-gray-600`} />
+                      <Shapes className={`size-5 text-gray-600`} />
                       <span className="font-medium">선호 포지션</span>
                     </div>
                     <ChevronRight className="size-5 text-gray-400" />
