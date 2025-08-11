@@ -19,7 +19,6 @@ export async function getScheduleAttendance(scheduleId: string) {
     const schedule = await prisma.schedule.findUnique({
       where: { id: scheduleId },
       select: {
-        // matchType: true,
         hostTeamId: true,
         invitedTeamId: true,
       },
@@ -28,26 +27,6 @@ export async function getScheduleAttendance(scheduleId: string) {
     if (!schedule) {
       return { success: false, error: "스케줄을 찾을 수 없습니다" };
     }
-
-    const attendances = await prisma.scheduleAttendance.findMany({
-      where: { scheduleId },
-      select: {
-        teamType: true,
-        attendanceStatus: true,
-        user: {
-          select: {
-            id: true,
-            nickname: true,
-            image: true,
-            // gender: true,
-            // position: true,
-            // skillLevel: true,
-            // birthDate: true,
-            // height: true,
-          },
-        },
-      },
-    });
 
     const session = await auth();
 
@@ -99,6 +78,22 @@ export async function getScheduleAttendance(scheduleId: string) {
       if (membership.teamId === schedule.invitedTeamId) {
         manageableTeams.push("invited");
       }
+    });
+
+    const attendances = await prisma.scheduleAttendance.findMany({
+      where: { scheduleId },
+      select: {
+        teamType: true,
+        attendanceStatus: true,
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            image: true,
+            name: manageableTeams.length > 0 ? true : false,
+          },
+        },
+      },
     });
 
     return {

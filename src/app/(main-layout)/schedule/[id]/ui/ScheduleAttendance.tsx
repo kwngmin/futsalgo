@@ -52,8 +52,8 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     if (isLoading) {
       return (
         <div className="mt-4 px-4">
-          <div className="h-12 rounded-md bg-neutral-100 animate-pulse" />
-          <div className="h-[98px] rounded-2xl bg-neutral-100 animate-pulse my-2" />
+          {/* <div className="h-12 rounded-md bg-neutral-100 animate-pulse" /> */}
+          <div className="h-[138px] rounded-2xl bg-neutral-100 animate-pulse my-2" />
           {Array.from({ length: 10 }).map((_, index) => (
             <div
               key={index}
@@ -162,7 +162,17 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                 ) : (
                   <div className="size-8 rounded-full bg-gray-200" />
                 )}
-                <span className="font-medium">{attendance.user.nickname}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-medium">
+                    {attendance.user.nickname}
+                  </span>
+                  {attendance.user.name && (
+                    <span className="text-sm font-medium text-gray-500">
+                      {attendance.user.name}
+                      {/* {`• ${attendance.user.name}`} */}
+                    </span>
+                  )}
+                </div>
               </div>
               <span
                 className={`font-medium mx-2 ${

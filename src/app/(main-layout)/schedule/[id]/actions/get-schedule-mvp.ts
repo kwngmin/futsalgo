@@ -13,6 +13,7 @@ export interface MvpAttendance {
   user: {
     id: string;
     nickname: string | null;
+    name: string | null;
     image: string | null;
   };
 }
@@ -37,25 +38,8 @@ export async function getScheduleMvp(scheduleId: string) {
       return { success: false, error: "스케줄을 찾을 수 없습니다" };
     }
 
-    const attendances = await prisma.scheduleAttendance.findMany({
-      where: { scheduleId },
-      select: {
-        teamType: true,
-        attendanceStatus: true,
-        mvpReceived: true,
-        mvpToUserId: true,
-        userId: true,
-        user: {
-          select: {
-            id: true,
-            nickname: true,
-            image: true,
-          },
-        },
-      },
-    });
-
     const session = await auth();
+    const currentUserId = session?.user?.id;
 
     const [hostTeam, invitedTeam, userTeamMemberships, currentUserAttendance] =
       await Promise.all([
@@ -77,10 +61,10 @@ export async function getScheduleMvp(scheduleId: string) {
               },
             })
           : null,
-        session?.user?.id
+        currentUserId
           ? prisma.teamMember.findMany({
               where: {
-                userId: session.user.id,
+                userId: currentUserId,
                 status: "APPROVED",
                 teamId: {
                   in: [schedule.hostTeamId, schedule.invitedTeamId].filter(
@@ -94,12 +78,12 @@ export async function getScheduleMvp(scheduleId: string) {
               },
             })
           : null,
-        session?.user?.id
+        currentUserId
           ? prisma.scheduleAttendance.findUnique({
               where: {
                 scheduleId_userId: {
                   scheduleId,
-                  userId: session.user.id,
+                  userId: currentUserId,
                 },
               },
               select: {
@@ -122,6 +106,30 @@ export async function getScheduleMvp(scheduleId: string) {
         manageableTeams.push("invited");
       }
     });
+
+    const attendances = await prisma.scheduleAttendance.findMany({
+      where: { scheduleId },
+      select: {
+        teamType: true,
+        attendanceStatus: true,
+        mvpReceived: true,
+        mvpToUserId: true,
+        userId: true,
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+            name: manageableTeams.length > 0 ? true : false,
+            image: true,
+          },
+        },
+      },
+    });
+
+    // 현재 사용자가 참석자에 포함되어 있는지 확인
+    const isCurrentUserAttending = currentUserId
+      ? attendances.some((att) => att.userId === currentUserId)
+      : false;
 
     // MVP 통계 계산
     const calculateMvpStats = (
@@ -156,6 +164,7 @@ export async function getScheduleMvp(scheduleId: string) {
         manageableTeams,
         schedule,
         currentUserAttendance,
+        isCurrentUserAttending,
         mvpStats: {
           host: calculateMvpStats(hostAttendances),
           invited: calculateMvpStats(invitedAttendances),

@@ -25,6 +25,7 @@ interface TeamAttendance {
   user: {
     id: string;
     nickname: string | null;
+    name: string | null;
     image: string | null;
   };
 }
@@ -89,17 +90,23 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
     return (teamType: TeamType) => {
       const attendances = getSortedAttendancesByTeamType(teamType);
       const currentUserId = data?.data?.currentUserAttendance?.userId;
+      const isCurrentUserAttending = data?.data?.isCurrentUserAttending;
 
       return attendances
         .filter((att) => att.user.id !== currentUserId) // 자신 제외
         .map((att) => ({
           value: att.user.id,
-          label: att.user.nickname || "익명",
+          label: isCurrentUserAttending
+            ? `${att.user.nickname || "익명"}${
+                att.user.name ? ` (${att.user.name})` : ""
+              }`
+            : att.user.nickname || "익명",
         }));
     };
   }, [
     getSortedAttendancesByTeamType,
     data?.data?.currentUserAttendance?.userId,
+    data?.data?.isCurrentUserAttending,
   ]);
 
   const handleVoteStart = () => {
@@ -126,8 +133,8 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
 
   const renderLoadingSkeleton = () => (
     <div className="mt-4 px-4">
-      <div className="h-12 rounded-md bg-neutral-100 animate-pulse" />
-      <div className="h-[98px] rounded-2xl bg-neutral-100 animate-pulse my-2" />
+      {/* <div className="h-12 rounded-md bg-neutral-100 animate-pulse" /> */}
+      <div className="h-[138px] rounded-2xl bg-neutral-100 animate-pulse my-2" />
       {Array.from({ length: 10 }).map((_, index) => (
         <div
           key={index}
@@ -205,7 +212,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
         </div>
 
         {sortedAttendances.length > 0 ? (
-          sortedAttendances.map((attendance, index) => (
+          sortedAttendances.map((attendance) => (
             <div
               key={attendance.user.id}
               className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0"
@@ -222,20 +229,28 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
                 ) : (
                   <div className="size-8 rounded-full bg-gray-200" />
                 )}
-                <span className="font-medium">
-                  {attendance.user.nickname || "익명"}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base font-medium">
+                    {attendance.user.nickname || "익명"}
+                  </span>
+                  {attendance.user.name && (
+                    <span className="text-sm font-medium text-gray-500">
+                      {attendance.user.name}
+                      {/* {`• ${attendance.user.name}`} */}
+                    </span>
+                  )}
+                </div>
               </div>
               <span
                 className={`font-medium mx-2 ${
                   attendance.mvpReceived === 0
-                    ? "text-gray-500"
-                    : index === 0 && attendance.mvpReceived > 0
-                    ? "text-indigo-600 font-bold"
+                    ? "text-gray-400"
                     : "text-emerald-600"
                 }`}
               >
-                {attendance.mvpReceived}표
+                {attendance.mvpReceived
+                  ? `${attendance.mvpReceived}표`
+                  : "없음"}
               </span>
             </div>
           ))
