@@ -435,9 +435,9 @@ const PlayerContent = ({ id }: { id: string }) => {
 
               {/* 선호 포지션 */}
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mx-4">
-                <div className="bg-neutral-50 rounded-2xl overflow-hidden col-span-2 sm:col-span-3 flex flex-col">
+                <div className="border rounded-2xl overflow-hidden col-span-2 sm:col-span-3 flex flex-col">
                   <div
-                    className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-100 hover:bg-neutral-200 transition-colors"
+                    className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
                     onClick={() => {
                       alert("선호 포지션");
                     }}
@@ -533,9 +533,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 실력 */}
-              <div className="bg-neutral-50 rounded-2xl overflow-hidden mx-4">
+              <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-100 hover:bg-neutral-200 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
                   onClick={() => {
                     alert("실력");
                   }}
@@ -556,9 +556,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 통계 */}
-              <div className="bg-neutral-50 rounded-2xl overflow-hidden mx-4">
+              <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-100 hover:bg-neutral-200 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
                   onClick={() => {
                     alert("통계");
                   }}
