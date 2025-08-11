@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
 import ScheduleComments from "./ScheduleComments";
+import ScheduleMvp from "./ScheduleMvp";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -188,6 +189,8 @@ const ScheduleContent = ({
       {selectedTab === "comments" && (
         <ScheduleComments scheduleId={scheduleId} />
       )}
+
+      {selectedTab === "mvp" && <ScheduleMvp scheduleId={scheduleId} />}
     </div>
   );
 };

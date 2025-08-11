@@ -1,10 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getScheduleAttendance } from "../actions/get-schedule-attendance";
-// import ManageAttendance from "./ManageAttendance";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
 import { ChevronRight, UserCheck } from "lucide-react";
