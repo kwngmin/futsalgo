@@ -479,7 +479,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       <div
                         className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "PIVO"
-                            ? "bg-white shadow-md"
+                            ? "bg-white shadow-md/5"
                             : "bg-muted text-muted-foreground"
                         }`}
                       >
@@ -490,7 +490,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       <div
                         className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "ALA"
-                            ? "bg-white shadow-md"
+                            ? "bg-white shadow-md/5"
                             : "bg-muted text-muted-foreground"
                         }`}
                       >
@@ -499,7 +499,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       <div
                         className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "ALA"
-                            ? "bg-white shadow-md"
+                            ? "bg-white shadow-md/5"
                             : "bg-muted text-muted-foreground"
                         }`}
                       >
@@ -510,7 +510,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       <div
                         className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "FIXO"
-                            ? "bg-white shadow-md"
+                            ? "bg-white shadow-md/5"
                             : "bg-muted text-muted-foreground"
                         }`}
                       >
@@ -521,7 +521,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       <div
                         className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
                           data.data.position === "GOLEIRO"
-                            ? "bg-white shadow-md"
+                            ? "bg-white shadow-md/5"
                             : "bg-muted text-muted-foreground"
                         }`}
                       >
