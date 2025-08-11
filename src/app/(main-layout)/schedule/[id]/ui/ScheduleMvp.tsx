@@ -217,7 +217,12 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
               key={attendance.user.id}
               className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0"
             >
-              <div className="flex items-center gap-2">
+              <div
+                className="flex items-center gap-2 group select-none"
+                onClick={() => {
+                  router.push(`/players/${attendance.user.id}`);
+                }}
+              >
                 {attendance.user.image ? (
                   <Image
                     src={attendance.user.image}
@@ -230,7 +235,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
                   <div className="size-8 rounded-full bg-gray-200" />
                 )}
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base font-medium">
+                  <span className="text-base font-medium group-hover:underline underline-offset-2 cursor-pointer">
                     {attendance.user.nickname || "익명"}
                   </span>
                   {attendance.user.name && (
