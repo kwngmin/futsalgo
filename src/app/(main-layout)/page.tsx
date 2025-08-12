@@ -22,7 +22,7 @@ const HomePage = () => {
   console.log(data, "data");
 
   if (isLoading) {
-    return <SchedulePageLoading />;
+    return <SchedulePageLoading isPage />;
   }
 
   return (

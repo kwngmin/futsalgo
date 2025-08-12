@@ -28,6 +28,7 @@ import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
 import { Fragment, useState } from "react";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 import PlayerPhotosGallery from "./PlayerPhotosGallery";
+import PlayerSchedule from "./PlayerSchedule";
 
 // 서버 액션에서 가져온 타입을 그대로 사용
 
@@ -43,7 +44,7 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "경기",
+    label: "경기일정",
     value: "matches",
     isDisabled: false,
   },
@@ -392,6 +393,8 @@ const PlayerContent = ({ id }: { id: string }) => {
         )}
 
         {selectedTab === "photos" && <PlayerPhotosGallery userId={id} />}
+
+        {selectedTab === "matches" && <PlayerSchedule userId={id} />}
       </div>
     </div>
   );

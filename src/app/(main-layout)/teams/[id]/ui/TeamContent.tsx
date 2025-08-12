@@ -40,9 +40,9 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "경기",
+    label: "경기일정",
     value: "matches",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     label: "사진",
