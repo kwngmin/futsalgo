@@ -26,6 +26,7 @@ import {
 } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
 import TeamMemberList from "./TeamMemberList";
+import TeamPhotosGallery from "./TeamPhotosGallery";
 
 const tabs = [
   {
@@ -46,7 +47,7 @@ const tabs = [
   {
     label: "사진",
     value: "photos",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     label: "통계",
@@ -742,6 +743,9 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
             </Fragment>
           )}
+
+          {/* 사진 */}
+          {selectedTab === "photos" && <TeamPhotosGallery teamId={id} />}
         </div>
       ) : null}
     </div>
