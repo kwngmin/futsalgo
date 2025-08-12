@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 import ScheduleCard from "@/app/(main-layout)/ui/ScheduleCard";
 import SchedulePageLoading from "@/app/(main-layout)/ui/loading";
 import { getPlayerSchedules } from "../actions/get-player-schedules";
+import { CalendarBlankIcon } from "@phosphor-icons/react";
 
 interface PlayerScheduleProps {
   userId: string;
@@ -63,10 +64,12 @@ const PlayerSchedule = ({ userId }: PlayerScheduleProps) => {
 
   if (allSchedules.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-center">
-          <p className="text-muted-foreground">참석한 경기일정이 없습니다</p>
-        </div>
+      <div className="text-center min-h-[50vh] flex flex-col items-center justify-center text-gray-500">
+        <CalendarBlankIcon
+          className="w-16 h-16 mx-auto mb-4 text-gray-300"
+          weight="duotone"
+        />
+        <p className="text-lg mb-2 font-medium">경기일정이 없습니다.</p>
       </div>
     );
   }
@@ -87,11 +90,11 @@ const PlayerSchedule = ({ userId }: PlayerScheduleProps) => {
         )}
       </div>
 
-      {!hasNextPage && allSchedules.length > 0 && (
+      {/* {!hasNextPage && allSchedules.length > 0 && (
         <div className="text-center py-8 text-sm text-muted-foreground">
           모든 경기일정을 불러왔습니다
         </div>
-      )}
+      )} */}
     </div>
   );
 };
