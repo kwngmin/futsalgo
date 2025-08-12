@@ -24,8 +24,8 @@ const SideNav = () => {
             <Image
               src="/futsalgo_logo.svg"
               alt="FUTSALGO"
-              width={131}
-              height={24}
+              width={115}
+              height={23}
             />
           </button>
 
