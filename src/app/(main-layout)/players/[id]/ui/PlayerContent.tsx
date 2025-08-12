@@ -24,9 +24,10 @@ import {
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
 import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
-import MannerBar from "./MannerBar";
+// import MannerBar from "./MannerBar";
 import { Fragment, useState } from "react";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
+import PlayerPhotosGallery from "./PlayerPhotosGallery";
 
 // 서버 액션에서 가져온 타입을 그대로 사용
 
@@ -44,12 +45,12 @@ const tabs = [
   {
     label: "경기",
     value: "matches",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     label: "사진",
     value: "photos",
-    isDisabled: true,
+    isDisabled: false,
   },
 ];
 
@@ -183,7 +184,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </span>
               </div>
             </div>
-            <MannerBar />
+            {/* <MannerBar /> */}
           </div>
 
           {/* 탭 */}
@@ -389,6 +390,8 @@ const PlayerContent = ({ id }: { id: string }) => {
             />
           </Fragment>
         )}
+
+        {selectedTab === "photos" && <PlayerPhotosGallery userId={id} />}
       </div>
     </div>
   );
