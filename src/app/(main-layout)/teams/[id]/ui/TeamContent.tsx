@@ -27,6 +27,7 @@ import {
 import { Fragment, useState } from "react";
 import TeamMemberList from "./TeamMemberList";
 import TeamPhotosGallery from "./TeamPhotosGallery";
+import TeamSchedules from "./TeamSchedules";
 
 const tabs = [
   {
@@ -746,6 +747,9 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 사진 */}
           {selectedTab === "photos" && <TeamPhotosGallery teamId={id} />}
+
+          {/* 경기일정 */}
+          {selectedTab === "matches" && <TeamSchedules teamId={id} />}
         </div>
       ) : null}
     </div>
