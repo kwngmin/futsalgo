@@ -106,7 +106,7 @@ export const TeamPhotosGallery = ({ teamId }: TeamPhotosGalleryProps) => {
                           router.push(`/schedule/${photo.schedule.id}`)
                         }
                       >
-                        {renderMatchInfo(photo)}{" "}
+                        {renderMatchInfo(photo)}
                       </span>
                       {/* <span
                         className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
@@ -259,17 +259,19 @@ export const TeamPhotosGallery = ({ teamId }: TeamPhotosGalleryProps) => {
                   )}
                   <div>
                     <p className="font-medium hover:underline underline-offset-2">
-                      {photos[selectedImageIndex].uploader.nickname ||
-                        photos[selectedImageIndex].uploader.name}
+                      {renderMatchInfo(photos[selectedImageIndex])}
+                      {/* {photos[selectedImageIndex].uploader.nickname ||
+                        photos[selectedImageIndex].uploader.name} */}
                     </p>
                     <p className="text-sm text-gray-300">
-                      {renderMatchInfo(photos[selectedImageIndex])}
-                      {" • "}
                       {new Date(
                         photos[selectedImageIndex].schedule.date
-                      ).toLocaleDateString("ko-KR")}
-                      {" • "}
-                      {photos[selectedImageIndex].schedule.place}
+                      ).toLocaleDateString("ko-KR", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
                     </p>
                   </div>
                 </div>
