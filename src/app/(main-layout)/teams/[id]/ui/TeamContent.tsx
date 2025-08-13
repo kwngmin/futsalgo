@@ -442,7 +442,8 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">
-                    불가능
+                    {/* 초청 불가 */}
+                    초청 가능
                     {/* {data.data.stats.averageHeight}cm */}
                   </div>
                   <Label className="text-muted-foreground">친선전</Label>
