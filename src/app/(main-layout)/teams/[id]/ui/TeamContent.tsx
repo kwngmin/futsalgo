@@ -255,13 +255,13 @@ const TeamContent = ({ id }: { id: string }) => {
                       variant="outline"
                       size="sm"
                     >
-                      거절 사유보기
+                      거절 사유
                     </Button>
                     <Button
                       className="text-sm font-semibold text-white bg-indigo-700"
                       size="sm"
                     >
-                      재가입 신청하기
+                      재가입 신청
                     </Button>
                   </div>
                 </div>
@@ -286,7 +286,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     }
                   }}
                 >
-                  팀원 스탯 평가
+                  팀원 평가
                 </Button>
               )}
             </div>
