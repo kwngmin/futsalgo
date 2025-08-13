@@ -38,7 +38,7 @@ const tabs = [
     isDisabled: false,
   },
   {
-    label: "명단",
+    label: "팀원",
     value: "members",
     isDisabled: false,
   },
