@@ -147,7 +147,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 팀 정보 */}
           <div className="space-y-2">
             <div className="space-y-4 px-4">
-              <div className="flex items-center gap-4 h-28 mb-4">
+              <div className="flex items-center gap-4 h-28">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
@@ -164,7 +164,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                   )}
                 </div>
-                <div className="flex flex-col">
+                <div className="grow flex flex-col">
                   <div className="flex items-center gap-2">
                     <h1 className="text-xl font-semibold">
                       {data?.data?.name}
@@ -187,6 +187,87 @@ const TeamContent = ({ id }: { id: string }) => {
                         }`} */}
                   </span>
 
+                  {/* 가입하기 */}
+                  {!data.data.currentUserMembership.isMember ? (
+                    data.data.recruitmentStatus === "RECRUITING" && (
+                      <Button
+                        className="text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600 mt-4"
+                        size="sm"
+                        onClick={async () => {
+                          if (session.data) {
+                            try {
+                              const result = await joinTeam(id);
+                              console.log(result);
+                              if (result?.success) {
+                                alert("가입 신청이 완료되었습니다.");
+                                refetch();
+                              } else {
+                                alert(result?.error);
+                              }
+                            } catch (error) {
+                              console.error(error);
+                              alert("가입 신청에 실패했습니다.");
+                            }
+                          } else {
+                            alert("로그인이 필요합니다.");
+                            signIn();
+                          }
+                        }}
+                      >
+                        가입 신청
+                      </Button>
+                    )
+                  ) : data.data.currentUserMembership.status === "PENDING" ? (
+                    <Button
+                      className="w-full text-base font-semibold"
+                      size="lg"
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          const result = await cancelJoinTeam(id);
+                          console.log(result);
+                          if (result?.success) {
+                            alert("가입 신청이 취소되었습니다.");
+                            refetch();
+                          } else {
+                            alert(result?.error);
+                          }
+                        } catch (error) {
+                          console.error(error);
+                          alert("가입 신청 취소에 실패했습니다.");
+                        }
+                      }}
+                    >
+                      가입신청 취소
+                    </Button>
+                  ) : (
+                    data.data.currentUserMembership.status === "REJECTED" && (
+                      <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
+                        <div className="flex items-center px-2">
+                          <CircleX className="size-5 text-red-600 mr-3" />
+                          <span className="font-medium text-red-600">
+                            가입 신청이 거절되었습니다.
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            className="text-sm font-semibold"
+                            variant="outline"
+                            size="sm"
+                          >
+                            거절 사유보기
+                          </Button>
+                          <Button
+                            className="text-sm font-semibold text-white bg-indigo-700"
+                            size="sm"
+                          >
+                            재가입 신청하기
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  )}
+
                   {/* <div className="flex items-center gap-2 mt-2">
                     <button className="shrink-0 h-10 flex px-4 gap-1.5 items-center justify-center text-white bg-neutral-800 rounded-md transition-colors cursor-pointer font-semibold">
                       가입 신청
@@ -198,86 +279,6 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div> */}
                 </div>
               </div>
-              {/* 가입하기 */}
-              {!data.data.currentUserMembership.isMember ? (
-                data.data.recruitmentStatus === "RECRUITING" && (
-                  <Button
-                    className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
-                    size="lg"
-                    onClick={async () => {
-                      if (session.data) {
-                        try {
-                          const result = await joinTeam(id);
-                          console.log(result);
-                          if (result?.success) {
-                            alert("가입 신청이 완료되었습니다.");
-                            refetch();
-                          } else {
-                            alert(result?.error);
-                          }
-                        } catch (error) {
-                          console.error(error);
-                          alert("가입 신청에 실패했습니다.");
-                        }
-                      } else {
-                        alert("로그인이 필요합니다.");
-                        signIn();
-                      }
-                    }}
-                  >
-                    가입 신청
-                  </Button>
-                )
-              ) : data.data.currentUserMembership.status === "PENDING" ? (
-                <Button
-                  className="w-full text-base font-semibold"
-                  size="lg"
-                  variant="outline"
-                  onClick={async () => {
-                    try {
-                      const result = await cancelJoinTeam(id);
-                      console.log(result);
-                      if (result?.success) {
-                        alert("가입 신청이 취소되었습니다.");
-                        refetch();
-                      } else {
-                        alert(result?.error);
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      alert("가입 신청 취소에 실패했습니다.");
-                    }
-                  }}
-                >
-                  가입신청 취소
-                </Button>
-              ) : (
-                data.data.currentUserMembership.status === "REJECTED" && (
-                  <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
-                    <div className="flex items-center px-2">
-                      <CircleX className="size-5 text-red-600 mr-3" />
-                      <span className="font-medium text-red-600">
-                        가입 신청이 거절되었습니다.
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        className="text-sm font-semibold"
-                        variant="outline"
-                        size="sm"
-                      >
-                        거절 사유보기
-                      </Button>
-                      <Button
-                        className="text-sm font-semibold text-white bg-indigo-700"
-                        size="sm"
-                      >
-                        재가입 신청하기
-                      </Button>
-                    </div>
-                  </div>
-                )
-              )}
             </div>
 
             {/* 탭 */}
