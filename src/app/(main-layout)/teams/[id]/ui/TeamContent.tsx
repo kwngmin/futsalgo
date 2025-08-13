@@ -555,11 +555,11 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                 </div>
 
-                {/* 팀 실력 */}
+                {/* 실력 자체 평가 */}
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-2">
                     <Sparkles className="size-5 text-gray-600" />
-                    <span className="font-medium">팀 실력</span>
+                    <span className="font-medium">실력 자체 평가</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
@@ -572,7 +572,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-2">
                     <Hash className="size-5 text-gray-600" />
-                    <span className="font-medium">팀 코드</span>
+                    <span className="font-medium">코드</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
@@ -581,11 +581,11 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                 </div>
 
-                {/* 팀 등록일 */}
+                {/* 등록일 */}
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-2">
                     <CalendarCheck2 className="size-5 text-gray-600" />
-                    <span className="font-medium">팀 등록일</span>
+                    <span className="font-medium">등록일</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
