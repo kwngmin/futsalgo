@@ -114,27 +114,40 @@ const TeamContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex items-center justify-end gap-2">
-          {/* <button
+        <div className="flex items-center justify-end gap-1">
+          <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-black hover:bg-black/80 text-white rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
           >
+            삭제
+          </button>
+          <button
+            type="button"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
+          >
+            수정
+          </button>
+          <button
+            type="button"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
+          >
+            {/* <UserPlus className="size-5 text-gray-600" /> */}
             팔로우
-          </button> */}
+          </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
-          </button>
+          </button> */}
         </div>
       </div>
       {data ? (
         <div className="space-y-3">
           {/* 팀 정보 */}
-          <div className="border-b border-gray-300 space-y-2">
+          <div className="space-y-2">
             <div className="space-y-4 px-4">
-              <div className="flex items-center gap-4 h-20">
+              <div className="flex items-center gap-4 h-28">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
@@ -186,158 +199,167 @@ const TeamContent = ({ id }: { id: string }) => {
                           ]
                         }`} */}
                   </span>
-                  <div className="flex items-center gap-2 mt-2">
-                    <button className="shrink-0 h-10 flex px-3 gap-1.5 items-center justify-center text-gray-600 bg-gray-100 rounded transition-colors cursor-pointer font-semibold">
-                      <UserPlus className="text-sm size-5" />
-                      팔로우
-                    </button>
-                  </div>
-                </div>
-              </div>
 
-              {/* 가입하기 */}
-              {data.data.currentUserMembership.role === "MANAGER" ||
-              data.data.currentUserMembership.role === "OWNER" ? (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full text-base font-semibold cursor-pointer"
-                  onClick={() => {
-                    setIsLoading(true);
-                    router.push(`/edit-team/${id}`);
-                  }}
-                >
-                  팀 정보 수정
-                </Button>
-              ) : !data.data.currentUserMembership.isMember ? (
-                data.data.recruitmentStatus === "RECRUITING" ? (
-                  <Button
-                    className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
-                    size="lg"
-                    onClick={async () => {
-                      if (session.data) {
+                  {/* 가입하기 */}
+                  {data.data.currentUserMembership.role === "MANAGER" ||
+                  data.data.currentUserMembership.role === "OWNER" ? (
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full text-base font-semibold cursor-pointer"
+                      onClick={() => {
+                        setIsLoading(true);
+                        router.push(`/edit-team/${id}`);
+                      }}
+                    >
+                      팀 정보 수정
+                    </Button>
+                  ) : !data.data.currentUserMembership.isMember ? (
+                    data.data.recruitmentStatus === "RECRUITING" ? (
+                      <Button
+                        className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
+                        size="lg"
+                        onClick={async () => {
+                          if (session.data) {
+                            try {
+                              const result = await joinTeam(id);
+                              console.log(result);
+                              if (result?.success) {
+                                alert("가입 신청이 완료되었습니다.");
+                                refetch();
+                              } else {
+                                alert(result?.error);
+                              }
+                            } catch (error) {
+                              console.error(error);
+                              alert("가입 신청에 실패했습니다.");
+                            }
+                          } else {
+                            alert("로그인이 필요합니다.");
+                            signIn();
+                          }
+                        }}
+                      >
+                        가입 신청
+                      </Button>
+                    ) : (
+                      // 빈 여백 추가
+                      <div />
+                    )
+                  ) : data.data.currentUserMembership.status === "PENDING" ? (
+                    // <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
+                    //   <div className="flex items-center px-2">
+                    //     {/* <Hourglass className="size-5 mr-3 stroke-indigo-700" /> */}
+                    //     <span className="font-medium text-slate-700">
+                    //       승인 대기중
+                    //     </span>
+                    //   </div>
+                    //   <Button
+                    //     className="text-sm font-semibold text-slate-700"
+                    //     variant="outline"
+                    //     size="sm"
+                    //   >
+                    //     가입신청 취소
+                    //   </Button>
+                    // </div>
+                    <Button
+                      className="w-full text-base font-semibold"
+                      size="lg"
+                      variant="outline"
+                      onClick={async () => {
                         try {
-                          const result = await joinTeam(id);
+                          const result = await cancelJoinTeam(id);
                           console.log(result);
                           if (result?.success) {
-                            alert("가입 신청이 완료되었습니다.");
+                            alert("가입 신청이 취소되었습니다.");
                             refetch();
                           } else {
                             alert(result?.error);
                           }
                         } catch (error) {
                           console.error(error);
-                          alert("가입 신청에 실패했습니다.");
+                          alert("가입 신청 취소에 실패했습니다.");
                         }
-                      } else {
-                        alert("로그인이 필요합니다.");
-                        signIn();
-                      }
-                    }}
-                  >
-                    가입 신청
-                  </Button>
-                ) : (
-                  // 빈 여백 추가
-                  <div />
-                )
-              ) : data.data.currentUserMembership.status === "PENDING" ? (
-                // <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
-                //   <div className="flex items-center px-2">
-                //     {/* <Hourglass className="size-5 mr-3 stroke-indigo-700" /> */}
-                //     <span className="font-medium text-slate-700">
-                //       승인 대기중
-                //     </span>
-                //   </div>
-                //   <Button
-                //     className="text-sm font-semibold text-slate-700"
-                //     variant="outline"
-                //     size="sm"
-                //   >
-                //     가입신청 취소
-                //   </Button>
-                // </div>
-                <Button
-                  className="w-full text-base font-semibold"
-                  size="lg"
-                  variant="outline"
-                  onClick={async () => {
-                    try {
-                      const result = await cancelJoinTeam(id);
-                      console.log(result);
-                      if (result?.success) {
-                        alert("가입 신청이 취소되었습니다.");
-                        refetch();
-                      } else {
-                        alert(result?.error);
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      alert("가입 신청 취소에 실패했습니다.");
-                    }
-                  }}
-                >
-                  가입신청 취소
-                </Button>
-              ) : (
-                data.data.currentUserMembership.status === "REJECTED" && (
-                  <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
-                    <div className="flex items-center px-2">
-                      <CircleX className="size-5 text-red-600 mr-3" />
-                      <span className="font-medium text-red-600">
-                        가입 신청이 거절되었습니다.
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        className="text-sm font-semibold"
-                        variant="outline"
-                        size="sm"
-                      >
-                        거절 사유보기
-                      </Button>
-                      <Button
-                        className="text-sm font-semibold text-white bg-indigo-700"
-                        size="sm"
-                      >
-                        재가입 신청하기
-                      </Button>
-                    </div>
-                  </div>
-                )
-              )}
+                      }}
+                    >
+                      가입신청 취소
+                    </Button>
+                  ) : (
+                    data.data.currentUserMembership.status === "REJECTED" && (
+                      <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
+                        <div className="flex items-center px-2">
+                          <CircleX className="size-5 text-red-600 mr-3" />
+                          <span className="font-medium text-red-600">
+                            가입 신청이 거절되었습니다.
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            className="text-sm font-semibold"
+                            variant="outline"
+                            size="sm"
+                          >
+                            거절 사유보기
+                          </Button>
+                          <Button
+                            className="text-sm font-semibold text-white bg-indigo-700"
+                            size="sm"
+                          >
+                            재가입 신청하기
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  )}
+
+                  {/* <div className="flex items-center gap-2 mt-2">
+                    <button className="shrink-0 h-10 flex px-4 gap-1.5 items-center justify-center text-white bg-neutral-800 rounded-md transition-colors cursor-pointer font-semibold">
+                      가입 신청
+                    </button>
+                    <button className="shrink-0 h-10 flex px-4 gap-1.5 items-center justify-center text-gray-600 bg-gray-100 rounded-md transition-colors cursor-pointer font-semibold">
+                      <UserPlus className="text-sm size-5" />
+                      팔로우
+                    </button>
+                  </div> */}
+                </div>
+              </div>
             </div>
 
             {/* 탭 */}
-            <div className="flex items-center justify-between gap-2 px-4">
+            <div className="flex items-center justify-between gap-2 px-4 border-b">
               <div className="flex h-12 space-x-2">
-                {tabs
-                  // .filter(
-                  //   (tab) =>
-                  //     tab.value !== "management" ||
-                  //     (tab.value === "management" &&
-                  //       (data.data.currentUserMembership.role === "MANAGER" ||
-                  //         data.data.currentUserMembership.role === "OWNER") &&
-                  //       data.data.currentUserMembership.status === "APPROVED")
-                  // )
-                  .map((tab) => (
-                    <div
-                      key={tab.value}
-                      className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
-                        selectedTab === tab.value
-                          ? "border-gray-700"
-                          : "border-transparent"
-                      } ${
-                        tab.isDisabled ? "pointer-events-none opacity-50" : ""
-                      }`}
-                      onClick={() => setSelectedTab(tab.value)}
-                    >
-                      {tab.label}
-                      {/* <div className={` rounded-t-full h-0.5 w-full flex overflow-hidden ${selectedTab === tab.value ? "":""}`} /> */}
-                    </div>
-                  ))}
+                {tabs.map((tab) => (
+                  <div
+                    key={tab.value}
+                    className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
+                      selectedTab === tab.value
+                        ? "border-gray-700"
+                        : "border-transparent"
+                    } ${
+                      tab.isDisabled ? "pointer-events-none opacity-50" : ""
+                    }`}
+                    onClick={() => setSelectedTab(tab.value)}
+                  >
+                    {tab.label}
+                  </div>
+                ))}
               </div>
             </div>
+
+            {/* 탭 */}
+            {/* <div className="bg-slate-100 flex items-center px-4 sm:px-2 sm:mx-4 h-12  sm:rounded-full">
+              {tabs.map((tab) => (
+                <div
+                  key={tab.value}
+                  className={`flex justify-center items-center font-semibold text-base px-4 cursor-pointer h-9 rounded-full ${
+                    selectedTab === tab.value ? "bg-black text-white" : ""
+                  } ${tab.isDisabled ? "pointer-events-none opacity-50" : ""}`}
+                  onClick={() => setSelectedTab(tab.value)}
+                >
+                  {tab.label}
+                </div>
+              ))}
+            </div> */}
           </div>
 
           {/* 가입하기 */}
