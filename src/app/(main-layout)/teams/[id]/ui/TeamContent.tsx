@@ -16,8 +16,6 @@ import {
   ScrollText,
   Share,
   Sparkles,
-  // UserPlus,
-  // UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -175,17 +173,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       #{data.data.code}
                     </div> */}
                   </div>
-                  <span className="text-sm text-muted-foreground tracking-tight">
-                    {/* {data?.data?.createdAt
-                      ? `${new Date(data?.data?.createdAt).toLocaleDateString(
-                          "ko-KR",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )} 등록`
-                      : "데이터 없음"} */}
+                  <span className="font-medium text-muted-foreground tracking-tight">
                     {
                       TEAM_LEVEL_DESCRIPTION[
                         data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
@@ -404,26 +392,6 @@ const TeamContent = ({ id }: { id: string }) => {
             )
           )} */}
 
-          {/* 팀 관리하기 */}
-          {/* {(data.data.currentUserMembership.role === "MANAGER" ||
-            data.data.currentUserMembership.role === "OWNER") && (
-            <div className="bg-white rounded-lg overflow-hidden">
-              <button
-                onClick={() => {
-                  alert("팀 관리하기");
-                }}
-                // onClick={() => router.push(`/players/${member.userId}`)}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors border-t border-gray-100 first:border-t-0 cursor-pointer"
-              >
-                <div className="flex items-center space-x-3">
-                  <Settings className="size-5 text-gray-600" />
-                  <span className="font-medium">팀 관리하기</span>
-                </div>
-                <ChevronRight className="size-5 text-gray-400" />
-              </button>
-            </div>
-          )} */}
-
           {/* 팀원 */}
           {selectedTab === "members" && (
             <TeamMemberList
@@ -440,7 +408,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {selectedTab === "overview" && (
             <Fragment>
               {/* 기본 정보 */}
-              <div className="bg-gray-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+              <div className="bg-neutral-100 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">
                     {
@@ -584,26 +552,6 @@ const TeamContent = ({ id }: { id: string }) => {
                   )}
                 </div>
 
-                {/* 팀 실력 */}
-                <div>
-                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                    <div className="flex items-center space-x-2">
-                      <Sparkles className="size-5 text-gray-600" />
-                      <span className="font-medium">팀 실력</span>
-                    </div>
-                  </div>
-
-                  <p className="mx-4 border p-4 bg-white rounded-2xl whitespace-pre-line mb-3 break-words">
-                    {`${
-                      TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
-                    } - ${
-                      TEAM_LEVEL_DESCRIPTION[
-                        data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                      ]
-                    }`}
-                  </p>
-                </div>
-
                 {/* 활동 지역 */}
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-2">
@@ -614,6 +562,19 @@ const TeamContent = ({ id }: { id: string }) => {
                     <span className="text-base font-medium text-gray-500">
                       {data.data.city}
                       {data.data.district && ` ${data.data.district}`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 팀 실력 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="size-5 text-gray-600" />
+                    <span className="font-medium">팀 실력</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]}
                     </span>
                   </div>
                 </div>
@@ -684,9 +645,19 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="sm:px-4">
                   <button
                     type="button"
-                    className="my-4 sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    className="mt-8 sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                   >
-                    팀 해체
+                    팀 삭제
+                  </button>
+                </div>
+              )}
+              {data.data.currentUserMembership.role !== "OWNER" && (
+                <div className="sm:px-4">
+                  <button
+                    type="button"
+                    className="mt-8 sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                  >
+                    팀 탈퇴
                   </button>
                 </div>
               )}
