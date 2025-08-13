@@ -5,6 +5,7 @@ import { cancelJoinTeam, getTeam, joinTeam } from "../model/actions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
+  CalendarCheck2,
   ChartPie,
   ChevronRight,
   CircleX,
@@ -115,18 +116,19 @@ const TeamContent = ({ id }: { id: string }) => {
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
         <div className="flex items-center justify-end gap-1">
-          <button
-            type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
-          >
-            삭제
-          </button>
-          <button
-            type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
-          >
-            수정
-          </button>
+          {data.data.currentUserMembership.role === "OWNER" && (
+            <button
+              type="button"
+              className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
+              onClick={() => {
+                setIsLoading(true);
+                router.push(`/edit-team/${id}`);
+              }}
+            >
+              수정
+            </button>
+          )}
+
           <button
             type="button"
             className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
@@ -201,21 +203,8 @@ const TeamContent = ({ id }: { id: string }) => {
                   </span>
 
                   {/* 가입하기 */}
-                  {data.data.currentUserMembership.role === "MANAGER" ||
-                  data.data.currentUserMembership.role === "OWNER" ? (
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="w-full text-base font-semibold cursor-pointer"
-                      onClick={() => {
-                        setIsLoading(true);
-                        router.push(`/edit-team/${id}`);
-                      }}
-                    >
-                      팀 정보 수정
-                    </Button>
-                  ) : !data.data.currentUserMembership.isMember ? (
-                    data.data.recruitmentStatus === "RECRUITING" ? (
+                  {!data.data.currentUserMembership.isMember ? (
+                    data.data.recruitmentStatus === "RECRUITING" && (
                       <Button
                         className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
                         size="lg"
@@ -242,26 +231,8 @@ const TeamContent = ({ id }: { id: string }) => {
                       >
                         가입 신청
                       </Button>
-                    ) : (
-                      // 빈 여백 추가
-                      <div />
                     )
                   ) : data.data.currentUserMembership.status === "PENDING" ? (
-                    // <div className="flex items-center justify-between bg-slate-400/10 rounded-lg p-1.5">
-                    //   <div className="flex items-center px-2">
-                    //     {/* <Hourglass className="size-5 mr-3 stroke-indigo-700" /> */}
-                    //     <span className="font-medium text-slate-700">
-                    //       승인 대기중
-                    //     </span>
-                    //   </div>
-                    //   <Button
-                    //     className="text-sm font-semibold text-slate-700"
-                    //     variant="outline"
-                    //     size="sm"
-                    //   >
-                    //     가입신청 취소
-                    //   </Button>
-                    // </div>
                     <Button
                       className="w-full text-base font-semibold"
                       size="lg"
@@ -517,7 +488,7 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 팀 실력 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
+              {/* <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
                   className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
@@ -539,7 +510,7 @@ const TeamContent = ({ id }: { id: string }) => {
                           ]
                         }`}
                 </div>
-              </div>
+              </div> */}
 
               {/* 실력 분포 */}
               <div className="border rounded-2xl overflow-hidden mx-4">
@@ -593,23 +564,9 @@ const TeamContent = ({ id }: { id: string }) => {
 
               {/* 라인 프로필 */}
               <div>
-                {/* 활동 지역 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <MapPinned className="size-5 text-gray-600" />
-                    <span className="font-medium">활동 지역</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.city}
-                      {data.data.district && ` ${data.data.district}`}
-                    </span>
-                  </div>
-                </div>
-
                 {/* 소개 */}
                 <div>
-                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
                     <div className="flex items-center space-x-2">
                       <ScrollText className="size-5 text-gray-600" />
                       <span className="font-medium">소개</span>
@@ -627,6 +584,40 @@ const TeamContent = ({ id }: { id: string }) => {
                   )}
                 </div>
 
+                {/* 팀 실력 */}
+                <div>
+                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                    <div className="flex items-center space-x-2">
+                      <Sparkles className="size-5 text-gray-600" />
+                      <span className="font-medium">팀 실력</span>
+                    </div>
+                  </div>
+
+                  <p className="mx-4 border p-4 bg-white rounded-2xl whitespace-pre-line mb-3 break-words">
+                    {`${
+                      TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
+                    } - ${
+                      TEAM_LEVEL_DESCRIPTION[
+                        data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                      ]
+                    }`}
+                  </p>
+                </div>
+
+                {/* 활동 지역 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <MapPinned className="size-5 text-gray-600" />
+                    <span className="font-medium">활동 지역</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.city}
+                      {data.data.district && ` ${data.data.district}`}
+                    </span>
+                  </div>
+                </div>
+
                 {/* 코드 */}
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-2">
@@ -636,6 +627,28 @@ const TeamContent = ({ id }: { id: string }) => {
                   <div className="flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
                       {data.data.code}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 팀 등록일 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <CalendarCheck2 className="size-5 text-gray-600" />
+                    <span className="font-medium">팀 등록일</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data?.data?.createdAt
+                        ? new Date(data?.data?.createdAt).toLocaleDateString(
+                            "ko-KR",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )
+                        : "데이터 없음"}
                     </span>
                   </div>
                 </div>
@@ -666,18 +679,17 @@ const TeamContent = ({ id }: { id: string }) => {
                   </div>
                 </div> */}
               </div>
-              <p className="text-center text-sm text-gray-500 mt-6">
-                {data?.data?.createdAt
-                  ? `${new Date(data?.data?.createdAt).toLocaleDateString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )} 등록`
-                  : "데이터 없음"}
-              </p>
+
+              {data.data.currentUserMembership.role === "OWNER" && (
+                <div className="sm:px-4">
+                  <button
+                    type="button"
+                    className="my-4 sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                  >
+                    팀 해체
+                  </button>
+                </div>
+              )}
             </Fragment>
           )}
 
