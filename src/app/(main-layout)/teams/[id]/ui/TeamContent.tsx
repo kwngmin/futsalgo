@@ -147,7 +147,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 팀 정보 */}
           <div className="space-y-2">
             <div className="space-y-4 px-4">
-              <div className="flex items-center gap-4 h-28">
+              <div className="flex items-center gap-4 h-28 mb-4">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
@@ -435,9 +435,10 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">
-                    {data.data.stats.averageHeight}cm
+                    불가능
+                    {/* {data.data.stats.averageHeight}cm */}
                   </div>
-                  <Label className="text-muted-foreground">평균 키</Label>
+                  <Label className="text-muted-foreground">친선전</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
                   <div className="font-semibold">
