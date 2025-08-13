@@ -9,11 +9,14 @@ import {
   ChevronRight,
   CircleX,
   EllipsisVertical,
+  Hash,
   Loader2,
   MapPinned,
   ScrollText,
   Share,
   Sparkles,
+  UserPlus,
+  // UserRound,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -63,12 +66,6 @@ const TeamContent = ({ id }: { id: string }) => {
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const [modalStates, setModalStates] = useState({
-  //   edit: false,
-  //   TeamLevel: false,
-  //   playerSkillLevel: false,
-  // });
-
   const { data, refetch } = useQuery({
     queryKey: ["team", id],
     queryFn: () => getTeam(id),
@@ -80,100 +77,6 @@ const TeamContent = ({ id }: { id: string }) => {
   const handleGoBack = () => {
     router.back();
   };
-
-  // const openModal = (field: keyof typeof modalStates) => {
-  //   setModalStates((prev) => ({ ...prev, [field]: true }));
-  // };
-
-  // const closeModal = (field: keyof typeof modalStates) => {
-  //   setModalStates((prev) => ({ ...prev, [field]: false }));
-  // };
-
-  // const renderFieldModal = (
-  //   field: "edit" | "TeamLevel" | "playerSkillLevel",
-  //   title: string
-  // ) => (
-  //   <FieldModal
-  //     title={title}
-  //     open={modalStates[field]}
-  //     onOpenChange={(open) => {
-  //       if (!open) closeModal(field);
-  //     }}
-  //     trigger={
-  //       field === "edit" ? (
-  //         <Button
-  //           variant="outline"
-  //           size="lg"
-  //           className="w-full text-base font-semibold cursor-pointer"
-  //           onClick={() => openModal(field)}
-  //         >
-  //           팀 정보 수정
-  //         </Button>
-  //       ) : (
-  //         <div
-  //           onClick={() => openModal(field)}
-  //           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-b-0"
-  //         >
-  //           <div className="flex items-center space-x-3">
-  //             {/* {field === "nickname" ? (
-  //             <IdCard className={`size-5 text-gray-600`} />
-  //           ) : field === "email" ? (
-  //             <Mail className={`size-5 text-gray-600`} />
-  //           ) : field === "phone" ? (
-  //             <Phone className={`size-5 text-gray-600`} />
-  //           ) : (
-  //             <User2 className="size-5 text-gray-600" />
-  //           )} */}
-  //             <span className="font-medium">
-  //               {/* {field === "basic"
-  //               ? `${data.name || "미설정"} • ${
-  //                   GENDER[data.gender as keyof typeof GENDER]
-  //                 } • ${
-  //                   data.birthDate
-  //                     ? age.success
-  //                       ? `${age.age}세`
-  //                       : "생년월일 미설정"
-  //                     : "생년월일 미설정"
-  //                 } • ${data.height ? `${data.height}cm` : "키 미설정"}`
-  //               : field === "phone"
-  //               ? formatPhoneNumber(data[field] || "") || "설정되지 않음"
-  //               : data[field] || "설정되지 않음"} */}
-  //             </span>
-  //           </div>
-  //           <ChevronRight className="size-5 text-gray-400" />
-  //         </div>
-  //       )
-  //     }
-  //   >
-  //     {field === "edit" ? (
-  //       data?.data ? (
-  //         <EditTeamForm team={data?.data} />
-  //       ) : (
-  //         <div>데이터 없음</div>
-  //       )
-  //     ) : (
-  //       <div>hi</div>
-  //     )}
-  //     {/* {field === "phone" ? (
-  //       <ProfilePhone
-  //         data={data[field] || ""}
-  //         onSuccess={() => closeModal(field)}
-  //       />
-  //     ) : field === "nickname" ? (
-  //       <ProfileNickname
-  //         data={data[field] || ""}
-  //         onSuccess={() => closeModal(field)}
-  //       />
-  //     ) : field === "email" ? (
-  //       <ProfileEmail
-  //         data={data[field] || ""}
-  //         onSuccess={() => closeModal(field)}
-  //       />
-  //     ) : (
-  //       <ProfileBasicForm data={data} onSuccess={() => closeModal(field)} />
-  //     )} */}
-  //   </FieldModal>
-  // );
 
   if (!data) {
     return (
@@ -202,6 +105,7 @@ const TeamContent = ({ id }: { id: string }) => {
           <div className="text-base text-muted-foreground">로딩 중입니다.</div>
         </div>
       )}
+
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between h-16 shrink-0 px-4">
         <button
@@ -211,12 +115,12 @@ const TeamContent = ({ id }: { id: string }) => {
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
         <div className="flex items-center justify-end gap-2">
-          <button
+          {/* <button
             type="button"
             className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-black hover:bg-black/80 text-white rounded-full transition-colors cursor-pointer font-semibold"
           >
             팔로우
-          </button>
+          </button> */}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
@@ -252,12 +156,12 @@ const TeamContent = ({ id }: { id: string }) => {
                     <h1 className="text-xl font-semibold">
                       {data?.data?.name}
                     </h1>
-                    <div className="h-5 flex items-center font-normal pb-0.5">
+                    {/* <div className="h-5 flex items-center font-normal pb-0.5">
                       #{data.data.code}
-                    </div>
+                    </div> */}
                   </div>
-                  <span className="text-muted-foreground tracking-tight">
-                    {data?.data?.createdAt
+                  <span className="text-sm text-muted-foreground tracking-tight">
+                    {/* {data?.data?.createdAt
                       ? `${new Date(data?.data?.createdAt).toLocaleDateString(
                           "ko-KR",
                           {
@@ -266,8 +170,28 @@ const TeamContent = ({ id }: { id: string }) => {
                             day: "numeric",
                           }
                         )} 등록`
-                      : "데이터 없음"}
+                      : "데이터 없음"} */}
+                    {
+                      TEAM_LEVEL_DESCRIPTION[
+                        data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                      ]
+                    }
+                    {/* {`${
+                      TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
+                    } - 
+                        ${
+                          TEAM_LEVEL_DESCRIPTION[
+                            data.data
+                              .level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                          ]
+                        }`} */}
                   </span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <button className="shrink-0 h-10 flex px-3 gap-1.5 items-center justify-center text-gray-600 bg-gray-100 rounded transition-colors cursor-pointer font-semibold">
+                      <UserPlus className="text-sm size-5" />
+                      팔로우
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -569,79 +493,6 @@ const TeamContent = ({ id }: { id: string }) => {
                   <Label className="text-muted-foreground">팀원 모집</Label>
                 </div>
               </div>
-              {/* <div className="border rounded-2xl overflow-hidden mx-4">
-                <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
-                  <div className="flex items-center space-x-3">
-                    <List className={`size-5 text-gray-600`} />
-                    <span className="font-medium">기본 정보</span>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {
-                        TEAM_GENDER[
-                          data?.data?.gender as keyof typeof TEAM_GENDER
-                        ]
-                      }
-                    </div>
-                    <Label className="text-muted-foreground">구분</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.professionalCount
-                        ? `${data.data.stats.professionalCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">선수 출신</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageAge}살
-                    </div>
-                    <Label className="text-muted-foreground">평균 연령</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.averageHeight}cm
-                    </div>
-                    <Label className="text-muted-foreground">평균 키</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.members.approved.length}명
-                    </div>
-                    <Label className="text-muted-foreground">팀원 수</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.recruitmentStatus === "RECRUITING"
-                        ? "모집중"
-                        : "마감"}
-                    </div>
-                    <Label className="text-muted-foreground">팀원 모집</Label>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* 통계 */}
-              {/* <div className="bg-white rounded-lg overflow-hidden">
-               */}
-
-              {/* 경기 년도 선택 */}
-              {/* <div className="flex items-center justify-between gap-2">
-            <h2 className="font-medium text-gray-600 px-2 text-sm">
-              경기 년도 선택 :
-            </h2>
-            <Select>
-              <SelectTrigger className="grow bg-white">
-                <SelectValue placeholder="선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">2025년</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
 
               {/* 팀 실력 */}
               <div className="border rounded-2xl overflow-hidden mx-4">
@@ -718,30 +569,93 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
 
-              {/* 주요 활동 지역 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
-                <div className="w-full flex items-center px-4 py-3 border-b bg-gray-50">
-                  <div className="flex items-center space-x-3">
-                    <MapPinned className={`size-5 text-gray-600`} />
-                    <span className="font-medium">주요 활동 지역</span>
+              {/* 라인 프로필 */}
+              <div>
+                {/* 활동 지역 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <MapPinned className="size-5 text-gray-600" />
+                    <span className="font-medium">활동 지역</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.city}
+                      {data.data.district && ` ${data.data.district}`}
+                    </span>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
-                  {data.data.city}
-                  {data.data.district && ` ${data.data.district}`}
-                </div>
-              </div>
 
-              {/* 소개 */}
-              <div className="border rounded-2xl mx-4">
-                <div className="w-full flex items-center justify-start px-4 py-3 border-b bg-gray-50 space-x-3">
-                  <ScrollText className={`size-5 text-gray-600`} />
-                  <span className="font-medium">소개</span>
+                {/* 소개 */}
+                <div>
+                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                    <div className="flex items-center space-x-2">
+                      <ScrollText className="size-5 text-gray-600" />
+                      <span className="font-medium">소개</span>
+                    </div>
+                    {!Boolean(data?.data?.description) && (
+                      <span className="text-base font-medium text-gray-500">
+                        없음
+                      </span>
+                    )}
+                  </div>
+                  {Boolean(data?.data?.description) && (
+                    <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+                      {data?.data?.description}
+                    </p>
+                  )}
                 </div>
-                <p className="px-4 py-6 my-3 sm:my-0">
-                  {data?.data?.description ?? "소개 없음"}
-                </p>
+
+                {/* 코드 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Hash className="size-5 text-gray-600" />
+                    <span className="font-medium">팀 코드</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.code}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 만든이 */}
+                {/* <div
+                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+                  onClick={() => {
+                    router.push(`/players/${data.data.schedule?.createdBy.id}`);
+                  }}
+                >
+                  <div className="flex items-center space-x-2">
+                    <UserRound className="size-5 text-gray-600" />
+                    <span className="font-medium">소유자</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Image
+                      src={data.data.owner.image ?? ""}
+                      alt="avatar"
+                      width={24}
+                      height={24}
+                      className="rounded-lg mr-1"
+                    />
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.schedule?.createdBy.nickname}
+                    </span>
+                    <ChevronRight className="size-5 text-gray-400" />
+                  </div>
+                </div> */}
               </div>
+              <p className="text-center text-sm text-gray-500 mt-6">
+                {data?.data?.createdAt
+                  ? `${new Date(data?.data?.createdAt).toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )} 등록`
+                  : "데이터 없음"}
+              </p>
             </Fragment>
           )}
 
