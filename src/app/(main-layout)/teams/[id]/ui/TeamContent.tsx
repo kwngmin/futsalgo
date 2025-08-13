@@ -491,7 +491,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 실력 분포 */}
               <div className="border rounded-2xl overflow-hidden mx-4">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
                   onClick={() => {
                     alert("팀원 실력");
                   }}
@@ -540,26 +540,6 @@ const TeamContent = ({ id }: { id: string }) => {
 
               {/* 라인 프로필 */}
               <div>
-                {/* 소개 */}
-                <div>
-                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
-                    <div className="flex items-center space-x-2">
-                      <ScrollText className="size-5 text-gray-600" />
-                      <span className="font-medium">소개</span>
-                    </div>
-                    {!Boolean(data?.data?.description) && (
-                      <span className="text-base font-medium text-gray-500">
-                        없음
-                      </span>
-                    )}
-                  </div>
-                  {Boolean(data?.data?.description) && (
-                    <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-                      {data?.data?.description}
-                    </p>
-                  )}
-                </div>
-
                 {/* 활동 지역 */}
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-2">
@@ -620,6 +600,26 @@ const TeamContent = ({ id }: { id: string }) => {
                         : "데이터 없음"}
                     </span>
                   </div>
+                </div>
+
+                {/* 소개 */}
+                <div>
+                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 border-t border-gray-100">
+                    <div className="flex items-center space-x-2">
+                      <ScrollText className="size-5 text-gray-600" />
+                      <span className="font-medium">소개</span>
+                    </div>
+                    {!Boolean(data?.data?.description) && (
+                      <span className="text-base font-medium text-gray-500">
+                        없음
+                      </span>
+                    )}
+                  </div>
+                  {Boolean(data?.data?.description) && (
+                    <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+                      {data?.data?.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* 만든이 */}
