@@ -75,7 +75,7 @@ const StatCard = ({ label, value }: { label: string; value: number }) => (
 // }) => (
 //   <div className="border rounded-2xl overflow-hidden mx-4">
 //     <div
-//       className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
+//       className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
 //       onClick={() => alert(label)}
 //     >
 //       <div className="flex items-center space-x-3">
@@ -273,7 +273,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             {/* 통계 */}
             <div className="border rounded-2xl overflow-hidden mx-4">
               <div
-                className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
                 onClick={() => alert("통계")}
               >
                 <div className="flex items-center space-x-3">
@@ -295,94 +295,100 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            {/* 선호 포지션 */}
-            <div className="grid grid-cols-5 sm:grid-cols-4 mx-4">
-              <div className="border rounded-2xl overflow-hidden col-span-3 sm:col-span-3 flex flex-col">
+            <div className="grid sm:grid-cols-2 gap-3 px-4">
+              {/* 선호 포지션 */}
+              <div className="border rounded-2xl overflow-hidden flex flex-col">
                 <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
                   onClick={() => alert("선호 포지션")}
                 >
                   <div className="flex items-center space-x-3">
                     <Shapes className="size-5 text-gray-600" />
                     <span className="font-medium">선호 포지션</span>
                   </div>
-                  <ChevronRight className="size-5 text-gray-400" />
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {
+                        FUTSAL_POSITIONS[
+                          playerData.position as keyof typeof FUTSAL_POSITIONS
+                        ]
+                      }
+                    </span>
+                    {/* <ChevronRight className="size-5 text-gray-400" /> */}
+                  </div>
                 </div>
-                <div className="grow flex flex-col gap-1 items-center justify-center px-4">
-                  <span className="font-semibold">
-                    {
-                      FUTSAL_POSITIONS[
-                        playerData.position as keyof typeof FUTSAL_POSITIONS
-                      ]
-                    }
-                  </span>
+
+                {/* 피치 포지션 */}
+                <div className="relative select-none">
+                  <div className="w-full h-full flex items-center justify-center ">
+                    <Image
+                      src="/half_pitch.svg"
+                      alt="position"
+                      width={590}
+                      height={609}
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="absolute w-full h-full top-0 left-0 flex flex-col">
+                    <div className="w-full h-1/4 flex items-end justify-center">
+                      <div
+                        className={`px-6 sm:px-4 h-10 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xl sm:text-base ${
+                          playerData.position === "PIVO"
+                            ? "bg-white"
+                            : "bg-neutral-200 text-muted-foreground"
+                        }`}
+                      >
+                        PIVO
+                      </div>
+                    </div>
+                    <div className="w-full h-1/4 flex justify-between items-center px-8 sm:px-4">
+                      <div
+                        className={`px-6 sm:px-4 h-10 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xl sm:text-base ${
+                          playerData.position === "ALA"
+                            ? "bg-white"
+                            : "bg-neutral-200 text-muted-foreground"
+                        }`}
+                      >
+                        ALA
+                      </div>
+                      <div
+                        className={`px-6 sm:px-4 h-10 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xl sm:text-base ${
+                          playerData.position === "ALA"
+                            ? "bg-white"
+                            : "bg-neutral-200 text-muted-foreground"
+                        }`}
+                      >
+                        ALA
+                      </div>
+                    </div>
+                    <div className="w-full h-1/4 flex items-center justify-center">
+                      <div
+                        className={`px-6 sm:px-4 h-10 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xl sm:text-base ${
+                          playerData.position === "FIXO"
+                            ? "bg-white"
+                            : "bg-neutral-200 text-muted-foreground"
+                        }`}
+                      >
+                        FIXO
+                      </div>
+                    </div>
+                    <div className="w-full h-1/4 flex items-center justify-center">
+                      <div
+                        className={`px-6 sm:px-4 h-10 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xl sm:text-base ${
+                          playerData.position === "GOLEIRO"
+                            ? "bg-white"
+                            : "bg-neutral-200 text-muted-foreground"
+                        }`}
+                      >
+                        GOLEIRO
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/* 피치 포지션 */}
-              <div className="relative select-none col-span-2 sm:col-span-1">
-                <Image
-                  src="/half_pitch.svg"
-                  alt="position"
-                  width={296}
-                  height={306}
-                  className="rounded-2xl overflow-hidden"
-                />
-                <div className="absolute w-full h-full top-0 left-0 flex flex-col py-3 pr-0.5">
-                  <div className="w-full h-1/4 flex items-center justify-center">
-                    <div
-                      className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
-                        playerData.position === "PIVO"
-                          ? "bg-white shadow-md/5"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      PIVO
-                    </div>
-                  </div>
-                  <div className="w-full h-1/4 flex justify-between items-center px-3">
-                    <div
-                      className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
-                        playerData.position === "ALA"
-                          ? "bg-white shadow-md/5"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      ALA
-                    </div>
-                    <div
-                      className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
-                        playerData.position === "ALA"
-                          ? "bg-white shadow-md/5"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      ALA
-                    </div>
-                  </div>
-                  <div className="w-full h-1/4 flex items-center justify-center">
-                    <div
-                      className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
-                        playerData.position === "FIXO"
-                          ? "bg-white shadow-md/5"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      FIXO
-                    </div>
-                  </div>
-                  <div className="w-full h-1/4 flex items-end justify-center">
-                    <div
-                      className={`px-2 h-6 rounded-full flex items-center justify-center font-semibold text-xs ${
-                        playerData.position === "GOLEIRO"
-                          ? "bg-white shadow-md/5"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      GOLEIRO
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+              {/* 🎯 새로 추가: 팀원 평가 레이더 차트 */}
+              <PlayerRatingRadarChart ratingsData={playerData.ratings} />
             </div>
 
             <div>
@@ -390,7 +396,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                 <div className="flex items-center space-x-2">
                   <Sparkles className="size-5 text-gray-600" />
-                  <span className="font-medium">코드</span>
+                  <span className="font-medium">실력</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
@@ -423,9 +429,6 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
-
-            {/* 🎯 새로 추가: 팀원 평가 레이더 차트 */}
-            <PlayerRatingRadarChart ratingsData={playerData.ratings} />
           </Fragment>
         )}
 
