@@ -294,7 +294,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 sm:block">
-                  <div className="sm:hidden flex items-center justify-center">
+                  <div className="sm:hidden flex items-center justify-center font-medium">
                     {
                       FUTSAL_POSITIONS[
                         playerData.position as keyof typeof FUTSAL_POSITIONS
@@ -319,18 +319,18 @@ const PlayerContent = ({ id }: { id: string }) => {
                           className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
                             playerData.position === "PIVO"
                               ? "bg-white"
-                              : "bg-neutral-200 text-muted-foreground"
+                              : "bg-neutral-200/50 text-muted-foreground"
                           }`}
                         >
                           PIVO
                         </div>
                       </div>
-                      <div className="w-full h-1/4 flex justify-between items-center px-4 sm:px-6">
+                      <div className="w-full h-1/4 flex justify-between items-center px-3 sm:px-6">
                         <div
                           className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
                             playerData.position === "ALA"
                               ? "bg-white"
-                              : "bg-neutral-200 text-muted-foreground"
+                              : "bg-neutral-200/50 text-muted-foreground"
                           }`}
                         >
                           ALA
@@ -339,7 +339,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                           className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
                             playerData.position === "ALA"
                               ? "bg-white"
-                              : "bg-neutral-200 text-muted-foreground"
+                              : "bg-neutral-200/50 text-muted-foreground"
                           }`}
                         >
                           ALA
@@ -350,7 +350,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                           className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
                             playerData.position === "FIXO"
                               ? "bg-white"
-                              : "bg-neutral-200 text-muted-foreground"
+                              : "bg-neutral-200/50 text-muted-foreground"
                           }`}
                         >
                           FIXO
@@ -361,7 +361,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                           className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
                             playerData.position === "GOLEIRO"
                               ? "bg-white"
-                              : "bg-neutral-200 text-muted-foreground"
+                              : "bg-neutral-200/50 text-muted-foreground"
                           }`}
                         >
                           GOLEIRO
