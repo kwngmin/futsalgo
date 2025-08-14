@@ -201,19 +201,15 @@ const RadarChart = ({ ratings }: { ratings: RatingItem[] }) => {
   );
 };
 
-const getCurrentDateInfo = () => {
-  const currentDate = new Date();
-  return {
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth() + 1,
-  };
-};
+// const getCurrentDateInfo = () => {
+//   const currentDate = new Date();
+//   return {
+//     year: currentDate.getFullYear(),
+//     month: currentDate.getMonth() + 1,
+//   };
+// };
 
-const NoRatingsMessage = ({
-  dateInfo,
-}: {
-  dateInfo: { year: number; month: number };
-}) => (
+const NoRatingsMessage = () => (
   <div className="border rounded-2xl overflow-hidden flex flex-col">
     <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
       <div className="flex items-center space-x-3">
@@ -251,10 +247,14 @@ const mapRatingsData = (
 };
 
 export default function PlayerRatingRadarChart({ ratingsData }: Props) {
-  const dateInfo = getCurrentDateInfo();
+  // const dateInfo = getCurrentDateInfo();
 
   if (!ratingsData.hasRatings) {
-    return <NoRatingsMessage dateInfo={dateInfo} />;
+    return (
+      <NoRatingsMessage
+      // dateInfo={dateInfo}
+      />
+    );
   }
 
   const { averageRatings, totalRatings } = ratingsData;
