@@ -243,6 +243,10 @@ model User {
   // 게시판
   posts           Post[]
 
+  // 팀원 평가 관계
+  givenRatings    TeamMemberRating[] @relation("GivenRatings")
+  receivedRatings TeamMemberRating[] @relation("ReceivedRatings") 
+
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
    
@@ -309,6 +313,9 @@ model Team {
   homeMatches      Match[]    @relation("MatchHomeTeam")
   awayMatches      Match[]    @relation("MatchAwayTeam")
 
+  // 팀 멤버들의 평가 관계
+  memberRatings   TeamMemberRating[] 
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -341,6 +348,47 @@ model TeamMember {
   @@index([teamId, role], map: "team_role_idx")
   @@index([teamId, role, status], map: "team_role_status_idx")
   @@map("team_members")
+}
+
+// 팀 멤버 평가 모델
+model TeamMemberRating {
+  id          String   @id @default(cuid())
+  
+  // 관계 필드
+  teamId      String   // 어떤 팀에서의 평가인지
+  fromUserId  String   // 평가를 준 사람
+  toUserId    String   // 평가를 받은 사람
+  
+  // 평가 항목별 점수 (1-5점)
+  shooting    Int      @default(1)  // 슈팅 (1-5)
+  passing     Int      @default(1)  // 패스 (1-5)
+  stamina     Int      @default(1)  // 체력 (1-5)
+  physical    Int      @default(1)  // 피지컬 (1-5)
+  dribbling   Int      @default(1)  // 드리블 (1-5)
+  defense     Int      @default(1)  // 수비 (1-5)
+  
+  // 평가 기간 관련
+  periodYear  Int      // 평가 연도 (2024, 2025 등)
+  periodMonth Int      // 평가 월 (1-12)
+  
+  // 관계 설정
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  fromUser    User     @relation("GivenRatings", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser      User     @relation("ReceivedRatings", fields: [toUserId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 제약 조건: 같은 팀에서 같은 평가자가 같은 피평가자를 같은 기간에 중복 평가 방지
+  @@unique([teamId, fromUserId, toUserId, periodYear, periodMonth])
+  
+  // 인덱스 최적화
+  @@index([teamId, toUserId])                   // 특정 팀의 특정 멤버 평가 조회
+  @@index([teamId, periodYear, periodMonth])    // 특정 팀의 특정 기간 평가 조회
+  @@index([toUserId, periodYear])               // 특정 사용자의 받은 평가 조회
+  @@index([fromUserId])                         // 특정 사용자가 준 평가 조회
+  
+  @@map("team_member_ratings")
 }
 
 // ========== SCHEDULE & MATCH MODELS ==========
