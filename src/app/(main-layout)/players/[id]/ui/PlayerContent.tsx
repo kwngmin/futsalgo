@@ -21,6 +21,7 @@ import {
   FUTSAL_POSITIONS,
   GENDER,
   PLAYER_BACKGROUND,
+  SKILL_LEVEL,
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
@@ -401,9 +402,14 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
-                    {SKILL_LEVEL_OPTIONS.find(
+                    {/* {SKILL_LEVEL.find(
                       (option) => option.value === playerData.skillLevel
-                    )?.label || "정보 없음"}
+                    )?.value || "정보 없음"} */}
+                    {
+                      SKILL_LEVEL[
+                        playerData.skillLevel as keyof typeof SKILL_LEVEL
+                      ]
+                    }
                   </span>
                 </div>
               </div>
