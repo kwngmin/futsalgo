@@ -5,12 +5,6 @@ import { prisma } from "@/shared/lib/prisma";
 import { auth } from "@/shared/lib/auth";
 import TeamMemberRatingList from "./ui/TeamMemberRatingList";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
 /**
  * 팀 멤버들과 평가 정보를 가져오는 함수
  * @param teamId - 팀 ID
@@ -97,14 +91,19 @@ async function getTeamMembers(teamId: string, currentUserId: string) {
   }
 }
 
-export default async function TeamRatingPage({ params }: Props) {
+export default async function TeamRatingPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const session = await auth();
 
   if (!session?.user?.id) {
     notFound();
   }
 
-  const data = await getTeamMembers(params.id, session.user.id);
+  const data = await getTeamMembers(id, session.user.id);
 
   if (!data) {
     notFound();
@@ -124,7 +123,7 @@ export default async function TeamRatingPage({ params }: Props) {
       <Suspense fallback={<div>로딩 중...</div>}>
         <TeamMemberRatingList
           members={data.members}
-          teamId={params.id}
+          teamId={id}
           currentUserId={session.user.id}
         />
       </Suspense>
