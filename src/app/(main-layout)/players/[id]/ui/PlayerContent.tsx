@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
+  CalendarCheck2,
   ChartPie,
   ChevronRight,
   EllipsisVertical,
@@ -62,31 +63,31 @@ const StatCard = ({ label, value }: { label: string; value: number }) => (
   </div>
 );
 
-const InfoCard = ({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string;
-  icon: React.ComponentType<{ className?: string }>;
-}) => (
-  <div className="border rounded-2xl overflow-hidden mx-4">
-    <div
-      className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
-      onClick={() => alert(label)}
-    >
-      <div className="flex items-center space-x-3">
-        <Icon className="size-5 text-gray-600" />
-        <span className="font-medium">{label}</span>
-      </div>
-      <ChevronRight className="size-5 text-gray-400" />
-    </div>
-    <div className="flex flex-col gap-1 items-center font-semibold px-4 py-8">
-      {value}
-    </div>
-  </div>
-);
+// const InfoCard = ({
+//   label,
+//   value,
+//   icon: Icon,
+// }: {
+//   label: string;
+//   value: string;
+//   icon: React.ComponentType<{ className?: string }>;
+// }) => (
+//   <div className="border rounded-2xl overflow-hidden mx-4">
+//     <div
+//       className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
+//       onClick={() => alert(label)}
+//     >
+//       <div className="flex items-center space-x-3">
+//         <Icon className="size-5 text-gray-600" />
+//         <span className="font-medium">{label}</span>
+//       </div>
+//       <ChevronRight className="size-5 text-gray-400" />
+//     </div>
+//     <div className="flex flex-col gap-1 items-center font-semibold px-4 py-8">
+//       {value}
+//     </div>
+//   </div>
+// );
 
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -136,16 +137,17 @@ const PlayerContent = ({ id }: { id: string }) => {
         <div className="flex justify-end items-center gap-2">
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-black hover:bg-black/80 text-white rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
           >
+            {/* <UserPlus className="size-5 text-gray-600" /> */}
             팔로우
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -153,7 +155,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 회원 정보 */}
         <div className="border-b border-gray-300 space-y-2">
           <div className="space-y-4 px-4">
-            <div className="flex items-center gap-4 h-20">
+            <div className="flex items-center gap-4 h-20 mb-8">
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl">
@@ -171,8 +173,8 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-semibold">{playerData.nickname}</h1>
-                <span className="text-muted-foreground tracking-tight">
-                  {playerData.createdAt
+                <span className="font-medium text-muted-foreground tracking-tight">
+                  {/* {playerData.createdAt
                     ? `${new Date(playerData.createdAt).toLocaleDateString(
                         "ko-KR",
                         {
@@ -181,7 +183,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                           day: "numeric",
                         }
                       )} 가입`
-                    : "데이터 없음"}
+                    : "데이터 없음"} */}
+                  {SKILL_LEVEL_OPTIONS.find(
+                    (option) => option.value === playerData.skillLevel
+                  )?.label || "정보 없음"}
                 </span>
               </div>
             </div>
@@ -379,16 +384,44 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            {/* 실력 */}
-            <InfoCard
-              label="실력"
-              value={
-                SKILL_LEVEL_OPTIONS.find(
-                  (option) => option.value === playerData.skillLevel
-                )?.label || "정보 없음"
-              }
-              icon={Sparkles}
-            />
+            <div>
+              {/* 실력 */}
+              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                <div className="flex items-center space-x-2">
+                  <Sparkles className="size-5 text-gray-600" />
+                  <span className="font-medium">코드</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {SKILL_LEVEL_OPTIONS.find(
+                      (option) => option.value === playerData.skillLevel
+                    )?.label || "정보 없음"}
+                  </span>
+                </div>
+              </div>
+
+              {/* 가입일 */}
+              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                <div className="flex items-center space-x-2">
+                  <CalendarCheck2 className="size-5 text-gray-600" />
+                  <span className="font-medium">가입일</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {data?.data?.createdAt
+                      ? new Date(data?.data?.createdAt).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      : "데이터 없음"}
+                  </span>
+                </div>
+              </div>
+            </div>
           </Fragment>
         )}
 
