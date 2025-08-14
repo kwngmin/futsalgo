@@ -30,6 +30,7 @@ import { Fragment, useState } from "react";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 import PlayerPhotosGallery from "./PlayerPhotosGallery";
 import PlayerSchedule from "./PlayerSchedule";
+import PlayerRatingRadarChart from "./PlayerRadarChart";
 
 // 서버 액션에서 가져온 타입을 그대로 사용
 
@@ -422,6 +423,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
+
+            {/* 🎯 새로 추가: 팀원 평가 레이더 차트 */}
+            <PlayerRatingRadarChart ratingsData={playerData.ratings} />
           </Fragment>
         )}
 
