@@ -313,10 +313,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                         className="object-cover"
                       />
                     </div>
-                    <div className="absolute w-full h-full top-0 left-0 flex flex-col">
+                    <div className="absolute w-full h-full top-0 left-0 flex flex-col pt-3">
                       <div className="w-full h-1/4 flex items-end justify-center">
                         <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
                             playerData.position === "PIVO"
                               ? "bg-white"
                               : "bg-neutral-200/50 text-muted-foreground"
@@ -327,7 +327,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       </div>
                       <div className="w-full h-1/4 flex justify-between items-center px-3 sm:px-6">
                         <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
                             playerData.position === "ALA"
                               ? "bg-white"
                               : "bg-neutral-200/50 text-muted-foreground"
@@ -336,7 +336,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                           ALA
                         </div>
                         <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
                             playerData.position === "ALA"
                               ? "bg-white"
                               : "bg-neutral-200/50 text-muted-foreground"
@@ -345,9 +345,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                           ALA
                         </div>
                       </div>
-                      <div className="w-full h-1/4 flex items-center justify-center">
+                      <div className="w-full h-1/4 flex items-start justify-center">
                         <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
                             playerData.position === "FIXO"
                               ? "bg-white"
                               : "bg-neutral-200/50 text-muted-foreground"
@@ -358,7 +358,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       </div>
                       <div className="w-full h-1/4 flex items-center justify-center">
                         <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
                             playerData.position === "GOLEIRO"
                               ? "bg-white"
                               : "bg-neutral-200/50 text-muted-foreground"
