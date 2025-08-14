@@ -1,7 +1,7 @@
 // components/player/PlayerRatingRadarChart.tsx
 "use client";
 
-import { ChevronRight, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 interface RatingItem {
   key: string;
@@ -220,12 +220,7 @@ const NoRatingsMessage = ({
         <TrendingUp className="size-5 text-gray-600" />
         <span className="font-medium">팀원 평가</span>
       </div>
-      <div className="flex items-center gap-1">
-        <span className="text-sm text-gray-500">
-          {dateInfo.year}년 {dateInfo.month}월
-        </span>
-        <ChevronRight className="size-5 text-gray-400" />
-      </div>
+      <span className="text-base font-medium text-gray-500">없음</span>
     </div>
     <div className="grow flex flex-col items-center justify-center h-64 pb-4">
       <div className="text-gray-500">아직 받은 평가가 없습니다</div>
