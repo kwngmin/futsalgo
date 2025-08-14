@@ -9,7 +9,7 @@ import {
   CalendarCheck2,
   ChartPie,
   ChevronRight,
-  EllipsisVertical,
+  // EllipsisVertical,
   Shapes,
   Share,
   Sparkles,
