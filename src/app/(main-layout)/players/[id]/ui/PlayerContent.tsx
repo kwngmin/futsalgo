@@ -283,7 +283,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     <Shapes className="size-5 text-gray-600" />
                     <span className="font-medium">선호 포지션</span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="hidden sm:flex items-center gap-1">
                     <span className="text-base font-medium text-gray-500">
                       {
                         FUTSAL_POSITIONS[
@@ -291,73 +291,81 @@ const PlayerContent = ({ id }: { id: string }) => {
                         ]
                       }
                     </span>
-                    {/* <ChevronRight className="size-5 text-gray-400" /> */}
                   </div>
                 </div>
-
-                {/* 피치 포지션 */}
-                <div className="relative select-none">
-                  <div className="w-full h-full flex items-center justify-center ">
-                    <Image
-                      src="/half_pitch.svg"
-                      alt="position"
-                      width={590}
-                      height={609}
-                      className="object-cover"
-                    />
+                <div className="grid grid-cols-2 sm:block">
+                  <div className="sm:hidden flex items-center justify-center">
+                    {
+                      FUTSAL_POSITIONS[
+                        playerData.position as keyof typeof FUTSAL_POSITIONS
+                      ]
+                    }
                   </div>
-                  <div className="absolute w-full h-full top-0 left-0 flex flex-col">
-                    <div className="w-full h-1/4 flex items-end justify-center">
-                      <div
-                        className={`px-4 h-9 sm:h-8 rounded-full flex items-center justify-center font-semibold text-base sm:text-sm ${
-                          playerData.position === "PIVO"
-                            ? "bg-white"
-                            : "bg-neutral-200 text-muted-foreground"
-                        }`}
-                      >
-                        PIVO
-                      </div>
+
+                  {/* 피치 포지션 */}
+                  <div className="relative select-none">
+                    <div className="w-full h-full flex items-center justify-center ">
+                      <Image
+                        src="/half_pitch.svg"
+                        alt="position"
+                        width={590}
+                        height={609}
+                        className="object-cover"
+                      />
                     </div>
-                    <div className="w-full h-1/4 flex justify-between items-center px-6 sm:px-4">
-                      <div
-                        className={`px-4 h-9 sm:h-8 rounded-full flex items-center justify-center font-semibold text-base sm:text-sm ${
-                          playerData.position === "ALA"
-                            ? "bg-white"
-                            : "bg-neutral-200 text-muted-foreground"
-                        }`}
-                      >
-                        ALA
+                    <div className="absolute w-full h-full top-0 left-0 flex flex-col">
+                      <div className="w-full h-1/4 flex items-end justify-center">
+                        <div
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                            playerData.position === "PIVO"
+                              ? "bg-white"
+                              : "bg-neutral-200 text-muted-foreground"
+                          }`}
+                        >
+                          PIVO
+                        </div>
                       </div>
-                      <div
-                        className={`px-4 h-9 sm:h-8 rounded-full flex items-center justify-center font-semibold text-base sm:text-sm ${
-                          playerData.position === "ALA"
-                            ? "bg-white"
-                            : "bg-neutral-200 text-muted-foreground"
-                        }`}
-                      >
-                        ALA
+                      <div className="w-full h-1/4 flex justify-between items-center px-4 sm:px-6">
+                        <div
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                            playerData.position === "ALA"
+                              ? "bg-white"
+                              : "bg-neutral-200 text-muted-foreground"
+                          }`}
+                        >
+                          ALA
+                        </div>
+                        <div
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                            playerData.position === "ALA"
+                              ? "bg-white"
+                              : "bg-neutral-200 text-muted-foreground"
+                          }`}
+                        >
+                          ALA
+                        </div>
                       </div>
-                    </div>
-                    <div className="w-full h-1/4 flex items-center justify-center">
-                      <div
-                        className={`px-4 h-9 sm:h-8 rounded-full flex items-center justify-center font-semibold text-base sm:text-sm ${
-                          playerData.position === "FIXO"
-                            ? "bg-white"
-                            : "bg-neutral-200 text-muted-foreground"
-                        }`}
-                      >
-                        FIXO
+                      <div className="w-full h-1/4 flex items-center justify-center">
+                        <div
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                            playerData.position === "FIXO"
+                              ? "bg-white"
+                              : "bg-neutral-200 text-muted-foreground"
+                          }`}
+                        >
+                          FIXO
+                        </div>
                       </div>
-                    </div>
-                    <div className="w-full h-1/4 flex items-center justify-center">
-                      <div
-                        className={`px-4 h-9 sm:h-8 rounded-full flex items-center justify-center font-semibold text-base sm:text-sm ${
-                          playerData.position === "GOLEIRO"
-                            ? "bg-white"
-                            : "bg-neutral-200 text-muted-foreground"
-                        }`}
-                      >
-                        GOLEIRO
+                      <div className="w-full h-1/4 flex items-center justify-center">
+                        <div
+                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base ${
+                            playerData.position === "GOLEIRO"
+                              ? "bg-white"
+                              : "bg-neutral-200 text-muted-foreground"
+                          }`}
+                        >
+                          GOLEIRO
+                        </div>
                       </div>
                     </div>
                   </div>
