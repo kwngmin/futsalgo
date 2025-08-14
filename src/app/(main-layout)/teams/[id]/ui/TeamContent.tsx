@@ -270,20 +270,8 @@ const TeamContent = ({ id }: { id: string }) => {
                   className="w-full text-base font-semibold"
                   size="lg"
                   variant="outline"
-                  onClick={async () => {
-                    try {
-                      const result = await cancelJoinTeam(id);
-                      console.log(result);
-                      if (result?.success) {
-                        alert("가입 신청이 취소되었습니다.");
-                        refetch();
-                      } else {
-                        alert(result?.error);
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      alert("가입 신청 취소에 실패했습니다.");
-                    }
+                  onClick={() => {
+                    router.push(`/teams/${id}/ratings`);
                   }}
                 >
                   팀원 평가
