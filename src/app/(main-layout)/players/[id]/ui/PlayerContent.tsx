@@ -190,8 +190,8 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </span>
                 <div className="flex items-center gap-2 mt-2 text-gray-500">
                   <div className="flex items-center gap-1.5">
-                    <CalendarCheck2 className="size-4" />
-                    <span className="text-sm font-medium tracking-tight">
+                    <CalendarCheck2 className="size-3.5" />
+                    <span className="text-sm tracking-tight">
                       {data?.data?.createdAt
                         ? `${new Date(data?.data?.createdAt).toLocaleDateString(
                             "ko-KR",

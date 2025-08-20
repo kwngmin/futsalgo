@@ -169,6 +169,12 @@ const TeamContent = ({ id }: { id: string }) => {
                     <h1 className="text-xl font-semibold">
                       {data?.data?.name}
                     </h1>
+                    <div className="flex items-center">
+                      <Hash className="size-4" />
+                      <span className="text-sm font-medium mr-1">
+                        {data.data.code}
+                      </span>
+                    </div>
                   </div>
                   <span className="font-medium text-muted-foreground tracking-tight leading-tight">
                     {
@@ -177,21 +183,19 @@ const TeamContent = ({ id }: { id: string }) => {
                       ]
                     }
                   </span>
-                  <div className="flex items-center gap-2 mt-1.5 text-gray-500">
+                  <div className="flex items-center gap-2 mt-1.5 text-muted-foreground">
                     <div className="flex items-center gap-1">
-                      <CalendarCheck2 className="size-4" />
-                      <span className="text-sm font-medium mr-1">
+                      <CalendarCheck2 className="size-3.5" />
+                      <span className="text-sm tracking-tight mr-1">
                         {data?.data?.createdAt
-                          ? `등록일: ${new Date(
+                          ? `${new Date(
                               data?.data?.createdAt
-                            ).toLocaleDateString()}`
+                            ).toLocaleDateString("ko-KR", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })} 등록`
                           : "데이터 없음"}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-0.5">
-                      <Hash className="size-4" />
-                      <span className="text-sm font-medium mr-1">
-                        {data.data.code}
                       </span>
                     </div>
                   </div>
