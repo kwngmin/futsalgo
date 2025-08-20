@@ -189,7 +189,7 @@ const RadarChart = ({
 };
 
 const NoRatingsMessage = () => (
-  <div className="border rounded-2xl overflow-hidden flex flex-col">
+  <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
     <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
       <div className="flex items-center space-x-3">
         <TrendingUp className="size-5 text-gray-600" />
@@ -197,7 +197,7 @@ const NoRatingsMessage = () => (
       </div>
       <span className="text-base font-medium text-gray-500">없음</span>
     </div>
-    <div className="grow flex flex-col items-center justify-center h-64 pb-4">
+    <div className="grow flex flex-col items-center justify-center h-32 mt-4 pb-4">
       <div className="text-gray-500">아직 받은 평가가 없습니다</div>
       <div className="text-sm text-gray-400">
         팀원들이 평가를 완료하면 여기에 표시됩니다
