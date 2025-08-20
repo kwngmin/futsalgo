@@ -299,10 +299,12 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
             return (
               <div
                 key={rating.key}
-                className="flex justify-between items-center px-4 text-sm gap-3"
+                className="flex justify-between items-center px-4 sm:text-sm gap-3"
               >
                 <div className="min-w-24 flex items-center gap-2">
-                  <span className="font-semibold w-10">{rating.label}</span>
+                  <span className="font-semibold w-12 sm:w-10">
+                    {rating.label}
+                  </span>
                   <span className="text-muted-foreground text-xs">
                     {rating.abbr}
                   </span>
