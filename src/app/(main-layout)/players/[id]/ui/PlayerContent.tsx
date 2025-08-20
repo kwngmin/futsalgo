@@ -33,7 +33,6 @@ import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 // import PlayerPhotosGallery from "./PlayerPhotosGallery";
 // import PlayerSchedule from "./PlayerSchedule";
 import PlayerRatingRadarChart from "./PlayerRadarChart";
-import { TShirtIcon } from "@phosphor-icons/react";
 
 // 서버 액션에서 가져온 타입을 그대로 사용
 
@@ -135,7 +134,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 회원 정보 */}
         <div className="space-y-2">
           <div className="space-y-4 px-4">
-            <div className="flex items-center gap-4 h-20 mb-4">
+            <div className="flex items-center gap-4 h-20 mb-8">
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl ring ring-gray-300">
@@ -192,26 +191,17 @@ const PlayerContent = ({ id }: { id: string }) => {
         </div>
 
         {/* 소속 팀 */}
-        <div className="">
-          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
-            <div className="flex items-center space-x-2">
-              <TShirtIcon className="size-5 text-gray-600" />
-              <span className="font-medium">소속 팀</span>
-            </div>
-            <span className="text-base font-medium text-gray-500">
-              {playerData.teams.length > 0
-                ? `${playerData.teams.length}팀`
-                : "없음"}
-            </span>
+        {playerData.teams.length > 0 ? (
+          <div className="mx-4 border rounded-md overflow-hidden">
+            {playerData.teams.map((team) => (
+              <TeamCard team={team.team} key={team.team.id} />
+            ))}
           </div>
-          {playerData.teams.length > 0 && (
-            <div className="mx-4 border rounded-2xl overflow-hidden">
-              {playerData.teams.map((team) => (
-                <TeamCard team={team.team} key={team.team.id} />
-              ))}
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className="flex justify-center items-center px-4 py-6 my-3 font-medium text-muted-foreground">
+            소속 팀이 존재하지 않습니다
+          </div>
+        )}
 
         {/* 기본 정보 & 피치 포지션 */}
         <div className="flex flex-col sm:flex-row gap-3 px-4 sm:pl-0">
