@@ -189,7 +189,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                   )?.label || "정보 없음"}
                 </span>
                 <div className="flex items-center gap-2 mt-2 text-gray-500">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1">
                     <CalendarCheck2 className="size-3.5" />
                     <span className="text-sm tracking-tight">
                       {data?.data?.createdAt

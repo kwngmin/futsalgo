@@ -183,7 +183,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       ]
                     }
                   </span>
-                  <div className="flex items-center gap-2 mt-1.5 text-muted-foreground">
+                  <div className="flex items-center gap-2 mt-2 text-gray-500">
                     <div className="flex items-center gap-1">
                       <CalendarCheck2 className="size-3.5" />
                       <span className="text-sm tracking-tight mr-1">
