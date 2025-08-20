@@ -255,7 +255,7 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
         </div>
 
         {/* 상세 수치 */}
-        <div className="flex flex-col gap-1.5 border-t sm:border-none py-4 my-auto">
+        <div className="flex flex-col gap-1.5 sm:border-t sm:border-none py-4 my-auto">
           {ratings.map((rating) => (
             <div
               key={rating.key}
