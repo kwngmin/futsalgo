@@ -273,7 +273,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="grid sm:grid-cols-2 mx-4 gap-2">
               <div className="border rounded-2xl overflow-hidden flex flex-col">
                 <div
-                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors shrink-0"
                   onClick={() => alert("선호 포지션")}
                 >
                   <div className="flex items-center space-x-3">
@@ -281,7 +281,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     <span className="font-medium">선호 포지션</span>
                   </div>
                 </div>
-                <div className="h-full min-h-20 grow flex flex-col gap-1 items-center justify-center">
+                <div className="h-full min-h-20 grow flex flex-col gap-1 items-center justify-center mb-2">
                   <div className="font-semibold">
                     {
                       FUTSAL_POSITIONS[
