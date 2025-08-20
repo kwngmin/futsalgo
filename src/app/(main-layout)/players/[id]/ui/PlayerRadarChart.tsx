@@ -34,8 +34,14 @@ const RATING_CONFIG = [
   { key: "defense", label: "수비", angle: 210 },
 ] as const;
 
-const RadarChart = ({ ratings }: { ratings: RatingItem[] }) => {
-  const chartRadius = 80; // 차트 반지름
+const RadarChart = ({
+  ratings,
+  isMobile,
+}: {
+  ratings: RatingItem[];
+  isMobile?: boolean;
+}) => {
+  const chartRadius = isMobile ? 100 : 80; // 차트 반지름
   const labelOffset = 16; // 라벨까지의 거리
   const padding = 28; // SVG 여백
 
@@ -142,7 +148,7 @@ const RadarChart = ({ ratings }: { ratings: RatingItem[] }) => {
           x={x}
           y={y + yOffset}
           textAnchor={textAnchor}
-          fontSize="0.875rem"
+          fontSize={isMobile ? "1rem" : "0.875rem"}
           fill="#1f2937"
           fontWeight="500"
           dominantBaseline={dominantBaseline}
@@ -241,8 +247,11 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
 
       <div className="grid sm:grid-cols-2 sm:gap-4 items-center">
         {/* 레이더 차트 */}
-        <div className="py-3">
+        <div className="py-3 hidden sm:block">
           <RadarChart ratings={ratings} />
+        </div>
+        <div className="py-3 sm:hidden">
+          <RadarChart ratings={ratings} isMobile />
         </div>
 
         {/* 상세 수치 */}

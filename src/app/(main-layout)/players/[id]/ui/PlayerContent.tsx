@@ -270,7 +270,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
 
             {/* 선호 포지션 */}
-            <div className="grid sm:grid-cols-2 mx-4 gap-2">
+            <div className="grid grid-cols-2 mx-4 gap-2">
               <div className="border rounded-2xl overflow-hidden flex flex-col">
                 <div
                   className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
