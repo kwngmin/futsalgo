@@ -25,7 +25,9 @@ const TeamCard = ({
   return (
     <div
       className={`${
-        size === "md" ? "gap-3" : "gap-2 border-t first:border-t-0"
+        size === "md"
+          ? "gap-3"
+          : "gap-2 border-t border-neutral-300 first:border-t-0"
       } py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center`}
       onClick={() => router.push(`/teams/${team.id}`)}
     >

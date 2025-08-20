@@ -192,7 +192,7 @@ const PlayerContent = ({ id }: { id: string }) => {
 
         {/* 소속 팀 */}
         {playerData.teams.length > 0 ? (
-          <div className="mx-4 border rounded-md overflow-hidden">
+          <div className="mx-4 border border-neutral-300 rounded-md overflow-hidden">
             {playerData.teams.map((team) => (
               <TeamCard team={team.team} key={team.team.id} size="sm" />
             ))}
