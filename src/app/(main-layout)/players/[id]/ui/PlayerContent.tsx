@@ -39,21 +39,21 @@ const tabs = [
     value: "overview",
     isDisabled: false,
   },
-  {
-    label: "소속 팀",
-    value: "teams",
-    isDisabled: false,
-  },
-  {
-    label: "경기일정",
-    value: "matches",
-    isDisabled: false,
-  },
-  {
-    label: "사진",
-    value: "photos",
-    isDisabled: false,
-  },
+  // {
+  //   label: "소속 팀",
+  //   value: "teams",
+  //   isDisabled: false,
+  // },
+  // {
+  //   label: "경기일정",
+  //   value: "matches",
+  //   isDisabled: false,
+  // },
+  // {
+  //   label: "사진",
+  //   value: "photos",
+  //   isDisabled: false,
+  // },
 ];
 
 const StatCard = ({ label, value }: { label: string; value: number }) => (
@@ -231,16 +231,25 @@ const PlayerContent = ({ id }: { id: string }) => {
         </div>
 
         {/* 소속 팀 */}
-        {selectedTab === "teams" &&
-          (playerData.teams.length > 0 ? (
-            playerData.teams.map((team) => (
-              <TeamCard team={team.team} key={team.team.id} />
-            ))
-          ) : (
-            <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-medium text-muted-foreground">
-              소속 팀이 존재하지 않습니다
+        <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
+          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors shrink-0">
+            <div className="flex items-center space-x-3">
+              <Shapes className="size-5 text-gray-600" />
+              <span className="font-medium">소속 팀</span>
             </div>
-          ))}
+          </div>
+          <div className="py-2">
+            {playerData.teams.length > 0 ? (
+              playerData.teams.map((team) => (
+                <TeamCard team={team.team} key={team.team.id} />
+              ))
+            ) : (
+              <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-medium text-muted-foreground">
+                소속 팀이 존재하지 않습니다
+              </div>
+            )}
+          </div>
+        </div>
 
         {selectedTab === "overview" && (
           <Fragment>
