@@ -335,7 +335,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                         }`}
                       />
                     </div>
-                    <div className="h-full w-1/4 flex flex-col justify-between items-center py-6 sm:py-4">
+                    <div className="h-full w-1/4 flex flex-col justify-between items-center py-5 sm:py-4">
                       <div
                         className={`size-5 sm:size-4 rounded-full ${
                           playerData.position === "ALA"
