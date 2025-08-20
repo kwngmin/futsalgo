@@ -15,7 +15,7 @@ import {
   MapPinned,
   ScrollText,
   Share,
-  Sparkles,
+  // Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -23,7 +23,7 @@ import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
 import {
   TEAM_GENDER,
-  TEAM_LEVEL,
+  // TEAM_LEVEL,
   TEAM_LEVEL_DESCRIPTION,
 } from "@/entities/team/model/constants";
 import { Fragment, useState } from "react";
@@ -146,8 +146,8 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="space-y-3">
           {/* 팀 정보 */}
           <div className="space-y-2">
-            <div className="space-y-4 px-4">
-              <div className="flex items-center gap-4 h-20">
+            <div className="space-y-4 px-4 sm:flex sm:space-x-4 sm:items-center">
+              <div className="flex items-center gap-4 h-20 sm:grow">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
@@ -170,29 +170,62 @@ const TeamContent = ({ id }: { id: string }) => {
                       {data?.data?.name}
                     </h1>
                   </div>
-                  <span className="font-medium text-muted-foreground tracking-tight">
+                  <span className="font-medium text-muted-foreground tracking-tight leading-tight">
                     {
                       TEAM_LEVEL_DESCRIPTION[
                         data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
                       ]
                     }
-                    {/* {`${
-                      TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]
-                    } - 
-                        ${
-                          TEAM_LEVEL_DESCRIPTION[
-                            data.data
-                              .level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                          ]
-                        }`} */}
                   </span>
+                  <div className="flex items-center gap-2 mt-2 text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <CalendarCheck2 className="size-4" />
+                      <span className="text-sm font-medium mr-1">
+                        {data?.data?.createdAt
+                          ? `등록일: ${new Date(
+                              data?.data?.createdAt
+                            ).toLocaleDateString()}`
+                          : "데이터 없음"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      <Hash className="size-4" />
+                      <span className="text-sm font-medium mr-1">
+                        {data.data.code}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
+              {/* <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-1">
+                  <CalendarCheck2 className="size-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-500 mr-1">
+                    {data?.data?.createdAt
+                      ? `${new Date(
+                          data?.data?.createdAt
+                        ).toLocaleDateString()} 등록`
+                      : "데이터 없음"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Hash className="size-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-500 mr-1">
+                    {data.data.code}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPinned className="size-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-500 mr-1">
+                    {data.data.city} {data.data.district}
+                  </span>
+                </div>
+              </div> */}
               {/* 가입하기 */}
               {!data.data.currentUserMembership.isMember ? (
                 data.data.recruitmentStatus === "RECRUITING" && (
                   <Button
-                    className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
+                    className="w-full sm:max-w-48 text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
                     size="lg"
                     onClick={async () => {
                       if (session.data) {
@@ -220,7 +253,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 )
               ) : data.data.currentUserMembership.status === "PENDING" ? (
                 <Button
-                  className="w-full text-base font-semibold"
+                  className="w-full sm:max-w-48 text-base font-semibold"
                   size="lg"
                   variant="outline"
                   onClick={async () => {
@@ -242,7 +275,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   가입신청 취소
                 </Button>
               ) : data.data.currentUserMembership.status === "REJECTED" ? (
-                <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
+                <div className="sm:max-w-48 flex items-center justify-between bg-red-400/10 rounded-lg p-2">
                   <div className="flex items-center px-2">
                     <CircleX className="size-5 text-red-600 mr-3" />
                     <span className="font-medium text-red-600">
@@ -267,7 +300,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               ) : (
                 <Button
-                  className="w-full text-base font-semibold"
+                  className="sm:max-w-48 w-full text-base font-semibold"
                   size="lg"
                   variant="outline"
                   onClick={() => {
@@ -529,68 +562,6 @@ const TeamContent = ({ id }: { id: string }) => {
 
               {/* 라인 프로필 */}
               <div>
-                {/* 활동 지역 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <MapPinned className="size-5 text-gray-600" />
-                    <span className="font-medium">활동 지역</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.city}
-                      {data.data.district && ` ${data.data.district}`}
-                    </span>
-                  </div>
-                </div>
-
-                {/* 실력 자체 평가 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <Sparkles className="size-5 text-gray-600" />
-                    <span className="font-medium">실력 자체 평가</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]}
-                    </span>
-                  </div>
-                </div>
-
-                {/* 코드 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <Hash className="size-5 text-gray-600" />
-                    <span className="font-medium">코드</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.code}
-                    </span>
-                  </div>
-                </div>
-
-                {/* 등록일 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <CalendarCheck2 className="size-5 text-gray-600" />
-                    <span className="font-medium">등록일</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data?.data?.createdAt
-                        ? new Date(data?.data?.createdAt).toLocaleDateString(
-                            "ko-KR",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
-                          )
-                        : "데이터 없음"}
-                    </span>
-                  </div>
-                </div>
-
                 {/* 소개 */}
                 <div>
                   <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 border-t border-gray-100">
@@ -610,6 +581,55 @@ const TeamContent = ({ id }: { id: string }) => {
                     </p>
                   )}
                 </div>
+
+                {/* 활동 지역 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <MapPinned className="size-5 text-gray-600" />
+                    <span className="font-medium">활동 지역</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.city}
+                      {data.data.district && ` ${data.data.district}`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* 코드 */}
+                {/* <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Hash className="size-5 text-gray-600" />
+                    <span className="font-medium">코드</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.code}
+                    </span>
+                  </div>
+                </div> */}
+
+                {/* 등록일 */}
+                {/* <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <CalendarCheck2 className="size-5 text-gray-600" />
+                    <span className="font-medium">등록일</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data?.data?.createdAt
+                        ? new Date(data?.data?.createdAt).toLocaleDateString(
+                            "ko-KR",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )
+                        : "데이터 없음"}
+                    </span>
+                  </div>
+                </div> */}
 
                 {/* 만든이 */}
                 {/* <div

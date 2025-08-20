@@ -12,7 +12,6 @@ import {
   // EllipsisVertical,
   Shapes,
   Share,
-  Sparkles,
 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
 import {
@@ -21,7 +20,6 @@ import {
   FUTSAL_POSITIONS,
   GENDER,
   PLAYER_BACKGROUND,
-  SKILL_LEVEL,
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
@@ -230,7 +228,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {selectedTab === "overview" && (
           <Fragment>
             {/* 기본 정보 */}
-            <div className="bg-neutral-100 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
+            <div className="bg-neutral-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
               <div className="flex flex-col gap-1 items-center my-3">
                 <div className="font-semibold">
                   {GENDER[playerData.gender as keyof typeof GENDER]}
@@ -271,9 +269,8 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            {/* 선호 포지션 및 팀원 평가 */}
-            <div className="grid sm:grid-cols-2 gap-3 px-4">
-              {/* 선호 포지션 */}
+            {/* 선호 포지션 */}
+            <div className="grid sm:grid-cols-2 mx-4 gap-2">
               <div className="border rounded-2xl overflow-hidden flex flex-col">
                 <div
                   className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
@@ -283,98 +280,85 @@ const PlayerContent = ({ id }: { id: string }) => {
                     <Shapes className="size-5 text-gray-600" />
                     <span className="font-medium">선호 포지션</span>
                   </div>
-                  <div className="hidden sm:flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {
-                        FUTSAL_POSITIONS[
-                          playerData.position as keyof typeof FUTSAL_POSITIONS
-                        ]
-                      }
-                    </span>
-                  </div>
                 </div>
-                <div className="grid grid-cols-2 sm:block">
-                  <div className="sm:hidden flex items-center justify-center font-medium">
+                <div className="h-full min-h-20 grow flex flex-col gap-1 items-center justify-center">
+                  <div className="font-semibold">
                     {
                       FUTSAL_POSITIONS[
                         playerData.position as keyof typeof FUTSAL_POSITIONS
                       ]
                     }
                   </div>
+                  <Label className="text-muted-foreground">
+                    {playerData.position}
+                  </Label>
+                </div>
+              </div>
 
-                  {/* 피치 포지션 */}
-                  <div className="relative select-none">
-                    <div className="w-full h-full flex items-center justify-center ">
-                      <Image
-                        src="/half_pitch.svg"
-                        alt="position"
-                        width={590}
-                        height={609}
-                        className="object-cover"
+              {/* 피치 포지션 */}
+              <div className="flex items-center justify-center">
+                <div className="h-fit relative select-none">
+                  <div className="w-full h-full flex items-center justify-center ">
+                    <Image
+                      src="/full_pitch.svg"
+                      alt="position"
+                      width={806}
+                      height={406}
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="absolute w-full h-full top-0 left-0 flex pl-4">
+                    <div className="w-1/4 shrink-0" />
+                    <div className="h-full w-1/4 flex items-center justify-center">
+                      <div
+                        className={`size-4 rounded-full ${
+                          playerData.position === "PIVO"
+                            ? "bg-red-500"
+                            : "bg-white/50"
+                        }`}
                       />
                     </div>
-                    <div className="absolute w-full h-full top-0 left-0 flex flex-col pt-3">
-                      <div className="w-full h-1/4 flex items-end justify-center">
-                        <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
-                            playerData.position === "PIVO"
-                              ? "bg-white"
-                              : "bg-neutral-200/50 text-muted-foreground"
-                          }`}
-                        >
-                          PIVO
-                        </div>
-                      </div>
-                      <div className="w-full h-1/4 flex justify-between items-center px-3 sm:px-6">
-                        <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
-                            playerData.position === "ALA"
-                              ? "bg-white"
-                              : "bg-neutral-200/50 text-muted-foreground"
-                          }`}
-                        >
-                          ALA
-                        </div>
-                        <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
-                            playerData.position === "ALA"
-                              ? "bg-white"
-                              : "bg-neutral-200/50 text-muted-foreground"
-                          }`}
-                        >
-                          ALA
-                        </div>
-                      </div>
-                      <div className="w-full h-1/4 flex items-start justify-center">
-                        <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
-                            playerData.position === "FIXO"
-                              ? "bg-white"
-                              : "bg-neutral-200/50 text-muted-foreground"
-                          }`}
-                        >
-                          FIXO
-                        </div>
-                      </div>
-                      <div className="w-full h-1/4 flex items-center justify-center">
-                        <div
-                          className={`px-3 sm:px-4 h-7 sm:h-8 rounded-full flex items-center justify-center font-semibold text-xs sm:text-sm ${
-                            playerData.position === "GOLEIRO"
-                              ? "bg-white"
-                              : "bg-neutral-200/50 text-muted-foreground"
-                          }`}
-                        >
-                          GOLEIRO
-                        </div>
-                      </div>
+                    <div className="h-full w-1/4 flex flex-col justify-between items-center py-3 sm:py-4">
+                      <div
+                        className={`size-4 rounded-full ${
+                          playerData.position === "ALA"
+                            ? "bg-red-500"
+                            : "bg-white/50"
+                        }`}
+                      />
+                      <div
+                        className={`size-4 rounded-full ${
+                          playerData.position === "ALA"
+                            ? "bg-red-500"
+                            : "bg-white/50"
+                        }`}
+                      />
+                    </div>
+                    <div className="h-full w-1/4 flex items-center justify-center">
+                      <div
+                        className={`size-4 rounded-full ${
+                          playerData.position === "FIXO"
+                            ? "bg-red-500"
+                            : "bg-white/50"
+                        }`}
+                      />
+                    </div>
+                    <div className="h-full w-1/4 flex items-center justify-center">
+                      <div
+                        className={`size-4 rounded-full ${
+                          playerData.position === "GOLEIRO"
+                            ? "bg-red-500"
+                            : "bg-white/50"
+                        }`}
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* 🎯 새로 추가: 팀원 평가 레이더 차트 */}
-              <PlayerRatingRadarChart ratingsData={playerData.ratings} />
             </div>
+
+            {/* 레이더 차트 */}
+            <PlayerRatingRadarChart ratingsData={playerData.ratings} />
 
             {/* 통계 */}
             <div className="border rounded-2xl overflow-hidden mx-4">
@@ -402,26 +386,6 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
 
             <div>
-              {/* 실력 */}
-              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                <div className="flex items-center space-x-2">
-                  <Sparkles className="size-5 text-gray-600" />
-                  <span className="font-medium">실력</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium text-gray-500">
-                    {/* {SKILL_LEVEL.find(
-                      (option) => option.value === playerData.skillLevel
-                    )?.value || "정보 없음"} */}
-                    {
-                      SKILL_LEVEL[
-                        playerData.skillLevel as keyof typeof SKILL_LEVEL
-                      ]
-                    }
-                  </span>
-                </div>
-              </div>
-
               {/* 가입일 */}
               <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
                 <div className="flex items-center space-x-2">
