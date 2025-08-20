@@ -45,7 +45,7 @@ const TeamCard = ({
         ) : (
           <div
             className={`${
-              size === "md" ? "size-14" : "size-10"
+              size === "md" ? "size-14" : "size-8"
             } bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}
           >
             {team.name.charAt(0)}
