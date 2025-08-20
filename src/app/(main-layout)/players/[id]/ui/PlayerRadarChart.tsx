@@ -6,7 +6,7 @@ import { ChartBar } from "lucide-react";
 interface RatingItem {
   key: string;
   label: string;
-  description: string;
+  abbr: string;
   value: number;
   maxValue: number;
 }
@@ -28,13 +28,46 @@ interface Props {
 
 const RATING_CONFIG = [
   // 12시 방향부터 시작
-  { key: "shooting", label: "SHT", description: "슈팅", angle: -90 },
-  { key: "passing", label: "PAS", description: "패스", angle: -30 },
-  { key: "stamina", label: "STA", description: "체력", angle: 30 },
-  { key: "physical", label: "PHY", description: "피지컬", angle: 90 },
-  { key: "dribbling", label: "DRI", description: "드리블", angle: 150 },
-  { key: "defense", label: "DEF", description: "수비", angle: 210 },
+  { key: "shooting", abbr: "SHT", label: "슈팅", angle: -90 },
+  { key: "passing", abbr: "PAS", label: "패스", angle: -30 },
+  { key: "stamina", abbr: "STA", label: "체력", angle: 30 },
+  { key: "physical", abbr: "PHY", label: "피지컬", angle: 90 },
+  { key: "dribbling", abbr: "DRI", label: "드리블", angle: 150 },
+  { key: "defense", abbr: "DEF", label: "수비", angle: 210 },
 ] as const;
+
+// 점수에 따른 색상 매핑 함수
+const getColorByScore = (score: number) => {
+  if (score >= 4)
+    return {
+      bg: "#01AA3E",
+      bgWithOpacity: "rgba(1, 170, 62, 0.1)",
+      text: "#006B28",
+    }; // 초록
+  if (score >= 3)
+    return {
+      bg: "#7CAE00",
+      bgWithOpacity: "rgba(124, 174, 0, 0.1)",
+      text: "#5A8200",
+    }; // 연두
+  if (score >= 2)
+    return {
+      bg: "#D19F02",
+      bgWithOpacity: "rgba(209, 159, 2, 0.1)",
+      text: "#A17A01",
+    }; // 노랑
+  if (score > 1)
+    return {
+      bg: "#CA7302",
+      bgWithOpacity: "rgba(202, 115, 2, 0.1)",
+      text: "#985501",
+    }; // 주황
+  return {
+    bg: "#B70005",
+    bgWithOpacity: "rgba(183, 0, 5, 0.1)",
+    text: "#8B0004",
+  }; // 빨강
+};
 
 const RadarChart = ({
   ratings,
@@ -221,7 +254,7 @@ const mapRatingsData = (
   return RATING_CONFIG.map((config) => ({
     key: config.key,
     label: config.label,
-    description: config.description,
+    abbr: config.abbr,
     value: averageRatings[config.key as keyof typeof averageRatings] || 0,
     maxValue: 5,
   }));
@@ -260,36 +293,43 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
 
         {/* 상세 수치 */}
         <div className="flex flex-col gap-1.5 sm:border-t sm:border-none py-4 my-auto">
-          {ratings.map((rating) => (
-            <div
-              key={rating.key}
-              className="flex justify-between items-center px-4 text-sm gap-3"
-            >
-              <div className="min-w-24 flex items-center gap-2">
-                <span className="font-semibold w-7">{rating.label}</span>
-                <span className="text-gray-600 text-xs">
-                  {rating.description}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 grow">
-                <div className="bg-gray-100 h-1 w-full">
+          {ratings.map((rating) => {
+            const colors = getColorByScore(rating.value);
+
+            return (
+              <div
+                key={rating.key}
+                className="flex justify-between items-center px-4 text-sm gap-3"
+              >
+                <div className="min-w-24 flex items-center gap-2">
+                  <span className="font-semibold w-10">{rating.label}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {rating.abbr}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 grow">
+                  <div className="bg-gray-100 h-1 w-full">
+                    <div
+                      className="h-full bg-amber-500"
+                      style={{
+                        width: `${rating.value * 20}%`,
+                        // backgroundColor: colors.bg,
+                      }}
+                    />
+                  </div>
                   <div
-                    className="h-full bg-amber-500"
-                    style={{ width: `${rating.value * 20}%` }}
-                  />
-                </div>
-                <div
-                  className={`font-semibold px-2 py-1 rounded-md ${
-                    rating.value >= 4.5
-                      ? "bg-amber-500 text-white"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {rating.value.toFixed(1)}
+                    className="font-bold px-2 py-1 rounded-md w-10 text-center"
+                    style={{
+                      backgroundColor: colors.bgWithOpacity,
+                      color: colors.text,
+                    }}
+                  >
+                    {rating.value.toFixed(1)}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           {/* <div className="text-sm text-gray-500 text-center flex items-center justify-center bg-gray-50 px-4 py-2 mx-4 rounded">
             {totalRatings}명의 팀원이 평가
           </div> */}
