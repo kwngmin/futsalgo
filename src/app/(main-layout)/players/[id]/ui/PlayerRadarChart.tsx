@@ -270,7 +270,7 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
                   />
                 </div>
                 <div
-                  className={`font-semibold px-2 py-1 rounded-full ${
+                  className={`font-semibold px-2 py-1 rounded-md ${
                     rating.value >= 4.5
                       ? "bg-amber-500 text-white"
                       : "bg-gray-100 text-gray-600"

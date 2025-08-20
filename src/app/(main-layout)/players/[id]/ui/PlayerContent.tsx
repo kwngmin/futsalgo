@@ -173,7 +173,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-semibold">{playerData.nickname}</h1>
-                <span className="font-medium text-muted-foreground tracking-tight">
+                <span className="font-medium text-muted-foreground tracking-tight leading-tight">
                   {/* {playerData.createdAt
                     ? `${new Date(playerData.createdAt).toLocaleDateString(
                         "ko-KR",
@@ -188,18 +188,19 @@ const PlayerContent = ({ id }: { id: string }) => {
                     (option) => option.value === playerData.skillLevel
                   )?.label || "정보 없음"}
                 </span>
-                <div className="flex items-center gap-2 mt-1.5 text-gray-500">
-                  <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2 mt-2 text-gray-500">
+                  <div className="flex items-center gap-1.5">
                     <CalendarCheck2 className="size-4" />
-                    <span className="text-sm font-medium mr-1">
+                    <span className="text-sm font-medium">
                       {data?.data?.createdAt
-                        ? `가입일: ${new Date(
-                            data?.data?.createdAt
-                          ).toLocaleDateString("ko-KR", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}`
+                        ? `${new Date(data?.data?.createdAt).toLocaleDateString(
+                            "ko-KR",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )} 가입`
                         : "데이터 없음"}
                     </span>
                   </div>
@@ -334,7 +335,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                         }`}
                       />
                     </div>
-                    <div className="h-full w-1/4 flex flex-col justify-between items-center py-4">
+                    <div className="h-full w-1/4 flex flex-col justify-between items-center py-6 sm:py-4">
                       <div
                         className={`size-5 sm:size-4 rounded-full ${
                           playerData.position === "ALA"
