@@ -186,27 +186,6 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
         </div>
 
-        {/* 소속 팀 */}
-        <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
-          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors shrink-0">
-            <div className="flex items-center space-x-3">
-              <Shapes className="size-5 text-gray-600" />
-              <span className="font-medium">소속 팀</span>
-            </div>
-          </div>
-          <div className="py-2">
-            {playerData.teams.length > 0 ? (
-              playerData.teams.map((team) => (
-                <TeamCard team={team.team} key={team.team.id} />
-              ))
-            ) : (
-              <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-medium text-muted-foreground">
-                소속 팀이 존재하지 않습니다
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* 기본 정보 */}
         <div className="bg-neutral-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
           <div className="flex flex-col gap-1 items-center my-3">
@@ -246,6 +225,27 @@ const PlayerContent = ({ id }: { id: string }) => {
               {CONDITION[playerData.condition as keyof typeof CONDITION]}
             </div>
             <Label className="text-muted-foreground">부상</Label>
+          </div>
+        </div>
+
+        {/* 소속 팀 */}
+        <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
+          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors shrink-0">
+            <div className="flex items-center space-x-3">
+              <Shapes className="size-5 text-gray-600" />
+              <span className="font-medium">소속 팀</span>
+            </div>
+          </div>
+          <div className="py-2">
+            {playerData.teams.length > 0 ? (
+              playerData.teams.map((team) => (
+                <TeamCard team={team.team} key={team.team.id} />
+              ))
+            ) : (
+              <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-medium text-muted-foreground">
+                소속 팀이 존재하지 않습니다
+              </div>
+            )}
           </div>
         </div>
 
