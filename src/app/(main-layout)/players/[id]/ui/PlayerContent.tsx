@@ -7,15 +7,19 @@ import Image from "next/image";
 import {
   ArrowLeft,
   CalendarCheck2,
+  CalendarDays,
   ChartPie,
   ChevronRight,
+  Footprints,
+  History,
+  Ruler,
   // EllipsisVertical,
   Shapes,
   Share,
+  VenusAndMars,
 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
 import {
-  CONDITION,
   FOOT,
   FUTSAL_POSITIONS,
   GENDER,
@@ -29,6 +33,7 @@ import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 // import PlayerPhotosGallery from "./PlayerPhotosGallery";
 // import PlayerSchedule from "./PlayerSchedule";
 import PlayerRatingRadarChart from "./PlayerRadarChart";
+import { TShirtIcon } from "@phosphor-icons/react";
 
 // 서버 액션에서 가져온 타입을 그대로 사용
 
@@ -130,7 +135,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 회원 정보 */}
         <div className="space-y-2">
           <div className="space-y-4 px-4">
-            <div className="flex items-center gap-4 h-20 mb-8">
+            <div className="flex items-center gap-4 h-20 mb-4">
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl ring ring-gray-300">
@@ -186,98 +191,175 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
         </div>
 
-        {/* 기본 정보 */}
-        <div className="bg-neutral-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {GENDER[playerData.gender as keyof typeof GENDER]}
-            </div>
-            <Label className="text-muted-foreground">성별</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {
-                PLAYER_BACKGROUND[
-                  playerData.playerBackground as keyof typeof PLAYER_BACKGROUND
-                ]
-              }
-            </div>
-            <Label className="text-muted-foreground">출신</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {getCurrentAge(playerData.birthDate as string).age}살
-            </div>
-            <Label className="text-muted-foreground">나이</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">{playerData.height}cm</div>
-            <Label className="text-muted-foreground">키</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {FOOT[playerData.foot as keyof typeof FOOT]}
-            </div>
-            <Label className="text-muted-foreground">사용하는 발</Label>
-          </div>
-          <div className="flex flex-col gap-1 items-center my-3">
-            <div className="font-semibold">
-              {CONDITION[playerData.condition as keyof typeof CONDITION]}
-            </div>
-            <Label className="text-muted-foreground">부상</Label>
-          </div>
-        </div>
-
         {/* 소속 팀 */}
-        <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
-          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors shrink-0">
-            <div className="flex items-center space-x-3">
-              <Shapes className="size-5 text-gray-600" />
+        <div className="">
+          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
+            <div className="flex items-center space-x-2">
+              <TShirtIcon className="size-5 text-gray-600" />
               <span className="font-medium">소속 팀</span>
             </div>
+            <span className="text-base font-medium text-gray-500">
+              {playerData.teams.length > 0
+                ? `${playerData.teams.length}팀`
+                : "없음"}
+            </span>
           </div>
-          <div className="py-2">
-            {playerData.teams.length > 0 ? (
-              playerData.teams.map((team) => (
+          {playerData.teams.length > 0 && (
+            <div className="mx-4 border rounded-2xl overflow-hidden">
+              {playerData.teams.map((team) => (
                 <TeamCard team={team.team} key={team.team.id} />
-              ))
-            ) : (
-              <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-medium text-muted-foreground">
-                소속 팀이 존재하지 않습니다
-              </div>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* 선호 포지션 */}
-        <div className="grid sm:grid-cols-2 mx-4 gap-2">
-          <div className="border rounded-2xl overflow-hidden flex flex-col">
-            <div
-              className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors shrink-0"
-              onClick={() => alert("선호 포지션")}
-            >
-              <div className="flex items-center space-x-3">
-                <Shapes className="size-5 text-gray-600" />
-                <span className="font-medium">선호 포지션</span>
+        {/* 기본 정보 & 피치 포지션 */}
+        <div className="flex flex-col sm:flex-row gap-3 px-4 sm:pl-0">
+          {/* 기본 정보 */}
+          <div className="grow">
+            {/* 출신 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <History className="size-5 text-gray-600" />
+                <span className="font-medium">출신</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {
+                    PLAYER_BACKGROUND[
+                      playerData.playerBackground as keyof typeof PLAYER_BACKGROUND
+                    ]
+                  }
+                </span>
               </div>
             </div>
-            <div className="h-full min-h-20 grow flex flex-col gap-1 items-center justify-center mt-1 mb-2">
-              <div className="font-semibold">
-                {
-                  FUTSAL_POSITIONS[
-                    playerData.position as keyof typeof FUTSAL_POSITIONS
-                  ]
-                }
+            {/* 성별 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <VenusAndMars className="size-5 text-gray-600" />
+                <span className="font-medium">성별</span>
               </div>
-              <Label className="text-muted-foreground">
-                {playerData.position}
-              </Label>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {GENDER[playerData.gender as keyof typeof GENDER]}
+                </span>
+              </div>
+            </div>
+
+            {/* 나이 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <CalendarDays className="size-5 text-gray-600" />
+                <span className="font-medium">나이</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {getCurrentAge(playerData.birthDate as string).age}살
+                </span>
+              </div>
+            </div>
+            {/* 키 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <Ruler className="size-5 text-gray-600" />
+                <span className="font-medium">키</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {playerData.height}cm
+                </span>
+              </div>
+            </div>
+            {/* 사용하는 발 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <Footprints className="size-5 text-gray-600" />
+                <span className="font-medium">사용하는 발</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {FOOT[playerData.foot as keyof typeof FOOT]}
+                </span>
+              </div>
+            </div>
+            {/* 선호하는 포지션 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <Shapes className="size-5 text-gray-600" />
+                <span className="font-medium">선호하는 포지션</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {
+                    FUTSAL_POSITIONS[
+                      playerData.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </span>
+              </div>
             </div>
           </div>
 
           {/* 피치 포지션 */}
-          <div className="flex items-center justify-center">
-            <div className="h-fit relative select-none">
+          <div className="">
+            <div className="relative select-none hidden sm:block">
+              <div className="w-full h-full flex items-center justify-center ">
+                <Image
+                  src="/full_pitch_vertical.svg"
+                  alt="position"
+                  width={135}
+                  height={268}
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute w-full h-full top-0 left-0 flex flex-col pt-4">
+                <div className="h-1/4 shrink-0" />
+                <div className="w-full h-1/4 flex items-center justify-center">
+                  <div
+                    className={`size-5 sm:size-4 rounded-full ${
+                      playerData.position === "PIVO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="w-full h-1/4 flex justify-between items-center px-4">
+                  <div
+                    className={`size-5 sm:size-4 rounded-full ${
+                      playerData.position === "ALA"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                  <div
+                    className={`size-5 sm:size-4 rounded-full ${
+                      playerData.position === "ALA"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="w-full h-1/4 flex items-center justify-center">
+                  <div
+                    className={`size-5 sm:size-4 rounded-full ${
+                      playerData.position === "FIXO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="w-full h-1/4 flex items-center justify-center">
+                  <div
+                    className={`size-5 sm:size-4 rounded-full ${
+                      playerData.position === "GOLEIRO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="relative select-none sm:hidden">
               <div className="w-full h-full flex items-center justify-center ">
                 <Image
                   src="/full_pitch.svg"
