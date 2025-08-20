@@ -281,7 +281,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                     <span className="font-medium">선호 포지션</span>
                   </div>
                 </div>
-                <div className="h-full min-h-20 grow flex flex-col gap-1 items-center justify-center mb-2">
+                <div className="h-full min-h-20 grow flex flex-col gap-1 items-center justify-center mt-1 mb-2">
                   <div className="font-semibold">
                     {
                       FUTSAL_POSITIONS[
