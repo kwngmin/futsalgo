@@ -41,7 +41,7 @@ const RadarChart = ({
   ratings: RatingItem[];
   isMobile?: boolean;
 }) => {
-  const chartRadius = isMobile ? 100 : 80; // 차트 반지름
+  const chartRadius = isMobile ? 112 : 80; // 차트 반지름
   const labelOffset = 16; // 라벨까지의 거리
   const padding = 28; // SVG 여백
 
