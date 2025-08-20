@@ -177,7 +177,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       ]
                     }
                   </span>
-                  <div className="flex items-center gap-2 mt-2 text-gray-500">
+                  <div className="flex items-center gap-2 mt-1.5 text-gray-500">
                     <div className="flex items-center gap-1">
                       <CalendarCheck2 className="size-4" />
                       <span className="text-sm font-medium mr-1">

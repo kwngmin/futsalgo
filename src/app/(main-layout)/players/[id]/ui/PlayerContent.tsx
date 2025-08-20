@@ -188,6 +188,22 @@ const PlayerContent = ({ id }: { id: string }) => {
                     (option) => option.value === playerData.skillLevel
                   )?.label || "정보 없음"}
                 </span>
+                <div className="flex items-center gap-2 mt-1.5 text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <CalendarCheck2 className="size-4" />
+                    <span className="text-sm font-medium mr-1">
+                      {data?.data?.createdAt
+                        ? `가입일: ${new Date(
+                            data?.data?.createdAt
+                          ).toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}`
+                        : "데이터 없음"}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
             {/* <MannerBar /> */}
@@ -382,30 +398,6 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <StatCard label="득점" value={playerData.stats.goals} />
                 <StatCard label="어시스트" value={playerData.stats.assists} />
                 <StatCard label="MVP" value={playerData.stats.mvp} />
-              </div>
-            </div>
-
-            <div>
-              {/* 가입일 */}
-              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                <div className="flex items-center space-x-2">
-                  <CalendarCheck2 className="size-5 text-gray-600" />
-                  <span className="font-medium">가입일</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium text-gray-500">
-                    {data?.data?.createdAt
-                      ? new Date(data?.data?.createdAt).toLocaleDateString(
-                          "ko-KR",
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }
-                        )
-                      : "데이터 없음"}
-                  </span>
-                </div>
               </div>
             </div>
           </Fragment>
