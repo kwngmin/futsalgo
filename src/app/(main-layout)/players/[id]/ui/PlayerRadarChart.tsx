@@ -1,11 +1,12 @@
 // components/player/PlayerRatingRadarChart.tsx
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { ChartBar } from "lucide-react";
 
 interface RatingItem {
   key: string;
   label: string;
+  description: string;
   value: number;
   maxValue: number;
 }
@@ -26,12 +27,13 @@ interface Props {
 }
 
 const RATING_CONFIG = [
-  { key: "shooting", label: "슈팅", angle: -90 }, // 12시 방향부터 시작
-  { key: "passing", label: "패스", angle: -30 },
-  { key: "stamina", label: "체력", angle: 30 },
-  { key: "physical", label: "피지컬", angle: 90 },
-  { key: "dribbling", label: "드리블", angle: 150 },
-  { key: "defense", label: "수비", angle: 210 },
+  // 12시 방향부터 시작
+  { key: "shooting", label: "SHT", description: "슈팅", angle: -90 },
+  { key: "passing", label: "PAS", description: "패스", angle: -30 },
+  { key: "stamina", label: "STA", description: "체력", angle: 30 },
+  { key: "physical", label: "PHY", description: "피지컬", angle: 90 },
+  { key: "dribbling", label: "DRI", description: "드리블", angle: 150 },
+  { key: "defense", label: "DEF", description: "수비", angle: 210 },
 ] as const;
 
 const RadarChart = ({
@@ -150,7 +152,7 @@ const RadarChart = ({
           textAnchor={textAnchor}
           fontSize={isMobile ? "1rem" : "0.875rem"}
           fill="#1f2937"
-          fontWeight="500"
+          fontWeight="600"
           dominantBaseline={dominantBaseline}
         >
           {config.label}
@@ -192,10 +194,10 @@ const NoRatingsMessage = () => (
   <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
     <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
       <div className="flex items-center space-x-3">
-        <TrendingUp className="size-5 text-gray-600" />
-        <span className="font-medium">팀원 평가</span>
+        <ChartBar className="size-5 text-gray-600" />
+        <span className="font-medium">능력치</span>
       </div>
-      <span className="text-base font-medium text-gray-500">없음</span>
+      {/* <span className="text-base font-medium text-gray-500">없음</span> */}
     </div>
     <div className="grow flex flex-col items-center justify-center h-32 mt-4 pb-4">
       <div className="text-gray-500">아직 받은 평가가 없습니다</div>
@@ -206,12 +208,12 @@ const NoRatingsMessage = () => (
   </div>
 );
 
-const calculateTotalScore = (ratings: RatingItem[]): string => {
-  if (ratings.length === 0) return "0.0";
+// const calculateTotalScore = (ratings: RatingItem[]): string => {
+//   if (ratings.length === 0) return "0.0";
 
-  const sum = ratings.reduce((acc, rating) => acc + rating.value, 0);
-  return sum.toFixed(1);
-};
+//   const sum = ratings.reduce((acc, rating) => acc + rating.value, 0);
+//   return sum.toFixed(1);
+// };
 
 const mapRatingsData = (
   averageRatings: Props["ratingsData"]["averageRatings"]
@@ -219,6 +221,7 @@ const mapRatingsData = (
   return RATING_CONFIG.map((config) => ({
     key: config.key,
     label: config.label,
+    description: config.description,
     value: averageRatings[config.key as keyof typeof averageRatings] || 0,
     maxValue: 5,
   }));
@@ -231,18 +234,19 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
 
   const { averageRatings, totalRatings } = ratingsData;
   const ratings = mapRatingsData(averageRatings);
-  const totalScore = calculateTotalScore(ratings);
+  // const totalScore = calculateTotalScore(ratings);
 
   return (
     <div className="mx-4 border rounded-2xl overflow-hidden flex flex-col">
       <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
         <div className="flex items-center space-x-3">
-          <TrendingUp className="size-5 text-gray-600" />
-          <span className="font-medium">팀원 평가</span>
+          <ChartBar className="size-5 text-gray-600" />
+          <span className="font-medium">능력치</span>
+          <span className="font-medium text-sm text-gray-500">{`팀원 평가(${totalRatings}명)`}</span>
         </div>
-        <span className="text-base font-medium text-gray-500">
+        {/* <span className="text-base font-medium text-gray-500">
           {totalScore}
-        </span>
+        </span> */}
       </div>
 
       <div className="grid sm:grid-cols-2 sm:gap-4 items-center">
@@ -261,7 +265,12 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
               key={rating.key}
               className="flex justify-between items-center px-4 text-sm gap-3"
             >
-              <div className="text-gray-600 min-w-16">{rating.label}</div>
+              <div className="min-w-24 flex items-center gap-2">
+                <span className="font-semibold w-7">{rating.label}</span>
+                <span className="text-gray-600 text-xs">
+                  {rating.description}
+                </span>
+              </div>
               <div className="flex items-center gap-3 grow">
                 <div className="bg-gray-100 h-1 w-full">
                   <div
@@ -281,9 +290,9 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
               </div>
             </div>
           ))}
-          <div className="text-sm text-gray-500 text-center flex items-center justify-center bg-gray-50 px-4 py-2 mx-4 rounded">
+          {/* <div className="text-sm text-gray-500 text-center flex items-center justify-center bg-gray-50 px-4 py-2 mx-4 rounded">
             {totalRatings}명의 팀원이 평가
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
