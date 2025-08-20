@@ -134,7 +134,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 회원 정보 */}
         <div className="space-y-2">
           <div className="space-y-4 px-4">
-            <div className="flex items-center gap-4 h-20 mb-8">
+            <div className="flex items-center gap-4 h-20 mb-6">
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl ring ring-gray-300">
