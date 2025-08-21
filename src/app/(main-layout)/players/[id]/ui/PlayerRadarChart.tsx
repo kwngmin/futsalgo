@@ -315,22 +315,16 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
                   </span> */}
                 </div>
                 <div className="flex items-center gap-3 grow">
-                  <div
-                    className="h-1 w-full bg-gray-200"
-                    // style={{
-                    //   backgroundColor: colors.bgWithOpacity,
-                    // }}
-                  >
+                  <div className="h-1 w-full bg-gray-200">
                     <div
                       className="h-full bg-amber-500"
                       style={{
                         width: `${rating.value * 20}%`,
-                        // backgroundColor: colors.bg,
                       }}
                     />
                   </div>
                   <div
-                    className="font-bold shrink-0 py-1 rounded-md w-12 text-center"
+                    className="font-bold shrink-0 py-1 rounded-md w-11 sm:w-10 text-center"
                     style={{
                       backgroundColor: colors.bg,
                       color: "white",
