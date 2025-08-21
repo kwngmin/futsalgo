@@ -117,16 +117,13 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="flex items-center justify-end gap-1.5">
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center hover:bg-neutral-100 rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors cursor-pointer font-semibold text-gray-600 hover:text-gray-700"
           >
             팔로우
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
-          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <EllipsisVertical className="size-5" />
-          </button> */}
         </div>
       </div>
       {data ? (
@@ -341,77 +338,6 @@ const TeamContent = ({ id }: { id: string }) => {
             </div> */}
           </div>
 
-          {/* 가입하기 */}
-          {/* {!data.data.currentUserMembership.isMember ? (
-            data.data.recruitmentStatus === "RECRUITING" ? (
-              <Button
-                className="w-full text-base font-semibold bg-indigo-700"
-                size="lg"
-                onClick={async () => {
-                  if (session.data) {
-                    try {
-                      const result = await joinTeam(id);
-                      console.log(result);
-                      if (result?.success) {
-                        alert("가입 신청이 완료되었습니다.");
-                      } else {
-                        alert(result?.error);
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      alert("가입 신청에 실패했습니다.");
-                    }
-                  } else {
-                    alert("로그인이 필요합니다.");
-                    signIn();
-                  }
-                }}
-              >
-                가입 신청
-              </Button>
-            ) : null
-          ) : data.data.currentUserMembership.status === "PENDING" ? (
-            <div className="flex items-center justify-between bg-white rounded-lg p-2">
-              <div className="flex items-center px-2">
-                <Hourglass className="size-5 mr-3" />
-                <span className="font-medium">가입 대기중</span>
-              </div>
-              <Button
-                className="text-sm font-semibold text-indigo-700"
-                variant="outline"
-                size="sm"
-              >
-                가입 취소
-              </Button>
-            </div>
-          ) : (
-            data.data.currentUserMembership.status === "REJECTED" && (
-              <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
-                <div className="flex items-center px-2">
-                  <CircleX className="size-5 text-red-600 mr-3" />
-                  <span className="font-medium text-red-600">
-                    가입 신청이 거절되었습니다.
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    className="text-sm font-semibold"
-                    variant="outline"
-                    size="sm"
-                  >
-                    거절 사유보기
-                  </Button>
-                  <Button
-                    className="text-sm font-semibold text-white bg-indigo-700"
-                    size="sm"
-                  >
-                    재가입 신청하기
-                  </Button>
-                </div>
-              </div>
-            )
-          )} */}
-
           {/* 팀원 */}
           {selectedTab === "members" && (
             <TeamMemberList
@@ -507,72 +433,11 @@ const TeamContent = ({ id }: { id: string }) => {
                     )}
                   </div>
                   {Boolean(data?.data?.description) && (
-                    <p className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+                    <p className="border p-4 bg-white rounded-2xl min-h-24 whitespace-pre-line mb-3 break-words">
                       {data?.data?.description}
                     </p>
                   )}
                 </div>
-
-                {/* 코드 */}
-                {/* <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <Hash className="size-5 text-gray-600" />
-                    <span className="font-medium">코드</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.code}
-                    </span>
-                  </div>
-                </div> */}
-
-                {/* 등록일 */}
-                {/* <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <CalendarCheck2 className="size-5 text-gray-600" />
-                    <span className="font-medium">등록일</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data?.data?.createdAt
-                        ? new Date(data?.data?.createdAt).toLocaleDateString(
-                            "ko-KR",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
-                          )
-                        : "데이터 없음"}
-                    </span>
-                  </div>
-                </div> */}
-
-                {/* 만든이 */}
-                {/* <div
-                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-                  onClick={() => {
-                    router.push(`/players/${data.data.schedule?.createdBy.id}`);
-                  }}
-                >
-                  <div className="flex items-center space-x-2">
-                    <UserRound className="size-5 text-gray-600" />
-                    <span className="font-medium">소유자</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Image
-                      src={data.data.owner.image ?? ""}
-                      alt="avatar"
-                      width={24}
-                      height={24}
-                      className="rounded-lg mr-1"
-                    />
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.schedule?.createdBy.nickname}
-                    </span>
-                    <ChevronRight className="size-5 text-gray-400" />
-                  </div>
-                </div> */}
               </div>
 
               {/* 실력 분포 */}
@@ -580,9 +445,8 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-gray-50">
                   <div className="flex items-center space-x-3">
                     <ChartPie className={`size-5 text-gray-600`} />
-                    <span className="font-medium">팀원 실력</span>
+                    <span className="font-medium">팀원 실력 분포</span>
                   </div>
-                  {/* <ChevronRight className="size-5 text-gray-400" /> */}
                 </div>
                 <div className="grid grid-cols-4 gap-3 p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
@@ -591,7 +455,7 @@ const TeamContent = ({ id }: { id: string }) => {
                         ? `${data.data.stats.beginnerCount}명`
                         : "없음"}
                     </div>
-                    <Label className="text-muted-foreground">초보</Label>
+                    <Label className="text-muted-foreground">왕초보</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-semibold">
