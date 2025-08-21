@@ -70,6 +70,21 @@ const StatCard = ({ label, value }: { label: string; value: number }) => (
 //   </div>
 // );
 
+/**
+ * yyyymmdd 형식의 문자열을 "yyyy년 m월 d일"로 변환
+ * @param dateStr yyyymmdd 형식 문자열 (예: "19860302")
+ * @returns 변환된 날짜 문자열
+ */
+export function formatKoreanDate(dateStr: string): string {
+  if (dateStr.length !== 8) return dateStr;
+
+  const year = dateStr.substring(0, 4);
+  const month = parseInt(dateStr.substring(4, 6), 10); // 03 -> 3
+  const day = parseInt(dateStr.substring(6, 8), 10); // 02 -> 2
+
+  return `${year}년 ${month}월 ${day}일`;
+}
+
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
 
@@ -244,9 +259,10 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-base font-medium text-gray-500">
-                  {playerData.birthDate?.slice(0, 4)}년{" "}
+                  {/* {playerData.birthDate?.slice(0, 4)}년{" "}
                   {playerData.birthDate?.slice(4, 6)}월{" "}
-                  {playerData.birthDate?.slice(6, 8)}일
+                  {playerData.birthDate?.slice(6, 8)}일 */}
+                  {formatKoreanDate(playerData.birthDate as string)}
                 </span>
               </div>
             </div>
