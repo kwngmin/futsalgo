@@ -306,33 +306,33 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
                 key={rating.key}
                 className="flex justify-between items-center px-4 sm:text-sm gap-3"
               >
-                <div className="min-w-24 flex items-center gap-2">
+                <div className="min-w-16 flex items-center gap-2">
                   <span className="font-semibold tracking-tight w-11 sm:w-10">
                     {rating.label}
                   </span>
-                  <span className="text-gray-400 text-sm font-semibold">
+                  {/* <span className="text-gray-400 text-sm font-semibold">
                     {rating.abbr}
-                  </span>
+                  </span> */}
                 </div>
                 <div className="flex items-center gap-3 grow">
                   <div
-                    className="h-1 w-full"
-                    style={{
-                      backgroundColor: colors.bgWithOpacity,
-                    }}
+                    className="h-1 w-full bg-gray-200"
+                    // style={{
+                    //   backgroundColor: colors.bgWithOpacity,
+                    // }}
                   >
                     <div
-                      className="h-full"
+                      className="h-full bg-amber-500"
                       style={{
                         width: `${rating.value * 20}%`,
-                        backgroundColor: colors.bg,
+                        // backgroundColor: colors.bg,
                       }}
                     />
                   </div>
                   <div
-                    className="font-bold shrink-0 py-1 rounded-md w-10 text-center"
+                    className="font-bold shrink-0 py-1 rounded-md w-12 text-center"
                     style={{
-                      backgroundColor: colors.text,
+                      backgroundColor: colors.bg,
                       color: "white",
                     }}
                   >

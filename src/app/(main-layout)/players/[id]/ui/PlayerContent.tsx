@@ -133,7 +133,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         <div className="flex justify-end items-center gap-1.5">
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center hover:bg-neutral-100 rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-emerald-500/10 text-emerald-600 hover:bg-emerald-200 rounded-full transition-colors cursor-pointer font-semibold"
           >
             팔로우
           </button>
@@ -436,15 +436,20 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 포지션 표시 */}
-            <div className="flex justify-center items-center gap-1.5 px-4 h-12 sm:h-9 sm:text-sm tracking-tight font-bold text-red-500 bg-green-800/10 pb-0.5 border-[3px] border-t-0 sm:border-2 sm:border-y-0 border-white">
-              {playerData.position}
-              <span className="font-medium text-gray-600">
-                {
-                  FUTSAL_POSITIONS_KOREAN[
-                    playerData.position as keyof typeof FUTSAL_POSITIONS_KOREAN
-                  ]
-                }
-              </span>
+            <div className="flex justify-center items-center h-12 sm:h-9 bg-green-800/10 pb-0.5 border-[3px] border-t-0 sm:border-2 sm:border-y-0 border-white">
+              <div className="text-sm sm:text-xs tracking-tight flex items-center gap-1 bg-white rounded px-3 sm:px-1.5 py-1">
+                <span className="font-bold text-red-500">
+                  {playerData.position}
+                </span>
+                <span className="text-gray-300">•</span>
+                <span className="font-medium text-gray-600">
+                  {
+                    FUTSAL_POSITIONS_KOREAN[
+                      playerData.position as keyof typeof FUTSAL_POSITIONS_KOREAN
+                    ]
+                  }
+                </span>
+              </div>
             </div>
           </div>
         </div>
