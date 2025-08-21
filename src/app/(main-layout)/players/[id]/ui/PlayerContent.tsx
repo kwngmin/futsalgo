@@ -437,14 +437,15 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 포지션 표시 */}
-            <div className="flex justify-center items-center gap-2 px-4 h-12 sm:h-9 sm:text-sm tracking-tight font-bold text-red-500">
-              {`${playerData.position}
-              • 
-              ${
-                FUTSAL_POSITIONS_KOREAN[
-                  playerData.position as keyof typeof FUTSAL_POSITIONS_KOREAN
-                ]
-              }`}
+            <div className="flex justify-center items-center gap-1.5 px-4 h-11 sm:h-9 sm:text-sm tracking-tight font-bold text-red-500">
+              {playerData.position}
+              <span className="font-medium text-gray-600">
+                {
+                  FUTSAL_POSITIONS_KOREAN[
+                    playerData.position as keyof typeof FUTSAL_POSITIONS_KOREAN
+                  ]
+                }
+              </span>
             </div>
           </div>
         </div>
