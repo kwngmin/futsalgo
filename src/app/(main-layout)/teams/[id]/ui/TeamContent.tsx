@@ -625,11 +625,11 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
 
               {/* 수정 & 삭제 */}
-              <div className="sm:px-4 mt-12 space-y-3 sm:grid gap-3 grid-cols-3">
+              <div className="px-4 mt-12 space-y-3 sm:grid gap-3 grid-cols-3">
                 {data.data.currentUserMembership.role === "OWNER" && (
                   <button
                     type="button"
-                    className="sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-600 font-medium"
+                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-600 font-medium"
                     onClick={() => {
                       setIsLoading(true);
                       router.push(`/edit-team/${id}`);
@@ -641,7 +641,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 {data.data.currentUserMembership.role === "OWNER" && (
                   <button
                     type="button"
-                    className="sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                   >
                     팀 삭제
                   </button>
@@ -649,7 +649,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 {data.data.currentUserMembership.role !== "OWNER" && (
                   <button
                     type="button"
-                    className="sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                   >
                     팀 탈퇴
                   </button>
