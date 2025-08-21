@@ -7,7 +7,7 @@ import {
   ArrowLeft,
   CalendarCheck2,
   ChartPie,
-  ChevronRight,
+  // ChevronRight,
   CircleX,
   // EllipsisVertical,
   Hash,
@@ -15,6 +15,7 @@ import {
   MapPinned,
   ScrollText,
   Share,
+  UserStar,
   // Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -116,9 +117,8 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="flex items-center justify-end gap-1.5">
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center hover:bg-neutral-100 rounded-full transition-colors cursor-pointer font-semibold"
           >
-            {/* <UserPlus className="size-5 text-gray-600" /> */}
             팔로우
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -133,8 +133,8 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="space-y-3">
           {/* 팀 정보 */}
           <div className="space-y-2">
-            <div className="space-y-4 px-4 sm:flex sm:space-x-4 sm:items-center">
-              <div className="flex items-center gap-4 h-20 sm:grow">
+            <div className="space-y-4 px-4">
+              <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
@@ -216,7 +216,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {!data.data.currentUserMembership.isMember ? (
                 data.data.recruitmentStatus === "RECRUITING" && (
                   <Button
-                    className="w-full sm:max-w-48 text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
+                    className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
                     size="lg"
                     onClick={async () => {
                       if (session.data) {
@@ -244,7 +244,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 )
               ) : data.data.currentUserMembership.status === "PENDING" ? (
                 <Button
-                  className="w-full sm:max-w-48 text-base font-semibold"
+                  className="w-full text-base font-semibold"
                   size="lg"
                   variant="outline"
                   onClick={async () => {
@@ -266,7 +266,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   가입신청 취소
                 </Button>
               ) : data.data.currentUserMembership.status === "REJECTED" ? (
-                <div className="sm:max-w-48 flex items-center justify-between bg-red-400/10 rounded-lg p-2">
+                <div className="flex items-center justify-between bg-red-400/10 rounded-lg p-2">
                   <div className="flex items-center px-2">
                     <CircleX className="size-5 text-red-600 mr-3" />
                     <span className="font-medium text-red-600">
@@ -291,13 +291,14 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               ) : (
                 <Button
-                  className="sm:max-w-48 w-full text-base font-semibold"
+                  className="w-full text-base font-semibold"
                   size="lg"
                   variant="outline"
                   onClick={() => {
                     router.push(`/teams/${id}/ratings`);
                   }}
                 >
+                  <UserStar className="size-5 text-gray-600" />
                   팀원 평가
                 </Button>
               )}
@@ -576,17 +577,12 @@ const TeamContent = ({ id }: { id: string }) => {
 
               {/* 실력 분포 */}
               <div className="border rounded-2xl overflow-hidden mx-4">
-                <div
-                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-                  onClick={() => {
-                    alert("팀원 실력");
-                  }}
-                >
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-gray-50">
                   <div className="flex items-center space-x-3">
                     <ChartPie className={`size-5 text-gray-600`} />
                     <span className="font-medium">팀원 실력</span>
                   </div>
-                  <ChevronRight className="size-5 text-gray-400" />
+                  {/* <ChevronRight className="size-5 text-gray-400" /> */}
                 </div>
                 <div className="grid grid-cols-4 gap-3 p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
@@ -629,7 +625,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 {data.data.currentUserMembership.role === "OWNER" && (
                   <button
                     type="button"
-                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-600 font-medium"
+                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-700 font-medium"
                     onClick={() => {
                       setIsLoading(true);
                       router.push(`/edit-team/${id}`);

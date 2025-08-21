@@ -133,12 +133,11 @@ const PlayerContent = ({ id }: { id: string }) => {
         <div className="flex justify-end items-center gap-1.5">
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-900 hover:bg-neutral-700 text-white rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center hover:bg-neutral-100 rounded-full transition-colors cursor-pointer font-semibold"
           >
-            {/* <UserPlus className="size-5 text-gray-600" /> */}
             팔로우
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
