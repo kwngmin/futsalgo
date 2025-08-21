@@ -307,10 +307,10 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
                 className="flex justify-between items-center px-4 sm:text-sm gap-3"
               >
                 <div className="min-w-24 flex items-center gap-2">
-                  <span className="font-semibold w-12 sm:w-10">
+                  <span className="font-semibold tracking-tight w-11 sm:w-10">
                     {rating.label}
                   </span>
-                  <span className="text-muted-foreground text-xs">
+                  <span className="text-gray-400 text-sm font-semibold">
                     {rating.abbr}
                   </span>
                 </div>
