@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
+  Cake,
   CalendarCheck2,
   CalendarDays,
   ChartPie,
@@ -235,7 +236,20 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </span>
               </div>
             </div>
-
+            {/* 생년월일 */}
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+              <div className="flex items-center space-x-2">
+                <Cake className="size-5 text-gray-600" />
+                <span className="font-medium">생년월일</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-base font-medium text-gray-500">
+                  {playerData.birthDate?.slice(0, 4)}년{" "}
+                  {playerData.birthDate?.slice(4, 6)}월{" "}
+                  {playerData.birthDate?.slice(6, 8)}일
+                </span>
+              </div>
+            </div>
             {/* 나이 */}
             <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
@@ -405,6 +419,9 @@ const PlayerContent = ({ id }: { id: string }) => {
                   />
                 </div>
               </div>
+            </div>
+            <div className="flex justify-center items-center px-4 h-12 sm:h-10 text-sm tracking-tight font-semibold bg-neutral-100 text-gray-600 pb-0.5 leading-tight border-[3px] sm:border-2 border-white">
+              {playerData.position}
             </div>
           </div>
         </div>

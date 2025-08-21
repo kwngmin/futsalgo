@@ -26,28 +26,28 @@ const TeamCard = ({
     <div
       className={`${
         size === "md"
-          ? "gap-3"
-          : "gap-2 border-t border-neutral-300 first:border-t-0"
-      } py-2 px-4 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center`}
+          ? "py-2"
+          : "py-3 border-t border-neutral-300 first:border-t-0"
+      } gap-3 px-4 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center`}
       onClick={() => router.push(`/teams/${team.id}`)}
     >
       {/* 팀 로고 */}
       <div
         className={`${
-          size === "md" ? "size-14" : "size-8"
+          size === "md" ? "size-14" : "size-10"
         } rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}
       >
         {team.logoUrl ? (
           <Image
             src={team.logoUrl}
             alt={team.name}
-            width={size === "md" ? 56 : 32}
-            height={size === "md" ? 56 : 32}
+            width={size === "md" ? 56 : 40}
+            height={size === "md" ? 56 : 40}
           />
         ) : (
           <div
             className={`${
-              size === "md" ? "size-14" : "size-8"
+              size === "md" ? "size-14" : "size-10"
             } bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}
           >
             {team.name.charAt(0)}
@@ -59,8 +59,8 @@ const TeamCard = ({
       <div className="flex flex-col items-start justify-center grow">
         <h3
           className={`${
-            size === "md" ? "text-lg sm:text-base" : "text-sm"
-          } font-semibold flex items-center gap-2 truncate leading-none h-6`}
+            size === "md" ? "text-lg sm:text-base font-semibold" : "font-medium"
+          } flex items-center gap-2 truncate leading-none h-6`}
         >
           {team.name}
           <span className="sm:text-sm font-medium text-amber-600 mb-0.5">
@@ -77,7 +77,7 @@ const TeamCard = ({
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
           <div
             className={`${
-              size === "md" ? "sm:text-sm" : "text-xs mb-1"
+              size === "md" ? "sm:text-sm" : "text-sm mb-0.5"
             } w-full tracking-tight flex items-center gap-1 text-muted-foreground font-medium`}
           >
             {team.gender === "MALE" ? (
@@ -119,7 +119,7 @@ const TeamCard = ({
 
       {team.recruitmentStatus === "RECRUITING" && (
         <div className="flex items-center">
-          <div className="flex justify-center items-center gap-0.5 px-1.5 h-12 sm:size-14">
+          <div className="flex justify-center items-center gap-0.5 px-1.5 h-12">
             {/* <span className="text-xs sm:text-sm text-teal-700 font-semibold tracking-tight">
             팀전 신청 가능
           </span> */}
