@@ -23,6 +23,7 @@ import { getCurrentAge } from "@/entities/user/model/actions";
 import {
   FOOT,
   FUTSAL_POSITIONS,
+  FUTSAL_POSITIONS_KOREAN,
   GENDER,
   PLAYER_BACKGROUND,
   SKILL_LEVEL_OPTIONS,
@@ -220,7 +221,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         )}
 
         {/* 기본 정보 & 피치 포지션 */}
-        <div className="flex flex-col sm:flex-row gap-3 px-4">
+        <div className="flex flex-col sm:flex-row gap-3 px-4 border-b border-gray-100">
           {/* 기본 정보 */}
           <div className="grow">
             {/* 출신 */}
@@ -259,9 +260,6 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-base font-medium text-gray-500">
-                  {/* {playerData.birthDate?.slice(0, 4)}년{" "}
-                  {playerData.birthDate?.slice(4, 6)}월{" "}
-                  {playerData.birthDate?.slice(6, 8)}일 */}
                   {formatKoreanDate(playerData.birthDate as string)}
                 </span>
               </div>
@@ -303,7 +301,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 선호하는 포지션 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-y border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-3">
                 <Shapes className="size-5 text-gray-600" />
                 <span className="font-medium">선호하는 포지션</span>
@@ -321,7 +319,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           </div>
 
           {/* 피치 포지션 */}
-          <div className="">
+          <div>
             {/* 데스크탑 */}
             <div className="relative select-none hidden sm:block">
               <div className="w-full h-full flex items-center justify-center ">
@@ -439,8 +437,14 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 포지션 표시 */}
-            <div className="flex justify-center items-center px-4 h-12 sm:h-10 text-sm tracking-tight font-bold bg-red-500/10 text-red-500 pb-0.5 leading-tight border-[3px] sm:border-2 border-white rounded-md">
-              {playerData.position}
+            <div className="flex justify-center items-center gap-2 px-4 h-12 sm:h-9 text-sm tracking-tight font-bold text-red-500">
+              {`${playerData.position}
+              • 
+              ${
+                FUTSAL_POSITIONS_KOREAN[
+                  playerData.position as keyof typeof FUTSAL_POSITIONS_KOREAN
+                ]
+              }`}
             </div>
           </div>
         </div>

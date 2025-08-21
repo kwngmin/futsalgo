@@ -38,6 +38,13 @@ export const FUTSAL_POSITIONS = {
   GOLEIRO: "골키퍼",
 };
 
+export const FUTSAL_POSITIONS_KOREAN = {
+  PIVO: "피보",
+  ALA: "아라",
+  FIXO: "픽소",
+  GOLEIRO: "골레이로",
+};
+
 export const POSITION_DESCRIPTION = {
   PIVO: "최전방 공격수로, 볼을 지키고 동료에게 연결",
   ALA: "윙어처럼 측면에서 공격을 지원하고, 적극적으로 수비 가담",
