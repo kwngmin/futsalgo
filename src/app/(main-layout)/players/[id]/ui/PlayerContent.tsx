@@ -210,7 +210,7 @@ const PlayerContent = ({ id }: { id: string }) => {
           <div className="grow">
             {/* 출신 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <History className="size-5 text-gray-600" />
                 <span className="font-medium">출신</span>
               </div>
@@ -226,7 +226,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             {/* 성별 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <VenusAndMars className="size-5 text-gray-600" />
                 <span className="font-medium">성별</span>
               </div>
@@ -238,7 +238,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             {/* 생년월일 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Cake className="size-5 text-gray-600" />
                 <span className="font-medium">생년월일</span>
               </div>
@@ -252,7 +252,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             {/* 나이 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <CalendarDays className="size-5 text-gray-600" />
                 <span className="font-medium">나이</span>
               </div>
@@ -264,7 +264,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             {/* 키 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Ruler className="size-5 text-gray-600" />
                 <span className="font-medium">키</span>
               </div>
@@ -276,7 +276,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             {/* 사용하는 발 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Footprints className="size-5 text-gray-600" />
                 <span className="font-medium">사용하는 발</span>
               </div>
@@ -288,7 +288,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
             {/* 선호하는 포지션 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-y border-gray-100 gap-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Shapes className="size-5 text-gray-600" />
                 <span className="font-medium">선호하는 포지션</span>
               </div>
