@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, EllipsisVertical, Share } from "lucide-react";
+import { ArrowLeft, Share } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
@@ -132,7 +132,7 @@ const ScheduleContent = ({
             {startTime && `${startTime.getMonth() + 1}.${startTime.getDate()}`}
           </h1>
         </button> */}
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center justify-end gap-1.5">
           <button
             className={`shrink-0 size-10 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
               isLiked ? "hover:bg-indigo-600/10" : "hover:bg-gray-100 group"
@@ -152,9 +152,9 @@ const ScheduleContent = ({
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
-          </button>
+          </button> */}
         </div>
       </div>
 
