@@ -122,7 +122,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             {/* <UserPlus className="size-5 text-gray-600" /> */}
             팔로우
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -420,7 +420,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-center items-center px-4 h-12 sm:h-10 text-sm tracking-tight font-semibold bg-neutral-100 text-gray-600 pb-0.5 leading-tight border-[3px] sm:border-2 border-white">
+            <div className="flex justify-center items-center px-4 h-12 sm:h-10 text-sm tracking-tight font-semibold bg-neutral-100 text-gray-600 pb-0.5 leading-tight border-[3px] sm:border-2 border-white rounded-md">
               {playerData.position}
             </div>
           </div>
