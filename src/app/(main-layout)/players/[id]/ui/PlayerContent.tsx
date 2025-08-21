@@ -437,7 +437,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 포지션 표시 */}
-            <div className="flex justify-center items-center gap-2 px-4 h-12 sm:h-9 text-sm tracking-tight font-bold text-red-500">
+            <div className="flex justify-center items-center gap-2 px-4 h-12 sm:h-9 sm:text-sm tracking-tight font-bold text-red-500">
               {`${playerData.position}
               • 
               ${
