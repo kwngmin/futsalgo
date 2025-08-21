@@ -287,7 +287,7 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
         </span> */}
       </div>
 
-      <div className="grid sm:grid-cols-2 sm:gap-4 items-center">
+      <div className="grid sm:grid-cols-2 sm:gap-2 items-center">
         {/* 레이더 차트 */}
         <div className="py-3 hidden sm:block bg-gradient-to-b from-neutral-100 bg-neutral-50">
           <RadarChart ratings={ratings} />
@@ -297,7 +297,7 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
         </div>
 
         {/* 상세 수치 */}
-        <div className="flex flex-col gap-2 sm:gap-3 sm:border-t sm:border-none py-6 sm:py-4 my-auto">
+        <div className="flex flex-col gap-2 sm:gap-2.5 sm:border-t sm:border-none py-6 sm:py-4 my-auto">
           {ratings.map((rating) => {
             const colors = getColorByScore(rating.value);
 
@@ -325,10 +325,10 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
                     />
                   </div>
                   <div
-                    className="font-bold px-2 py-1 rounded-md w-10 text-center"
+                    className="font-bold shrink-0 py-1 rounded-md w-10 text-center"
                     style={{
-                      backgroundColor: colors.bgWithOpacity,
-                      color: colors.text,
+                      backgroundColor: colors.text,
+                      color: "white",
                     }}
                   >
                     {rating.value.toFixed(1)}
