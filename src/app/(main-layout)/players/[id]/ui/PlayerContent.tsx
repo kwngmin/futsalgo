@@ -220,7 +220,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         )}
 
         {/* 기본 정보 & 피치 포지션 */}
-        <div className="flex flex-col sm:flex-row gap-3 mx-4 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row gap-3 mx-4 sm:border-b border-gray-100">
           {/* 기본 정보 */}
           <div className="grow">
             {/* 출신 */}
