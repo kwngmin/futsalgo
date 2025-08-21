@@ -320,7 +320,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <div className="h-1/4 shrink-0" />
                 <div className="w-full h-1/4 flex items-center justify-center">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-3.5 rounded-full ${
                       playerData.position === "PIVO"
                         ? "bg-red-500"
                         : "bg-white/50"
@@ -329,14 +329,14 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="w-full h-1/4 flex justify-between items-center px-4">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-3.5 rounded-full ${
                       playerData.position === "ALA"
                         ? "bg-red-500"
                         : "bg-white/50"
                     }`}
                   />
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-3.5 rounded-full ${
                       playerData.position === "ALA"
                         ? "bg-red-500"
                         : "bg-white/50"
@@ -345,7 +345,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="w-full h-1/4 flex items-center justify-center">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-3.5 rounded-full ${
                       playerData.position === "FIXO"
                         ? "bg-red-500"
                         : "bg-white/50"
@@ -354,7 +354,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="w-full h-1/4 flex items-center justify-center">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-3.5 rounded-full ${
                       playerData.position === "GOLEIRO"
                         ? "bg-red-500"
                         : "bg-white/50"
@@ -377,23 +377,23 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <div className="w-1/4 shrink-0" />
                 <div className="h-full w-1/4 flex items-center justify-center">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-6 rounded-full ${
                       playerData.position === "PIVO"
                         ? "bg-red-500"
                         : "bg-white/50"
                     }`}
                   />
                 </div>
-                <div className="h-full w-1/4 flex flex-col justify-between items-center py-5 sm:py-4">
+                <div className="h-full w-1/4 flex flex-col justify-between items-center py-8">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-6 rounded-full ${
                       playerData.position === "ALA"
                         ? "bg-red-500"
                         : "bg-white/50"
                     }`}
                   />
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-6 rounded-full ${
                       playerData.position === "ALA"
                         ? "bg-red-500"
                         : "bg-white/50"
@@ -402,7 +402,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="h-full w-1/4 flex items-center justify-center">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-6 rounded-full ${
                       playerData.position === "FIXO"
                         ? "bg-red-500"
                         : "bg-white/50"
@@ -411,7 +411,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="h-full w-1/4 flex items-center justify-center">
                   <div
-                    className={`size-5 sm:size-4 rounded-full ${
+                    className={`size-6 rounded-full ${
                       playerData.position === "GOLEIRO"
                         ? "bg-red-500"
                         : "bg-white/50"
