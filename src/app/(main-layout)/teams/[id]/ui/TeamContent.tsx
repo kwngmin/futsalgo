@@ -642,14 +642,15 @@ const TeamContent = ({ id }: { id: string }) => {
                     팀 삭제
                   </button>
                 )}
-                {data.data.currentUserMembership.status === "APPROVED" && (
-                  <button
-                    type="button"
-                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
-                  >
-                    팀 탈퇴
-                  </button>
-                )}
+                {data.data.currentUserMembership.status === "APPROVED" &&
+                  data.data.currentUserMembership.role !== "OWNER" && (
+                    <button
+                      type="button"
+                      className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    >
+                      팀 탈퇴
+                    </button>
+                  )}
               </div>
             </Fragment>
           )}
