@@ -479,7 +479,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 라인 프로필 */}
               <div className="px-4">
                 {/* 활동 지역 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                <div className="w-full flex items-center justify-between px-1 h-12 sm:h-11 border-t border-gray-100 gap-3">
                   <div className="flex items-center space-x-3">
                     <MapPinned className="size-5 text-gray-600" />
                     <span className="font-medium">활동 지역</span>
@@ -494,7 +494,7 @@ const TeamContent = ({ id }: { id: string }) => {
 
                 {/* 소개 */}
                 <div>
-                  <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 border-t border-gray-100">
+                  <div className="w-full flex items-center justify-between px-1 h-12 sm:h-11 gap-3 border-t border-gray-100">
                     <div className="flex items-center space-x-3">
                       <ScrollText className="size-5 text-gray-600" />
                       <span className="font-medium">소개</span>
