@@ -1,7 +1,7 @@
 // components/player/PlayerRatingRadarChart.tsx
 "use client";
 
-import { ChartBar } from "lucide-react";
+import { UserRoundSearch } from "lucide-react";
 
 interface RatingItem {
   key: string;
@@ -227,8 +227,8 @@ const NoRatingsMessage = () => (
   <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
     <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
       <div className="flex items-center space-x-3">
-        <ChartBar className="size-5 text-gray-600" />
-        <span className="font-medium">능력치</span>
+        <UserRoundSearch className="size-5 text-gray-600" />
+        <span className="font-medium">분석</span>
       </div>
       {/* <span className="text-base font-medium text-gray-500">없음</span> */}
     </div>
@@ -271,11 +271,16 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
 
   return (
     <div className="mx-4 border rounded-2xl overflow-hidden flex flex-col">
-      <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
+      <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 sm:gap-0 bg-neutral-50">
         <div className="flex items-center space-x-3">
-          <ChartBar className="size-5 text-gray-600" />
-          <span className="font-medium">능력치</span>
-          <span className="font-medium text-sm text-gray-500">{`팀원 평가(${totalRatings}명)`}</span>
+          <UserRoundSearch className="size-5 text-gray-600" />
+          <div className="flex items-center gap-1.5">
+            <span className="font-medium">분석</span>
+            <span className="font-medium text-sm text-gray-600">팀원 평가</span>
+            <span className="text-sm font-semibold text-amber-600">
+              {totalRatings}
+            </span>
+          </div>
         </div>
         {/* <span className="text-base font-medium text-gray-500">
           {totalScore}
@@ -284,15 +289,15 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
 
       <div className="grid sm:grid-cols-2 sm:gap-4 items-center">
         {/* 레이더 차트 */}
-        <div className="py-3 hidden sm:block">
+        <div className="py-3 hidden sm:block bg-gradient-to-b from-transparent to-neutral-100">
           <RadarChart ratings={ratings} />
         </div>
-        <div className="py-3 sm:hidden">
+        <div className="py-3 sm:hidden bg-gradient-to-b from-transparent to-neutral-100">
           <RadarChart ratings={ratings} isMobile />
         </div>
 
         {/* 상세 수치 */}
-        <div className="flex flex-col gap-1.5 sm:border-t sm:border-none py-4 my-auto">
+        <div className="flex flex-col gap-1.5 sm:border-t sm:border-none py-6 sm:py-4 my-auto">
           {ratings.map((rating) => {
             const colors = getColorByScore(rating.value);
 

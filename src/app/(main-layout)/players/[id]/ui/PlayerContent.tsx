@@ -114,15 +114,15 @@ const PlayerContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex justify-end items-center gap-2">
+        <div className="flex justify-end items-center gap-1.5">
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
+            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-900 hover:bg-neutral-700 text-white rounded-full transition-colors cursor-pointer font-semibold"
           >
             {/* <UserPlus className="size-5 text-gray-600" /> */}
             팔로우
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -138,7 +138,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="flex items-center gap-4 h-20 mb-4">
               {/* 프로필 사진 */}
               <div className="relative">
-                <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl ring ring-gray-300">
+                <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl border">
                   <Image
                     width={80}
                     height={80}
@@ -193,7 +193,7 @@ const PlayerContent = ({ id }: { id: string }) => {
 
         {/* 소속 팀 */}
         {playerData.teams.length > 0 ? (
-          <div className="mx-4 border border-neutral-300 rounded-md overflow-hidden">
+          <div className="mx-4 border border-neutral-300 rounded-md overflow-hidden shadow-xs">
             {playerData.teams.map((team) => (
               <TeamCard team={team.team} key={team.team.id} size="sm" />
             ))}
@@ -205,11 +205,11 @@ const PlayerContent = ({ id }: { id: string }) => {
         )}
 
         {/* 기본 정보 & 피치 포지션 */}
-        <div className="flex flex-col sm:flex-row gap-3 px-4 sm:pl-0">
+        <div className="flex flex-col sm:flex-row gap-3 px-4">
           {/* 기본 정보 */}
           <div className="grow">
             {/* 출신 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <History className="size-5 text-gray-600" />
                 <span className="font-medium">출신</span>
@@ -225,7 +225,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 성별 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <VenusAndMars className="size-5 text-gray-600" />
                 <span className="font-medium">성별</span>
@@ -237,7 +237,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 생년월일 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <Cake className="size-5 text-gray-600" />
                 <span className="font-medium">생년월일</span>
@@ -251,7 +251,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 나이 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <CalendarDays className="size-5 text-gray-600" />
                 <span className="font-medium">나이</span>
@@ -263,7 +263,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 키 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <Ruler className="size-5 text-gray-600" />
                 <span className="font-medium">키</span>
@@ -275,7 +275,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 사용하는 발 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <Footprints className="size-5 text-gray-600" />
                 <span className="font-medium">사용하는 발</span>
@@ -287,7 +287,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 선호하는 포지션 */}
-            <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <Shapes className="size-5 text-gray-600" />
                 <span className="font-medium">선호하는 포지션</span>
