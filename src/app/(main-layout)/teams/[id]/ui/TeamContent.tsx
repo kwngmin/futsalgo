@@ -52,11 +52,11 @@ const tabs = [
     value: "photos",
     isDisabled: false,
   },
-  {
-    label: "통계",
-    value: "statistics",
-    isDisabled: true,
-  },
+  // {
+  //   label: "통계",
+  //   value: "statistics",
+  //   isDisabled: true,
+  // },
 ];
 
 const TeamContent = ({ id }: { id: string }) => {
@@ -113,20 +113,7 @@ const TeamContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex items-center justify-end gap-1">
-          {data.data.currentUserMembership.role === "OWNER" && (
-            <button
-              type="button"
-              className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
-              onClick={() => {
-                setIsLoading(true);
-                router.push(`/edit-team/${id}`);
-              }}
-            >
-              수정
-            </button>
-          )}
-
+        <div className="flex items-center justify-end gap-1.5">
           <button
             type="button"
             className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neurtral-200 rounded-full transition-colors cursor-pointer font-semibold"
@@ -489,87 +476,26 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
 
-              {/* 팀 실력 */}
-              {/* <div className="border rounded-2xl overflow-hidden mx-4">
-                <div
-                  className="w-full flex items-center justify-between px-4 py-3 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-                  onClick={() => {
-                    alert("팀 실력");
-                  }}
-                >
-                  <div className="flex items-center space-x-3">
-                    <Sparkles className={`size-5 text-gray-600`} />
-                    <span className="font-medium">팀 실력</span>
-                  </div>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </div>
-                <div className="flex flex-col gap-1 items-center px-4 py-6 my-3 font-semibold">
-                  {`${TEAM_LEVEL[data.data.level as keyof typeof TEAM_LEVEL]} - 
-                        ${
-                          TEAM_LEVEL_DESCRIPTION[
-                            data.data
-                              .level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                          ]
-                        }`}
-                </div>
-              </div> */}
-
-              {/* 실력 분포 */}
-              <div className="border rounded-2xl overflow-hidden mx-4">
-                <div
-                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
-                  onClick={() => {
-                    alert("팀원 실력");
-                  }}
-                >
-                  <div className="flex items-center space-x-3">
-                    <ChartPie className={`size-5 text-gray-600`} />
-                    <span className="font-medium">팀원 실력</span>
-                  </div>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </div>
-                <div className="grid grid-cols-4 gap-3 p-4">
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.beginnerCount
-                        ? `${data.data.stats.beginnerCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">초보</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.amateurCount
-                        ? `${data.data.stats.amateurCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">아마추어</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.aceCount
-                        ? `${data.data.stats.aceCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">에이스</Label>
-                  </div>
-                  <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
-                      {data.data.stats.semiproCount
-                        ? `${data.data.stats.semiproCount}명`
-                        : "없음"}
-                    </div>
-                    <Label className="text-muted-foreground">세미프로</Label>
-                  </div>
-                </div>
-              </div>
-
               {/* 라인 프로필 */}
-              <div>
+              <div className="px-4">
+                {/* 활동 지역 */}
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
+                  <div className="flex items-center space-x-3">
+                    <MapPinned className="size-5 text-gray-600" />
+                    <span className="font-medium">활동 지역</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base font-medium text-gray-500">
+                      {data.data.city}
+                      {data.data.district && ` ${data.data.district}`}
+                    </span>
+                  </div>
+                </div>
+
                 {/* 소개 */}
                 <div>
                   <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 border-t border-gray-100">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <ScrollText className="size-5 text-gray-600" />
                       <span className="font-medium">소개</span>
                     </div>
@@ -580,24 +506,10 @@ const TeamContent = ({ id }: { id: string }) => {
                     )}
                   </div>
                   {Boolean(data?.data?.description) && (
-                    <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+                    <p className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
                       {data?.data?.description}
                     </p>
                   )}
-                </div>
-
-                {/* 활동 지역 */}
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <MapPinned className="size-5 text-gray-600" />
-                    <span className="font-medium">활동 지역</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.city}
-                      {data.data.district && ` ${data.data.district}`}
-                    </span>
-                  </div>
                 </div>
 
                 {/* 코드 */}
@@ -662,26 +574,87 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div> */}
               </div>
 
-              {data.data.currentUserMembership.role === "OWNER" && (
-                <div className="sm:px-4">
+              {/* 실력 분포 */}
+              <div className="border rounded-2xl overflow-hidden mx-4">
+                <div
+                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  onClick={() => {
+                    alert("팀원 실력");
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <ChartPie className={`size-5 text-gray-600`} />
+                    <span className="font-medium">팀원 실력</span>
+                  </div>
+                  <ChevronRight className="size-5 text-gray-400" />
+                </div>
+                <div className="grid grid-cols-4 gap-3 p-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.beginnerCount
+                        ? `${data.data.stats.beginnerCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">초보</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.amateurCount
+                        ? `${data.data.stats.amateurCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">아마추어</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.aceCount
+                        ? `${data.data.stats.aceCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">에이스</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.semiproCount
+                        ? `${data.data.stats.semiproCount}명`
+                        : "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">세미프로</Label>
+                  </div>
+                </div>
+              </div>
+
+              {/* 수정 & 삭제 */}
+              <div className="sm:px-4 mt-12 space-y-3 sm:grid gap-3 grid-cols-3">
+                {data.data.currentUserMembership.role === "OWNER" && (
                   <button
                     type="button"
-                    className="mt-8 sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    className="sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-600 font-medium"
+                    onClick={() => {
+                      setIsLoading(true);
+                      router.push(`/edit-team/${id}`);
+                    }}
+                  >
+                    수정
+                  </button>
+                )}
+                {data.data.currentUserMembership.role === "OWNER" && (
+                  <button
+                    type="button"
+                    className="sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                   >
                     팀 삭제
                   </button>
-                </div>
-              )}
-              {data.data.currentUserMembership.role !== "OWNER" && (
-                <div className="sm:px-4">
+                )}
+                {data.data.currentUserMembership.role !== "OWNER" && (
                   <button
                     type="button"
-                    className="mt-8 sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    className="sm:rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                   >
                     팀 탈퇴
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </Fragment>
           )}
 
