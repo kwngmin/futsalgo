@@ -38,6 +38,25 @@ export async function getTeam(id: string) {
             },
           },
         },
+        // 일정 및 경기 관련 데이터 추가
+        hostedSchedules: {
+          include: {
+            matches: {
+              include: {
+                lineups: true,
+              },
+            },
+          },
+        },
+        invitedSchedules: {
+          include: {
+            matches: {
+              include: {
+                lineups: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -118,6 +137,55 @@ export async function getTeam(id: string) {
       background: string
     ) => members.filter((m) => m.user.playerBackground === background).length;
 
+    // 일정 관련 통계 계산
+    const calculateScheduleStats = () => {
+      // 호스트로 진행한 일정과 초대받은 일정을 합침 (PENDING, REJECTED 제외)
+      const allSchedules = [
+        ...team.hostedSchedules.filter(
+          (schedule) =>
+            schedule.status !== "PENDING" && schedule.status !== "REJECTED"
+        ),
+        ...team.invitedSchedules.filter(
+          (schedule) =>
+            schedule.status !== "PENDING" && schedule.status !== "REJECTED"
+        ),
+      ];
+
+      // Match가 있는 모든 경기들 (lineup이 있는 것만)
+      const allMatches = allSchedules.flatMap((schedule) =>
+        schedule.matches.filter((match) => match.lineups.length > 0)
+      );
+
+      // 일정 수: Match가 있는 Schedule들만 (lineup이 있는 match가 있어야 함)
+      const totalSchedules = allSchedules.filter((schedule) =>
+        schedule.matches.some((match) => match.lineups.length > 0)
+      ).length;
+
+      // 경기 수: lineup이 있는 Match들의 개수
+      const totalMatches = allMatches.length;
+
+      // 자체전 수: matchType이 SQUAD이고 lineup이 있는 match가 있는 schedule
+      const selfMatches = allSchedules.filter(
+        (schedule) =>
+          schedule.matchType === "SQUAD" &&
+          schedule.matches.some((match) => match.lineups.length > 0)
+      ).length;
+
+      // 친선전 수: matchType이 TEAM이고 lineup이 있는 match가 있는 schedule
+      const friendlyMatches = allSchedules.filter(
+        (schedule) =>
+          schedule.matchType === "TEAM" &&
+          schedule.matches.some((match) => match.lineups.length > 0)
+      ).length;
+
+      return {
+        totalSchedules,
+        totalMatches,
+        selfMatches,
+        friendlyMatches,
+      };
+    };
+
     // 실시간 통계 계산
     const stats = {
       beginnerCount: countBySkillLevel(approvedMembers, "BEGINNER"),
@@ -130,6 +198,8 @@ export async function getTeam(id: string) {
       ),
       averageAge: calculateAverageAge(approvedMembers),
       averageHeight: calculateAverageHeight(approvedMembers),
+      // 일정 통계 추가
+      scheduleStats: calculateScheduleStats(),
     };
 
     return {

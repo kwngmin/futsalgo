@@ -6,6 +6,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   CalendarCheck2,
+  Calendar,
   ChartPie,
   // ChevronRight,
   CircleX,
@@ -480,6 +481,42 @@ const TeamContent = ({ id }: { id: string }) => {
                         : "없음"}
                     </div>
                     <Label className="text-muted-foreground">세미프로</Label>
+                  </div>
+                </div>
+              </div>
+
+              {/* 경기일정 요약 */}
+              <div className="border rounded-2xl overflow-hidden mx-4">
+                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <Calendar className={`size-5 text-gray-600`} />
+                    <span className="font-medium">경기일정 요약</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 gap-3 p-4">
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.scheduleStats.totalSchedules || "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">일정</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.scheduleStats.totalMatches || "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">경기</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.scheduleStats.selfMatches || "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">자체전</Label>
+                  </div>
+                  <div className="flex flex-col gap-1 items-center my-3">
+                    <div className="font-semibold">
+                      {data.data.stats.scheduleStats.friendlyMatches || "없음"}
+                    </div>
+                    <Label className="text-muted-foreground">친선전</Label>
                   </div>
                 </div>
               </div>
