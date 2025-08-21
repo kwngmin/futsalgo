@@ -208,7 +208,7 @@ const PlayerContent = ({ id }: { id: string }) => {
 
         {/* 소속 팀 */}
         {playerData.teams.length > 0 ? (
-          <div className="mx-4 border border-neutral-300 rounded-md overflow-hidden shadow-xs">
+          <div className="mx-4 border rounded-md overflow-hidden shadow-xs">
             {playerData.teams.map((team) => (
               <TeamCard team={team.team} key={team.team.id} size="sm" />
             ))}
@@ -436,7 +436,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 포지션 표시 */}
-            <div className="flex justify-center items-center gap-1.5 px-4 h-11 sm:h-9 sm:text-sm tracking-tight font-bold text-red-500 bg-green-800/10 pb-0.5 border-[3px] border-t-0 sm:border-2 sm:border-y-0 border-white">
+            <div className="flex justify-center items-center gap-1.5 px-4 h-12 sm:h-9 sm:text-sm tracking-tight font-bold text-red-500 bg-green-800/10 pb-0.5 border-[3px] border-t-0 sm:border-2 sm:border-y-0 border-white">
               {playerData.position}
               <span className="font-medium text-gray-600">
                 {
