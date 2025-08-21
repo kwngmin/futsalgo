@@ -287,7 +287,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 선호하는 포지션 */}
-            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-t border-gray-100 gap-3">
+            <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 border-y border-gray-100 gap-3">
               <div className="flex items-center space-x-2">
                 <Shapes className="size-5 text-gray-600" />
                 <span className="font-medium">선호하는 포지션</span>
