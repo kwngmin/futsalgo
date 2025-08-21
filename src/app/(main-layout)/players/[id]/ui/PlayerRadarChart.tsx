@@ -289,10 +289,10 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
 
       <div className="grid sm:grid-cols-2 sm:gap-4 items-center">
         {/* 레이더 차트 */}
-        <div className="py-3 hidden sm:block bg-gradient-to-b from-transparent to-neutral-100">
+        <div className="py-3 hidden sm:block bg-gradient-to-b from-neutral-100 bg-neutral-50">
           <RadarChart ratings={ratings} />
         </div>
-        <div className="py-3 sm:hidden bg-gradient-to-b from-transparent to-neutral-100">
+        <div className="py-3 sm:hidden bg-gradient-to-b from-neutral-100 bg-neutral-50">
           <RadarChart ratings={ratings} isMobile />
         </div>
 
