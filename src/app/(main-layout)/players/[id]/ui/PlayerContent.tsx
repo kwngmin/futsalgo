@@ -2,7 +2,9 @@
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getPlayer, type PlayerData } from "../model/actions";
+import { followUser } from "../actions/follow-user"; // 새로 추가한 액션 import
 import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react"; // useSession import 추가
 import Image from "next/image";
 import {
   ArrowLeft,
@@ -17,6 +19,7 @@ import {
   // EllipsisVertical,
   Shapes,
   Share,
+  UserRoundCheck,
   VenusAndMars,
 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
@@ -62,8 +65,9 @@ export function formatKoreanDate(dateStr: string): string {
 
 const PlayerContent = ({ id }: { id: string }) => {
   const router = useRouter();
+  const session = useSession(); // 세션 추가
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["player", id],
     queryFn: () => getPlayer(id),
     placeholderData: keepPreviousData,
@@ -74,6 +78,31 @@ const PlayerContent = ({ id }: { id: string }) => {
 
   const handleGoBack = () => {
     router.back();
+  };
+
+  // 팔로우 처리 함수 추가
+  const handleFollowClick = async (userId: string) => {
+    if (!session.data) {
+      alert("로그인이 필요합니다.");
+      signIn();
+      return;
+    }
+
+    try {
+      const result = await followUser({ userId });
+      console.log(result);
+      if (result.success) {
+        refetch(); // 데이터 재조회하여 UI 업데이트
+        // toast.success(result.message); // 토스트 메시지가 있다면 활용
+      } else {
+        console.warn(result.error);
+        alert(result.error);
+        // toast.error(result.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("팔로우 처리 중 오류가 발생했습니다.");
+    }
   };
 
   if (!data) {
@@ -94,6 +123,14 @@ const PlayerContent = ({ id }: { id: string }) => {
 
   const playerData = data.data as PlayerData;
 
+  // 현재 사용자가 이 회원을 팔로우하고 있는지 확인
+  const isFollowing = playerData.followers?.some(
+    (follow) => follow.followerId === session.data?.user?.id
+  );
+
+  // 자기 자신인지 확인
+  const isOwnProfile = session.data?.user?.id === id;
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
@@ -105,12 +142,22 @@ const PlayerContent = ({ id }: { id: string }) => {
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
         <div className="flex justify-end items-center gap-1.5">
-          <button
-            type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors cursor-pointer font-semibold text-gray-600 hover:text-gray-700"
-          >
-            팔로우
-          </button>
+          {/* 자기 자신이 아닐 때만 팔로우 버튼 표시 */}
+          {!isOwnProfile && (
+            <button
+              type="button"
+              className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
+                isFollowing
+                  ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
+                  : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
+              }`}
+              onClick={() => handleFollowClick(id)}
+            >
+              {" "}
+              {isFollowing && <UserRoundCheck className="size-5" />}
+              {isFollowing ? "팔로잉" : "팔로우"}
+            </button>
+          )}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
