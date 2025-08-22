@@ -18,6 +18,7 @@ import {
   ScrollText,
   Share,
   UserStar,
+  UserRoundCheck,
   // Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -152,11 +153,12 @@ const TeamContent = ({ id }: { id: string }) => {
             type="button"
             className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
               isFollowing
-                ? "bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
+                ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
                 : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
             }`}
             onClick={() => handleFollowClick(id)}
           >
+            {isFollowing && <UserRoundCheck className="size-5" />}
             {isFollowing ? "팔로잉" : "팔로우"}
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
