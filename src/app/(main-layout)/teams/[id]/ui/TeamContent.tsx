@@ -403,7 +403,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   <div className="font-medium">
                     {data.data.stats.professionalCount
                       ? `${data.data.stats.professionalCount}명`
-                      : "없음"}
+                      : "선출 없음"}
                   </div>
                   <Label className="text-muted-foreground">선수 출신</Label>
                 </div>
@@ -431,7 +431,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   <div className="font-medium">
                     {data.data.recruitmentStatus === "RECRUITING"
                       ? "모집중"
-                      : "마감"}
+                      : "모집마감"}
                   </div>
                   <Label className="text-muted-foreground">팀원 모집</Label>
                 </div>
