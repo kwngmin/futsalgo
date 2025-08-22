@@ -9,15 +9,12 @@ import {
   CalendarCheck2,
   Calendar,
   ChartPie,
-  // ChevronRight,
   CircleX,
-  // EllipsisVertical,
   Hash,
   Loader2,
   MapPinned,
   ScrollText,
   Share,
-  UserStar,
   UserRoundCheck,
   // Sparkles,
 } from "lucide-react";
@@ -335,7 +332,6 @@ const TeamContent = ({ id }: { id: string }) => {
                     router.push(`/teams/${id}/ratings`);
                   }}
                 >
-                  <UserStar className="size-5 text-gray-100" />
                   팀원 평가
                 </Button>
               )}
