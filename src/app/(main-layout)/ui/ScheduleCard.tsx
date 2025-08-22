@@ -4,11 +4,12 @@ import { Vote } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
-import formatTimeRange from "@/entities/schedule/lib/format-time-range";
 import { HeartIcon } from "@phosphor-icons/react";
 import { likeSchedule } from "../actions/like-schedule";
 import { useQueryClient } from "@tanstack/react-query";
 import { Prisma } from "@prisma/client";
+import Image from "next/image";
+import { Fragment } from "react";
 
 type ScheduleCardProps = Prisma.ScheduleGetPayload<{
   include: {
@@ -24,21 +25,6 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   const router = useRouter();
   const session = useSession();
   const queryClient = useQueryClient();
-
-  const timeRange = formatTimeRange({
-    time: {
-      start: schedule.startTime,
-      end: schedule.endTime,
-    },
-  });
-
-  // const [period, time] = schedule?.startTime
-  //   ?.toLocaleTimeString("ko-KR", {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   })
-  //   .split(" ");
-
   const dDay = calculateDday(schedule?.date as Date);
 
   const handleScheduleClick = (scheduleId: string) => {
@@ -94,31 +80,70 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <div className="flex items-center gap-2">
-            {/* <CourtBasketballIcon className="size-5" /> */}
-            {schedule.matchType === "TEAM" ? (
-              <span className="font-medium text-indigo-700">친선전</span>
-            ) : (
-              <span className="font-medium text-emerald-600">자체전</span>
-            )}
-            <div className="sm:text-sm tracking-tighter flex items-center gap-1 text-muted-foreground font-medium">
-              {timeRange}
+          <h3 className="text-lg sm:text-base flex items-center gap-2 truncate leading-none h-6 tracking-tight">
+            <span className="font-semibold">{schedule.place}</span>
+            {/* <span className="text-gray-400 font-medium">•</span> */}
+            {schedule.startTime?.toLocaleTimeString("ko-KR", {
+              hour: "numeric",
+              minute: "numeric",
+            })}
+            <div
+              className={`text-sm sm:text-xs font-semibold rounded px-1 flex items-center justify-center h-6 sm:h-5 ${
+                schedule.matchType === "TEAM"
+                  ? "text-indigo-600 bg-indigo-600/5"
+                  : "text-emerald-600 bg-emerald-600/5"
+              }`}
+            >
+              {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
             </div>
-          </div>
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
-            {schedule.place}
           </h3>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              {schedule.hostTeam.logoUrl ? (
+                <Image
+                  src={schedule.hostTeam.logoUrl}
+                  alt={schedule.hostTeam.name}
+                  width={16}
+                  height={16}
+                  className="rounded-full"
+                />
+              ) : (
+                <div className="size-4 rounded-full bg-gray-100" />
+              )}
+              <span className="sm:text-sm font-medium">
+                {schedule.hostTeam.name}
+              </span>
+            </div>
+            {schedule.matchType === "TEAM" && (
+              <Fragment>
+                <span className="text-sm text-muted-foreground font-semibold">
+                  vs
+                </span>
+                <div className="flex items-center gap-1">
+                  {schedule.invitedTeam?.logoUrl ? (
+                    <Image
+                      src={schedule.invitedTeam.logoUrl}
+                      alt={schedule.invitedTeam.name}
+                      width={16}
+                      height={16}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="size-4 rounded-full bg-gray-100" />
+                  )}
+                  <span className="sm:text-sm font-medium">
+                    {schedule.invitedTeam?.name}
+                  </span>
+                </div>
+              </Fragment>
+            )}
+          </div>
         </div>
+
         <div
-          className="flex items-center justify-center gap-2 rounded-lg w-10 h-14 group"
+          className="hidden flex items-center justify-center gap-2 rounded-lg w-10 h-14 group"
           onClick={() => handleLikeClick(schedule.id)}
         >
-          {/* <HeartIcon
-            className={`size-6 group-hover:animate-ping absolute ${
-              isLiked ? "text-indigo-600" : "text-zinc-200"
-            }`}
-            weight="fill"
-          /> */}
           <HeartIcon
             className={`size-6 group-hover: ${
               isLiked

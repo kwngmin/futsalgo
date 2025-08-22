@@ -30,12 +30,12 @@ const HomePage = () => {
       {/* 상단: 제목과 검색 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
-          <h1 className="text-2xl font-bold cursor-default">경기일정</h1>
+          <h1 className="text-2xl font-bold cursor-default">전체일정</h1>
           <h1
             className="text-2xl font-bold opacity-30 cursor-pointer"
-            onClick={() => router.push("/liked")}
+            onClick={() => router.push("/my-schedules")}
           >
-            좋아요
+            내 일정
           </h1>
         </div>
         <div className="flex items-center gap-2">
