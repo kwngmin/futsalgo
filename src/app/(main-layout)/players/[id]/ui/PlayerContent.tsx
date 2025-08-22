@@ -449,8 +449,8 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
             </div>
             {/* 포지션 표시 */}
-            <div className="flex justify-center items-center h-12 sm:h-9 bg-green-800/5 pb-0.5 border-[3px] border-t-0 sm:border-2 sm:border-y-0 border-white">
-              <div className="text-sm sm:text-xs tracking-tight flex items-center gap-1 bg-white rounded px-3 sm:px-1.5 py-1 shadow-md/5">
+            <div className="flex justify-center items-center h-12 sm:h-9 bg-gradient-to-b from-green-800/20 to-green-800/5 pb-0.5 border-[3px] border-t-0 sm:border-2 sm:border-y-0 border-white">
+              <div className="text-sm sm:text-xs tracking-tight flex items-center gap-1 bg-white rounded px-3 sm:px-1.5 py-1">
                 <span className="font-bold text-red-500">
                   {playerData.position}
                 </span>
