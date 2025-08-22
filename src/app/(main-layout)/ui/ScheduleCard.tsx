@@ -115,7 +115,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
             </div>
             {schedule.matchType === "TEAM" && (
               <Fragment>
-                <span className="text-sm text-muted-foreground font-semibold">
+                <span className="text-sm text-muted-foreground font-medium">
                   vs
                 </span>
                 <div className="flex items-center gap-1">
