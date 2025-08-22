@@ -38,6 +38,7 @@ export async function getTeam(id: string) {
             },
           },
         },
+        followers: true,
         // 일정 및 경기 관련 데이터 추가
         hostedSchedules: {
           include: {

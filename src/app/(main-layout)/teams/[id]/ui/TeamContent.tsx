@@ -2,6 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { cancelJoinTeam, getTeam, joinTeam } from "../model/actions";
+import { followTeam } from "../actions/follow-team"; // 새로 추가한 액션 import
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -79,6 +80,31 @@ const TeamContent = ({ id }: { id: string }) => {
     router.back();
   };
 
+  // 팔로우 처리 함수 추가
+  const handleFollowClick = async (teamId: string) => {
+    if (!session.data) {
+      alert("로그인이 필요합니다.");
+      signIn();
+      return;
+    }
+
+    try {
+      const result = await followTeam({ teamId });
+      console.log(result);
+      if (result.success) {
+        refetch(); // 데이터 재조회하여 UI 업데이트
+        // toast.success(result.message); // 토스트 메시지가 있다면 활용
+      } else {
+        console.warn(result.error);
+        alert(result.error);
+        // toast.error(result.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("팔로우 처리 중 오류가 발생했습니다.");
+    }
+  };
+
   if (!data) {
     return (
       <div className="text-center text-gray-500 pt-10">
@@ -94,6 +120,11 @@ const TeamContent = ({ id }: { id: string }) => {
       </div>
     );
   }
+
+  // 현재 사용자가 이 팀을 팔로우하고 있는지 확인
+  const isFollowing = data.data.followers?.some(
+    (follow) => follow.userId === session.data?.user?.id
+  );
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -116,11 +147,17 @@ const TeamContent = ({ id }: { id: string }) => {
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
         <div className="flex items-center justify-end gap-1.5">
+          {/* 팔로우 버튼 수정 */}
           <button
             type="button"
-            className="shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors cursor-pointer font-semibold text-gray-600 hover:text-gray-700"
+            className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
+              isFollowing
+                ? "bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
+                : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
+            }`}
+            onClick={() => handleFollowClick(id)}
           >
-            팔로우
+            {isFollowing ? "팔로잉" : "팔로우"}
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
