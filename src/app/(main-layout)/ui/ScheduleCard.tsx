@@ -80,12 +80,15 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           onClick={() => handleScheduleClick(schedule.id)}
         >
           <h3 className="text-lg sm:text-base flex items-center gap-2 truncate leading-none h-6 tracking-tight">
-            <span className="font-semibold">{schedule.place}</span>
+            <span className="font-semibold">
+              {" "}
+              {schedule.startTime?.toLocaleTimeString("ko-KR", {
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </span>
             {/* <span className="text-gray-400 font-medium">•</span> */}
-            {schedule.startTime?.toLocaleTimeString("ko-KR", {
-              hour: "numeric",
-              minute: "numeric",
-            })}
+            {schedule.place}
             <div
               className={`text-sm sm:text-xs font-semibold rounded px-1.5 sm:px-1 flex items-center justify-center h-6 sm:h-5 ${
                 schedule.matchType === "TEAM"
