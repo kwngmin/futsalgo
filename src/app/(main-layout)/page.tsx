@@ -67,7 +67,8 @@ const HomePage = () => {
         {data?.data?.upcomingSchedules?.map((schedule) => {
           return <ScheduleCard schedule={schedule} key={schedule.id} />;
         })}
-        {data?.data?.todaysSchedules?.length === 0 &&
+        {session.data?.user?.id &&
+          data?.data?.todaysSchedules?.length === 0 &&
           data?.data?.upcomingSchedules?.length === 0 && (
             <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-14 flex justify-center items-center text-sm text-muted-foreground">
               예정된 경기가 없습니다.
