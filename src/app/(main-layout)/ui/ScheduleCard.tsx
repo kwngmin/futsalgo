@@ -79,15 +79,15 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           className="grow flex flex-col gap-0.5 justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <h3 className="text-lg sm:text-base flex items-center gap-2 truncate leading-none h-6 tracking-tight">
-            <span className="font-semibold">
+          <h3 className="flex items-center gap-2 truncate leading-none h-6 tracking-tight">
+            <span className="font-semibold text-lg sm:text-base">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
               })}
             </span>
             {/* <span className="text-gray-400 font-medium">•</span> */}
-            {schedule.place}
+            <span className="sm:text-sm">{schedule.place}</span>
             <div
               className={`text-sm sm:text-xs font-semibold rounded px-1.5 sm:px-1 flex items-center justify-center h-6 sm:h-5 ${
                 schedule.matchType === "TEAM"
