@@ -87,7 +87,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
               minute: "numeric",
             })}
             <div
-              className={`text-sm sm:text-xs font-semibold rounded px-1 flex items-center justify-center h-6 sm:h-5 ${
+              className={`text-sm sm:text-xs font-semibold rounded px-1.5 sm:px-1 flex items-center justify-center h-6 sm:h-5 ${
                 schedule.matchType === "TEAM"
                   ? "text-indigo-600 bg-indigo-600/5"
                   : "text-emerald-600 bg-emerald-600/5"
