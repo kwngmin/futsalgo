@@ -16,10 +16,8 @@ import {
   Footprints,
   History,
   Ruler,
-  // EllipsisVertical,
   Shapes,
   Share,
-  UserRoundCheck,
   VenusAndMars,
 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
@@ -153,8 +151,6 @@ const PlayerContent = ({ id }: { id: string }) => {
               }`}
               onClick={() => handleFollowClick(id)}
             >
-              {" "}
-              {isFollowing && <UserRoundCheck className="size-5" />}
               {isFollowing ? "팔로잉" : "팔로우"}
             </button>
           )}
@@ -171,7 +167,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 회원 정보 */}
         <div className="space-y-2">
           <div className="space-y-4 px-4">
-            <div className="flex items-center gap-4 h-20 mb-6">
+            <div className="flex items-center gap-4 h-20 mb-8">
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl border">

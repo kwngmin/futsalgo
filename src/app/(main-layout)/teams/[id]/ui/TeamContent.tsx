@@ -165,7 +165,7 @@ const TeamContent = ({ id }: { id: string }) => {
         <div className="space-y-3">
           {/* 팀 정보 */}
           <div className="space-y-2">
-            <div className="space-y-6 px-4">
+            <div className="space-y-8 px-4">
               <div className="flex items-center gap-4 h-20">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
