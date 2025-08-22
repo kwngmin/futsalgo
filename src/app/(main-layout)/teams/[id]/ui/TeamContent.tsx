@@ -15,8 +15,6 @@ import {
   MapPinned,
   ScrollText,
   Share,
-  UserRoundCheck,
-  // Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -155,7 +153,7 @@ const TeamContent = ({ id }: { id: string }) => {
             }`}
             onClick={() => handleFollowClick(id)}
           >
-            {isFollowing && <UserRoundCheck className="size-5" />}
+            {/* {isFollowing && <UserRoundCheck className="size-5" />} */}
             {isFollowing ? "팔로잉" : "팔로우"}
           </button>
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -489,7 +487,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <div className="font-medium">
                       {data.data.stats.beginnerCount
                         ? `${data.data.stats.beginnerCount}명`
-                        : "없음"}
+                        : "-"}
                     </div>
                     <Label className="text-muted-foreground">왕초보</Label>
                   </div>
@@ -497,7 +495,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <div className="font-medium">
                       {data.data.stats.amateurCount
                         ? `${data.data.stats.amateurCount}명`
-                        : "없음"}
+                        : "-"}
                     </div>
                     <Label className="text-muted-foreground">아마추어</Label>
                   </div>
@@ -505,7 +503,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <div className="font-medium">
                       {data.data.stats.aceCount
                         ? `${data.data.stats.aceCount}명`
-                        : "없음"}
+                        : "-"}
                     </div>
                     <Label className="text-muted-foreground">에이스</Label>
                   </div>
@@ -513,7 +511,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <div className="font-medium">
                       {data.data.stats.semiproCount
                         ? `${data.data.stats.semiproCount}명`
-                        : "없음"}
+                        : "-"}
                     </div>
                     <Label className="text-muted-foreground">세미프로</Label>
                   </div>
@@ -531,25 +529,25 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="grid grid-cols-4 gap-3 p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-medium">
-                      {data.data.stats.scheduleStats.totalSchedules || "없음"}
+                      {data.data.stats.scheduleStats.totalSchedules || "0"}
                     </div>
                     <Label className="text-muted-foreground">일정</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-medium">
-                      {data.data.stats.scheduleStats.totalMatches || "없음"}
+                      {data.data.stats.scheduleStats.totalMatches || "0"}
                     </div>
                     <Label className="text-muted-foreground">경기</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-medium">
-                      {data.data.stats.scheduleStats.selfMatches || "없음"}
+                      {data.data.stats.scheduleStats.selfMatches || "0"}
                     </div>
                     <Label className="text-muted-foreground">자체전</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
                     <div className="font-medium">
-                      {data.data.stats.scheduleStats.friendlyMatches || "없음"}
+                      {data.data.stats.scheduleStats.friendlyMatches || "0"}
                     </div>
                     <Label className="text-muted-foreground">친선전</Label>
                   </div>
