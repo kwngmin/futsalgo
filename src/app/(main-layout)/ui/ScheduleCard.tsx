@@ -72,12 +72,11 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
       <div className="flex px-4 gap-3 cursor-pointer">
         <div
           className={`size-14 rounded-2xl font-semibold flex items-center justify-center gap-2 truncate leading-none tracking-tight border`}
-          // ${dateStatus.style}
         >
           {dateStatus.text}
         </div>
         <div
-          className="grow flex flex-col justify-center"
+          className="grow flex flex-col gap-0.5 justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
           <h3 className="text-lg sm:text-base flex items-center gap-2 truncate leading-none h-6 tracking-tight">
@@ -110,7 +109,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
               ) : (
                 <div className="size-4 rounded-full bg-gray-100" />
               )}
-              <span className="sm:text-sm font-medium">
+              <span className="text-sm font-medium tracking-tight text-gray-600">
                 {schedule.hostTeam.name}
               </span>
             </div>
@@ -131,7 +130,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
                   ) : (
                     <div className="size-4 rounded-full bg-gray-100" />
                   )}
-                  <span className="sm:text-sm font-medium">
+                  <span className="text-sm font-medium tracking-tight text-gray-600">
                     {schedule.invitedTeam?.name}
                   </span>
                 </div>
