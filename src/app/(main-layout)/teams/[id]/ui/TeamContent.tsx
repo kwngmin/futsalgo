@@ -291,12 +291,12 @@ const TeamContent = ({ id }: { id: string }) => {
                 <Button
                   className="w-full text-base font-semibold"
                   size="lg"
-                  variant="outline"
+                  // variant="outline"
                   onClick={() => {
                     router.push(`/teams/${id}/ratings`);
                   }}
                 >
-                  <UserStar className="size-5 text-gray-600" />
+                  <UserStar className="size-5 text-gray-100" />
                   팀원 평가
                 </Button>
               )}
@@ -524,7 +524,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 수정 & 삭제 */}
               <div className="px-4 mt-12 space-y-3 sm:grid gap-3 grid-cols-3">
                 {data.data.currentUserMembership.role === "OWNER" && (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="sm:col-span-2 grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-700 font-medium"
