@@ -40,36 +40,10 @@ import PlayerRatingRadarChart from "./PlayerRadarChart";
 
 const StatCard = ({ label, value }: { label: string; value: number }) => (
   <div className="flex flex-col gap-1 items-center my-3">
-    <div className="font-semibold">{value}</div>
+    <div className="font-medium">{value}</div>
     <Label className="text-muted-foreground">{label}</Label>
   </div>
 );
-
-// const InfoCard = ({
-//   label,
-//   value,
-//   icon: Icon,
-// }: {
-//   label: string;
-//   value: string;
-//   icon: React.ComponentType<{ className?: string }>;
-// }) => (
-//   <div className="border rounded-2xl overflow-hidden mx-4">
-//     <div
-//       className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
-//       onClick={() => alert(label)}
-//     >
-//       <div className="flex items-center space-x-3">
-//         <Icon className="size-5 text-gray-600" />
-//         <span className="font-medium">{label}</span>
-//       </div>
-//       <ChevronRight className="size-5 text-gray-400" />
-//     </div>
-//     <div className="flex flex-col gap-1 items-center font-semibold px-4 py-8">
-//       {value}
-//     </div>
-//   </div>
-// );
 
 /**
  * yyyymmdd 형식의 문자열을 "yyyy년 m월 d일"로 변환
@@ -150,7 +124,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 회원 정보 */}
         <div className="space-y-2">
           <div className="space-y-4 px-4">
-            <div className="flex items-center gap-4 h-20 mb-4">
+            <div className="flex items-center gap-4 h-24 mb-4">
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl border">
@@ -167,18 +141,10 @@ const PlayerContent = ({ id }: { id: string }) => {
                 )}
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-semibold">{playerData.nickname}</h1>
+                <h1 className="text-xl sm:text-lg font-semibold">
+                  {playerData.nickname}
+                </h1>
                 <span className="font-medium text-muted-foreground tracking-tight leading-tight">
-                  {/* {playerData.createdAt
-                    ? `${new Date(playerData.createdAt).toLocaleDateString(
-                        "ko-KR",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )} 가입`
-                    : "데이터 없음"} */}
                   {SKILL_LEVEL_OPTIONS.find(
                     (option) => option.value === playerData.skillLevel
                   )?.label || "정보 없음"}

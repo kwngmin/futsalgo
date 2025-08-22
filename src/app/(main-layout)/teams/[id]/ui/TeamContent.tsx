@@ -132,7 +132,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 팀 정보 */}
           <div className="space-y-2">
             <div className="space-y-4 px-4">
-              <div className="flex items-center gap-4 h-20">
+              <div className="flex items-center gap-4 h-24">
                 {/* 프로필 사진 */}
                 <div className="size-20 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
@@ -151,7 +151,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="grow flex flex-col">
                   <div className="flex items-center gap-2">
-                    <h1 className="text-xl font-semibold">
+                    <h1 className="text-xl sm:text-lg font-semibold">
                       {data?.data?.name}
                     </h1>
                     <div className="flex items-center">
@@ -357,7 +357,7 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 기본 정보 */}
               <div className="bg-neutral-50 rounded-2xl mx-4 grid grid-cols-3 sm:grid-cols-6 gap-3 p-4">
                 <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">
+                  <div className="font-medium">
                     {
                       TEAM_GENDER[
                         data?.data?.gender as keyof typeof TEAM_GENDER
@@ -367,7 +367,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   <Label className="text-muted-foreground">구분</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">
+                  <div className="font-medium">
                     {data.data.stats.professionalCount
                       ? `${data.data.stats.professionalCount}명`
                       : "없음"}
@@ -375,13 +375,13 @@ const TeamContent = ({ id }: { id: string }) => {
                   <Label className="text-muted-foreground">선수 출신</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">
+                  <div className="font-medium">
                     {data.data.stats.averageAge}살
                   </div>
                   <Label className="text-muted-foreground">평균 연령</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">
+                  <div className="font-medium">
                     {/* 초청 불가 */}
                     초청 가능
                     {/* {data.data.stats.averageHeight}cm */}
@@ -389,13 +389,13 @@ const TeamContent = ({ id }: { id: string }) => {
                   <Label className="text-muted-foreground">친선전</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">
+                  <div className="font-medium">
                     {data.data.members.approved.length}명
                   </div>
                   <Label className="text-muted-foreground">팀원 수</Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center my-3">
-                  <div className="font-semibold">
+                  <div className="font-medium">
                     {data.data.recruitmentStatus === "RECRUITING"
                       ? "모집중"
                       : "마감"}
@@ -451,7 +451,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="grid grid-cols-4 gap-3 p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.beginnerCount
                         ? `${data.data.stats.beginnerCount}명`
                         : "없음"}
@@ -459,7 +459,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <Label className="text-muted-foreground">왕초보</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.amateurCount
                         ? `${data.data.stats.amateurCount}명`
                         : "없음"}
@@ -467,7 +467,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <Label className="text-muted-foreground">아마추어</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.aceCount
                         ? `${data.data.stats.aceCount}명`
                         : "없음"}
@@ -475,7 +475,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <Label className="text-muted-foreground">에이스</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.semiproCount
                         ? `${data.data.stats.semiproCount}명`
                         : "없음"}
@@ -495,25 +495,25 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="grid grid-cols-4 gap-3 p-4">
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.scheduleStats.totalSchedules || "없음"}
                     </div>
                     <Label className="text-muted-foreground">일정</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.scheduleStats.totalMatches || "없음"}
                     </div>
                     <Label className="text-muted-foreground">경기</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.scheduleStats.selfMatches || "없음"}
                     </div>
                     <Label className="text-muted-foreground">자체전</Label>
                   </div>
                   <div className="flex flex-col gap-1 items-center my-3">
-                    <div className="font-semibold">
+                    <div className="font-medium">
                       {data.data.stats.scheduleStats.friendlyMatches || "없음"}
                     </div>
                     <Label className="text-muted-foreground">친선전</Label>
@@ -524,25 +524,26 @@ const TeamContent = ({ id }: { id: string }) => {
               {/* 수정 & 삭제 */}
               <div className="px-4 mt-12 space-y-3 sm:grid gap-3 grid-cols-3">
                 {data.data.currentUserMembership.role === "OWNER" && (
-                  <button
-                    type="button"
-                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-700 font-medium"
-                    onClick={() => {
-                      setIsLoading(true);
-                      router.push(`/edit-team/${id}`);
-                    }}
-                  >
-                    수정
-                  </button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 w-full transition-colors text-gray-700 font-medium"
+                      onClick={() => {
+                        setIsLoading(true);
+                        router.push(`/edit-team/${id}`);
+                      }}
+                    >
+                      수정
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                    >
+                      팀 삭제
+                    </button>
+                  </div>
                 )}
-                {data.data.currentUserMembership.role === "OWNER" && (
-                  <button
-                    type="button"
-                    className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
-                  >
-                    팀 삭제
-                  </button>
-                )}
+
                 {data.data.currentUserMembership.status === "APPROVED" &&
                   data.data.currentUserMembership.role !== "OWNER" && (
                     <button
