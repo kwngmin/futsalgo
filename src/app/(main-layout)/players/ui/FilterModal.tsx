@@ -11,7 +11,7 @@ const filterOptions = [
   { id: "FEMALE", label: "여자" },
 ];
 
-type FilterType = "all" | "MALE" | "FEMALE" | "following";
+type FilterType = "all" | "MALE" | "FEMALE";
 
 const FilterModal = ({
   filter,

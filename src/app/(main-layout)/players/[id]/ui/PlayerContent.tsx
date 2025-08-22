@@ -462,6 +462,14 @@ const PlayerContent = ({ id }: { id: string }) => {
                     ]
                   }
                 </span>
+                {/* <span className="text-gray-300 sm:hidden">•</span>
+                <span className="font-medium text-gray-600 sm:hidden">
+                  {
+                    FUTSAL_POSITIONS[
+                      playerData.position as keyof typeof FUTSAL_POSITIONS
+                    ]
+                  }
+                </span> */}
               </div>
             </div>
           </div>
