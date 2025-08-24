@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
+import { Separator } from "@/shared/components/ui/separator";
 
 type ScheduleCardProps = Prisma.ScheduleGetPayload<{
   include: {
@@ -85,19 +86,23 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           <div>{dateStatus.text}</div>
         </div>
         <div
-          className="grow flex flex-col gap-0.5 justify-center"
+          className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <h3 className="flex items-center gap-2 truncate leading-none h-6 tracking-tight">
-            <span className="font-semibold text-lg sm:text-base">
+          <div className="flex items-center gap-1.5 truncate leading-none h-6 tracking-tight sm:text-sm font-medium text-gray-600">
+            <span className="">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
               })}
             </span>
+            <Separator
+              orientation="vertical"
+              className="!h-3.5 !w-0.25 bg-gray-400"
+            />
             {/* <span className="text-gray-400 font-medium">•</span> */}
-            <span className="sm:text-sm font-medium">{schedule.place}</span>
-          </h3>
+            <span className="">{schedule.place}</span>
+          </div>
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
               {schedule.hostTeam.logoUrl ? (
@@ -111,7 +116,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
               ) : (
                 <div className="size-4 rounded-full bg-gray-100" />
               )}
-              <span className="text-sm font-medium tracking-tight text-gray-600">
+              <span className="text-sm font-medium tracking-tight">
                 {schedule.hostTeam.name}
               </span>
             </div>
@@ -132,15 +137,23 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
                   ) : (
                     <div className="size-4 rounded-full bg-gray-100" />
                   )}
-                  <span className="text-sm font-medium tracking-tight text-gray-600">
+                  <span className="text-sm font-medium tracking-tight">
                     {schedule.invitedTeam?.name}
                   </span>
                 </div>
               </Fragment>
             )}
+            {/* <div
+              className={`text-xs px-1.5 sm:px-1 flex items-center justify-center h-5.5 rounded-md font-semibold ${
+                schedule.matchType === "TEAM"
+                  ? "text-indigo-600 bg-indigo-600/10"
+                  : "text-emerald-600 bg-emerald-600/10"
+              }`}
+            >
+              {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
+            </div> */}
           </div>
         </div>
-
         <div
           className="hidden flex items-center justify-center gap-2 rounded-lg w-10 h-14 group"
           onClick={() => handleLikeClick(schedule.id)}
