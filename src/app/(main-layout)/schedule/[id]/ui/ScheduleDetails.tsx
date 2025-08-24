@@ -78,41 +78,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
       )}
 
       <div className="relative">
-        {/* 우리팀 & 주최팀vs초청팀 로고 */}
-        {/* {data?.data?.schedule?.matchType === "SQUAD" ? (
-          <div className="w-full flex items-center justify-center sm:gap-0 pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
-            <TeamLogo
-              logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-              teamType="HOST"
-            />
-          </div>
-        ) : (
-          <div className="w-full flex items-center justify-center pt-6 pb-1.5 bg-gradient-to-b from-slate-100 to-transparent sm:from-transparent px-4">
-            <TeamLogo
-              logoUrl={data.data.schedule?.hostTeam?.logoUrl ?? ""}
-              teamType="HOST"
-            />
-            <span className="text-center text-lg sm:text-base font-medium shrink-0 w-10 mt-4">
-              VS
-            </span>
-            <TeamLogo
-              logoUrl={data.data.schedule?.invitedTeam?.logoUrl ?? ""}
-              teamType="INVITED"
-            />
-          </div>
-        )} */}
-
         {/* 공통 */}
         <div className="w-full flex flex-col items-center justify-center px-4 my-8">
-          <span
-            className={`flex items-center justify-center text-lg font-medium ${
-              data.data.schedule?.matchType === "TEAM"
-                ? "text-indigo-600"
-                : "text-emerald-600"
-            }`}
-          >
-            {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
-          </span>
           <span className="flex items-center justify-center font-bold text-2xl tracking-tight">
             {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
               month: "long",
@@ -124,6 +91,15 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
           </span>
           <div className="w-full flex justify-center items-center gap-1 text-xl tracking-tight">
             {data.data.schedule?.place}
+            <span
+              className={`flex items-center justify-center text-lg font-medium ${
+                data.data.schedule?.matchType === "TEAM"
+                  ? "text-indigo-600"
+                  : "text-emerald-600"
+              }`}
+            >
+              {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
+            </span>
           </div>
         </div>
 

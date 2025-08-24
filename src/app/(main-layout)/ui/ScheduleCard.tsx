@@ -71,9 +71,18 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
       <div className="flex px-4 gap-3 cursor-pointer">
         <div
-          className={`size-14 rounded-2xl font-semibold flex items-center justify-center gap-2 truncate leading-none tracking-tight border`}
+          className={`size-14 rounded-2xl font-semibold flex flex-col items-center truncate gap-1.5 leading-none tracking-tight border`}
         >
-          {dateStatus.text}
+          <div
+            className={`w-full text-xs font-medium rounded px-1.5 sm:px-1 flex items-center justify-center h-5.5 ${
+              schedule.matchType === "TEAM"
+                ? "text-indigo-600 bg-indigo-600/5"
+                : "text-emerald-600 bg-emerald-600/5"
+            }`}
+          >
+            {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
+          </div>
+          <span>{dateStatus.text}</span>
         </div>
         <div
           className="grow flex flex-col gap-0.5 justify-center"
@@ -88,17 +97,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
             </span>
             {/* <span className="text-gray-400 font-medium">•</span> */}
             <span className="sm:text-sm font-medium">{schedule.place}</span>
-            <div
-              className={`text-sm sm:text-xs font-medium rounded px-1.5 sm:px-1 flex items-center justify-center h-6 sm:h-5 ${
-                schedule.matchType === "TEAM"
-                  ? "text-indigo-600 bg-indigo-600/5"
-                  : "text-emerald-600 bg-emerald-600/5"
-              }`}
-            >
-              {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
-            </div>
           </h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
               {schedule.hostTeam.logoUrl ? (
                 <Image
