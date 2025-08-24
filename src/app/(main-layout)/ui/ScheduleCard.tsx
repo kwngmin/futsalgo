@@ -116,7 +116,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
               ) : (
                 <div className="size-4 rounded-full bg-gray-100" />
               )}
-              <span className="text-sm font-medium tracking-tight">
+              <span className="sm:text-sm font-medium tracking-tight truncate">
                 {schedule.hostTeam.name}
               </span>
             </div>
@@ -137,7 +137,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
                   ) : (
                     <div className="size-4 rounded-full bg-gray-100" />
                   )}
-                  <span className="text-sm font-medium tracking-tight">
+                  <span className="sm:text-sm font-medium tracking-tight truncate">
                     {schedule.invitedTeam?.name}
                   </span>
                 </div>
