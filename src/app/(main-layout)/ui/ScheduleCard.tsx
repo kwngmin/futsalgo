@@ -74,7 +74,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           className={`size-14 rounded-2xl font-semibold flex flex-col items-center truncate gap-1.5 leading-none tracking-tight border`}
         >
           <div
-            className={`w-full text-xs font-medium rounded px-1.5 sm:px-1 flex items-center justify-center h-5.5 ${
+            className={`w-full text-xs font-semibold rounded px-1.5 sm:px-1 flex items-center justify-center h-5.5 ${
               schedule.matchType === "TEAM"
                 ? "text-indigo-600 bg-indigo-600/5"
                 : "text-emerald-600 bg-emerald-600/5"
