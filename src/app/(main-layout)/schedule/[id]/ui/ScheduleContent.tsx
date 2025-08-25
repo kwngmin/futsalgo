@@ -4,19 +4,19 @@ import {
   ArrowLeft,
   Share,
   ChevronRight,
-  Flag,
+  // Flag,
   Loader2,
-  MailOpen,
+  // MailOpen,
   Megaphone,
-  UserRound,
+  // UserRound,
   PlusIcon,
-  Timer,
-  Calendar,
+  // Timer,
+  // Calendar,
   // Timer,
   // Vote,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+// import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
 import { CalendarCheckIcon, SoccerBallIcon } from "@phosphor-icons/react";
@@ -30,7 +30,7 @@ import { getSchedule } from "../actions/get-schedule";
 import { Button } from "@/shared/components/ui/button";
 import { addMatch } from "../actions/add-match";
 import Image from "next/image";
-import { Separator } from "@/shared/components/ui/separator";
+// import { Separator } from "@/shared/components/ui/separator";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -50,7 +50,7 @@ export function calculateDday(date: Date): number {
   return diffDays;
 }
 
-const tabs = [
+export const tabs = [
   {
     label: "개요",
     value: "overview",
@@ -102,10 +102,11 @@ const ScheduleContent = ({
 
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
-  const validTab = tabs.find((t) => t.value === tab);
-  const [selectedTab, setSelectedTab] = useState<string>(
-    validTab ? validTab.value : tabs[0].value
-  );
+  console.log(tab, "tab");
+  // const validTab = tabs.find((t) => t.value === tab);
+  // const [selectedTab, setSelectedTab] = useState<string>(
+  //   validTab ? validTab.value : tabs[0].value
+  // );
   // const [isLiked, setIsLiked] = useState(isLikedSchedule);
 
   const session = useSession();
@@ -390,15 +391,9 @@ const ScheduleContent = ({
       {/* 참석 인원 탭 내용 */}
       <ScheduleAttendance scheduleId={scheduleId} />
 
-      {selectedTab === "photos" && (
-        <SchedulePhotosGallery scheduleId={scheduleId} />
-      )}
-
-      {selectedTab === "comments" && (
-        <ScheduleComments scheduleId={scheduleId} />
-      )}
-
-      {selectedTab === "mvp" && <ScheduleMvp scheduleId={scheduleId} />}
+      <SchedulePhotosGallery scheduleId={scheduleId} />
+      <ScheduleComments scheduleId={scheduleId} />
+      <ScheduleMvp scheduleId={scheduleId} />
 
       {/* 만든 날짜와 만든이 */}
       <div className="flex items-center justify-center gap-2 mt-6">
