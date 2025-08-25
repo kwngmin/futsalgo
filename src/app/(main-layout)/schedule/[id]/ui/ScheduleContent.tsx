@@ -284,7 +284,7 @@ const ScheduleContent = ({
           </div>
         </div>
         <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
-          <button className="grow h-11 sm:h-9 font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-sm">
+          <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-700 rounded-sm">
             참석
           </button>
           <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 rounded-sm">
@@ -315,7 +315,7 @@ const ScheduleContent = ({
                 <Button
                   // variant="outline"
                   size="sm"
-                  className="text-sm font-semibold rounded-full px-3"
+                  className="text-sm font-bold rounded-full !px-3"
                   onClick={async () => {
                     const result = await addMatch(scheduleId);
                     if (result.success) {
