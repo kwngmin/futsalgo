@@ -84,7 +84,7 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
             {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
               month: "long",
               day: "numeric",
-              weekday: "long",
+              weekday: "narrow",
               hour: "numeric",
               minute: "numeric",
             })}

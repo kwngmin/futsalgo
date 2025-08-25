@@ -148,7 +148,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           attandances.map((attendance) => (
             <div
               key={attendance.user.id}
-              className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none"
+              className="hidden flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none"
             >
               <div
                 className="flex items-center gap-2"

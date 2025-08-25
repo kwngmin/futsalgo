@@ -3,27 +3,22 @@
 import {
   ArrowLeft,
   Share,
-  Calendar,
   ChevronRight,
-  Clock,
   Flag,
   Loader2,
   MailOpen,
-  MapPin,
   Megaphone,
   UserRound,
+  PlusIcon,
+  Timer,
+  // Vote,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
-import { HeartIcon, SoccerBallIcon } from "@phosphor-icons/react";
-import { likeSchedule } from "@/app/(main-layout)/actions/like-schedule";
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { SoccerBallIcon } from "@phosphor-icons/react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
 import ScheduleComments from "./ScheduleComments";
@@ -33,6 +28,7 @@ import { getSchedule } from "../actions/get-schedule";
 import { Button } from "@/shared/components/ui/button";
 import { addMatch } from "../actions/add-match";
 import Image from "next/image";
+import { Separator } from "@/shared/components/ui/separator";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -96,10 +92,11 @@ const ScheduleContent = ({
   startTime?: Date;
   matchType?: MatchType;
 }) => {
+  console.log(isLikedSchedule, "isLikedSchedule");
   console.log(startTime, "startTime");
   console.log(matchType, "matchType");
   const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
@@ -107,7 +104,7 @@ const ScheduleContent = ({
   const [selectedTab, setSelectedTab] = useState<string>(
     validTab ? validTab.value : tabs[0].value
   );
-  const [isLiked, setIsLiked] = useState(isLikedSchedule);
+  // const [isLiked, setIsLiked] = useState(isLikedSchedule);
 
   const session = useSession();
   const currentUserId = session.data?.user?.id;
@@ -122,18 +119,40 @@ const ScheduleContent = ({
     router.push("/");
   };
 
-  const handleLikeClick = async (scheduleId: string) => {
-    const result = await likeSchedule({ scheduleId });
-    console.log(result);
-    if (result.success) {
-      queryClient.invalidateQueries({ queryKey: ["schedules"] });
-      setIsLiked(result.liked);
-      alert(result.message);
-    } else {
-      console.warn(result.error);
-      // toast.error(result.error);
-    }
-  };
+  // const handleLikeClick = async (scheduleId: string) => {
+  //   const result = await likeSchedule({ scheduleId });
+  //   console.log(result);
+  //   if (result.success) {
+  //     queryClient.invalidateQueries({ queryKey: ["schedules"] });
+  //     setIsLiked(result.liked);
+  //     alert(result.message);
+  //   } else {
+  //     console.warn(result.error);
+  //     // toast.error(result.error);
+  //   }
+  // };
+
+  // const timeRange = formatTimeRange({
+  //   time: {
+  //     start: data.data.schedule?.startTime as Date,
+  //     end: data.data.schedule?.endTime as Date,
+  //   },
+  // });
+
+  // const opposingTeam =
+  //   data.data.schedule?.matchType === "SQUAD"
+  //     ? data.data.schedule.hostTeam
+  //     : data.data.schedule?.guestTeam;
+
+  // const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
+  //   "ko-KR",
+  //   {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   }
+  // );
+
+  // const [period, time] = timeString?.split(" ") || [];
 
   if (!data) {
     return (
@@ -176,25 +195,26 @@ const ScheduleContent = ({
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        {/* <button
-          className="flex items-center cursor-pointer select-none hover:bg-gray-100 rounded-full group pr-4"
-          onClick={handleGoBack}
+        <span
+          // className="font-semibold tracking-tight"
+          className={`flex items-center justify-center font-semibold ${
+            data.data.schedule?.matchType === "TEAM"
+              ? "text-indigo-600"
+              : "text-emerald-600"
+          }`}
         >
-          <div className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 rounded-full transition-colors">
-            <ArrowLeft style={{ width: "24px", height: "24px" }} />
-          </div>
-          <h1 className="text-xl font-semibold">
-            일정 상세
-            {matchType === MatchType.SQUAD ? "자체전" : "친선전"}
-            {startTime?.toLocaleDateString("ko-KR", {
-              month: "long",
-              day: "numeric",
-            })}
-            {startTime && `${startTime.getMonth() + 1}.${startTime.getDate()}`}
-          </h1>
-        </button> */}
+          {/* {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+            month: "long",
+            day: "numeric",
+            weekday: "narrow",
+            hour: "numeric",
+            minute: "numeric",
+          })} */}
+          {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
+        </span>
         <div className="flex items-center justify-end gap-1.5">
-          <button
+          {/* 좋아요 */}
+          {/* <button
             className={`shrink-0 size-10 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
               isLiked ? "hover:bg-indigo-600/10" : "hover:bg-gray-100 group"
             }`}
@@ -208,20 +228,16 @@ const ScheduleContent = ({
               }`}
               weight="fill"
             />
-            {/* 좋아요 */}
-          </button>
+          </button> */}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
-          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <EllipsisVertical className="size-5" />
-          </button> */}
         </div>
       </div>
 
       {/* 공통 */}
       <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
-        <span className="flex items-center justify-center font-semibold text-2xl sm:text-xl tracking-tight">
+        <span className="flex items-center gap-1 justify-center font-semibold text-xl sm:text-lg tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
             day: "numeric",
@@ -232,7 +248,7 @@ const ScheduleContent = ({
         </span>
         <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight">
           {data.data.schedule?.place}
-          <span
+          {/* <span
             className={`flex items-center justify-center ${
               data.data.schedule?.matchType === "TEAM"
                 ? "text-indigo-700"
@@ -240,319 +256,221 @@ const ScheduleContent = ({
             }`}
           >
             {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
-          </span>
+          </span> */}
         </div>
       </div>
 
-      {/* 탭 */}
-      <div className="flex items-center justify-between gap-2 px-4 border-b">
-        <div className="flex h-12 space-x-2">
-          {tabs.map((tab) => (
-            <div
-              key={tab.value}
-              className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
-                selectedTab === tab.value
-                  ? "border-gray-700"
-                  : "border-transparent"
-              } ${tab.isDisabled ? "pointer-events-none opacity-50" : ""}`}
-              onClick={() => setSelectedTab(tab.value)}
-            >
-              {tab.label}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 탭 */}
-      {/* <div className="bg-slate-100 flex items-center px-4 sm:px-2 sm:mx-4 h-12  sm:rounded-full">
-        {tabs.map((tab) => (
-          <div
-            key={tab.value}
-            className={`flex justify-center items-center font-semibold text-base px-4 cursor-pointer h-9 rounded-full ${
-              selectedTab === tab.value ? "bg-black text-white" : ""
-            } ${tab.isDisabled ? "pointer-events-none opacity-50" : ""}`}
-            onClick={() => setSelectedTab(tab.value)}
-          >
-            {tab.label}
+      <div className="mx-4 flex flex-col sm:flex-row gap-2 bg-slate-100 rounded-2xl p-4">
+        <div className="flex flex-col gap-2">
+          <h3 className="font-semibold">나의 참석여부</h3>
+          <div className="w-full flex items-center gap-1.5 rounded-lg px-2 h-8 bg-white/50 border border-white">
+            <Timer className="size-5 text-amber-600" />
+            <span className="text-sm font-medium text-amber-700 tracking-tight">
+              7월 11일 오전 10:00까지 결정해주세요.
+            </span>
           </div>
-        ))}
-      </div> */}
+        </div>
+        <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-2">
+          <button className="grow h-11 sm:h-10 font-semibold text-white bg-blue-600 hover:bg-blue-700 !rounded-md">
+            참석
+          </button>
+          <button className="grow h-11 sm:h-10 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 !rounded-md">
+            불참
+          </button>
+        </div>
+      </div>
 
-      {/* 참석 인원 탭 내용 */}
-      {selectedTab === "attendance" && (
-        <ScheduleAttendance scheduleId={scheduleId} />
-      )}
-
-      {selectedTab === "overview" && (
-        <div className="space-y-3 mt-3">
-          {isLoading && (
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 rounded-lg">
-              <Loader2
-                className="w-4 h-4 animate-spin"
-                style={{ width: "40px", height: "40px", color: "gray" }}
-              />
-              <div className="text-base text-muted-foreground">
-                로딩 중입니다.
-              </div>
+      <div className="space-y-3">
+        {isLoading && (
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 rounded-lg">
+            <Loader2
+              className="w-4 h-4 animate-spin"
+              style={{ width: "40px", height: "40px", color: "gray" }}
+            />
+            <div className="text-base text-muted-foreground">
+              로딩 중입니다.
             </div>
-          )}
+          </div>
+        )}
 
-          <div className="relative">
-            <div className="">
-              {/* 경기 정보 */}
-              {data.data.schedule.matches.length > 0 && (
-                <div className="px-4">
-                  <div className="rounded-md border overflow-hidden shadow-xs">
-                    {data.data.schedule.matches.map((match, index) => (
-                      <div
-                        className="overflow-hidden border-b last:border-b-0"
-                        key={match.id}
-                      >
-                        <div
-                          className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                          onClick={() => {
-                            router.push(
-                              `/schedule/${scheduleId}/match/${match.id}`
-                            );
-                          }}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <SoccerBallIcon
-                              className="size-5 text-gray-600"
-                              weight="fill"
-                            />
-                            <span className="font-medium">{index + 1}경기</span>
-                            {match.durationMinutes && (
-                              <span className="text-sm text-gray-500">
-                                {match.durationMinutes}분
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-base font-medium text-gray-500">
-                              {match.homeScore} - {match.awayScore}
-                            </span>
-                            <ChevronRight className="size-5 text-gray-400" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 경기 추가 버튼 */}
-              {currentUserId &&
-                data.data.schedule.createdBy.id === currentUserId && (
-                  <div className="px-4 py-2">
-                    <Button
-                      type="button"
-                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-                      size="lg"
-                      onClick={async () => {
-                        const result = await addMatch(scheduleId);
-                        if (result.success) {
-                          refetch();
-                        } else {
-                          console.log(result.error, "result.error");
-                          // toast.error(result.error);
-                        }
-                      }}
-                      // onClick={() => {
-                      //   router.push(`/schedule/${scheduleId}/match/add`);
-                      // }}
-                    >
-                      경기 추가
-                    </Button>
-                  </div>
-                )}
-
-              {/* 공지사항 */}
-              <div>
-                <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <Megaphone className={`size-5 text-gray-600`} />
-                    <span className="font-medium">공지사항</span>
-                  </div>
-                  {!Boolean(data?.data.schedule?.description) && (
-                    <span className="text-base font-medium text-gray-500">
-                      없음
-                    </span>
-                  )}
-                </div>
-                {Boolean(data?.data.schedule?.description) && (
-                  <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-                    {data?.data.schedule?.description ?? "공지사항 없음"}
-                  </p>
-                )}
-              </div>
-
-              {/* 주최팀 */}
-              <div
-                className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                onClick={() => {
-                  router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <Flag className="size-5 text-gray-600" />
-                  <span className="font-medium">주최팀</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Image
-                    src={data.data.schedule?.hostTeam.logoUrl ?? ""}
-                    alt="avatar"
-                    width={24}
-                    height={24}
-                    className="rounded-lg"
-                  />
-                  <span className="text-base font-medium text-gray-500">
-                    {data.data.schedule?.hostTeam?.name}
-                  </span>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </div>
-              </div>
-
-              {/* 초청팀 */}
-              {data.data.schedule.invitedTeam && (
-                <div
-                  className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-                  onClick={() => {
-                    router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
+        <div className="px-4">
+          <div className="flex justify-between items-center py-3">
+            <h2 className="text-lg font-semibold">경기</h2>
+            {/* 경기 추가 버튼 */}
+            {currentUserId &&
+              data.data.schedule.createdBy.id === currentUserId && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-sm font-medium"
+                  onClick={async () => {
+                    const result = await addMatch(scheduleId);
+                    if (result.success) {
+                      refetch();
+                    } else {
+                      console.log(result.error, "result.error");
+                      // toast.error(result.error);
+                    }
                   }}
                 >
-                  <div className="flex items-center space-x-2">
-                    <MailOpen className="size-5 text-gray-600" />
-                    <span className="font-medium">초청팀</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Image
-                      src={data.data.schedule?.invitedTeam.logoUrl ?? ""}
-                      alt="avatar"
-                      width={24}
-                      height={24}
-                      className="rounded-lg"
-                    />
-                    <span className="text-base font-medium text-gray-500">
-                      {data.data.schedule?.invitedTeam?.name}
-                    </span>
-                    <ChevronRight className="size-5 text-gray-400" />
-                  </div>
-                </div>
+                  <PlusIcon className="size-4" />
+                  추가
+                </Button>
               )}
-
-              {/* 장소 이름 */}
-              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="size-5 text-gray-600" />
-                  <span className="font-medium">장소</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium text-gray-500">
-                    {data.data.schedule?.place}
-                  </span>
-                </div>
-              </div>
-
-              {/* 경기 일자 */}
-              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                <div className="flex items-center space-x-2">
-                  <Calendar className="size-5 text-gray-600" />
-                  <span className="font-medium">일자</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium text-gray-500">
-                    {data.data.schedule?.startTime?.toLocaleDateString(
-                      "ko-KR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        weekday: "long",
-                      }
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              {/* 예약 시간 */}
-              <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3">
-                <div className="flex items-center space-x-2">
-                  <Clock className="size-5 text-gray-600" />
-                  <span className="font-medium">시간</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-base font-medium text-gray-500">
-                    {data.data.schedule?.startTime?.toLocaleTimeString(
-                      "ko-KR",
-                      {
-                        hour: "numeric",
-                        minute: "numeric",
-                      }
-                    )}{" "}
-                    -{" "}
-                    {data.data.schedule?.endTime?.toLocaleTimeString("ko-KR", {
-                      hour: "numeric",
-                      minute: "numeric",
-                    })}
-                  </span>
-                </div>
-              </div>
-
-              {/* 만든이 */}
-              <div
-                className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
-                onClick={() => {
-                  router.push(`/players/${data.data.schedule?.createdBy.id}`);
-                }}
-              >
-                <div className="flex items-center space-x-2">
-                  <UserRound className="size-5 text-gray-600" />
-                  <span className="font-medium">만든이</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Image
-                    src={data.data.schedule?.createdBy.image ?? ""}
-                    alt="avatar"
-                    width={24}
-                    height={24}
-                    className="rounded-lg mr-1"
-                  />
-                  <span className="text-base font-medium text-gray-500">
-                    {data.data.schedule?.createdBy.nickname}
-                  </span>
-                  <ChevronRight className="size-5 text-gray-400" />
-                </div>
-              </div>
-            </div>
-
-            <p className="text-center text-sm text-gray-500 mt-6">
-              만든 날:{" "}
-              {data?.data?.schedule?.startTime
-                ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
-                    "ko-KR",
-                    {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    }
-                  )
-                : ""}
-            </p>
           </div>
-          {/* 팀원 */}
-          {/* {selectedTab === "members" && (
-          <TeamMemberList
-            members={data.data.members}
-            isMember={data.data.currentUserMembership.isMember}
-            role={data.data.currentUserMembership.role}
-            status={data.data.currentUserMembership.status}
-            refetch={refetch}
-            teamId={id}
-          />
-        )} */}
+          {/* 경기 정보 */}
+          {data.data.schedule.matches.length > 0 && (
+            <div className="rounded-md border overflow-hidden shadow-xs">
+              {data.data.schedule.matches.map((match, index) => (
+                <div
+                  className="overflow-hidden border-b last:border-b-0"
+                  key={match.id}
+                >
+                  <div
+                    className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => {
+                      router.push(`/schedule/${scheduleId}/match/${match.id}`);
+                    }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <SoccerBallIcon
+                        className="size-5 text-gray-600"
+                        weight="fill"
+                      />
+                      <span className="font-medium">{index + 1}경기</span>
+                      {match.durationMinutes && (
+                        <span className="text-sm text-gray-500">
+                          {match.durationMinutes}분
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-base font-medium text-gray-500">
+                        {match.homeScore} - {match.awayScore}
+                      </span>
+                      <ChevronRight className="size-5 text-gray-400" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+        {/* 공지사항 */}
+        <div>
+          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
+            <div className="flex items-center space-x-2">
+              <Megaphone className={`size-5 text-gray-600`} />
+              <span className="font-medium">공지사항</span>
+            </div>
+            {!Boolean(data?.data.schedule?.description) && (
+              <span className="text-base font-medium text-gray-500">없음</span>
+            )}
+          </div>
+          {Boolean(data?.data.schedule?.description) && (
+            <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+              {data?.data.schedule?.description ?? "공지사항 없음"}
+            </p>
+          )}
+        </div>
+
+        {/* 주최팀 */}
+        <div
+          className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+          onClick={() => {
+            router.push(`/teams/${data.data.schedule?.hostTeam.id}`);
+          }}
+        >
+          <div className="flex items-center space-x-2">
+            <Flag className="size-5 text-gray-600" />
+            <span className="font-medium">주최팀</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Image
+              src={data.data.schedule?.hostTeam.logoUrl ?? ""}
+              alt="avatar"
+              width={24}
+              height={24}
+              className="rounded-lg"
+            />
+            <span className="text-base font-medium text-gray-500">
+              {data.data.schedule?.hostTeam?.name}
+            </span>
+            <ChevronRight className="size-5 text-gray-400" />
+          </div>
+        </div>
+
+        {/* 초청팀 */}
+        {data.data.schedule.invitedTeam && (
+          <div
+            className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+            onClick={() => {
+              router.push(`/teams/${data.data.schedule?.invitedTeamId}`);
+            }}
+          >
+            <div className="flex items-center space-x-2">
+              <MailOpen className="size-5 text-gray-600" />
+              <span className="font-medium">초청팀</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Image
+                src={data.data.schedule?.invitedTeam.logoUrl ?? ""}
+                alt="avatar"
+                width={24}
+                height={24}
+                className="rounded-lg"
+              />
+              <span className="text-base font-medium text-gray-500">
+                {data.data.schedule?.invitedTeam?.name}
+              </span>
+              <ChevronRight className="size-5 text-gray-400" />
+            </div>
+          </div>
+        )}
+
+        {/* 만든이 */}
+        <div
+          className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-t border-gray-100 gap-3 cursor-pointer  hover:bg-gray-50 transition-colors"
+          onClick={() => {
+            router.push(`/players/${data.data.schedule?.createdBy.id}`);
+          }}
+        >
+          <div className="flex items-center space-x-2">
+            <UserRound className="size-5 text-gray-600" />
+            <span className="font-medium">만든이</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Image
+              src={data.data.schedule?.createdBy.image ?? ""}
+              alt="avatar"
+              width={24}
+              height={24}
+              className="rounded-lg mr-1"
+            />
+            <span className="text-base font-medium text-gray-500">
+              {data.data.schedule?.createdBy.nickname}
+            </span>
+            <ChevronRight className="size-5 text-gray-400" />
+          </div>
+        </div>
+
+        <p className="text-center text-sm text-gray-500 mt-6">
+          만든 날:{" "}
+          {data?.data?.schedule?.startTime
+            ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
+                "ko-KR",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            : ""}
+        </p>
+      </div>
+
+      {/* 참석 인원 탭 내용 */}
+      <ScheduleAttendance scheduleId={scheduleId} />
 
       {selectedTab === "photos" && (
         <SchedulePhotosGallery scheduleId={scheduleId} />
