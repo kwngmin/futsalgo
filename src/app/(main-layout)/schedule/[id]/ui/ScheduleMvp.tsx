@@ -176,7 +176,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
           {!isVoting ? (
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full mb-2"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-gray-400 shadow-xs hover:shadow-sm w-full mb-2"
               onClick={handleVoteStart}
             >
               <Vote className="w-5 h-5 text-gray-600" />
@@ -226,13 +226,13 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
           <div className="grid grid-cols-3 gap-3 px-4 py-2 mb-1">
             <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
-                {mvpStats.voted === 0 ? "-" : `${mvpStats.voted}명`}
+                {mvpStats.voted === 0 ? "-" : `${mvpStats.voted}`}
               </div>
               <Label className="text-muted-foreground">투표완료</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
-                {mvpStats.notVoted === 0 ? "-" : `${mvpStats.notVoted}명`}
+                {mvpStats.notVoted === 0 ? "-" : `${mvpStats.notVoted}`}
               </div>
               <Label className="text-muted-foreground">미투표</Label>
             </div>

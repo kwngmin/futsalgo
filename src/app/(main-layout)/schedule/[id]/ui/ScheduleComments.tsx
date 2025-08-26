@@ -433,7 +433,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             </div>
 
             {/* 댓글 내용 */}
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-md">
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-md">
               {comment.content}
             </p>
 
@@ -545,7 +545,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <div className={optimisticComments.length === 0 ? "mb-2" : "mb-4"}>
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-gray-400 shadow-xs hover:shadow-sm w-full"
               onClick={() => setFocusNewComment(true)}
             >
               <PencilLine className="w-5 h-5 text-gray-600" />

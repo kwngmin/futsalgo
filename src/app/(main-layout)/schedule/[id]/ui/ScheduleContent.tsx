@@ -298,7 +298,7 @@ const ScheduleContent = ({
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {isLoading && (
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 rounded-lg">
             <Loader2
@@ -326,7 +326,7 @@ const ScheduleContent = ({
               data.data.schedule.createdBy.id === currentUserId && (
                 <Button
                   size="sm"
-                  className="text-sm font-bold rounded-full !px-3 gap-1"
+                  className="text-base sm:text-sm font-bold rounded-full !px-3 gap-1"
                   onClick={async () => {
                     const result = await addMatch(scheduleId);
                     if (result.success) {
@@ -337,7 +337,7 @@ const ScheduleContent = ({
                     }
                   }}
                 >
-                  <PlusIcon className="size-4" strokeWidth={2.5} />
+                  <PlusIcon className="size-4" strokeWidth={2.75} />
                   추가
                 </Button>
               )}
@@ -345,10 +345,10 @@ const ScheduleContent = ({
 
           {/* 경기 정보 */}
           {data.data.schedule.matches.length > 0 ? (
-            <div className="rounded-md border overflow-hidden shadow-xs">
+            <div className="rounded-md border border-gray-400 overflow-hidden shadow-xs">
               {data.data.schedule.matches.map((match, index) => (
                 <div
-                  className="overflow-hidden border-b last:border-b-0"
+                  className="overflow-hidden border-b border-gray-400 last:border-b-0"
                   key={match.id}
                 >
                   <div
@@ -403,7 +403,7 @@ const ScheduleContent = ({
               </div>
               <Button
                 size="sm"
-                className="text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1"
+                className="text-base sm:text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1"
                 onClick={() => setIsNoticeOpen(!isNoticeOpen)}
               >
                 {isNoticeOpen ? "접기" : "펼치기"}
