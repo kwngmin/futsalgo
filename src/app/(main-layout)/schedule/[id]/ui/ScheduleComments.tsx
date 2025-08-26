@@ -596,7 +596,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           댓글이 없습니다.
         </p>
       ) : (
-        <div className="relative space-y-6">
+        <div className="relative space-y-6 mt-1">
           {optimisticComments.map((comment) => renderComment(comment))}
           <div className="absolute top-4 -bottom-8 left-0 border-r w-4 z-0" />
           <div className="absolute translate-x-1/2 -bottom-4 left-2 size-2 bg-gray-100 rounded-full z-0" />

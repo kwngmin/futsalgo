@@ -427,9 +427,10 @@ const ScheduleContent = ({
         <ScheduleAttendance scheduleId={scheduleId} />
 
         {/* MVP */}
-        {data.data.schedule.startTime < new Date() && (
-          <ScheduleMvp scheduleId={scheduleId} />
-        )}
+        {data.data.schedule.startTime < new Date() &&
+          data.data.schedule.matches.length > 0 && (
+            <ScheduleMvp scheduleId={scheduleId} />
+          )}
 
         {/* 사진 */}
         {data.data.schedule.startTime < new Date() && (
