@@ -318,7 +318,7 @@ const ScheduleContent = ({
                 weight="fill"
                 className="size-6 text-gray-800"
               /> */}
-              <h2 className="text-lg font-semibold ">경기</h2>
+              <h2 className="text-lg font-bold ">경기</h2>
             </div>
             {/* 경기 추가 버튼 */}
             {currentUserId &&
@@ -397,7 +397,7 @@ const ScheduleContent = ({
                   weight="fill"
                   className="size-6 text-gray-800"
                 /> */}
-                <h2 className="text-lg font-semibold ">공지사항</h2>
+                <h2 className="text-lg font-bold ">공지사항</h2>
               </div>
               <Button
                 size="sm"
