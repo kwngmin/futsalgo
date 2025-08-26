@@ -251,7 +251,7 @@ const ScheduleContent = ({
       </div>
 
       {/* 공통 */}
-      <div className="w-full flex flex-col items-center justify-center px-4 mb-4">
+      <div className="w-full flex flex-col items-center justify-center px-4 my-4">
         <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
