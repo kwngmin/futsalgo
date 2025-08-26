@@ -7,7 +7,7 @@ import { Camera, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState, useCallback } from "react";
 import uploadSchedulePhotos from "../actions/upload-schedule-photos";
-import { ImagesIcon } from "@phosphor-icons/react";
+// import { ImagesIcon } from "@phosphor-icons/react";
 
 interface FileWithPreview {
   file: File;
@@ -211,7 +211,7 @@ const SchedulePhotoUpload = ({
     return (
       <div className="flex justify-between items-center py-2 min-h-12">
         <div className="flex items-center gap-2">
-          <ImagesIcon weight="fill" className="size-6 text-gray-800" />
+          {/* <ImagesIcon weight="fill" className="size-6 text-gray-800" /> */}
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>
         <label
@@ -244,7 +244,7 @@ const SchedulePhotoUpload = ({
     <div>
       <div className="flex justify-between items-center py-3 min-h-14">
         <div className="flex items-center gap-2">
-          <ImagesIcon weight="fill" className="size-6 text-gray-800" />
+          {/* <ImagesIcon weight="fill" className="size-6 text-gray-800" /> */}
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>
         <button

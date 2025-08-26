@@ -23,8 +23,8 @@ import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
 import {
   CalendarCheckIcon,
-  CourtBasketballIcon,
-  MegaphoneSimpleIcon,
+  // CourtBasketballIcon,
+  // MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -251,7 +251,7 @@ const ScheduleContent = ({
       </div>
 
       {/* 공통 */}
-      <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
+      <div className="w-full flex flex-col items-center justify-center px-4 mb-4">
         <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
@@ -314,10 +314,10 @@ const ScheduleContent = ({
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-12">
             <div className="flex items-center gap-2">
-              <CourtBasketballIcon
+              {/* <CourtBasketballIcon
                 weight="fill"
                 className="size-6 text-gray-800"
-              />
+              /> */}
               <h2 className="text-lg font-semibold ">경기</h2>
             </div>
             {/* 경기 추가 버튼 */}
@@ -393,10 +393,10 @@ const ScheduleContent = ({
           <div className="px-4">
             <div className="flex justify-between items-center py-2 min-h-12">
               <div className="flex items-center gap-2">
-                <MegaphoneSimpleIcon
+                {/* <MegaphoneSimpleIcon
                   weight="fill"
                   className="size-6 text-gray-800"
-                />
+                /> */}
                 <h2 className="text-lg font-semibold ">공지사항</h2>
               </div>
               <Button
