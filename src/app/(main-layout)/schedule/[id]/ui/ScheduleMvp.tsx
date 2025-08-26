@@ -245,7 +245,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
             ? sortedAttendances.map((attendance) => (
                 <div
                   key={attendance.user.id}
-                  className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none pl-6"
+                  className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none px-4"
                 >
                   <div
                     className="flex items-center gap-2"
@@ -259,7 +259,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
                         alt="user_image"
                         width={32}
                         height={32}
-                        className="rounded-full object-cover size-8"
+                        className="rounded-full object-cover size-8 border"
                       />
                     ) : (
                       <div className="size-8 rounded-full bg-gray-200" />
