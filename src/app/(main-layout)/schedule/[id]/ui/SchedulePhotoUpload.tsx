@@ -209,14 +209,14 @@ const SchedulePhotoUpload = ({
   // 파일 선택 버튼
   if (files.length === 0) {
     return (
-      <div className="flex justify-between items-center py-3 min-h-14">
+      <div className="flex justify-between items-center py-2 min-h-12">
         <div className="flex items-center gap-2">
           <ImagesIcon weight="fill" className="size-6 text-gray-800" />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>
         <label
           htmlFor="schedule-photos"
-          className="flex items-center bg-black text-white text-sm font-bold rounded-full px-3 gap-1 h-9 sm:h-8 cursor-pointer"
+          className="flex items-center bg-black text-white text-sm font-bold rounded-full px-3 gap-1 h-8 cursor-pointer"
         >
           <Camera className="w-5 h-5 text-gray-100" />
           <span>

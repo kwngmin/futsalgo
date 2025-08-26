@@ -23,6 +23,7 @@ import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
 import {
   CalendarCheckIcon,
+  CourtBasketballIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
@@ -311,9 +312,12 @@ const ScheduleContent = ({
         )}
 
         <div className="px-4">
-          <div className="flex justify-between items-center py-3 min-h-14">
+          <div className="flex justify-between items-center py-2 min-h-12">
             <div className="flex items-center gap-2">
-              <SoccerBallIcon weight="fill" className="size-6 text-gray-800" />
+              <CourtBasketballIcon
+                weight="fill"
+                className="size-6 text-gray-800"
+              />
               <h2 className="text-lg font-semibold ">경기</h2>
             </div>
             {/* 경기 추가 버튼 */}
@@ -353,6 +357,10 @@ const ScheduleContent = ({
                     }}
                   >
                     <div className="flex items-center space-x-2">
+                      <SoccerBallIcon
+                        weight="fill"
+                        className="size-5 text-gray-800"
+                      />
                       <span className="font-medium">{index + 1}경기</span>
                       {match.durationMinutes && (
                         <span className="text-sm text-gray-500">
@@ -383,7 +391,7 @@ const ScheduleContent = ({
           (attendance) => attendance.userId === currentUserId
         ) && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-3 min-h-14">
+            <div className="flex justify-between items-center py-2 min-h-12">
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   weight="fill"

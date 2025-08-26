@@ -374,9 +374,9 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       >
         {/* <div key={comment.id} className={`${isReply ? "ml-10 my-2" : "mb-2"}`}> */}
         <div
-          className={`z-10 flex px-4 sm:px-0 gap-1.5 ${
-            isOptimistic ? "opacity-60" : ""
-          } ${isReply ? "ml-10" : ""}`}
+          className={`z-10 flex gap-1.5 ${isOptimistic ? "opacity-60" : ""} ${
+            isReply ? "ml-10" : ""
+          }`}
         >
           {/* 프로필 이미지, 닉네임, 작성일시 */}
           <div className={`h-10 flex items-center gap-2 mb-0.5`}>
@@ -527,8 +527,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const isSubmitting = addCommentMutation.isPending || isPending;
 
   return (
-    <div className="max-w-4xl py-4">
-      <div className="flex justify-between items-center py-3 min-h-14 px-4">
+    <div className="px-4">
+      <div className="flex justify-between items-center py-2 min-h-12">
         <div className="flex items-center gap-2">
           <ChatCircleDotsIcon weight="fill" className="size-6 text-gray-800" />
           <h2 className="text-lg font-semibold ">댓글</h2>
@@ -538,7 +538,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       {/* 댓글 작성 폼 */}
       {currentUser &&
         (!focusNewComment ? (
-          <div className="px-4 mb-4">
+          <div className="mb-4">
             <button
               type="button"
               className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
@@ -595,7 +595,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         <div className="relative space-y-6">
           {optimisticComments.map((comment) => renderComment(comment))}
           <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
-          <div className="absolute translate-x-1/2 -bottom-3 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
+          <div className="absolute translate-x-1/2 -bottom-1 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
         </div>
       )}
     </div>

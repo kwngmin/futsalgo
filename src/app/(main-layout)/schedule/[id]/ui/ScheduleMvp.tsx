@@ -159,10 +159,10 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
 
   return (
     <div className="px-4">
-      <div className="flex justify-between items-center py-3 min-h-14">
+      <div className="flex justify-between items-center py-2 min-h-12">
         <div className="flex items-center gap-2">
           <CrownIcon weight="fill" className="size-6 text-gray-800" />
-          <h2 className="text-lg font-semibold ">오늘의 MVP</h2>
+          <h2 className="text-lg font-semibold ">MVP</h2>
         </div>
       </div>
 
@@ -172,7 +172,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
           {!isVoting ? (
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full mb-2"
               onClick={handleVoteStart}
             >
               <Vote className="w-5 h-5 text-gray-600" />
@@ -216,7 +216,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
       )}
 
       {/* 통합 MVP 투표 현황 */}
-      <div className="mt-2">
+      <div className="">
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* MVP 투표 현황 */}
           <div className="grid grid-cols-3 gap-3 px-4 py-2 mb-1">
@@ -245,7 +245,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
             ? sortedAttendances.map((attendance) => (
                 <div
                   key={attendance.user.id}
-                  className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none"
+                  className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none pl-6"
                 >
                   <div
                     className="flex items-center gap-2"
