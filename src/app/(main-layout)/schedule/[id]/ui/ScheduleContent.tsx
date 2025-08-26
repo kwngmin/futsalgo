@@ -313,7 +313,7 @@ const ScheduleContent = ({
 
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-12">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <CourtBasketballIcon
                 weight="fill"
                 className="size-6 text-gray-800"
@@ -392,7 +392,7 @@ const ScheduleContent = ({
         ) && (
           <div className="px-4">
             <div className="flex justify-between items-center py-2 min-h-12">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   weight="fill"
                   className="size-6 text-gray-800"

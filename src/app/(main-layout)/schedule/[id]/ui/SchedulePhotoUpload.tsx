@@ -210,7 +210,7 @@ const SchedulePhotoUpload = ({
   if (files.length === 0) {
     return (
       <div className="flex justify-between items-center py-2 min-h-12">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <ImagesIcon weight="fill" className="size-6 text-gray-800" />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>
@@ -243,7 +243,7 @@ const SchedulePhotoUpload = ({
   return (
     <div>
       <div className="flex justify-between items-center py-3 min-h-14">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <ImagesIcon weight="fill" className="size-6 text-gray-800" />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>

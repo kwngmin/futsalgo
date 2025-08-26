@@ -223,7 +223,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   return (
     <div className="px-4">
       <div className="flex justify-between items-center py-2 min-h-12">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <UsersIcon weight="fill" className="size-6 text-gray-800" />
           <h2 className="text-lg font-semibold ">참석인원</h2>
         </div>
