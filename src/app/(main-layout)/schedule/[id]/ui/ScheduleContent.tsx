@@ -7,16 +7,18 @@ import {
   // Flag,
   Loader2,
   // MailOpen,
-  Megaphone,
+  // Megaphone,
   // UserRound,
   PlusIcon,
+  ChevronUp,
+  ChevronDown,
   // Timer,
   // Calendar,
   // Timer,
   // Vote,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-// import { useState } from "react";
+import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
 import { CalendarCheckIcon, SoccerBallIcon } from "@phosphor-icons/react";
@@ -108,6 +110,7 @@ const ScheduleContent = ({
   //   validTab ? validTab.value : tabs[0].value
   // );
   // const [isLiked, setIsLiked] = useState(isLikedSchedule);
+  const [isNoticeOpen, setIsNoticeOpen] = useState(true);
 
   const session = useSession();
   const currentUserId = session.data?.user?.id;
@@ -117,6 +120,10 @@ const ScheduleContent = ({
     queryFn: () => getSchedule(scheduleId),
     placeholderData: keepPreviousData,
   });
+
+  const isAttendance = data?.data?.schedule?.attendances.some(
+    (attendance) => attendance.userId === currentUserId
+  );
 
   const handleGoBack = () => {
     router.push("/");
@@ -193,7 +200,7 @@ const ScheduleContent = ({
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
       <div className="flex justify-between items-center shrink-0 px-4 h-16">
         <button
-          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+          className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
           onClick={handleGoBack}
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
@@ -232,7 +239,7 @@ const ScheduleContent = ({
               weight="fill"
             />
           </button> */}
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
         </div>
@@ -240,7 +247,7 @@ const ScheduleContent = ({
 
       {/* 공통 */}
       <div className="w-full flex flex-col items-center justify-center px-4 mb-8">
-        <span className="flex items-center gap-1 justify-center font-semibold text-xl sm:text-lg tracking-tight">
+        <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
             day: "numeric",
@@ -249,51 +256,44 @@ const ScheduleContent = ({
             minute: "numeric",
           })}
         </span>
-        <div className="w-full flex justify-center items-center gap-1 text-lg sm:text-base tracking-tight">
+        <div className="w-full flex justify-center items-center gap-1 text-lg  tracking-tight">
           {data.data.schedule?.place}
-          {/* <span
-            className={`flex items-center justify-center ${
-              data.data.schedule?.matchType === "TEAM"
-                ? "text-indigo-700"
-                : "text-emerald-700"
-            }`}
-          >
-            {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
-          </span> */}
         </div>
       </div>
 
-      <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-full bg-white/80">
-            <CalendarCheckIcon
-              className="size-6 text-indigo-700"
-              weight="fill"
-            />
-            {/* <Calendar className="size-5 text-gray-600" /> */}
-          </div>
-          <div className="flex flex-col">
-            <span className="font-semibold">경기일정 참석여부</span>
-            <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
-              {/* <Timer className="size-5 text-amber-600" /> */}
-              <span className="font-semibold text-indigo-700">
-                7월 11일 오전 10:00까지
-              </span>
-              선택해주세요.
+      {isAttendance && (
+        <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none mb-3">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-full bg-white/80">
+              <CalendarCheckIcon
+                className="size-6 text-indigo-700"
+                weight="fill"
+              />
+              {/* <Calendar className="size-5 text-gray-600" /> */}
+            </div>
+            <div className="flex flex-col">
+              <span className="font-semibold">경기일정 참석여부</span>
+              <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
+                {/* <Timer className="size-5 text-amber-600" /> */}
+                <span className="font-semibold text-indigo-700">
+                  7월 11일 오전 10:00까지
+                </span>
+                선택해주세요.
+              </div>
             </div>
           </div>
+          <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
+            <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200">
+              참석
+            </button>
+            <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive rounded-sm active:scale-95 transition-all duration-200">
+              불참
+            </button>
+          </div>
         </div>
-        <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
-          <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-700 rounded-sm">
-            참석
-          </button>
-          <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 rounded-sm">
-            불참
-          </button>
-        </div>
-      </div>
+      )}
 
-      <div className="space-y-3">
+      <div className="space-y-6">
         {isLoading && (
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 rounded-lg">
             <Loader2
@@ -315,7 +315,7 @@ const ScheduleContent = ({
                 <Button
                   // variant="outline"
                   size="sm"
-                  className="text-sm font-bold rounded-full !px-3"
+                  className="text-sm font-bold rounded-full !px-3 gap-1"
                   onClick={async () => {
                     const result = await addMatch(scheduleId);
                     if (result.success) {
@@ -327,12 +327,12 @@ const ScheduleContent = ({
                   }}
                 >
                   <PlusIcon className="size-4" strokeWidth={2.5} />
-                  경기 추가
+                  추가
                 </Button>
               )}
           </div>
           {/* 경기 정보 */}
-          {data.data.schedule.matches.length > 0 && (
+          {data.data.schedule.matches.length > 0 ? (
             <div className="rounded-md border overflow-hidden shadow-xs">
               {data.data.schedule.matches.map((match, index) => (
                 <div
@@ -358,7 +358,8 @@ const ScheduleContent = ({
                       )}
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="text-base font-medium text-gray-500">
+                      <span className="text-sm text-gray-500 px-1">스코어</span>
+                      <span className="text-base font-medium text-gray-500 min-w-12 px-1 text-center">
                         {match.homeScore} - {match.awayScore}
                       </span>
                       <ChevronRight className="size-5 text-gray-400" />
@@ -367,33 +368,59 @@ const ScheduleContent = ({
                 </div>
               ))}
             </div>
-          )}
-        </div>
-        {/* 공지사항 */}
-        <div>
-          <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3">
-            <div className="flex items-center space-x-2">
-              <Megaphone className={`size-5 text-gray-600`} />
-              <span className="font-medium">공지사항</span>
+          ) : (
+            <div className="px-4 py-3 text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+              경기가 존재하지 않습니다.
             </div>
-            {!Boolean(data?.data.schedule?.description) && (
-              <span className="text-base font-medium text-gray-500">없음</span>
-            )}
-          </div>
-          {Boolean(data?.data.schedule?.description) && (
-            <p className="mx-4 border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-              {data?.data.schedule?.description ?? "공지사항 없음"}
-            </p>
           )}
         </div>
+
+        {/* 공지사항 */}
+        {data.data.schedule.attendances.some(
+          (attendance) => attendance.userId === currentUserId
+        ) && (
+          <div className="px-4">
+            <div className="flex justify-between items-center py-3">
+              <h2 className="text-lg font-semibold">공지사항</h2>
+              <Button
+                size="sm"
+                className="text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1"
+                onClick={() => setIsNoticeOpen(!isNoticeOpen)}
+              >
+                {isNoticeOpen ? "접기" : "펼치기"}
+                {isNoticeOpen ? (
+                  <ChevronUp className="size-4" />
+                ) : (
+                  <ChevronDown className="size-4" />
+                )}
+              </Button>
+            </div>
+            {isNoticeOpen ? (
+              Boolean(data?.data.schedule?.description) ? (
+                <p className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
+                  {data?.data.schedule?.description ?? "공지사항 없음"}
+                </p>
+              ) : (
+                <p className="p-4 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center text-sm">
+                  공지사항이 존재하지 않습니다.
+                </p>
+              )
+            ) : null}
+          </div>
+        )}
+
+        {/* 참석 인원 탭 내용 */}
+        <ScheduleAttendance scheduleId={scheduleId} />
+
+        {/* MVP */}
+        <ScheduleMvp scheduleId={scheduleId} />
+
+        {/* 사진 */}
+        <SchedulePhotosGallery scheduleId={scheduleId} />
+
+        {/* 댓글 */}
+        <ScheduleComments scheduleId={scheduleId} />
       </div>
-
-      {/* 참석 인원 탭 내용 */}
-      <ScheduleAttendance scheduleId={scheduleId} />
-
-      <SchedulePhotosGallery scheduleId={scheduleId} />
-      <ScheduleComments scheduleId={scheduleId} />
-      <ScheduleMvp scheduleId={scheduleId} />
 
       {/* 만든 날짜와 만든이 */}
       <div className="flex items-center justify-center gap-2 mt-6">

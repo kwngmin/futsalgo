@@ -65,7 +65,7 @@ export const SchedulePhotosGallery = ({
   }
 
   return (
-    <div className="space-y-4 mt-4 px-4">
+    <div className="px-4">
       {/* 업로드 폼 */}
       {canUpload && (
         <SchedulePhotoUpload
@@ -77,11 +77,15 @@ export const SchedulePhotosGallery = ({
       {/* 사진 갤러리 */}
       {photos.length > 0 ? (
         <div className="space-y-6">
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-3 gap-0.5">
             {photos.map((photo, index) => (
-              <div key={photo.id} className="">
+              <div
+                key={photo.id}
+                className="group aspect-square cursor-pointer overflow-hidden relative"
+                onClick={() => handleImageClick(index)}
+              >
                 {/* 업로더 정보 */}
-                <div className="flex justify-between items-center h-10 select-none">
+                <div className="group-hover:opacity-100 opacity-0 transition-opacity duration-300 absolute p-2 bottom-0 left-0 right-0 flex justify-between items-center h-14 select-none z-10 bg-gradient-to-t from-black/80 to-black/20 text-white">
                   <div
                     className="flex items-center gap-2 shrink-0"
                     onClick={() => router.push(`/players/${photo.uploader.id}`)}
@@ -95,7 +99,7 @@ export const SchedulePhotosGallery = ({
                         className="size-8 rounded-full"
                       />
                     )}
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-col">
                       <span
                         className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
                         onClick={() =>
@@ -104,9 +108,7 @@ export const SchedulePhotosGallery = ({
                       >
                         {photo.uploader.nickname || photo.uploader.name}
                       </span>
-                      {/* <span className="text-gray-500">•</span> */}
-                      {/* <span className="text-sm text-muted-foreground"> */}
-                      <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                      <span className="text-sm sm:text-xs text-gray-300 tracking-tight">
                         {new Date(photo.createdAt).toLocaleDateString("ko-KR", {
                           month: "short",
                           day: "numeric",
@@ -116,23 +118,15 @@ export const SchedulePhotosGallery = ({
                       </span>
                     </div>
                   </div>
-                  {/* <span className="text-sm text-muted-foreground">
-                    {new Date(photo.createdAt).toLocaleDateString("ko-KR")}
-                  </span> */}
                 </div>
 
-                <div
-                  className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-100 ml-8"
-                  onClick={() => handleImageClick(index)}
-                >
-                  <Image
-                    src={photo.url}
-                    alt={`경기 사진 ${index + 1}`}
-                    fill
-                    className="object-cover transition-transform"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                </div>
+                <Image
+                  src={photo.url}
+                  alt={`경기 사진 ${index + 1}`}
+                  fill
+                  className="object-cover transition-transform group-hover:scale-110"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                />
               </div>
             ))}
           </div>
@@ -154,15 +148,14 @@ export const SchedulePhotosGallery = ({
           )}
         </div>
       ) : !isLoading ? (
-        <div className="text-center min-h-[50vh] flex flex-col items-center justify-center text-gray-500">
+        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center justify-center gap-1">
           <ImagesIcon
-            className="w-16 h-16 mx-auto mb-4 text-gray-300"
+            className="size-10 mx-auto text-gray-300 shrink-0"
             weight="duotone"
           />
-          <p className="text-lg mb-2 font-medium">사진이 없습니다.</p>
-          {/* {canUpload && (
-            <p className="text-sm">첫 번째 사진을 업로드해보세요!</p>
-          )} */}
+          <p className=" text-gray-500 whitespace-pre-line mb-3 break-words text-sm">
+            사진이 없습니다.
+          </p>
         </div>
       ) : (
         <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">

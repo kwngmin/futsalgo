@@ -208,110 +208,124 @@ const SchedulePhotoUpload = ({
   // 파일 선택 버튼
   if (files.length === 0) {
     return (
-      <label
-        htmlFor="schedule-photos"
-        className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm"
-      >
-        <Camera className="w-5 h-5 text-gray-600" />
-        <span>
-          사진 업로드
-          {/* {files.length === 0
+      <div className="flex justify-between items-center py-3">
+        <h2 className="text-lg font-semibold ">사진</h2>
+        <label
+          htmlFor="schedule-photos"
+          className="flex items-center bg-black text-white text-sm font-bold rounded-full px-3 gap-1 h-9 sm:h-8 cursor-pointer"
+        >
+          <Camera className="w-5 h-5 text-gray-100" />
+          <span>
+            업로드
+            {/* {files.length === 0
         ? "사진 업로드"
         : `사진 추가 (${MAX_FILES - files.length}장 더)`} */}
-        </span>
-        <input
-          id="schedule-photos"
-          ref={fileInputRef}
-          type="file"
-          multiple
-          className="hidden"
-          accept="image/*"
-          onChange={handleFileChange}
-          disabled={isLoading}
-        />
-      </label>
+          </span>
+          <input
+            id="schedule-photos"
+            ref={fileInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={isLoading}
+          />
+        </label>
+      </div>
     );
   }
 
   return (
-    <div className="p-4 flex flex-col justify-center items-center gap-4 bg-gray-50 rounded-lg">
-      {/* 로딩 오버레이 */}
-      {isLoading && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
-            <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
-            <div className="text-base text-gray-700">
-              사진을 업로드하는 중입니다...
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 선택된 파일들 미리보기 */}
-      {files.length > 0 && (
-        <div className="w-full max-w-2xl">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
-            {files.map((fileWithPreview) => (
-              <div key={fileWithPreview.id} className="relative group">
-                <div className="relative w-full aspect-square">
-                  <Image
-                    src={fileWithPreview.previewUrl}
-                    alt={fileWithPreview.file.name}
-                    fill
-                    className="object-cover rounded-lg"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                  {uploadProgress[fileWithPreview.id] && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
-                      <Loader2 className="w-6 h-6 animate-spin text-white" />
-                    </div>
-                  )}
-                </div>
-                <button
-                  onClick={() => removeFile(fileWithPreview.id)}
-                  disabled={isLoading}
-                  className="absolute -top-2 -right-2 bg-gray-500 hover:bg-gray-600 disabled:opacity-50 text-white rounded-full p-1 shadow-md transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-                <p className="text-xs text-gray-600 mt-1 truncate">
-                  {fileWithPreview.file.name}
-                </p>
+    <div>
+      <div className="flex justify-between items-center py-3">
+        <h2 className="text-lg font-semibold ">사진</h2>
+        <button
+          onClick={clearAllFiles}
+          className="flex items-center justify-center bg-gray-100 rounded-full size-9 sm:size-8 cursor-pointer"
+        >
+          <X className="w-5 h-5 text-gray-600" />
+        </button>
+      </div>
+      <div className="p-4 flex flex-col justify-center items-center gap-4 bg-gray-50 rounded-lg mb-3">
+        {/* 로딩 오버레이 */}
+        {isLoading && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
+              <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+              <div className="text-base text-gray-700">
+                사진을 업로드하는 중입니다...
               </div>
-            ))}
-          </div>
-
-          {/* 업로드/취소 버튼 */}
-          <div className="flex flex-col gap-3 items-center">
-            <div className="text-sm text-gray-600">
-              선택된 파일: {files.length}/{MAX_FILES}장
-            </div>
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={handleUpload}
-                disabled={isLoading || files.length === 0}
-                className="rounded-full px-6 font-semibold"
-              >
-                {isLoading ? "업로드 중..." : `${files.length}장 업로드`}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={clearAllFiles}
-                disabled={isLoading}
-                className="rounded-full px-6 font-semibold"
-              >
-                전체 취소
-              </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {files.length >= MAX_FILES && (
-        <p className="text-sm text-gray-500">
-          최대 {MAX_FILES}장까지 업로드할 수 있습니다.
-        </p>
-      )}
+        {/* 선택된 파일들 미리보기 */}
+        {files.length > 0 && (
+          <div className="w-full max-w-2xl">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+              {files.map((fileWithPreview) => (
+                <div key={fileWithPreview.id} className="relative group">
+                  <div className="relative w-full aspect-square">
+                    <Image
+                      src={fileWithPreview.previewUrl}
+                      alt={fileWithPreview.file.name}
+                      fill
+                      className="object-cover rounded-lg"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                    {uploadProgress[fileWithPreview.id] && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
+                        <Loader2 className="w-6 h-6 animate-spin text-white" />
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => removeFile(fileWithPreview.id)}
+                    disabled={isLoading}
+                    className="absolute -top-2 -right-2 bg-gray-800 hover:bg-gray-600 disabled:opacity-50 text-white rounded-full p-1 shadow-md transition-colors cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  <p className="text-xs text-gray-600 mt-1 truncate">
+                    {fileWithPreview.file.name}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* 업로드/취소 버튼 */}
+            <div className="flex flex-col gap-3 items-center">
+              <div className="text-sm text-gray-600">
+                선택된 파일: {files.length}/{MAX_FILES}장
+              </div>
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={handleUpload}
+                  disabled={isLoading || files.length === 0}
+                  className="rounded-full px-6 font-semibold"
+                >
+                  {isLoading ? "업로드 중..." : `${files.length}장 업로드`}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={clearAllFiles}
+                  disabled={isLoading}
+                  className="rounded-full px-6 font-semibold"
+                >
+                  전체 취소
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {files.length >= MAX_FILES && (
+          <p className="text-sm text-gray-500">
+            최대 {MAX_FILES}장까지 업로드할 수 있습니다.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

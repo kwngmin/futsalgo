@@ -6,7 +6,9 @@ import { getScheduleAttendance } from "../actions/get-schedule-attendance";
 import { useRouter } from "next/navigation";
 import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
-import { ChevronRight, UserCheck } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { Separator } from "@/shared/components/ui/separator";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -51,7 +53,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
     if (isLoading) {
       return (
-        <div className="mt-4 px-4">
+        <div className="">
           {/* <div className="h-12 rounded-md bg-neutral-100 animate-pulse" /> */}
           <div className="h-[138px] rounded-2xl bg-neutral-100 animate-pulse my-2" />
           {Array.from({ length: 10 }).map((_, index) => (
@@ -83,7 +85,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     ).length;
 
     return (
-      <div className="mt-4 px-4">
+      <div className="">
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* 팀 정보 */}
           <div
@@ -110,26 +112,37 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
               ) : (
                 <div className="size-6 rounded-lg bg-gray-200" />
               )}
-              <span className="text-base font-medium">{team?.name ?? ""}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-medium">
+                  {team?.name ?? ""}
+                </span>
+                <Separator
+                  orientation="vertical"
+                  className="!h-4 !bg-gray-300"
+                />
+                <span className="text-base font-medium text-gray-500">
+                  {teamType === "host" ? "주최팀" : "초청팀"}
+                </span>
+              </div>
             </div>
             <ChevronRight className="size-5 text-gray-400" />
           </div>
 
           {/* 참석 현황 */}
           <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
-            <div className="flex flex-col gap-1 items-center my-3">
+            <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
                 {attendances === 0 ? "없음" : `${attendances}명`}
               </div>
               <Label className="text-muted-foreground">참석</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-3">
+            <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
                 {notAttendances === 0 ? "없음" : `${notAttendances}명`}
               </div>
               <Label className="text-muted-foreground">불참</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-3">
+            <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
                 {undecidedAttendances === 0
                   ? "없음"
@@ -137,7 +150,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
               </div>
               <Label className="text-muted-foreground">미정</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-3">
+            <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">0</div>
               <Label className="text-muted-foreground">용병</Label>
             </div>
@@ -148,7 +161,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           attandances.map((attendance) => (
             <div
               key={attendance.user.id}
-              className="hidden flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none"
+              className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none"
             >
               <div
                 className="flex items-center gap-2"
@@ -202,13 +215,16 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   };
 
   return (
-    <div className="space-y-6">
-      {data?.data?.manageableTeams &&
-        data?.data?.manageableTeams.length > 0 && (
-          <div className="m-4">
-            <button
-              type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
+    <div className="px-4">
+      <div className="flex justify-between items-center py-3">
+        <h2 className="text-lg font-semibold ">참석인원</h2>
+        {/* 경기 추가 버튼 */}
+        {data?.data?.manageableTeams &&
+          data?.data?.manageableTeams.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-sm font-bold rounded-full !px-3 gap-1"
               onClick={() => {
                 router.push(
                   `/schedule/${scheduleId}/attendances/${
@@ -221,14 +237,23 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                 );
               }}
             >
-              <UserCheck className="w-5 h-5 text-gray-600" />
-              <span>참석자 관리</span>
-            </button>
-          </div>
-        )}
+              {/* <Settings className="size-4" strokeWidth={2.5} /> */}
+              관리
+              <ChevronRight className="size-4" strokeWidth={2.5} />
+            </Button>
+          )}
+      </div>
 
-      {renderAttendance({ teamType: "host" })}
-      {data?.data?.invitedTeam && renderAttendance({ teamType: "invited" })}
+      <div
+        className={
+          data?.data?.invitedTeam
+            ? "grid sm:grid-cols-2 gap-4 space-y-6"
+            : "space-y-6"
+        }
+      >
+        {renderAttendance({ teamType: "host" })}
+        {data?.data?.invitedTeam && renderAttendance({ teamType: "invited" })}
+      </div>
     </div>
   );
 };
