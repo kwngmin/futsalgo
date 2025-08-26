@@ -363,15 +363,10 @@ const ScheduleContent = ({
                         className="size-5 text-gray-800"
                       />
                       <span className="font-medium">{index + 1}경기</span>
-                      {match.durationMinutes && (
-                        <span className="text-sm text-gray-500">
-                          {match.durationMinutes}분
-                        </span>
-                      )}
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-sm text-gray-500 px-1">스코어</span>
-                      <span className="text-base font-medium text-gray-700 min-w-12 px-1 text-center">
+                      <span className="text-base font-medium text-gray-800 min-w-12 px-1 text-center">
                         {match.homeScore} - {match.awayScore}
                       </span>
                       <ChevronRight className="size-5 text-gray-400" />

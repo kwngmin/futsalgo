@@ -88,7 +88,7 @@ export const SchedulePhotosGallery = ({
       {/* 사진 갤러리 */}
       {photos.length > 0 ? (
         <div className="space-y-6">
-          <div className="grid grid-cols-3 gap-0.5 bg-zinc-50">
+          <div className="grid grid-cols-3 gap-0.5 bg-neutral-100">
             {photos.map((photo, index) => (
               <div
                 key={photo.id}

@@ -92,18 +92,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
       <div className="">
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* 팀 정보 */}
-          <div
-            className="w-full flex items-center justify-between px-4 h-12 border-b gap-3 cursor-pointer bg-neutral-50 group"
-            onClick={() => {
-              router.push(
-                `/teams/${
-                  teamType === "host"
-                    ? data?.data?.hostTeam?.id
-                    : data?.data?.invitedTeam?.id
-                }`
-              );
-            }}
-          >
+          <div className="w-full flex items-center justify-between px-4 h-12 border-b gap-3 bg-neutral-50">
             <div className="flex items-center gap-2">
               {team?.logoUrl ? (
                 <Image
@@ -117,7 +106,18 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                 <div className="size-6 rounded-lg bg-gray-200" />
               )}
               <div className="flex items-center gap-2">
-                <span className="text-base font-medium group-hover:underline underline-offset-2">
+                <span
+                  className="text-base font-medium hover:underline underline-offset-2 cursor-pointer"
+                  onClick={() => {
+                    router.push(
+                      `/teams/${
+                        teamType === "host"
+                          ? data?.data?.hostTeam?.id
+                          : data?.data?.invitedTeam?.id
+                      }`
+                    );
+                  }}
+                >
                   {team?.name ?? ""}
                 </span>
                 <Separator
