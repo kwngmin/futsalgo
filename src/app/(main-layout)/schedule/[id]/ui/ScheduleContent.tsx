@@ -267,7 +267,7 @@ const ScheduleContent = ({
       </div>
 
       {isAttendance && (
-        <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none mb-3">
+        <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none my-3">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-full bg-white/80">
               <CalendarCheckIcon
