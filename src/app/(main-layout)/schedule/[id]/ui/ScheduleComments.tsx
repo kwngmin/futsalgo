@@ -584,12 +584,14 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (
-        <div className="text-center min-h-[50vh] flex flex-col items-center justify-center text-gray-500">
+        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center justify-center gap-1">
           <ChatsIcon
-            className="w-16 h-16 mx-auto mb-4 text-gray-300"
+            className="size-10 mx-auto text-gray-300 shrink-0"
             weight="duotone"
           />
-          <p className="text-lg mb-2 font-medium">댓글이 없습니다.</p>
+          <p className=" text-gray-500 whitespace-pre-line mb-1 break-words text-sm">
+            댓글이 없습니다.
+          </p>
         </div>
       ) : (
         <div className="relative space-y-6">

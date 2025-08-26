@@ -157,7 +157,7 @@ export const SchedulePhotosGallery = ({
             className="size-10 mx-auto text-gray-300 shrink-0"
             weight="duotone"
           />
-          <p className=" text-gray-500 whitespace-pre-line mb-3 break-words text-sm">
+          <p className=" text-gray-500 whitespace-pre-line mb-1 break-words text-sm">
             사진이 없습니다.
           </p>
         </div>
