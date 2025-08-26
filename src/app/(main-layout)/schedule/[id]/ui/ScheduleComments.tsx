@@ -532,6 +532,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         <div className="flex items-center gap-2">
           <ChatCircleDotsIcon //
             // weight="fill"
+            weight="light"
             className="size-6 text-gray-800"
           />
           <h2 className="text-lg font-semibold ">댓글</h2>
