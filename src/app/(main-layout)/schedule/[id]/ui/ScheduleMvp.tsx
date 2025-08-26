@@ -172,7 +172,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
               onClick={handleVoteStart}
             >
               <Vote className="w-5 h-5 text-gray-600" />
-              <span>MVP 투표</span>
+              <span>투표하기</span>
             </button>
           ) : (
             <div className="space-y-3">
@@ -212,7 +212,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
       )}
 
       {/* 통합 MVP 투표 현황 */}
-      <div className="mt-3">
+      <div className="mt-2">
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* MVP 투표 현황 */}
           <div className="grid grid-cols-3 gap-3 px-4 py-2 mb-1">

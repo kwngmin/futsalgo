@@ -7,7 +7,7 @@ import { useState } from "react";
 import SchedulePhotoUpload from "./SchedulePhotoUpload";
 import { useSchedulePhotos } from "../lib/use-schedule-photos";
 import { ImagesIcon } from "@phosphor-icons/react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 interface SchedulePhotosGalleryProps {
   scheduleId: string;
@@ -16,7 +16,7 @@ interface SchedulePhotosGalleryProps {
 export const SchedulePhotosGallery = ({
   scheduleId,
 }: SchedulePhotosGalleryProps) => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const { photos, canUpload, isLoading, error, hasMore, refresh, loadMore } =
     useSchedulePhotos({
@@ -86,10 +86,7 @@ export const SchedulePhotosGallery = ({
               >
                 {/* 업로더 정보 */}
                 <div className="group-hover:opacity-100 opacity-0 transition-opacity duration-300 absolute p-2 bottom-0 left-0 right-0 flex justify-between items-center h-14 select-none z-10 bg-gradient-to-t from-black/80 to-black/20 text-white">
-                  <div
-                    className="flex items-center gap-2 shrink-0"
-                    onClick={() => router.push(`/players/${photo.uploader.id}`)}
-                  >
+                  <div className="flex items-center gap-2 shrink-0">
                     {photo.uploader.image && (
                       <Image
                         src={photo.uploader.image}
@@ -102,9 +99,9 @@ export const SchedulePhotosGallery = ({
                     <div className="flex flex-col">
                       <span
                         className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
-                        onClick={() =>
-                          router.push(`/players/${photo.uploader.id}`)
-                        }
+                        // onClick={() =>
+                        //   router.push(`/players/${photo.uploader.id}`)
+                        // }
                       >
                         {photo.uploader.nickname || photo.uploader.name}
                       </span>

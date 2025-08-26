@@ -364,26 +364,22 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const renderComment = (comment: Comment, isReply = false) => {
     // 임시 댓글인지 확인 (Optimistic update)
     const isOptimistic = comment.id.startsWith("temp-");
-    const isExpanded = !expandedReplies.has(comment.id);
+    const isExpanded = expandedReplies.has(comment.id);
 
     return (
       <div
         key={comment.id} //
-        className="space-y-4"
+        className="space-y-6"
         // className={`${isReply ? "mt-2" : ""}`}
       >
         {/* <div key={comment.id} className={`${isReply ? "ml-10 my-2" : "mb-2"}`}> */}
         <div
-          className={`z-10 flex flex-col px-4 sm:px-0 ${
+          className={`z-10 flex px-4 sm:px-0 gap-1.5 ${
             isOptimistic ? "opacity-60" : ""
-          }`}
+          } ${isReply ? "ml-10" : ""}`}
         >
           {/* 프로필 이미지, 닉네임, 작성일시 */}
-          <div
-            className={`h-10 flex items-center gap-2 mb-0.5 ${
-              isReply ? "ml-7" : ""
-            }`}
-          >
+          <div className={`h-10 flex items-center gap-2 mb-0.5`}>
             {/* 프로필 이미지 */}
             <div
               className="w-8 flex flex-col z-20"
@@ -405,8 +401,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 </div>
               )}
             </div>
+          </div>
+          {/* 댓글 내용, 답글 버튼, 답글 수 */}
+          <div className="flex-1 min-w-0">
             {/* 닉네임, 작성일시 */}
-            <div className="flex items-center gap-1.5 h-10">
+            <div className="flex items-center gap-1.5 mb-1">
               <span
                 className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
                 onClick={() => {
@@ -432,13 +431,9 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 )}
               </span>
             </div>
-          </div>
-          {/* 댓글 내용, 답글 버튼, 답글 수 */}
-          <div className="ml-10 flex-1 min-w-0">
-            {/* {renderTeamBadge(comment.author.id)} */}
 
             {/* 댓글 내용 */}
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-100 px-3 py-2 rounded-md">
+            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-md">
               {comment.content}
             </p>
 
@@ -466,11 +461,14 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                     >
                       <MessageSquareText className="size-4 text-gray-500" />
                       답글 {comment.replies.length}개
-                      {isExpanded ? (
-                        <ChevronUp className="size-4 text-gray-500" />
-                      ) : (
-                        <ChevronDown className="size-4 text-gray-500" />
-                      )}
+                      <span className="text-gray-500 flex items-center text-xs rounded-full pl-2 pr-1 py-0.5 bg-zinc-50 hover:bg-zinc-200/50 transition-colors">
+                        {isExpanded ? "접기" : "펼치기"}
+                        {isExpanded ? (
+                          <ChevronUp className="size-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="size-4 text-gray-500" />
+                        )}
+                      </span>
                     </button>
                   )}
                 </div>
@@ -484,7 +482,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
         {/* 답글 작성 폼 */}
         {replyingTo === comment.id && currentUser && (
-          <div className="ml-10 px-4 space-y-1 mb-2">
+          <div className="ml-10 space-y-1 border-b pb-4">
             <textarea
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
@@ -530,8 +528,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
   return (
     <div className="max-w-4xl py-4 sm:px-4">
-      {/* 댓글 작성 폼 */}
+      <div className="flex justify-between items-center py-3">
+        <h2 className="text-lg font-semibold ">댓글</h2>
+      </div>
 
+      {/* 댓글 작성 폼 */}
       {currentUser &&
         (!focusNewComment ? (
           <div className="px-4 sm:px-0 mb-4">
@@ -545,7 +546,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             </button>
           </div>
         ) : (
-          <div className="px-4 sm:px-0 pb-4 border-b mb-2 flex items-start gap-2">
+          <div className="px-4 sm:px-0 pb-4 border-b mb-4 flex items-start gap-2">
             <div className="flex-1 space-y-1">
               <textarea
                 ref={newCommentRef}
@@ -588,7 +589,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <p className="text-lg mb-2 font-medium">댓글이 없습니다.</p>
         </div>
       ) : (
-        <div className="relative space-y-4">
+        <div className="relative space-y-6">
           {optimisticComments.map((comment) => renderComment(comment))}
           <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
           <div className="absolute translate-x-1/2 -bottom-3 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
