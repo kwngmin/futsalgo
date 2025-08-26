@@ -490,7 +490,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 handleKeyPress(e, () => handleSubmitReply(comment.id))
               }
               placeholder="답글을 입력하세요..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-400 rounded-md resize-none focus:ring-4 focus:ring-gray-200 focus:!border-gray-500 focus:!outline-none"
               rows={2}
               disabled={addCommentMutation.isPending}
             />
@@ -554,7 +554,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           </div>
         ) : (
           <div
-            className={`px-4 sm:px-0 pb-4 border-b flex items-start gap-2 ${
+            className={`pb-4 border-b flex items-start gap-2 ${
               optimisticComments.length === 0 ? "mb-2" : "mb-4"
             }`}
           >
@@ -565,7 +565,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 onChange={(e) => setNewComment(e.target.value)}
                 onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
                 placeholder="댓글을 입력하세요..."
-                className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-400 rounded-md resize-none focus:ring-4 focus:ring-gray-200 focus:!border-gray-500 focus:!outline-none"
                 rows={3}
                 disabled={isSubmitting}
               />
