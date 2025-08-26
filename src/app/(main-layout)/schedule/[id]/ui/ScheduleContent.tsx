@@ -316,7 +316,7 @@ const ScheduleContent = ({
             <div className="flex items-center gap-1.5">
               <CourtBasketballIcon
                 weight="fill"
-                className="size-5 text-gray-800"
+                className="size-6 text-gray-800"
               />
               <h2 className="text-lg font-semibold ">경기</h2>
             </div>
@@ -395,7 +395,7 @@ const ScheduleContent = ({
               <div className="flex items-center gap-1.5">
                 <MegaphoneSimpleIcon
                   weight="fill"
-                  className="size-5 text-gray-800"
+                  className="size-6 text-gray-800"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
               </div>

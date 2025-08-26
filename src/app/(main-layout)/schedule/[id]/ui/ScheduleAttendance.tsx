@@ -224,7 +224,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     <div className="px-4">
       <div className="flex justify-between items-center py-2 min-h-12">
         <div className="flex items-center gap-1.5">
-          <UsersIcon weight="fill" className="size-5 text-gray-800" />
+          <UsersIcon weight="fill" className="size-6 text-gray-800" />
           <h2 className="text-lg font-semibold ">참석인원</h2>
         </div>
         {/* 경기 추가 버튼 */}
