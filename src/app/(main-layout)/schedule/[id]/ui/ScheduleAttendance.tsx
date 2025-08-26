@@ -93,7 +93,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* 팀 정보 */}
           <div
-            className="w-full flex items-center justify-between px-4 h-12 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-200 transition-colors"
+            className="w-full flex items-center justify-between px-4 h-12 border-b gap-3 cursor-pointer bg-neutral-50 group"
             onClick={() => {
               router.push(
                 `/teams/${
@@ -117,7 +117,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                 <div className="size-6 rounded-lg bg-gray-200" />
               )}
               <div className="flex items-center gap-2">
-                <span className="text-base font-medium">
+                <span className="text-base font-medium group-hover:underline underline-offset-2">
                   {team?.name ?? ""}
                 </span>
                 <Separator
@@ -129,33 +129,31 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                 </span>
               </div>
             </div>
-            <ChevronRight className="size-5 text-gray-400" />
+            {/* <ChevronRight className="size-5 text-gray-400" /> */}
           </div>
 
           {/* 참석 현황 */}
           <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
             <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
-                {attendances === 0 ? "없음" : `${attendances}명`}
+                {attendances === 0 ? "-" : `${attendances}`}
               </div>
               <Label className="text-muted-foreground">참석</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
-                {notAttendances === 0 ? "없음" : `${notAttendances}명`}
+                {notAttendances === 0 ? "-" : `${notAttendances}`}
               </div>
               <Label className="text-muted-foreground">불참</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
-                {undecidedAttendances === 0
-                  ? "없음"
-                  : `${undecidedAttendances}명`}
+                {undecidedAttendances === 0 ? "-" : `${undecidedAttendances}`}
               </div>
               <Label className="text-muted-foreground">미정</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2">
-              <div className="font-semibold">0</div>
+              <div className="font-semibold">-</div>
               <Label className="text-muted-foreground">용병</Label>
             </div>
           </div>

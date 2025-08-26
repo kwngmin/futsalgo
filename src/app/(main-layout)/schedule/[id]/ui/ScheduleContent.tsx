@@ -345,10 +345,10 @@ const ScheduleContent = ({
 
           {/* 경기 정보 */}
           {data.data.schedule.matches.length > 0 ? (
-            <div className="rounded-md border border-gray-400 overflow-hidden shadow-xs">
+            <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
               {data.data.schedule.matches.map((match, index) => (
                 <div
-                  className="overflow-hidden border-b border-gray-400 last:border-b-0"
+                  className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
                   key={match.id}
                 >
                   <div
@@ -371,7 +371,7 @@ const ScheduleContent = ({
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-sm text-gray-500 px-1">스코어</span>
-                      <span className="text-base font-medium text-gray-500 min-w-12 px-1 text-center">
+                      <span className="text-base font-medium text-gray-700 min-w-12 px-1 text-center">
                         {match.homeScore} - {match.awayScore}
                       </span>
                       <ChevronRight className="size-5 text-gray-400" />

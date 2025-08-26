@@ -176,7 +176,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
           {!isVoting ? (
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-neutral-100 transition-colors bg-white border border-gray-400 shadow-xs hover:shadow-sm w-full mb-2"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-2"
               onClick={handleVoteStart}
             >
               <Vote className="w-5 h-5 text-gray-600" />
