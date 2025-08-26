@@ -23,8 +23,8 @@ import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
 import {
   CalendarCheckIcon,
-  // CourtBasketballIcon,
-  // MegaphoneSimpleIcon,
+  CourtBasketballIcon,
+  MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -313,12 +313,12 @@ const ScheduleContent = ({
 
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-12">
-            <div className="flex items-center gap-2">
-              {/* <CourtBasketballIcon
+            <div className="flex items-center gap-1.5">
+              <CourtBasketballIcon
                 weight="fill"
-                className="size-6 text-gray-800"
-              /> */}
-              <h2 className="text-lg font-bold ">경기</h2>
+                className="size-5 text-gray-800"
+              />
+              <h2 className="text-lg font-semibold ">경기</h2>
             </div>
             {/* 경기 추가 버튼 */}
             {currentUserId &&
@@ -392,12 +392,12 @@ const ScheduleContent = ({
         ) && (
           <div className="px-4">
             <div className="flex justify-between items-center py-2 min-h-12">
-              <div className="flex items-center gap-2">
-                {/* <MegaphoneSimpleIcon
+              <div className="flex items-center gap-1.5">
+                <MegaphoneSimpleIcon
                   weight="fill"
-                  className="size-6 text-gray-800"
-                /> */}
-                <h2 className="text-lg font-bold ">공지사항</h2>
+                  className="size-5 text-gray-800"
+                />
+                <h2 className="text-lg font-semibold ">공지사항</h2>
               </div>
               <Button
                 size="sm"

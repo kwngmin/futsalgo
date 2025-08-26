@@ -15,7 +15,7 @@ import { Label } from "@/shared/components/ui/label";
 import { Vote } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
-// import { CrownIcon } from "@phosphor-icons/react";
+import { CrownSimpleIcon } from "@phosphor-icons/react";
 
 const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -160,9 +160,9 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
   return (
     <div className="px-4">
       <div className="flex justify-between items-center py-2 min-h-12">
-        <div className="flex items-center gap-2">
-          {/* <CrownIcon weight="fill" className="size-6 text-gray-800" /> */}
-          <h2 className="text-lg font-bold ">MVP</h2>
+        <div className="flex items-center gap-1.5">
+          <CrownSimpleIcon weight="fill" className="size-5 text-gray-800" />
+          <h2 className="text-lg font-semibold ">MVP</h2>
         </div>
       </div>
 
