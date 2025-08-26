@@ -313,14 +313,13 @@ const ScheduleContent = ({
         <div className="px-4">
           <div className="flex justify-between items-center py-3 min-h-14">
             <div className="flex items-center gap-2">
-              <SoccerBallIcon weight="fill" className="size-7 text-gray-800" />
-              <h2 className="text-xl sm:text-lg font-semibold ">경기</h2>
+              <SoccerBallIcon weight="fill" className="size-6 text-gray-800" />
+              <h2 className="text-lg font-semibold ">경기</h2>
             </div>
             {/* 경기 추가 버튼 */}
             {currentUserId &&
               data.data.schedule.createdBy.id === currentUserId && (
                 <Button
-                  // variant="outline"
                   size="sm"
                   className="text-sm font-bold rounded-full !px-3 gap-1"
                   onClick={async () => {
@@ -338,6 +337,7 @@ const ScheduleContent = ({
                 </Button>
               )}
           </div>
+
           {/* 경기 정보 */}
           {data.data.schedule.matches.length > 0 ? (
             <div className="rounded-md border overflow-hidden shadow-xs">
@@ -353,10 +353,6 @@ const ScheduleContent = ({
                     }}
                   >
                     <div className="flex items-center space-x-2">
-                      {/* <SoccerBallIcon
-                        className="size-5 text-gray-600"
-                        weight="fill"
-                      /> */}
                       <span className="font-medium">{index + 1}경기</span>
                       {match.durationMinutes && (
                         <span className="text-sm text-gray-500">
@@ -391,9 +387,9 @@ const ScheduleContent = ({
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   weight="fill"
-                  className="size-7 text-gray-800"
+                  className="size-6 text-gray-800"
                 />
-                <h2 className="text-xl sm:text-lg font-semibold ">공지사항</h2>
+                <h2 className="text-lg font-semibold ">공지사항</h2>
               </div>
               <Button
                 size="sm"
