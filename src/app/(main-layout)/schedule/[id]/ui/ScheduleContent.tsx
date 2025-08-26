@@ -21,7 +21,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 // import ScheduleDetails from "./ScheduleDetails";
-import { CalendarCheckIcon, SoccerBallIcon } from "@phosphor-icons/react";
+import {
+  CalendarCheckIcon,
+  MegaphoneSimpleIcon,
+  SoccerBallIcon,
+} from "@phosphor-icons/react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
@@ -307,8 +311,11 @@ const ScheduleContent = ({
         )}
 
         <div className="px-4">
-          <div className="flex justify-between items-center py-3">
-            <h2 className="text-lg font-semibold">경기</h2>
+          <div className="flex justify-between items-center py-3 min-h-14">
+            <div className="flex items-center gap-2">
+              <SoccerBallIcon weight="fill" className="size-7 text-gray-800" />
+              <h2 className="text-xl sm:text-lg font-semibold ">경기</h2>
+            </div>
             {/* 경기 추가 버튼 */}
             {currentUserId &&
               data.data.schedule.createdBy.id === currentUserId && (
@@ -346,10 +353,10 @@ const ScheduleContent = ({
                     }}
                   >
                     <div className="flex items-center space-x-2">
-                      <SoccerBallIcon
+                      {/* <SoccerBallIcon
                         className="size-5 text-gray-600"
                         weight="fill"
-                      />
+                      /> */}
                       <span className="font-medium">{index + 1}경기</span>
                       {match.durationMinutes && (
                         <span className="text-sm text-gray-500">
@@ -380,8 +387,14 @@ const ScheduleContent = ({
           (attendance) => attendance.userId === currentUserId
         ) && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-3">
-              <h2 className="text-lg font-semibold">공지사항</h2>
+            <div className="flex justify-between items-center py-3 min-h-14">
+              <div className="flex items-center gap-2">
+                <MegaphoneSimpleIcon
+                  weight="fill"
+                  className="size-7 text-gray-800"
+                />
+                <h2 className="text-xl sm:text-lg font-semibold ">공지사항</h2>
+              </div>
               <Button
                 size="sm"
                 className="text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1"

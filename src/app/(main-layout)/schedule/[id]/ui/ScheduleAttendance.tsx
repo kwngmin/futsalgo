@@ -9,6 +9,7 @@ import { Label } from "@/shared/components/ui/label";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
+import { UsersIcon } from "@phosphor-icons/react";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -216,8 +217,11 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
   return (
     <div className="px-4">
-      <div className="flex justify-between items-center py-3">
-        <h2 className="text-lg font-semibold ">참석인원</h2>
+      <div className="flex justify-between items-center py-3 min-h-14">
+        <div className="flex items-center gap-2">
+          <UsersIcon weight="fill" className="size-7 text-gray-800" />
+          <h2 className="text-xl sm:text-lg font-semibold ">참석인원</h2>
+        </div>
         {/* 경기 추가 버튼 */}
         {data?.data?.manageableTeams &&
           data?.data?.manageableTeams.length > 0 && (

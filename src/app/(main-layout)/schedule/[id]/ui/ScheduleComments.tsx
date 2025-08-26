@@ -22,7 +22,7 @@ import {
   getScheduleComments,
 } from "../actions/get-schedule-comments";
 import Image from "next/image";
-import { ChatsIcon } from "@phosphor-icons/react";
+import { ChatCircleDotsIcon, ChatsIcon } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 
 // 타입 정의
@@ -527,15 +527,18 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const isSubmitting = addCommentMutation.isPending || isPending;
 
   return (
-    <div className="max-w-4xl py-4 sm:px-4">
-      <div className="flex justify-between items-center py-3">
-        <h2 className="text-lg font-semibold ">댓글</h2>
+    <div className="max-w-4xl py-4">
+      <div className="flex justify-between items-center py-3 min-h-14 px-4">
+        <div className="flex items-center gap-2">
+          <ChatCircleDotsIcon weight="fill" className="size-7 text-gray-800" />
+          <h2 className="text-xl font-semibold ">댓글</h2>
+        </div>
       </div>
 
       {/* 댓글 작성 폼 */}
       {currentUser &&
         (!focusNewComment ? (
-          <div className="px-4 sm:px-0 mb-4">
+          <div className="px-4 mb-4">
             <button
               type="button"
               className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"

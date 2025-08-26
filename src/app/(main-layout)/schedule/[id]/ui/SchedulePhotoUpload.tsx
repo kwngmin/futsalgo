@@ -7,6 +7,7 @@ import { Camera, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState, useCallback } from "react";
 import uploadSchedulePhotos from "../actions/upload-schedule-photos";
+import { ImagesIcon } from "@phosphor-icons/react";
 
 interface FileWithPreview {
   file: File;
@@ -208,8 +209,11 @@ const SchedulePhotoUpload = ({
   // 파일 선택 버튼
   if (files.length === 0) {
     return (
-      <div className="flex justify-between items-center py-3">
-        <h2 className="text-lg font-semibold ">사진</h2>
+      <div className="flex justify-between items-center py-3 min-h-14">
+        <div className="flex items-center gap-2">
+          <ImagesIcon weight="fill" className="size-7 text-gray-800" />
+          <h2 className="text-xl font-semibold ">사진</h2>
+        </div>
         <label
           htmlFor="schedule-photos"
           className="flex items-center bg-black text-white text-sm font-bold rounded-full px-3 gap-1 h-9 sm:h-8 cursor-pointer"
@@ -238,8 +242,11 @@ const SchedulePhotoUpload = ({
 
   return (
     <div>
-      <div className="flex justify-between items-center py-3">
-        <h2 className="text-lg font-semibold ">사진</h2>
+      <div className="flex justify-between items-center py-3 min-h-14">
+        <div className="flex items-center gap-2">
+          <ImagesIcon weight="fill" className="size-7 text-gray-800" />
+          <h2 className="text-xl font-semibold ">사진</h2>
+        </div>
         <button
           onClick={clearAllFiles}
           className="flex items-center justify-center bg-gray-100 rounded-full size-9 sm:size-8 cursor-pointer"
