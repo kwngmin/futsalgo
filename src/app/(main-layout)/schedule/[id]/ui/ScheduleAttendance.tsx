@@ -235,7 +235,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             <Button
               variant="ghost"
               size="sm"
-              className="text-base sm:text-sm font-semibold rounded-full !px-3 gap-1 text-slate-700"
+              className="text-base sm:text-sm font-semibold rounded-full !px-3 gap-1.5 text-slate-700"
               onClick={() => {
                 router.push(
                   `/schedule/${scheduleId}/attendances/${

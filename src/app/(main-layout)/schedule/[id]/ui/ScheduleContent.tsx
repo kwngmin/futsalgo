@@ -326,7 +326,7 @@ const ScheduleContent = ({
               data.data.schedule.createdBy.id === currentUserId && (
                 <Button
                   size="sm"
-                  className="text-base sm:text-sm font-bold rounded-full !px-3 gap-1"
+                  className="text-base sm:text-sm font-semibold rounded-full !px-3 gap-1.5"
                   onClick={async () => {
                     const result = await addMatch(scheduleId);
                     if (result.success) {
@@ -403,7 +403,7 @@ const ScheduleContent = ({
               </div>
               <Button
                 size="sm"
-                className="text-base sm:text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1"
+                className="text-base sm:text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1.5"
                 onClick={() => setIsNoticeOpen(!isNoticeOpen)}
               >
                 {isNoticeOpen ? "접기" : "펼치기"}

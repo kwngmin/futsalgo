@@ -220,7 +220,7 @@ const SchedulePhotoUpload = ({
         </div>
         <label
           htmlFor="schedule-photos"
-          className="flex items-center bg-black text-white text-sm font-bold rounded-full px-3 gap-1 h-8 cursor-pointer"
+          className="flex items-center bg-black text-white text-base sm:text-sm font-semibold rounded-full px-3 gap-1.5 h-8 cursor-pointer"
         >
           <Camera className="w-5 h-5 text-gray-100" />
           <span>
