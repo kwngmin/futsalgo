@@ -22,7 +22,7 @@ import {
   getScheduleComments,
 } from "../actions/get-schedule-comments";
 import Image from "next/image";
-import { ChatCircleDotsIcon, ChatsIcon } from "@phosphor-icons/react";
+import { ChatCircleDotsIcon } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 
 // 타입 정의
@@ -592,20 +592,14 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (
-        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center justify-center gap-1">
-          <ChatsIcon
-            className="size-10 mx-auto text-gray-300 shrink-0"
-            weight="duotone"
-          />
-          <p className=" text-gray-500 whitespace-pre-line mb-1 break-words text-sm">
-            댓글이 없습니다.
-          </p>
-        </div>
+        <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
+          댓글이 없습니다.
+        </p>
       ) : (
         <div className="relative space-y-6">
           {optimisticComments.map((comment) => renderComment(comment))}
-          <div className="absolute top-4 -bottom-5 left-0 border-r w-4 z-0" />
-          <div className="absolute translate-x-1/2 -bottom-1 left-2 size-2 bg-gray-200 rounded-full z-0" />
+          <div className="absolute top-4 -bottom-8 left-0 border-r w-4 z-0" />
+          <div className="absolute translate-x-1/2 -bottom-4 left-2 size-2 bg-gray-100 rounded-full z-0" />
         </div>
       )}
     </div>

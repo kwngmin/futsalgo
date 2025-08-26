@@ -381,8 +381,8 @@ const ScheduleContent = ({
               ))}
             </div>
           ) : (
-            <div className="px-4 py-3 text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
-              경기가 존재하지 않습니다.
+            <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+              경기가 없습니다.
             </div>
           )}
         </div>
@@ -420,8 +420,8 @@ const ScheduleContent = ({
                   {data?.data.schedule?.description ?? "공지사항 없음"}
                 </p>
               ) : (
-                <p className="p-4 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center text-sm">
-                  공지사항이 존재하지 않습니다.
+                <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
+                  공지사항이 없습니다.
                 </p>
               )
             ) : null}
@@ -432,10 +432,14 @@ const ScheduleContent = ({
         <ScheduleAttendance scheduleId={scheduleId} />
 
         {/* MVP */}
-        <ScheduleMvp scheduleId={scheduleId} />
+        {data.data.schedule.startTime < new Date() && (
+          <ScheduleMvp scheduleId={scheduleId} />
+        )}
 
         {/* 사진 */}
-        <SchedulePhotosGallery scheduleId={scheduleId} />
+        {data.data.schedule.startTime < new Date() && (
+          <SchedulePhotosGallery scheduleId={scheduleId} />
+        )}
 
         {/* 댓글 */}
         <ScheduleComments scheduleId={scheduleId} />

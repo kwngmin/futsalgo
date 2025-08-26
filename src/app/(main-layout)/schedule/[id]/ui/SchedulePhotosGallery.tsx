@@ -156,15 +156,9 @@ export const SchedulePhotosGallery = ({
           )}
         </div>
       ) : !isLoading ? (
-        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center justify-center gap-1">
-          <ImagesIcon
-            className="size-10 mx-auto text-gray-300 shrink-0"
-            weight="duotone"
-          />
-          <p className=" text-gray-500 whitespace-pre-line mb-1 break-words text-sm">
-            사진이 없습니다.
-          </p>
-        </div>
+        <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
+          사진이 없습니다.
+        </p>
       ) : (
         <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">
           <Loader2 className="animate-spin mx-auto mb-4" size={48} />
