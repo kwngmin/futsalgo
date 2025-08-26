@@ -538,7 +538,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       {/* 댓글 작성 폼 */}
       {currentUser &&
         (!focusNewComment ? (
-          <div className="mb-4">
+          <div className={optimisticComments.length === 0 ? "mb-2" : "mb-4"}>
             <button
               type="button"
               className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold hover:bg-gray-100 transition-colors bg-white border border-input shadow-xs hover:shadow-sm w-full"
@@ -549,7 +549,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             </button>
           </div>
         ) : (
-          <div className="px-4 sm:px-0 pb-4 border-b mb-4 flex items-start gap-2">
+          <div
+            className={`px-4 sm:px-0 pb-4 border-b flex items-start gap-2 ${
+              optimisticComments.length === 0 ? "mb-2" : "mb-4"
+            }`}
+          >
             <div className="flex-1 space-y-1">
               <textarea
                 ref={newCommentRef}
@@ -596,8 +600,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       ) : (
         <div className="relative space-y-6">
           {optimisticComments.map((comment) => renderComment(comment))}
-          <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
-          <div className="absolute translate-x-1/2 -bottom-1 left-6 sm:left-2 size-2 bg-gray-200 rounded-full z-0" />
+          <div className="absolute top-4 -bottom-5 left-0 border-r w-4 z-0" />
+          <div className="absolute translate-x-1/2 -bottom-1 left-2 size-2 bg-gray-200 rounded-full z-0" />
         </div>
       )}
     </div>
