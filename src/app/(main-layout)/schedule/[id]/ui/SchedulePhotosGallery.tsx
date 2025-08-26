@@ -102,21 +102,21 @@ export const SchedulePhotosGallery = ({
                       <Image
                         src={photo.uploader.image}
                         alt={photo.uploader.name || ""}
-                        width={32}
-                        height={32}
-                        className="size-8 rounded-full"
+                        width={24}
+                        height={24}
+                        className="size-6 rounded-full"
                       />
                     )}
                     <div className="flex flex-col">
                       <span
-                        className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
+                        className="text-sm font-semibold hover:underline underline-offset-2 cursor-pointer"
                         // onClick={() =>
                         //   router.push(`/players/${photo.uploader.id}`)
                         // }
                       >
                         {photo.uploader.nickname || photo.uploader.name}
                       </span>
-                      <span className="text-sm sm:text-xs text-gray-300 tracking-tight">
+                      <span className="text-xs text-gray-300 tracking-tight">
                         {new Date(photo.createdAt).toLocaleDateString("ko-KR", {
                           month: "short",
                           day: "numeric",

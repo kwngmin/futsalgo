@@ -12,7 +12,7 @@ import { voteMvp } from "../actions/vote-mvp";
 import { useRouter } from "next/navigation";
 // import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
-import { Vote } from "lucide-react";
+import { ChevronDown, Vote } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { CrownSimpleIcon } from "@phosphor-icons/react";
@@ -184,18 +184,21 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
             </button>
           ) : (
             <div className="space-y-3">
-              <select
-                value={selectedMvpId}
-                onChange={(e) => setSelectedMvpId(e.target.value)}
-                className="w-full px-3 py-2 border border-input rounded-md bg-white"
-              >
-                <option value="">MVP를 선택하세요</option>
-                {votingOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={selectedMvpId}
+                  onChange={(e) => setSelectedMvpId(e.target.value)}
+                  className="w-full px-3 py-2 h-12 sm:h-11 border border-input rounded-md bg-white appearance-none"
+                >
+                  <option value="">MVP를 선택하세요</option>
+                  {votingOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gray-500" />
+              </div>
               <div className="flex gap-2">
                 <button
                   type="button"

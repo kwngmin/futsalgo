@@ -277,7 +277,7 @@ const ScheduleContent = ({
               {/* <Calendar className="size-5 text-gray-600" /> */}
             </div>
             <div className="flex flex-col">
-              <span className="font-semibold">경기일정 참석여부</span>
+              <span className="font-medium">경기일정 참석여부</span>
               <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
                 {/* <Timer className="size-5 text-amber-600" /> */}
                 <span className="font-semibold text-indigo-700">
