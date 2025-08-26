@@ -223,7 +223,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
   return (
     <div className="px-4">
-      <div className="flex justify-between items-center py-2 min-h-12">
+      <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <UsersIcon //
             // weight="fill"
@@ -238,7 +238,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             <Button
               variant="ghost"
               size="sm"
-              className="text-base sm:text-sm font-semibold rounded-full !px-3 gap-1.5 text-slate-700"
+              className="text-base sm:text-sm font-semibold rounded-full gap-1.5 text-slate-700"
               onClick={() => {
                 router.push(
                   `/schedule/${scheduleId}/attendances/${

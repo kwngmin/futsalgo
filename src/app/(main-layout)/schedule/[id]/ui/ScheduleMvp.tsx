@@ -159,7 +159,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
 
   return (
     <div className="px-4">
-      <div className="flex justify-between items-center py-2 min-h-12">
+      <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <CrownSimpleIcon //
             // weight="fill"
@@ -176,43 +176,45 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
           {!isVoting ? (
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-2"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-3"
               onClick={handleVoteStart}
             >
               <Vote className="w-5 h-5 text-gray-600" />
               <span>투표하기</span>
             </button>
           ) : (
-            <div className="space-y-3">
-              <div className="relative">
-                <select
-                  value={selectedMvpId}
-                  onChange={(e) => setSelectedMvpId(e.target.value)}
-                  className="w-full px-3 py-2 h-12 sm:h-11 border border-input rounded-md bg-white appearance-none"
-                >
-                  <option value="">MVP를 선택하세요</option>
-                  {votingOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gray-500" />
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none mb-3">
+              <div className="flex items-center gap-2 grow">
+                <div className="relative w-full">
+                  <select
+                    value={selectedMvpId}
+                    onChange={(e) => setSelectedMvpId(e.target.value)}
+                    className="w-full px-3 py-2 h-12 sm:h-10 border border-input rounded-md bg-white appearance-none"
+                  >
+                    <option value="">MVP를 선택하세요</option>
+                    {votingOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gray-500" />
+                </div>
               </div>
-              <div className="flex gap-2">
+              <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
                 <button
                   type="button"
                   onClick={handleVoteSave}
+                  className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200"
                   disabled={voteMutation.isPending}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium cursor-pointer"
                 >
                   {voteMutation.isPending ? "저장 중..." : "저장"}
                 </button>
                 <button
                   type="button"
+                  className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-blue-900/15 hover:text-gray-800 rounded-sm active:scale-95 transition-all duration-200"
                   onClick={handleVoteCancel}
                   disabled={voteMutation.isPending}
-                  className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 disabled:opacity-50 font-medium cursor-pointer"
                 >
                   취소
                 </button>

@@ -528,7 +528,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
   return (
     <div className="px-4">
-      <div className="flex justify-between items-center py-2 min-h-12">
+      <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <ChatCircleDotsIcon //
             // weight="fill"
@@ -545,7 +545,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           <div className={optimisticComments.length === 0 ? "mb-2" : "mb-4"}>
             <button
               type="button"
-              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-2"
+              className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-3"
               onClick={() => setFocusNewComment(true)}
             >
               <PencilLine className="w-5 h-5 text-gray-600" />

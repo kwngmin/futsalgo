@@ -209,7 +209,7 @@ const SchedulePhotoUpload = ({
   // 파일 선택 버튼
   if (files.length === 0) {
     return (
-      <div className="flex justify-between items-center py-2 min-h-12">
+      <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <ImagesIcon //
             // weight="fill"
@@ -220,7 +220,7 @@ const SchedulePhotoUpload = ({
         </div>
         <label
           htmlFor="schedule-photos"
-          className="flex items-center bg-black text-white text-base sm:text-sm font-semibold rounded-full px-3 gap-1.5 h-8 cursor-pointer"
+          className="flex items-center bg-black text-white text-base sm:text-sm font-semibold rounded-full px-3.5 sm:px-3 gap-1.5 h-9 sm:h-8 cursor-pointer"
         >
           <Camera className="w-5 h-5 text-gray-100" />
           <span>
@@ -246,7 +246,7 @@ const SchedulePhotoUpload = ({
 
   return (
     <div>
-      <div className="flex justify-between items-center py-3 min-h-14">
+      <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <ImagesIcon //
             // weight="fill"

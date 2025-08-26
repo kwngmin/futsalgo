@@ -312,7 +312,7 @@ const ScheduleContent = ({
         )}
 
         <div className="px-4">
-          <div className="flex justify-between items-center py-2 min-h-12">
+          <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
             <div className="flex items-center gap-2">
               <CourtBasketballIcon
                 // weight="fill"
@@ -326,7 +326,7 @@ const ScheduleContent = ({
               data.data.schedule.createdBy.id === currentUserId && (
                 <Button
                   size="sm"
-                  className="text-base sm:text-sm font-semibold rounded-full !px-3 gap-1.5"
+                  className="text-base sm:text-sm font-semibold rounded-full gap-1.5"
                   onClick={async () => {
                     const result = await addMatch(scheduleId);
                     if (result.success) {
@@ -387,7 +387,7 @@ const ScheduleContent = ({
           (attendance) => attendance.userId === currentUserId
         ) && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-12">
+            <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   // weight="fill"
@@ -398,7 +398,7 @@ const ScheduleContent = ({
               </div>
               <Button
                 size="sm"
-                className="text-base sm:text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 !px-3 gap-1.5"
+                className="text-base sm:text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
                 onClick={() => setIsNoticeOpen(!isNoticeOpen)}
               >
                 {isNoticeOpen ? "접기" : "펼치기"}
