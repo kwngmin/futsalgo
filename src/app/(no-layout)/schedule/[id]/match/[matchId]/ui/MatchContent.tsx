@@ -109,11 +109,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 네비게이션 */}
-      <div className="flex items-center justify-between px-4 h-16 shrink-0">
+      <div className="flex items-center justify-between px-4 h-16 shrink-0 relative">
         <div className="flex gap-3">
           <h1 className="text-2xl font-bold">{data.matchOrder}경기</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
           <NavigationButton
             direction="prev"
             disabled={isPrevDisabled}
@@ -124,6 +124,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
             disabled={isNextDisabled}
             onClick={() => handleNavigation("next")}
           />
+        </div>
+        <div className="flex items-center gap-2">
           <button
             className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() =>
@@ -210,9 +212,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
         )}
 
         {/* 골 기록 입력 */}
-        {data.permissions.isEditable && (
-          <GoalRecord matchId={data.match.id} lineups={data.lineups} />
-        )}
+        {data.permissions.isEditable &&
+          data.match.schedule.startTime <= new Date() && (
+            <GoalRecord matchId={data.match.id} lineups={data.lineups} />
+          )}
 
         {/* 팀 명단 */}
         <div className="px-4">
