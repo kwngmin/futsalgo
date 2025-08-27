@@ -20,7 +20,7 @@ export const NavigationButton = ({
 
   return (
     <button
-      className={`shrink-0 h-9 sm:h-8 flex items-center gap-1 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors border border-gray-300 ${
+      className={`shrink-0 h-9 sm:h-8 flex items-center gap-1 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors border ${
         disabled
           ? "opacity-50 cursor-default pointer-events-none"
           : "cursor-pointer"
