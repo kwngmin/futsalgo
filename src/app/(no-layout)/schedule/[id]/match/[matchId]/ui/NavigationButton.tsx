@@ -20,11 +20,11 @@ export const NavigationButton = ({
 
   return (
     <button
-      className={`shrink-0 px-3 h-10 flex items-center gap-1.5 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors ${
+      className={`shrink-0 h-9 sm:h-8 flex items-center gap-1 font-medium justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors border border-gray-300 ${
         disabled
           ? "opacity-50 cursor-default pointer-events-none"
           : "cursor-pointer"
-      }`}
+      } ${isPrev ? "pl-2 pr-3" : "pl-3 pr-2"}`}
       onClick={onClick}
       disabled={disabled}
     >
