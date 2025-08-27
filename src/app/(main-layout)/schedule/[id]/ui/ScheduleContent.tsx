@@ -295,7 +295,7 @@ const ScheduleContent = ({
           </div>
         )}
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {isLoading && (
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center h-40 w-60 bg-gradient-to-br from-slate-100 to-zinc-100 rounded-lg">
             <Loader2
