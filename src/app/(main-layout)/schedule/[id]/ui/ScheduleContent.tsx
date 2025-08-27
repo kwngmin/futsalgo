@@ -336,7 +336,7 @@ const ScheduleContent = ({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-base sm:text-sm font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 hover:bg-indigo-50"
+                    className="text-base sm:text-sm font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
                     onClick={async () => {
                       const result = await addMatch(scheduleId);
                       if (result.success) {
@@ -348,7 +348,7 @@ const ScheduleContent = ({
                     }}
                   >
                     <PlusIcon className="size-4" strokeWidth={2.75} />
-                    경기 추가
+                    추가
                   </Button>
                 )}
             </div>
@@ -394,6 +394,28 @@ const ScheduleContent = ({
                 경기가 없습니다.
               </div>
             )}
+
+            {/* 경기 추가 버튼 */}
+            {/* {currentUserId &&
+              data.data.schedule.createdBy.id === currentUserId && (
+                <div className="pt-3">
+                  <Button
+                    type="button"
+                    className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
+                    size="lg"
+                    onClick={async () => {
+                      const result = await addMatch(scheduleId);
+                      if (result.success) {
+                        refetch();
+                      } else {
+                        console.log(result.error, "result.error");
+                      }
+                    }}
+                  >
+                    경기 추가
+                  </Button>
+                </div>
+              )} */}
           </div>
         )}
 
@@ -481,8 +503,8 @@ const ScheduleContent = ({
           <Image
             src={data.data.schedule?.createdBy.image ?? ""}
             alt="avatar"
-            width={20}
-            height={20}
+            width={24}
+            height={24}
             className="rounded-lg"
           />
           <span className="text-sm font-medium text-gray-500 group-hover:underline group-hover:text-gray-700 underline-offset-2">

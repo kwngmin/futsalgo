@@ -202,12 +202,8 @@ const ScheduleDetails = ({ scheduleId }: { scheduleId: string }) => {
                   refetch();
                 } else {
                   console.log(result.error, "result.error");
-                  // toast.error(result.error);
                 }
               }}
-              // onClick={() => {
-              //   router.push(`/schedule/${scheduleId}/match/add`);
-              // }}
             >
               경기 추가
             </Button>
