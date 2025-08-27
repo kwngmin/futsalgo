@@ -212,11 +212,12 @@ const SchedulePhotoUpload = ({
       <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <ImagesIcon //
-            // weight="fill"
-            weight="light"
-            className="size-7 text-gray-800"
+            weight="fill"
+            // weight="light"
+            // weight="duotone"
+            className="size-8 sm:size-7 text-gray-700"
           />
-          <h2 className="text-lg font-semibold ">사진</h2>
+          <h2 className="text-xl sm:text-lg font-semibold ">사진</h2>
         </div>
         <label
           htmlFor="schedule-photos"
@@ -249,11 +250,12 @@ const SchedulePhotoUpload = ({
       <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <ImagesIcon //
-            // weight="fill"
-            weight="light"
-            className="size-7 text-gray-800"
+            weight="fill"
+            // weight="light"
+            // weight="duotone"
+            className="size-8 sm:size-7 text-gray-700"
           />
-          <h2 className="text-lg font-semibold ">사진</h2>
+          <h2 className="text-xl sm:text-lg font-semibold ">사진</h2>
         </div>
         <button
           onClick={clearAllFiles}

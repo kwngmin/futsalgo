@@ -10,7 +10,7 @@ import { ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
 import { useSession } from "next-auth/react";
-import { UsersIcon } from "@phosphor-icons/react";
+import { UserCircleCheckIcon } from "@phosphor-icons/react";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
@@ -225,12 +225,13 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
     <div className="px-4">
       <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
-          <UsersIcon //
-            // weight="fill"
-            weight="light"
-            className="size-7 text-gray-800"
+          <UserCircleCheckIcon //
+            weight="fill"
+            // weight="light"
+            // weight="duotone"
+            className="size-8 sm:size-7 text-gray-700"
           />
-          <h2 className="text-lg font-semibold ">참석인원</h2>
+          <h2 className="text-xl sm:text-lg font-semibold ">참석인원</h2>
         </div>
         {/* 경기 추가 버튼 */}
         {data?.data?.manageableTeams &&
