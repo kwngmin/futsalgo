@@ -133,7 +133,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           </div>
 
           {/* 참석 현황 */}
-          <div className="bg-gradient-to-b from-neutral-200/60 to-neutral-50 grid grid-cols-4 gap-3 px-4 py-2">
+          <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
             <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
                 {attendances === 0 ? "-" : `${attendances}`}
