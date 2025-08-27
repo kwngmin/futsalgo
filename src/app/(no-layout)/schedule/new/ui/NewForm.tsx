@@ -25,6 +25,7 @@ import {
 import { useTeamCodeValidation } from "@/features/validation/hooks/use-validation";
 import { getInvitedTeam } from "../action/getInvitedTeam";
 import { MATCH_TYPE_OPTIONS } from "@/entities/schedule/model/constants";
+import { useQueryClient } from "@tanstack/react-query";
 // import Image from "next/image";
 
 const newFormSchema = z.object({
@@ -59,6 +60,7 @@ const NewForm = ({
   const [open, setOpen] = useState(false);
   const [matchDate, setMatchDate] = useState<Date>();
   const [deadlineDate, setDeadlineDate] = useState<Date>();
+  const queryClient = useQueryClient();
 
   const { teamCode, onChange } = useTeamCodeValidation();
   const [invitedTeam, setInvitedTeam] = useState<{
@@ -142,6 +144,8 @@ const NewForm = ({
         // 성공 알림
         alert("일정이 추가되었습니다.");
         // alert(result.data.message || "팀 정보가 업데이트되었습니다.");
+
+        queryClient.invalidateQueries({ queryKey: ["schedules"] });
 
         // 팀 상세 페이지로 리다이렉트 (선택사항)
         router.replace(`/`);
@@ -333,12 +337,12 @@ const NewForm = ({
       </div>
 
       <div className="space-y-3">
-        <Label className="">안내 사항</Label>
+        <Label className="">공지사항</Label>
         <Textarea
           {...register("description")}
           // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
           className="min-h-24"
-          placeholder="안내 사항을 작성해주세요"
+          placeholder="공지사항을 작성해주세요"
         />
       </div>
       {/* 참석여부 투표, 지난 날짜면 비활성화 */}

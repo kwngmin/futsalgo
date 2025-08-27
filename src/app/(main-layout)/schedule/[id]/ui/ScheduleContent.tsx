@@ -115,7 +115,6 @@ const ScheduleContent = ({
   //   validTab ? validTab.value : tabs[0].value
   // );
   // const [isLiked, setIsLiked] = useState(isLikedSchedule);
-  const [isNoticeOpen, setIsNoticeOpen] = useState(true);
 
   const session = useSession();
   const currentUserId = session.data?.user?.id;
@@ -125,6 +124,10 @@ const ScheduleContent = ({
     queryFn: () => getSchedule(scheduleId),
     placeholderData: keepPreviousData,
   });
+
+  const [isNoticeOpen, setIsNoticeOpen] = useState(
+    Boolean(data?.data?.schedule?.description)
+  );
 
   const isAttendance = data?.data?.schedule?.attendances.some(
     (attendance) => attendance.userId === currentUserId
@@ -266,37 +269,42 @@ const ScheduleContent = ({
         </div>
       </div>
 
-      {isAttendance && (
-        <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none my-3">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-full bg-white/80">
-              <CalendarCheckIcon
-                className="size-6 text-indigo-700"
-                weight="fill"
-              />
-              {/* <Calendar className="size-5 text-gray-600" /> */}
-            </div>
-            <div className="flex flex-col">
-              <span className="font-medium">경기일정 참석여부</span>
-              <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
-                {/* <Timer className="size-5 text-amber-600" /> */}
-                <span className="font-semibold text-indigo-700">
-                  7월 11일 오전 10:00까지
-                </span>
-                선택해주세요.
+      {/* 경기일정 참석여부 투표 */}
+      {isAttendance &&
+        data.data.schedule.status === "READY" &&
+        data.data.schedule.enableAttendanceVote &&
+        data.data.schedule.attendanceDeadline &&
+        new Date(data.data.schedule.attendanceDeadline) > new Date() && (
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none my-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-full bg-white/80">
+                <CalendarCheckIcon
+                  className="size-6 text-indigo-700"
+                  weight="fill"
+                />
+                {/* <Calendar className="size-5 text-gray-600" /> */}
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium">경기일정 참석여부</span>
+                <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
+                  {/* <Timer className="size-5 text-amber-600" /> */}
+                  <span className="font-semibold text-indigo-700">
+                    7월 11일 오전 10:00까지
+                  </span>
+                  선택해주세요.
+                </div>
               </div>
             </div>
+            <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
+              <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200">
+                참석
+              </button>
+              <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive rounded-sm active:scale-95 transition-all duration-200">
+                불참
+              </button>
+            </div>
           </div>
-          <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
-            <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200">
-              참석
-            </button>
-            <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive rounded-sm active:scale-95 transition-all duration-200">
-              불참
-            </button>
-          </div>
-        </div>
-      )}
+        )}
 
       <div className="space-y-4">
         {isLoading && (
@@ -311,76 +319,83 @@ const ScheduleContent = ({
           </div>
         )}
 
-        <div className="px-4">
-          <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
-            <div className="flex items-center gap-2">
-              <CourtBasketballIcon
-                // weight="fill"
-                weight="light"
-                className="size-6 text-gray-800"
-              />
-              <h2 className="text-lg font-semibold ">경기</h2>
-            </div>
-            {/* 경기 추가 버튼 */}
-            {currentUserId &&
-              data.data.schedule.createdBy.id === currentUserId && (
-                <Button
-                  size="sm"
-                  className="text-base sm:text-sm font-semibold rounded-full gap-1.5"
-                  onClick={async () => {
-                    const result = await addMatch(scheduleId);
-                    if (result.success) {
-                      refetch();
-                    } else {
-                      console.log(result.error, "result.error");
-                      // toast.error(result.error);
-                    }
-                  }}
-                >
-                  <PlusIcon className="size-4" strokeWidth={2.75} />
-                  추가
-                </Button>
-              )}
-          </div>
-
-          {/* 경기 정보 */}
-          {data.data.schedule.matches.length > 0 ? (
-            <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
-              {data.data.schedule.matches.map((match, index) => (
-                <div
-                  className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
-                  key={match.id}
-                >
-                  <div
-                    className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                    onClick={() => {
-                      router.push(`/schedule/${scheduleId}/match/${match.id}`);
+        {/* 경기 정보 */}
+        {data.data.schedule.status === "READY" && (
+          <div className="px-4">
+            <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
+              <div className="flex items-center gap-2">
+                <CourtBasketballIcon
+                  // weight="fill"
+                  weight="light"
+                  className="size-6 text-gray-800"
+                />
+                <h2 className="text-lg font-semibold ">경기</h2>
+              </div>
+              {/* 경기 추가 버튼 */}
+              {currentUserId &&
+                data.data.schedule.createdBy.id === currentUserId && (
+                  <Button
+                    size="sm"
+                    className="text-base sm:text-sm font-semibold rounded-full gap-1.5"
+                    onClick={async () => {
+                      const result = await addMatch(scheduleId);
+                      if (result.success) {
+                        refetch();
+                      } else {
+                        console.log(result.error, "result.error");
+                        // toast.error(result.error);
+                      }
                     }}
                   >
-                    <div className="flex items-center space-x-2">
-                      <SoccerBallIcon
-                        weight="fill"
-                        className="size-5 text-gray-800"
-                      />
-                      <span className="font-medium">{index + 1}경기</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm text-gray-500 px-1">스코어</span>
-                      <span className="text-base font-medium text-gray-800 min-w-12 px-1 text-center">
-                        {match.homeScore} - {match.awayScore}
-                      </span>
-                      <ChevronRight className="size-5 text-gray-400" />
+                    <PlusIcon className="size-4" strokeWidth={2.75} />
+                    추가
+                  </Button>
+                )}
+            </div>
+
+            {/* 경기 정보 */}
+            {data.data.schedule.matches.length > 0 ? (
+              <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
+                {data.data.schedule.matches.map((match, index) => (
+                  <div
+                    className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
+                    key={match.id}
+                  >
+                    <div
+                      className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        router.push(
+                          `/schedule/${scheduleId}/match/${match.id}`
+                        );
+                      }}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <SoccerBallIcon
+                          weight="fill"
+                          className="size-5 text-gray-800"
+                        />
+                        <span className="font-medium">{index + 1}경기</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-gray-500 px-1">
+                          스코어
+                        </span>
+                        <span className="text-base font-medium text-gray-800 min-w-12 px-1 text-center">
+                          {match.homeScore} - {match.awayScore}
+                        </span>
+                        <ChevronRight className="size-5 text-gray-400" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
-              경기가 없습니다.
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+                경기가 없습니다.
+              </div>
+            )}
+          </div>
+        )}
 
         {/* 공지사항 */}
         {data.data.schedule.attendances.some(
