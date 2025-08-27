@@ -73,7 +73,7 @@ export const SchedulePhotosGallery = ({
           onUploadComplete={handleUploadComplete}
         />
       ) : (
-        <div className="flex justify-between items-center py-2 min-h-12">
+        <div className="flex justify-between items-center py-2 min-h-13">
           <div className="flex items-center gap-2">
             <ImagesIcon //
               // weight="fill"

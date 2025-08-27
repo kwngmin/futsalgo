@@ -311,7 +311,7 @@ const ScheduleContent = ({
         {/* 경기 정보 */}
         {data.data.schedule.status === "READY" && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-12">
+            <div className="flex justify-between items-center py-2 min-h-13">
               <div className="flex items-center gap-2">
                 <CourtBasketballIcon
                   // weight="duotone"
@@ -415,7 +415,7 @@ const ScheduleContent = ({
           (attendance) => attendance.userId === currentUserId
         ) && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-12">
+            <div className="flex justify-between items-center py-2 min-h-13">
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   // weight="fill"
