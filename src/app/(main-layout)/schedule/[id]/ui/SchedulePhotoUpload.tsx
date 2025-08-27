@@ -3,7 +3,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { createUploadUrl } from "@/shared/lib/cloudflare/create-upload-url";
 import { uploadImage } from "@/shared/lib/cloudflare/upload-image";
-import { Camera, Loader2, X } from "lucide-react";
+import { Loader2, PlusIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState, useCallback } from "react";
 import uploadSchedulePhotos from "../actions/upload-schedule-photos";
@@ -223,13 +223,8 @@ const SchedulePhotoUpload = ({
           htmlFor="schedule-photos"
           className="flex items-center bg-indigo-50 hover:bg-indigo-100 text-indigo-500 hover:text-indigo-600 text-base sm:text-sm font-bold rounded-full px-3.5 sm:px-3 gap-1.5 h-9 sm:h-8 cursor-pointer"
         >
-          <Camera className="size-5" />
-          <span>
-            업로드
-            {/* {files.length === 0
-        ? "사진 업로드"
-        : `사진 추가 (${MAX_FILES - files.length}장 더)`} */}
-          </span>
+          <PlusIcon className="size-4" strokeWidth={2.75} />
+          추가
           <input
             id="schedule-photos"
             ref={fileInputRef}

@@ -4,23 +4,14 @@ import {
   ArrowLeft,
   Share,
   ChevronRight,
-  // Flag,
   Loader2,
-  // MailOpen,
-  // Megaphone,
-  // UserRound,
   PlusIcon,
   ChevronUp,
   ChevronDown,
-  // Timer,
-  // Calendar,
-  // Timer,
-  // Vote,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
-// import ScheduleDetails from "./ScheduleDetails";
 import {
   CalendarCheckIcon,
   CourtBasketballIcon,
