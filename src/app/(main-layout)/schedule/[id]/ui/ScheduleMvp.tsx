@@ -163,8 +163,8 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
         <div className="flex items-center gap-2">
           <CrownIcon //
             // weight="fill"
-            // weight="light"
-            weight="duotone"
+            weight="light"
+            // weight="duotone"
             className="size-8 sm:size-7 text-gray-700"
           />
           <h2 className="text-xl sm:text-lg font-semibold ">MVP</h2>

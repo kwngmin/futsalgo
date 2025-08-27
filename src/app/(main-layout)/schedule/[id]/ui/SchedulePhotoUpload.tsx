@@ -213,8 +213,8 @@ const SchedulePhotoUpload = ({
         <div className="flex items-center gap-2">
           <ImagesIcon //
             // weight="fill"
-            // weight="light"
-            weight="duotone"
+            weight="light"
+            // weight="duotone"
             className="size-8 sm:size-7 text-gray-700"
           />
           <h2 className="text-xl sm:text-lg font-semibold ">사진</h2>
@@ -251,8 +251,8 @@ const SchedulePhotoUpload = ({
         <div className="flex items-center gap-2">
           <ImagesIcon //
             // weight="fill"
-            // weight="light"
-            weight="duotone"
+            weight="light"
+            // weight="duotone"
             className="size-8 sm:size-7 text-gray-700"
           />
           <h2 className="text-xl sm:text-lg font-semibold ">사진</h2>
