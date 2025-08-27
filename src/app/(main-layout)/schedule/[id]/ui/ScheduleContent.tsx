@@ -452,14 +452,14 @@ const ScheduleContent = ({
           </div>
         )}
 
-        {/* 참석 인원 탭 내용 */}
-        <ScheduleAttendance scheduleId={scheduleId} />
-
         {/* MVP */}
         {data.data.schedule.startTime < new Date() &&
           data.data.schedule.matches.length > 0 && (
             <ScheduleMvp scheduleId={scheduleId} />
           )}
+
+        {/* 참석 인원 탭 내용 */}
+        <ScheduleAttendance scheduleId={scheduleId} />
 
         {/* 사진 */}
         {data.data.schedule.startTime < new Date() && (
