@@ -215,6 +215,10 @@ const GoalRecord = ({
     "watchValues.scorerId || watchValues.isScoredByMercenary"
   );
 
+  // 라인업 필터링
+  const homeLineup = lineups.filter((lineup) => lineup.side === "HOME");
+  const awayLineup = lineups.filter((lineup) => lineup.side === "AWAY");
+
   return (
     <div className="px-4">
       <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
@@ -223,114 +227,122 @@ const GoalRecord = ({
           <span className="text-base font-medium">새로운 골 & 어시스트</span>
         </div>
       </div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 p-4 bg-gray-50 rounded-md"
-      >
-        {/* 득점 */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <SoccerBallIcon className="size-5" weight="fill" />
-            <Label>골 넣은 사람</Label>
-          </div>
-          <div className="space-y-3">
-            <CustomSelect
-              // value={watchValues.scorerId || ""}
-              value={scorerSelectValue}
-              onChange={handleScorerChange}
-              options={
-                <>
-                  <option value="">선택</option>
-                  <optgroup label={`HOME`}>
-                    {renderPlayerOptions(homeLineups)}
-                    <option value="mercenary_home_side">용병</option>
-                  </optgroup>
-                  <optgroup label="AWAY">
-                    {renderPlayerOptions(awayLineups)}
-                    <option value="mercenary_away_side">용병</option>
-                  </optgroup>
-                </>
-              }
-            />
-
-            {/* 자책골 여부 */}
-            {Boolean(scorerId || isScoredByMercenary) && (
-              <div className="flex justify-between items-center space-x-2 h-11 bg-white rounded-md px-2">
-                <div className="flex items-center gap-2 px-1">
-                  <SoccerBallIcon
-                    className="size-5 text-destructive"
-                    weight="fill"
-                  />
-                  <Label htmlFor="isOwnGoal">자책골</Label>
-                </div>
-                <Switch
-                  id="isOwnGoal"
-                  checked={isOwnGoal}
-                  onCheckedChange={handleOwnGoalChange}
-                  className="scale-125 sm:scale-110 cursor-pointer"
-                />
-              </div>
-            )}
-          </div>
-
-          {errors.scorerId && (
-            <p className="text-sm text-red-500">{errors.scorerId.message}</p>
-          )}
-        </div>
-
-        {/* 어시스트 (자책골이 아닐 때만) */}
-        {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
+      {homeLineup.length > 0 && awayLineup.length > 0 ? (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6 p-4 bg-gray-50 rounded-md"
+        >
+          {/* 득점 */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <SneakerMoveIcon className="size-5" weight="fill" />
-              <Label>어시스트 한 사람</Label>
+              <SoccerBallIcon className="size-5" weight="fill" />
+              <Label>골 넣은 사람</Label>
             </div>
             <div className="space-y-3">
               <CustomSelect
-                // value={watchValues.assistId || ""}
-                value={assistSelectValue}
-                onChange={handleAssistChange}
+                // value={watchValues.scorerId || ""}
+                value={scorerSelectValue}
+                onChange={handleScorerChange}
                 options={
                   <>
-                    <option value="">없음</option>
-                    {scorerSide === "HOME"
-                      ? renderPlayerOptions(homeLineups, scorerId)
-                      : renderPlayerOptions(awayLineups, scorerId)}
-                    <option value="mercenary_assist">용병</option>
+                    <option value="">선택</option>
+                    <optgroup label={`HOME`}>
+                      {renderPlayerOptions(homeLineups)}
+                      <option value="mercenary_home_side">용병</option>
+                    </optgroup>
+                    <optgroup label="AWAY">
+                      {renderPlayerOptions(awayLineups)}
+                      <option value="mercenary_away_side">용병</option>
+                    </optgroup>
                   </>
                 }
               />
+
+              {/* 자책골 여부 */}
+              {Boolean(scorerId || isScoredByMercenary) && (
+                <div className="flex justify-between items-center space-x-2 h-11 bg-white rounded-md px-2">
+                  <div className="flex items-center gap-2 px-1">
+                    <SoccerBallIcon
+                      className="size-5 text-destructive"
+                      weight="fill"
+                    />
+                    <Label htmlFor="isOwnGoal">자책골</Label>
+                  </div>
+                  <Switch
+                    id="isOwnGoal"
+                    checked={isOwnGoal}
+                    onCheckedChange={handleOwnGoalChange}
+                    className="scale-125 sm:scale-110 cursor-pointer"
+                  />
+                </div>
+              )}
             </div>
-            {errors.assistId && (
-              <p className="text-sm text-red-500">{errors.assistId.message}</p>
+
+            {errors.scorerId && (
+              <p className="text-sm text-red-500">{errors.scorerId.message}</p>
             )}
           </div>
-        )}
-        {watchValues.scorerId && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center gap-2">
-            <Button
-              type="button"
-              disabled={isSubmitting || !watchValues.scorerId}
-              className="w-full font-medium tracking-tight disabled:opacity-50 disabled:pointer-events-none"
-              size="lg"
-              variant="secondary"
-              onClick={() => reset({})}
-            >
-              취소
-            </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting || !watchValues.scorerId}
-              // type="button"
-              className="w-full font-bold bg-black text-white tracking-tight disabled:opacity-50 disabled:pointer-events-none"
-              size="lg"
-            >
-              {/* GOAL ! */}
-              {isSubmitting ? "저장하는 중..." : "저장"}
-            </Button>
-          </div>
-        )}
-      </form>
+
+          {/* 어시스트 (자책골이 아닐 때만) */}
+          {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <SneakerMoveIcon className="size-5" weight="fill" />
+                <Label>어시스트 한 사람</Label>
+              </div>
+              <div className="space-y-3">
+                <CustomSelect
+                  // value={watchValues.assistId || ""}
+                  value={assistSelectValue}
+                  onChange={handleAssistChange}
+                  options={
+                    <>
+                      <option value="">없음</option>
+                      {scorerSide === "HOME"
+                        ? renderPlayerOptions(homeLineups, scorerId)
+                        : renderPlayerOptions(awayLineups, scorerId)}
+                      <option value="mercenary_assist">용병</option>
+                    </>
+                  }
+                />
+              </div>
+              {errors.assistId && (
+                <p className="text-sm text-red-500">
+                  {errors.assistId.message}
+                </p>
+              )}
+            </div>
+          )}
+          {watchValues.scorerId && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center gap-2">
+              <Button
+                type="button"
+                disabled={isSubmitting || !watchValues.scorerId}
+                className="w-full font-medium tracking-tight disabled:opacity-50 disabled:pointer-events-none"
+                size="lg"
+                variant="secondary"
+                onClick={() => reset({})}
+              >
+                취소
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !watchValues.scorerId}
+                // type="button"
+                className="w-full font-bold bg-black text-white tracking-tight disabled:opacity-50 disabled:pointer-events-none"
+                size="lg"
+              >
+                {/* GOAL ! */}
+                {isSubmitting ? "저장하는 중..." : "저장"}
+              </Button>
+            </div>
+          )}
+        </form>
+      ) : (
+        <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+          {/* 라인업이 존재하지 않습니다. */}팀 명단이 없습니다.
+        </div>
+      )}
     </div>
   );
 };

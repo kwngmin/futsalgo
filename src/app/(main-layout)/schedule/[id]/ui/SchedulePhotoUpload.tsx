@@ -214,7 +214,7 @@ const SchedulePhotoUpload = ({
           <ImagesIcon //
             // weight="fill"
             weight="light"
-            className="size-6 text-gray-800"
+            className="size-7 text-gray-800"
           />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>
@@ -251,7 +251,7 @@ const SchedulePhotoUpload = ({
           <ImagesIcon //
             // weight="fill"
             weight="light"
-            className="size-6 text-gray-800"
+            className="size-7 text-gray-800"
           />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>

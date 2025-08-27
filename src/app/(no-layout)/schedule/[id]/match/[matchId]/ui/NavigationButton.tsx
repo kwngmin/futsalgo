@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // 네비게이션 버튼 컴포넌트 (DRY 원칙 적용)
 interface NavigationButtonProps {
@@ -15,7 +15,7 @@ export const NavigationButton = ({
   onClick,
 }: NavigationButtonProps) => {
   const isPrev = direction === "prev";
-  const Icon = isPrev ? ChevronUp : ChevronDown;
+  const Icon = isPrev ? ChevronLeft : ChevronRight;
   const label = isPrev ? "이전" : "다음";
 
   return (
@@ -28,8 +28,17 @@ export const NavigationButton = ({
       onClick={onClick}
       disabled={disabled}
     >
-      <Icon className="size-5" strokeWidth={2.5} />
-      {label}
+      {isPrev ? (
+        <>
+          <Icon className="size-5" strokeWidth={2.5} />
+          {label}
+        </>
+      ) : (
+        <>
+          {label}
+          <Icon className="size-5" strokeWidth={2.5} />
+        </>
+      )}
     </button>
   );
 };

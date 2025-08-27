@@ -327,7 +327,7 @@ const ScheduleContent = ({
                 <CourtBasketballIcon
                   // weight="fill"
                   weight="light"
-                  className="size-6 text-gray-800"
+                  className="size-7 text-gray-800"
                 />
                 <h2 className="text-lg font-semibold ">경기</h2>
               </div>
@@ -407,7 +407,7 @@ const ScheduleContent = ({
                 <MegaphoneSimpleIcon
                   // weight="fill"
                   weight="light"
-                  className="size-6 text-gray-800"
+                  className="size-7 text-gray-800"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
               </div>
