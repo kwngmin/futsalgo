@@ -221,7 +221,7 @@ const SchedulePhotoUpload = ({
         </div>
         <label
           htmlFor="schedule-photos"
-          className="flex items-center bg-indigo-50 hover:bg-indigo-100 text-indigo-500 hover:text-indigo-600 text-base sm:text-sm font-bold rounded-full px-3.5 sm:px-3 gap-1.5 h-9 sm:h-8 cursor-pointer"
+          className="flex items-center bg-indigo-50 hover:bg-indigo-100 text-indigo-500 hover:text-indigo-600 text-base sm:text-sm font-semibold rounded-full px-3.5 sm:px-3 gap-1.5 h-9 sm:h-8 cursor-pointer"
         >
           <PlusIcon className="size-4" strokeWidth={2.75} />
           추가
