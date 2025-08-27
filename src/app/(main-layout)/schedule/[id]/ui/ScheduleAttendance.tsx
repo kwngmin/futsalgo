@@ -226,9 +226,9 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
       <div className="flex justify-between items-center py-2 min-h-14 sm:min-h-12">
         <div className="flex items-center gap-2">
           <UserCircleCheckIcon //
-            weight="fill"
+            // weight="fill"
             // weight="light"
-            // weight="duotone"
+            weight="duotone"
             className="size-8 sm:size-7 text-gray-700"
           />
           <h2 className="text-xl sm:text-lg font-semibold ">참석인원</h2>
