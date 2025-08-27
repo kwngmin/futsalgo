@@ -90,9 +90,9 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
 
     return (
       <div className="">
-        <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
+        <div className="overflow-hidden rounded-2xl mb-2">
           {/* 팀 정보 */}
-          <div className="w-full flex items-center justify-between px-4 h-12 border-b gap-3 bg-neutral-50">
+          <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
             <div className="flex items-center gap-2">
               {team?.logoUrl ? (
                 <Image
@@ -133,26 +133,26 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           </div>
 
           {/* 참석 현황 */}
-          <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
-            <div className="flex flex-col gap-1 items-center my-2">
+          <div className="bg-gradient-to-b from-neutral-200/60 to-neutral-50 grid grid-cols-4 gap-3 px-4 py-2">
+            <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
                 {attendances === 0 ? "-" : `${attendances}`}
               </div>
               <Label className="text-muted-foreground">참석</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-2">
+            <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
                 {notAttendances === 0 ? "-" : `${notAttendances}`}
               </div>
               <Label className="text-muted-foreground">불참</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-2">
+            <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
                 {undecidedAttendances === 0 ? "-" : `${undecidedAttendances}`}
               </div>
               <Label className="text-muted-foreground">미정</Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-2">
+            <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">-</div>
               <Label className="text-muted-foreground">용병</Label>
             </div>
