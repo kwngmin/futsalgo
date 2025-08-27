@@ -327,7 +327,7 @@ const ScheduleContent = ({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-base sm:text-sm font-semibold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
+                    className="text-base sm:text-sm !font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
                     onClick={async () => {
                       const result = await addMatch(scheduleId);
                       if (result.success) {
