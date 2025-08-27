@@ -215,15 +215,15 @@ const SchedulePhotoUpload = ({
             // weight="fill"
             weight="light"
             // weight="duotone"
-            className="size-8 sm:size-7 text-gray-700"
+            className="size-7 text-gray-700"
           />
-          <h2 className="text-xl sm:text-lg font-semibold ">사진</h2>
+          <h2 className="text-lg font-semibold ">사진</h2>
         </div>
         <label
           htmlFor="schedule-photos"
-          className="flex items-center bg-black text-white text-base sm:text-sm font-semibold rounded-full px-3.5 sm:px-3 gap-1.5 h-9 sm:h-8 cursor-pointer"
+          className="flex items-center hover:bg-indigo-50 text-indigo-500 hover:text-indigo-600 text-base sm:text-sm font-bold rounded-full px-3.5 sm:px-3 gap-1.5 h-9 sm:h-8 cursor-pointer"
         >
-          <Camera className="w-5 h-5 text-gray-100" />
+          <Camera className="size-5" />
           <span>
             업로드
             {/* {files.length === 0
@@ -253,9 +253,9 @@ const SchedulePhotoUpload = ({
             // weight="fill"
             weight="light"
             // weight="duotone"
-            className="size-8 sm:size-7 text-gray-700"
+            className="size-7 text-gray-700"
           />
-          <h2 className="text-xl sm:text-lg font-semibold ">사진</h2>
+          <h2 className="text-lg font-semibold ">사진</h2>
         </div>
         <button
           onClick={clearAllFiles}

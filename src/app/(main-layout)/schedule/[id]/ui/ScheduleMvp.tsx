@@ -165,9 +165,9 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
             // weight="fill"
             weight="light"
             // weight="duotone"
-            className="size-8 sm:size-7 text-gray-700"
+            className="size-7 text-gray-700"
           />
-          <h2 className="text-xl sm:text-lg font-semibold ">MVP</h2>
+          <h2 className="text-lg font-semibold ">MVP</h2>
         </div>
       </div>
 

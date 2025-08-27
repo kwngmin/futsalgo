@@ -534,9 +534,9 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             // weight="fill"
             weight="light"
             // weight="duotone"
-            className="size-8 sm:size-7 text-gray-700"
+            className="size-7 text-gray-700"
           />
-          <h2 className="text-xl sm:text-lg font-semibold ">댓글</h2>
+          <h2 className="text-lg font-semibold ">댓글</h2>
         </div>
       </div>
 

@@ -125,9 +125,7 @@ const ScheduleContent = ({
     placeholderData: keepPreviousData,
   });
 
-  const [isNoticeOpen, setIsNoticeOpen] = useState(
-    Boolean(data?.data?.schedule?.description)
-  );
+  const [isNoticeOpen, setIsNoticeOpen] = useState(true);
 
   const isAttendance = data?.data?.schedule?.attendances.some(
     (attendance) => attendance.userId === currentUserId
@@ -328,16 +326,17 @@ const ScheduleContent = ({
                   // weight="duotone"
                   // weight="fill"
                   weight="light"
-                  className="size-8 sm:size-7 text-gray-700"
+                  className="size-7 text-gray-700"
                 />
-                <h2 className="text-xl sm:text-lg font-semibold ">경기</h2>
+                <h2 className="text-lg font-semibold ">경기</h2>
               </div>
               {/* 경기 추가 버튼 */}
               {currentUserId &&
                 data.data.schedule.createdBy.id === currentUserId && (
                   <Button
                     size="sm"
-                    className="text-base sm:text-sm font-semibold rounded-full gap-1.5"
+                    variant="ghost"
+                    className="text-base sm:text-sm font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 hover:bg-indigo-50"
                     onClick={async () => {
                       const result = await addMatch(scheduleId);
                       if (result.success) {
@@ -349,7 +348,7 @@ const ScheduleContent = ({
                     }}
                   >
                     <PlusIcon className="size-4" strokeWidth={2.75} />
-                    추가
+                    경기 추가
                   </Button>
                 )}
             </div>
@@ -377,11 +376,11 @@ const ScheduleContent = ({
                         />
                         <span className="font-medium">{index + 1}경기</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 font-medium">
                         <span className="text-sm text-gray-500 px-1">
                           스코어
                         </span>
-                        <span className="text-base font-medium text-gray-800 min-w-12 px-1 text-center">
+                        <span className="text-base text-gray-800 min-w-12 px-1 text-center">
                           {match.homeScore} - {match.awayScore}
                         </span>
                         <ChevronRight className="size-5 text-gray-400" />
@@ -409,13 +408,13 @@ const ScheduleContent = ({
                   // weight="fill"
                   weight="light"
                   // weight="duotone"
-                  className="size-8 sm:size-7 text-gray-700"
+                  className="size-7 text-gray-700"
                 />
-                <h2 className="text-xl sm:text-lg font-semibold ">공지사항</h2>
+                <h2 className="text-lg font-semibold ">공지사항</h2>
               </div>
               <Button
                 size="sm"
-                className="text-base sm:text-sm font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
+                className="text-base sm:text-sm !font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
                 onClick={() => setIsNoticeOpen(!isNoticeOpen)}
               >
                 {isNoticeOpen ? "접기" : "펼치기"}
