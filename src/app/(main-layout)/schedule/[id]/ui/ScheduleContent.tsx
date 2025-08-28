@@ -8,7 +8,8 @@ import {
   PlusIcon,
   ChevronUp,
   ChevronDown,
-  CheckIcon,
+  SquareCheckBigIcon,
+  Square,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -291,27 +292,19 @@ const ScheduleContent = ({
               </div>
             </div>
             <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5 ">
-              <button
-                className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
-                  isAttendanceStatus === "ATTENDING"
-                    ? "text-white bg-indigo-600 hover:bg-indigo-700"
-                    : "bg-slate-200 hover:bg-indigo-600 hover:text-white"
-                }`}
-              >
-                {isAttendanceStatus === "ATTENDING" && (
-                  <CheckIcon className="size-4" strokeWidth={2.75} />
+              <button className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700">
+                {isAttendanceStatus === "ATTENDING" ? (
+                  <SquareCheckBigIcon className="size-5" />
+                ) : (
+                  <Square className="size-5" />
                 )}
                 참석
               </button>
-              <button
-                className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
-                  isAttendanceStatus === "NOT_ATTENDING"
-                    ? "text-white bg-red-600 hover:bg-red-700"
-                    : "text-destructive bg-red-600/10 hover:bg-red-600 hover:text-white"
-                }`}
-              >
-                {isAttendanceStatus === "NOT_ATTENDING" && (
-                  <CheckIcon className="size-4" strokeWidth={2.75} />
+              <button className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-destructive bg-red-600/10 hover:bg-red-600/15">
+                {isAttendanceStatus === "NOT_ATTENDING" ? (
+                  <SquareCheckBigIcon className="size-5" />
+                ) : (
+                  <Square className="size-5" />
                 )}
                 불참
               </button>
