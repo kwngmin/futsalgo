@@ -391,7 +391,7 @@ const ScheduleContent = ({
                         </div>
                         <div className="flex items-center gap-1 font-medium">
                           <span className="text-sm text-green-600 font-semibold px-1.5 py-0.25 bg-green-600/10 rounded">
-                            점수
+                            스코어
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
                             {match.homeScore} - {match.awayScore}
