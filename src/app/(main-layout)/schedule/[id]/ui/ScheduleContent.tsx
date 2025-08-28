@@ -292,10 +292,10 @@ const ScheduleContent = ({
             </div>
             <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5 ">
               <button
-                className={`sm:text-sm grow h-11 sm:h-9 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
+                className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
                   isAttendanceStatus === "ATTENDING"
                     ? "text-white bg-indigo-600 hover:bg-indigo-700"
-                    : "text-gray-700 bg-blue-900/10 hover:bg-indigo-600 hover:text-white"
+                    : "text-gray-800 bg-slate-200/80 hover:bg-indigo-600 hover:text-white"
                 }`}
               >
                 {isAttendanceStatus === "ATTENDING" && (
@@ -307,7 +307,7 @@ const ScheduleContent = ({
                 className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
                   isAttendanceStatus === "NOT_ATTENDING"
                     ? "text-white bg-red-600/10 hover:bg-red-600/20"
-                    : "text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive"
+                    : "text-gray-800 bg-slate-200/80 hover:bg-red-600/10 hover:text-destructive"
                 }`}
               >
                 {isAttendanceStatus === "NOT_ATTENDING" && (

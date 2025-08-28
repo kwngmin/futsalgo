@@ -150,7 +150,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100 rounded-b-xl border-b border-slate-200">
+        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-200">
           <div
             className="h-8 sm:h-9 flex items-center gap-1.5 sm:gap-2 text-sm"
             // onClick={() => handleScheduleClick(schedule.id)}
