@@ -77,9 +77,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     <div className="flex flex-col py-1 select-none">
       <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
-          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-50 pb-1`}
+          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 pb-1`}
         >
-          <div className="font-medium text-xs text-slate-500">{weekday}</div>
+          <div className="font-medium text-xs text-gray-500">{weekday}</div>
           <div className="font-semibold">
             {`${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`}
           </div>
