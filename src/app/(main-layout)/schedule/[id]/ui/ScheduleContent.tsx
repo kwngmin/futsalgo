@@ -15,7 +15,7 @@ import { useState } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import {
   CalendarCheckIcon,
-  CourtBasketballIcon,
+  // CourtBasketballIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
@@ -241,7 +241,7 @@ const ScheduleContent = ({
       </div>
 
       {/* 공통 */}
-      <div className="w-full flex flex-col items-center justify-center px-4 mb-3">
+      <div className="w-full flex flex-col items-center justify-center px-4 mb-6">
         <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
@@ -336,17 +336,14 @@ const ScheduleContent = ({
         {data.data.schedule.status === "READY" &&
           data.data.schedule.startTime <= new Date() && (
             <div className="px-4">
-              <div className="flex justify-between items-center py-2 min-h-13">
+              {/* <div className="flex justify-between items-center py-2 min-h-13">
                 <div className="flex items-center gap-2">
                   <CourtBasketballIcon
                     weight="duotone"
-                    // weight="fill"
-                    // weight="light"
                     className="size-7 text-gray-700"
                   />
                   <h2 className="text-lg font-semibold ">경기</h2>
                 </div>
-                {/* 경기 추가 버튼 */}
                 {currentUserId &&
                   data.data.schedule.createdBy.id === currentUserId && (
                     <Button
@@ -359,7 +356,6 @@ const ScheduleContent = ({
                           refetch();
                         } else {
                           console.log(result.error, "result.error");
-                          // toast.error(result.error);
                         }
                       }}
                     >
@@ -367,7 +363,7 @@ const ScheduleContent = ({
                       추가
                     </Button>
                   )}
-              </div>
+              </div> */}
 
               {/* 경기 정보 */}
               {data.data.schedule.matches.length > 0 ? (
@@ -394,7 +390,7 @@ const ScheduleContent = ({
                           {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-green-600 px-1.5 bg-green-700/5 rounded-sm py-0.5 font-semibold">
+                          <span className="text-sm text-green-600 font-semibold px-1.5">
                             점수
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
@@ -418,7 +414,7 @@ const ScheduleContent = ({
                   <div className="pt-3">
                     <Button
                       type="button"
-                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
+                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-base"
                       size="lg"
                       onClick={async () => {
                         const result = await addMatch(scheduleId);
@@ -445,10 +441,10 @@ const ScheduleContent = ({
             <div className="flex justify-between items-center py-2 min-h-13">
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
-                  // weight="fill"
+                  weight="fill"
                   // weight="light"
-                  weight="duotone"
-                  className="size-7 text-gray-700"
+                  // weight="duotone"
+                  className="size-7 text-teal-500"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
                 {/* <span className="text-sm text-gray-500">

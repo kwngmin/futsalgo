@@ -7,7 +7,8 @@ import {
   // UserIcon,
   DotsThreeOutlineIcon,
   NewspaperClippingIcon,
-  AddressBookIcon,
+  // AddressBookIcon,
+  AddressBookTabsIcon,
 } from "@phosphor-icons/react";
 
 export const navItems = [
@@ -27,7 +28,8 @@ export const navItems = [
   {
     id: "player",
     label: "회원",
-    icon: AddressBookIcon,
+    icon: AddressBookTabsIcon,
+    // icon: AddressBookIcon,
     // icon: UserIcon,
     href: "/players",
   },

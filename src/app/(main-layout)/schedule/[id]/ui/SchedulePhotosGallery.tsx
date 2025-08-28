@@ -76,10 +76,10 @@ export const SchedulePhotosGallery = ({
         <div className="flex justify-between items-center py-2 min-h-13">
           <div className="flex items-center gap-2">
             <ImagesIcon //
-              // weight="fill"
+              weight="fill"
               // weight="light"
-              weight="duotone"
-              className="size-7 text-gray-700"
+              // weight="duotone"
+              className="size-7 text-sky-700"
             />
             <h2 className="text-lg font-semibold ">사진</h2>
           </div>
