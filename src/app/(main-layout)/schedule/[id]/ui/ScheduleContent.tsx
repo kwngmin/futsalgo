@@ -394,8 +394,8 @@ const ScheduleContent = ({
                           {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-green-600 px-1.5 bg-green-600/5 rounded-xs py-0.5 font-semibold mr-1">
-                            스코어
+                          <span className="text-sm text-green-600 px-1.5 bg-green-700/5 rounded-sm py-0.5 font-semibold">
+                            점수
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
                             {match.homeScore} - {match.awayScore}
