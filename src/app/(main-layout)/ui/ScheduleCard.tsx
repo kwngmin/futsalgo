@@ -89,7 +89,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           onClick={() => handleScheduleClick(schedule.id)}
         >
           <div className="flex items-center gap-2 truncate leading-none h-6 tracking-tight">
-            <span className="text-gray-600 text-sm">{schedule.place}</span>
+            <span className="text-gray-700 text-sm">{schedule.place}</span>
             <Separator
               orientation="vertical"
               className="!h-3 !w-0.25 bg-gray-300"
