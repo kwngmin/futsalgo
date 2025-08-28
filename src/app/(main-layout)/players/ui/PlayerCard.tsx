@@ -49,19 +49,14 @@ const PlayerCard = ({
       ) : (
         <div className="size-14 bg-gray-400" />
       )}
-      {/* {isCurrentUser && (
-              <div className="absolute -top-0.5 -right-0.5 size-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-[10px] font-extrabold">나</span>
-              </div>
-            )} */}
 
       {/* 사용자 정보 */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <h3 className="text-lg sm:text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+          <h3 className="text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {player.nickname}
           </h3>
-          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight text-muted-foreground gap-2">
+          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight text-muted-foreground font-medium gap-2">
             {/* <Separator orientation="vertical" /> */}
             <div className="flex items-center gap-1">
               {/* {player.birthDate
@@ -116,7 +111,7 @@ const PlayerCard = ({
           {teamName || "소속 팀 없음"}
         </p> */}
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-          <div className="w-full sm:text-sm tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
+          <div className="w-full text-sm tracking-tight flex items-center gap-1 text-gray-700">
             {teamLogoUrl ? (
               <div className="size-5 sm:size-4 text-gray-700">
                 <Image

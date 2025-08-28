@@ -57,25 +57,18 @@ const TeamCard = ({
       <div className="flex flex-col items-start justify-center grow">
         <h3
           className={`${
-            size === "md" ? "text-lg sm:text-base font-semibold" : "font-medium"
+            size === "md" ? "text-base font-medium" : "font-medium"
           } flex items-center gap-2 truncate leading-none h-6`}
         >
           {team.name}
-          <span className="sm:text-sm font-medium text-amber-600 mb-0.5">
+          <span className="text-sm font-medium text-amber-600 mb-0.5">
             {team._count.members}
           </span>
-          {/* {isMyTeam && (
-              <div className="flex items-center gap-0.5 rounded px-1 bg-slate-500/10 h-5 border border-slate-300 mb-0.5">
-                <span className="text-xs text-slate-800 font-semibold tracking-tight">
-                  소속 팀
-                </span>
-              </div>
-            )} */}
         </h3>
         <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
           <div
             className={`${
-              size === "md" ? "sm:text-sm" : "text-sm mb-0.5"
+              size === "md" ? "text-sm" : "text-sm mb-0.5"
             } w-full tracking-tight flex items-center gap-1 text-muted-foreground font-medium`}
           >
             {team.gender === "MALE" ? (
