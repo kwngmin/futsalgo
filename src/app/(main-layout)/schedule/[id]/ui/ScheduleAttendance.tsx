@@ -227,8 +227,8 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
         <div className="flex items-center gap-2">
           <UserCircleCheckIcon //
             // weight="fill"
-            weight="light"
-            // weight="duotone"
+            // weight="light"
+            weight="duotone"
             className="size-7 text-gray-700"
           />
           <h2 className="text-lg font-semibold ">참석인원</h2>
@@ -239,7 +239,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             <Button
               variant="ghost"
               size="sm"
-              className="text-base sm:text-sm font-semibold rounded-full gap-1.5 text-blue-600"
+              className="text-base sm:text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 gap-1 hover:bg-blue-50"
               onClick={() => {
                 router.push(
                   `/schedule/${scheduleId}/attendances/${
@@ -255,7 +255,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
               {/* <Settings className="size-4" strokeWidth={2.5} /> */}
               관리
               <ChevronRight
-                className="size-4 text-blue-700"
+                className="size-4 text-blue-800"
                 strokeWidth={2.5}
               />
             </Button>

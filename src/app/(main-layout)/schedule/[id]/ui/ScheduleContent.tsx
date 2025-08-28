@@ -339,9 +339,9 @@ const ScheduleContent = ({
               <div className="flex justify-between items-center py-2 min-h-13">
                 <div className="flex items-center gap-2">
                   <CourtBasketballIcon
-                    // weight="duotone"
+                    weight="duotone"
                     // weight="fill"
-                    weight="light"
+                    // weight="light"
                     className="size-7 text-gray-700"
                   />
                   <h2 className="text-lg font-semibold ">경기</h2>
@@ -391,9 +391,10 @@ const ScheduleContent = ({
                             className="size-5 text-gray-800"
                           />
                           <span className="font-medium">{index + 1}경기</span>
+                          {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-gray-500 px-1">
+                          <span className="text-sm text-gray-500 px-1 bg-gray-100 rounded-xs py-0.5 font-semibold mr-1">
                             스코어
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
@@ -412,26 +413,27 @@ const ScheduleContent = ({
               )}
 
               {/* 경기 추가 버튼 */}
-              {/* {currentUserId &&
-              data.data.schedule.createdBy.id === currentUserId && (
-                <div className="pt-3">
-                  <Button
-                    type="button"
-                    className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 !text-lg"
-                    size="lg"
-                    onClick={async () => {
-                      const result = await addMatch(scheduleId);
-                      if (result.success) {
-                        refetch();
-                      } else {
-                        console.log(result.error, "result.error");
-                      }
-                    }}
-                  >
-                    경기 추가
-                  </Button>
-                </div>
-              )} */}
+              {currentUserId &&
+                data.data.schedule.createdBy.id === currentUserId && (
+                  <div className="pt-3">
+                    <Button
+                      type="button"
+                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
+                      size="lg"
+                      onClick={async () => {
+                        const result = await addMatch(scheduleId);
+                        if (result.success) {
+                          refetch();
+                        } else {
+                          console.log(result.error, "result.error");
+                        }
+                      }}
+                    >
+                      <PlusIcon className="size-5" strokeWidth={2.75} />
+                      경기 추가
+                    </Button>
+                  </div>
+                )}
             </div>
           )}
 
@@ -444,8 +446,8 @@ const ScheduleContent = ({
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   // weight="fill"
-                  weight="light"
-                  // weight="duotone"
+                  // weight="light"
+                  weight="duotone"
                   className="size-7 text-gray-700"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
