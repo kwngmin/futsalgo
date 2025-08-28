@@ -111,7 +111,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 상단: 제목과 네비게이션 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-1.5 items-center">
-          <h1 className="text-2xl font-bold min-w-20">{data.matchOrder}경기</h1>
+          <h1 className="text-2xl font-bold min-w-16">{data.matchOrder}경기</h1>
           <NavigationButton
             direction="prev"
             disabled={isPrevDisabled}
