@@ -390,7 +390,7 @@ const ScheduleContent = ({
                           {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-green-600 font-semibold px-1.5 py-0.25 bg-green-50 rounded border border-green-600/20 mr-1">
+                          <span className="text-sm text-green-600 font-semibold px-1.5 py-0.25 bg-green-600/10 rounded">
                             점수
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
