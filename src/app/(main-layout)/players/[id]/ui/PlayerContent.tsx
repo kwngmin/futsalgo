@@ -170,7 +170,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="flex items-center gap-4 h-20 mb-4">
               {/* 프로필 사진 */}
               <div className="relative">
-                <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-4xl border">
+                <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-full border">
                   <Image
                     width={80}
                     height={80}

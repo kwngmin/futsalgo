@@ -36,7 +36,7 @@ const PlayerCard = ({
             height={56}
             src={player.image}
             alt={player.nickname || "프로필 이미지"}
-            className="size-14 rounded-3xl object-cover"
+            className="size-14 rounded-full object-cover border"
             priority={isCurrentUser}
             loading={isCurrentUser ? "eager" : "lazy"}
           />

@@ -9,7 +9,7 @@ import {
   TeamMemberStatus,
   User,
 } from "@prisma/client";
-import { ChevronRight, Crown, UserRoundCog } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
@@ -74,7 +74,7 @@ const TeamMemberList = ({
                   width={56}
                   height={56}
                   loading="lazy"
-                  className="size-14 p-0.5 rounded-3xl object-cover"
+                  className="size-14 rounded-full border object-cover"
                 />
                 {member.user.condition === "INJURED" && <InjuredBadge />}
               </div>
@@ -82,26 +82,14 @@ const TeamMemberList = ({
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
-                    <div className="flex items-center gap-0.5 h-5">
-                      <UserRoundCog
-                        className="size-5 text-indigo-700 p-0.5 mb-0.5"
-                        strokeWidth={2}
-                      />
-                      <span className="text-sm text-indigo-700 font-semibold">
-                        부팀장
-                      </span>
-                    </div>
+                    <span className="text-sm text-indigo-700 font-semibold">
+                      부팀장
+                    </span>
                   )}
                   {member.role === "OWNER" && (
-                    <div className="flex items-center gap-0.5 h-5">
-                      <Crown
-                        className="size-5 text-amber-700 p-0.5 mb-0.5"
-                        strokeWidth={2}
-                      />
-                      <span className="text-sm text-amber-700 font-semibold">
-                        팀장
-                      </span>
-                    </div>
+                    <span className="text-sm text-amber-700 font-semibold">
+                      팀장
+                    </span>
                   )}
                 </span>
                 <span className="sm:text-sm text-muted-foreground tracking-tight">
@@ -155,7 +143,7 @@ const TeamMemberList = ({
                     width={56}
                     height={56}
                     loading="lazy"
-                    className="size-14 p-0.5 rounded-3xl object-cover"
+                    className="size-14 rounded-full border object-cover"
                   />
                   {member.user.condition === "INJURED" && <InjuredBadge />}
                 </div>
@@ -234,7 +222,7 @@ const TeamMemberList = ({
                   width={56}
                   height={56}
                   loading="lazy"
-                  className="size-14 p-0.5 rounded-3xl object-cover"
+                  className="size-14 rounded-full border object-cover"
                 />
                 {member.user.condition === "INJURED" && <InjuredBadge />}
               </div>
@@ -242,26 +230,14 @@ const TeamMemberList = ({
                 <span className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
                   {member.user.nickname || "닉네임 없음"}
                   {member.role === "MANAGER" && (
-                    <div className="flex items-center gap-0.5 h-5">
-                      <UserRoundCog
-                        className="size-5 text-indigo-700 p-0.5 mb-0.5"
-                        strokeWidth={2}
-                      />
-                      <span className="text-sm text-indigo-700 font-semibold">
-                        부팀장
-                      </span>
-                    </div>
+                    <span className="text-sm text-indigo-700 font-semibold">
+                      부팀장
+                    </span>
                   )}
                   {member.role === "OWNER" && (
-                    <div className="flex items-center gap-0.5 h-5">
-                      <Crown
-                        className="size-5 text-amber-700 p-0.5 mb-0.5"
-                        strokeWidth={2}
-                      />
-                      <span className="text-sm text-amber-700 font-semibold">
-                        팀장
-                      </span>
-                    </div>
+                    <span className="text-sm text-amber-700 font-semibold">
+                      팀장
+                    </span>
                   )}
                 </span>
                 <span className="sm:text-sm text-muted-foreground tracking-tight">
