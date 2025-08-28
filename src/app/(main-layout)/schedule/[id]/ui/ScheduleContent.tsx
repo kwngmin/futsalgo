@@ -266,7 +266,7 @@ const ScheduleContent = ({
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-full bg-white border border-slate-200">
                 <CalendarCheckIcon
-                  className="size-6 text-indigo-700"
+                  className="size-6 text-indigo-600"
                   weight="fill"
                 />
                 {/* <Calendar className="size-5 text-gray-600" /> */}
@@ -444,7 +444,7 @@ const ScheduleContent = ({
                   weight="fill"
                   // weight="light"
                   // weight="duotone"
-                  className="size-7 text-teal-500"
+                  className="size-7 text-emerald-500"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
                 {/* <span className="text-sm text-gray-500">
@@ -512,7 +512,7 @@ const ScheduleContent = ({
             : ""}
         </span>
         <div
-          className="flex items-center gap-1 group cursor-pointer"
+          className="flex items-center gap-2 group cursor-pointer"
           onClick={() => {
             router.push(`/players/${data.data.schedule?.createdBy.id}`);
           }}
