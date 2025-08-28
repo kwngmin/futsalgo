@@ -306,8 +306,8 @@ const ScheduleContent = ({
               <button
                 className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
                   isAttendanceStatus === "NOT_ATTENDING"
-                    ? "text-white bg-red-600/10 hover:bg-red-600/20"
-                    : "bg-slate-200 hover:bg-red-600/10 hover:text-destructive"
+                    ? "text-white bg-red-600 hover:bg-red-700"
+                    : "text-destructive bg-red-600/10 hover:bg-red-600 hover:text-white"
                 }`}
               >
                 {isAttendanceStatus === "NOT_ATTENDING" && (
