@@ -106,10 +106,10 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
             </span>
             <Separator
               orientation="vertical"
-              className="!h-3 !w-0.25 bg-gray-400"
+              className="!h-3 !w-0.25 bg-gray-300"
             />
             {/* <span className="text-gray-400 font-medium">•</span> */}
-            <span className="">{schedule.place}</span>
+            <span className="text-gray-600">{schedule.place}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
