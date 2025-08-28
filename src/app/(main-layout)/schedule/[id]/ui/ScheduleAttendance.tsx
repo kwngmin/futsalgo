@@ -229,7 +229,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             weight="fill"
             // weight="light"
             // weight="duotone"
-            className="size-7 text-emerald-500"
+            className="size-7 text-zinc-500"
           />
           <h2 className="text-lg font-semibold ">참석인원</h2>
         </div>
