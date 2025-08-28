@@ -171,9 +171,9 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
                 weight="fill"
               />
             </div>
-            <div className="flex flex-col sm:flex-row space-x-2 text-xs sm:text-sm">
-              <span className="shrink-0 font-semibold">참석여부</span>
-              <div className="w-full flex items-center gap-1 tracking-tight">
+            <div className="flex flex-col sm:flex-row space-x-2">
+              <span className="shrink-0 font-semibold text-sm">참석여부</span>
+              <div className="w-full flex items-center gap-1 tracking-tight text-xs sm:text-sm">
                 <span className="font-medium text-indigo-700">
                   {new Date(
                     schedule.attendanceDeadline as Date
