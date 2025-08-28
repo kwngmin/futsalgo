@@ -77,17 +77,16 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
       <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
-          className={`size-14 rounded-xl flex flex-col justify-center items-center truncate leading-none tracking-tight gap-0.5 bg-neutral-50 pb-2`}
+          className={`size-14 rounded-xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-50 pb-2`}
         >
           <div
-            className={`font-medium text-xs ${
+            className={`font-semibold tracking-tight text-xs ${
               weekday === "일요일"
-                ? "text-red-700"
+                ? "text-red-600"
                 : weekday === "토요일"
-                ? "text-blue-700"
-                : "text-slate-700"
+                ? "text-blue-600"
+                : "text-slate-600"
             }`}
-            // className="font-medium text-xs"
           >
             {weekday}
           </div>
@@ -162,29 +161,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
                 </div>
               </Fragment>
             )}
-            {/* <div
-              className={`text-xs px-1.5 sm:px-1 flex items-center justify-center h-5.5 rounded-md font-semibold ${
-                schedule.matchType === "TEAM"
-                  ? "text-indigo-600 bg-indigo-600/10"
-                  : "text-emerald-600 bg-emerald-600/10"
-              }`}
-            >
-              {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
-            </div> */}
           </div>
         </div>
-        {/* {schedule.enableAttendanceVote && (
-          <div className="flex flex-col items-center justify-center rounded-lg w-10 h-10 bg-amber-500/10">
-            <Vote className="size-5 text-amber-500" />
-            <span className="text-xs font-medium">
-              {attendanceStatus === "ATTENDING"
-                ? "참석"
-                : attendanceStatus === "NOT_ATTENDING"
-                ? "불참"
-                : "미정"}
-            </span>
-          </div>
-        )} */}
       </div>
 
       {attendanceStatus &&
