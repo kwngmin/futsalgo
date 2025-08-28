@@ -394,7 +394,7 @@ const ScheduleContent = ({
                           {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-gray-500 px-1 bg-gray-100 rounded-xs py-0.5 font-semibold mr-1">
+                          <span className="text-sm text-green-600 px-1.5 bg-green-600/5 rounded-xs py-0.5 font-semibold mr-1">
                             스코어
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
@@ -451,6 +451,9 @@ const ScheduleContent = ({
                   className="size-7 text-gray-700"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
+                {/* <span className="text-sm text-gray-500">
+                  외부인은 볼 수 없습니다.
+                </span> */}
               </div>
               <Button
                 size="sm"
