@@ -160,33 +160,31 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-2 sm:px-4 py-1 sm:py-0 gap-2 bg-gradient-to-b from-transparent to-slate-50 rounded-b-xl border-y border-slate-100">
+        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 gap-2 bg-gradient-to-b from-transparent to-slate-50 rounded-b-xl border-y border-slate-100">
           <div
-            className="h-9 sm:h-8 flex items-center gap-2 text-sm"
+            className="h-9 sm:h-8 flex items-center gap-1.5 sm:gap-2 text-sm"
             // onClick={() => handleScheduleClick(schedule.id)}
           >
-            <div className="p-2 rounded-full bg-white border border-slate-100 sm:border-none sm:p-0 sm:bg-transparent">
-              <CalendarCheckIcon
-                className="size-4.5 text-indigo-700"
-                weight="fill"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row space-x-2">
-              <span className="shrink-0 font-semibold text-sm">참석여부</span>
-              <div className="w-full flex items-center gap-1 tracking-tight text-xs sm:text-sm">
-                <span className="font-medium text-indigo-700">
-                  {new Date(
-                    schedule.attendanceDeadline as Date
-                  ).toLocaleDateString("ko-KR", {
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  })}
-                  까지
-                </span>
-                선택해주세요.
-              </div>
+            <CalendarCheckIcon
+              className="size-5 sm:size-6 text-indigo-700"
+              weight="fill"
+            />
+            <span className="shrink-0 font-semibold text-xs sm:text-sm">
+              참석여부
+            </span>
+            <div className="w-full flex items-center gap-1 tracking-tight text-xs sm:text-sm">
+              <span className="font-medium text-indigo-700">
+                {new Date(
+                  schedule.attendanceDeadline as Date
+                ).toLocaleDateString("ko-KR", {
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}
+                까지
+              </span>
+              선택해주세요.
             </div>
           </div>
           <span className="text-xs sm:text-sm font-medium text-amber-700">
