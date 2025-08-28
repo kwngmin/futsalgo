@@ -88,7 +88,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <div className="flex items-center gap-2 truncate leading-none h-5 sm:h-6 tracking-tight">
+          <div className="flex items-center gap-2 truncate leading-none h-5 tracking-tight">
             <span className="text-gray-800 text-sm">{schedule.place}</span>
             <Separator
               orientation="vertical"
@@ -114,7 +114,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
               ) : (
                 <div className="size-4 rounded-full bg-gray-100" />
               )}
-              <span className="sm:text-sm font-medium tracking-tight truncate">
+              <span className="font-medium tracking-tight truncate">
                 {schedule.hostTeam.name}
               </span>
             </div>
@@ -135,7 +135,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
                   ) : (
                     <div className="size-4 rounded-full bg-gray-100" />
                   )}
-                  <span className="sm:text-sm font-medium tracking-tight truncate">
+                  <span className="font-medium tracking-tight truncate">
                     {schedule.invitedTeam?.name}
                   </span>
                 </div>
