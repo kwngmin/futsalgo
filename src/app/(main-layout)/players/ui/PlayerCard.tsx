@@ -25,7 +25,7 @@ const PlayerCard = ({
 
   return (
     <div
-      className="px-4 py-2 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-3"
+      className="px-4 py-1.5 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center gap-3"
       onClick={() => router.push(`/players/${player.id}`)}
     >
       {/* 프로필 이미지 */}

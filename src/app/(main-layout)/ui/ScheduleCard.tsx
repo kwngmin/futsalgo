@@ -74,7 +74,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   });
 
   return (
-    <div className="flex flex-col py-1 select-none">
+    <div className="flex flex-col py-1.5 select-none">
       <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
           className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 pb-1`}
