@@ -54,7 +54,7 @@ const PlayerCard = ({
       {/* 사용자 정보 */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <h3 className="text-base font-medium flex items-center gap-2 truncate leading-none h-6">
+          <h3 className="text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
             {player.nickname}
           </h3>
           <div className="h-4 flex items-center text-sm tracking-tight text-muted-foreground font-medium gap-2">

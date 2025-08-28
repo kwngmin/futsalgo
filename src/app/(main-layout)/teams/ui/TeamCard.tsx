@@ -57,7 +57,7 @@ const TeamCard = ({
       <div className="flex flex-col items-start justify-center grow">
         <h3
           className={`${
-            size === "md" ? "text-base font-medium" : "font-medium"
+            size === "md" ? "text-base font-semibold" : "font-medium"
           } flex items-center gap-2 truncate leading-none h-6`}
         >
           {team.name}
