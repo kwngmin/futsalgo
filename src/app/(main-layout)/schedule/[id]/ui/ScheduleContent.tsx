@@ -300,7 +300,7 @@ const ScheduleContent = ({
                 )}
                 참석
               </button>
-              <button className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-destructive bg-red-600/10 hover:bg-red-600/15">
+              <button className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-destructive bg-red-600/5 hover:bg-red-600/10">
                 {isAttendanceStatus === "NOT_ATTENDING" ? (
                   <SquareCheckBigIcon className="size-5" />
                 ) : (
