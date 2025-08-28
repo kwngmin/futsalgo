@@ -74,7 +74,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   });
 
   return (
-    <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
+    <div className="flex flex-col py-1 select-none">
       <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
           className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-50 pb-1`}
@@ -88,8 +88,8 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <div className="flex items-center gap-2 truncate leading-none h-6 tracking-tight">
-            <span className="text-gray-700 text-sm">{schedule.place}</span>
+          <div className="flex items-center gap-2 truncate leading-none h-5 sm:h-6 tracking-tight">
+            <span className="text-gray-800 text-sm">{schedule.place}</span>
             <Separator
               orientation="vertical"
               className="!h-3 !w-0.25 bg-gray-300"
@@ -150,7 +150,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 gap-2 bg-gradient-to-b from-transparent to-slate-50 rounded-b-xl border-y border-slate-100">
+        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100 rounded-b-xl border-b border-slate-200">
           <div
             className="h-9 sm:h-8 flex items-center gap-1.5 sm:gap-2 text-sm"
             // onClick={() => handleScheduleClick(schedule.id)}
