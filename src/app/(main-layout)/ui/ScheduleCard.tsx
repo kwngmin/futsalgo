@@ -89,17 +89,17 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           onClick={() => handleScheduleClick(schedule.id)}
         >
           <div className="flex items-center gap-2 truncate leading-none h-5 tracking-tight">
-            <span className="text-gray-800 text-sm">{schedule.place}</span>
-            <Separator
-              orientation="vertical"
-              className="!h-3 !w-0.25 bg-gray-300"
-            />
             <span className="font-medium text-sm text-gray-600">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
               })}
             </span>
+            <Separator
+              orientation="vertical"
+              className="!h-3 !w-0.25 bg-gray-300"
+            />
+            <span className="text-gray-800 text-sm">{schedule.place}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
