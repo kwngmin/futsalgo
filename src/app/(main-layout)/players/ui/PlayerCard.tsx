@@ -1,6 +1,7 @@
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER } from "@/entities/user/model/constants";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
+import { Separator } from "@/shared/components/ui/separator";
 import { User } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -53,24 +54,25 @@ const PlayerCard = ({
       {/* 사용자 정보 */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <h3 className="text-base font-semibold flex items-center gap-2 truncate leading-none h-6">
+          <h3 className="text-base font-medium flex items-center gap-2 truncate leading-none h-6">
             {player.nickname}
           </h3>
-          <div className="h-4 flex items-center sm:text-sm mb-0.5 sm:mb-0 tracking-tight text-muted-foreground font-medium gap-2">
-            {/* <Separator orientation="vertical" /> */}
+          <div className="h-4 flex items-center text-sm tracking-tight text-muted-foreground font-medium gap-2">
+            <Separator orientation="vertical" className="!h-3.5" />
             <div className="flex items-center gap-1">
               {/* {player.birthDate
                 ? age.success
                   ? `${age.age}살`
                   : "생년월일 미설정"
                 : "생년월일 미설정"} */}
-              {`${GENDER[player.gender as keyof typeof GENDER]} • ${
+              {/* •  */}
+              {`${
                 player.birthDate
                   ? age.success
                     ? `${age.age}살`
                     : "생년월일 미설정"
                   : "생년월일 미설정"
-              }`}
+              } ${GENDER[player.gender as keyof typeof GENDER]}`}
               {/* {`${
                 player.birthDate
                   ? age.success
