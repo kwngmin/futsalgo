@@ -1,12 +1,11 @@
 "use client";
 
-import { Vote } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
-import { HeartIcon } from "@phosphor-icons/react";
-import { likeSchedule } from "../actions/like-schedule";
-import { useQueryClient } from "@tanstack/react-query";
+// import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
+import { CalendarCheckIcon } from "@phosphor-icons/react";
+// import { likeSchedule } from "../actions/like-schedule";
+// import { useQueryClient } from "@tanstack/react-query";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
@@ -25,72 +24,92 @@ type ScheduleCardProps = Prisma.ScheduleGetPayload<{
 const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   const router = useRouter();
   const session = useSession();
-  const queryClient = useQueryClient();
-  const dDay = calculateDday(schedule?.date as Date);
+  // const queryClient = useQueryClient();
+  // const dDay = calculateDday(schedule?.date as Date);
 
   const handleScheduleClick = (scheduleId: string) => {
     router.push(`/schedule/${scheduleId}`);
   };
 
-  const handleLikeClick = async (scheduleId: string) => {
-    const result = await likeSchedule({ scheduleId });
-    console.log(result);
-    if (result.success) {
-      queryClient.invalidateQueries({ queryKey: ["schedules"] });
-      // toast.success(result.message);
-    } else {
-      console.warn(result.error);
-      // toast.error(result.error);
-    }
-  };
+  // const handleLikeClick = async (scheduleId: string) => {
+  //   const result = await likeSchedule({ scheduleId });
+  //   console.log(result);
+  //   if (result.success) {
+  //     queryClient.invalidateQueries({ queryKey: ["schedules"] });
+  //   } else {
+  //     console.warn(result.error);
+  //   }
+  // };
 
-  const isLiked = schedule.likes.some(
-    (like) => like.userId === session.data?.user?.id
+  // const isLiked = schedule.likes.some(
+  //   (like) => like.userId === session.data?.user?.id
+  // );
+
+  // const getDateStatus = (day: number) => {
+  //   if (day > 1) {
+  //     return {
+  //       text: `D-${day}`,
+  //       style: "bg-muted",
+  //     };
+  //   } else if (day === 1) {
+  //     return { text: "내일", style: "bg-indigo-500/15 text-indigo-600" };
+  //   } else if (day === 0) {
+  //     return { text: "오늘", style: "bg-teal-500/15 text-teal-600" };
+  //   }
+  //   return {
+  //     text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
+  //     style: "bg-muted",
+  //   };
+  // };
+
+  // const dateStatus = getDateStatus(dDay);
+
+  const isAttendance = schedule.attendances.find(
+    (attendance) => attendance.userId === session.data?.user?.id
   );
 
-  const getDateStatus = (day: number) => {
-    if (day > 1) {
-      return {
-        text: `D-${day}`,
-        // style: "bg-slate-500/15 text-slate-600",
-        style: "bg-muted",
-      };
-    } else if (day === 1) {
-      return { text: "내일", style: "bg-indigo-500/15 text-indigo-600" };
-    } else if (day === 0) {
-      return { text: "오늘", style: "bg-teal-500/15 text-teal-600" };
-    }
-    return {
-      text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-      style: "bg-muted",
-    };
-  };
-
-  const dateStatus = getDateStatus(dDay);
+  const attendanceStatus = isAttendance ? isAttendance.attendanceStatus : null;
+  const weekday = schedule.date.toLocaleDateString("ko-KR", {
+    weekday: "long",
+  });
 
   return (
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
-      <div className="flex px-4 gap-3 cursor-pointer">
+      <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
-          className={`size-14 rounded-2xl font-semibold flex flex-col items-center truncate gap-1.5 leading-none tracking-tight bg-neutral-50`}
+          className={`size-14 rounded-xl flex flex-col justify-center items-center truncate leading-none tracking-tight gap-0.5 bg-neutral-50 pb-2`}
         >
           <div
-            className={`w-full text-xs px-1.5 sm:px-1 flex items-center justify-center h-5.5 ${
-              schedule.matchType === "TEAM"
-                ? "text-indigo-600 bg-indigo-600/10"
-                : "text-emerald-600 bg-emerald-600/10"
+            className={`font-medium text-xs ${
+              weekday === "일요일"
+                ? "text-red-700"
+                : weekday === "토요일"
+                ? "text-blue-700"
+                : "text-slate-700"
             }`}
+            // className="font-medium text-xs"
           >
-            {schedule.matchType === "TEAM" ? "친선전" : "자체전"}
+            {weekday}
           </div>
-          <div>{dateStatus.text}</div>
+          <div className="font-medium">
+            {/* {dateStatus.text} */}
+            {`${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`}
+            {/* {schedule.date.toLocaleString("ko-KR", {
+              month: "long",
+              day: "numeric",
+            })} */}
+            {/* {schedule.startTime?.toLocaleDateString("ko-KR", {
+              month: "long",
+              day: "long",
+            })} */}
+          </div>
         </div>
         <div
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <div className="flex items-center gap-1.5 truncate leading-none h-6 tracking-tight sm:text-sm font-medium text-gray-600">
-            <span className="">
+          <div className="flex items-center gap-2 truncate leading-none h-6 tracking-tight sm:text-sm">
+            <span className="font-medium">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
@@ -98,7 +117,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
             </span>
             <Separator
               orientation="vertical"
-              className="!h-3.5 !w-0.25 bg-gray-400"
+              className="!h-3 !w-0.25 bg-gray-400"
             />
             {/* <span className="text-gray-400 font-medium">•</span> */}
             <span className="">{schedule.place}</span>
@@ -154,89 +173,99 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
             </div> */}
           </div>
         </div>
-        <div
-          className="hidden flex items-center justify-center gap-2 rounded-lg w-10 h-14 group"
-          onClick={() => handleLikeClick(schedule.id)}
-        >
-          <HeartIcon
-            className={`size-6 group-hover: ${
-              isLiked
-                ? "text-indigo-600"
-                : "text-zinc-300 group-hover:text-zinc-400"
-            }`}
-            weight="fill"
-          />
-        </div>
-      </div>
-
-      {schedule.enableAttendanceVote ? (
-        <div className="flex flex-col sm:flex-row items-center px-4 gap-2">
-          <div
-            className="font-medium w-full h-12 sm:h-11 flex items-center gap-3 bg-slate-100 rounded-lg px-4"
-            onClick={() => handleScheduleClick(schedule.id)}
-          >
-            <Vote className="size-5 text-muted-foreground" />
-            <span className="font-medium">참석여부</span>
-            <span className="text-sm text-muted-foreground">
-              7월 11일 오전 10:00까지
+        {/* {schedule.enableAttendanceVote && (
+          <div className="flex flex-col items-center justify-center rounded-lg w-10 h-10 bg-amber-500/10">
+            <Vote className="size-5 text-amber-500" />
+            <span className="text-xs font-medium">
+              {attendanceStatus === "ATTENDING"
+                ? "참석"
+                : attendanceStatus === "NOT_ATTENDING"
+                ? "불참"
+                : "미정"}
             </span>
-            {/* <span className="text-sm font-medium">미참여</span> */}
           </div>
-          {schedule.attendances
-            .map((attendance) => attendance.userId)
-            .includes(session.data?.user?.id ?? "") ? (
-            <div>hello</div>
-          ) : (
-            <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1">
-              <button className="grow h-12 sm:h-11 font-semibold text-blue-600 bg-blue-600/5 hover:bg-blue-600/10 rounded-lg">
-                참석
-              </button>
-              <button className="grow h-12 sm:h-11 font-medium text-destructive bg-red-600/5 hover:bg-red-600/10 rounded-lg">
-                불참
-              </button>
-            </div>
-          )}
-        </div>
-      ) : null}
-      {/* ) : (
-        <div className="bg-slate-50 rounded-md h-9 text-sm text-muted-foreground font-medium mx-4 px-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">{`3경기 • 댓글 2개`}</div>
-          <div className="flex items-center gap-2">
-            <BookmarkIcon className="size-5" strokeWidth={2} />
-          </div>
-        </div>
-      )} */}
+        )} */}
+      </div>
 
-      {/* 참가 여부 */}
-      {/* <div className="px-4 flex h-11 justify-between items-center gap-4">
-    <div className="flex items-center gap-4">
-      <div className="text-sm font-medium flex items-center gap-1">
-        <Circle className="size-4" strokeWidth={2.5} />
-        참가 0
-      </div>
-      <div className="text-sm font-medium flex items-center gap-1">
-        <X
-          className="size-4 scale-[1.3] flex items-center justify-center"
-          strokeWidth={2}
-        />{" "}
-        불참 0
-      </div>
-      <div className="text-sm font-medium flex items-center gap-1">
-        <Clock className="size-4" strokeWidth={2.5} />
-        미정 0
-      </div>
+      {attendanceStatus &&
+      schedule.status === "READY" &&
+      schedule.enableAttendanceVote &&
+      schedule.attendanceDeadline &&
+      schedule.attendanceDeadline > new Date() ? (
+        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 py-1 sm:py-0 gap-2 bg-gradient-to-b from-transparent to-slate-50 rounded-b-xl border-y border-slate-100">
+          <div
+            className="h-9 sm:h-8 flex items-center gap-2 text-sm"
+            // onClick={() => handleScheduleClick(schedule.id)}
+          >
+            <div className="p-2 rounded-full bg-white border border-slate-100 sm:border-none sm:p-0 sm:bg-transparent">
+              <CalendarCheckIcon
+                className="size-4.5 text-indigo-700"
+                weight="fill"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row space-x-2 text-xs sm:text-sm">
+              <span className="shrink-0 font-semibold">참석여부</span>
+              <div className="w-full flex items-center gap-1 tracking-tight">
+                <span className="font-medium text-indigo-700">
+                  {new Date(
+                    schedule.attendanceDeadline as Date
+                  ).toLocaleDateString("ko-KR", {
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                  까지
+                </span>
+                선택해주세요.
+              </div>
+            </div>
+          </div>
+          <span className="text-xs sm:text-sm font-medium text-amber-700">
+            {attendanceStatus === "ATTENDING"
+              ? "참석"
+              : attendanceStatus === "NOT_ATTENDING"
+              ? "불참"
+              : "선택 안 함"}
+          </span>
+        </div>
+      ) : //   <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none">
+      //   <div className="flex items-center gap-2">
+      //     <div className="p-2 rounded-full bg-white/80">
+      //       <CalendarCheckIcon
+      //         className="size-6 text-indigo-700"
+      //         weight="fill"
+      //       />
+      //     </div>
+      //     <div className="flex flex-col">
+      //       <span className="font-medium">경기일정 참석여부</span>
+      //       <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
+      //         {/* <Timer className="size-5 text-amber-600" /> */}
+      //         <span className="font-semibold text-indigo-700">
+      //           {new Date(
+      //             schedule.attendanceDeadline as Date
+      //           ).toLocaleDateString("ko-KR", {
+      //             month: "long",
+      //             day: "numeric",
+      //             hour: "numeric",
+      //             minute: "numeric",
+      //           })}
+      //         </span>
+      //         선택해주세요.
+      //       </div>
+      //     </div>
+      //   </div>
+      //   <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
+      //     <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200">
+      //       참석
+      //     </button>
+      //     <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive rounded-sm active:scale-95 transition-all duration-200">
+      //       불참
+      //     </button>
+      //   </div>
+      // </div>
+      null}
     </div>
-    <div className="text-sm font-medium flex items-center gap-1">
-      결정완료
-    </div>
-  </div> */}
-    </div>
-    // <div className="bg-slate-50 rounded-md h-9 text-sm text-muted-foreground font-medium mx-4 px-4 flex justify-between items-center">
-    //   <div className="flex items-center gap-2">{`3경기 • 댓글 2개`}</div>
-    //   <div className="flex items-center gap-2">
-    //     <BookmarkIcon className="size-5" strokeWidth={2} />
-    //   </div>
-    // </div>
   );
 };
 

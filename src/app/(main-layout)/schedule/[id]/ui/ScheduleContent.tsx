@@ -203,20 +203,13 @@ const ScheduleContent = ({
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
         <span
-          // className="font-semibold tracking-tight"
-          className={`flex items-center justify-center font-semibold ${
-            data.data.schedule?.matchType === "TEAM"
-              ? "text-indigo-600"
-              : "text-emerald-600"
-          }`}
+          className="font-semibold tracking-tight text-lg"
+          // className={`flex items-center justify-center font-semibold ${
+          //   data.data.schedule?.matchType === "TEAM"
+          //     ? "text-indigo-600"
+          //     : "text-emerald-600"
+          // }`}
         >
-          {/* {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-            month: "long",
-            day: "numeric",
-            weekday: "narrow",
-            hour: "numeric",
-            minute: "numeric",
-          })} */}
           {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
         </span>
         <div className="flex items-center justify-end gap-1.5">
@@ -243,7 +236,7 @@ const ScheduleContent = ({
       </div>
 
       {/* 공통 */}
-      <div className="w-full flex flex-col items-center justify-center px-4 my-4">
+      <div className="w-full flex flex-col items-center justify-center px-4 mb-3">
         <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
@@ -263,10 +256,10 @@ const ScheduleContent = ({
         data.data.schedule.status === "READY" &&
         data.data.schedule.enableAttendanceVote &&
         data.data.schedule.attendanceDeadline &&
-        new Date(data.data.schedule.attendanceDeadline) > new Date() && (
-          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none my-3">
+        data.data.schedule.attendanceDeadline > new Date() && (
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-50 rounded-2xl p-3 sm:px-4 select-none my-3">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-white/80">
+              <div className="p-2 rounded-full bg-white border border-slate-100">
                 <CalendarCheckIcon
                   className="size-6 text-indigo-700"
                   weight="fill"
@@ -274,11 +267,19 @@ const ScheduleContent = ({
                 {/* <Calendar className="size-5 text-gray-600" /> */}
               </div>
               <div className="flex flex-col">
-                <span className="font-medium">경기일정 참석여부</span>
+                <span className="font-semibold">경기일정 참석여부</span>
                 <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
                   {/* <Timer className="size-5 text-amber-600" /> */}
-                  <span className="font-semibold text-indigo-700">
-                    7월 11일 오전 10:00까지
+                  <span className="font-medium text-indigo-700">
+                    {new Date(
+                      data.data.schedule.attendanceDeadline
+                    ).toLocaleDateString("ko-KR", {
+                      month: "long",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                    })}
+                    까지
                   </span>
                   선택해주세요.
                 </div>
@@ -309,85 +310,86 @@ const ScheduleContent = ({
         )}
 
         {/* 경기 정보 */}
-        {data.data.schedule.status === "READY" && (
-          <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-13">
-              <div className="flex items-center gap-2">
-                <CourtBasketballIcon
-                  // weight="duotone"
-                  // weight="fill"
-                  weight="light"
-                  className="size-7 text-gray-700"
-                />
-                <h2 className="text-lg font-semibold ">경기</h2>
-              </div>
-              {/* 경기 추가 버튼 */}
-              {currentUserId &&
-                data.data.schedule.createdBy.id === currentUserId && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-base sm:text-sm !font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
-                    onClick={async () => {
-                      const result = await addMatch(scheduleId);
-                      if (result.success) {
-                        refetch();
-                      } else {
-                        console.log(result.error, "result.error");
-                        // toast.error(result.error);
-                      }
-                    }}
-                  >
-                    <PlusIcon className="size-4" strokeWidth={2.75} />
-                    추가
-                  </Button>
-                )}
-            </div>
-
-            {/* 경기 정보 */}
-            {data.data.schedule.matches.length > 0 ? (
-              <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
-                {data.data.schedule.matches.map((match, index) => (
-                  <div
-                    className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
-                    key={match.id}
-                  >
-                    <div
-                      className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                      onClick={() => {
-                        router.push(
-                          `/schedule/${scheduleId}/match/${match.id}`
-                        );
+        {data.data.schedule.status === "READY" &&
+          data.data.schedule.startTime <= new Date() && (
+            <div className="px-4">
+              <div className="flex justify-between items-center py-2 min-h-13">
+                <div className="flex items-center gap-2">
+                  <CourtBasketballIcon
+                    // weight="duotone"
+                    // weight="fill"
+                    weight="light"
+                    className="size-7 text-gray-700"
+                  />
+                  <h2 className="text-lg font-semibold ">경기</h2>
+                </div>
+                {/* 경기 추가 버튼 */}
+                {currentUserId &&
+                  data.data.schedule.createdBy.id === currentUserId && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-base sm:text-sm !font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
+                      onClick={async () => {
+                        const result = await addMatch(scheduleId);
+                        if (result.success) {
+                          refetch();
+                        } else {
+                          console.log(result.error, "result.error");
+                          // toast.error(result.error);
+                        }
                       }}
                     >
-                      <div className="flex items-center space-x-2">
-                        <SoccerBallIcon
-                          weight="fill"
-                          className="size-5 text-gray-800"
-                        />
-                        <span className="font-medium">{index + 1}경기</span>
-                      </div>
-                      <div className="flex items-center gap-1 font-medium">
-                        <span className="text-sm text-gray-500 px-1">
-                          스코어
-                        </span>
-                        <span className="text-base text-gray-800 min-w-12 px-1 text-center">
-                          {match.homeScore} - {match.awayScore}
-                        </span>
-                        <ChevronRight className="size-5 text-gray-400" />
+                      <PlusIcon className="size-4" strokeWidth={2.75} />
+                      추가
+                    </Button>
+                  )}
+              </div>
+
+              {/* 경기 정보 */}
+              {data.data.schedule.matches.length > 0 ? (
+                <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
+                  {data.data.schedule.matches.map((match, index) => (
+                    <div
+                      className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
+                      key={match.id}
+                    >
+                      <div
+                        className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                        onClick={() => {
+                          router.push(
+                            `/schedule/${scheduleId}/match/${match.id}`
+                          );
+                        }}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <SoccerBallIcon
+                            weight="fill"
+                            className="size-5 text-gray-800"
+                          />
+                          <span className="font-medium">{index + 1}경기</span>
+                        </div>
+                        <div className="flex items-center gap-1 font-medium">
+                          <span className="text-sm text-gray-500 px-1">
+                            스코어
+                          </span>
+                          <span className="text-base text-gray-800 min-w-12 px-1 text-center">
+                            {match.homeScore} - {match.awayScore}
+                          </span>
+                          <ChevronRight className="size-5 text-gray-400" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
-                경기가 없습니다.
-              </div>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+                  경기가 없습니다.
+                </div>
+              )}
 
-            {/* 경기 추가 버튼 */}
-            {/* {currentUserId &&
+              {/* 경기 추가 버튼 */}
+              {/* {currentUserId &&
               data.data.schedule.createdBy.id === currentUserId && (
                 <div className="pt-3">
                   <Button
@@ -407,8 +409,8 @@ const ScheduleContent = ({
                   </Button>
                 </div>
               )} */}
-          </div>
-        )}
+            </div>
+          )}
 
         {/* 공지사항 */}
         {data.data.schedule.attendances.some(
@@ -453,7 +455,7 @@ const ScheduleContent = ({
         )}
 
         {/* MVP */}
-        {data.data.schedule.startTime < new Date() &&
+        {data.data.schedule.startTime <= new Date() &&
           data.data.schedule.matches.length > 0 && (
             <ScheduleMvp scheduleId={scheduleId} />
           )}
@@ -462,7 +464,7 @@ const ScheduleContent = ({
         <ScheduleAttendance scheduleId={scheduleId} />
 
         {/* 사진 */}
-        {data.data.schedule.startTime < new Date() && (
+        {data.data.schedule.startTime <= new Date() && (
           <SchedulePhotosGallery scheduleId={scheduleId} />
         )}
 
