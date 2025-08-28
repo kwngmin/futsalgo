@@ -77,7 +77,7 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
     <div className="space-y-2 sm:space-y-1 flex flex-col py-2 select-none">
       <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
-          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.75 bg-neutral-50 pb-1.5`}
+          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-50 pb-1`}
         >
           <div className="font-medium text-xs text-slate-500">{weekday}</div>
           <div className="font-medium">

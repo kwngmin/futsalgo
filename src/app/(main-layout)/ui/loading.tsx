@@ -6,7 +6,7 @@ const SchedulePageLoading = ({ isPage = false }: { isPage?: boolean }) => {
           <div className="flex gap-3">
             <h1 className="text-2xl font-bold cursor-default">경기일정</h1>
             <h1 className="text-2xl font-bold opacity-30 cursor-default">
-              좋아요
+              내 일정
             </h1>
           </div>
           <div className="flex items-center gap-2">
