@@ -8,6 +8,7 @@ import {
   PlusIcon,
   ChevronUp,
   ChevronDown,
+  CheckIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -121,6 +122,10 @@ const ScheduleContent = ({
   const isAttendance = data?.data?.schedule?.attendances.some(
     (attendance) => attendance.userId === currentUserId
   );
+
+  const isAttendanceStatus = data?.data?.schedule?.attendances.find(
+    (attendance) => attendance.userId === currentUserId
+  )?.attendanceStatus;
 
   const handleGoBack = () => {
     router.push("/");
@@ -285,11 +290,29 @@ const ScheduleContent = ({
                 </div>
               </div>
             </div>
-            <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
-              <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200">
+            <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5 ">
+              <button
+                className={`sm:text-sm grow h-11 sm:h-9 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
+                  isAttendanceStatus === "ATTENDING"
+                    ? "text-white bg-indigo-600 hover:bg-indigo-700"
+                    : "text-gray-700 bg-blue-900/10 hover:bg-indigo-600 hover:text-white"
+                }`}
+              >
+                {isAttendanceStatus === "ATTENDING" && (
+                  <CheckIcon className="size-4" strokeWidth={2.75} />
+                )}
                 참석
               </button>
-              <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive rounded-sm active:scale-95 transition-all duration-200">
+              <button
+                className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
+                  isAttendanceStatus === "NOT_ATTENDING"
+                    ? "text-white bg-red-600/10 hover:bg-red-600/20"
+                    : "text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive"
+                }`}
+              >
+                {isAttendanceStatus === "NOT_ATTENDING" && (
+                  <CheckIcon className="size-4" strokeWidth={2.75} />
+                )}
                 불참
               </button>
             </div>
