@@ -80,36 +80,26 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
           className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-50 pb-1`}
         >
           <div className="font-medium text-xs text-slate-500">{weekday}</div>
-          <div className="font-medium">
-            {/* {dateStatus.text} */}
+          <div className="font-semibold">
             {`${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`}
-            {/* {schedule.date.toLocaleString("ko-KR", {
-              month: "long",
-              day: "numeric",
-            })} */}
-            {/* {schedule.startTime?.toLocaleDateString("ko-KR", {
-              month: "long",
-              day: "long",
-            })} */}
           </div>
         </div>
         <div
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <div className="flex items-center gap-2 truncate leading-none h-6 tracking-tight sm:text-sm">
-            <span className="font-medium">
+          <div className="flex items-center gap-2 truncate leading-none h-6 tracking-tight">
+            <span className="text-gray-600 sm:text-sm">{schedule.place}</span>
+            <Separator
+              orientation="vertical"
+              className="!h-3 !w-0.25 bg-gray-300"
+            />
+            <span className="font-medium text-sm text-gray-600">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
               })}
             </span>
-            <Separator
-              orientation="vertical"
-              className="!h-3 !w-0.25 bg-gray-300"
-            />
-            {/* <span className="text-gray-400 font-medium">•</span> */}
-            <span className="text-gray-600">{schedule.place}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
