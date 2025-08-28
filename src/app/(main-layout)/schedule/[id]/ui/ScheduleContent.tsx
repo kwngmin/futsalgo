@@ -264,7 +264,7 @@ const ScheduleContent = ({
         data.data.schedule.attendanceDeadline > new Date() && (
           <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-50 rounded-2xl p-3 sm:px-4 select-none my-3">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-white border border-slate-100">
+              <div className="p-2 rounded-full bg-white border border-slate-200">
                 <CalendarCheckIcon
                   className="size-6 text-indigo-700"
                   weight="fill"
@@ -295,7 +295,7 @@ const ScheduleContent = ({
                 className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
                   isAttendanceStatus === "ATTENDING"
                     ? "text-white bg-indigo-600 hover:bg-indigo-700"
-                    : "text-gray-800 bg-slate-200/80 hover:bg-indigo-600 hover:text-white"
+                    : "bg-slate-200 hover:bg-indigo-600 hover:text-white"
                 }`}
               >
                 {isAttendanceStatus === "ATTENDING" && (
@@ -307,7 +307,7 @@ const ScheduleContent = ({
                 className={`sm:text-sm grow h-11 sm:h-9 font-medium rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-2 justify-center ${
                   isAttendanceStatus === "NOT_ATTENDING"
                     ? "text-white bg-red-600/10 hover:bg-red-600/20"
-                    : "text-gray-800 bg-slate-200/80 hover:bg-red-600/10 hover:text-destructive"
+                    : "bg-slate-200 hover:bg-red-600/10 hover:text-destructive"
                 }`}
               >
                 {isAttendanceStatus === "NOT_ATTENDING" && (
