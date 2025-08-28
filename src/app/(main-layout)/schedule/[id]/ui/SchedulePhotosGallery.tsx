@@ -79,7 +79,7 @@ export const SchedulePhotosGallery = ({
               weight="fill"
               // weight="light"
               // weight="duotone"
-              className="size-7 text-sky-700"
+              className="size-7 text-blue-700"
             />
             <h2 className="text-lg font-semibold ">사진</h2>
           </div>

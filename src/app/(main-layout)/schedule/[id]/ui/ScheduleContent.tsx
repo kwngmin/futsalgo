@@ -390,7 +390,7 @@ const ScheduleContent = ({
                           {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-green-600 font-semibold px-1.5">
+                          <span className="text-sm text-green-600 font-semibold px-1.5 py-0.25 bg-green-50 rounded border border-green-600/20 mr-1">
                             점수
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
@@ -414,7 +414,7 @@ const ScheduleContent = ({
                   <div className="pt-3">
                     <Button
                       type="button"
-                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-base"
+                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
                       size="lg"
                       onClick={async () => {
                         const result = await addMatch(scheduleId);
@@ -444,7 +444,7 @@ const ScheduleContent = ({
                   weight="fill"
                   // weight="light"
                   // weight="duotone"
-                  className="size-7 text-emerald-500"
+                  className="size-7 text-stone-500"
                 />
                 <h2 className="text-lg font-semibold ">공지사항</h2>
                 {/* <span className="text-sm text-gray-500">
