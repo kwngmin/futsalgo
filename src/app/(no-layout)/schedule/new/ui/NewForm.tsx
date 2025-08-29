@@ -297,13 +297,13 @@ const NewForm = ({
                   placeholder="초청팀 코드를 입력하세요"
                 />
                 {teamCode.status === "checking" && (
-                  <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin" />
+                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin" />
                 )}
                 {teamCode.status === "valid" && (
-                  <Check className="absolute right-3 top-2.5 h-4 w-4 text-green-600" />
+                  <Check className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-green-600" />
                 )}
                 {teamCode.status === "invalid" && (
-                  <X className="absolute right-3 top-2.5 h-4 w-4 text-red-600" />
+                  <X className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-red-600" />
                 )}
               </div>
               {teamCode.error && (

@@ -83,7 +83,7 @@ export function useNicknameValidation() {
   }, [debouncedNickname]);
 
   const onChange = (raw: string) => {
-    const valueWithoutSpaces = raw.replace(/\s/g, ""); // 모든 공백 제거
+    const valueWithoutSpaces = raw.replace(/\s/g, "");
     setNickname((prev) => ({
       ...prev,
       value: valueWithoutSpaces,
@@ -143,35 +143,51 @@ export function useTeamCodeValidation() {
   const debouncedTeamCode = useDebounce(teamCode.value, 300);
 
   useEffect(() => {
-    const teamCodeRegex = /^\d{6}$/;
-    if (debouncedTeamCode) {
+    const validateTeamCode = async () => {
+      if (!debouncedTeamCode) {
+        setTeamCode({
+          value: "",
+          status: "idle",
+        });
+        return;
+      }
+
+      const teamCodeRegex = /^\d{6}$/;
+
       if (
         debouncedTeamCode.length === 6 &&
         teamCodeRegex.test(debouncedTeamCode)
       ) {
-        const result = validateField(
-          "teamCode",
-          debouncedTeamCode,
-          setTeamCode
-        );
-        console.log(result, "result");
+        setTeamCode((prev) => ({
+          ...prev,
+          status: "checking",
+          error: undefined,
+        }));
+
+        try {
+          await validateField("teamCode", debouncedTeamCode, setTeamCode);
+        } catch (error) {
+          console.error("Team code validation error:", error);
+          setTeamCode((prev) => ({
+            ...prev,
+            status: "invalid",
+            error: "팀 코드 확인 중 오류가 발생했습니다",
+          }));
+        }
       } else {
         setTeamCode((prev) => ({
           ...prev,
           status: "invalid",
-          error: "사용할 수 없는 팀 코드입니다",
+          error: "팀 코드는 6자리 숫자여야 합니다",
         }));
       }
-    } else {
-      setTeamCode({
-        value: "",
-        status: "idle",
-      });
-    }
+    };
+
+    validateTeamCode();
   }, [debouncedTeamCode]);
 
   const onChange = (raw: string) => {
-    const valueWithoutSpaces = raw.replace(/\s/g, ""); // 모든 공백 제거
+    const valueWithoutSpaces = raw.replace(/\s/g, "");
     setTeamCode((prev) => ({
       ...prev,
       value: valueWithoutSpaces,
