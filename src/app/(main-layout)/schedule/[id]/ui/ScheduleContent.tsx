@@ -326,7 +326,8 @@ const ScheduleContent = ({
         )}
 
         {/* 경기 정보 */}
-        {data.data.schedule.status === "READY" &&
+        {(data.data.schedule.status === "READY" ||
+          data.data.schedule.status === "PLAY") &&
           data.data.schedule.startTime <= new Date() && (
             <div className="px-4">
               {/* <div className="flex justify-between items-center py-2 min-h-13">

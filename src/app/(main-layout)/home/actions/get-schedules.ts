@@ -56,7 +56,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
       where: {
         date: { lt: today }, // ← 어제 날짜까지 포함
         NOT: {
-          status: { in: ["PENDING", "REJECTED"] },
+          status: { in: ["PENDING", "REJECTED", "READY"] },
         },
       },
       include: {
