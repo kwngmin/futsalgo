@@ -22,9 +22,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
-import { MATCH_TYPE_OPTIONS } from "@/entities/schedule/model/constants";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTeamCodeValidation } from "../lib/use-team-code-validation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const newFormSchema = z.object({
   hostTeamId: z.string().min(1),
@@ -39,7 +38,7 @@ const newFormSchema = z.object({
   district: z.string().min(1).optional(),
   enableAttendanceVote: z.boolean(),
   attendanceDeadline: z.string().min(1).optional(),
-  attendanceEndTime: z.string().min(1).optional(),
+  // attendanceEndTime 제거 - 자정으로 고정
 });
 
 export type NewFormData = z.infer<typeof newFormSchema>;
@@ -60,6 +59,48 @@ const NewForm = ({
 
   const { teamCode, onChange } = useTeamCodeValidation();
 
+  // 날짜 관련 헬퍼 함수들
+  const isPastDate = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
+  const isToday = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    return compareDate.getTime() === today.getTime();
+  };
+
+  const isTomorrow = (date: Date) => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    return compareDate.getTime() === tomorrow.getTime();
+  };
+
+  // 참석여부 투표 표시 여부 결정
+  const shouldShowAttendanceVote = () => {
+    if (!matchDate) return false;
+    return !isToday(matchDate); // 오늘이 아닌 모든 날짜에 표시
+  };
+
+  // 동적 경기구분 옵션 생성
+  const getMatchTypeOptions = () => {
+    const baseOptions = [{ label: "자체전", value: "SQUAD" }];
+
+    // 과거 날짜가 아닌 경우에만 친선전 추가
+    if (!matchDate || !isPastDate(matchDate)) {
+      baseOptions.push({ label: "친선전", value: "TEAM" });
+    }
+
+    return baseOptions;
+  };
+
   const {
     register,
     handleSubmit,
@@ -75,6 +116,27 @@ const NewForm = ({
       hostTeamId: teams.length === 1 ? teams[0].team.id : "",
     },
   });
+
+  // 날짜 변경 시 경기구분 자동 조정
+  useEffect(() => {
+    if (matchDate && isPastDate(matchDate)) {
+      // 과거 날짜 선택 시 자동으로 자체전으로 변경
+      if (watch("matchType") === "TEAM") {
+        setValue("matchType", "SQUAD");
+      }
+    }
+  }, [matchDate, setValue, watch]);
+
+  // 경기구분 변경 시 날짜 제약 적용
+  useEffect(() => {
+    const currentMatchType = watch("matchType");
+
+    // 친선전 선택 시 과거 날짜가 선택되어 있다면 초기화
+    if (currentMatchType === "TEAM" && matchDate && isPastDate(matchDate)) {
+      setMatchDate(undefined);
+      setValue("date", "");
+    }
+  }, [watch("matchType")]);
 
   // 팀 코드가 유효할 때 invitedTeamId 설정
   useEffect(() => {
@@ -126,8 +188,9 @@ const NewForm = ({
     >
       <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
         <div className="flex flex-col gap-6">
+          {/* 날짜 선택 - 우선순위 1 */}
           <div className="flex flex-col gap-3 pb-3 sm:pb-0">
-            <Label htmlFor="date-picker" className="px-1">
+            <Label htmlFor="match-date-picker" className="px-1">
               날짜
             </Label>
             <Calendar
@@ -135,6 +198,13 @@ const NewForm = ({
               selected={matchDate}
               className="rounded-md border pb-12 sm:pb-7 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto shadow-xs"
               locale={ko}
+              disabled={(date) => {
+                // 친선전 선택 시 과거 날짜 비활성화
+                if (watch("matchType") === "TEAM") {
+                  return isPastDate(date);
+                }
+                return false; // 자체전은 모든 날짜 허용
+              }}
               onSelect={(date) => {
                 if (!date) return;
                 const dateData = new Date(date);
@@ -152,13 +222,13 @@ const NewForm = ({
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label htmlFor="time-picker" className="px-1">
+            <Label htmlFor="start-time" className="px-1">
               시작 시간 - 종료 시간
             </Label>
             <div className="flex items-center gap-2">
               <Input
                 type="time"
-                id="time-picker"
+                id="start-time"
                 defaultValue="06:00"
                 {...register("startTime")}
                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
@@ -166,6 +236,7 @@ const NewForm = ({
               -
               <Input
                 type="time"
+                id="end-time"
                 defaultValue="08:00"
                 {...register("endTime")}
                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
@@ -199,30 +270,40 @@ const NewForm = ({
             />
           </div>
 
+          {/* 경기 구분 - 날짜에 따라 동적으로 옵션 변경 */}
           <div className="space-y-3">
             <Label className="px-1">경기 구분</Label>
-            <CustomRadioGroup
-              options={MATCH_TYPE_OPTIONS}
-              value={watch("matchType")}
-              onValueChange={(value) =>
-                setValue("matchType", value as "TEAM" | "SQUAD")
-              }
-              error={errors.matchType?.message}
-              direction="vertical"
-            />
+            <div className="space-y-2">
+              <CustomRadioGroup
+                options={getMatchTypeOptions()}
+                value={watch("matchType")}
+                onValueChange={(value) =>
+                  setValue("matchType", value as "TEAM" | "SQUAD")
+                }
+                error={errors.matchType?.message}
+                direction="vertical"
+              />
+              {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
+              {matchDate && isPastDate(matchDate) && (
+                <div className="text-xs text-muted-foreground px-1">
+                  과거 날짜는 자체전만 선택 가능합니다
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* 팀 코드 입력 - 간소화된 로직 */}
+          {/* 팀 코드 입력 */}
           {watch("matchType") === "TEAM" && (
             <div className="space-y-3">
-              <Label htmlFor="invitedTeamCode">초청팀 코드</Label>
+              <Label htmlFor="invited-team-code">초청팀 코드</Label>
               <div className="relative">
                 <Input
-                  id="invitedTeamCode"
+                  id="invited-team-code"
                   type="text"
                   value={teamCode.value}
                   onChange={(e) => onChange(e.target.value)}
                   placeholder="초청팀 코드를 입력하세요"
+                  maxLength={6}
                 />
                 {teamCode.status === "checking" && (
                   <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin" />
@@ -245,9 +326,12 @@ const NewForm = ({
             </div>
           )}
 
-          {/* 초청팀 정보 표시 - 간소화된 로직 */}
+          {/* 초청팀 정보 표시 */}
           {teamCode.status === "valid" && teamCode.team && (
             <div className="space-y-2 p-3 bg-green-50 rounded-lg border border-green-200">
+              <div className="text-sm font-medium text-green-800">
+                초청팀 정보
+              </div>
               <div className="text-sm text-green-700">
                 <div>
                   <strong>{teamCode.team.name}</strong>
@@ -271,8 +355,8 @@ const NewForm = ({
         />
       </div>
 
-      {/* 참석여부 투표 */}
-      {matchDate && matchDate >= new Date() && (
+      {/* 참석여부 투표 - 오늘이 아닌 날짜에만 표시 */}
+      {shouldShowAttendanceVote() && (
         <div className="flex flex-col sm:flex-row gap-y-6 gap-x-2">
           <div className="space-y-3">
             <Label className="">참석여부 투표</Label>
@@ -303,138 +387,142 @@ const NewForm = ({
           </div>
 
           {watch("enableAttendanceVote") && (
-            <div className="hidden sm:grid grid-cols-2 gap-2">
-              <div className="flex flex-col gap-3 grow sm:grow-0">
-                <Label htmlFor="deadline-date-picker" className="px-1">
-                  투표 종료 일자
-                </Label>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="deadline-date-picker"
-                      className="min-w-48 justify-between font-normal !h-11 sm:!h-10"
-                      disabled={!matchDate}
+            <>
+              {/* 데스크톱 버전 - 종료 시간 제거 */}
+              <div className="hidden sm:block">
+                <div className="flex flex-col gap-3 max-w-64">
+                  <Label htmlFor="deadline-date-picker" className="px-1">
+                    투표 마감일자 (자정 마감)
+                  </Label>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        id="deadline-date-picker"
+                        className="min-w-48 justify-between font-normal !h-11 sm:!h-10"
+                        disabled={!matchDate}
+                      >
+                        <div className="flex items-center gap-3">
+                          <CalendarIcon />
+                          {deadlineDate
+                            ? deadlineDate.toLocaleDateString()
+                            : "일자를 선택하세요"}
+                        </div>
+                        <ChevronDownIcon />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto overflow-hidden p-0"
+                      align="start"
                     >
-                      <div className="flex items-center gap-3">
-                        <CalendarIcon />
-                        {deadlineDate
-                          ? deadlineDate.toLocaleDateString()
-                          : "일자를 선택하세요"}
-                      </div>
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={deadlineDate}
-                      locale={ko}
-                      disabled={(date) => {
-                        const today = new Date();
-                        today.setHours(0, 0, 0, 0);
+                      <Calendar
+                        mode="single"
+                        selected={deadlineDate}
+                        locale={ko}
+                        disabled={(date) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
 
-                        if (matchDate) {
-                          const match = new Date(matchDate);
-                          match.setDate(match.getDate() - 1);
-                          match.setHours(23, 59, 59, 999);
-                          return date < today || date > match;
+                          if (matchDate) {
+                            // 내일 경기면 오늘만 선택 가능
+                            if (isTomorrow(matchDate)) {
+                              const compareDate = new Date(date);
+                              compareDate.setHours(0, 0, 0, 0);
+                              return compareDate.getTime() !== today.getTime();
+                            }
+
+                            // 그 외의 경우 경기 전날까지 선택 가능
+                            const match = new Date(matchDate);
+                            match.setDate(match.getDate() - 1);
+                            match.setHours(23, 59, 59, 999);
+                            return date < today || date > match;
+                          }
+
+                          return date < today;
+                        }}
+                        onSelect={(date) => {
+                          if (!date) return;
+                          const dateData = new Date(date);
+                          const year = dateData.getFullYear();
+                          setValue(
+                            "attendanceDeadline",
+                            `${year}-${String(dateData.getMonth() + 1).padStart(
+                              2,
+                              "0"
+                            )}-${String(dateData.getDate()).padStart(2, "0")}`
+                          );
+                          setDeadlineDate(date);
+                          setOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {/* 내일 경기인 경우 안내 메시지 */}
+                  {matchDate && isTomorrow(matchDate) && (
+                    <div className="text-xs text-muted-foreground px-1">
+                      내일 경기는 오늘 자정까지만 투표 가능합니다
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 모바일 버전 - 종료 시간 제거 */}
+              <div className="flex flex-col gap-6 sm:hidden">
+                <div className="flex flex-col gap-3 pb-3 sm:pb-0">
+                  <Label htmlFor="mobile-deadline-picker" className="px-1">
+                    투표 마감일자 (자정 마감)
+                  </Label>
+                  <Calendar
+                    mode="single"
+                    selected={deadlineDate}
+                    className={`rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
+                      !matchDate ? "opacity-50 pointer-events-none" : ""
+                    }`}
+                    disabled={(date) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+
+                      if (matchDate) {
+                        // 내일 경기면 오늘만 선택 가능
+                        if (isTomorrow(matchDate)) {
+                          const compareDate = new Date(date);
+                          compareDate.setHours(0, 0, 0, 0);
+                          return compareDate.getTime() !== today.getTime();
                         }
 
-                        return date < today;
-                      }}
-                      onSelect={(date) => {
-                        if (!date) return;
-                        const dateData = new Date(date);
-                        const year = dateData.getFullYear();
-                        setValue(
-                          "attendanceDeadline",
-                          `${year}-${String(dateData.getMonth() + 1).padStart(
-                            2,
-                            "0"
-                          )}-${String(dateData.getDate()).padStart(2, "0")}`
-                        );
-                        setDeadlineDate(date);
-                        setOpen(false);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="attendance-end-time" className="px-1">
-                  투표 종료 시간
-                </Label>
-                <Input
-                  type="time"
-                  id="attendance-end-time"
-                  defaultValue="06:00"
-                  {...register("attendanceEndTime")}
-                  disabled={!matchDate}
-                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
-                />
-              </div>
-            </div>
-          )}
+                        // 그 외의 경우 경기 전날까지 선택 가능
+                        const match = new Date(matchDate);
+                        match.setDate(match.getDate() - 1);
+                        match.setHours(23, 59, 59, 999);
+                        return date < today || date > match;
+                      }
 
-          {watch("enableAttendanceVote") && (
-            <div className="flex flex-col gap-6 sm:hidden">
-              <div className="flex flex-col gap-3 pb-3 sm:pb-0">
-                <Label htmlFor="mobile-deadline-picker" className="px-1">
-                  투표 종료 일자
-                </Label>
-                <Calendar
-                  mode="single"
-                  selected={deadlineDate}
-                  className={`rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
-                    !matchDate ? "opacity-50 pointer-events-none" : ""
-                  }`}
-                  disabled={(date) => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-
-                    if (matchDate) {
-                      const match = new Date(matchDate);
-                      match.setDate(match.getDate() - 1);
-                      match.setHours(23, 59, 59, 999);
-                      return date < today || date > match;
-                    }
-
-                    return date < today;
-                  }}
-                  locale={ko}
-                  onSelect={(date) => {
-                    if (!date) return;
-                    const dateData = new Date(date);
-                    const year = dateData.getFullYear();
-                    setValue(
-                      "attendanceDeadline",
-                      `${year}-${String(dateData.getMonth() + 1).padStart(
-                        2,
-                        "0"
-                      )}-${String(dateData.getDate()).padStart(2, "0")}`
-                    );
-                    setDeadlineDate(date);
-                  }}
-                />
+                      return date < today;
+                    }}
+                    locale={ko}
+                    onSelect={(date) => {
+                      if (!date) return;
+                      const dateData = new Date(date);
+                      const year = dateData.getFullYear();
+                      setValue(
+                        "attendanceDeadline",
+                        `${year}-${String(dateData.getMonth() + 1).padStart(
+                          2,
+                          "0"
+                        )}-${String(dateData.getDate()).padStart(2, "0")}`
+                      );
+                      setDeadlineDate(date);
+                    }}
+                  />
+                  {/* 내일 경기인 경우 안내 메시지 */}
+                  {matchDate && isTomorrow(matchDate) && (
+                    <div className="text-xs text-muted-foreground px-1">
+                      내일 경기는 오늘 자정까지만 투표 가능합니다
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex flex-col gap-3 w-1/2">
-                <Label htmlFor="mobile-attendance-end-time" className="px-1">
-                  투표 종료 시간
-                </Label>
-                <Input
-                  type="time"
-                  id="mobile-attendance-end-time"
-                  defaultValue="06:00"
-                  {...register("attendanceEndTime")}
-                  disabled={!matchDate}
-                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none min-w-32 text-sm"
-                />
-              </div>
-            </div>
+            </>
           )}
         </div>
       )}
@@ -445,11 +533,12 @@ const NewForm = ({
         </Alert>
       )}
 
-      <div className="mt-12 space-y-3 sm:grid grid-cols-3 gap-2">
+      <div className="mt-12 space-y-3 sm:grid grid-cols-2 gap-2">
         <Button
           type="submit"
           disabled={
             isLoading ||
+            !matchDate ||
             (watch("matchType") === "TEAM" && teamCode.status !== "valid")
           }
           className="w-full font-semibold text-base disabled:opacity-50 disabled:pointer-events-none"

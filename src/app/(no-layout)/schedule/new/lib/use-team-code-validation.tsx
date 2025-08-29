@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { ValidationField } from "@/features/validation/model/types";
 import { validateTeamCodeAndGetInfo } from "../action/validate-team-code-and-get-info";
-// import { validateTeamCodeAndGetInfo } from "@/features/validation/model/actions/team-validation";
 
 // 팀 정보를 포함한 ValidationField 확장
 interface TeamValidationField extends ValidationField {
@@ -32,6 +31,7 @@ export function useTeamCodeValidation() {
         setTeamCode({
           value: "",
           status: "idle",
+          team: undefined,
         });
         return;
       }
@@ -99,7 +99,8 @@ export function useTeamCodeValidation() {
   }, [debouncedTeamCode]);
 
   const onChange = (raw: string) => {
-    const valueWithoutSpaces = raw.replace(/\s/g, "");
+    // 숫자만 허용하고 6자리 제한
+    const valueWithoutSpaces = raw.replace(/\D/g, "").slice(0, 6);
     setTeamCode((prev) => ({
       ...prev,
       value: valueWithoutSpaces,
