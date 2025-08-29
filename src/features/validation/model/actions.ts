@@ -40,15 +40,6 @@ export const validateField = async (
                   ? "전화번호"
                   : "닉네임"
               }입니다`,
-        // error: `이미 사용 중인 ${
-        //   type === "email"
-        //     ? "이메일"
-        //     : type === "phone"
-        //     ? "전화번호"
-        //     : type === "nickname"
-        //     ? "닉네임"
-        //     : "팀 코드"
-        // }입니다`,
       }));
     }
   } catch (error) {
