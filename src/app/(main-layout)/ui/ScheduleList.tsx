@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CalendarCheckIcon } from "@phosphor-icons/react";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
@@ -21,11 +21,16 @@ type ScheduleListProps = Prisma.ScheduleGetPayload<{
 const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
   const router = useRouter();
   const session = useSession();
+  const pathname = usePathname();
   // const queryClient = useQueryClient();
   // const dDay = calculateDday(schedule?.date as Date);
 
   const handleScheduleClick = (scheduleId: string) => {
-    router.push(`/schedule/${scheduleId}`);
+    if (pathname === "/my-schedules") {
+      router.push(`/schedule/${scheduleId}?tab=${pathname}`);
+    } else {
+      router.push(`/schedule/${scheduleId}`);
+    }
   };
 
   // const handleLikeClick = async (scheduleId: string) => {

@@ -9,7 +9,7 @@ import {
   // Trash2,
   X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
 import { shuffleLineupsAdvanced } from "../actions/shuffle-lineups";
@@ -28,6 +28,7 @@ interface MatchContentProps {
 
 const MatchContent = ({ data }: MatchContentProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<"view" | "edit">("view");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -83,7 +84,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
     const targetMatch = data.allMatches[targetIndex];
 
     if (targetMatch) {
-      router.push(`/schedule/${data.match.scheduleId}/match/${targetMatch.id}`);
+      router.push(
+        `/schedule/${data.match.scheduleId}/match/${targetMatch.id}${
+          searchParams.get("tab") === "/my-schedules"
+            ? `?tab=/my-schedules`
+            : ""
+        }`
+      );
     }
   };
 
@@ -127,7 +134,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
           <button
             className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() =>
-              router.push(`/schedule/${data.match.scheduleId}?tab=overview`)
+              router.push(
+                `/schedule/${data.match.scheduleId}/match/${data.match.id}${
+                  searchParams.get("tab") === "/my-schedules"
+                    ? `?tab=/my-schedules`
+                    : ""
+                }`
+              )
             }
           >
             <X className="size-5" />

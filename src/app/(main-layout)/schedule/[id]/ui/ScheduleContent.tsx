@@ -101,6 +101,7 @@ const ScheduleContent = ({
   // const queryClient = useQueryClient();
 
   const searchParams = useSearchParams();
+  console.log(searchParams, "searchParams");
   const tab = searchParams.get("tab");
   console.log(tab, "tab");
   // const validTab = tabs.find((t) => t.value === tab);
@@ -129,8 +130,11 @@ const ScheduleContent = ({
   )?.attendanceStatus;
 
   const handleGoBack = () => {
-    // router.push("/");
-    router.back();
+    if (searchParams.get("tab") === "/my-schedules") {
+      router.push("/my-schedules");
+    } else {
+      router.push("/");
+    }
   };
 
   // const handleLikeClick = async (scheduleId: string) => {
@@ -372,7 +376,9 @@ const ScheduleContent = ({
                         className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
                         onClick={() => {
                           router.push(
-                            `/schedule/${scheduleId}/match/${match.id}`
+                            `/schedule/${scheduleId}/match/${
+                              match.id
+                            }?tab=${searchParams.get("tab")}`
                           );
                         }}
                       >
