@@ -268,9 +268,9 @@ const ScheduleContent = ({
         data.data.schedule.enableAttendanceVote &&
         data.data.schedule.attendanceDeadline &&
         data.data.schedule.attendanceDeadline > new Date() && (
-          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-50 rounded-2xl p-4 select-none mb-4 border border-slate-300">
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-50 rounded-2xl p-4 select-none mb-4 border border-slate-200">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-white border border-slate-200">
+              <div className="p-2 rounded-full bg-white">
                 <CalendarCheckIcon
                   className="size-6 text-indigo-600"
                   weight="fill"
