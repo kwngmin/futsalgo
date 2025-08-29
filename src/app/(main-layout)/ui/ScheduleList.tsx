@@ -146,81 +146,39 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
       </div>
 
       {attendanceStatus &&
+      attendanceStatus === "UNDECIDED" &&
       schedule.status === "READY" &&
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-3 sm:px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-200">
-          <div
-            className="h-14 sm:h-9 flex items-center gap-2 text-sm"
-            // onClick={() => handleScheduleClick(schedule.id)}
-          >
+        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-t border-dashed border-slate-300 mt-2">
+          <div className="h-9 flex items-center gap-2 text-sm">
             <CalendarCheckIcon
-              className="size-6 sm:size-5 text-indigo-700"
+              className="size-6 text-indigo-700"
               weight="fill"
             />
-            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-              <span className="shrink-0 font-semibold text-sm">참석여부</span>
-              <div className="w-full flex items-center gap-1 tracking-tight text-xs sm:text-sm">
-                <span className="font-medium text-indigo-700">
-                  {new Date(
-                    schedule.attendanceDeadline as Date
-                  ).toLocaleDateString("ko-KR", {
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  })}
-                  까지
-                </span>
-                선택해주세요.
-              </div>
+            <span className="shrink-0 font-semibold text-sm">참석여부</span>
+            <Separator
+              orientation="vertical"
+              className="!h-3 !w-0.25 bg-gray-300"
+            />
+            <div className="w-full flex items-center gap-1 tracking-tight text-sm">
+              <span className="font-medium text-indigo-700">
+                {new Date(
+                  schedule.attendanceDeadline as Date
+                ).toLocaleDateString("ko-KR", {
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}
+                까지
+              </span>
+              선택해주세요.
             </div>
           </div>
-          <span className="text-sm font-medium text-amber-700">
-            {attendanceStatus === "ATTENDING"
-              ? "참석"
-              : attendanceStatus === "NOT_ATTENDING"
-              ? "불참"
-              : "선택 안 함"}
-          </span>
         </div>
-      ) : //   <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none">
-      //   <div className="flex items-center gap-2">
-      //     <div className="p-2 rounded-full bg-white/80">
-      //       <CalendarCheckIcon
-      //         className="size-6 text-indigo-700"
-      //         weight="fill"
-      //       />
-      //     </div>
-      //     <div className="flex flex-col">
-      //       <span className="font-medium">경기일정 참석여부</span>
-      //       <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
-      //         {/* <Timer className="size-5 text-amber-600" /> */}
-      //         <span className="font-semibold text-indigo-700">
-      //           {new Date(
-      //             schedule.attendanceDeadline as Date
-      //           ).toLocaleDateString("ko-KR", {
-      //             month: "long",
-      //             day: "numeric",
-      //             hour: "numeric",
-      //             minute: "numeric",
-      //           })}
-      //         </span>
-      //         선택해주세요.
-      //       </div>
-      //     </div>
-      //   </div>
-      //   <div className="w-full sm:w-48 shrink-0 flex items-center *:cursor-pointer gap-1.5 ">
-      //     <button className="grow h-11 sm:h-9 font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:bg-blue-800 rounded-sm active:scale-95 transition-all duration-200">
-      //       참석
-      //     </button>
-      //     <button className="grow h-11 sm:h-9 font-medium text-gray-700 bg-blue-900/10 hover:bg-red-600/10 hover:text-destructive rounded-sm active:scale-95 transition-all duration-200">
-      //       불참
-      //     </button>
-      //   </div>
-      // </div>
-      null}
+      ) : null}
     </div>
   );
 };
