@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { rateTeamMember } from "../actions/rate-team-memer";
 import { Separator } from "@/shared/components/ui/separator";
-import { SquarePen } from "lucide-react";
+import { SquarePen, X } from "lucide-react";
 
 interface Member {
   id: string;
@@ -206,7 +206,7 @@ export default function TeamMemberRatingList({
               </div>
             </div>
             <div className="flex items-center justify-center size-10 bg-white rounded-lg">
-              <SquarePen className="size-4 text-gray-600" />
+              <SquarePen className="size-5 text-gray-500" />
             </div>
           </div>
         ))}
@@ -229,9 +229,9 @@ export default function TeamMemberRatingList({
                 </h2>
                 <button
                   onClick={closeModal}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
-                  ✕
+                  <X className="size-5" />
                 </button>
               </div>
 
