@@ -2,10 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-// import { calculateDday } from "../schedule/[id]/ui/ScheduleContent";
 import { CalendarCheckIcon } from "@phosphor-icons/react";
-// import { likeSchedule } from "../actions/like-schedule";
-// import { useQueryClient } from "@tanstack/react-query";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";

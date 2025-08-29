@@ -129,7 +129,8 @@ const ScheduleContent = ({
   )?.attendanceStatus;
 
   const handleGoBack = () => {
-    router.push("/");
+    // router.push("/");
+    router.back();
   };
 
   // const handleLikeClick = async (scheduleId: string) => {
