@@ -4,7 +4,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowDownUp, Plus, Search } from "lucide-react";
-import ScheduleCard from "../ui/ScheduleCard";
+import ScheduleList from "../ui/ScheduleList";
 import { getLikedSchedules } from "./actions/get-liked-schedules";
 import LikedPageLoading from "./loading";
 
@@ -58,7 +58,7 @@ const LikedPage = () => {
       <div className="">
         {/* 좋아요 한 경기 */}
         {data?.data?.likedSchedules?.map((schedule) => {
-          return <ScheduleCard schedule={schedule} key={schedule.id} />;
+          return <ScheduleList schedule={schedule} key={schedule.id} />;
         })}
         {error && <div className="text-red-500">{error.message}</div>}
       </div>

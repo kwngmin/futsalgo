@@ -1,7 +1,7 @@
 "use client";
 
 import SchedulePageLoading from "@/app/(main-layout)/ui/loading";
-import ScheduleCard from "@/app/(main-layout)/ui/ScheduleCard";
+import ScheduleList from "@/app/(main-layout)/ui/ScheduleList";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -77,7 +77,7 @@ const TeamSchedules = ({ teamId }: TeamSchedulesProps) => {
   return (
     <div className="flex flex-col">
       {allSchedules.map((schedule) => (
-        <ScheduleCard key={schedule.id} schedule={schedule} />
+        <ScheduleList key={schedule.id} schedule={schedule} />
       ))}
 
       {/* 무한스크롤 트리거 */}

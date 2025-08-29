@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { formatCityName } from "@/entities/team/lib/format-city-name";
 
-const TeamCard = ({
+const TeamList = ({
   team,
   size = "md",
 }: {
@@ -125,4 +125,4 @@ const TeamCard = ({
   );
 };
 
-export default TeamCard;
+export default TeamList;

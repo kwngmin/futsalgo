@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowDownUp, Plus, Search } from "lucide-react";
-import ScheduleCard from "./ui/ScheduleCard";
+import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 
@@ -61,11 +61,11 @@ const HomePage = () => {
       <div className="">
         {/* 오늘 경기 */}
         {data?.data?.todaysSchedules?.map((schedule) => {
-          return <ScheduleCard schedule={schedule} key={schedule.id} />;
+          return <ScheduleList schedule={schedule} key={schedule.id} />;
         })}
         {/* 예정된 경기 */}
         {data?.data?.upcomingSchedules?.map((schedule) => {
-          return <ScheduleCard schedule={schedule} key={schedule.id} />;
+          return <ScheduleList schedule={schedule} key={schedule.id} />;
         })}
         {session.data?.user?.id &&
           data?.data?.todaysSchedules?.length === 0 &&
@@ -84,7 +84,7 @@ const HomePage = () => {
           </div>
         )}
         {data?.data?.pastSchedules?.map((schedule) => {
-          return <ScheduleCard schedule={schedule} key={schedule.id} />;
+          return <ScheduleList schedule={schedule} key={schedule.id} />;
         })}
         {error && <div className="text-red-500">{error.message}</div>}
       </div>

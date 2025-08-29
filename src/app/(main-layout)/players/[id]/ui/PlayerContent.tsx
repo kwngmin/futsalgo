@@ -30,7 +30,7 @@ import {
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import { Label } from "@/shared/components/ui/label";
-import TeamCard from "@/app/(main-layout)/teams/ui/TeamCard";
+import TeamList from "@/app/(main-layout)/teams/ui/TeamList";
 // import MannerBar from "./MannerBar";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 // import PlayerPhotosGallery from "./PlayerPhotosGallery";
@@ -219,7 +219,7 @@ const PlayerContent = ({ id }: { id: string }) => {
         {playerData.teams.length > 0 ? (
           <div className="mx-4 border rounded-md overflow-hidden shadow-xs">
             {playerData.teams.map((team) => (
-              <TeamCard team={team.team} key={team.team.id} size="sm" />
+              <TeamList team={team.team} key={team.team.id} size="sm" />
             ))}
           </div>
         ) : (

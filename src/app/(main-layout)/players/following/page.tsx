@@ -8,7 +8,7 @@ import {
   type FollowingPlayersResponse,
 } from "../model/actions";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import PlayerCard from "../ui/PlayerCard";
+import PlayerList from "../ui/PlayerList";
 import { User } from "@prisma/client";
 import SkeletonContent from "../ui/SkeletonPlayerContent";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
@@ -164,7 +164,7 @@ const FollowingPlayersPage = () => {
           <div className="bg-white rounded-2xl">
             {/* 필터된 회원 목록 */}
             {filteredPlayers?.map((player) => (
-              <PlayerCard
+              <PlayerList
                 key={player.id}
                 player={player}
                 teamName={

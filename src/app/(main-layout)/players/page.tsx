@@ -5,7 +5,7 @@ import { Search, ArrowDownUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { getPlayers, type PlayersResponse } from "./model/actions";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import PlayerCard from "./ui/PlayerCard";
+import PlayerList from "./ui/PlayerList";
 import { User } from "@prisma/client";
 import SkeletonContent from "./ui/SkeletonPlayerContent";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
@@ -178,7 +178,7 @@ const PlayersPage = () => {
           <div className="bg-white rounded-2xl">
             {/* 내 프로필 섹션 (전체 회원 페이지에서만 표시) */}
             {!isFollowingPage && isLoggedIn && currentUser ? (
-              <PlayerCard
+              <PlayerList
                 player={currentUser}
                 isCurrentUser={true}
                 teamName={
@@ -194,7 +194,7 @@ const PlayersPage = () => {
 
             {/* 필터된 회원 목록 */}
             {filteredPlayers?.map((player) => (
-              <PlayerCard
+              <PlayerList
                 key={player.id}
                 player={player}
                 teamName={

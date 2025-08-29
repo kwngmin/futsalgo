@@ -8,7 +8,7 @@ import {
   type GetFollowingTeamsResponse,
 } from "../model/actions";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import TeamCard from "../ui/TeamCard";
+import TeamList from "../ui/TeamList";
 import SkeletonContent from "../ui/SkeletonTeamContent";
 import { useRouter } from "next/navigation";
 
@@ -117,7 +117,7 @@ const FollowingTeamsPage = () => {
           <div className="bg-white rounded-2xl">
             {/* 팔로잉한 팀 목록 */}
             {allTeams?.map((team) => (
-              <TeamCard key={team.id} team={team} />
+              <TeamList key={team.id} team={team} />
             ))}
 
             {/* 로딩 인디케이터 */}

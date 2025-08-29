@@ -11,7 +11,7 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { Separator } from "@/shared/components/ui/separator";
 
-type ScheduleCardProps = Prisma.ScheduleGetPayload<{
+type ScheduleListProps = Prisma.ScheduleGetPayload<{
   include: {
     hostTeam: true;
     invitedTeam: true;
@@ -21,7 +21,7 @@ type ScheduleCardProps = Prisma.ScheduleGetPayload<{
   };
 }>;
 
-const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
+const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
   const router = useRouter();
   const session = useSession();
   // const queryClient = useQueryClient();
@@ -225,4 +225,4 @@ const ScheduleCard = ({ schedule }: { schedule: ScheduleCardProps }) => {
   );
 };
 
-export default ScheduleCard;
+export default ScheduleList;

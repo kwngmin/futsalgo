@@ -7,7 +7,7 @@ import { getTeams, type GetTeamsResponse } from "./model/actions";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import SkeletonContent from "./ui/SkeletonTeamContent";
-import TeamCard from "./ui/TeamCard";
+import TeamList from "./ui/TeamList";
 
 const TeamsPage = () => {
   const router = useRouter();
@@ -141,7 +141,7 @@ const TeamsPage = () => {
           {/* 팀 목록 */}
           <div className="bg-white rounded-2xl">
             {allTeams.map((team) => (
-              <TeamCard key={team.id} team={team} />
+              <TeamList key={team.id} team={team} />
             ))}
 
             {/* 로딩 인디케이터 */}
