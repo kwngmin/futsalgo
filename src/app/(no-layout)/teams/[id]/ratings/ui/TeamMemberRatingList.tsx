@@ -1,13 +1,13 @@
 // components/team/team-member-rating-list.tsx
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { rateTeamMember } from "../actions/rate-team-memer";
+import { Separator } from "@/shared/components/ui/separator";
+import { SquarePen } from "lucide-react";
 
 interface Member {
   id: string;
@@ -139,62 +139,74 @@ export default function TeamMemberRatingList({
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="">
         {members.map((member) => (
           <div
             key={member.id}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
+            className="bg-white rounded-lg px-4 h-16 flex items-center hover:bg-gray-50 transition-shadow cursor-pointer"
             onClick={() => openModal(member)}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200">
-                  {member.user.image ? (
-                    <Image
-                      src={member.user.image}
-                      alt={member.user.nickname || member.user.name || ""}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-500">
-                      👤
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900">
+            <div className="flex items-center space-x-4 grow">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                {member.user.image ? (
+                  <Image
+                    src={member.user.image}
+                    alt={member.user.nickname || member.user.name || ""}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-500">
+                    👤
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <h3 className="font-semibold">
                     {member.user.nickname || member.user.name || "이름 없음"}
                   </h3>
+                  <Separator
+                    orientation="vertical"
+                    className="!h-3 bg-gray-300"
+                  />
                   {member.user.nickname && member.user.name && (
-                    <p className="text-sm text-gray-600">{member.user.name}</p>
+                    <p className="text-sm text-gray-800">{member.user.name}</p>
+                  )}
+                </div>
+                <div className="flex items-center space-x-3">
+                  {member.hasRated ? (
+                    <div className="text-sm">
+                      {member.ratedAt && (
+                        <span className="text-gray-500">
+                          {new Date(member.ratedAt).toLocaleDateString(
+                            "ko-KR",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </span>
+                        // <span className="text-gray-500">
+                        //   {format(new Date(member.ratedAt), "YYYY년 M월 dd일", {
+                        //     locale: ko,
+                        //   })}{" "}
+                        // </span>
+                      )}
+                      <span className="text-gray-400"> • </span>
+                      <span className="text-gray-500">평가 완료</span>
+                    </div>
+                  ) : (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      평가 대기
+                    </span>
                   )}
                 </div>
               </div>
-
-              <div className="flex items-center space-x-3">
-                {member.hasRated ? (
-                  <div className="text-right">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      평가 완료
-                    </span>
-                    {member.ratedAt && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        {format(new Date(member.ratedAt), "MM월 dd일", {
-                          locale: ko,
-                        })}
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                    평가 대기
-                  </span>
-                )}
-
-                <div className="text-gray-400">→</div>
-              </div>
+            </div>
+            <div className="flex items-center justify-center size-10 bg-white rounded-lg">
+              <SquarePen className="size-4 text-gray-600" />
             </div>
           </div>
         ))}
@@ -208,13 +220,12 @@ export default function TeamMemberRatingList({
 
       {/* 평가 모달 */}
       {isModalOpen && selectedMember && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900">
                   {selectedMember.user.nickname || selectedMember.user.name}{" "}
-                  평가하기
                 </h2>
                 <button
                   onClick={closeModal}
@@ -260,14 +271,14 @@ export default function TeamMemberRatingList({
                 <button
                   onClick={closeModal}
                   disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
                 >
                   취소
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
                 >
                   {isSubmitting ? "저장 중..." : "저장"}
                 </button>

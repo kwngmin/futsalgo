@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/shared/lib/prisma";
 import { auth } from "@/shared/lib/auth";
 import TeamMemberRatingList from "./ui/TeamMemberRatingList";
+import TeamMemberHeader from "./ui/TeamMemberHeader";
 
 /**
  * 팀 멤버들과 평가 정보를 가져오는 함수
@@ -110,16 +111,14 @@ export default async function TeamRatingPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {data.team?.name} 팀원 평가
-        </h1>
-        <p className="text-gray-600 mt-2">
-          팀원들의 실력을 평가해주세요. 한 달에 한 번만 평가할 수 있습니다.
+    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
+      <TeamMemberHeader id={id} />
+      <div className="mx-4 bg-slate-100 rounded px-4 h-9 flex items-center mb-4 text-sm">
+        <h1 className="text-2xl font-bold text-gray-900"></h1>
+        <p className="text-gray-600">
+          {data.team.name} 팀원들의 실력을 평가해주세요.
         </p>
       </div>
-
       <Suspense fallback={<div>로딩 중...</div>}>
         <TeamMemberRatingList
           members={data.members}
