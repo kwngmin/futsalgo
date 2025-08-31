@@ -391,7 +391,7 @@ const ScheduleContent = ({
                           {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-green-600 font-semibold px-1.5 py-0.25 bg-green-600/5 rounded">
+                          <span className="text-sm text-green-600 font-semibold px-1.5">
                             스코어
                           </span>
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
@@ -434,7 +434,7 @@ const ScheduleContent = ({
             </div>
           )}
 
-        {/* 공지사항 */}
+        {/* 시설 이용안내 */}
         {data.data.schedule.attendances.some(
           (attendance) => attendance.userId === currentUserId
         ) && (
@@ -447,7 +447,7 @@ const ScheduleContent = ({
                   // weight="duotone"
                   className="size-7 text-stone-500"
                 />
-                <h2 className="text-lg font-semibold ">공지사항</h2>
+                <h2 className="text-lg font-semibold ">시설 이용안내</h2>
                 {/* <span className="text-sm text-gray-500">
                   외부인은 볼 수 없습니다.
                 </span> */}
@@ -468,11 +468,11 @@ const ScheduleContent = ({
             {isNoticeOpen ? (
               Boolean(data?.data.schedule?.description) ? (
                 <p className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-                  {data?.data.schedule?.description ?? "공지사항 없음"}
+                  {data?.data.schedule?.description ?? "이용안내 없음"}
                 </p>
               ) : (
                 <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
-                  공지사항이 없습니다.
+                  이용안내가 없습니다.
                 </p>
               )
             ) : null}

@@ -25,21 +25,34 @@ import {
 import { useTeamCodeValidation } from "../lib/use-team-code-validation";
 import { useQueryClient } from "@tanstack/react-query";
 
-const newFormSchema = z.object({
-  hostTeamId: z.string().min(1),
-  invitedTeamId: z.string().optional(),
-  place: z.string().min(1),
-  description: z.string().optional(),
-  date: z.string().min(1),
-  startTime: z.string().min(1),
-  endTime: z.string().min(1),
-  matchType: z.string().min(1),
-  city: z.string().min(1).optional(),
-  district: z.string().min(1).optional(),
-  enableAttendanceVote: z.boolean(),
-  attendanceDeadline: z.string().min(1).optional(),
-  // attendanceEndTime 제거 - 자정으로 고정
-});
+const newFormSchema = z
+  .object({
+    hostTeamId: z.string().min(1),
+    invitedTeamId: z.string().optional(),
+    place: z.string().min(1),
+    description: z.string().optional(),
+    date: z.string().min(1),
+    startTime: z.string().min(1),
+    endTime: z.string().min(1),
+    matchType: z.string().min(1),
+    city: z.string().min(1).optional(),
+    district: z.string().min(1).optional(),
+    enableAttendanceVote: z.boolean(),
+    attendanceDeadline: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // 참석여부 투표를 사용하는 경우에만 attendanceDeadline 필수
+      if (data.enableAttendanceVote) {
+        return data.attendanceDeadline && data.attendanceDeadline.length > 0;
+      }
+      return true;
+    },
+    {
+      message: "참석여부 투표를 사용하는 경우 마감일자를 선택해주세요",
+      path: ["attendanceDeadline"],
+    }
+  );
 
 export type NewFormData = z.infer<typeof newFormSchema>;
 
@@ -83,10 +96,10 @@ const NewForm = ({
     return compareDate.getTime() === tomorrow.getTime();
   };
 
-  // 참석여부 투표 표시 여부 결정
+  // 참석여부 투표 표시 여부 결정 - 과거 날짜와 오늘은 표시하지 않음
   const shouldShowAttendanceVote = () => {
     if (!matchDate) return false;
-    return !isToday(matchDate); // 오늘이 아닌 모든 날짜에 표시
+    return !isPastDate(matchDate) && !isToday(matchDate); // 내일 이후 날짜에만 표시
   };
 
   // 동적 경기구분 옵션 생성
@@ -117,33 +130,47 @@ const NewForm = ({
     },
   });
 
-  // 날짜 변경 시 경기구분 자동 조정
+  // 날짜 변경 시 로직 처리
   useEffect(() => {
-    if (matchDate && isPastDate(matchDate)) {
-      // 과거 날짜 선택 시 자동으로 자체전으로 변경
-      if (watch("matchType") === "TEAM") {
+    if (!matchDate) return;
+
+    // 과거 날짜이거나 오늘 선택 시
+    if (isPastDate(matchDate) || isToday(matchDate)) {
+      // 1. 과거 날짜에서 친선전이 선택되어 있다면 자체전으로 변경
+      if (isPastDate(matchDate) && watch("matchType") === "TEAM") {
         setValue("matchType", "SQUAD");
       }
+
+      // 2. 참석여부 투표 비활성화 (과거 날짜 + 오늘)
+      setValue("enableAttendanceVote", false);
+      setValue("attendanceDeadline", undefined);
+      setDeadlineDate(undefined);
     }
   }, [matchDate, setValue, watch]);
 
-  // 경기구분 변경 시 날짜 제약 적용
+  // 경기구분 변경 시 처리
   useEffect(() => {
     const currentMatchType = watch("matchType");
 
-    // 친선전 선택 시 과거 날짜가 선택되어 있다면 초기화
-    if (currentMatchType === "TEAM" && matchDate && isPastDate(matchDate)) {
-      setMatchDate(undefined);
-      setValue("date", "");
+    if (currentMatchType === "SQUAD") {
+      // 자체전 선택 시 invitedTeamId 초기화
+      setValue("invitedTeamId", undefined);
+    } else if (currentMatchType === "TEAM") {
+      // 친선전 선택 시 과거 날짜가 선택되어 있다면 날짜 초기화
+      if (matchDate && isPastDate(matchDate)) {
+        setMatchDate(undefined);
+        setValue("date", "");
+      }
     }
-  }, [watch("matchType")]);
+  }, [watch("matchType"), matchDate, setValue]);
 
   // 팀 코드가 유효할 때 invitedTeamId 설정
   useEffect(() => {
     if (teamCode.status === "valid" && teamCode.team?.id) {
       setValue("invitedTeamId", teamCode.team.id);
     } else {
-      setValue("invitedTeamId", "");
+      // 유효하지 않거나 자체전인 경우 undefined로 설정
+      setValue("invitedTeamId", undefined);
     }
   }, [teamCode.status, teamCode.team?.id, setValue]);
 
@@ -188,7 +215,7 @@ const NewForm = ({
     >
       <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
         <div className="flex flex-col gap-6">
-          {/* 날짜 선택 - 우선순위 1 */}
+          {/* 날짜 선택 */}
           <div className="flex flex-col gap-3 pb-3 sm:pb-0">
             <Label htmlFor="match-date-picker" className="px-1">
               날짜
@@ -221,6 +248,7 @@ const NewForm = ({
             />
           </div>
 
+          {/* 시간 선택 */}
           <div className="flex flex-col gap-3">
             <Label htmlFor="start-time" className="px-1">
               시작 시간 - 종료 시간
@@ -246,15 +274,17 @@ const NewForm = ({
         </div>
 
         <div className="flex flex-col gap-6 grow">
+          {/* 풋살장 */}
           <div className="space-y-3">
-            <Label className="">장소</Label>
+            <Label className="">풋살장</Label>
             <Input
               type="text"
-              placeholder="장소를 입력하세요"
+              placeholder="풋살장을 입력하세요"
               {...register("place")}
             />
           </div>
 
+          {/* 주최팀 */}
           <div className="space-y-3">
             <Label className="px-1">주최팀</Label>
             <CustomSelect
@@ -270,7 +300,7 @@ const NewForm = ({
             />
           </div>
 
-          {/* 경기 구분 - 날짜에 따라 동적으로 옵션 변경 */}
+          {/* 경기 구분 */}
           <div className="space-y-3">
             <Label className="px-1">경기 구분</Label>
             <div className="space-y-2">
@@ -285,14 +315,14 @@ const NewForm = ({
               />
               {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
               {matchDate && isPastDate(matchDate) && (
-                <div className="text-xs text-muted-foreground px-1">
+                <div className="text-sm text-muted-foreground px-1">
                   과거 날짜는 자체전만 선택 가능합니다
                 </div>
               )}
             </div>
           </div>
 
-          {/* 팀 코드 입력 */}
+          {/* 팀 코드 입력 - 친선전일 때만 */}
           {watch("matchType") === "TEAM" && (
             <div className="space-y-3">
               <Label htmlFor="invited-team-code">초청팀 코드</Label>
@@ -346,16 +376,17 @@ const NewForm = ({
         </div>
       </div>
 
+      {/* 시설 이용안내 */}
       <div className="space-y-3">
-        <Label className="">공지사항</Label>
+        <Label className="">시설 이용안내</Label>
         <Textarea
           {...register("description")}
           className="min-h-24"
-          placeholder="공지사항을 작성해주세요"
+          placeholder="시설 이용안내를 작성해주세요"
         />
       </div>
 
-      {/* 참석여부 투표 - 오늘이 아닌 날짜에만 표시 */}
+      {/* 참석여부 투표 - 과거 날짜가 아닌 경우에만 표시 */}
       {shouldShowAttendanceVote() && (
         <div className="flex flex-col sm:flex-row gap-y-6 gap-x-2">
           <div className="space-y-3">
@@ -379,7 +410,11 @@ const NewForm = ({
                     ? "bg-white shadow-xs"
                     : "text-muted-foreground border-transparent"
                 }`}
-                onClick={() => setValue("enableAttendanceVote", false)}
+                onClick={() => {
+                  setValue("enableAttendanceVote", false);
+                  setValue("attendanceDeadline", undefined);
+                  setDeadlineDate(undefined);
+                }}
               >
                 사용 안 함
               </button>
@@ -388,7 +423,7 @@ const NewForm = ({
 
           {watch("enableAttendanceVote") && (
             <>
-              {/* 데스크톱 버전 - 종료 시간 제거 */}
+              {/* 데스크톱 버전 - 투표 마감일자 */}
               <div className="hidden sm:block">
                 <div className="flex flex-col gap-3 max-w-64">
                   <Label htmlFor="deadline-date-picker" className="px-1">
@@ -457,16 +492,10 @@ const NewForm = ({
                       />
                     </PopoverContent>
                   </Popover>
-                  {/* 내일 경기인 경우 안내 메시지 */}
-                  {matchDate && isTomorrow(matchDate) && (
-                    <div className="text-xs text-muted-foreground px-1">
-                      내일 경기는 오늘 자정까지만 투표 가능합니다
-                    </div>
-                  )}
                 </div>
               </div>
 
-              {/* 모바일 버전 - 종료 시간 제거 */}
+              {/* 모바일 버전 - 투표 마감일자 */}
               <div className="flex flex-col gap-6 sm:hidden">
                 <div className="flex flex-col gap-3 pb-3 sm:pb-0">
                   <Label htmlFor="mobile-deadline-picker" className="px-1">
@@ -514,12 +543,6 @@ const NewForm = ({
                       setDeadlineDate(date);
                     }}
                   />
-                  {/* 내일 경기인 경우 안내 메시지 */}
-                  {matchDate && isTomorrow(matchDate) && (
-                    <div className="text-xs text-muted-foreground px-1">
-                      내일 경기는 오늘 자정까지만 투표 가능합니다
-                    </div>
-                  )}
                 </div>
               </div>
             </>
@@ -527,13 +550,15 @@ const NewForm = ({
         </div>
       )}
 
+      {/* 오류 메시지 */}
       {errors.root && (
         <Alert variant="destructive">
           <AlertDescription>{errors.root.message}</AlertDescription>
         </Alert>
       )}
 
-      <div className="mt-12 space-y-3 sm:grid grid-cols-2 gap-2">
+      {/* 버튼들 */}
+      <div className="mt-12 space-y-3 sm:grid grid-cols-3 gap-2">
         <Button
           type="submit"
           disabled={
