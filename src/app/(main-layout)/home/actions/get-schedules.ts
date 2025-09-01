@@ -56,7 +56,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
       where: {
         date: { lt: today }, // ← 어제 날짜까지 포함
         NOT: {
-          status: { in: ["PENDING", "REJECTED", "READY"] },
+          status: { in: ["PENDING", "REJECTED", "READY", "DELETED"] },
         },
       },
       include: {
@@ -124,6 +124,9 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
           gte: today,
           lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
         },
+        status: {
+          not: "DELETED",
+        },
         OR: [
           { hostTeamId: { in: approvedTeamIds } },
           { invitedTeamId: { in: approvedTeamIds } },
@@ -146,6 +149,9 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
       where: {
         date: {
           gt: new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1),
+        },
+        status: {
+          not: "DELETED",
         },
         OR: [
           { hostTeamId: { in: approvedTeamIds } },

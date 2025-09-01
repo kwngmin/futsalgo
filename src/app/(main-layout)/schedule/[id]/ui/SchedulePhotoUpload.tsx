@@ -215,7 +215,7 @@ const SchedulePhotoUpload = ({
             weight="fill"
             // weight="light"
             // weight="duotone"
-            className="size-7 text-blue-500"
+            className="size-7 text-zinc-500"
           />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>
@@ -248,7 +248,7 @@ const SchedulePhotoUpload = ({
             weight="fill"
             // weight="light"
             // weight="duotone"
-            className="size-7 text-blue-500"
+            className="size-7 text-zinc-500"
           />
           <h2 className="text-lg font-semibold ">사진</h2>
         </div>

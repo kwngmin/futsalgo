@@ -101,6 +101,9 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
           gte: today,
           lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
         },
+        status: {
+          not: "DELETED",
+        },
         ...scheduleFilter,
       },
       include: scheduleInclude,
@@ -113,6 +116,9 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
         date: {
           gt: new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1),
         },
+        status: {
+          not: "DELETED",
+        },
         ...scheduleFilter,
       },
       include: scheduleInclude,
@@ -123,6 +129,9 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
     const pastSchedules = await prisma.schedule.findMany({
       where: {
         date: { lt: today },
+        status: {
+          not: "DELETED",
+        },
         ...scheduleFilter,
       },
       include: scheduleInclude,

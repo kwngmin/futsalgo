@@ -10,13 +10,15 @@ import {
   ChevronDown,
   SquareCheckBigIcon,
   Square,
+  Edit3,
+  Save,
+  X,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import {
   CalendarCheckIcon,
-  // CourtBasketballIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
@@ -29,8 +31,10 @@ import { useSession } from "next-auth/react";
 import { getSchedule } from "../actions/get-schedule";
 import { Button } from "@/shared/components/ui/button";
 import { addMatch } from "../actions/add-match";
+import { deleteSchedule } from "../actions/delete-schedule";
+import { updateScheduleNotice } from "../actions/update-schedule-notice";
+import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import Image from "next/image";
-// import { Separator } from "@/shared/components/ui/separator";
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -76,11 +80,6 @@ export const tabs = [
     value: "comments",
     isDisabled: false,
   },
-  // {
-  //   label: "후기",
-  //   value: "reviews",
-  //   isDisabled: true,
-  // },
 ];
 
 const ScheduleContent = ({
@@ -98,17 +97,11 @@ const ScheduleContent = ({
   console.log(startTime, "startTime");
   console.log(matchType, "matchType");
   const router = useRouter();
-  // const queryClient = useQueryClient();
 
   const searchParams = useSearchParams();
   console.log(searchParams, "searchParams");
   const tab = searchParams.get("tab");
   console.log(tab, "tab");
-  // const validTab = tabs.find((t) => t.value === tab);
-  // const [selectedTab, setSelectedTab] = useState<string>(
-  //   validTab ? validTab.value : tabs[0].value
-  // );
-  // const [isLiked, setIsLiked] = useState(isLikedSchedule);
 
   const session = useSession();
   const currentUserId = session.data?.user?.id;
@@ -120,6 +113,31 @@ const ScheduleContent = ({
   });
 
   const [isNoticeOpen, setIsNoticeOpen] = useState(true);
+  const [isEditingNotice, setIsEditingNotice] = useState(false);
+  const [noticeContent, setNoticeContent] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSavingNotice, setIsSavingNotice] = useState(false);
+  const [isRespondingInvitation, setIsRespondingInvitation] = useState(false);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // 데이터 로드 시 공지사항 내용 설정
+  useEffect(() => {
+    if (data?.data?.schedule?.description) {
+      setNoticeContent(data.data.schedule.description);
+    }
+  }, [data?.data?.schedule?.description]);
+
+  // 편집 모드 진입 시 textarea 포커스
+  useEffect(() => {
+    if (isEditingNotice && textareaRef.current) {
+      textareaRef.current.focus();
+      // 커서를 텍스트 끝으로 이동
+      const length = textareaRef.current.value.length;
+      textareaRef.current.setSelectionRange(length, length);
+    }
+  }, [isEditingNotice]);
 
   const isAttendance = data?.data?.schedule?.attendances.some(
     (attendance) => attendance.userId === currentUserId
@@ -129,6 +147,10 @@ const ScheduleContent = ({
     (attendance) => attendance.userId === currentUserId
   )?.attendanceStatus;
 
+  const canEditNotice = currentUserId === data?.data?.schedule?.createdBy.id;
+  const hasNoticeContent = Boolean(data?.data?.schedule?.description);
+  const shouldShowNoticeSection = canEditNotice || hasNoticeContent;
+
   const handleGoBack = () => {
     if (searchParams.get("tab") === "/my-schedules") {
       router.push("/my-schedules");
@@ -137,40 +159,83 @@ const ScheduleContent = ({
     }
   };
 
-  // const handleLikeClick = async (scheduleId: string) => {
-  //   const result = await likeSchedule({ scheduleId });
-  //   console.log(result);
-  //   if (result.success) {
-  //     queryClient.invalidateQueries({ queryKey: ["schedules"] });
-  //     setIsLiked(result.liked);
-  //     alert(result.message);
-  //   } else {
-  //     console.warn(result.error);
-  //     // toast.error(result.error);
-  //   }
-  // };
+  const handleStartEditNotice = () => {
+    setNoticeContent(data?.data?.schedule?.description || "");
+    setIsEditingNotice(true);
+  };
 
-  // const timeRange = formatTimeRange({
-  //   time: {
-  //     start: data.data.schedule?.startTime as Date,
-  //     end: data.data.schedule?.endTime as Date,
-  //   },
-  // });
+  const handleCancelEditNotice = () => {
+    setNoticeContent(data?.data?.schedule?.description || "");
+    setIsEditingNotice(false);
+  };
 
-  // const opposingTeam =
-  //   data.data.schedule?.matchType === "SQUAD"
-  //     ? data.data.schedule.hostTeam
-  //     : data.data.schedule?.guestTeam;
+  const handleSaveNotice = async () => {
+    setIsSavingNotice(true);
+    try {
+      const result = await updateScheduleNotice(scheduleId, noticeContent);
+      if (result.success) {
+        setIsEditingNotice(false);
+        refetch(); // 데이터 새로고침
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("공지사항 저장 실패:", error);
+      alert("공지사항 저장에 실패했습니다.");
+    } finally {
+      setIsSavingNotice(false);
+    }
+  };
 
-  // const timeString = data.data.schedule?.startTime?.toLocaleTimeString(
-  //   "ko-KR",
-  //   {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   }
-  // );
+  const handleDeleteSchedule = async () => {
+    setIsDeleting(true);
+    try {
+      const result = await deleteSchedule(scheduleId);
+      if (result.success) {
+        router.push("/"); // 메인 페이지로 이동
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("일정 삭제 실패:", error);
+      alert("일정 삭제에 실패했습니다.");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
 
-  // const [period, time] = timeString?.split(" ") || [];
+  const handleRespondInvitation = async (response: "ACCEPT" | "DECLINE") => {
+    setIsRespondingInvitation(true);
+    try {
+      const result = await respondTeamInvitation(scheduleId, response);
+      if (result.success) {
+        refetch(); // 데이터 새로고침
+        if (response === "ACCEPT") {
+          alert("대전신청을 수락했습니다.");
+        } else {
+          alert("대전신청을 거절했습니다.");
+        }
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("초청 응답 실패:", error);
+      alert("초청 응답에 실패했습니다.");
+    } finally {
+      setIsRespondingInvitation(false);
+    }
+  };
+
+  // 키보드 이벤트 핸들러
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Escape") {
+      handleCancelEditNotice();
+    } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSaveNotice();
+    }
+  };
 
   if (!data) {
     return (
@@ -195,7 +260,6 @@ const ScheduleContent = ({
 
   console.log(data, "data");
 
-  // const dDay = calculateDday(data.data.schedule?.date as Date);
   const attendanceIds = data.data.schedule.attendances.map((attendance) => {
     return {
       userId: attendance.userId,
@@ -213,33 +277,10 @@ const ScheduleContent = ({
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <span
-          className="font-semibold tracking-tight text-lg"
-          // className={`flex items-center justify-center font-semibold ${
-          //   data.data.schedule?.matchType === "TEAM"
-          //     ? "text-indigo-600"
-          //     : "text-emerald-600"
-          // }`}
-        >
+        <span className="font-semibold tracking-tight text-lg">
           {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
         </span>
         <div className="flex items-center justify-end gap-1.5">
-          {/* 좋아요 */}
-          {/* <button
-            className={`shrink-0 size-10 flex items-center justify-center rounded-full transition-colors cursor-pointer ${
-              isLiked ? "hover:bg-indigo-600/10" : "hover:bg-gray-100 group"
-            }`}
-            onClick={() => handleLikeClick(scheduleId)}
-          >
-            <HeartIcon
-              className={`size-6 transition-colors ${
-                isLiked
-                  ? "text-indigo-600"
-                  : "text-zinc-300 group-hover:text-zinc-400"
-              }`}
-              weight="fill"
-            />
-          </button> */}
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
             <Share className="size-5" />
           </button>
@@ -257,10 +298,63 @@ const ScheduleContent = ({
             minute: "numeric",
           })}
         </span>
-        <div className="w-full flex justify-center items-center gap-1 text-lg  tracking-tight">
+        <div className="w-full flex justify-center items-center gap-1 text-lg tracking-tight">
           {data.data.schedule?.place}
         </div>
       </div>
+
+      {/* 친선전 요청 대기 상태 (PENDING) */}
+      {data.data.schedule.status === "PENDING" &&
+        (isAttendance || data.data.isManager) && (
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-amber-50 rounded-2xl p-4 select-none mb-4 border border-amber-200">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-full bg-white">
+                <CalendarCheckIcon
+                  className="size-6 text-amber-600"
+                  weight="fill"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-semibold">대전신청</span>
+                <div className="w-full flex items-center gap-1 tracking-tight text-sm">
+                  {data.data.isManager === "GUEST" ? (
+                    <span className="font-medium text-amber-700">
+                      수락 또는 거절을 선택해주세요.
+                    </span>
+                  ) : (
+                    <span className="font-medium text-amber-700">
+                      초청팀의 대전신청 수락 대기중입니다.
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+            {data.data.isManager === "GUEST" && (
+              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5">
+                <button
+                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => handleRespondInvitation("ACCEPT")}
+                  disabled={isRespondingInvitation}
+                >
+                  {isRespondingInvitation ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : null}
+                  수락
+                </button>
+                <button
+                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => handleRespondInvitation("DECLINE")}
+                  disabled={isRespondingInvitation}
+                >
+                  {isRespondingInvitation ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : null}
+                  거절
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
       {/* 경기일정 참석여부 투표 */}
       {isAttendance &&
@@ -275,12 +369,10 @@ const ScheduleContent = ({
                   className="size-6 text-indigo-600"
                   weight="fill"
                 />
-                {/* <Calendar className="size-5 text-gray-600" /> */}
               </div>
               <div className="flex flex-col">
                 <span className="font-semibold">경기일정 참석여부</span>
                 <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
-                  {/* <Timer className="size-5 text-amber-600" /> */}
                   <span className="font-medium text-indigo-700">
                     {new Date(
                       data.data.schedule.attendanceDeadline
@@ -335,36 +427,6 @@ const ScheduleContent = ({
           data.data.schedule.status === "PLAY") &&
           data.data.schedule.startTime <= new Date() && (
             <div className="px-4">
-              {/* <div className="flex justify-between items-center py-2 min-h-13">
-                <div className="flex items-center gap-2">
-                  <CourtBasketballIcon
-                    weight="duotone"
-                    className="size-7 text-gray-700"
-                  />
-                  <h2 className="text-lg font-semibold ">경기</h2>
-                </div>
-                {currentUserId &&
-                  data.data.schedule.createdBy.id === currentUserId && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-base sm:text-sm !font-bold rounded-full gap-1.5 text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
-                      onClick={async () => {
-                        const result = await addMatch(scheduleId);
-                        if (result.success) {
-                          refetch();
-                        } else {
-                          console.log(result.error, "result.error");
-                        }
-                      }}
-                    >
-                      <PlusIcon className="size-4" strokeWidth={2.75} />
-                      추가
-                    </Button>
-                  )}
-              </div> */}
-
-              {/* 경기 정보 */}
               {data.data.schedule.matches.length > 0 ? (
                 <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
                   {data.data.schedule.matches.map((match, index) => (
@@ -388,7 +450,6 @@ const ScheduleContent = ({
                             className="size-5 text-gray-800"
                           />
                           <span className="font-medium">{index + 1}경기</span>
-                          {/* <span>{match.}</span> */}
                         </div>
                         <div className="flex items-center gap-1 font-medium">
                           <span className="text-sm text-green-600 font-semibold px-1.5">
@@ -410,77 +471,136 @@ const ScheduleContent = ({
               )}
 
               {/* 경기 추가 버튼 */}
-              {currentUserId &&
-                data.data.schedule.createdBy.id === currentUserId && (
-                  <div className="pt-3">
-                    <Button
-                      type="button"
-                      className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
-                      size="lg"
-                      onClick={async () => {
-                        const result = await addMatch(scheduleId);
-                        if (result.success) {
-                          refetch();
-                        } else {
-                          console.log(result.error, "result.error");
-                        }
-                      }}
-                    >
-                      <div className="size-6 rounded-full bg-white flex items-center justify-center">
-                        <PlusIcon
-                          className="size-5 text-indigo-700"
-                          strokeWidth={2.75}
-                        />
-                      </div>
-                      경기 추가
-                    </Button>
-                  </div>
-                )}
+              {canEditNotice && (
+                <div className="pt-3">
+                  <Button
+                    type="button"
+                    className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
+                    size="lg"
+                    onClick={async () => {
+                      const result = await addMatch(scheduleId);
+                      if (result.success) {
+                        refetch();
+                      } else {
+                        console.log(result.error, "result.error");
+                      }
+                    }}
+                  >
+                    <div className="size-6 rounded-full bg-white flex items-center justify-center">
+                      <PlusIcon
+                        className="size-5 text-indigo-700"
+                        strokeWidth={2.75}
+                      />
+                    </div>
+                    경기 추가
+                  </Button>
+                </div>
+              )}
             </div>
           )}
 
         {/* 공지사항 */}
-        {data.data.schedule.attendances.some(
-          (attendance) => attendance.userId === currentUserId
-        ) && (
+        {shouldShowNoticeSection && (
           <div className="px-4">
             <div className="flex justify-between items-center py-2 min-h-13">
               <div className="flex items-center gap-2">
                 <MegaphoneSimpleIcon
                   weight="fill"
-                  // weight="light"
-                  // weight="duotone"
                   className="size-7 text-stone-500"
                 />
-                <h2 className="text-lg font-semibold ">공지사항</h2>
-                {/* <span className="text-sm text-gray-500">
-                  외부인은 볼 수 없습니다.
-                </span> */}
+                <h2 className="text-lg font-semibold">공지사항</h2>
               </div>
-              <Button
-                size="sm"
-                className="text-base sm:text-sm !font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
-                onClick={() => setIsNoticeOpen(!isNoticeOpen)}
-              >
-                {isNoticeOpen ? "접기" : "펼치기"}
-                {isNoticeOpen ? (
-                  <ChevronUp className="size-4" />
-                ) : (
-                  <ChevronDown className="size-4" />
+              <div className="flex items-center gap-2">
+                {!isEditingNotice && (
+                  <Button
+                    size="sm"
+                    className="text-base sm:text-sm !font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
+                    onClick={() => setIsNoticeOpen(!isNoticeOpen)}
+                  >
+                    {isNoticeOpen ? "접기" : "펼치기"}
+                    {isNoticeOpen ? (
+                      <ChevronUp className="size-4" />
+                    ) : (
+                      <ChevronDown className="size-4" />
+                    )}
+                  </Button>
                 )}
-              </Button>
+              </div>
             </div>
-            {isNoticeOpen ? (
-              Boolean(data?.data.schedule?.description) ? (
-                <p className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-                  {data?.data.schedule?.description ?? "공지사항 없음"}
-                </p>
-              ) : (
-                <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
-                  이용안내가 없습니다.
-                </p>
-              )
-            ) : null}
+
+            {isNoticeOpen && (
+              <div className="space-y-3">
+                {!isEditingNotice ? (
+                  // 읽기 모드
+                  <div>
+                    {hasNoticeContent ? (
+                      <div className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line break-words">
+                        {data?.data?.schedule?.description}
+                      </div>
+                    ) : (
+                      <div className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line break-words min-h-16 flex items-center justify-center sm:text-sm">
+                        이용안내가 없습니다.
+                      </div>
+                    )}
+
+                    {/* 편집 버튼 (글쓴이만) */}
+                    {canEditNotice && (
+                      <div className="pt-3">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-base sm:text-sm font-semibold gap-2"
+                          onClick={handleStartEditNotice}
+                        >
+                          <Edit3 className="size-4" />
+                          {hasNoticeContent ? "수정하기" : "공지사항 추가"}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  // 편집 모드
+                  <div className="space-y-3">
+                    <textarea
+                      ref={textareaRef}
+                      value={noticeContent}
+                      onChange={(e) => setNoticeContent(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="공지사항을 입력해주세요..."
+                      className="w-full min-h-40 p-4 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={handleSaveNotice}
+                        disabled={isSavingNotice}
+                        className="font-semibold gap-2"
+                      >
+                        {isSavingNotice ? (
+                          <Loader2 className="size-4 animate-spin" />
+                        ) : (
+                          <Save className="size-4" />
+                        )}
+                        저장
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleCancelEditNotice}
+                        disabled={isSavingNotice}
+                        className="font-semibold gap-2"
+                      >
+                        <X className="size-4" />
+                        취소
+                      </Button>
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      ESC로 취소, Ctrl+Enter로 저장
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -503,19 +623,62 @@ const ScheduleContent = ({
       </div>
 
       {/* 수정 및 삭제 */}
-      {currentUserId && data.data.schedule.createdBy.id === currentUserId && (
-        <div className="px-4 flex flex-col sm:grid grid-cols-3 gap-2 mt-6">
-          {/* <Button
+      {canEditNotice && (
+        <div className="px-4 flex flex-col gap-2 mt-6">
+          <Button
+            variant="destructive"
             type="button"
-            onClick={() => {
-              router.push(`/schedule/${scheduleId}/edit`);
-            }}
+            onClick={() => setShowDeleteConfirm(true)}
+            disabled={isDeleting}
           >
-            수정
-          </Button> */}
-          <Button variant="destructive" type="button">
-            삭제
+            {isDeleting ? (
+              <>
+                <Loader2 className="size-4 animate-spin mr-2" />
+                삭제 중...
+              </>
+            ) : (
+              "삭제"
+            )}
           </Button>
+        </div>
+      )}
+
+      {/* 삭제 확인 모달 */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
+            <h3 className="font-semibold text-lg mb-2">일정 삭제</h3>
+            <p className="text-gray-600 mb-6">
+              정말로 이 일정을 삭제하시겠습니까?
+              <br />
+              삭제된 일정은 복구할 수 없습니다.
+            </p>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isDeleting}
+              >
+                아니요
+              </Button>
+              <Button
+                variant="destructive"
+                className="flex-1"
+                onClick={handleDeleteSchedule}
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin mr-2" />
+                    삭제 중...
+                  </>
+                ) : (
+                  "예"
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 

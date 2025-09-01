@@ -9,7 +9,7 @@ import {
 } from "@/features/add-schedule/model/actions/get-my-teams";
 import { getScheduleById } from "@/features/edit-schedule/model/actions/get-schedule-by-id.test";
 import { updateSchedule } from "@/features/edit-schedule/model/actions/update-schedule.test";
-import { deleteSchedule } from "@/features/edit-schedule/model/actions/delete-schedule";
+import { deleteSchedule } from "@/app/(main-layout)/schedule/[id]/actions/delete-schedule";
 import EditScheduleForm, { type EditFormData } from "./EditScheduleForm";
 
 // 공통 헤더 컴포넌트 추출

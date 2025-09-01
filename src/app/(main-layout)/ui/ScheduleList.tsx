@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarCheckIcon } from "@phosphor-icons/react";
+import { CalendarCheckIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
@@ -146,6 +146,34 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
           </div>
         </div>
       </div>
+
+      {schedule.status === "PENDING" ? (
+        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-t border-dashed border-slate-300 mt-2">
+          <div className="h-9 flex items-center gap-2 text-sm">
+            <PaperPlaneRightIcon
+              className="size-6 text-emerald-600"
+              weight="fill"
+            />
+            <span className="shrink-0 font-semibold text-sm">대전신청</span>
+            <Separator
+              orientation="vertical"
+              className="!h-3 !w-0.25 bg-gray-300"
+            />
+            <div className="w-full flex items-center gap-1 tracking-tight text-sm">
+              <span className="font-medium text-emerald-700">
+                {schedule.createdAt.toLocaleDateString("ko-KR", {
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}
+                에
+              </span>
+              요청되었습니다.
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {attendanceStatus &&
       attendanceStatus === "UNDECIDED" &&
