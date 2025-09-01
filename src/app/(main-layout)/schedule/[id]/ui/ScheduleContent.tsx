@@ -497,6 +497,14 @@ const ScheduleContent = ({
         <ScheduleComments scheduleId={scheduleId} />
       </div>
 
+      {/* 수정 및 삭제 */}
+      {currentUserId && data.data.schedule.createdBy.id === currentUserId && (
+        <div className="flex items-center justify-center gap-2 mt-6">
+          <Button>수정</Button>
+          <Button>삭제</Button>
+        </div>
+      )}
+
       {/* 만든 날짜와 만든이 */}
       <div className="flex items-center justify-center gap-2 mt-6">
         <span className="text-center text-sm text-gray-500">
