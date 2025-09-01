@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
-import { Textarea } from "@/shared/components/ui/textarea";
+// import { Textarea } from "@/shared/components/ui/textarea";
 import { Input } from "@/shared/components/ui/input";
 import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
@@ -56,7 +56,7 @@ const newFormSchema = z
 
 export type NewFormData = z.infer<typeof newFormSchema>;
 
-const NewForm = ({
+const NewScheduleForm = ({
   teams,
   userId,
 }: {
@@ -376,15 +376,15 @@ const NewForm = ({
         </div>
       </div>
 
-      {/* 시설 이용안내 */}
-      <div className="space-y-3">
-        <Label className="">시설 이용안내</Label>
+      {/* 공지사항 */}
+      {/* <div className="space-y-3">
+        <Label className="">공지사항</Label>
         <Textarea
           {...register("description")}
           className="min-h-24"
-          placeholder="시설 이용안내를 작성해주세요"
+          placeholder="공지사항을 작성해주세요"
         />
-      </div>
+      </div> */}
 
       {/* 참석여부 투표 - 과거 날짜가 아닌 경우에만 표시 */}
       {shouldShowAttendanceVote() && (
@@ -594,4 +594,4 @@ const NewForm = ({
   );
 };
 
-export default NewForm;
+export default NewScheduleForm;

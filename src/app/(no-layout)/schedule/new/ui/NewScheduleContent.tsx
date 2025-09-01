@@ -3,7 +3,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import NewForm from "./NewForm";
+import NewScheduleForm from "./NewScheduleForm";
 // import { getTeam } from "@/features/add-schedule/model/actions/get-my-team";
 // import { Team } from "@prisma/client";
 import {
@@ -11,7 +11,7 @@ import {
   GetTeamsReturn,
 } from "@/features/add-schedule/model/actions/get-my-teams";
 
-const NewContent = ({ userId }: { userId: string }) => {
+const NewScheduleContent = ({ userId }: { userId: string }) => {
   const router = useRouter();
 
   const { data } = useQuery({
@@ -48,10 +48,10 @@ const NewContent = ({ userId }: { userId: string }) => {
         </button>
       </div>
       <div className="space-y-6">
-        <NewForm teams={data.data?.teams} userId={userId} />
+        <NewScheduleForm teams={data.data?.teams} userId={userId} />
       </div>
     </div>
   );
 };
 
-export default NewContent;
+export default NewScheduleContent;

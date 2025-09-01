@@ -426,7 +426,12 @@ const ScheduleContent = ({
                         }
                       }}
                     >
-                      <PlusIcon className="size-5" strokeWidth={2.75} />
+                      <div className="size-6 rounded-full bg-white flex items-center justify-center">
+                        <PlusIcon
+                          className="size-5 text-indigo-700"
+                          strokeWidth={2.75}
+                        />
+                      </div>
                       경기 추가
                     </Button>
                   </div>
@@ -434,7 +439,7 @@ const ScheduleContent = ({
             </div>
           )}
 
-        {/* 시설 이용안내 */}
+        {/* 공지사항 */}
         {data.data.schedule.attendances.some(
           (attendance) => attendance.userId === currentUserId
         ) && (
@@ -447,7 +452,7 @@ const ScheduleContent = ({
                   // weight="duotone"
                   className="size-7 text-stone-500"
                 />
-                <h2 className="text-lg font-semibold ">시설 이용안내</h2>
+                <h2 className="text-lg font-semibold ">공지사항</h2>
                 {/* <span className="text-sm text-gray-500">
                   외부인은 볼 수 없습니다.
                 </span> */}
@@ -468,7 +473,7 @@ const ScheduleContent = ({
             {isNoticeOpen ? (
               Boolean(data?.data.schedule?.description) ? (
                 <p className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line mb-3 break-words">
-                  {data?.data.schedule?.description ?? "이용안내 없음"}
+                  {data?.data.schedule?.description ?? "공지사항 없음"}
                 </p>
               ) : (
                 <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
@@ -499,9 +504,18 @@ const ScheduleContent = ({
 
       {/* 수정 및 삭제 */}
       {currentUserId && data.data.schedule.createdBy.id === currentUserId && (
-        <div className="flex items-center justify-center gap-2 mt-6">
-          <Button>수정</Button>
-          <Button>삭제</Button>
+        <div className="px-4 flex flex-col sm:grid grid-cols-3 gap-2 mt-6">
+          {/* <Button
+            type="button"
+            onClick={() => {
+              router.push(`/schedule/${scheduleId}/edit`);
+            }}
+          >
+            수정
+          </Button> */}
+          <Button variant="destructive" type="button">
+            삭제
+          </Button>
         </div>
       )}
 

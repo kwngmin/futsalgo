@@ -1,8 +1,8 @@
 import { auth } from "@/shared/lib/auth";
-import NewScheduleContent from "./ui/NewScheduleContent";
 import { redirect } from "next/navigation";
+import EditScheduleContent from "./ui/EditScheduleContent";
 
-const NewPage = async () => {
+const EditSchedulePage = async () => {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -10,7 +10,7 @@ const NewPage = async () => {
     return redirect("/");
   }
 
-  return <NewScheduleContent userId={session.user.id} />;
+  return <EditScheduleContent userId={session.user.id} />;
 };
 
-export default NewPage;
+export default EditSchedulePage;
