@@ -18,7 +18,13 @@ type ScheduleListProps = Prisma.ScheduleGetPayload<{
   };
 }>;
 
-const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
+const ScheduleList = ({
+  schedule,
+  myTeams,
+}: {
+  schedule: ScheduleListProps;
+  myTeams: string[];
+}) => {
   const router = useRouter();
   const session = useSession();
   const pathname = usePathname();
@@ -169,7 +175,9 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
                 })}
                 에
               </span>
-              요청되었습니다.
+              {myTeams.includes(schedule.hostTeamId)
+                ? "요청을 보냈습니다."
+                : "요청을 받았습니다."}
             </div>
           </div>
         </div>

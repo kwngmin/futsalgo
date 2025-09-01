@@ -39,6 +39,7 @@ export interface GetSchedulesResponse {
     upcomingSchedules: ScheduleWithDetails[];
     pastSchedules: ScheduleWithDetails[];
     manageableTeams: Team[];
+    myTeams: Team[];
     likes: ScheduleLike[];
   };
 }
@@ -82,6 +83,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
           upcomingSchedules: [],
           pastSchedules,
           manageableTeams: [],
+          myTeams: [],
           likes: [],
         },
       };
@@ -178,6 +180,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         todaysSchedules,
         upcomingSchedules,
         manageableTeams,
+        myTeams: player.teams.map((t) => t.team),
         likes: [],
       },
     };

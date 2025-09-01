@@ -36,6 +36,8 @@ const HomePage = () => {
     return <SchedulePageLoading isPage />;
   }
 
+  const myTeams = data?.data?.myTeams.map((team) => team.id);
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 검색 */}
@@ -82,12 +84,24 @@ const HomePage = () => {
       <div>
         {/* 오늘 경기 */}
         {data?.data?.todaysSchedules?.map((schedule) => {
-          return <ScheduleList schedule={schedule} key={schedule.id} />;
+          return (
+            <ScheduleList
+              schedule={schedule}
+              key={schedule.id}
+              myTeams={myTeams}
+            />
+          );
         })}
 
         {/* 예정된 경기 */}
         {data?.data?.upcomingSchedules?.map((schedule) => {
-          return <ScheduleList schedule={schedule} key={schedule.id} />;
+          return (
+            <ScheduleList
+              schedule={schedule}
+              key={schedule.id}
+              myTeams={myTeams}
+            />
+          );
         })}
 
         {/* 예정된 일정이 없는 경우 */}
@@ -113,7 +127,13 @@ const HomePage = () => {
 
         {/* 지난 경기 */}
         {data?.data?.pastSchedules?.map((schedule) => {
-          return <ScheduleList schedule={schedule} key={schedule.id} />;
+          return (
+            <ScheduleList
+              schedule={schedule}
+              key={schedule.id}
+              myTeams={myTeams}
+            />
+          );
         })}
 
         {error && (
