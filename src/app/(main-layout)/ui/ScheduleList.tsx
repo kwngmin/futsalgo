@@ -23,7 +23,7 @@ const ScheduleList = ({
   myTeams,
 }: {
   schedule: ScheduleListProps;
-  myTeams: string[];
+  myTeams?: string[];
 }) => {
   const router = useRouter();
   const session = useSession();
@@ -153,7 +153,7 @@ const ScheduleList = ({
         </div>
       </div>
 
-      {schedule.status === "PENDING" ? (
+      {myTeams && schedule.status === "PENDING" ? (
         <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-t border-dashed border-slate-300 mt-2">
           <div className="h-9 flex items-center gap-2 text-sm">
             <PaperPlaneRightIcon
@@ -175,7 +175,7 @@ const ScheduleList = ({
                 })}
                 에
               </span>
-              {myTeams.includes(schedule.hostTeamId)
+              {myTeams?.includes(schedule.hostTeamId)
                 ? "요청을 보냈습니다."
                 : "요청을 받았습니다."}
             </div>
