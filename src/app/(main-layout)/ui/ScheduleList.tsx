@@ -96,18 +96,18 @@ const ScheduleList = ({
           className="grow flex flex-col justify-center"
           onClick={() => handleScheduleClick(schedule.id)}
         >
-          <div className="flex items-center gap-2 truncate leading-none h-5 tracking-tight">
+          <div className="flex items-center gap-1.5 truncate leading-none h-5 tracking-tight">
+            <span className="text-gray-800 text-sm">{schedule.place}</span>
+            <Separator
+              orientation="vertical"
+              className="!h-3 !w-0.25 bg-gray-300"
+            />
             <span className="font-medium text-sm text-gray-600">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
               })}
             </span>
-            <Separator
-              orientation="vertical"
-              className="!h-3 !w-0.25 bg-gray-300"
-            />
-            <span className="text-gray-800 text-sm">{schedule.place}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
@@ -155,7 +155,7 @@ const ScheduleList = ({
 
       {myTeams && schedule.status === "PENDING" ? (
         <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1 relative">
-          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-8 bottom-4 rounded-bl-md" />
+          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-6 bottom-4 rounded-bl-md" />
           {myTeams?.includes(schedule.hostTeamId) ? (
             <div className="h-9 flex items-center gap-2 text-sm">
               <HourglassHighIcon
@@ -204,7 +204,7 @@ const ScheduleList = ({
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
         <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1 relative">
-          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-8 bottom-4 rounded-bl-md" />
+          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-6 bottom-4 rounded-bl-md" />
           <div className="h-9 flex items-center gap-2 text-sm">
             <CalendarCheckIcon
               className="size-6 text-indigo-700"
