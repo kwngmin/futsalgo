@@ -572,10 +572,10 @@ const NewScheduleForm = ({
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              저장 중...
+              만들기 중...
             </>
           ) : (
-            "저장"
+            "만들기"
           )}
         </Button>
 

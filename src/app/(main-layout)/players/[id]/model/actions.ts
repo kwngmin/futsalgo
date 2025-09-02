@@ -159,9 +159,9 @@ export async function getPlayer(id: string) {
   try {
     // const currentYear = new Date().getFullYear();
     // 현재 날짜 정보
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
+    // const currentDate = new Date();
+    // const currentYear = currentDate.getFullYear();
+    // const currentMonth = currentDate.getMonth() + 1;
 
     // 기본 사용자 정보 조회
     const player = await prisma.user.findUnique({
@@ -235,12 +235,12 @@ export async function getPlayer(id: string) {
           },
         }),
 
-        // 현재 월 팀원 평가 데이터
+        // 팀원 평가 데이터
         prisma.teamMemberRating.findMany({
           where: {
             toUserId: id,
-            periodYear: currentYear,
-            periodMonth: currentMonth,
+            // periodYear: currentYear,
+            // periodMonth: currentMonth,
           },
           include: {
             fromUser: {

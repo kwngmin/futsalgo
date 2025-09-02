@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarCheckIcon, PaperPlaneRightIcon } from "@phosphor-icons/react";
+import { CalendarCheckIcon, HourglassHighIcon } from "@phosphor-icons/react";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
@@ -155,31 +155,44 @@ const ScheduleList = ({
 
       {myTeams && schedule.status === "PENDING" ? (
         <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-t border-dashed border-slate-300 mt-2">
-          <div className="h-9 flex items-center gap-2 text-sm">
-            <PaperPlaneRightIcon
-              className="size-6 text-emerald-600"
-              weight="fill"
-            />
-            <span className="shrink-0 font-semibold text-sm">대전신청</span>
-            <Separator
-              orientation="vertical"
-              className="!h-3 !w-0.25 bg-gray-300"
-            />
-            <div className="w-full flex items-center gap-1 tracking-tight text-sm">
-              <span className="font-medium text-emerald-700">
-                {schedule.createdAt.toLocaleDateString("ko-KR", {
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
-                에
-              </span>
-              {myTeams?.includes(schedule.hostTeamId)
-                ? "요청을 보냈습니다."
-                : "요청을 받았습니다."}
+          {myTeams?.includes(schedule.hostTeamId) ? (
+            <div className="h-9 flex items-center gap-2 text-sm">
+              <HourglassHighIcon
+                className="size-6 text-amber-700"
+                weight="fill"
+              />
+              {/* <Separator
+             orientation="vertical"
+             className="!h-3 !w-0.25 bg-gray-300"
+           /> */}
+              <div className="w-full flex items-center gap-1 tracking-tight text-sm">
+                <span className="shrink-0 font-semibold text-sm">초청팀</span>
+                응답을 기다리는 중 입니다.
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="h-9 flex items-center gap-2 text-sm">
+              <HourglassHighIcon
+                className="size-6 text-amber-600"
+                weight="fill"
+              />
+              <div className="w-full flex items-center gap-1 tracking-tight text-sm">
+                <span>
+                  <span className="shrink-0 font-semibold text-sm">친선전</span>
+                  을
+                </span>
+                제안 받았습니다. 응답해주세요
+                {/* <span className="font-medium text-emerald-700">
+                  {schedule.createdAt.toLocaleDateString("ko-KR", {
+                    month: "long",
+                    day: "numeric",
+                    // hour: "numeric",
+                    // minute: "numeric",
+                  })}
+                </span> */}
+              </div>
+            </div>
+          )}
         </div>
       ) : null}
 
@@ -195,22 +208,26 @@ const ScheduleList = ({
               className="size-6 text-indigo-700"
               weight="fill"
             />
-            <span className="shrink-0 font-semibold text-sm">참석여부</span>
-            <Separator
+
+            {/* <Separator
               orientation="vertical"
               className="!h-3 !w-0.25 bg-gray-300"
-            />
+            /> */}
             <div className="w-full flex items-center gap-1 tracking-tight text-sm">
-              <span className="font-medium text-indigo-700">
-                {new Date(
-                  schedule.attendanceDeadline as Date
-                ).toLocaleDateString("ko-KR", {
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
+              <span>
+                <span className="font-medium text-indigo-700">
+                  {new Date(
+                    schedule.attendanceDeadline as Date
+                  ).toLocaleDateString("ko-KR", {
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
                 까지
+              </span>
+              <span>
+                <span className="shrink-0 font-semibold text-sm">참석여부</span>
+                를
               </span>
               선택해주세요.
             </div>

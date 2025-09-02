@@ -13,12 +13,15 @@ import {
   Edit3,
   Save,
   X,
+  ClockIcon,
+  MapPinIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import {
   CalendarCheckIcon,
+  HourglassHighIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
@@ -35,6 +38,53 @@ import { deleteSchedule } from "../actions/delete-schedule";
 import { updateScheduleNotice } from "../actions/update-schedule-notice";
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import Image from "next/image";
+import { Separator } from "@/shared/components/ui/separator";
+
+/**
+ * 시간 범위를 한국어 표기 형식으로 변환
+ * @param start 시작 시간 (Date 객체)
+ * @param end 종료 시간 (Date 객체)
+ * @returns 변환된 시간 문자열 (예: "오전 6:00 - 8:00" 또는 "오전 11:00 - 오후 1:00")
+ */
+function formatTimeRange(start: Date, end: Date): string {
+  const startOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    dayPeriod: "short", // 오전/오후
+  };
+
+  const endOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    dayPeriod: "short",
+  };
+
+  const startParts = new Intl.DateTimeFormat(
+    "ko-KR",
+    startOptions
+  ).formatToParts(start);
+  const endParts = new Intl.DateTimeFormat("ko-KR", endOptions).formatToParts(
+    end
+  );
+
+  const startPeriod =
+    startParts.find((p) => p.type === "dayPeriod")?.value ?? "";
+  const startTime = startParts
+    .filter((p) => p.type !== "dayPeriod")
+    .map((p) => p.value)
+    .join("");
+
+  const endPeriod = endParts.find((p) => p.type === "dayPeriod")?.value ?? "";
+  const endTime = endParts
+    .filter((p) => p.type !== "dayPeriod")
+    .map((p) => p.value)
+    .join("");
+
+  if (startPeriod === endPeriod) {
+    return `${startPeriod} ${startTime} - ${endTime}`;
+  }
+  return `${startPeriod} ${startTime} - ${endPeriod} ${endTime}`;
+}
 
 /**
  * @param date YYYY-MM-DD 형식의 날짜 문자열
@@ -267,6 +317,11 @@ const ScheduleContent = ({
   });
   console.log(attendanceIds, "attendances");
 
+  console.log(
+    data.data.schedule.attendanceDeadline,
+    "data.data.schedule.attendanceDeadline"
+  );
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
@@ -288,49 +343,59 @@ const ScheduleContent = ({
       </div>
 
       {/* 공통 */}
-      <div className="w-full flex flex-col items-center justify-center px-4 mb-6">
+      <div className="w-full flex flex-col items-center justify-center px-4 mb-6 gap-1">
         <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
             month: "long",
             day: "numeric",
             weekday: "long",
-            hour: "numeric",
-            minute: "numeric",
           })}
         </span>
-        <div className="w-full flex justify-center items-center gap-1 text-lg tracking-tight">
-          {data.data.schedule?.place}
+        <div className="w-full flex justify-center items-center gap-2 text-base tracking-tight">
+          <div className="flex items-center gap-1">
+            <MapPinIcon className="size-4 text-gray-500" strokeWidth={2} />
+            {data.data.schedule?.place}
+          </div>
+          <Separator
+            orientation="vertical"
+            className="!h-3 !w-0.25 bg-gray-300"
+          />
+          <div className="flex items-center gap-1">
+            <ClockIcon className="size-4 text-gray-500" strokeWidth={2} />
+            {formatTimeRange(
+              new Date(data.data.schedule?.startTime),
+              new Date(data.data.schedule?.endTime)
+            )}
+          </div>
         </div>
       </div>
 
       {/* 친선전 요청 대기 상태 (PENDING) */}
       {data.data.schedule.status === "PENDING" &&
         (isAttendance || data.data.isManager) && (
-          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-amber-50 rounded-2xl p-4 select-none mb-4 border border-amber-200">
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 rounded-2xl px-4 py-2 select-none mb-4 bg-amber-600/5 border border-amber-200">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-full bg-white">
-                <CalendarCheckIcon
+                <HourglassHighIcon
                   className="size-6 text-amber-600"
                   weight="fill"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="font-semibold">대전신청</span>
-                <div className="w-full flex items-center gap-1 tracking-tight text-sm">
-                  {data.data.isManager === "GUEST" ? (
-                    <span className="font-medium text-amber-700">
-                      수락 또는 거절을 선택해주세요.
-                    </span>
-                  ) : (
-                    <span className="font-medium text-amber-700">
-                      초청팀의 대전신청 수락 대기중입니다.
-                    </span>
-                  )}
+              <div className="flex flex-col items-center">
+                {/* <span className="font-semibold">
+                  {data.data.isManager === "GUEST"
+                    ? "친선전을 제안 받았습니다"
+                    : "친선전을 제안했습니다"}
+                </span> */}
+                <div className="w-full flex justify-center items-center gap-1 tracking-tight font-medium">
+                  {data.data.isManager === "GUEST"
+                    ? "친선전을 제안 받았습니다. 응답해주세요"
+                    : "  초청팀 응답을 기다리는 중 입니다."}
                 </div>
               </div>
             </div>
             {data.data.isManager === "GUEST" && (
-              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5">
+              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5 mb-2">
                 <button
                   className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => handleRespondInvitation("ACCEPT")}
@@ -362,7 +427,7 @@ const ScheduleContent = ({
         data.data.schedule.enableAttendanceVote &&
         data.data.schedule.attendanceDeadline &&
         data.data.schedule.attendanceDeadline > new Date() && (
-          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-50 rounded-2xl p-4 select-none mb-4 border border-slate-200">
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-50 rounded-2xl p-4 select-none mb-4 border border-slate-300">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-full bg-white">
                 <CalendarCheckIcon
