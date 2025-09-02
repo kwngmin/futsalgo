@@ -3,7 +3,11 @@
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { InvitationStatus, ScheduleStatus } from "@prisma/client";
+import {
+  InvitationStatus,
+  ScheduleStatus,
+  TeamMemberStatus,
+} from "@prisma/client";
 
 export type RespondTeamInvitationReturn =
   | {
@@ -39,12 +43,24 @@ export async function respondTeamInvitation(
       where: { id: scheduleId },
       include: {
         invitation: true,
+        hostTeam: {
+          include: {
+            members: {
+              where: {
+                status: TeamMemberStatus.APPROVED,
+                banned: false,
+              },
+              select: { userId: true },
+            },
+          },
+        },
         invitedTeam: {
           include: {
             members: {
               where: {
                 userId: userId,
-                status: "APPROVED",
+                status: TeamMemberStatus.APPROVED,
+                banned: false,
                 role: { in: ["OWNER", "MANAGER"] },
               },
             },
@@ -68,7 +84,10 @@ export async function respondTeamInvitation(
     }
 
     // 2. 권한 체크: 초청받은 팀의 OWNER 또는 MANAGER인지 확인
-    if (schedule.invitedTeam?.members.length === 0) {
+    if (
+      !schedule.invitedTeam?.members ||
+      schedule.invitedTeam.members.length === 0
+    ) {
       return {
         success: false,
         error: "초청을 수락/거절할 권한이 없습니다",
@@ -112,6 +131,48 @@ export async function respondTeamInvitation(
           status: newScheduleStatus,
         },
       });
+
+      // 수락인 경우 양 팀 멤버들을 참석자로 추가
+      if (response === "ACCEPT") {
+        // 호스트 팀 멤버 추가
+        if (schedule.hostTeam && schedule.hostTeam.members.length > 0) {
+          await tx.scheduleAttendance.createMany({
+            data: schedule.hostTeam.members.map((member) => ({
+              scheduleId,
+              userId: member.userId,
+              attendanceStatus: "UNDECIDED",
+              teamType: "HOST",
+            })),
+            skipDuplicates: true, // 중복 방지
+          });
+        }
+
+        // 초대받은 팀 멤버 추가
+        const invitedTeamMembers = await tx.team.findUnique({
+          where: { id: schedule.invitedTeamId! },
+          include: {
+            members: {
+              where: {
+                status: TeamMemberStatus.APPROVED,
+                banned: false,
+              },
+              select: { userId: true },
+            },
+          },
+        });
+
+        if (invitedTeamMembers && invitedTeamMembers.members.length > 0) {
+          await tx.scheduleAttendance.createMany({
+            data: invitedTeamMembers.members.map((member) => ({
+              scheduleId,
+              userId: member.userId,
+              attendanceStatus: "UNDECIDED",
+              teamType: "INVITED",
+            })),
+            skipDuplicates: true, // 중복 방지
+          });
+        }
+      }
 
       return {
         invitation: updatedInvitation,

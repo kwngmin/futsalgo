@@ -25,7 +25,11 @@ import {
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
 import ScheduleComments from "./ScheduleComments";
@@ -36,9 +40,14 @@ import { Button } from "@/shared/components/ui/button";
 import { addMatch } from "../actions/add-match";
 import { deleteSchedule } from "../actions/delete-schedule";
 import { updateScheduleNotice } from "../actions/update-schedule-notice";
-import { respondTeamInvitation } from "../actions/respond-team-invitation";
+// import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import Image from "next/image";
 import { Separator } from "@/shared/components/ui/separator";
+import { updateAttendanceStatus } from "../actions/update-attendance-status";
+import {
+  acceptTeamMatchInvitation,
+  rejectTeamMatchInvitation,
+} from "@/features/add-schedule/model/actions/add-new-schedule";
 
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
@@ -162,6 +171,8 @@ const ScheduleContent = ({
     placeholderData: keepPreviousData,
   });
 
+  const queryClient = useQueryClient();
+
   const [isNoticeOpen, setIsNoticeOpen] = useState(true);
   const [isEditingNotice, setIsEditingNotice] = useState(false);
   const [noticeContent, setNoticeContent] = useState("");
@@ -169,6 +180,7 @@ const ScheduleContent = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSavingNotice, setIsSavingNotice] = useState(false);
   const [isRespondingInvitation, setIsRespondingInvitation] = useState(false);
+  const [isUpdatingAttendance, setIsUpdatingAttendance] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -259,7 +271,18 @@ const ScheduleContent = ({
   const handleRespondInvitation = async (response: "ACCEPT" | "DECLINE") => {
     setIsRespondingInvitation(true);
     try {
-      const result = await respondTeamInvitation(scheduleId, response);
+      // const result = await respondTeamInvitation(scheduleId, response);
+      const invitedTeamId = data?.data?.schedule?.invitedTeamId;
+      const result =
+        response === "ACCEPT"
+          ? await acceptTeamMatchInvitation({
+              scheduleId,
+              invitedTeamId: invitedTeamId!,
+            })
+          : await rejectTeamMatchInvitation({
+              scheduleId,
+              // reason: "거절 이유",
+            });
       if (result.success) {
         refetch(); // 데이터 새로고침
         if (response === "ACCEPT") {
@@ -275,6 +298,27 @@ const ScheduleContent = ({
       alert("초청 응답에 실패했습니다.");
     } finally {
       setIsRespondingInvitation(false);
+    }
+  };
+
+  // 참석 상태 업데이트 핸들러
+  const handleUpdateAttendanceStatus = async (
+    status: "ATTENDING" | "NOT_ATTENDING"
+  ) => {
+    setIsUpdatingAttendance(true);
+    try {
+      const result = await updateAttendanceStatus(scheduleId, status);
+      if (result.success) {
+        refetch(); // 데이터 새로고침
+        queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("참석 상태 업데이트 실패:", error);
+      alert("참석 상태 업데이트에 실패했습니다.");
+    } finally {
+      setIsUpdatingAttendance(false);
     }
   };
 
@@ -383,20 +427,15 @@ const ScheduleContent = ({
                 />
               </div>
               <div className="flex flex-col items-center">
-                {/* <span className="font-semibold">
-                  {data.data.isManager === "GUEST"
-                    ? "친선전을 제안 받았습니다"
-                    : "친선전을 제안했습니다"}
-                </span> */}
                 <div className="w-full flex justify-center items-center gap-1 tracking-tight font-medium">
                   {data.data.isManager === "GUEST"
                     ? "친선전을 제안 받았습니다. 응답해주세요"
-                    : "  초청팀 응답을 기다리는 중 입니다."}
+                    : "초청팀 응답을 기다리는 중입니다."}
                 </div>
               </div>
             </div>
             {data.data.isManager === "GUEST" && (
-              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5">
+              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
                 <button
                   className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => handleRespondInvitation("ACCEPT")}
@@ -438,7 +477,7 @@ const ScheduleContent = ({
               </div>
               <div className="flex flex-col">
                 <span className="font-semibold">경기일정 참석여부</span>
-                <div className="w-full flex items-center gap-1 tracking-tight text-sm ">
+                <div className="w-full flex items-center gap-1 tracking-tight text-sm">
                   <span className="font-medium text-indigo-700">
                     {new Date(
                       data.data.schedule.attendanceDeadline
@@ -454,20 +493,52 @@ const ScheduleContent = ({
                 </div>
               </div>
             </div>
-            <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5 ">
-              <button className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700">
-                {isAttendanceStatus === "ATTENDING" ? (
-                  <SquareCheckBigIcon className="size-5" />
+            <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
+              <button
+                className={`sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isAttendanceStatus === "ATTENDING"
+                    ? "text-white bg-indigo-600 hover:bg-indigo-700"
+                    : "text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
+                }`}
+                onClick={() => handleUpdateAttendanceStatus("ATTENDING")}
+                disabled={isUpdatingAttendance}
+              >
+                {isUpdatingAttendance ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : isAttendanceStatus !== "ATTENDING" ? (
+                  <Square className={`size-5 text-indigo-600`} />
                 ) : (
-                  <Square className="size-5" />
+                  <SquareCheckBigIcon
+                    className={`size-5 ${
+                      isAttendanceStatus === "ATTENDING"
+                        ? "text-white"
+                        : "text-indigo-600"
+                    }`}
+                  />
                 )}
                 참석
               </button>
-              <button className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-destructive bg-red-600/5 hover:bg-red-600/10">
-                {isAttendanceStatus === "NOT_ATTENDING" ? (
-                  <SquareCheckBigIcon className="size-5" />
+              <button
+                className={`sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed ${
+                  isAttendanceStatus === "NOT_ATTENDING"
+                    ? "text-white bg-red-600 hover:bg-red-700"
+                    : "text-red-600 bg-red-50 hover:bg-red-100"
+                }`}
+                onClick={() => handleUpdateAttendanceStatus("NOT_ATTENDING")}
+                disabled={isUpdatingAttendance}
+              >
+                {isUpdatingAttendance ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : isAttendanceStatus !== "NOT_ATTENDING" ? (
+                  <Square className={`size-5 text-red-600`} />
                 ) : (
-                  <Square className="size-5" />
+                  <SquareCheckBigIcon
+                    className={`size-5 ${
+                      isAttendanceStatus === "NOT_ATTENDING"
+                        ? "text-white"
+                        : "text-red-600"
+                    }`}
+                  />
                 )}
                 불참
               </button>
