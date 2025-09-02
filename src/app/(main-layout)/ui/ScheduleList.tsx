@@ -85,7 +85,7 @@ const ScheduleList = ({
     <div className="flex flex-col py-1.5 select-none">
       <div className="flex px-4 gap-3 cursor-pointer items-center">
         <div
-          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 pb-1`}
+          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 pb-1 z-10`}
         >
           <div className="font-medium text-xs text-gray-500">{weekday}</div>
           <div className="font-semibold">
@@ -154,7 +154,8 @@ const ScheduleList = ({
       </div>
 
       {myTeams && schedule.status === "PENDING" ? (
-        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1">
+        <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1 relative">
+          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-8 bottom-4 rounded-bl-md" />
           {myTeams?.includes(schedule.hostTeamId) ? (
             <div className="h-9 flex items-center gap-2 text-sm">
               <HourglassHighIcon
@@ -202,7 +203,8 @@ const ScheduleList = ({
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1">
+        <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1 relative">
+          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-8 bottom-4 rounded-bl-md" />
           <div className="h-9 flex items-center gap-2 text-sm">
             <CalendarCheckIcon
               className="size-6 text-indigo-700"
