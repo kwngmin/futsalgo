@@ -605,7 +605,7 @@ const ScheduleContent = ({
                       </div>
                     ) : (
                       <div className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line break-words min-h-16 flex items-center justify-center sm:text-sm">
-                        이용안내가 없습니다.
+                        공지사항이 없습니다.
                       </div>
                     )}
 
@@ -613,9 +613,9 @@ const ScheduleContent = ({
                     {canEditNotice && (
                       <div className="pt-3">
                         <Button
-                          size="sm"
+                          // size="sm"
                           variant="outline"
-                          className="text-base sm:text-sm font-semibold gap-2"
+                          className="text-base sm:text-sm font-semibold gap-2 border-gray-400"
                           onClick={handleStartEditNotice}
                         >
                           <Edit3 className="size-4" />
@@ -688,12 +688,56 @@ const ScheduleContent = ({
         <ScheduleComments scheduleId={scheduleId} />
       </div>
 
+      {/* 만든 날짜와 만든이 */}
+      <div className="flex items-center justify-center gap-2 mt-6">
+        <span className="text-center text-sm text-gray-500">
+          만든 날:{" "}
+          {data?.data?.schedule?.startTime
+            ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
+                "ko-KR",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
+              )
+            : ""}
+        </span>
+        <div
+          className="flex items-center gap-2 group cursor-pointer"
+          onClick={() => {
+            router.push(`/players/${data.data.schedule?.createdBy.id}`);
+          }}
+        >
+          <Image
+            src={data.data.schedule?.createdBy.image ?? ""}
+            alt="avatar"
+            width={24}
+            height={24}
+            className="rounded-lg"
+          />
+          <span className="text-sm font-medium text-gray-500 group-hover:underline group-hover:text-gray-700 underline-offset-2">
+            {data.data.schedule?.createdBy.nickname}
+          </span>
+        </div>
+      </div>
+
       {/* 수정 및 삭제 */}
       {canEditNotice && (
         <div className="px-4 flex flex-col gap-2 mt-6">
-          <Button
-            variant="destructive"
+          {/* <Button variant="destructive" type="button">
+            {isDeleting ? (
+              <>
+                <Loader2 className="size-4 animate-spin mr-2" />
+                삭제 중...
+              </>
+            ) : (
+              "삭제"
+            )}
+          </Button> */}
+          <button
             type="button"
+            className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-30 disabled:cursor-default"
             onClick={() => setShowDeleteConfirm(true)}
             disabled={isDeleting}
           >
@@ -705,7 +749,7 @@ const ScheduleContent = ({
             ) : (
               "삭제"
             )}
-          </Button>
+          </button>
         </div>
       )}
 
@@ -747,40 +791,6 @@ const ScheduleContent = ({
           </div>
         </div>
       )}
-
-      {/* 만든 날짜와 만든이 */}
-      <div className="flex items-center justify-center gap-2 mt-6">
-        <span className="text-center text-sm text-gray-500">
-          만든 날:{" "}
-          {data?.data?.schedule?.startTime
-            ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
-                "ko-KR",
-                {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }
-              )
-            : ""}
-        </span>
-        <div
-          className="flex items-center gap-2 group cursor-pointer"
-          onClick={() => {
-            router.push(`/players/${data.data.schedule?.createdBy.id}`);
-          }}
-        >
-          <Image
-            src={data.data.schedule?.createdBy.image ?? ""}
-            alt="avatar"
-            width={24}
-            height={24}
-            className="rounded-lg"
-          />
-          <span className="text-sm font-medium text-gray-500 group-hover:underline group-hover:text-gray-700 underline-offset-2">
-            {data.data.schedule?.createdBy.nickname}
-          </span>
-        </div>
-      </div>
     </div>
   );
 };
