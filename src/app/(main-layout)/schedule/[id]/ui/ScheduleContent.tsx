@@ -373,7 +373,7 @@ const ScheduleContent = ({
       {/* 친선전 요청 대기 상태 (PENDING) */}
       {data.data.schedule.status === "PENDING" &&
         (isAttendance || data.data.isManager) && (
-          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 rounded-2xl px-4 py-2 select-none mb-4 bg-amber-600/5 border border-amber-200">
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 rounded-2xl p-4 select-none mb-4 bg-amber-600/5 border border-amber-200">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-full bg-white">
                 <HourglassHighIcon
@@ -395,7 +395,7 @@ const ScheduleContent = ({
               </div>
             </div>
             {data.data.isManager === "GUEST" && (
-              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5 mb-2">
+              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center *:cursor-pointer gap-1.5">
                 <button
                   className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => handleRespondInvitation("ACCEPT")}
