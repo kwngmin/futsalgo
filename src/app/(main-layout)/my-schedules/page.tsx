@@ -92,6 +92,8 @@ const MySchedulesPage = () => {
     (data.data?.upcomingSchedules?.length || 0) +
     (data.data?.pastSchedules?.length || 0);
 
+  const myTeams = data?.data?.myTeams.map((team) => team.id);
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 뒤로가기와 제목, 검색 */}
@@ -128,12 +130,24 @@ const MySchedulesPage = () => {
       <div className="">
         {/* 오늘 경기 */}
         {data.data?.todaysSchedules?.map((schedule) => {
-          return <ScheduleList schedule={schedule} key={schedule.id} />;
+          return (
+            <ScheduleList
+              schedule={schedule}
+              key={schedule.id}
+              myTeams={myTeams}
+            />
+          );
         })}
 
         {/* 예정된 경기 */}
         {data.data?.upcomingSchedules?.map((schedule) => {
-          return <ScheduleList schedule={schedule} key={schedule.id} />;
+          return (
+            <ScheduleList
+              schedule={schedule}
+              key={schedule.id}
+              myTeams={myTeams}
+            />
+          );
         })}
 
         {/* 예정된 일정이 없는 경우 */}
@@ -156,7 +170,13 @@ const MySchedulesPage = () => {
 
         {/* 지난 경기 */}
         {data.data?.pastSchedules?.map((schedule) => {
-          return <ScheduleList schedule={schedule} key={schedule.id} />;
+          return (
+            <ScheduleList
+              schedule={schedule}
+              key={schedule.id}
+              myTeams={myTeams}
+            />
+          );
         })}
 
         {/* 전체 일정이 없는 경우 */}
