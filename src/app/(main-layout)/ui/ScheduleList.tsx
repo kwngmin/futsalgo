@@ -154,7 +154,7 @@ const ScheduleList = ({
       </div>
 
       {myTeams && schedule.status === "PENDING" ? (
-        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-t border-dashed border-slate-300 mt-2">
+        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1">
           {myTeams?.includes(schedule.hostTeamId) ? (
             <div className="h-9 flex items-center gap-2 text-sm">
               <HourglassHighIcon
@@ -202,7 +202,7 @@ const ScheduleList = ({
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-t border-dashed border-slate-300 mt-2">
+        <div className="mx-4 flex justify-between items-center px-4 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 mt-1">
           <div className="h-9 flex items-center gap-2 text-sm">
             <CalendarCheckIcon
               className="size-6 text-indigo-700"
