@@ -199,7 +199,8 @@ const ScheduleContent = ({
 
   const canEditNotice = currentUserId === data?.data?.schedule?.createdBy.id;
   const hasNoticeContent = Boolean(data?.data?.schedule?.description);
-  const shouldShowNoticeSection = canEditNotice || hasNoticeContent;
+  const shouldShowNoticeSection =
+    isAttendance && (canEditNotice || hasNoticeContent);
 
   const handleGoBack = () => {
     if (searchParams.get("tab") === "/my-schedules") {
@@ -517,9 +518,9 @@ const ScheduleContent = ({
                           <span className="font-medium">{index + 1}경기</span>
                         </div>
                         <div className="flex items-center gap-1 font-medium">
-                          <span className="text-sm text-green-600 font-semibold px-1.5">
+                          {/* <span className="text-sm text-green-600 font-semibold px-1.5">
                             스코어
-                          </span>
+                          </span> */}
                           <span className="text-base text-gray-800 min-w-12 px-1 text-center">
                             {match.homeScore} - {match.awayScore}
                           </span>
