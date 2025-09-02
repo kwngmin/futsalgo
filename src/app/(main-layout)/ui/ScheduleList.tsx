@@ -154,8 +154,8 @@ const ScheduleList = ({
       </div>
 
       {myTeams && schedule.status === "PENDING" ? (
-        <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 relative">
-          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-5 bottom-4 rounded-bl-md" />
+        <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-200 relative">
+          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-5 bottom-4 rounded-bl-sm" />
           {myTeams?.includes(schedule.hostTeamId) ? (
             <div className="h-9 flex items-center gap-2 text-sm">
               <HourglassHighIcon
@@ -203,8 +203,8 @@ const ScheduleList = ({
       schedule.enableAttendanceVote &&
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
-        <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-300 relative">
-          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-5 bottom-4 rounded-bl-md" />
+        <div className="mx-4 flex justify-between items-center px-8 gap-2 bg-gradient-to-b from-transparent to-slate-100/80 rounded-b-xl border-b border-slate-200 relative">
+          <div className="absolute border-l border-b border-gray-300 left-3 w-3 h-5 bottom-4 rounded-bl-sm" />
           <div className="h-9 flex items-center gap-2 text-sm">
             <CalendarCheckIcon
               className="size-6 text-indigo-700"
