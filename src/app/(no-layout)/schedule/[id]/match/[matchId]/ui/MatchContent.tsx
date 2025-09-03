@@ -286,7 +286,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             <GoalRecord matchId={data.match.id} lineups={data.lineups} />
           )}
 
-        {/* 출전 명단 */}
+        {/* 팀 명단 */}
         <div className="px-4">
           {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
             <div className="flex items-center gap-2">
@@ -326,7 +326,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
               <UserListIcon className="size-7 text-stone-500" weight="fill" />
-              <h2 className="text-lg font-semibold">출전 명단</h2>
+              <h2 className="text-lg font-semibold">팀 명단</h2>
             </div>
             {data.permissions.isEditable && (
               <div className="flex items-center gap-3">
