@@ -25,9 +25,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {goal.isOwnGoal && (
-              <span className="text-sm text-destructive font-medium">
-                자책골
-              </span>
+              <span className="text-sm text-destructive">자책골</span>
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <div className="flex items-center gap-1">
@@ -74,9 +72,7 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {goal.isOwnGoal && (
-              <span className="text-sm text-destructive font-medium">
-                자책골
-              </span>
+              <span className="text-sm text-destructive">자책골</span>
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
               <div className="flex items-center gap-1">
