@@ -21,8 +21,8 @@ const Lineup = ({
   }
 
   return (
-    <div className="py-3 bg-gray-50 rounded-2xl">
-      <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-10 rounded-md mx-3 mb-2 bg-white">
+    <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 rounded-2xl overflow-hidden">
+      <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
         {/* <div
           className={`size-2 rounded-full ${
             side === "home" ? "bg-indigo-600" : "bg-emerald-600"
@@ -40,7 +40,7 @@ const Lineup = ({
         lineups.map((player) => (
           <div
             key={player.id}
-            className="flex items-center gap-2 px-4 h-14 select-none group cursor-pointer hover:bg-gray-50 border-b last:border-b-0 border-gray-100"
+            className="flex items-center gap-2 px-4 h-14 select-none group cursor-pointer hover:bg-gray-50 border-b last:border-b-0 border-gray-200"
             onClick={() => router.push(`/players/${player.user.id}`)}
           >
             {player.user.image ? (
