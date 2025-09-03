@@ -13,12 +13,17 @@ import { GoalItem } from "./GoalItem";
 import { LineupEditItem } from "./LineupEditItem";
 import { deleteGoalRecord } from "../actions/create-goal-record";
 import {
+  deleteMatch,
+  toggleSides,
+  updateSquadLineup,
+  updateTeamMatchLineup,
+} from "../actions/match-actions";
+import {
   ClockCounterClockwiseIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
   UserListIcon,
 } from "@phosphor-icons/react";
-// import { SoccerBallIcon } from "@phosphor-icons/react";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -28,7 +33,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<"view" | "edit">("view");
-
   const [isLoading, setIsLoading] = useState(false);
 
   // 골 기록을 기반으로 각 시점의 점수 계산 (useMemo로 최적화)
@@ -97,6 +101,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
   // 랜덤 팀 나누기 핸들러
   const handleShuffleLineups = async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
       const result = await shuffleLineupsAdvanced(data.match.id);
       if (result.success) {
@@ -108,6 +115,78 @@ const MatchContent = ({ data }: MatchContentProps) => {
     } catch (error) {
       console.error("Shuffle error:", error);
       alert("오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 사이드 변경 핸들러
+  const handleToggleSides = async () => {
+    if (isLoading) return;
+
+    if (!confirm("홈과 어웨이 사이드를 서로 바꾸시겠습니까?")) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await toggleSides(data.match.id);
+      if (result.success) {
+        alert("사이드 변경이 완료되었습니다");
+      } else {
+        console.error(result.error);
+        alert("사이드 변경에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("사이드 변경 오류:", error);
+      alert("오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 명단 업데이트 핸들러
+  const handleUpdateLineup = async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+    try {
+      let result;
+      if (data.match.schedule.matchType === "SQUAD") {
+        result = await updateSquadLineup(data.match.id);
+      } else {
+        result = await updateTeamMatchLineup(data.match.id);
+      }
+
+      if (result.success) {
+        alert(result.message || "명단 업데이트가 완료되었습니다");
+      } else {
+        console.error(result.error);
+        alert(result.error || "명단 업데이트에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("명단 업데이트 오류:", error);
+      alert("오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 경기 삭제 핸들러
+  const handleDeleteMatch = async () => {
+    if (isLoading) return;
+
+    if (!confirm("경기를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await deleteMatch(data.match.id, data.match.scheduleId);
+    } catch (error) {
+      console.error("경기 삭제 오류:", error);
+      alert("경기 삭제에 실패했습니다.");
+      setIsLoading(false);
     }
   };
 
@@ -155,8 +234,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
           />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 ">
-            {/* <span className="text-sm text-gray-500">사이드</span> */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
             <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto pb-6">
               <span>{data.match.homeScore}</span>
               <span>-</span>
@@ -207,37 +285,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 </div>
               </div>
             </div>
-            {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-b-2 border-gray-300">
-              <div className="flex items-center gap-2">
-                <History className="size-5 text-gray-600" />
-                <span className="text-base font-medium">득점 기록</span>
-              </div>
-              <div className="flex items-center gap-1.5 justify-center">
-                <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
-                  <SoccerBallIcon
-                    className="size-3 text-gray-700"
-                    weight="fill"
-                  />
-                  <span className="text-xs font-medium">골</span>
-                </div>
-                <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
-                  <SneakerMoveIcon
-                    className="size-3 text-gray-700"
-                    weight="fill"
-                  />
-                  <span className="text-xs font-medium">어시스트</span>
-                </div>
-                <div className="flex items-center gap-1 bg-destructive/5 rounded-full px-2 h-6">
-                  <SoccerBallIcon
-                    className="size-3 text-destructive"
-                    weight="fill"
-                  />
-                  <span className="text-xs font-medium text-destructive">
-                    자책골
-                  </span>
-                </div>
-              </div>
-            </div> */}
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
@@ -288,41 +335,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
         {/* 팀 명단 */}
         <div className="px-4">
-          {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
-            <div className="flex items-center gap-2">
-              <ClipboardList className="size-5 text-gray-600" />
-              <span className="text-base font-medium">팀 명단</span>
-            </div>
-            {data.permissions.isEditable && (
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">모드</span>
-                <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
-                  <button
-                    type="button"
-                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all ${
-                      mode === "view"
-                        ? "bg-white shadow-xs"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
-                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
-                  >
-                    보기
-                  </button>
-                  <button
-                    type="button"
-                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer  transition-all ${
-                      mode === "edit"
-                        ? "bg-white shadow-xs"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
-                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
-                  >
-                    수정
-                  </button>
-                </div>
-              </div>
-            )}
-          </div> */}
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
               <UserListIcon className="size-7 text-stone-500" weight="fill" />
@@ -339,21 +351,19 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         ? "bg-white shadow-xs"
                         : "text-gray-500 hover:text-gray-700"
                     }`}
-                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
+                    onClick={() => setMode("view")}
                   >
-                    {/* {mode === "view" ? "보기" : "수정"} */}
                     보기
                   </button>
                   <button
                     type="button"
-                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer  transition-all ${
+                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all ${
                       mode === "edit"
                         ? "bg-white shadow-xs"
                         : "text-gray-500 hover:text-gray-700"
                     }`}
-                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
+                    onClick={() => setMode("edit")}
                   >
-                    {/* {mode === "view" ? "보기" : "수정"} */}
                     수정
                   </button>
                 </div>
@@ -386,7 +396,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 <div className="grid grid-cols-2 gap-2 pt-4">
                   <button
                     type="button"
-                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+                    disabled={isLoading}
+                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleShuffleLineups}
                   >
                     <Dices className="size-5 text-gray-400" />
@@ -396,7 +407,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </button>
                   <button
                     type="button"
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+                    disabled={isLoading}
+                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
                       <RefreshCcw className="size-5 text-gray-400" />
@@ -407,10 +420,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
+                <div className="grid grid-cols-2 gap-2 pt-4">
                   <button
                     type="button"
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+                    disabled={isLoading}
+                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleToggleSides}
                   >
                     <div className="flex items-center gap-2">
                       <ArrowLeftRight className="size-5 text-gray-400" />
@@ -421,7 +436,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </button>
                   <button
                     type="button"
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors"
+                    disabled={isLoading}
+                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
                       <RefreshCcw className="size-5 text-gray-400" />
@@ -435,7 +452,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
               <button
                 type="button"
-                className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium"
+                disabled={isLoading}
+                className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleDeleteMatch}
               >
                 경기 삭제
               </button>
