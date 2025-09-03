@@ -154,7 +154,30 @@ const PlayerContent = ({ id }: { id: string }) => {
               {isFollowing ? "팔로잉" : "팔로우"}
             </button>
           )}
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          <button
+            className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+            type="button"
+            onClick={async () => {
+              console.log(process.env.NODE_ENV, "env");
+              try {
+                if (process.env.NODE_ENV === "development") {
+                  console.log("development");
+                  await navigator.clipboard.writeText(
+                    `localhost:3000/players/${id}`
+                  );
+                } else {
+                  console.log("production");
+                  await navigator.clipboard.writeText(
+                    `www.futsalgo.com/players/${id}`
+                  );
+                }
+              } catch (error) {
+                console.error(error, "error");
+              } finally {
+                alert("URL이 복사되었습니다.");
+              }
+            }}
+          >
             <Share className="size-5" />
           </button>
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">

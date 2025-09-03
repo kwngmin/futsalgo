@@ -381,7 +381,30 @@ const ScheduleContent = ({
           {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
         </span>
         <div className="flex items-center justify-end gap-1.5">
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
+          <button
+            className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+            type="button"
+            onClick={async () => {
+              console.log(process.env.NODE_ENV, "env");
+              try {
+                if (process.env.NODE_ENV === "development") {
+                  console.log("development");
+                  await navigator.clipboard.writeText(
+                    `localhost:3000/schedule/${scheduleId}`
+                  );
+                } else {
+                  console.log("production");
+                  await navigator.clipboard.writeText(
+                    `www.futsalgo.com/schedule/${scheduleId}`
+                  );
+                }
+              } catch (error) {
+                console.error(error, "error");
+              } finally {
+                alert("URL이 복사되었습니다.");
+              }
+            }}
+          >
             <Share className="size-5" />
           </button>
         </div>
