@@ -20,6 +20,7 @@ import { NavigationButton } from "./NavigationButton";
 import { GoalItem } from "./GoalItem";
 import { LineupEditItem } from "./LineupEditItem";
 import { deleteGoalRecord } from "../actions/create-goal-record";
+import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
 // import { SoccerBallIcon } from "@phosphor-icons/react";
 
 interface MatchContentProps {
@@ -180,6 +181,32 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 <span className="text-base font-medium">골 & 어시스트</span>
               </div>
             </div> */}
+            <div className="flex items-center gap-2 justify-center mb-4">
+              {/* <span className="text-sm font-medium">구분</span> */}
+              <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
+                <SoccerBallIcon
+                  className="size-3 text-gray-700"
+                  weight="fill"
+                />
+                <span className="text-xs font-medium">골</span>
+              </div>
+              <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
+                <SneakerMoveIcon
+                  className="size-3 text-gray-700"
+                  weight="fill"
+                />
+                <span className="text-xs font-medium">어시스트</span>
+              </div>
+              <div className="flex items-center gap-1 bg-destructive/5 rounded-full px-2 h-6">
+                <SoccerBallIcon
+                  className="size-3 text-destructive"
+                  weight="fill"
+                />
+                <span className="text-xs font-medium text-destructive">
+                  자책골
+                </span>
+              </div>
+            </div>
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}

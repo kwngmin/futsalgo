@@ -1,5 +1,6 @@
 "use client";
 
+import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
 // import {
 //     SneakerMoveIcon, //
 //   SoccerBallIcon,
@@ -24,19 +25,31 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {goal.isOwnGoal && (
-              <span className="text-sm text-muted-foreground font-medium">
+              <span className="text-sm text-destructive font-medium">
                 자책골
               </span>
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
-              <span className="text-sm text-muted-foreground font-medium">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-              </span>
+              <div className="flex items-center gap-1">
+                <span className="text-sm text-muted-foreground font-medium">
+                  {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+                </span>
+                <SneakerMoveIcon
+                  className="size-3 text-gray-600"
+                  weight="fill"
+                />
+              </div>
             )}
           </div>
+          <SoccerBallIcon
+            className={`size-4 ${
+              goal.isOwnGoal ? "text-destructive" : "text-gray-700"
+            }`}
+            weight="fill"
+          />
         </div>
 
-        <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-medium text-muted-foreground">
+        <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none font-medium text-muted-foreground">
           {scoreAtTime}
         </div>
         <div className="w-full" />
@@ -44,36 +57,43 @@ export const GoalItem = ({ goal, scoreAtTime, isHome }: GoalItemProps) => (
     ) : (
       <>
         <div className="w-full" />
-        <div className="flex justify-center items-center w-14 shrink-0 h-6 leading-none font-medium text-muted-foreground">
+        <div className="flex justify-center items-center w-12 shrink-0 h-6 leading-none font-medium text-muted-foreground">
           {scoreAtTime}
         </div>
         <div className="w-full flex justify-start items-center gap-1.5">
-          {/* <SoccerBallIcon
-            className={`size-5 sm:size-4 ${
-              goal.isOwnGoal ? "text-destructive" : ""
+          <SoccerBallIcon
+            className={`size-4 ${
+              goal.isOwnGoal ? "text-destructive" : "text-gray-700"
             }`}
             weight="fill"
-          /> */}
+          />
+
           <div className="flex flex-col">
             <span className="font-semibold leading-tight">
               {/* <span className="text-sm sm:text-base font-semibold leading-tight"> */}
               {goal.isScoredByMercenary ? "용병" : goal.scorer?.nickname}
             </span>
             {goal.isOwnGoal && (
-              <span className="text-sm text-muted-foreground font-medium">
+              <span className="text-sm text-destructive font-medium">
                 자책골
               </span>
             )}
             {(goal.isAssistedByMercenary || goal.assistId) && (
-              <span className="text-sm text-muted-foreground font-medium">
-                {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
-                {/* {`${
+              <div className="flex items-center gap-1">
+                <SneakerMoveIcon
+                  className="size-3 text-gray-600"
+                  weight="fill"
+                />
+                <span className="text-sm text-muted-foreground font-medium">
+                  {goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname}
+                  {/* {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
                 } 어시스트`} */}
-                {/* {`${
+                  {/* {`${
                   goal.isAssistedByMercenary ? "용병" : goal.assist?.nickname
                 }${!hasPermission ? " 어시스트" : ""}`} */}
-              </span>
+                </span>
+              </div>
             )}
           </div>
         </div>
