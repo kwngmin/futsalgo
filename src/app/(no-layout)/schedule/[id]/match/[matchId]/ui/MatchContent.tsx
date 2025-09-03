@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  ArrowLeftRight,
-  ClipboardList,
-  Dices,
-  Minus,
-  RefreshCcw,
-  // Trash2,
-  X,
-} from "lucide-react";
+import { ArrowLeftRight, Dices, Minus, RefreshCcw, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -20,7 +12,12 @@ import { NavigationButton } from "./NavigationButton";
 import { GoalItem } from "./GoalItem";
 import { LineupEditItem } from "./LineupEditItem";
 import { deleteGoalRecord } from "../actions/create-goal-record";
-import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
+import {
+  ClockCounterClockwiseIcon,
+  SneakerMoveIcon,
+  SoccerBallIcon,
+  UserListIcon,
+} from "@phosphor-icons/react";
 // import { SoccerBallIcon } from "@phosphor-icons/react";
 
 interface MatchContentProps {
@@ -175,42 +172,75 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {/* 골 기록 */}
         {goalsWithScore.length > 0 && (
           <div className="px-4">
-            {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
+            <div className="flex justify-between items-center py-2 min-h-13">
               <div className="flex items-center gap-2">
-                <History className="size-5 text-gray-600" />
-                <span className="text-base font-medium">골 & 어시스트</span>
-              </div>
-            </div> */}
-            <div className="flex items-center gap-2 justify-center mb-4">
-              {/* <span className="text-sm font-medium">구분</span> */}
-              <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
-                <SoccerBallIcon
-                  className="size-3 text-gray-700"
+                <ClockCounterClockwiseIcon
+                  className="size-7 text-stone-500"
                   weight="fill"
                 />
-                <span className="text-xs font-medium">골</span>
+                <h2 className="text-lg font-semibold">득점기록</h2>
               </div>
-              <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
-                <SneakerMoveIcon
-                  className="size-3 text-gray-700"
-                  weight="fill"
-                />
-                <span className="text-xs font-medium">어시스트</span>
-              </div>
-              <div className="flex items-center gap-1 bg-destructive/5 rounded-full px-2 h-6">
-                <SoccerBallIcon
-                  className="size-3 text-destructive"
-                  weight="fill"
-                />
-                <span className="text-xs font-medium text-destructive">
-                  자책골
-                </span>
+              <div className="flex items-center gap-1 justify-center">
+                <div className="flex items-center gap-1 rounded-full px-2 h-6">
+                  <SoccerBallIcon
+                    className="size-3 text-gray-700"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium">골</span>
+                </div>
+                <div className="flex items-center gap-1 rounded-full px-2 h-6">
+                  <SneakerMoveIcon
+                    className="size-3 text-gray-700"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium">어시스트</span>
+                </div>
+                <div className="flex items-center gap-1 rounded-full px-2 h-6">
+                  <SoccerBallIcon
+                    className="size-3 text-destructive"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium text-destructive">
+                    자책골
+                  </span>
+                </div>
               </div>
             </div>
+            {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3 border-b-2 border-gray-300">
+              <div className="flex items-center gap-2">
+                <History className="size-5 text-gray-600" />
+                <span className="text-base font-medium">득점 기록</span>
+              </div>
+              <div className="flex items-center gap-1.5 justify-center">
+                <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
+                  <SoccerBallIcon
+                    className="size-3 text-gray-700"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium">골</span>
+                </div>
+                <div className="flex items-center gap-1 bg-slate-100 rounded-full px-2 h-6">
+                  <SneakerMoveIcon
+                    className="size-3 text-gray-700"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium">어시스트</span>
+                </div>
+                <div className="flex items-center gap-1 bg-destructive/5 rounded-full px-2 h-6">
+                  <SoccerBallIcon
+                    className="size-3 text-destructive"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium text-destructive">
+                    자책골
+                  </span>
+                </div>
+              </div>
+            </div> */}
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
-                className="px-2 flex items-center border-b last:border-b-0 border-gray-100 relative"
+                className="px-2 flex items-center border-t border-gray-100 relative"
               >
                 {/* 순서 */}
                 <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0">
@@ -257,7 +287,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
         {/* 팀 명단 */}
         <div className="px-4">
-          <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
+          {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
             <div className="flex items-center gap-2">
               <ClipboardList className="size-5 text-gray-600" />
               <span className="text-base font-medium">팀 명단</span>
@@ -268,7 +298,42 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
                   <button
                     type="button"
+                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all ${
+                      mode === "view"
+                        ? "bg-white shadow-xs"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
+                  >
+                    보기
+                  </button>
+                  <button
+                    type="button"
                     className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer  transition-all ${
+                      mode === "edit"
+                        ? "bg-white shadow-xs"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    onClick={() => setMode(mode === "view" ? "edit" : "view")}
+                  >
+                    수정
+                  </button>
+                </div>
+              </div>
+            )}
+          </div> */}
+          <div className="flex justify-between items-center py-2 min-h-13">
+            <div className="flex items-center gap-2">
+              <UserListIcon className="size-7 text-stone-500" weight="fill" />
+              <h2 className="text-lg font-semibold">팀 명단</h2>
+            </div>
+            {data.permissions.isEditable && (
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-500">모드</span>
+                <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
+                  <button
+                    type="button"
+                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all ${
                       mode === "view"
                         ? "bg-white shadow-xs"
                         : "text-gray-500 hover:text-gray-700"
@@ -296,7 +361,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           </div>
 
           {mode === "view" ? (
-            <div className="grid grid-cols-2 border-y border-gray-100">
+            <div className="grid grid-cols-2 border-y border-gray-200">
               <Lineup lineups={homeLineup} side="home" />
               <Lineup lineups={awayLineup} side="away" />
             </div>
