@@ -23,11 +23,11 @@ const Lineup = ({
   return (
     <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 rounded-2xl overflow-hidden">
       <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
-        {/* <div
+        <div
           className={`size-2 rounded-full ${
             side === "home" ? "bg-indigo-600" : "bg-emerald-600"
           }`}
-        /> */}
+        />
         <span
           className={`${
             side === "home" ? "text-indigo-700" : "text-emerald-700"
