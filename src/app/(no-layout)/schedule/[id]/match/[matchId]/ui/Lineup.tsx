@@ -21,14 +21,26 @@ const Lineup = ({
   }
 
   return (
-    <div
-      className={`py-2 ${side === "away" ? "border-l border-gray-100" : ""}`}
-    >
+    <div className="py-3 bg-gray-50 rounded-2xl">
+      <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-10 rounded-md mx-3 mb-2 bg-white">
+        {/* <div
+          className={`size-2 rounded-full ${
+            side === "home" ? "bg-indigo-600" : "bg-emerald-600"
+          }`}
+        /> */}
+        <span
+          className={`${
+            side === "home" ? "text-indigo-700" : "text-emerald-700"
+          }`}
+        >
+          {side === "home" ? "홈" : "어웨이"}
+        </span>
+      </div>
       {lineups.length > 0 ? (
         lineups.map((player) => (
           <div
             key={player.id}
-            className="flex items-center gap-2 px-3 h-14 select-none group cursor-pointer hover:bg-gray-50"
+            className="flex items-center gap-2 px-4 h-14 select-none group cursor-pointer hover:bg-gray-50 border-b last:border-b-0 border-gray-100"
             onClick={() => router.push(`/players/${player.user.id}`)}
           >
             {player.user.image ? (

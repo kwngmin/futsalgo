@@ -149,14 +149,15 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 콘텐트 영역 */}
       <div className="space-y-3">
         {/* 팀 정보 및 점수 */}
-        <div className="relative grid grid-cols-2 px-4 py-6 sm:pb-10 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
+        <div className="relative grid grid-cols-2 px-4 pt-8 pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
           <TeamSide
             side="home"
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
           />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
-            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto sm:mb-4">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 ">
+            {/* <span className="text-sm text-gray-500">사이드</span> */}
+            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto pb-6">
               <span>{data.match.homeScore}</span>
               <span>-</span>
               <span>{data.match.awayScore}</span>
@@ -285,7 +286,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             <GoalRecord matchId={data.match.id} lineups={data.lineups} />
           )}
 
-        {/* 팀 명단 */}
+        {/* 출전 명단 */}
         <div className="px-4">
           {/* <div className="w-full flex items-center justify-between h-14 sm:h-11 gap-3">
             <div className="flex items-center gap-2">
@@ -325,7 +326,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
               <UserListIcon className="size-7 text-stone-500" weight="fill" />
-              <h2 className="text-lg font-semibold">팀 명단</h2>
+              <h2 className="text-lg font-semibold">출전 명단</h2>
             </div>
             {data.permissions.isEditable && (
               <div className="flex items-center gap-3">
@@ -361,7 +362,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           </div>
 
           {mode === "view" ? (
-            <div className="grid grid-cols-2 border-y border-gray-200">
+            <div className="grid grid-cols-2 gap-2">
               <Lineup lineups={homeLineup} side="home" />
               <Lineup lineups={awayLineup} side="away" />
             </div>
