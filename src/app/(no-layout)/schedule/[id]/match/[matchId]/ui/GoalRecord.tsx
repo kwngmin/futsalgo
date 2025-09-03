@@ -220,8 +220,8 @@ const GoalRecord = ({
 
   if (homeLineup.length === 0 && awayLineup.length === 0) {
     return (
-      <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
-        {/* 라인업이 존재하지 않습니다. */}팀 명단이 없습니다.
+      <div className="mx-4 px-4 py-8 text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+        팀 명단에서 사이드를 선택해주세요.
       </div>
     );
   }
