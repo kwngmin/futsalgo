@@ -12,6 +12,7 @@ import { createGoalRecord } from "../actions/create-goal-record";
 import { useMemo } from "react";
 import { Switch } from "@/shared/components/ui/switch";
 import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const goalRecordSchema = z
   .object({
@@ -74,10 +75,14 @@ export type GoalRecordFormData = z.infer<typeof goalRecordSchema>;
 const GoalRecord = ({
   matchId,
   lineups,
+  scheduleId,
 }: {
   matchId: string;
   lineups: LineupsData | LineupsWithNameData;
+  scheduleId: string;
 }) => {
+  const queryClient = useQueryClient();
+
   const {
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -183,6 +188,9 @@ const GoalRecord = ({
     try {
       await createGoalRecord(matchId, data);
       alert("골이 기록되었습니다!");
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", scheduleId],
+      });
       reset();
     } catch (error) {
       console.error(error);

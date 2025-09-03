@@ -19,11 +19,12 @@ import {
   updateTeamMatchLineup,
 } from "../actions/match-actions";
 import {
+  ClipboardTextIcon,
   ClockCounterClockwiseIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
-  UserListIcon,
 } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -32,6 +33,7 @@ interface MatchContentProps {
 const MatchContent = ({ data }: MatchContentProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -183,6 +185,16 @@ const MatchContent = ({ data }: MatchContentProps) => {
     setIsLoading(true);
     try {
       await deleteMatch(data.match.id, data.match.scheduleId);
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", data.match.scheduleId],
+      });
+      router.push(
+        `/schedule/${data.match.scheduleId}${
+          searchParams.get("tab") === "/my-schedules"
+            ? `?tab=/my-schedules`
+            : ""
+        }`
+      );
     } catch (error) {
       console.error("경기 삭제 오류:", error);
       alert("경기 삭제에 실패했습니다.");
@@ -235,7 +247,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             name={data.match.homeTeam.name}
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
-            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto pb-6">
+            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto pb-12 sm:pb-4">
               <span>{data.match.homeScore}</span>
               <span>-</span>
               <span>{data.match.awayScore}</span>
@@ -330,14 +342,21 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {/* 골 기록 입력 */}
         {data.permissions.isEditable &&
           data.match.schedule.startTime <= new Date() && (
-            <GoalRecord matchId={data.match.id} lineups={data.lineups} />
+            <GoalRecord
+              matchId={data.match.id}
+              lineups={data.lineups}
+              scheduleId={data.match.scheduleId}
+            />
           )}
 
         {/* 팀 명단 */}
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
-              <UserListIcon className="size-7 text-stone-500" weight="fill" />
+              <ClipboardTextIcon
+                className="size-7 text-stone-500"
+                weight="fill"
+              />
               <h2 className="text-lg font-semibold">팀 명단</h2>
             </div>
             {data.permissions.isEditable && (

@@ -14,7 +14,7 @@ import {
   Save,
   X,
   ClockIcon,
-  MapPinIcon,
+  // MapPinIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
@@ -42,7 +42,7 @@ import { deleteSchedule } from "../actions/delete-schedule";
 import { updateScheduleNotice } from "../actions/update-schedule-notice";
 // import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import Image from "next/image";
-import { Separator } from "@/shared/components/ui/separator";
+// import { Separator } from "@/shared/components/ui/separator";
 import { updateAttendanceStatus } from "../actions/update-attendance-status";
 import {
   acceptTeamMatchInvitation,
@@ -412,22 +412,32 @@ const ScheduleContent = ({
 
       {/* 공통 */}
       <div className="w-full flex flex-col items-center justify-center px-4 mb-6 gap-1">
-        <span className="flex items-center gap-1 justify-center font-semibold text-2xl tracking-tight">
+        <span className="flex items-center gap-1 justify-center text-lg font-medium tracking-tight">
           {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+            year: "numeric",
             month: "long",
             day: "numeric",
             weekday: "long",
           })}
         </span>
+        <span className="flex items-center gap-1 justify-center font-semibold text-2xl">
+          {data.data.schedule?.place}
+        </span>
         <div className="w-full flex justify-center items-center gap-2 text-base tracking-tight">
           <div className="flex items-center gap-1">
-            <MapPinIcon className="size-4 text-gray-500" strokeWidth={2} />
-            {data.data.schedule?.place}
+            {/* <MapPinIcon className="size-4 text-gray-500" strokeWidth={2} /> */}
+            {/* {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+            })} */}
+            {/* {data.data.schedule?.place} */}
           </div>
-          <Separator
+          {/* <Separator
             orientation="vertical"
             className="!h-3 !w-0.25 bg-gray-300"
-          />
+          /> */}
           <div className="flex items-center gap-1">
             <ClockIcon className="size-4 text-gray-500" strokeWidth={2} />
             {formatTimeRange(
@@ -638,11 +648,17 @@ const ScheduleContent = ({
                     className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
                     size="lg"
                     onClick={async () => {
-                      const result = await addMatch(scheduleId);
-                      if (result.success) {
-                        refetch();
-                      } else {
-                        console.log(result.error, "result.error");
+                      try {
+                        const result = await addMatch(scheduleId);
+                        if (result.success) {
+                          refetch();
+                        } else {
+                          console.log(result.error, "result.error");
+                          alert(result.error);
+                        }
+                      } catch (error) {
+                        console.error(error, "error");
+                        alert("경기 추가에 실패했습니다.");
                       }
                     }}
                   >

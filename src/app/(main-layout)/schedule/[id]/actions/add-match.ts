@@ -45,12 +45,12 @@ export async function addMatch(scheduleId: string) {
     }
 
     // 참석자 중에 현재 사용자가 있는지 확인
-    const userAttendance = attendances.find(
-      (attendance) => attendance.userId === userId
-    );
-    if (!userAttendance) {
-      return { success: false, error: "참석자가 아닙니다" };
-    }
+    // const userAttendance = attendances.find(
+    //   (attendance) => attendance.userId === userId
+    // );
+    // if (!userAttendance) {
+    //   return { success: false, error: "참석자가 아닙니다" };
+    // }
 
     // awayTeamId 결정 로직 개선
     const awayTeamId = matchType === "TEAM" ? invitedTeamId! : hostTeamId;
