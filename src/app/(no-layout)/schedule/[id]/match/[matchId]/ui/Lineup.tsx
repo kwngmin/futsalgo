@@ -49,7 +49,7 @@ const Lineup = ({
                 alt="player image"
                 width={36}
                 height={36}
-                className="overflow-hidden object-cover size-8 sm:size-9 rounded-[42%] shrink-0"
+                className="object-cover size-8 sm:size-9 rounded-full shrink-0 ring ring-gray-200"
               />
             ) : (
               <div className="size-10 rounded-md bg-gray-100"></div>

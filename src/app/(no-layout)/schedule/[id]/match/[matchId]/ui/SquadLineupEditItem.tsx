@@ -97,7 +97,7 @@ export const SquadLineupEditItem = ({
                       alt={lineup.user.nickname || lineup.user.name || ""}
                       width={36}
                       height={36}
-                      className="size-8 rounded-full object-cover"
+                      className="size-8 rounded-full object-cover ring ring-gray-200"
                     />
                   ) : (
                     <div className="size-8 rounded-full bg-gray-200" />
@@ -122,7 +122,7 @@ export const SquadLineupEditItem = ({
                       alt={lineup.user.nickname || lineup.user.name || ""}
                       width={36}
                       height={36}
-                      className="size-8 rounded-full object-cover"
+                      className="size-8 rounded-full object-cover ring ring-gray-200"
                     />
                   ) : (
                     <div className="size-8 rounded-full bg-gray-200" />
@@ -147,7 +147,7 @@ export const SquadLineupEditItem = ({
                       alt={lineup.user.nickname || lineup.user.name || ""}
                       width={36}
                       height={36}
-                      className="size-8 rounded-full object-cover"
+                      className="size-8 rounded-full object-cover ring ring-gray-200"
                     />
                   ) : (
                     <div className="size-8 rounded-full bg-gray-200" />
