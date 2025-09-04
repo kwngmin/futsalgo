@@ -1,6 +1,6 @@
 "use client";
 
-import { Dices, Minus, RefreshCcw, X } from "lucide-react";
+import { Dices, Info, Minus, RefreshCcw, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -373,6 +373,15 @@ const MatchContent = ({ data }: MatchContentProps) => {
               </div>
             )}
           </div>
+
+          {goalsWithScore.length > 0 && data.permissions.isEditable && (
+            <div className="h-8 mb-2 flex items-center gap-2 px-3 bg-amber-50 rounded-md border border-amber-100">
+              <Info className="size-4 text-amber-600" />
+              <span className="text-sm text-amber-700">
+                명단 수정은 득점기록이 존재하지 않아야 가능합니다
+              </span>
+            </div>
+          )}
 
           {mode === "view" ? (
             <div className="grid grid-cols-2 gap-2">
