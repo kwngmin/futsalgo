@@ -727,7 +727,7 @@ const ScheduleContent = ({
                         <Button
                           // size="sm"
                           variant="outline"
-                          className="text-base sm:text-sm font-semibold gap-2 border-gray-300"
+                          className="text-base sm:text-sm font-semibold gap-2 border-gray-300 hover:border-gray-400"
                           onClick={handleStartEditNotice}
                         >
                           <Edit3 className="size-4" />
