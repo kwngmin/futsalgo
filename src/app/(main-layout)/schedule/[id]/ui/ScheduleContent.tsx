@@ -50,6 +50,7 @@ import {
   rejectTeamMatchInvitation,
 } from "@/features/add-schedule/model/actions/add-new-schedule";
 import { Separator } from "@/shared/components/ui/separator";
+import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
 
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
@@ -789,79 +790,26 @@ const ScheduleContent = ({
           )}
 
         {/* 참석 인원 탭 내용 */}
-        {data.data.schedule.status === "READY" ||
-          (data.data.schedule.status === "PLAY" && (
-            <ScheduleAttendance scheduleId={scheduleId} />
-          ))}
+        {(data.data.schedule.status === "READY" ||
+          data.data.schedule.status === "PLAY") && (
+          <ScheduleAttendance scheduleId={scheduleId} />
+        )}
 
         {data.data.schedule.status === "PENDING" && (
-          <div className="mx-4 rounded-2xl overflow-hidden">
-            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
-              <div className="flex items-center gap-2">
-                {data.data.schedule.hostTeam?.logoUrl ? (
-                  <Image
-                    src={data.data.schedule.hostTeam?.logoUrl}
-                    alt="team_logo"
-                    width={24}
-                    height={24}
-                    className="rounded-lg"
-                  />
-                ) : (
-                  <div className="size-6 rounded-lg bg-gray-200" />
-                )}
-                <div className="flex items-center gap-2">
-                  <span
-                    className="text-base font-medium hover:underline underline-offset-2 cursor-pointer"
-                    onClick={() => {
-                      router.push(`/teams/${data.data.schedule.hostTeam?.id}`);
-                    }}
-                  >
-                    {data.data.schedule.hostTeam?.name ?? ""}
-                  </span>
-                  <Separator
-                    orientation="vertical"
-                    className="!h-4 !bg-gray-300"
-                  />
-                  <span className="text-base font-medium text-gray-500">
-                    주최팀
-                  </span>
-                </div>
+          <div className="relative grid grid-cols-2 px-4 pt-6 pb-3 sm:pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
+            <TeamSide
+              logoUrl={data.data.schedule.hostTeam?.logoUrl}
+              name={data.data.schedule.hostTeam?.name ?? ""}
+            />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
+              <div className="flex items-center gap-2 text-4xl text-gray-500 font-light tracking-tighter my-auto">
+                vs
               </div>
             </div>
-            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
-              <div className="flex items-center gap-2">
-                {data.data.schedule.invitedTeam?.logoUrl ? (
-                  <Image
-                    src={data.data.schedule.invitedTeam?.logoUrl}
-                    alt="team_logo"
-                    width={24}
-                    height={24}
-                    className="rounded-lg"
-                  />
-                ) : (
-                  <div className="size-6 rounded-lg bg-gray-200" />
-                )}
-                <div className="flex items-center gap-2">
-                  <span
-                    className="text-base font-medium hover:underline underline-offset-2 cursor-pointer"
-                    onClick={() => {
-                      router.push(
-                        `/teams/${data.data.schedule.invitedTeam?.id}`
-                      );
-                    }}
-                  >
-                    {data.data.schedule.invitedTeam?.name ?? ""}
-                  </span>
-                  <Separator
-                    orientation="vertical"
-                    className="!h-4 !bg-gray-300"
-                  />
-                  <span className="text-base font-medium text-gray-500">
-                    초청팀
-                  </span>
-                </div>
-              </div>
-            </div>
+            <TeamSide
+              logoUrl={data.data.schedule.invitedTeam?.logoUrl}
+              name={data.data.schedule.invitedTeam?.name ?? ""}
+            />
           </div>
         )}
 
