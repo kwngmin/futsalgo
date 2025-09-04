@@ -81,7 +81,7 @@ export const SquadLineupEditItem = ({
           )}
         </div>
         <div className="flex items-center justify-end gap-2">
-          <div className="grow grid grid-cols-3 gap-4 p-0.5 rounded-full bg-gray-100 group-hover:bg-white group-hover:ring group-hover:ring-gray-300 hover:ring-gray-400">
+          <div className="grow grid grid-cols-3 gap-2 p-0.5 rounded-full bg-gray-100 group-hover:bg-white group-hover:ring group-hover:ring-gray-300 hover:ring-gray-400">
             <button
               type="button"
               disabled={isLoading}

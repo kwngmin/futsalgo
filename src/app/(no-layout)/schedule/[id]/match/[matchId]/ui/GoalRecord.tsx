@@ -226,7 +226,7 @@ const GoalRecord = ({
   const homeLineup = lineups.filter((lineup) => lineup.side === "HOME");
   const awayLineup = lineups.filter((lineup) => lineup.side === "AWAY");
 
-  if (homeLineup.length === 0 && awayLineup.length === 0) {
+  if (homeLineup.length === 0 || awayLineup.length === 0) {
     return (
       <div className="mx-4 px-4 py-8 text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
         팀 명단에서 사이드를 선택해주세요.
