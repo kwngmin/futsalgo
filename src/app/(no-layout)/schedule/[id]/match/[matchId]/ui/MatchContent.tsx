@@ -422,7 +422,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
@@ -435,7 +435,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleShuffleLineups}
                   >
                     <Dices className="size-5 text-gray-400" />
@@ -449,7 +449,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
