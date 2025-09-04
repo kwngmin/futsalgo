@@ -237,7 +237,7 @@ const GoalRecord = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-gray-50 rounded-md border border-gray-300 mx-4"
+      className="space-y-6 p-4 bg-gray-50 rounded-2xl border border-gray-200 mx-4"
     >
       {/* 득점 */}
       <div className="space-y-3">

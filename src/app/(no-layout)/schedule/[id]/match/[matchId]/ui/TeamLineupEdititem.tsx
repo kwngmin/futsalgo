@@ -41,7 +41,7 @@ export const TeamLineupEditItem = ({
   };
 
   return (
-    <div className="flex items-center gap-2 h-14 px-4 border-b last:border-b-0 hover:bg-gray-50">
+    <div className="flex items-center gap-2 h-14 px-3 sm:px-4 border-b last:border-b-0 hover:bg-gray-50">
       <div className="hidden sm:flex items-center justify-center text-sm font-medium text-muted-foreground size-8 sm:size-9 shrink-0 pr-1">
         {index + 1}
       </div>

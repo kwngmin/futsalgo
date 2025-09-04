@@ -40,7 +40,7 @@ const Lineup = ({
         lineups.map((player) => (
           <div
             key={player.id}
-            className="flex items-center gap-2 px-4 h-14 select-none group cursor-pointer hover:bg-gray-50 border-b last:border-b-0 border-gray-200"
+            className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group cursor-pointer hover:bg-gray-50 border-b last:border-b-0 border-gray-200"
             onClick={() => router.push(`/players/${player.user.id}`)}
           >
             {player.user.image ? (
