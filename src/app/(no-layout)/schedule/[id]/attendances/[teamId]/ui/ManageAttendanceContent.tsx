@@ -7,7 +7,7 @@ import { addAttendances } from "../actions/add-attendances";
 import { updateAttendance } from "../actions/update-attendance";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { updateAllAttendanceStatus } from "../actions/update-all-attendace-status";
 import { removeAttendance } from "../actions/remove-attendance";
 
@@ -24,22 +24,38 @@ type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
   };
 }>;
 
+interface ManageAttendanceContentProps {
+  scheduleId: string;
+  data: AttendanceWithUser[];
+  teamId: string;
+  teamType: "HOST" | "INVITED";
+}
+
+const ATTENDANCE_STATUS_CONFIG = {
+  ATTENDING: { label: "참석", color: "text-emerald-600" },
+  NOT_ATTENDING: { label: "불참", color: "text-destructive" },
+  UNDECIDED: { label: "미정", color: "text-gray-600" },
+} as const;
+
 const ManageAttendanceContent = ({
   scheduleId,
   data,
   teamId,
   teamType,
-}: {
-  scheduleId: string;
-  data: AttendanceWithUser[];
-  teamId: string;
-  teamType: "HOST" | "INVITED";
-}) => {
+}: ManageAttendanceContentProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [showAllAttendanceMenu, setShowAllAttendanceMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 초기 순서를 유지하기 위해 정렬된 데이터 생성 (생성 시점 또는 ID 기준)
+  const sortedData = useMemo(() => {
+    return [...data].sort((a, b) => {
+      // ID 기준으로 정렬하여 일관된 순서 유지
+      return a.id.localeCompare(b.id);
+    });
+  }, [data]);
 
   // 외부 클릭 감지
   useEffect(() => {
@@ -79,7 +95,10 @@ const ManageAttendanceContent = ({
       });
 
       if (result.success) {
-        queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+        // 특정 쿼리만 무효화하여 순서 유지
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId, teamId],
+        });
       } else {
         alert(result.error || "참석 상태 변경에 실패했습니다.");
       }
@@ -92,12 +111,7 @@ const ManageAttendanceContent = ({
   };
 
   const handleUpdateAll = async (attendanceStatus: AttendanceStatus) => {
-    const statusText =
-      attendanceStatus === "ATTENDING"
-        ? "참석"
-        : attendanceStatus === "NOT_ATTENDING"
-        ? "불참"
-        : "미정";
+    const statusText = ATTENDANCE_STATUS_CONFIG[attendanceStatus].label;
 
     if (!confirm(`모든 팀원을 "${statusText}"으로 일괄 변경하시겠습니까?`)) {
       return;
@@ -114,7 +128,9 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId, teamId],
+        });
         setShowAllAttendanceMenu(false);
       } else {
         alert(result.error || "전체 참석처리에 실패했습니다.");
@@ -128,14 +144,12 @@ const ManageAttendanceContent = ({
   };
 
   const handleUpdateAttendances = async () => {
-    // if (!confirm("팀원 명단을 업데이트하시겠습니까?")) {
-    //   return;
-    // }
-
     try {
       setIsLoading(true);
       await addAttendances({ scheduleId, teamId, teamType });
-      queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+      queryClient.invalidateQueries({
+        queryKey: ["scheduleAttendance", scheduleId, teamId],
+      });
       alert("팀원 업데이트가 완료되었습니다.");
     } catch (error) {
       console.error(error);
@@ -164,7 +178,9 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId, teamId],
+        });
       } else {
         alert(result.error || "참석자 삭제에 실패했습니다.");
       }
@@ -176,91 +192,83 @@ const ManageAttendanceContent = ({
     }
   };
 
+  const renderAttendanceButton = (
+    currentStatus: AttendanceStatus,
+    targetStatus: AttendanceStatus,
+    label: string,
+    attendanceId: string
+  ) => {
+    const isActive = currentStatus === targetStatus;
+    const config = ATTENDANCE_STATUS_CONFIG[targetStatus];
+
+    return (
+      <button
+        type="button"
+        disabled={isLoading}
+        className={`text-sm rounded-sm flex items-center justify-center h-9 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
+          isActive
+            ? `bg-white border border-gray-300 shadow-xs font-semibold ${config.color}`
+            : "text-muted-foreground font-medium hover:bg-gray-50"
+        }`}
+        onClick={() =>
+          !isLoading &&
+          handleUpdate({
+            attendanceId,
+            attendanceStatus: targetStatus,
+          })
+        }
+      >
+        {label}
+      </button>
+    );
+  };
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-4 h-16 shrink-0">
+      {/* 상단: 제목과 닫기 버튼 */}
+      <header className="flex items-center justify-between px-4 h-16 shrink-0">
         <h1 className="text-2xl font-bold">팀원 명단</h1>
-        <div className="flex items-center gap-2">
-          <button
-            className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-            onClick={() =>
-              router.push(`/schedule/${scheduleId}?tab=attendance`)
-            }
-          >
-            <X className="size-5" />
-          </button>
-        </div>
-      </div>
+        <button
+          type="button"
+          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+          onClick={() => router.push(`/schedule/${scheduleId}?tab=attendance`)}
+          aria-label="닫기"
+        >
+          <X className="size-5" />
+        </button>
+      </header>
+
       <div className="px-4">
-        {/* 전체 참석처리, 팀원 업데이트 */}
+        {/* 전체 참석처리, 팀원 업데이트 버튼 */}
         <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
-          {/* 드롭다운 메뉴 */}
-          {/* <div className="relative" ref={dropdownRef}>
-            <div
-              className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={() => setShowAllAttendanceMenu(!showAllAttendanceMenu)}
-            >
-              <div className="flex items-center gap-2">
-                <SquareCheckBig className="size-5 text-gray-400" />
-                <span className="text-base font-medium text-center">
-                  전체 참석처리
-                </span>
-              </div>
-              <ChevronDown className="size-4 text-gray-600" />
-            </div>
-            {showAllAttendanceMenu && (
-              <div className="absolute top-full mt-1 w-full bg-white border border-gray-400 rounded-md shadow-lg z-10">
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-50 first:rounded-t-md disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => handleUpdateAll("ATTENDING")}
-                >
-                  전체 참석
-                </button>
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => handleUpdateAll("NOT_ATTENDING")}
-                >
-                  전체 불참
-                </button>
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-50 last:rounded-b-md disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => handleUpdateAll("UNDECIDED")}
-                >
-                  전체 미정
-                </button>
-              </div>
-            )}
-          </div> */}
-          <div
-            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          <button
+            type="button"
+            disabled={isLoading}
+            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => handleUpdateAll("ATTENDING")}
           >
             <div className="flex items-center gap-2">
               <SquareCheckBig className="size-5 text-gray-400" />
               <span className="text-base font-medium">전체 참석처리</span>
             </div>
-          </div>
-          <div
-            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          </button>
+          <button
+            type="button"
+            disabled={isLoading}
+            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleUpdateAttendances}
           >
             <div className="flex items-center gap-2">
               <RefreshCcw className="size-5 text-gray-400" />
               <span className="text-base font-medium">팀원 업데이트</span>
             </div>
-          </div>
+          </button>
         </div>
+
         {/* 참석자 목록 */}
         <div className="mt-4">
-          {data.map((attendance, index) => (
-            <div
+          {sortedData.map((attendance, index) => (
+            <article
               key={attendance.id}
               className="flex items-center gap-4 py-3 border-t border-gray-100"
             >
@@ -278,57 +286,29 @@ const ManageAttendanceContent = ({
                 </div>
                 <div className="flex items-center gap-1 sm:min-w-72">
                   <div className="grow grid grid-cols-3 p-0.5 rounded-md bg-gray-100">
-                    <div
-                      className={`text-sm rounded-sm flex items-center justify-center h-9 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                        attendance.attendanceStatus === "ATTENDING"
-                          ? "bg-white border border-gray-300 shadow-xs font-semibold text-emerald-600"
-                          : "text-muted-foreground font-medium"
-                      }`}
-                      onClick={() =>
-                        !isLoading &&
-                        handleUpdate({
-                          attendanceId: attendance.id,
-                          attendanceStatus: "ATTENDING",
-                        })
-                      }
-                    >
-                      참석
-                    </div>
-                    <div
-                      className={`text-sm rounded-sm flex items-center justify-center h-9 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                        attendance.attendanceStatus === "NOT_ATTENDING"
-                          ? "bg-white border border-gray-300 shadow-xs font-semibold text-destructive"
-                          : "text-muted-foreground font-medium"
-                      }`}
-                      onClick={() =>
-                        !isLoading &&
-                        handleUpdate({
-                          attendanceId: attendance.id,
-                          attendanceStatus: "NOT_ATTENDING",
-                        })
-                      }
-                    >
-                      불참
-                    </div>
-                    <div
-                      className={`text-sm rounded-sm flex items-center justify-center h-9 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                        attendance.attendanceStatus === "UNDECIDED"
-                          ? "bg-white border border-gray-300 shadow-xs font-semibold"
-                          : "text-muted-foreground font-medium"
-                      }`}
-                      onClick={() =>
-                        !isLoading &&
-                        handleUpdate({
-                          attendanceId: attendance.id,
-                          attendanceStatus: "UNDECIDED",
-                        })
-                      }
-                    >
-                      미정
-                    </div>
+                    {renderAttendanceButton(
+                      attendance.attendanceStatus,
+                      "ATTENDING",
+                      "참석",
+                      attendance.id
+                    )}
+                    {renderAttendanceButton(
+                      attendance.attendanceStatus,
+                      "NOT_ATTENDING",
+                      "불참",
+                      attendance.id
+                    )}
+                    {renderAttendanceButton(
+                      attendance.attendanceStatus,
+                      "UNDECIDED",
+                      "미정",
+                      attendance.id
+                    )}
                   </div>
-                  <div
-                    className="flex items-center justify-center size-10 bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                  <button
+                    type="button"
+                    disabled={isLoading}
+                    className="flex items-center justify-center size-10 bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                     onClick={() =>
                       !isLoading &&
                       handleRemoveAttendance(
@@ -336,12 +316,13 @@ const ManageAttendanceContent = ({
                         attendance.user.nickname!
                       )
                     }
+                    aria-label={`${attendance.user.nickname} 삭제`}
                   >
                     <Minus className="size-4.5 sm:size-4 text-destructive" />
-                  </div>
+                  </button>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
