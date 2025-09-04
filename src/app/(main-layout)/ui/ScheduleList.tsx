@@ -82,20 +82,20 @@ const ScheduleList = ({
   });
 
   return (
-    <div className="flex flex-col py-1.5 select-none">
-      <div className="flex px-4 gap-3 cursor-pointer items-center">
+    <div
+      className="flex flex-col py-1.5 select-none hover:bg-gray-50 transition-colors cursor-pointer group"
+      onClick={() => handleScheduleClick(schedule.id)}
+    >
+      <div className="flex px-4 gap-3 items-center">
         <div
-          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 pb-1 z-10`}
+          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg/5 group-hover:ring ring-gray-400 pb-1 z-10`}
         >
           <div className="font-medium text-xs text-gray-500">{weekday}</div>
           <div className="font-semibold">
             {`${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`}
           </div>
         </div>
-        <div
-          className="grow flex flex-col justify-center"
-          onClick={() => handleScheduleClick(schedule.id)}
-        >
+        <div className="grow flex flex-col justify-center">
           <div className="flex items-center gap-1.5 truncate leading-none h-5 tracking-tight">
             <span className="text-gray-800 text-sm">{schedule.place}</span>
             <Separator

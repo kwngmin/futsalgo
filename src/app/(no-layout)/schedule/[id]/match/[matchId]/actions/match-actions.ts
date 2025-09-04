@@ -1,7 +1,12 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-import { TeamSide, MatchType, AttendanceStatus } from "@prisma/client";
+import {
+  TeamSide,
+  MatchType,
+  AttendanceStatus,
+  ScheduleStatus,
+} from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -10,7 +15,7 @@ import { redirect } from "next/navigation";
  */
 export async function deleteMatch(matchId: string, scheduleId: string) {
   try {
-    // 트랜잭션으로 관련된 모든 데이터 삭제
+    // 트랜잭션으로 관련된 모든 데이터 삭제 및 스케줄 상태 업데이트
     await prisma.$transaction(async (tx) => {
       // 골 기록 삭제
       await tx.goalRecord.deleteMany({
@@ -26,6 +31,26 @@ export async function deleteMatch(matchId: string, scheduleId: string) {
       await tx.match.delete({
         where: { id: matchId },
       });
+
+      // 스케줄의 남은 매치 수 확인
+      const remainingMatches = await tx.match.count({
+        where: { scheduleId },
+      });
+
+      // 매치가 모두 삭제되었고 상태가 PLAY라면 READY로 변경
+      if (remainingMatches === 0) {
+        const schedule = await tx.schedule.findUnique({
+          where: { id: scheduleId },
+          select: { status: true },
+        });
+
+        if (schedule?.status === ScheduleStatus.PLAY) {
+          await tx.schedule.update({
+            where: { id: scheduleId },
+            data: { status: ScheduleStatus.READY },
+          });
+        }
+      }
     });
 
     revalidatePath(`/schedule/${scheduleId}`);

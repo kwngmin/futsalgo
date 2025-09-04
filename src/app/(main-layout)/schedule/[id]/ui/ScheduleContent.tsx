@@ -789,7 +789,81 @@ const ScheduleContent = ({
           )}
 
         {/* 참석 인원 탭 내용 */}
-        <ScheduleAttendance scheduleId={scheduleId} />
+        {data.data.schedule.status === "READY" ||
+          (data.data.schedule.status === "PLAY" && (
+            <ScheduleAttendance scheduleId={scheduleId} />
+          ))}
+
+        {data.data.schedule.status === "PENDING" && (
+          <div className="mx-4 rounded-2xl overflow-hidden">
+            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
+              <div className="flex items-center gap-2">
+                {data.data.schedule.hostTeam?.logoUrl ? (
+                  <Image
+                    src={data.data.schedule.hostTeam?.logoUrl}
+                    alt="team_logo"
+                    width={24}
+                    height={24}
+                    className="rounded-lg"
+                  />
+                ) : (
+                  <div className="size-6 rounded-lg bg-gray-200" />
+                )}
+                <div className="flex items-center gap-2">
+                  <span
+                    className="text-base font-medium hover:underline underline-offset-2 cursor-pointer"
+                    onClick={() => {
+                      router.push(`/teams/${data.data.schedule.hostTeam?.id}`);
+                    }}
+                  >
+                    {data.data.schedule.hostTeam?.name ?? ""}
+                  </span>
+                  <Separator
+                    orientation="vertical"
+                    className="!h-4 !bg-gray-300"
+                  />
+                  <span className="text-base font-medium text-gray-500">
+                    주최팀
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
+              <div className="flex items-center gap-2">
+                {data.data.schedule.invitedTeam?.logoUrl ? (
+                  <Image
+                    src={data.data.schedule.invitedTeam?.logoUrl}
+                    alt="team_logo"
+                    width={24}
+                    height={24}
+                    className="rounded-lg"
+                  />
+                ) : (
+                  <div className="size-6 rounded-lg bg-gray-200" />
+                )}
+                <div className="flex items-center gap-2">
+                  <span
+                    className="text-base font-medium hover:underline underline-offset-2 cursor-pointer"
+                    onClick={() => {
+                      router.push(
+                        `/teams/${data.data.schedule.invitedTeam?.id}`
+                      );
+                    }}
+                  >
+                    {data.data.schedule.invitedTeam?.name ?? ""}
+                  </span>
+                  <Separator
+                    orientation="vertical"
+                    className="!h-4 !bg-gray-300"
+                  />
+                  <span className="text-base font-medium text-gray-500">
+                    초청팀
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 사진 */}
         {data.data.schedule.startTime <= new Date() && (

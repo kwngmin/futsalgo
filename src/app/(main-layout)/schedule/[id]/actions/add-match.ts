@@ -2,7 +2,7 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { TeamSide } from "@prisma/client";
+import { TeamSide, ScheduleStatus } from "@prisma/client";
 
 export async function addMatch(scheduleId: string) {
   try {
@@ -20,6 +20,7 @@ export async function addMatch(scheduleId: string) {
         hostTeamId: true,
         invitedTeamId: true,
         matchType: true,
+        status: true,
         attendances: {
           where: {
             attendanceStatus: "ATTENDING",
@@ -36,7 +37,7 @@ export async function addMatch(scheduleId: string) {
       return { success: false, error: "스케줄을 찾을 수 없습니다" };
     }
 
-    const { hostTeamId, invitedTeamId, matchType, attendances } =
+    const { hostTeamId, invitedTeamId, matchType, status, attendances } =
       scheduleWithAttendances;
 
     // TEAM 매치타입일 때 초대팀 검증
@@ -87,6 +88,14 @@ export async function addMatch(scheduleId: string) {
       if (lineupData.length > 0) {
         await tx.lineup.createMany({
           data: lineupData,
+        });
+      }
+
+      // 스케줄 상태 업데이트: 상태가 READY라면 PLAY로 변경
+      if (status === ScheduleStatus.READY) {
+        await tx.schedule.update({
+          where: { id: scheduleId },
+          data: { status: ScheduleStatus.PLAY },
         });
       }
 
