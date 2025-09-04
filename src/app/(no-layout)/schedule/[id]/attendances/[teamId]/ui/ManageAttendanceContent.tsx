@@ -230,7 +230,7 @@ const ManageAttendanceContent = ({
         <h1 className="text-2xl font-bold">팀원 명단</h1>
         <button
           type="button"
-          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+          className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
           onClick={() => router.push(`/schedule/${scheduleId}?tab=attendance`)}
           aria-label="닫기"
         >
@@ -244,7 +244,7 @@ const ManageAttendanceContent = ({
           <button
             type="button"
             disabled={isLoading}
-            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             onClick={() => handleUpdateAll("ATTENDING")}
           >
             <div className="flex items-center gap-2">
@@ -255,7 +255,7 @@ const ManageAttendanceContent = ({
           <button
             type="button"
             disabled={isLoading}
-            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             onClick={handleUpdateAttendances}
           >
             <div className="flex items-center gap-2">
