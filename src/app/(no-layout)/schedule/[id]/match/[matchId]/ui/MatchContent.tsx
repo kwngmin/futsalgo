@@ -344,7 +344,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             </div>
             {data.permissions.isEditable && (
               <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">모드</span>
+                {/* <span className="text-sm text-gray-500">모드</span> */}
                 <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
                   <button
                     type="button"
@@ -359,12 +359,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </button>
                   <button
                     type="button"
-                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all ${
+                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
                       mode === "edit"
                         ? "bg-white shadow-xs"
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                     onClick={() => setMode("edit")}
+                    disabled={goalsWithScore.length > 0}
                   >
                     수정
                   </button>
@@ -415,7 +416,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           )}
 
           {/* 관리 버튼들 */}
-          {data.permissions.isEditable && (
+          {goalsWithScore.length === 0 && data.permissions.isEditable && (
             <div>
               {data.match.schedule.matchType === "SQUAD" ? (
                 <div className="grid grid-cols-2 gap-2 pt-4">
