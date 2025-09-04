@@ -37,61 +37,6 @@ export async function deleteMatch(matchId: string, scheduleId: string) {
 }
 
 /**
- * 사이드 변경 (호스트팀과 초대팀의 사이드를 서로 바꿈)
- */
-export async function toggleSides(matchId: string) {
-  try {
-    const match = await prisma.match.findUnique({
-      where: { id: matchId },
-      include: {
-        schedule: true,
-        lineups: true,
-      },
-    });
-
-    if (!match) {
-      return { success: false, error: "매치를 찾을 수 없습니다" };
-    }
-
-    await prisma.$transaction(async (tx) => {
-      // 모든 라인업의 사이드를 반대로 변경
-      const updatePromises = match.lineups.map((lineup) => {
-        let newSide: TeamSide;
-        if (lineup.side === "HOME") {
-          newSide = "AWAY";
-        } else if (lineup.side === "AWAY") {
-          newSide = "HOME";
-        } else {
-          newSide = "UNDECIDED"; // UNDECIDED는 그대로 유지
-        }
-
-        return tx.lineup.update({
-          where: { id: lineup.id },
-          data: { side: newSide },
-        });
-      });
-
-      // 스코어도 서로 바꿈
-      await tx.match.update({
-        where: { id: matchId },
-        data: {
-          homeScore: match.awayScore,
-          awayScore: match.homeScore,
-        },
-      });
-
-      await Promise.all(updatePromises);
-    });
-
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
-    return { success: true };
-  } catch (error) {
-    console.error("사이드 변경 실패:", error);
-    return { success: false, error: "사이드 변경에 실패했습니다" };
-  }
-}
-
-/**
  * 자체전 명단 업데이트: 참석자 중 라인업에 없는 인원을 추가
  */
 export async function updateSquadLineup(matchId: string) {

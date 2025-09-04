@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight, Dices, Minus, RefreshCcw, X } from "lucide-react";
+import { Dices, Minus, RefreshCcw, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -10,11 +10,10 @@ import GoalRecord from "./GoalRecord";
 import type { MatchDataResult, GoalWithScore } from "../model/types";
 import { NavigationButton } from "./NavigationButton";
 import { GoalItem } from "./GoalItem";
-import { LineupEditItem } from "./LineupEditItem";
+import { SquadLineupEditItem } from "./SquadLineupEditItem";
 import { deleteGoalRecord } from "../actions/create-goal-record";
 import {
   deleteMatch,
-  toggleSides,
   updateSquadLineup,
   updateTeamMatchLineup,
 } from "../actions/match-actions";
@@ -25,6 +24,7 @@ import {
   SoccerBallIcon,
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { TeamLineupEditItem } from "./TeamLineupEdititem";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -122,31 +122,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
     }
   };
 
-  // 사이드 변경 핸들러
-  const handleToggleSides = async () => {
-    if (isLoading) return;
-
-    if (!confirm("홈과 어웨이 사이드를 서로 바꾸시겠습니까?")) {
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const result = await toggleSides(data.match.id);
-      if (result.success) {
-        alert("사이드 변경이 완료되었습니다");
-      } else {
-        console.error(result.error);
-        alert("사이드 변경에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("사이드 변경 오류:", error);
-      alert("오류가 발생했습니다.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // 명단 업데이트 핸들러
   const handleUpdateLineup = async () => {
     if (isLoading) return;
@@ -206,8 +181,18 @@ const MatchContent = ({ data }: MatchContentProps) => {
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 네비게이션 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <div className="flex gap-1.5 items-center">
-          <h1 className="text-2xl font-bold min-w-16">{data.matchOrder}경기</h1>
+        <div className="flex gap-2 items-center">
+          <h1 className="text-2xl font-bold min-w-16">
+            {/* <h1 className="text-2xl font-bold min-w-32 flex items-center gap-2"> */}
+            {data.matchOrder}경기
+            {/* <Separator
+              className="!h-4 bg-gray-400 !w-0.25"
+              orientation="vertical"
+            />
+            <span className="text-lg font-medium text-gray-800">
+              {data.match.schedule.matchType === "SQUAD" ? "자체전" : "친선전"}
+            </span> */}
+          </h1>
           <NavigationButton
             direction="prev"
             disabled={isPrevDisabled}
@@ -240,21 +225,19 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 콘텐트 영역 */}
       <div className="space-y-3">
         {/* 팀 정보 및 점수 */}
-        <div className="relative grid grid-cols-2 px-4 pt-8 pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
+        <div className="relative grid grid-cols-2 px-4 pt-6 pb-3 sm:pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
           <TeamSide
-            side="home"
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
           />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4">
-            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto pb-12 sm:pb-4">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
+            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
               <span>{data.match.homeScore}</span>
               <span>-</span>
               <span>{data.match.awayScore}</span>
             </div>
           </div>
           <TeamSide
-            side="away"
             logoUrl={data.match.awayTeam.logoUrl}
             name={data.match.awayTeam.name}
           />
@@ -392,19 +375,42 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
           {mode === "view" ? (
             <div className="grid grid-cols-2 gap-2">
-              <Lineup lineups={homeLineup} side="home" />
-              <Lineup lineups={awayLineup} side="away" />
+              <Lineup lineups={homeLineup} />
+              <Lineup lineups={awayLineup} />
             </div>
-          ) : (
-            <div>
+          ) : data.match.schedule.matchType === "SQUAD" ? (
+            <div className="border rounded-2xl overflow-hidden">
               {data.lineups.map((lineup, index) => (
-                <LineupEditItem
+                <SquadLineupEditItem
                   key={lineup.id}
                   lineup={lineup}
                   index={index}
                   isMember={data.permissions.isMember}
                 />
               ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <div className="border rounded-2xl overflow-hidden">
+                {homeLineup.map((lineup, index) => (
+                  <TeamLineupEditItem
+                    key={lineup.id}
+                    lineup={lineup}
+                    index={index}
+                    isMember={data.permissions.isMember}
+                  />
+                ))}
+              </div>
+              <div className="border rounded-2xl overflow-hidden">
+                {awayLineup.map((lineup, index) => (
+                  <TeamLineupEditItem
+                    key={lineup.id}
+                    lineup={lineup}
+                    index={index}
+                    isMember={data.permissions.isMember}
+                  />
+                ))}
+              </div>
             </div>
           )}
 
@@ -413,17 +419,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
             <div>
               {data.match.schedule.matchType === "SQUAD" ? (
                 <div className="grid grid-cols-2 gap-2 pt-4">
-                  <button
-                    type="button"
-                    disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={handleShuffleLineups}
-                  >
-                    <Dices className="size-5 text-gray-400" />
-                    <span className="text-base font-medium">
-                      랜덤 팀 나누기
-                    </span>
-                  </button>
                   <button
                     type="button"
                     disabled={isLoading}
@@ -437,22 +432,20 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       </span>
                     </div>
                   </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-2 pt-4">
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={handleToggleSides}
+                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleShuffleLineups}
                   >
-                    <div className="flex items-center gap-2">
-                      <ArrowLeftRight className="size-5 text-gray-400" />
-                      <span className="text-base font-medium text-center">
-                        사이드 변경
-                      </span>
-                    </div>
+                    <Dices className="size-5 text-gray-400" />
+                    <span className="text-base font-medium">
+                      랜덤 팀 나누기
+                    </span>
                   </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 pt-4">
                   <button
                     type="button"
                     disabled={isLoading}

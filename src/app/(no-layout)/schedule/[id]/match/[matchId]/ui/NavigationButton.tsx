@@ -16,26 +16,26 @@ export const NavigationButton = ({
 }: NavigationButtonProps) => {
   const isPrev = direction === "prev";
   const Icon = isPrev ? ChevronLeft : ChevronRight;
-  const label = isPrev ? "이전" : "다음";
+  // const label = isPrev ? "이전" : "다음";
 
   return (
     <button
-      className={`shrink-0 h-10 sm:h-9 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors ${
+      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors ${
         disabled
           ? "opacity-30 cursor-default pointer-events-none"
           : "cursor-pointer"
-      } ${isPrev ? "pl-2 pr-4" : "pl-4 pr-2"}`}
+      }`}
       onClick={onClick}
       disabled={disabled}
     >
       {isPrev ? (
         <>
           <Icon className="size-5" />
-          {label}
+          {/* {label} */}
         </>
       ) : (
         <>
-          {label}
+          {/* {label} */}
           <Icon className="size-5" />
         </>
       )}

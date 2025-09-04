@@ -9,10 +9,10 @@ type Lineup = LineupsData | LineupsWithNameData;
 
 const Lineup = ({
   lineups,
-  side,
-}: {
+}: // side,
+{
   lineups: Lineup;
-  side: "home" | "away";
+  // side: "home" | "away";
 }) => {
   const router = useRouter();
 
@@ -21,8 +21,8 @@ const Lineup = ({
   }
 
   return (
-    <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 rounded-2xl overflow-hidden">
-      <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
+    <div className="border rounded-2xl overflow-hidden">
+      {/* <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
         <div
           className={`size-2 rounded-full ${
             side === "home" ? "bg-indigo-600" : "bg-emerald-600"
@@ -35,7 +35,7 @@ const Lineup = ({
         >
           {side === "home" ? "홈" : "어웨이"}
         </span>
-      </div>
+      </div> */}
       {lineups.length > 0 ? (
         lineups.map((player) => (
           <div
