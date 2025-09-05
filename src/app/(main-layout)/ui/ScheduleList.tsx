@@ -89,20 +89,20 @@ const ScheduleList = ({
     >
       <div className="flex px-4 gap-3 items-center">
         <div
-          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg group-hover:ring ring-gray-300 pb-1 z-10`}
+          className={`shrink-0 size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg group-hover:ring ring-gray-300 pb-1 z-10`}
         >
           <div className="font-medium text-xs text-gray-500">{weekday}</div>
           <div className="font-semibold">
             {`${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`}
           </div>
         </div>
-        <div className="grow flex flex-col justify-center">
-          <div className="flex items-center gap-1.5 truncate leading-none h-5 tracking-tight">
+        <div className="grow flex flex-col justify-center overflow-hidden">
+          <div className="flex items-center gap-1.5 leading-none h-5 tracking-tight">
             {(schedule.status === "PENDING" ||
               schedule.status === "REJECTED") && (
               <Fragment>
                 <div
-                  className={`flex items-center gap-0.5 font-medium text-sm rounded-full pb-px ${
+                  className={`shrink-0 flex items-center gap-0.5 font-medium text-sm rounded-full pb-px ${
                     schedule.status === "REJECTED"
                       ? "text-red-600"
                       : "text-amber-700"
@@ -121,12 +121,14 @@ const ScheduleList = ({
                 />
               </Fragment>
             )}
-            <span className="text-gray-800 text-sm">{schedule.place}</span>
+            <span className="text-gray-800 text-sm truncate whitespace-nowrap overflow-hidden">
+              {schedule.place}
+            </span>
             <Separator
               orientation="vertical"
               className="!h-3 !w-0.25 bg-gray-300"
             />
-            <span className="font-medium text-sm text-gray-600">
+            <span className="font-medium text-sm text-gray-600 shrink-0">
               {schedule.startTime?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
