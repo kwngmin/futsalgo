@@ -21,6 +21,8 @@ export async function getScheduleAttendance(scheduleId: string) {
       select: {
         hostTeamId: true,
         invitedTeamId: true,
+        hostTeamMercenaryCount: true,
+        invitedTeamMercenaryCount: true,
       },
     });
 

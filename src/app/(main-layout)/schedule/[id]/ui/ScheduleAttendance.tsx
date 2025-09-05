@@ -136,24 +136,28 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
             <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
-                {attendances === 0 ? "-" : `${attendances}`}
+                {attendances === 0 ? "0" : `${attendances}`}
               </div>
               <Label className="text-muted-foreground">참석</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
-                {notAttendances === 0 ? "-" : `${notAttendances}`}
+                {notAttendances === 0 ? "0" : `${notAttendances}`}
               </div>
               <Label className="text-muted-foreground">불참</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2 pb-2">
               <div className="font-semibold">
-                {undecidedAttendances === 0 ? "-" : `${undecidedAttendances}`}
+                {undecidedAttendances === 0 ? "0" : `${undecidedAttendances}`}
               </div>
               <Label className="text-muted-foreground">미정</Label>
             </div>
             <div className="flex flex-col gap-1 items-center my-2 pb-2">
-              <div className="font-semibold">-</div>
+              <div className="font-semibold">
+                {teamType === "host"
+                  ? data?.data?.schedule.hostTeamMercenaryCount
+                  : data?.data?.schedule.invitedTeamMercenaryCount}
+              </div>
               <Label className="text-muted-foreground">용병</Label>
             </div>
           </div>

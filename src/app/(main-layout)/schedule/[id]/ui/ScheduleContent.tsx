@@ -476,9 +476,10 @@ const ScheduleContent = ({
               </div>
               <div className="flex flex-col items-center">
                 <div className="w-full flex justify-center items-center gap-1 tracking-tight font-medium">
-                  {data.data.isManager === "GUEST"
-                    ? "친선전 제안을 거절했습니다."
-                    : "초청팀이 제안을 거절했습니다."}
+                  초청팀이 친선전을 거절했습니다.
+                  {/* {data.data.isManager === "GUEST"
+                    ? "친선전을 거절했습니다."
+                    : "초청팀이 친선전을 거절했습니다."} */}
                 </div>
               </div>
             </div>
