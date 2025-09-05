@@ -98,23 +98,28 @@ const ScheduleList = ({
         </div>
         <div className="grow flex flex-col justify-center">
           <div className="flex items-center gap-1.5 truncate leading-none h-5 tracking-tight">
-            {" "}
             {(schedule.status === "PENDING" ||
               schedule.status === "REJECTED") && (
-              <div
-                className={`flex items-center gap-0.5 font-semibold text-xs rounded-full pb-px ${
-                  schedule.status === "REJECTED"
-                    ? "text-red-600"
-                    : "text-amber-600"
-                }`}
-              >
-                {schedule.status === "REJECTED" ? (
-                  <Ban className="size-3" strokeWidth={2.25} />
-                ) : (
-                  <Hourglass className="size-3" strokeWidth={2.25} />
-                )}
-                {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
-              </div>
+              <Fragment>
+                <div
+                  className={`flex items-center gap-0.5 font-medium text-sm rounded-full pb-px ${
+                    schedule.status === "REJECTED"
+                      ? "text-red-600"
+                      : "text-amber-700"
+                  }`}
+                >
+                  {schedule.status === "REJECTED" ? (
+                    <Ban className="size-3" strokeWidth={2.25} />
+                  ) : (
+                    <Hourglass className="size-3" strokeWidth={2.25} />
+                  )}
+                  {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
+                </div>
+                <Separator
+                  orientation="vertical"
+                  className="!h-3 !w-0.25 bg-gray-300"
+                />
+              </Fragment>
             )}
             <span className="text-gray-800 text-sm">{schedule.place}</span>
             <Separator

@@ -117,7 +117,7 @@ const HomePage = () => {
         {session.data?.user?.id &&
           data?.data?.pastSchedules &&
           data.data.pastSchedules.length > 0 && (
-            <div className="flex items-center gap-2 mt-4 overflow-hidden px-4 relative h-6">
+            <div className="flex items-center gap-2 mt-4 overflow-hidden px-4 relative h-8">
               <div className="absolute left-0 bg-white px-4 text-sm text-muted-foreground font-semibold shrink-0">
                 지난 일정
               </div>
