@@ -5,6 +5,7 @@ import { Minus, RefreshCcw, SquareCheckBig, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { addAttendances } from "../actions/add-attendances";
 import { updateAttendance } from "../actions/update-attendance";
+import { updateMercenaryCount } from "../actions/update-mercenary-count";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -29,6 +30,7 @@ interface ManageAttendanceContentProps {
   data: AttendanceWithUser[];
   teamId: string;
   teamType: "HOST" | "INVITED";
+  initialMercenaryCount: number;
 }
 
 const ATTENDANCE_STATUS_CONFIG = {
@@ -42,11 +44,14 @@ const ManageAttendanceContent = ({
   data,
   teamId,
   teamType,
+  initialMercenaryCount,
 }: ManageAttendanceContentProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [showAllAttendanceMenu, setShowAllAttendanceMenu] = useState(false);
+  const [mercenaryCount, setMercenaryCount] = useState(initialMercenaryCount);
+  const [isMercenaryUpdating, setIsMercenaryUpdating] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 초기 순서를 유지하기 위해 정렬된 데이터 생성 (생성 시점 또는 ID 기준)
@@ -192,6 +197,35 @@ const ManageAttendanceContent = ({
     }
   };
 
+  const handleMercenaryCountChange = async (newCount: number) => {
+    if (newCount < 0) return;
+
+    try {
+      setIsMercenaryUpdating(true);
+      const result = await updateMercenaryCount({
+        scheduleId,
+        teamId,
+        teamType,
+        mercenaryCount: newCount,
+      });
+
+      if (result.success) {
+        setMercenaryCount(newCount);
+        // 필요시 쿼리 무효화
+        queryClient.invalidateQueries({
+          queryKey: ["schedule", scheduleId],
+        });
+      } else {
+        alert(result.error || "용병 수 업데이트에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("오류가 발생했습니다.");
+    } finally {
+      setIsMercenaryUpdating(false);
+    }
+  };
+
   const renderAttendanceButton = (
     currentStatus: AttendanceStatus,
     targetStatus: AttendanceStatus,
@@ -325,6 +359,75 @@ const ManageAttendanceContent = ({
             </article>
           ))}
         </div>
+
+        {/* 용병 수 관리 섹션 */}
+        {/* <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Users className="size-5 text-blue-600" />
+              <span className="font-semibold text-blue-900">용병 수</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(mercenaryCount - 1)}
+              >
+                -
+              </button>
+              <span className="min-w-[3rem] text-center font-semibold text-lg">
+                {mercenaryCount}
+              </span>
+              <button
+                type="button"
+                disabled={isMercenaryUpdating}
+                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <p className="text-sm text-blue-700 mt-2">
+            경기에 참여할 용병의 수를 설정하세요.
+          </p>
+        </div> */}
+
+        <article className="flex items-center gap-4 py-3 border-t border-gray-100 min-h-16">
+          <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
+            {sortedData.length + 1}
+          </div>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
+            <div className="flex gap-2 items-center">
+              <span className="font-semibold">용병</span>
+              <span className="font-medium text-muted-foreground">
+                경기에 참여 할 용병의 수
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(mercenaryCount - 1)}
+              >
+                -
+              </button>
+              <span className="min-w-[3rem] text-center font-semibold text-lg">
+                {mercenaryCount}
+              </span>
+              <button
+                type="button"
+                disabled={isMercenaryUpdating}
+                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   );

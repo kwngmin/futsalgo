@@ -15,10 +15,18 @@ const ManageAttendancePage = async ({
     select: {
       hostTeamId: true,
       invitedTeamId: true,
+      hostTeamMercenaryCount: true,
+      invitedTeamMercenaryCount: true,
     },
   });
 
   const teamType = schedule?.hostTeamId === teamId ? "HOST" : "INVITED";
+
+  // 현재 팀의 용병 수 가져오기
+  const currentMercenaryCount =
+    teamType === "HOST"
+      ? schedule?.hostTeamMercenaryCount ?? 0
+      : schedule?.invitedTeamMercenaryCount ?? 0;
 
   const attendances = await prisma.scheduleAttendance.findMany({
     where: {
@@ -43,6 +51,7 @@ const ManageAttendancePage = async ({
       scheduleId={id}
       teamId={teamId}
       teamType={teamType}
+      initialMercenaryCount={currentMercenaryCount}
     />
   );
 };
