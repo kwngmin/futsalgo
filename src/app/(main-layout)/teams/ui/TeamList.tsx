@@ -26,7 +26,7 @@ const TeamList = ({
     <div
       className={`${
         size === "md" ? "py-1.5" : "py-3 border-t first:border-t-0"
-      } gap-3 px-4 hover:bg-gray-50 transition-colors cursor-pointer relative flex items-center`}
+      } gap-3 px-4 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer relative flex items-center`}
       onClick={() => router.push(`/teams/${team.id}`)}
     >
       {/* 팀 로고 */}
