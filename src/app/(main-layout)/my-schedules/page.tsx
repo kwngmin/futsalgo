@@ -4,8 +4,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowDownUp, ArrowLeft, Search } from "lucide-react";
-
-import { Separator } from "@/shared/components/ui/separator";
 import { getMySchedules } from "./actions/get-my-schedules";
 import SchedulePageLoading from "../ui/loading";
 import ScheduleList from "../ui/ScheduleList";
@@ -87,11 +85,6 @@ const MySchedulesPage = () => {
     );
   }
 
-  const totalSchedules =
-    (data.data?.todaysSchedules?.length || 0) +
-    (data.data?.upcomingSchedules?.length || 0) +
-    (data.data?.pastSchedules?.length || 0);
-
   const myTeams = data?.data?.myTeams.map((team) => team.id);
 
   return (
@@ -128,48 +121,7 @@ const MySchedulesPage = () => {
 
       {/* ScheduleList */}
       <div className="">
-        {/* 오늘 경기 */}
-        {data.data?.todaysSchedules?.map((schedule) => {
-          return (
-            <ScheduleList
-              schedule={schedule}
-              key={schedule.id}
-              myTeams={myTeams}
-            />
-          );
-        })}
-
-        {/* 예정된 경기 */}
-        {data.data?.upcomingSchedules?.map((schedule) => {
-          return (
-            <ScheduleList
-              schedule={schedule}
-              key={schedule.id}
-              myTeams={myTeams}
-            />
-          );
-        })}
-
-        {/* 예정된 일정이 없는 경우 */}
-        {data.data?.todaysSchedules?.length === 0 &&
-          data.data?.upcomingSchedules?.length === 0 && (
-            <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-14 flex justify-center items-center text-sm text-muted-foreground">
-              예정된 경기가 없습니다.
-            </div>
-          )}
-
-        {/* 지난 경기 구분선 */}
-        {data.data?.pastSchedules && data.data.pastSchedules.length > 0 && (
-          <div className="flex items-center gap-2 mt-4 overflow-hidden px-4 relative h-6">
-            <div className="absolute left-0 bg-white px-4 text-sm text-muted-foreground font-semibold shrink-0">
-              지난 일정
-            </div>
-            <Separator />
-          </div>
-        )}
-
-        {/* 지난 경기 */}
-        {data.data?.pastSchedules?.map((schedule) => {
+        {data.data?.schedules?.map((schedule) => {
           return (
             <ScheduleList
               schedule={schedule}
@@ -180,9 +132,9 @@ const MySchedulesPage = () => {
         })}
 
         {/* 전체 일정이 없는 경우 */}
-        {totalSchedules === 0 && (
+        {data.data?.schedules?.length === 0 && (
           <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-muted-foreground">
-            아직 소속된 팀의 일정이 없습니다.
+            소속된 팀의 일정이 없습니다.
           </div>
         )}
       </div>

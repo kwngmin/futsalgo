@@ -22,9 +22,7 @@ export interface GetMySchedulesResponse {
   success: boolean;
   error?: string;
   data?: {
-    todaysSchedules: ScheduleWithDetails[];
-    upcomingSchedules: ScheduleWithDetails[];
-    pastSchedules: ScheduleWithDetails[];
+    schedules: ScheduleWithDetails[];
     myTeams: Team[];
   };
 }
@@ -38,24 +36,13 @@ const SCHEDULE_INCLUDE = {
   likes: true,
 } as const;
 
-// 날짜 유틸리티 함수들
-function getStartOfDay(date: Date = new Date()): Date {
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-  return startOfDay;
-}
-
-function getEndOfDay(date: Date): Date {
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
-  return endOfDay;
-}
-
-function getNextDay(date: Date): Date {
-  const nextDay = new Date(date);
-  nextDay.setDate(date.getDate() + 1);
-  return nextDay;
-}
+// 날짜 유틸리티 함수들을 별도 파일로 분리하는 것을 고려해보세요
+// utils/date-helpers.ts
+// function getStartOfDay(date: Date = new Date()): Date {
+//   const startOfDay = new Date(date);
+//   startOfDay.setHours(0, 0, 0, 0);
+//   return startOfDay;
+// }
 
 // 일정 조회를 위한 공통 where 조건 생성
 function createScheduleWhereCondition(teamIds: string[]) {
@@ -81,62 +68,47 @@ async function getUserTeamInfo(userId: string) {
     throw new Error("사용자를 찾을 수 없습니다");
   }
 
-  const approvedTeamIds = player.teams.map((t) => t.teamId);
-  const myTeams = player.teams.map((t) => t.team);
-
   return {
-    approvedTeamIds,
-    myTeams,
+    approvedTeamIds: player.teams.map((t) => t.teamId),
+    myTeams: player.teams.map((t) => t.team),
   };
 }
 
-// 오늘 일정 조회
-async function getTodaysSchedules(
+// 모든 일정을 조회하는 통합 함수
+async function getAllSchedules(
   teamIds: string[]
 ): Promise<ScheduleWithDetails[]> {
-  const today = getStartOfDay();
-  const endOfToday = getEndOfDay(today);
+  // const today = getStartOfDay();
 
   return prisma.schedule.findMany({
-    where: {
-      date: { gte: today, lte: endOfToday },
-      ...createScheduleWhereCondition(teamIds),
-    },
+    where: createScheduleWhereCondition(teamIds),
     include: SCHEDULE_INCLUDE,
-    orderBy: [{ startTime: "asc" }, { createdAt: "desc" }],
+    orderBy: [
+      // 오늘 날짜 기준으로 미래 일정은 오름차순, 과거 일정은 내림차순
+      {
+        date: "desc",
+      },
+      // 날짜가 같은 경우 시간순 정렬
+      {
+        startTime: "desc",
+      },
+      // 동일 시간대 일정은 최신 생성순
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 }
 
-// 예정된 일정 조회
-async function getUpcomingSchedules(
-  teamIds: string[]
-): Promise<ScheduleWithDetails[]> {
-  const tomorrow = getNextDay(getStartOfDay());
-
-  return prisma.schedule.findMany({
-    where: {
-      date: { gte: tomorrow },
-      ...createScheduleWhereCondition(teamIds),
-    },
-    include: SCHEDULE_INCLUDE,
-    orderBy: [{ date: "asc" }, { startTime: "asc" }],
-  });
-}
-
-// 과거 일정 조회
-async function getPastSchedules(
-  teamIds: string[]
-): Promise<ScheduleWithDetails[]> {
-  const today = getStartOfDay();
-
-  return prisma.schedule.findMany({
-    where: {
-      date: { lt: today },
-      ...createScheduleWhereCondition(teamIds),
-    },
-    include: SCHEDULE_INCLUDE,
-    orderBy: [{ date: "desc" }, { startTime: "desc" }],
-  });
+// 에러 처리를 위한 헬퍼 함수
+function handleDatabaseError(error: unknown): string {
+  if (
+    error instanceof Error &&
+    error.message.includes("Can't reach database server")
+  ) {
+    return "데이터베이스 서버에 연결할 수 없습니다. 네트워크 상태를 확인하거나 잠시 후 다시 시도해주세요.";
+  }
+  return "서버 오류가 발생했습니다";
 }
 
 export async function getMySchedules(): Promise<GetMySchedulesResponse> {
@@ -161,48 +133,28 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
       return {
         success: true,
         data: {
-          todaysSchedules: [],
-          upcomingSchedules: [],
-          pastSchedules: [],
+          schedules: [],
           myTeams: [],
         },
       };
     }
 
-    const [todaysSchedules, upcomingSchedules, pastSchedules] =
-      await Promise.all([
-        getTodaysSchedules(approvedTeamIds),
-        getUpcomingSchedules(approvedTeamIds),
-        getPastSchedules(approvedTeamIds),
-      ]);
+    // 모든 일정을 한 번에 조회
+    const schedules = await getAllSchedules(approvedTeamIds);
 
     return {
       success: true,
       data: {
-        todaysSchedules,
-        upcomingSchedules,
-        pastSchedules,
+        schedules,
         myTeams,
       },
     };
   } catch (error) {
     console.error("내 일정 목록 조회 실패:", error);
 
-    // 데이터베이스 연결 오류인 경우 구체적인 메시지 제공
-    if (
-      error instanceof Error &&
-      error.message.includes("Can't reach database server")
-    ) {
-      return {
-        success: false,
-        error:
-          "데이터베이스 서버에 연결할 수 없습니다. 네트워크 상태를 확인하거나 잠시 후 다시 시도해주세요.",
-      };
-    }
-
     return {
       success: false,
-      error: "서버 오류가 발생했습니다",
+      error: handleDatabaseError(error),
     };
   }
 }
