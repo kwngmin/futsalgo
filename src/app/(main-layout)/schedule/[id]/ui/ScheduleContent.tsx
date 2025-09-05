@@ -800,6 +800,8 @@ const ScheduleContent = ({
             <TeamSide
               logoUrl={data.data.schedule.hostTeam?.logoUrl}
               name={data.data.schedule.hostTeam?.name ?? ""}
+              teamId={data.data.schedule.hostTeam?.id}
+              label="주최팀"
             />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
               <div className="flex items-center gap-2 text-4xl text-gray-500 font-light tracking-tighter my-auto">
@@ -809,6 +811,8 @@ const ScheduleContent = ({
             <TeamSide
               logoUrl={data.data.schedule.invitedTeam?.logoUrl}
               name={data.data.schedule.invitedTeam?.name ?? ""}
+              teamId={data.data.schedule.invitedTeam?.id}
+              label="초청팀"
             />
           </div>
         )}
