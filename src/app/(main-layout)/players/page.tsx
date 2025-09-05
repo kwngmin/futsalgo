@@ -10,7 +10,7 @@ import { User } from "@prisma/client";
 import SkeletonContent from "./ui/SkeletonPlayerContent";
 import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
 import FilterModal from "./ui/FilterModal";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const filterOptions = [
   { id: "all", label: "전체" },
@@ -20,12 +20,23 @@ const filterOptions = [
 
 type FilterType = "all" | "MALE" | "FEMALE";
 
+type TabType = "players" | "following";
+
 const PlayersPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
-  const isFollowingPage = pathname === "/players/following";
+  // const isFollowingPage = pathname === "/players/following";
+
+  const [currentTab, setCurrentTab] = useState<TabType>("players");
+
+  const handleTabChange = (tab: TabType) => {
+    setCurrentTab(tab);
+    if (tab === "following") {
+      router.push("/players/following");
+    }
+  };
 
   const [modalStates, setModalStates] = useState({
     sort: false,
@@ -48,7 +59,7 @@ const PlayersPage = () => {
     string[],
     number
   >({
-    queryKey: ["players", isFollowingPage ? "following" : "all"],
+    queryKey: ["players", "all"],
     queryFn: ({ pageParam }: { pageParam: number }) => getPlayers(pageParam),
     getNextPageParam: (lastPage) => {
       if (lastPage?.success && lastPage.data?.hasMore) {
@@ -126,16 +137,16 @@ const PlayersPage = () => {
   );
 
   // 팔로잉 페이지로 이동
-  const handleFollowingClick = () => {
-    if (isLoggedIn) {
-      router.push("/players/following");
-    }
-  };
+  // const handleFollowingClick = () => {
+  //   if (isLoggedIn) {
+  //     router.push("/players/following");
+  //   }
+  // };
 
   // 전체 회원 페이지로 이동
-  const handleAllPlayersClick = () => {
-    router.push("/players");
-  };
+  // const handleAllPlayersClick = () => {
+  //   router.push("/players");
+  // };
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -143,20 +154,22 @@ const PlayersPage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1
-            className={`text-2xl font-bold cursor-pointer ${
-              !isFollowingPage ? "" : "opacity-30"
+            className={`text-2xl font-bold cursor-pointer transition-opacity ${
+              currentTab === "players" ? "" : "opacity-30 hover:opacity-50"
             }`}
-            onClick={handleAllPlayersClick}
+            onClick={() => handleTabChange("players")}
+            // onClick={handleAllPlayersClick}
           >
             회원
           </h1>
           {/* 로그인된 사용자에게만 팔로잉 버튼 표시 */}
           {isLoggedIn && (
             <h1
-              className={`text-2xl font-bold cursor-pointer ${
-                isFollowingPage ? "" : "opacity-30"
+              className={`text-2xl font-bold cursor-pointer transition-opacity ${
+                currentTab === "following" ? "" : "opacity-30 hover:opacity-50"
               }`}
-              onClick={handleFollowingClick}
+              onClick={() => handleTabChange("following")}
+              // onClick={handleFollowingClick}
             >
               팔로잉
             </h1>
@@ -177,7 +190,7 @@ const PlayersPage = () => {
           {/* 회원 목록 */}
           <div className="bg-white rounded-2xl">
             {/* 내 프로필 섹션 (전체 회원 페이지에서만 표시) */}
-            {!isFollowingPage && isLoggedIn && currentUser ? (
+            {isLoggedIn && currentUser ? (
               <PlayerList
                 player={currentUser}
                 isCurrentUser={true}
@@ -221,18 +234,24 @@ const PlayersPage = () => {
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {isFollowingPage
+                {/* {isFollowingPage
                   ? "팔로잉한 회원이 없습니다"
                   : selectedFilter === "all"
+                  ? "회원이 없습니다"
+                  : `${
+                      filterOptions.find((f) => f.id === selectedFilter)?.label
+                    } 회원이 없습니다`} */}
+                {selectedFilter === "all"
                   ? "회원이 없습니다"
                   : `${
                       filterOptions.find((f) => f.id === selectedFilter)?.label
                     } 회원이 없습니다`}
               </h3>
               <p className="text-gray-500 mb-6">
-                {isFollowingPage
+                {/* {isFollowingPage
                   ? "다른 회원을 팔로우해보세요"
-                  : "다른 필터를 선택해보세요"}
+                  : "다른 필터를 선택해보세요"} */}
+                다른 필터를 선택해보세요
               </p>
             </div>
           )}

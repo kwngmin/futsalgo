@@ -17,10 +17,21 @@ import { useRouter } from "next/navigation";
 
 type FilterType = "all" | "MALE" | "FEMALE";
 
+type TabType = "players" | "following";
+
 const FollowingPlayersPage = () => {
   const router = useRouter();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
+
+  const [currentTab, setCurrentTab] = useState<TabType>("following");
+
+  const handleTabChange = (tab: TabType) => {
+    setCurrentTab(tab);
+    if (tab === "players") {
+      router.push("/players");
+    }
+  };
 
   const [modalStates, setModalStates] = useState({
     sort: false,
@@ -126,9 +137,9 @@ const FollowingPlayersPage = () => {
   );
 
   // 전체 회원 페이지로 이동
-  const handleAllPlayersClick = () => {
-    router.push("/players");
-  };
+  // const handleAllPlayersClick = () => {
+  //   router.push("/players");
+  // };
 
   // 로그인되지 않은 사용자 처리
   if (!isLoggedIn) {
@@ -141,12 +152,22 @@ const FollowingPlayersPage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1
-            className="text-2xl font-bold opacity-30 cursor-pointer"
-            onClick={handleAllPlayersClick}
+            className={`text-2xl font-bold cursor-pointer transition-opacity ${
+              currentTab === "players" ? "" : "opacity-30 hover:opacity-50"
+            }`}
+            onClick={() => handleTabChange("players")}
+            // onClick={handleAllPlayersClick}
           >
             회원
           </h1>
-          <h1 className="text-2xl font-bold">팔로잉</h1>
+          <h1
+            className={`text-2xl font-bold cursor-pointer transition-opacity ${
+              currentTab === "following" ? "" : "opacity-30 hover:opacity-50"
+            }`}
+            onClick={() => handleTabChange("following")}
+          >
+            팔로잉
+          </h1>
         </div>
         <div className="flex items-center gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -195,7 +216,8 @@ const FollowingPlayersPage = () => {
               </h3>
               <p className="text-gray-500 mb-6">다른 회원을 팔로우해보세요</p>
               <button
-                onClick={handleAllPlayersClick}
+                // onClick={handleAllPlayersClick}
+                onClick={() => handleTabChange("players")}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 전체 회원 보기

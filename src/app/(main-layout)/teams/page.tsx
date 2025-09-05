@@ -1,20 +1,31 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Search, ArrowDownUp, Plus } from "lucide-react";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { getTeams, type GetTeamsResponse } from "./model/actions";
 import { useSession } from "next-auth/react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import TeamList from "./ui/TeamList";
 
+type TabType = "teams" | "following";
+
 const TeamsPage = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
-  const isFollowingPage = pathname === "/teams/following";
+  // const isFollowingPage = pathname === "/teams/following";
+
+  const [currentTab, setCurrentTab] = useState<TabType>("teams");
+
+  const handleTabChange = (tab: TabType) => {
+    setCurrentTab(tab);
+    if (tab === "following") {
+      router.push("/teams/following");
+    }
+  };
 
   // 인피니티 쿼리 사용
   const {
@@ -31,7 +42,7 @@ const TeamsPage = () => {
     string[],
     number
   >({
-    queryKey: ["teams", isFollowingPage ? "following" : "all"],
+    queryKey: ["teams", "all"],
     queryFn: ({ pageParam }: { pageParam: number }) => getTeams(pageParam),
     getNextPageParam: (lastPage) => {
       if (lastPage?.success && lastPage.data?.hasMore) {
@@ -78,16 +89,16 @@ const TeamsPage = () => {
   console.log(myTeams, "myTeams");
 
   // 팔로잉 페이지로 이동
-  const handleFollowingClick = () => {
-    if (isLoggedIn) {
-      router.push("/teams/following");
-    }
-  };
+  // const handleFollowingClick = () => {
+  //   if (isLoggedIn) {
+  //     router.push("/teams/following");
+  //   }
+  // };
 
   // 전체 팀 페이지로 이동
-  const handleAllTeamsClick = () => {
-    router.push("/teams");
-  };
+  // const handleAllTeamsClick = () => {
+  //   router.push("/teams");
+  // };
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -95,20 +106,22 @@ const TeamsPage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1
-            className={`text-2xl font-bold cursor-pointer ${
-              !isFollowingPage ? "" : "opacity-30"
+            className={`text-2xl font-bold cursor-pointer transition-opacity ${
+              currentTab === "teams" ? "" : "opacity-30 hover:opacity-50"
             }`}
-            onClick={handleAllTeamsClick}
+            // onClick={handleAllTeamsClick}
+            onClick={() => handleTabChange("teams")}
           >
             팀
           </h1>
           {/* 로그인된 사용자에게만 팔로잉 버튼 표시 */}
           {isLoggedIn && (
             <h1
-              className={`text-2xl font-bold cursor-pointer ${
-                isFollowingPage ? "" : "opacity-30"
+              className={`text-2xl font-bold cursor-pointer transition-opacity ${
+                currentTab === "following" ? "" : "opacity-30 hover:opacity-50"
               }`}
-              onClick={handleFollowingClick}
+              // onClick={handleFollowingClick}
+              onClick={() => handleTabChange("following")}
             >
               팔로잉
             </h1>
@@ -122,7 +135,7 @@ const TeamsPage = () => {
             <ArrowDownUp className="size-5" />
           </button>
           {/* 팀 생성 버튼 (전체 팀 페이지에서만 표시) */}
-          {!isFollowingPage && Array.isArray(myTeams) && myTeams.length < 6 && (
+          {Array.isArray(myTeams) && myTeams.length < 6 && (
             <button
               type="button"
               onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
@@ -157,30 +170,33 @@ const TeamsPage = () => {
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {isFollowingPage ? "팔로잉한 팀이 없습니다" : "팀이 없습니다"}
+                {/* {isFollowingPage ? "팔로잉한 팀이 없습니다" : "팀이 없습니다"} */}
+                팀이 없습니다
               </h3>
               <p className="text-gray-500 mb-6">
-                {isFollowingPage
+                {/* {isFollowingPage
                   ? "다른 팀을 팔로우해보세요"
-                  : "새로운 팀을 만들어보세요"}
+                  : "새로운 팀을 만들어보세요"} */}
+                새로운 팀을 만들어보세요
               </p>
-              {isFollowingPage && (
+              {/* {isFollowingPage && (
                 <button
                   onClick={handleAllTeamsClick}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
                 >
                   전체 팀 보기
                 </button>
-              )}
+              )} */}
             </div>
           )}
 
           {/* 더 이상 로드할 데이터가 없을 때 */}
           {!hasNextPage && allTeams.length > 0 && (
             <div className="text-center py-4 text-gray-500 text-sm">
-              {isFollowingPage
+              {/* {isFollowingPage
                 ? "모든 팔로잉 팀을 불러왔습니다"
-                : "모든 팀을 불러왔습니다"}
+                : "모든 팀을 불러왔습니다"} */}
+              모든 팀을 불러왔습니다
             </div>
           )}
         </div>

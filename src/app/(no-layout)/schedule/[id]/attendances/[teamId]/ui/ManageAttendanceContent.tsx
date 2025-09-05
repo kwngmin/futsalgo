@@ -374,7 +374,7 @@ const ManageAttendanceContent = ({
         {/* 용병 수 관리 섹션 */}
         <article className="flex items-center gap-4 py-3 border-t border-gray-100 min-h-16">
           <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
-            {sortedData.length + 1}
+            {/* {sortedData.length + 1} */}-
           </div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
             <div className="flex gap-2 items-center">

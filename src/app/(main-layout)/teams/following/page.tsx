@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Search, ArrowDownUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 import {
@@ -12,10 +12,21 @@ import TeamList from "../ui/TeamList";
 import SkeletonContent from "../ui/SkeletonTeamContent";
 import { useRouter } from "next/navigation";
 
+type TabType = "teams" | "following";
+
 const FollowingTeamsPage = () => {
   const router = useRouter();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
+
+  const [currentTab, setCurrentTab] = useState<TabType>("following");
+
+  const handleTabChange = (tab: TabType) => {
+    setCurrentTab(tab);
+    if (tab === "teams") {
+      router.push("/teams");
+    }
+  };
 
   // 로그인되지 않은 사용자는 전체 팀 페이지로 리다이렉트
   useEffect(() => {
@@ -77,9 +88,9 @@ const FollowingTeamsPage = () => {
     ) || [];
 
   // 전체 팀 페이지로 이동
-  const handleAllTeamsClick = () => {
-    router.push("/teams");
-  };
+  // const handleAllTeamsClick = () => {
+  //   router.push("/teams");
+  // };
 
   // 로그인되지 않은 사용자 처리
   if (!isLoggedIn) {
@@ -92,12 +103,21 @@ const FollowingTeamsPage = () => {
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1
-            className="text-2xl font-bold opacity-30 cursor-pointer"
-            onClick={handleAllTeamsClick}
+            className={`text-2xl font-bold cursor-pointer transition-opacity ${
+              currentTab === "teams" ? "" : "opacity-30 hover:opacity-50"
+            }`}
+            onClick={() => handleTabChange("teams")}
           >
             팀
           </h1>
-          <h1 className="text-2xl font-bold">팔로잉</h1>
+          <h1
+            className={`text-2xl font-bold cursor-pointer transition-opacity ${
+              currentTab === "following" ? "" : "opacity-30 hover:opacity-50"
+            }`}
+            onClick={() => handleTabChange("following")}
+          >
+            팔로잉
+          </h1>
         </div>
         <div className="flex items-center gap-2">
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
@@ -137,7 +157,7 @@ const FollowingTeamsPage = () => {
               </h3>
               <p className="text-gray-500 mb-6">다른 팀을 팔로우해보세요</p>
               <button
-                onClick={handleAllTeamsClick}
+                onClick={() => handleTabChange("teams")}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 전체 팀 보기
