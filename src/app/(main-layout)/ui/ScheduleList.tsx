@@ -88,7 +88,7 @@ const ScheduleList = ({
     >
       <div className="flex px-4 gap-3 items-center">
         <div
-          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg/5 group-hover:ring ring-gray-400 pb-1 z-10`}
+          className={`size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg group-hover:ring ring-gray-300 pb-1 z-10`}
         >
           <div className="font-medium text-xs text-gray-500">{weekday}</div>
           <div className="font-semibold">
@@ -111,10 +111,10 @@ const ScheduleList = ({
             {(schedule.status === "PENDING" ||
               schedule.status === "REJECTED") && (
               <span
-                className={`text-xs rounded-full px-1.5 py-0.5 ${
+                className={`group-hover:bg-white font-medium text-xs rounded-full px-1.5 py-0.5 ${
                   schedule.status === "REJECTED"
-                    ? "text-red-600 bg-red-500/10 group-hover:bg-red-500/15"
-                    : "text-gray-700 bg-gray-100 group-hover:bg-gray-200"
+                    ? "text-red-600"
+                    : "text-amber-600"
                 }`}
               >
                 {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
