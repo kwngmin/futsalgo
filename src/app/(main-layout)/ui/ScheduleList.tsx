@@ -98,6 +98,24 @@ const ScheduleList = ({
         </div>
         <div className="grow flex flex-col justify-center">
           <div className="flex items-center gap-1.5 truncate leading-none h-5 tracking-tight">
+            {" "}
+            {(schedule.status === "PENDING" ||
+              schedule.status === "REJECTED") && (
+              <div
+                className={`flex items-center gap-0.5 font-semibold text-xs rounded-full pb-px ${
+                  schedule.status === "REJECTED"
+                    ? "text-red-600"
+                    : "text-amber-600"
+                }`}
+              >
+                {schedule.status === "REJECTED" ? (
+                  <Ban className="size-3" strokeWidth={2.25} />
+                ) : (
+                  <Hourglass className="size-3" strokeWidth={2.25} />
+                )}
+                {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
+              </div>
+            )}
             <span className="text-gray-800 text-sm">{schedule.place}</span>
             <Separator
               orientation="vertical"
@@ -109,23 +127,6 @@ const ScheduleList = ({
                 minute: "numeric",
               })}
             </span>
-            {(schedule.status === "PENDING" ||
-              schedule.status === "REJECTED") && (
-              <div
-                className={`flex items-center gap-0.5 font-semibold text-xs rounded-full  ${
-                  schedule.status === "REJECTED"
-                    ? "text-red-600"
-                    : "text-amber-600"
-                }`}
-              >
-                {schedule.status === "REJECTED" ? (
-                  <Ban className="size-3" />
-                ) : (
-                  <Hourglass className="size-3" />
-                )}
-                {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
-              </div>
-            )}
           </div>
           <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
