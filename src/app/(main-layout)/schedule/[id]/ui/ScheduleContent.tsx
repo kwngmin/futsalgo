@@ -439,7 +439,7 @@ const ScheduleContent = ({
             {data.data.isManager === "GUEST" && (
               <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
                 <button
-                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   onClick={() => handleRespondInvitation("ACCEPT")}
                   disabled={isRespondingInvitation}
                 >
@@ -449,7 +449,7 @@ const ScheduleContent = ({
                   수락
                 </button>
                 <button
-                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   onClick={() => handleRespondInvitation("DECLINE")}
                   disabled={isRespondingInvitation}
                 >
@@ -519,7 +519,7 @@ const ScheduleContent = ({
             </div>
             <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
               <button
-                className={`sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
                   isAttendanceStatus === "ATTENDING"
                     ? "text-white bg-indigo-600 hover:bg-indigo-700"
                     : "text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
@@ -543,7 +543,7 @@ const ScheduleContent = ({
                 참석
               </button>
               <button
-                className={`sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
                   isAttendanceStatus === "NOT_ATTENDING"
                     ? "text-white bg-red-600 hover:bg-red-700"
                     : "text-red-600 bg-red-50 hover:bg-red-100"
