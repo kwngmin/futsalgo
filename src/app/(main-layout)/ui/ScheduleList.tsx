@@ -84,7 +84,7 @@ const ScheduleList = ({
 
   return (
     <div
-      className="flex flex-col py-1.5 select-none hover:bg-gray-50 transition-colors cursor-pointer group"
+      className="flex flex-col py-1.5 select-none hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group"
       onClick={() => handleScheduleClick(schedule.id)}
     >
       <div className="flex px-4 gap-3 items-center">
@@ -221,7 +221,7 @@ const ScheduleList = ({
       schedule.attendanceDeadline > new Date() ? (
         <div className="mx-4 flex justify-between items-center pl-12 gap-2 relative">
           <div className="absolute border-l border-b border-gray-300 left-7 w-4 h-4 bottom-3 rounded-bl-sm" />
-          <div className="h-7 flex items-center gap-1 text-sm px-1.5 rounded-sm group-hover:bg-white">
+          <div className="h-7 flex items-center gap-1 text-sm px-1.5 rounded-sm group-hover:bg-white/50">
             <CalendarCheckIcon
               className="size-4.5 text-indigo-700"
               weight="fill"
