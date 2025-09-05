@@ -36,7 +36,7 @@ const HomePage = () => {
     return <SchedulePageLoading isPage />;
   }
 
-  const myTeams = data?.data?.myTeams.map((team) => team.id);
+  // const myTeams = data?.data?.myTeams.map((team) => team.id);
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -88,7 +88,7 @@ const HomePage = () => {
             <ScheduleList
               schedule={schedule}
               key={schedule.id}
-              myTeams={myTeams}
+              // myTeams={myTeams}
             />
           );
         })}
@@ -99,7 +99,7 @@ const HomePage = () => {
             <ScheduleList
               schedule={schedule}
               key={schedule.id}
-              myTeams={myTeams}
+              // myTeams={myTeams}
             />
           );
         })}
@@ -131,7 +131,7 @@ const HomePage = () => {
             <ScheduleList
               schedule={schedule}
               key={schedule.id}
-              myTeams={myTeams}
+              // myTeams={myTeams}
             />
           );
         })}

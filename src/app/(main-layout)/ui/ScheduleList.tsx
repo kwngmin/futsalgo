@@ -2,11 +2,12 @@
 
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarCheckIcon, HourglassHighIcon } from "@phosphor-icons/react";
+import { CalendarCheckIcon } from "@phosphor-icons/react";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
 import { Separator } from "@/shared/components/ui/separator";
+import { Ban, Hourglass } from "lucide-react";
 
 type ScheduleListProps = Prisma.ScheduleGetPayload<{
   include: {
@@ -20,10 +21,10 @@ type ScheduleListProps = Prisma.ScheduleGetPayload<{
 
 const ScheduleList = ({
   schedule,
-  myTeams,
-}: {
+}: // myTeams,
+{
   schedule: ScheduleListProps;
-  myTeams?: string[];
+  // myTeams?: string[];
 }) => {
   const router = useRouter();
   const session = useSession();
@@ -110,15 +111,20 @@ const ScheduleList = ({
             </span>
             {(schedule.status === "PENDING" ||
               schedule.status === "REJECTED") && (
-              <span
-                className={`group-hover:bg-white font-medium text-xs rounded-full px-1.5 py-0.5 ${
+              <div
+                className={`flex items-center gap-0.5 font-semibold text-xs rounded-full  ${
                   schedule.status === "REJECTED"
                     ? "text-red-600"
                     : "text-amber-600"
                 }`}
               >
+                {schedule.status === "REJECTED" ? (
+                  <Ban className="size-3" />
+                ) : (
+                  <Hourglass className="size-3" />
+                )}
                 {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
-              </span>
+              </div>
             )}
           </div>
           <div className="flex items-center gap-1.5">
@@ -165,7 +171,8 @@ const ScheduleList = ({
         </div>
       </div>
 
-      {myTeams && schedule.status === "PENDING" ? (
+      {/* 친선전 대기 상태 */}
+      {/* {myTeams && schedule.status === "PENDING" ? (
         <div className="mx-4 flex justify-between items-center pl-12 gap-2 relative">
           <div className="absolute border-l border-b border-gray-300 left-7 w-3 h-5 bottom-4 rounded-bl-sm" />
           {myTeams?.includes(schedule.hostTeamId) ? (
@@ -174,10 +181,6 @@ const ScheduleList = ({
                 className="size-6 text-amber-700"
                 weight="fill"
               />
-              {/* <Separator
-             orientation="vertical"
-             className="!h-3 !w-0.25 bg-gray-300"
-           /> */}
               <div className="w-full flex items-center gap-1 tracking-tight text-sm">
                 <span className="shrink-0 font-semibold text-sm">초청팀</span>
                 응답을 기다리는 중 입니다.
@@ -195,20 +198,13 @@ const ScheduleList = ({
                   을
                 </span>
                 제안 받았습니다. 응답해주세요
-                {/* <span className="font-medium text-emerald-700">
-                  {schedule.createdAt.toLocaleDateString("ko-KR", {
-                    month: "long",
-                    day: "numeric",
-                    // hour: "numeric",
-                    // minute: "numeric",
-                  })}
-                </span> */}
               </div>
             </div>
           )}
         </div>
-      ) : null}
+      ) : null} */}
 
+      {/* 참석 투표 상태 */}
       {attendanceStatus &&
       attendanceStatus === "UNDECIDED" &&
       schedule.status === "READY" &&
@@ -216,17 +212,12 @@ const ScheduleList = ({
       schedule.attendanceDeadline &&
       schedule.attendanceDeadline > new Date() ? (
         <div className="mx-4 flex justify-between items-center pl-12 gap-2 relative">
-          <div className="absolute border-l border-b border-gray-300 left-7 w-3 h-5 bottom-4 rounded-bl-sm" />
-          <div className="h-9 flex items-center gap-2 text-sm">
+          <div className="absolute border-l border-b border-gray-300 left-7 w-4 h-4 bottom-3 rounded-bl-sm" />
+          <div className="h-7 flex items-center gap-1 text-sm px-1.5 rounded-sm group-hover:bg-white">
             <CalendarCheckIcon
-              className="size-6 text-indigo-700"
+              className="size-4.5 text-indigo-700"
               weight="fill"
             />
-
-            {/* <Separator
-              orientation="vertical"
-              className="!h-3 !w-0.25 bg-gray-300"
-            /> */}
             <div className="w-full flex items-center gap-1 tracking-tight text-sm">
               <span>
                 <span className="font-medium text-indigo-700">

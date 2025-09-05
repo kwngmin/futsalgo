@@ -23,7 +23,6 @@ export interface GetMySchedulesResponse {
   error?: string;
   data?: {
     schedules: ScheduleWithDetails[];
-    myTeams: Team[];
   };
 }
 
@@ -70,7 +69,7 @@ async function getUserTeamInfo(userId: string) {
 
   return {
     approvedTeamIds: player.teams.map((t) => t.teamId),
-    myTeams: player.teams.map((t) => t.team),
+    // myTeams: player.teams.map((t) => t.team),
   };
 }
 
@@ -126,7 +125,7 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
       };
     }
 
-    const { approvedTeamIds, myTeams } = await getUserTeamInfo(session.user.id);
+    const { approvedTeamIds } = await getUserTeamInfo(session.user.id);
 
     // 팀에 속하지 않은 경우
     if (approvedTeamIds.length === 0) {
@@ -134,7 +133,6 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
         success: true,
         data: {
           schedules: [],
-          myTeams: [],
         },
       };
     }
@@ -146,7 +144,6 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
       success: true,
       data: {
         schedules,
-        myTeams,
       },
     };
   } catch (error) {

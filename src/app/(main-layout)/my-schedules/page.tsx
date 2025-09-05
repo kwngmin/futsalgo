@@ -85,7 +85,7 @@ const MySchedulesPage = () => {
     );
   }
 
-  const myTeams = data?.data?.myTeams.map((team) => team.id);
+  // const myTeams = data?.data?.myTeams.map((team) => team.id);
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -126,7 +126,7 @@ const MySchedulesPage = () => {
             <ScheduleList
               schedule={schedule}
               key={schedule.id}
-              myTeams={myTeams}
+              // myTeams={myTeams}
             />
           );
         })}

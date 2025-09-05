@@ -214,7 +214,17 @@ const ManageAttendanceContent = ({
         setMercenaryCount(newCount);
         // 필요시 쿼리 무효화
         queryClient.invalidateQueries({
-          queryKey: ["schedule", scheduleId],
+          predicate: (query) => {
+            const queryKey = query.queryKey;
+            return (
+              (Array.isArray(queryKey) &&
+                queryKey[0] === "schedule" &&
+                queryKey[1] === scheduleId) ||
+              (Array.isArray(queryKey) &&
+                queryKey[0] === "scheduleAttendance" &&
+                queryKey[1] === scheduleId)
+            );
+          },
         });
       } else {
         alert(result.error || "용병 수 업데이트에 실패했습니다.");
@@ -377,7 +387,7 @@ const ManageAttendanceContent = ({
               <button
                 type="button"
                 disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="h-9 w-20 grow rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opaci ty-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                className="h-9 w-20 grow rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opaci ty-50 disabled:cursor-not-allowed transition-colors text-sm font-medium cursor-pointer"
                 onClick={() => handleMercenaryCountChange(0)}
               >
                 없음
@@ -410,7 +420,7 @@ const ManageAttendanceContent = ({
               <button
                 type="button"
                 disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 onClick={() => handleMercenaryCountChange(2)}
               >
                 <Minus className="size-4.5 sm:size-4" />
@@ -421,7 +431,7 @@ const ManageAttendanceContent = ({
               <button
                 type="button"
                 disabled={isMercenaryUpdating}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
               >
                 <Plus className="size-4.5 sm:size-4" />

@@ -8,6 +8,7 @@ import {
   ScheduleAttendance,
   User,
   ScheduleLike,
+  ScheduleStatus,
 } from "@prisma/client";
 
 export interface ScheduleWithDetails extends Schedule {
@@ -26,7 +27,7 @@ export interface GetSchedulesResponse {
     upcomingSchedules: ScheduleWithDetails[];
     pastSchedules: ScheduleWithDetails[];
     manageableTeams: Team[];
-    myTeams: Team[];
+    // myTeams: Team[];
     likes: ScheduleLike[];
   };
 }
@@ -62,7 +63,9 @@ function getNextDay(date: Date): Date {
 // 일정 조회를 위한 공통 where 조건 생성
 function createScheduleWhereCondition(teamIds: string[]) {
   return {
-    status: { not: "DELETED" as const },
+    NOT: {
+      status: { in: [ScheduleStatus.REJECTED, ScheduleStatus.DELETED] },
+    },
     OR: [{ hostTeamId: { in: teamIds } }, { invitedTeamId: { in: teamIds } }],
   };
 }
@@ -75,12 +78,19 @@ async function getPastSchedules(): Promise<ScheduleWithDetails[]> {
     where: {
       date: { lt: today },
       NOT: {
-        status: { in: ["PENDING", "REJECTED", "READY", "DELETED"] },
+        status: {
+          in: [
+            ScheduleStatus.PENDING,
+            ScheduleStatus.REJECTED,
+            ScheduleStatus.READY,
+            ScheduleStatus.DELETED,
+          ],
+        },
       },
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
-  });
+  }) as Promise<ScheduleWithDetails[]>;
 }
 
 // 사용자의 팀 정보 조회
@@ -107,7 +117,7 @@ async function getUserTeamInfo(userId: string) {
   return {
     approvedTeamIds,
     manageableTeams,
-    myTeams: player.teams.map((t) => t.team),
+    // myTeams: player.teams.map((t) => t.team),
   };
 }
 
@@ -125,7 +135,7 @@ async function getTodaysSchedules(
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { createdAt: "desc" },
-  });
+  }) as Promise<ScheduleWithDetails[]>;
 }
 
 // 예정된 일정 조회
@@ -141,7 +151,7 @@ async function getUpcomingSchedules(
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "asc" },
-  });
+  }) as Promise<ScheduleWithDetails[]>;
 }
 
 export async function getSchedules(): Promise<GetSchedulesResponse> {
@@ -161,13 +171,13 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
           upcomingSchedules: [],
           pastSchedules,
           manageableTeams: [],
-          myTeams: [],
+          // myTeams: [],
           likes: [],
         },
       };
     }
 
-    const { approvedTeamIds, manageableTeams, myTeams } = await getUserTeamInfo(
+    const { approvedTeamIds, manageableTeams } = await getUserTeamInfo(
       session.user.id
     );
 
@@ -183,7 +193,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         todaysSchedules,
         upcomingSchedules,
         manageableTeams,
-        myTeams,
+        // myTeams,
         likes: [], // 필요시 별도 조회 로직 추가
       },
     };
