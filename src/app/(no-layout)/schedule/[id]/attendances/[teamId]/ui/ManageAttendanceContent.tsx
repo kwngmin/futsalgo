@@ -1,7 +1,7 @@
 "use client";
 
 import { AttendanceStatus, Prisma } from "@prisma/client";
-import { Minus, RefreshCcw, SquareCheckBig, X } from "lucide-react";
+import { Minus, Plus, RefreshCcw, SquareCheckBig, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { addAttendances } from "../actions/add-attendances";
 import { updateAttendance } from "../actions/update-attendance";
@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { updateAllAttendanceStatus } from "../actions/update-all-attendace-status";
 import { removeAttendance } from "../actions/remove-attendance";
+import { Separator } from "@/shared/components/ui/separator";
 
 type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
   select: {
@@ -361,39 +362,6 @@ const ManageAttendanceContent = ({
         </div>
 
         {/* 용병 수 관리 섹션 */}
-        {/* <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Users className="size-5 text-blue-600" />
-              <span className="font-semibold text-blue-900">용병 수</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                onClick={() => handleMercenaryCountChange(mercenaryCount - 1)}
-              >
-                -
-              </button>
-              <span className="min-w-[3rem] text-center font-semibold text-lg">
-                {mercenaryCount}
-              </span>
-              <button
-                type="button"
-                disabled={isMercenaryUpdating}
-                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
-              >
-                +
-              </button>
-            </div>
-          </div>
-          <p className="text-sm text-blue-700 mt-2">
-            경기에 참여할 용병의 수를 설정하세요.
-          </p>
-        </div> */}
-
         <article className="flex items-center gap-4 py-3 border-t border-gray-100 min-h-16">
           <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
             {sortedData.length + 1}
@@ -405,14 +373,47 @@ const ManageAttendanceContent = ({
                 경기에 참여 할 용병의 수
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:min-w-72 h-10 rounded-md bg-gray-100 p-0.5">
               <button
                 type="button"
                 disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                onClick={() => handleMercenaryCountChange(mercenaryCount - 1)}
+                className="h-9 w-20 grow rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opaci ty-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                onClick={() => handleMercenaryCountChange(0)}
               >
-                -
+                없음
+              </button>
+              {/* <button
+                type="button"
+                disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(0)}
+              >
+                0
+              </button>
+              <button
+                type="button"
+                disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(1)}
+              >
+                1
+              </button>
+              <button
+                type="button"
+                disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(2)}
+              >
+                2
+              </button> */}
+              <Separator orientation="vertical" className="!h-7 w-px" />
+              <button
+                type="button"
+                disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => handleMercenaryCountChange(2)}
+              >
+                <Minus className="size-4.5 sm:size-4" />
               </button>
               <span className="min-w-[3rem] text-center font-semibold text-lg">
                 {mercenaryCount}
@@ -420,10 +421,10 @@ const ManageAttendanceContent = ({
               <button
                 type="button"
                 disabled={isMercenaryUpdating}
-                className="size-8 rounded-md bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
               >
-                +
+                <Plus className="size-4.5 sm:size-4" />
               </button>
             </div>
           </div>
