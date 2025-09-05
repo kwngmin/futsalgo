@@ -22,6 +22,7 @@ import { useState, useRef, useEffect } from "react";
 import ScheduleAttendance from "./ScheduleAttendance";
 import {
   CalendarCheckIcon,
+  CalendarXIcon,
   HourglassHighIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
@@ -41,16 +42,11 @@ import { Button } from "@/shared/components/ui/button";
 import { addMatch } from "../actions/add-match";
 import { deleteSchedule } from "../actions/delete-schedule";
 import { updateScheduleNotice } from "../actions/update-schedule-notice";
-// import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import Image from "next/image";
-// import { Separator } from "@/shared/components/ui/separator";
 import { updateAttendanceStatus } from "../actions/update-attendance-status";
-import {
-  acceptTeamMatchInvitation,
-  rejectTeamMatchInvitation,
-} from "@/features/add-schedule/model/actions/add-new-schedule";
 import { Separator } from "@/shared/components/ui/separator";
 import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
+import { respondTeamInvitation } from "../actions/respond-team-invitation";
 
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
@@ -115,34 +111,6 @@ export function calculateDday(date: Date): number {
 
   return diffDays;
 }
-
-export const tabs = [
-  {
-    label: "개요",
-    value: "overview",
-    isDisabled: false,
-  },
-  {
-    label: "참석자",
-    value: "attendance",
-    isDisabled: false,
-  },
-  {
-    label: "MVP",
-    value: "mvp",
-    isDisabled: false,
-  },
-  {
-    label: "사진",
-    value: "photos",
-    isDisabled: false,
-  },
-  {
-    label: "댓글",
-    value: "comments",
-    isDisabled: false,
-  },
-];
 
 const ScheduleContent = ({
   scheduleId,
@@ -214,8 +182,6 @@ const ScheduleContent = ({
 
   const canEditNotice = currentUserId === data?.data?.schedule?.createdBy.id;
   const hasNoticeContent = Boolean(data?.data?.schedule?.description);
-  const shouldShowNoticeSection =
-    isAttendance && (canEditNotice || hasNoticeContent);
 
   const handleGoBack = () => {
     if (searchParams.get("tab") === "/my-schedules") {
@@ -274,18 +240,18 @@ const ScheduleContent = ({
   const handleRespondInvitation = async (response: "ACCEPT" | "DECLINE") => {
     setIsRespondingInvitation(true);
     try {
-      // const result = await respondTeamInvitation(scheduleId, response);
-      const invitedTeamId = data?.data?.schedule?.invitedTeamId;
-      const result =
-        response === "ACCEPT"
-          ? await acceptTeamMatchInvitation({
-              scheduleId,
-              invitedTeamId: invitedTeamId!,
-            })
-          : await rejectTeamMatchInvitation({
-              scheduleId,
-              // reason: "거절 이유",
-            });
+      const result = await respondTeamInvitation(scheduleId, response);
+      // const invitedTeamId = data?.data?.schedule?.invitedTeamId;
+      // const result =
+      //   response === "ACCEPT"
+      //     ? await acceptTeamMatchInvitation({
+      //         scheduleId,
+      //         invitedTeamId: invitedTeamId!,
+      //       })
+      //     : await rejectTeamMatchInvitation({
+      //         scheduleId,
+      //         // reason: "거절 이유",
+      //       });
       if (result.success) {
         refetch(); // 데이터 새로고침
         if (response === "ACCEPT") {
@@ -497,6 +463,28 @@ const ScheduleContent = ({
           </div>
         )}
 
+      {/* 친선전 요청 거절 상태 (REJECTED) */}
+      {data.data.schedule.status === "REJECTED" &&
+        (isAttendance || data.data.isManager) && (
+          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 rounded-2xl p-4 select-none mb-4 bg-slate-600/5 border border-slate-200">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-full bg-white">
+                <CalendarXIcon
+                  className="size-6 text-slate-600"
+                  weight="fill"
+                />
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="w-full flex justify-center items-center gap-1 tracking-tight font-medium">
+                  {data.data.isManager === "GUEST"
+                    ? "친선전 제안을 거절했습니다."
+                    : "초청팀이 제안을 거절했습니다."}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
       {/* 경기일정 참석여부 투표 */}
       {isAttendance &&
         data.data.schedule.status === "READY" &&
@@ -679,109 +667,111 @@ const ScheduleContent = ({
           )}
 
         {/* 공지사항 */}
-        {shouldShowNoticeSection && (
-          <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-13">
-              <div className="flex items-center gap-2">
-                <MegaphoneSimpleIcon
-                  weight="fill"
-                  className="size-7 text-stone-500"
-                />
-                <h2 className="text-lg font-semibold">공지사항</h2>
+        {(data.data.schedule.status === "READY" ||
+          data.data.schedule.status === "PLAY") &&
+          data?.data?.isMember && (
+            <div className="px-4">
+              <div className="flex justify-between items-center py-2 min-h-13">
+                <div className="flex items-center gap-2">
+                  <MegaphoneSimpleIcon
+                    weight="fill"
+                    className="size-7 text-stone-500"
+                  />
+                  <h2 className="text-lg font-semibold">공지사항</h2>
+                </div>
+                <div className="flex items-center gap-2">
+                  {!isEditingNotice && (
+                    <Button
+                      size="sm"
+                      className="text-base sm:text-sm !font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
+                      onClick={() => setIsNoticeOpen(!isNoticeOpen)}
+                    >
+                      {isNoticeOpen ? "접기" : "펼치기"}
+                      {isNoticeOpen ? (
+                        <ChevronUp className="size-4" />
+                      ) : (
+                        <ChevronDown className="size-4" />
+                      )}
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                {!isEditingNotice && (
-                  <Button
-                    size="sm"
-                    className="text-base sm:text-sm !font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
-                    onClick={() => setIsNoticeOpen(!isNoticeOpen)}
-                  >
-                    {isNoticeOpen ? "접기" : "펼치기"}
-                    {isNoticeOpen ? (
-                      <ChevronUp className="size-4" />
-                    ) : (
-                      <ChevronDown className="size-4" />
-                    )}
-                  </Button>
-                )}
-              </div>
-            </div>
 
-            {isNoticeOpen && (
-              <div className="space-y-3">
-                {!isEditingNotice ? (
-                  // 읽기 모드
-                  <div>
-                    {hasNoticeContent ? (
-                      <div className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line break-words">
-                        {data?.data?.schedule?.description}
-                      </div>
-                    ) : (
-                      <div className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line break-words min-h-16 flex items-center justify-center sm:text-sm">
-                        공지사항이 없습니다.
-                      </div>
-                    )}
+              {isNoticeOpen && (
+                <div className="space-y-3">
+                  {!isEditingNotice ? (
+                    // 읽기 모드
+                    <div>
+                      {hasNoticeContent ? (
+                        <div className="border p-4 bg-white rounded-2xl min-h-40 whitespace-pre-line break-words">
+                          {data?.data?.schedule?.description}
+                        </div>
+                      ) : (
+                        <div className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line break-words min-h-16 flex items-center justify-center sm:text-sm">
+                          공지사항이 없습니다.
+                        </div>
+                      )}
 
-                    {/* 편집 버튼 (글쓴이만) */}
-                    {canEditNotice && (
-                      <div className="pt-3">
+                      {/* 편집 버튼 (글쓴이만) */}
+                      {canEditNotice && (
+                        <div className="pt-3">
+                          <Button
+                            // size="sm"
+                            variant="outline"
+                            className="text-base sm:text-sm font-semibold gap-2 border-gray-300 hover:border-gray-400"
+                            onClick={handleStartEditNotice}
+                          >
+                            <Edit3 className="size-4" />
+                            {hasNoticeContent ? "수정하기" : "공지사항 작성"}
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    // 편집 모드
+                    <div className="space-y-3">
+                      <textarea
+                        ref={textareaRef}
+                        value={noticeContent}
+                        onChange={(e) => setNoticeContent(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="공지사항을 입력해주세요..."
+                        className="w-full min-h-40 p-4 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      />
+                      <div className="flex gap-2">
                         <Button
-                          // size="sm"
-                          variant="outline"
-                          className="text-base sm:text-sm font-semibold gap-2 border-gray-300 hover:border-gray-400"
-                          onClick={handleStartEditNotice}
+                          size="sm"
+                          onClick={handleSaveNotice}
+                          disabled={isSavingNotice}
+                          className="font-semibold gap-2"
                         >
-                          <Edit3 className="size-4" />
-                          {hasNoticeContent ? "수정하기" : "공지사항 작성"}
+                          {isSavingNotice ? (
+                            <Loader2 className="size-4 animate-spin" />
+                          ) : (
+                            <Save className="size-4" />
+                          )}
+                          저장
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleCancelEditNotice}
+                          disabled={isSavingNotice}
+                          className="font-semibold gap-2"
+                        >
+                          <X className="size-4" />
+                          취소
                         </Button>
                       </div>
-                    )}
-                  </div>
-                ) : (
-                  // 편집 모드
-                  <div className="space-y-3">
-                    <textarea
-                      ref={textareaRef}
-                      value={noticeContent}
-                      onChange={(e) => setNoticeContent(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="공지사항을 입력해주세요..."
-                      className="w-full min-h-40 p-4 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        onClick={handleSaveNotice}
-                        disabled={isSavingNotice}
-                        className="font-semibold gap-2"
-                      >
-                        {isSavingNotice ? (
-                          <Loader2 className="size-4 animate-spin" />
-                        ) : (
-                          <Save className="size-4" />
-                        )}
-                        저장
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={handleCancelEditNotice}
-                        disabled={isSavingNotice}
-                        className="font-semibold gap-2"
-                      >
-                        <X className="size-4" />
-                        취소
-                      </Button>
+                      <p className="text-sm text-gray-500">
+                        ESC로 취소, Ctrl+Enter로 저장
+                      </p>
                     </div>
-                    <p className="text-sm text-gray-500">
-                      ESC로 취소, Ctrl+Enter로 저장
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
         {/* MVP */}
         {data.data.schedule.startTime <= new Date() &&
@@ -795,7 +785,8 @@ const ScheduleContent = ({
           <ScheduleAttendance scheduleId={scheduleId} />
         )}
 
-        {data.data.schedule.status === "PENDING" && (
+        {(data.data.schedule.status === "PENDING" ||
+          data.data.schedule.status === "REJECTED") && (
           <div className="relative grid grid-cols-2 px-4 pt-6 pb-3 sm:pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
             <TeamSide
               logoUrl={data.data.schedule.hostTeam?.logoUrl}
@@ -818,9 +809,11 @@ const ScheduleContent = ({
         )}
 
         {/* 사진 */}
-        {data.data.schedule.startTime <= new Date() && (
-          <SchedulePhotosGallery scheduleId={scheduleId} />
-        )}
+        {(data.data.schedule.status === "READY" ||
+          data.data.schedule.status === "PLAY") &&
+          data.data.schedule.startTime <= new Date() && (
+            <SchedulePhotosGallery scheduleId={scheduleId} />
+          )}
 
         {/* 댓글 */}
         <ScheduleComments scheduleId={scheduleId} />

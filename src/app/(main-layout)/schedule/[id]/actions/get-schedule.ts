@@ -5,8 +5,6 @@ import { prisma } from "@/shared/lib/prisma";
 
 export async function getSchedule(scheduleId: string) {
   try {
-    const session = await auth();
-
     // 1. 일정 정보는 로그인 여부와 관계없이 항상 조회
     const schedule = await prisma.schedule.findUnique({
       where: { id: scheduleId },
@@ -47,6 +45,7 @@ export async function getSchedule(scheduleId: string) {
     }
 
     // 2. 로그인하지 않은 경우 → 일정만 리턴
+    const session = await auth();
     if (!session?.user?.id) {
       return {
         success: true,
@@ -74,35 +73,43 @@ export async function getSchedule(scheduleId: string) {
       };
     }
 
-    // 4. 내가 관리자 권한을 가진 팀인지 확인
+    // 4. 팀 멤버십 및 권한 확인 (한 번의 루프로 처리)
     let isManager: "HOST" | "GUEST" | null = null;
+    let isMember = false;
 
     for (const teamMember of player.teams) {
-      if (
-        teamMember.teamId === schedule.hostTeamId &&
-        (teamMember.role === "OWNER" || teamMember.role === "MANAGER")
-      ) {
-        isManager = "HOST";
-        break;
+      const { teamId, role } = teamMember;
+      const isManagerRole = role === "OWNER" || role === "MANAGER";
+
+      if (teamId === schedule.hostTeamId) {
+        isMember = true;
+        if (isManagerRole && !isManager) {
+          isManager = "HOST";
+        }
+      } else if (teamId === schedule.invitedTeamId) {
+        isMember = true;
+        if (isManagerRole && !isManager) {
+          isManager = "GUEST";
+        }
       }
-      if (
-        teamMember.teamId === schedule.invitedTeamId &&
-        (teamMember.role === "OWNER" || teamMember.role === "MANAGER")
-      ) {
-        isManager = "GUEST";
-        break;
-      }
+
+      // 두 팀 모두 확인했으면 루프 종료
+      if (isManager && isMember) break;
     }
 
     return {
       success: true,
       data: {
         schedule,
-        isManager, // "HOST" | "GUEST" | null
+        isManager,
+        isMember,
       },
     };
   } catch (error) {
     console.error("스케줄 데이터 조회 실패:", error);
-    return { success: false, error: "서버 오류가 발생했습니다" };
+    return {
+      success: false,
+      error: "서버 오류가 발생했습니다",
+    };
   }
 }
