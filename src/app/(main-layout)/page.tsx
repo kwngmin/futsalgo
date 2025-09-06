@@ -16,6 +16,7 @@ import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -89,15 +90,23 @@ const HomePage = () => {
 
       {/* 필터 */}
       <div>
-        <div className="flex items-center gap-1 select-none mb-2">
-          <div className="shrink-0 size-10 flex items-center justify-center ml-4 mr-2 border rounded-full">
+        <div className="flex items-center gap-1.5 select-none mb-2">
+          <div className="shrink-0 size-10 flex items-center justify-center ml-4 border rounded-full">
             <SlidersHorizontal className="size-5" strokeWidth={2.5} />
           </div>
-          <div className="text-sm font-semibold bg-black text-white  px-3 h-8 flex items-center justify-center rounded-full">
+          <div className="sm:text-sm font-semibold bg-black text-white  px-4 h-9 sm:h-8 flex items-center justify-center rounded-full">
             자체전
           </div>
-          <div className="text-sm font-semibold bg-black text-white  px-3 h-8 flex items-center justify-center rounded-full">
+          <div className="sm:text-sm font-semibold bg-black text-white  px-4 h-9 sm:h-8 flex items-center justify-center rounded-full">
             친선전
+          </div>
+          <div className="sm:text-sm font-semibold bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full">
+            <SunIcon className="size-5 text-red-500" weight="fill" />
+            오전
+          </div>
+          <div className="sm:text-sm font-semibold bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full">
+            <MoonIcon className="size-5 text-yellow-500" weight="fill" />
+            오후
           </div>
         </div>
       </div>
