@@ -90,27 +90,27 @@ const HomePage = () => {
       {/* 필터 */}
       <div className="flex items-center gap-3 select-none mb-3 relative">
         <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
-        <div className="shrink-0 size-10 flex items-center justify-center ml-4 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 active:scale-95">
-          <SlidersHorizontalIcon className="size-5" strokeWidth={2.5} />
+        <div className="shrink-0 size-10 flex items-center justify-center ml-4 bg-black text-white rounded-full cursor-pointer hover:bg-black/80 active:scale-95">
+          <SlidersHorizontalIcon className="size-6" />
         </div>
-        <div className="grow overflow-hidden h-9 sm:h-8 flex border-l">
+        <div className="grow overflow-hidden h-9 sm:h-8 flex border-l border-gray-300">
           <div className="pl-3 pr-8 h-12 sm:h-11 overflow-x-scroll scroll-ml-4 flex gap-1.5">
-            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium bg-gray-100 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <HandsClappingIcon
-                className="size-5 text-purple-600"
+                className="size-5 text-purple-700"
                 weight="fill"
               />
               자체전
             </div>
-            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              <HandshakeIcon className="size-5 text-blue-600" weight="fill" />
+            <div className="sm:text-sm font-medium bg-gray-100 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+              <HandshakeIcon className="size-5 text-blue-700" weight="fill" />
               친선전
             </div>
-            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium bg-gray-100 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <SunIcon className="size-5 text-red-500" weight="fill" />
               오전
             </div>
-            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium bg-gray-100 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <MoonIcon className="size-5 text-yellow-500" weight="fill" />
               오후
             </div>
@@ -127,7 +127,7 @@ const HomePage = () => {
             className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:bg-black"
           >
             <div className="flex items-center justify-center gap-2">
-              <div className="shrink-0 size-6 flex items-center justify-center bg-white text-indigo-600 rounded-full">
+              <div className="shrink-0 size-7 md:size-6 flex items-center justify-center bg-white text-indigo-600 rounded-full">
                 <Plus className="size-5" strokeWidth={2.5} />
               </div>
               <span className="text-sm font-semibold">새로운 일정 추가</span>
