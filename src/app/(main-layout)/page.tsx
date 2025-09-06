@@ -4,7 +4,14 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ArrowDownUp, ChevronRight, Plus, Search } from "lucide-react";
+import {
+  // ArrowDownUp,
+  ChevronRight,
+  Plus,
+  Search,
+  SlidersHorizontal,
+  // Settings2,
+} from "lucide-react";
 import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
@@ -64,9 +71,9 @@ const HomePage = () => {
           <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <Search className="size-5" />
           </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
+          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <ArrowDownUp className="size-5" />
-          </button>
+          </button> */}
           {/* {Array.isArray(data?.data?.manageableTeams) &&
             data?.data?.manageableTeams.length > 0 && (
               <button
@@ -77,6 +84,21 @@ const HomePage = () => {
                 <Plus className="size-5" strokeWidth={2} />
               </button>
             )} */}
+        </div>
+      </div>
+
+      {/* 필터 */}
+      <div>
+        <div className="flex items-center gap-1 select-none mb-2">
+          <div className="shrink-0 size-10 flex items-center justify-center ml-4 mr-2 border rounded-full">
+            <SlidersHorizontal className="size-5" strokeWidth={2.5} />
+          </div>
+          <div className="text-sm font-semibold bg-black text-white  px-3 h-8 flex items-center justify-center rounded-full">
+            자체전
+          </div>
+          <div className="text-sm font-semibold bg-black text-white  px-3 h-8 flex items-center justify-center rounded-full">
+            친선전
+          </div>
         </div>
       </div>
 
