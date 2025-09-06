@@ -4,19 +4,16 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  // ArrowDownUp,
-  ChevronRight,
-  Plus,
-  Search,
-  SlidersHorizontal,
-  // Settings2,
-} from "lucide-react";
+import { ChevronRight, Plus, Search } from "lucide-react";
 import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
-import { MoonIcon, SunIcon } from "@phosphor-icons/react";
+import {
+  MoonIcon,
+  SlidersHorizontalIcon,
+  SunIcon,
+} from "@phosphor-icons/react";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -91,8 +88,8 @@ const HomePage = () => {
       {/* 필터 */}
       <div>
         <div className="flex items-center gap-1.5 select-none mb-2">
-          <div className="shrink-0 size-10 flex items-center justify-center ml-4 border border-gray-300 rounded-full">
-            <SlidersHorizontal className="size-5" strokeWidth={2.5} />
+          <div className="shrink-0 size-10 flex items-center justify-center ml-4 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 active:scale-95">
+            <SlidersHorizontalIcon className="size-5" strokeWidth={2.5} />
           </div>
           <div className="sm:text-sm font-medium px-3.5 h-9 sm:h-8 flex items-center justify-center rounded-full border border-gray-500">
             자체전
@@ -100,12 +97,12 @@ const HomePage = () => {
           <div className="sm:text-sm font-medium px-3.5 h-9 sm:h-8 flex items-center justify-center rounded-full border border-gray-500">
             친선전
           </div>
-          <div className="sm:text-sm font-medium bg-gray-50 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full border border-gray-500 cursor-pointer hover:bg-gray-100 active:bg-gray-200">
-            <SunIcon className="size-5 text-red-500" weight="fill" />
+          <div className="sm:text-sm font-medium border border-gray-300 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95">
+            <SunIcon className="size-5 text-red-400" weight="fill" />
             오전
           </div>
-          <div className="sm:text-sm font-medium bg-gray-50 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full border border-gray-500 cursor-pointer hover:bg-gray-100 active:bg-gray-200">
-            <MoonIcon className="size-5 text-yellow-500" weight="fill" />
+          <div className="sm:text-sm font-medium border border-gray-300 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95">
+            <MoonIcon className="size-5 text-yellow-400" weight="fill" />
             오후
           </div>
         </div>
@@ -117,7 +114,7 @@ const HomePage = () => {
           <button
             type="button"
             onClick={() => router.push("/schedule/new")}
-            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:bg-black"
+            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:bg-black"
           >
             <div className="flex items-center justify-center gap-2">
               <div className="shrink-0 size-6 flex items-center justify-center bg-white text-indigo-600 rounded-full">
