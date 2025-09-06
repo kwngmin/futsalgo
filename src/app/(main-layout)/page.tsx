@@ -86,7 +86,7 @@ const HomePage = () => {
           <button
             type="button"
             onClick={() => router.push("/schedule/new")}
-            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 flex items-center justify-between bg-indigo-600 text-white hover:bg-black/80 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:scale-98 active:md:scale-100"
+            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:bg-black"
           >
             <div className="flex items-center justify-center gap-2">
               <div className="shrink-0 size-6 flex items-center justify-center bg-white text-indigo-600 rounded-full">
