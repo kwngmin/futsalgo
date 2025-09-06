@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Search, ArrowDownUp, Plus } from "lucide-react";
+import { Search, ArrowDownUp, Plus, ChevronRight } from "lucide-react";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { getTeams, type GetTeamsResponse } from "./model/actions";
 import { useSession } from "next-auth/react";
@@ -135,7 +135,7 @@ const TeamsPage = () => {
             <ArrowDownUp className="size-5" />
           </button>
           {/* 팀 생성 버튼 (전체 팀 페이지에서만 표시) */}
-          {Array.isArray(myTeams) && myTeams.length < 6 && (
+          {/* {Array.isArray(myTeams) && myTeams.length < 6 && (
             <button
               type="button"
               onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
@@ -143,9 +143,25 @@ const TeamsPage = () => {
             >
               <Plus className="size-5" strokeWidth={2} />
             </button>
-          )}
+          )} */}
         </div>
       </div>
+
+      {Array.isArray(myTeams) && myTeams.length < 6 && (
+        <button
+          type="button"
+          onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
+          className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 flex items-center justify-between bg-emerald-600 text-white hover:bg-black/80 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:scale-98 active:md:scale-100"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <div className="shrink-0 size-6 flex items-center justify-center bg-white text-emerald-600 rounded-full">
+              <Plus className="size-5" strokeWidth={2.5} />
+            </div>
+            <span className="text-sm font-semibold">새로운 팀 등록</span>
+          </div>
+          <ChevronRight className="size-5 opacity-80" strokeWidth={2} />
+        </button>
+      )}
 
       {isLoading ? (
         <SkeletonContent />
