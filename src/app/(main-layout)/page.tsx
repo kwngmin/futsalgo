@@ -88,28 +88,29 @@ const HomePage = () => {
       </div>
 
       {/* 필터 */}
-      <div className="flex items-center gap-2 select-none mb-2">
+      <div className="flex items-center gap-3 select-none mb-3 relative">
+        <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
         <div className="shrink-0 size-10 flex items-center justify-center ml-4 border border-gray-300 rounded-full cursor-pointer hover:bg-gray-100 active:scale-95">
           <SlidersHorizontalIcon className="size-5" strokeWidth={2.5} />
         </div>
         <div className="grow overflow-hidden h-9 sm:h-8 flex border-l">
-          <div className="pl-2 pr-4 h-12 sm:h-11 overflow-x-scroll scroll-ml-4 flex gap-1.5">
-            <div className="sm:text-sm font-medium border border-gray-300 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+          <div className="pl-3 pr-8 h-12 sm:h-11 overflow-x-scroll scroll-ml-4 flex gap-1.5">
+            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <HandsClappingIcon
-                className="size-5 text-purple-500"
+                className="size-5 text-purple-600"
                 weight="fill"
               />
               자체전
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              <HandshakeIcon className="size-5 text-blue-500" weight="fill" />
+            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+              <HandshakeIcon className="size-5 text-blue-600" weight="fill" />
               친선전
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <SunIcon className="size-5 text-red-500" weight="fill" />
               오전
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-500 hover:bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <MoonIcon className="size-5 text-yellow-500" weight="fill" />
               오후
             </div>
