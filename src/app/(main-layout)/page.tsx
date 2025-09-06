@@ -100,11 +100,11 @@ const HomePage = () => {
           <div className="sm:text-sm font-semibold bg-black text-white  px-4 h-9 sm:h-8 flex items-center justify-center rounded-full">
             친선전
           </div>
-          <div className="sm:text-sm font-semibold bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full">
+          <div className="sm:text-sm font-medium bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full border">
             <SunIcon className="size-5 text-red-500" weight="fill" />
             오전
           </div>
-          <div className="sm:text-sm font-semibold bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full">
+          <div className="sm:text-sm font-medium bg-gray-100 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full border">
             <MoonIcon className="size-5 text-yellow-500" weight="fill" />
             오후
           </div>
