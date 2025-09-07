@@ -19,16 +19,16 @@ type ScheduleListProps = Prisma.ScheduleGetPayload<{
   };
 }>;
 
-function isSameDate(date: Date | string): boolean {
-  const d1 = new Date(date);
-  const d2 = new Date();
+// function isSameDate(date: Date | string): boolean {
+//   const d1 = new Date(date);
+//   const d2 = new Date();
 
-  return (
-    d1.getFullYear() === d2.getFullYear() &&
-    d1.getMonth() === d2.getMonth() &&
-    d1.getDate() === d2.getDate()
-  );
-}
+//   return (
+//     d1.getFullYear() === d2.getFullYear() &&
+//     d1.getMonth() === d2.getMonth() &&
+//     d1.getDate() === d2.getDate()
+//   );
+// }
 
 const ScheduleList = ({
   schedule,
@@ -99,9 +99,9 @@ const ScheduleList = ({
       onClick={() => handleScheduleClick(schedule.id)}
     >
       <div className="flex px-4 gap-3 items-center relative">
-        {isSameDate(schedule.date) && (
+        {/* {isSameDate(schedule.date) && (
           <div className="absolute top-0 left-4 z-20 bg-red-600 rounded-full size-2 outline-2 outline-white" />
-        )}
+        )} */}
         <div
           className={`shrink-0 size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg group-hover:outline group-active:bg-white group-active:shadow-lg group-active:outline outline-gray-300 pb-1 z-10`}
         >
