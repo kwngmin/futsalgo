@@ -141,7 +141,7 @@ const HomePage = () => {
         {Array.isArray(data?.data?.todaysSchedules) &&
           data?.data?.todaysSchedules?.length > 0 && (
             <div className="flex items-center gap-2 mt-4 first:mt-0 overflow-hidden px-5 h-8">
-              <div className="size-2 bg-red-500 rounded-full" />
+              <div className="size-2.5 sm:size-2 bg-red-500 rounded-full" />
               <div className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
                 오늘 일정
               </div>
@@ -163,7 +163,7 @@ const HomePage = () => {
         {Array.isArray(data?.data?.upcomingSchedules) &&
           data?.data?.upcomingSchedules?.length > 0 && (
             <div className="flex items-center gap-2 mt-4 first:mt-0 overflow-hidden px-5 h-8">
-              <div className="size-2 bg-amber-500 rounded-full" />
+              <div className="size-2.5 sm:size-2 bg-amber-500 rounded-full" />
               <div className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
                 예정된 일정
               </div>
@@ -194,7 +194,7 @@ const HomePage = () => {
           data?.data?.pastSchedules &&
           data.data.pastSchedules.length > 0 && (
             <div className="flex items-center gap-2 mt-4 first:mt-0 overflow-hidden px-5 h-8">
-              <div className="size-2 bg-gray-400 rounded-full" />
+              <div className="size-2.5 sm:size-2 bg-gray-400 rounded-full" />
               <div className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
                 지난 일정
               </div>
