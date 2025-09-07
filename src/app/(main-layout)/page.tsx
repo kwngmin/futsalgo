@@ -159,7 +159,7 @@ const HomePage = () => {
               </span>
               <Separator orientation="vertical" className="!h-3" />
               <span className="text-sm sm:text-xs text-gray-400 shrink-0">
-                비공개 일정
+                비공개
               </span>
               <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
             </div>
@@ -185,7 +185,7 @@ const HomePage = () => {
               </span>
               <Separator orientation="vertical" className="!h-3" />
               <span className="text-sm sm:text-xs text-gray-400 shrink-0">
-                비공개 일정
+                비공개
               </span>
               <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
             </div>
@@ -218,7 +218,8 @@ const HomePage = () => {
             </span>
             <Separator orientation="vertical" className="!h-3" />
             <span className="text-sm sm:text-xs text-gray-400 shrink-0">
-              공개 일정
+              {/* 공개됨 */}
+              전체공개 (비로그인 사용자 열람 가능)
             </span>
             <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
           </div>
