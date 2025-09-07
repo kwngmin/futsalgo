@@ -94,7 +94,7 @@ const HomePage = () => {
           <SlidersHorizontalIcon className="size-6" />
         </div>
         <div className="grow overflow-hidden h-9 sm:h-8 flex border-l border-gray-300">
-          <div className="pl-3 pr-8 h-12 sm:h-11 overflow-x-scroll scroll-ml-4 flex gap-1.5">
+          <div className="w-full pl-3 pr-8 h-12 sm:h-11 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1.5">
             <div className="sm:text-sm font-medium border border-gray-400 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <HandsClappingIcon
                 className="size-5 text-purple-700"
@@ -124,7 +124,7 @@ const HomePage = () => {
           <button
             type="button"
             onClick={() => router.push("/schedule/new")}
-            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-auto shrink-0 h-12 sm:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 active:bg-black"
+            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-2xs md:max-w-2xl mx-auto shrink-0 h-14 sm:h-10 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-2xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 sm:px-2 md:px-3 active:bg-black"
           >
             <div className="flex items-center justify-center gap-2">
               <div className="shrink-0 size-7 sm:size-6 flex items-center justify-center bg-white text-indigo-700 rounded-full">
