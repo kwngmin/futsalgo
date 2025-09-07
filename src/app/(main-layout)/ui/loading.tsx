@@ -27,8 +27,8 @@ const SchedulePageLoading = ({
           </div>
           <div className="flex items-center gap-2">
             <button className="shrink-0 size-10 flex items-center justify-center bg-gray-100 rounded-full animate-pulse" />
-            <button className="shrink-0 size-10 flex items-center justify-center bg-gray-100 rounded-full animate-pulse" />
-            <button className="shrink-0 size-10 flex items-center justify-center bg-gray-100 rounded-full animate-pulse" />
+            {/* <button className="shrink-0 size-10 flex items-center justify-center bg-gray-100 rounded-full animate-pulse" />
+            <button className="shrink-0 size-10 flex items-center justify-center bg-gray-100 rounded-full animate-pulse" /> */}
           </div>
         </div>
         <div className="px-4">
