@@ -88,24 +88,24 @@ const HomePage = () => {
       </div>
 
       {/* 필터 */}
-      <div className="flex items-center gap-3 select-none mb-2 relative">
+      <div className="flex items-center gap-2 select-none mb-2 relative">
         <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
         <div className="shrink-0 size-10 flex items-center justify-center ml-4 rounded-full cursor-pointer hover:bg-gray-100 active:scale-95 active:bg-gray-200">
           <SlidersHorizontalIcon className="size-6" />
         </div>
-        <div className="grow overflow-hidden h-9 sm:h-8 flex items-start border-l border-gray-300">
+        <div className="grow overflow-hidden h-8 sm:h-7 flex items-start border-l border-gray-300">
           <div className="w-full pl-3 pr-8 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1">
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-3 sm:pr-2 pl-4 sm:pl-3 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               자체전
               <X className="size-4" />
             </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-3 sm:pr-2 pl-4 sm:pl-3 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               친선전 <X className="size-4" />
             </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-3 sm:pr-2 pl-4 sm:pl-3 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               오전 <X className="size-4" />
             </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-3 sm:pr-2 pl-4 sm:pl-3 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               오후 <X className="size-4" />
             </div>
           </div>
