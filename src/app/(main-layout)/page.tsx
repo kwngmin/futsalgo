@@ -94,20 +94,20 @@ const HomePage = () => {
           <SlidersHorizontalIcon className="size-6" />
         </div>
         <div className="grow overflow-hidden h-8 sm:h-7 flex items-start border-l border-gray-300">
-          <div className="w-full pl-3 pr-8 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1">
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+          <div className="w-full pl-3 pr-8 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1.5">
+            {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               자체전
               <X className="size-4" />
-            </div>
+            </div> */}
             <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               친선전 <X className="size-4" />
             </div>
             <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               오전 <X className="size-4" />
             </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               오후 <X className="size-4" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
