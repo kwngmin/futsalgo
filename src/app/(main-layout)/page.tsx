@@ -154,9 +154,13 @@ const HomePage = () => {
           data?.data?.todaysSchedules?.length > 0 && (
             <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
               <div className="size-2.5 sm:size-2 bg-red-500 rounded-full" />
-              <div className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
+              <span className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
                 오늘 일정
-              </div>
+              </span>
+              <Separator orientation="vertical" className="!h-3" />
+              <span className="text-sm sm:text-xs text-gray-400 shrink-0">
+                비공개 일정
+              </span>
               <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
             </div>
           )}
@@ -176,9 +180,13 @@ const HomePage = () => {
           data?.data?.upcomingSchedules?.length > 0 && (
             <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
               <div className="size-2.5 sm:size-2 bg-amber-500 rounded-full" />
-              <div className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
+              <span className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
                 예정된 일정
-              </div>
+              </span>
+              <Separator orientation="vertical" className="!h-3" />
+              <span className="text-sm sm:text-xs text-gray-400 shrink-0">
+                비공개 일정
+              </span>
               <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
             </div>
           )}
@@ -202,17 +210,19 @@ const HomePage = () => {
           )}
 
         {/* 지난 경기 구분선 */}
-        {session.data?.user?.id &&
-          data?.data?.pastSchedules &&
-          data.data.pastSchedules.length > 0 && (
-            <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
-              <div className="size-2.5 sm:size-2 bg-gray-400 rounded-full" />
-              <div className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
-                지난 일정
-              </div>
-              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
-            </div>
-          )}
+        {data?.data?.pastSchedules && data.data.pastSchedules.length > 0 && (
+          <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
+            <div className="size-2.5 sm:size-2 bg-gray-400 rounded-full" />
+            <span className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
+              지난 일정
+            </span>
+            <Separator orientation="vertical" className="!h-3" />
+            <span className="text-sm sm:text-xs text-gray-400 shrink-0">
+              공개 일정
+            </span>
+            <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
+          </div>
+        )}
 
         {/* 지난 경기 */}
         {data?.data?.pastSchedules?.map((schedule) => {
