@@ -9,13 +9,13 @@ import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
-import {
-  HandsClappingIcon,
-  HandshakeIcon,
-  MoonIcon,
-  SlidersHorizontalIcon,
-  SunIcon,
-} from "@phosphor-icons/react";
+// import {
+//   HandsClappingIcon,
+//   HandshakeIcon,
+//   MoonIcon,
+//   SlidersHorizontalIcon,
+//   SunIcon,
+// } from "@phosphor-icons/react";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -88,12 +88,11 @@ const HomePage = () => {
       </div>
 
       {/* 필터 */}
-      <div className="flex items-center gap-3 select-none mb-3 relative">
+      {/* <div className="flex items-center gap-3 select-none mb-3 relative">
         <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
         <div className="shrink-0 size-10 flex items-center justify-center ml-4 rounded-full cursor-pointer hover:bg-gray-100 active:scale-95 active:bg-gray-200">
           <SlidersHorizontalIcon className="size-6" />
         </div>
-        {/* <div className="grow overflow-hidden flex border-l border-gray-300"> */}
         <div className="grow overflow-hidden h-9 sm:h-8 flex items-start border-l border-gray-300">
           <div className="w-full pl-3 pr-8 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1.5">
             <div className="sm:text-sm font-medium border border-gray-400 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
@@ -117,7 +116,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* 새로운 일정 추가 버튼 */}
       {Array.isArray(data?.data?.manageableTeams) &&
@@ -139,6 +138,15 @@ const HomePage = () => {
 
       {/* ScheduleList */}
       <div>
+        {Array.isArray(data?.data?.todaysSchedules) &&
+          data?.data?.todaysSchedules?.length > 0 && (
+            <div className="flex items-center gap-2 mt-4 first:mt-0 overflow-hidden px-5 h-8">
+              <div className="text-xs text-muted-foreground shrink-0">
+                오늘 일정
+              </div>
+              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
+            </div>
+          )}
         {/* 오늘 경기 */}
         {data?.data?.todaysSchedules?.map((schedule) => {
           return (
@@ -151,6 +159,15 @@ const HomePage = () => {
         })}
 
         {/* 예정된 경기 */}
+        {Array.isArray(data?.data?.upcomingSchedules) &&
+          data?.data?.upcomingSchedules?.length > 0 && (
+            <div className="flex items-center gap-2 mt-4 first:mt-0 overflow-hidden px-5 h-8">
+              <div className="text-xs text-muted-foreground shrink-0">
+                예정된 일정
+              </div>
+              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
+            </div>
+          )}
         {data?.data?.upcomingSchedules?.map((schedule) => {
           return (
             <ScheduleList
@@ -174,11 +191,11 @@ const HomePage = () => {
         {session.data?.user?.id &&
           data?.data?.pastSchedules &&
           data.data.pastSchedules.length > 0 && (
-            <div className="flex items-center gap-2 mt-4 overflow-hidden px-4 relative h-8">
-              <div className="absolute left-0 bg-white px-4 text-sm text-muted-foreground font-semibold shrink-0">
+            <div className="flex items-center gap-2 mt-4 first:mt-0 overflow-hidden px-5 h-8">
+              <div className="text-xs text-muted-foreground shrink-0">
                 지난 일정
               </div>
-              <Separator />
+              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
             </div>
           )}
 
