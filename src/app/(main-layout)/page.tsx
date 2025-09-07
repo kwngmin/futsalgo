@@ -90,11 +90,12 @@ const HomePage = () => {
       {/* 필터 */}
       <div className="flex items-center gap-3 select-none mb-3 relative">
         <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
-        <div className="shrink-0 size-10 flex items-center justify-center ml-4 bg-black text-white rounded-full cursor-pointer hover:bg-black/80 active:scale-95">
+        <div className="shrink-0 size-10 flex items-center justify-center ml-4 rounded-full cursor-pointer hover:bg-gray-100 active:scale-95 active:bg-gray-200">
           <SlidersHorizontalIcon className="size-6" />
         </div>
-        <div className="grow overflow-hidden h-9 sm:h-8 flex border-l border-gray-300">
-          <div className="w-full pl-3 pr-8 h-12 sm:h-11 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1.5">
+        {/* <div className="grow overflow-hidden flex border-l border-gray-300"> */}
+        <div className="grow overflow-hidden h-9 sm:h-8 flex items-start border-l border-gray-300">
+          <div className="w-full pl-3 pr-8 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1.5">
             <div className="sm:text-sm font-medium border border-gray-400 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2 pr-3.5 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <HandsClappingIcon
                 className="size-5 text-purple-700"
