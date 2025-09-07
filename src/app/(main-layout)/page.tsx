@@ -99,33 +99,27 @@ const HomePage = () => {
           <SlidersHorizontalIcon className="size-4" />
           <span className="text-xs font-medium">필터</span>
         </div> */}
-        <div className="grow overflow-hidden h-8 sm:h-7 flex items-start">
+        <div className="grow overflow-hidden h-9 sm:h-8 flex items-start">
           <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
               지역
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <HandshakeIcon className="size-5 text-gray-700" weight="fill" />
               경기구분
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
               시간대
             </div>
-            {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              자체전
-              <X className="size-4" />
-            </div> */}
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+
+            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               친선전 <X className="size-4" />
             </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               오전 <X className="size-4" />
             </div>
-            {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              오후 <X className="size-4" />
-            </div> */}
           </div>
         </div>
       </div>
