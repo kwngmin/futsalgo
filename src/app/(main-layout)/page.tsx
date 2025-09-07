@@ -90,7 +90,7 @@ const HomePage = () => {
       {/* 필터 */}
       <div className="mx-4 flex items-center gap-2 select-none relative">
         <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
-        <div className="shrink-0 size-10 flex items-center justify-center rounded cursor-pointer hover:bg-gray-100 active:scale-95 active:bg-gray-200">
+        <div className="shrink-0 size-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 active:scale-95 active:bg-gray-200">
           <SlidersHorizontalIcon className="size-6" />
         </div>
         <div className="grow overflow-hidden h-8 sm:h-7 flex items-start border-l border-gray-300">
@@ -118,7 +118,7 @@ const HomePage = () => {
           <button
             type="button"
             onClick={() => router.push("/schedule/new")}
-            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-2xs md:max-w-2xl mx-auto shrink-0 h-14 sm:h-10 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-3xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-4 sm:px-2 md:px-3 active:bg-black"
+            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-2xs md:max-w-2xl mx-auto shrink-0 h-14 sm:h-10 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-3xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-5 sm:px-2 md:px-3 active:bg-black"
           >
             <div className="flex items-center justify-center gap-3 sm:gap-2">
               <div className="shrink-0 size-7 sm:size-6 flex items-center justify-center bg-white text-indigo-700 rounded-full">
@@ -126,7 +126,7 @@ const HomePage = () => {
               </div>
               <span className="sm:text-sm font-semibold">새로운 일정 추가</span>
             </div>
-            <ChevronRight className="size-6 opacity-80" strokeWidth={2} />
+            <ChevronRight className="size-6 opacity-80" strokeWidth={1.5} />
           </button>
         )}
 
