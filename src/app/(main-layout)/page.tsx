@@ -10,12 +10,17 @@ import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
 import {
-  // HandsClappingIcon,
-  // HandshakeIcon,
-  // MoonIcon,
-  SlidersHorizontalIcon,
-  // SunIcon,
+  HandshakeIcon,
+  MapPinAreaIcon,
+  SunHorizonIcon,
 } from "@phosphor-icons/react";
+// import {
+//   HandsClappingIcon,
+//
+//   MoonIcon,
+//   SlidersHorizontalIcon,
+//   SunIcon,
+// } from "@phosphor-icons/react";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -88,13 +93,26 @@ const HomePage = () => {
       </div>
 
       {/* 필터 */}
-      <div className="mx-4 flex items-center gap-2 select-none relative">
+      <div className="flex items-center gap-2 select-none relative">
         <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
-        <div className="shrink-0 size-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-100 active:scale-95 active:bg-gray-200">
-          <SlidersHorizontalIcon className="size-6" />
-        </div>
-        <div className="grow overflow-hidden h-8 sm:h-7 flex items-start border-l border-gray-300">
-          <div className="w-full pl-3 pr-8 overflow-y-hidden overflow-x-scroll scroll-ml-4 flex gap-1.5">
+        {/* <div className="shrink-0 size-10 flex flex-col items-center justify-center gap-0.5">
+          <SlidersHorizontalIcon className="size-4" />
+          <span className="text-xs font-medium">필터</span>
+        </div> */}
+        <div className="grow overflow-hidden h-8 sm:h-7 flex items-start">
+          <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+              <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
+              지역
+            </div>
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+              <HandshakeIcon className="size-5 text-gray-700" weight="fill" />
+              경기구분
+            </div>
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+              <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
+              시간대
+            </div>
             {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               자체전
               <X className="size-4" />
