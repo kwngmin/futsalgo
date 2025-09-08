@@ -4,376 +4,102 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  ChevronDown,
-  ChevronRight, //
-  Plus,
-  Search,
-  X,
-} from "lucide-react";
-import ScheduleList from "./ui/ScheduleList";
+import { useState, useCallback } from "react";
+import { useDebounce } from "@/shared/hooks/use-debounce";
+
+// 컴포넌트별 분리
+import Header from "./ui/Header";
+import FilterBar from "./ui/FilterBar";
+import ScheduleSection from "./ui/ScheduleSection";
+import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
-import { Separator } from "@/shared/components/ui/separator";
-import { useState } from "react";
-import {
-  CalendarDotsIcon,
-  MapPinAreaIcon,
-  SunHorizonIcon,
-} from "@phosphor-icons/react";
-// import {
-//   CalendarDotsIcon,
-//   MapPinAreaIcon,
-//   SoccerBallIcon,
-//   SunHorizonIcon,
-// } from "@phosphor-icons/react";
 
 type TabType = "schedules" | "my-schedules";
 
 const HomePage = () => {
   const router = useRouter();
   const session = useSession();
-  const [currentTab, setCurrentTab] = useState<TabType>("schedules");
 
+  // 상태 관리
+  const [currentTab, setCurrentTab] = useState<TabType>("schedules");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
+  // 디바운스된 검색어
+  const debouncedSearchValue = useDebounce(searchValue, 300);
+
+  // 데이터 조회 - 최적화된 설정
   const { data, isLoading, error } = useQuery({
-    queryKey: ["schedules", session.data?.user?.id],
-    queryFn: getSchedules,
+    queryKey: ["schedules", session.data?.user?.id, debouncedSearchValue],
+    queryFn: () => getSchedules(debouncedSearchValue),
     placeholderData: keepPreviousData,
+    staleTime: 1000 * 60 * 2, // 2분간 fresh 상태 유지
+    gcTime: 1000 * 60 * 10, // 10분간 가비지 컬렉션 방지
+    refetchOnWindowFocus: false, // 윈도우 포커스 시 재조회 방지
   });
 
-  console.log(data, "data");
+  // 핸들러 함수들을 useCallback으로 메모이제이션
+  const handleTabChange = useCallback(
+    (tab: TabType) => {
+      setCurrentTab(tab);
+      if (tab === "my-schedules") {
+        router.push("/my-schedules");
+      }
+    },
+    [router]
+  );
 
-  const handleTabChange = (tab: TabType) => {
-    setCurrentTab(tab);
-    if (tab === "my-schedules") {
-      router.push("/my-schedules");
-    }
-  };
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchValue(value);
+  }, []);
 
-  if (isLoading) {
+  const handleSearchClear = useCallback(() => {
+    setSearchValue("");
+  }, []);
+
+  const handleSearchFocus = useCallback(() => {
+    setSearchFocused(true);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setSearchFocused(false);
+    setSearchValue("");
+  }, []);
+
+  if (isLoading && !data) {
     return <SchedulePageLoading isPage />;
   }
 
-  // const myTeams = data?.data?.myTeams.map((team) => team.id);
-
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 헤더(태블릿 ~ 데스크톱): 상단 탭, 검색 */}
-      <div className="hidden sm:flex items-center justify-between px-4 h-16 shrink-0">
-        <div className="flex gap-3">
-          <h1
-            className={`text-2xl font-bold cursor-pointer transition-opacity ${
-              currentTab === "schedules" ? "" : "opacity-30 hover:opacity-50"
-            }`}
-            onClick={() => handleTabChange("schedules")}
-          >
-            경기일정
-          </h1>
-          <h1
-            className={`text-2xl font-bold cursor-pointer transition-opacity ${
-              currentTab === "my-schedules" ? "" : "opacity-30 hover:opacity-50"
-            }`}
-            onClick={() => handleTabChange("my-schedules")}
-          >
-            내 일정
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          {searchFocused && (
-            <div className="w-72 shrink-0 px-3 h-9 hidden sm:flex items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors cursor-pointer gap-2 bg-gray-100 hover:bg-gray-200">
-              <Search className="size-4.5 shrink-0" />
-              <input
-                className="grow placeholder:text-sm h-full border-none focus:outline-none sm:text-sm"
-                placeholder="팀 이름 또는 풋살장을 입력하세요"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              {searchValue && (
-                <div
-                  className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors cursor-pointer shrink-0"
-                  onClick={() => setSearchValue("")}
-                >
-                  <X className="size-3 text-white/80" strokeWidth={2.5} />
-                </div>
-              )}
-            </div>
-          )}
-          {!searchFocused ? (
-            <button
-              className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-              onClick={() => {
-                setSearchFocused(true);
-              }}
-            >
-              <Search className="size-5" />
-            </button>
-          ) : (
-            <button
-              className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-sm font-medium"
-              onClick={() => {
-                setSearchFocused(false);
-              }}
-            >
-              닫기
-            </button>
-          )}
-        </div>
-      </div>
+      {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
+      <Header
+        currentTab={currentTab}
+        searchFocused={searchFocused}
+        searchValue={searchValue}
+        onTabChange={handleTabChange}
+        onSearchChange={handleSearchChange}
+        onSearchClear={handleSearchClear}
+        onSearchFocus={handleSearchFocus}
+        onSearchClose={handleSearchClose}
+      />
 
-      {/* 헤더(모바일): 상단 탭, 검색 */}
-      {!searchFocused ? (
-        <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0">
-          <div className="flex gap-3">
-            <h1
-              className={`text-2xl font-bold cursor-pointer transition-opacity ${
-                currentTab === "schedules" ? "" : "opacity-30 hover:opacity-50"
-              }`}
-              onClick={() => handleTabChange("schedules")}
-            >
-              경기일정
-            </h1>
-            <h1
-              className={`text-2xl font-bold cursor-pointer transition-opacity ${
-                currentTab === "my-schedules"
-                  ? ""
-                  : "opacity-30 hover:opacity-50"
-              }`}
-              onClick={() => handleTabChange("my-schedules")}
-            >
-              내 일정
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            {searchFocused && (
-              <div className="w-72 shrink-0 px-3 h-9 hidden sm:flex items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors cursor-pointer gap-2 bg-gray-100 hover:bg-gray-200">
-                <Search className="size-4.5 shrink-0" />
-                <input
-                  className="grow placeholder:text-sm h-full border-none focus:outline-none sm:text-sm"
-                  placeholder="팀 이름 또는 풋살장을 입력하세요"
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                />
-                {searchValue && (
-                  <div
-                    className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors cursor-pointer shrink-0"
-                    onClick={() => setSearchValue("")}
-                  >
-                    <X className="size-3 text-white/80" strokeWidth={2.5} />
-                  </div>
-                )}
-              </div>
-            )}
-            {!searchFocused ? (
-              <button
-                className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                onClick={() => {
-                  setSearchFocused(true);
-                }}
-              >
-                <Search className="size-5" />
-              </button>
-            ) : (
-              <button
-                className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-sm font-medium"
-                onClick={() => {
-                  setSearchFocused(false);
-                }}
-              >
-                닫기
-              </button>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
-          <div className="grow shrink-0 px-3 h-9 flex sm:hidden items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors cursor-pointer gap-2 bg-gray-100 hover:bg-gray-200">
-            <Search className="size-5 shrink-0" />
-            <input
-              className="grow placeholder:text-sm h-full border-none focus:outline-none sm:text-sm"
-              placeholder="팀 이름 또는 풋살장을 입력하세요"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            {searchValue && (
-              <div
-                className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors cursor-pointer shrink-0"
-                onClick={() => setSearchValue("")}
-              >
-                <X className="size-3 text-white/80" strokeWidth={2.5} />
-              </div>
-            )}
-          </div>
-          <button
-            className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-sm font-medium"
-            onClick={() => {
-              setSearchFocused(false);
-            }}
-          >
-            닫기
-          </button>
-        </div>
-      )}
-
-      {/* 필터 */}
-      <div className="flex items-center gap-2 select-none relative">
-        <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent" />
-        {/* <div className="shrink-0 size-10 flex flex-col items-center justify-center gap-0.5">
-          <SlidersHorizontalIcon className="size-4" />
-          <span className="text-xs font-medium">필터</span>
-        </div> */}
-        <div className="grow overflow-hidden h-9 sm:h-8 flex items-start">
-          <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3.5 sm:pl-3 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              {/* <SoccerBallIcon className="size-5 text-gray-700" weight="fill" /> */}
-              경기 분류
-              <ChevronDown className="size-4 text-muted-foreground" />
-            </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
-              지역
-              <ChevronDown className="size-4 text-muted-foreground" />
-            </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              <CalendarDotsIcon
-                className="size-5 text-gray-700"
-                weight="fill"
-              />
-              요일
-              <ChevronDown className="size-4 text-muted-foreground" />
-            </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
-              시간
-              <ChevronDown className="size-4 text-muted-foreground" />
-            </div>
-            {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              친선전 <X className="size-4" />
-            </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              오전 <X className="size-4" />
-            </div> */}
-          </div>
-        </div>
-      </div>
+      {/* 필터 바 */}
+      <FilterBar />
 
       {/* 새로운 일정 추가 버튼 */}
-      {Array.isArray(data?.data?.manageableTeams) &&
-        data?.data?.manageableTeams.length > 0 && (
-          <button
-            type="button"
-            onClick={() => router.push("/schedule/new")}
-            className="fixed bottom-[58px] sm:bottom-16 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-2xs md:max-w-2xl mx-auto shrink-0 h-14 sm:h-10 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-t-3xl sm:rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-5 sm:px-2 md:px-3 active:bg-black"
-          >
-            <div className="flex items-center justify-center gap-3 sm:gap-2">
-              <div className="shrink-0 size-7 sm:size-6 flex items-center justify-center bg-white text-indigo-700 rounded-full">
-                <Plus className="size-5" strokeWidth={2.5} />
-              </div>
-              <span className="sm:text-sm font-semibold">새로운 일정 추가</span>
-            </div>
-            <ChevronRight className="size-6 opacity-80" strokeWidth={1.5} />
-          </button>
-        )}
+      {data?.data?.manageableTeams && data.data.manageableTeams.length > 0 && (
+        <AddScheduleButton onClick={() => router.push("/schedule/new")} />
+      )}
 
-      {/* ScheduleList */}
-      <div>
-        {Array.isArray(data?.data?.todaysSchedules) &&
-          data?.data?.todaysSchedules?.length > 0 && (
-            <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
-              <div className="size-2.5 sm:size-2 bg-red-500 rounded-full" />
-              <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
-                오늘 일정
-              </span>
-              <Separator orientation="vertical" className="!h-3" />
-              <span className="text-sm sm:text-xs text-muted-foreground shrink-0">
-                비공개
-              </span>
-              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
-            </div>
-          )}
-        {/* 오늘 경기 */}
-        {data?.data?.todaysSchedules?.map((schedule) => {
-          return (
-            <ScheduleList
-              schedule={schedule}
-              key={schedule.id}
-              // myTeams={myTeams}
-            />
-          );
-        })}
-
-        {/* 예정된 경기 */}
-        {Array.isArray(data?.data?.upcomingSchedules) &&
-          data?.data?.upcomingSchedules?.length > 0 && (
-            <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
-              <div className="size-2.5 sm:size-2 bg-amber-500 rounded-full" />
-              <span className="text-sm sm:text-xs text-gray-700 font-medium shrink-0">
-                예정된 일정
-              </span>
-              <Separator orientation="vertical" className="!h-3" />
-              <span className="text-sm sm:text-xs text-muted-foreground shrink-0">
-                비공개
-              </span>
-              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
-            </div>
-          )}
-        {data?.data?.upcomingSchedules?.map((schedule) => {
-          return (
-            <ScheduleList
-              schedule={schedule}
-              key={schedule.id}
-              // myTeams={myTeams}
-            />
-          );
-        })}
-
-        {/* 예정된 일정이 없는 경우 */}
-        {session.data?.user?.id &&
-          data?.data?.todaysSchedules?.length === 0 &&
-          data?.data?.upcomingSchedules?.length === 0 && (
-            <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-14 flex justify-center items-center text-sm text-muted-foreground">
-              예정된 경기가 없습니다.
-            </div>
-          )}
-
-        {/* 지난 경기 구분선 */}
-        {data?.data?.pastSchedules && data.data.pastSchedules.length > 0 && (
-          <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
-            <div className="size-2.5 sm:size-2 bg-gray-400 rounded-full" />
-            <span className="text-sm sm:text-xs text-gray-700 font-medium shrink-0">
-              지난 일정
-            </span>
-            <Separator orientation="vertical" className="!h-3" />
-            <span className="text-sm sm:text-xs text-green-700 shrink-0">
-              {/* 공개됨 */}
-              전체공개
-            </span>
-            <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
-          </div>
-        )}
-
-        {/* 지난 경기 */}
-        {data?.data?.pastSchedules?.map((schedule) => {
-          return (
-            <ScheduleList
-              schedule={schedule}
-              key={schedule.id}
-              // myTeams={myTeams}
-            />
-          );
-        })}
-
-        {error && (
-          <div className="mx-4 bg-red-50 rounded-2xl px-4 h-14 flex justify-center items-center text-sm text-red-600">
-            {error.message}
-          </div>
-        )}
-      </div>
+      {/* 일정 섹션들 */}
+      <ScheduleSection
+        todaysSchedules={data?.data?.todaysSchedules}
+        upcomingSchedules={data?.data?.upcomingSchedules}
+        pastSchedules={data?.data?.pastSchedules}
+        userId={session.data?.user?.id}
+        error={error}
+      />
     </div>
   );
 };

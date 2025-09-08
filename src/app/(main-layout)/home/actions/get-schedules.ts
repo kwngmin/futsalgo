@@ -27,7 +27,6 @@ export interface GetSchedulesResponse {
     upcomingSchedules: ScheduleWithDetails[];
     pastSchedules: ScheduleWithDetails[];
     manageableTeams: Team[];
-    // myTeams: Team[];
     likes: ScheduleLike[];
   };
 }
@@ -42,23 +41,25 @@ const SCHEDULE_INCLUDE = {
 } as const;
 
 // 날짜 유틸리티 함수들
-function getStartOfDay(date: Date = new Date()): Date {
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-  return startOfDay;
-}
+const DateUtils = {
+  getStartOfDay(date: Date = new Date()): Date {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    return startOfDay;
+  },
 
-function getEndOfDay(date: Date): Date {
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
-  return endOfDay;
-}
+  getEndOfDay(date: Date): Date {
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+    return endOfDay;
+  },
 
-function getNextDay(date: Date): Date {
-  const nextDay = new Date(date);
-  nextDay.setDate(date.getDate() + 1);
-  return nextDay;
-}
+  getNextDay(date: Date): Date {
+    const nextDay = new Date(date);
+    nextDay.setDate(date.getDate() + 1);
+    return nextDay;
+  },
+};
 
 // 일정 조회를 위한 공통 where 조건 생성
 function createScheduleWhereCondition(teamIds: string[]) {
@@ -70,9 +71,36 @@ function createScheduleWhereCondition(teamIds: string[]) {
   };
 }
 
-// 과거 일정 조회
-async function getPastSchedules(): Promise<ScheduleWithDetails[]> {
-  const today = getStartOfDay();
+// 검색 조건 생성 함수
+function createSearchCondition(searchQuery?: string) {
+  if (!searchQuery || searchQuery.trim() === "") {
+    return {};
+  }
+
+  const trimmedQuery = searchQuery.trim();
+
+  return {
+    OR: [
+      {
+        hostTeam: {
+          name: { contains: trimmedQuery, mode: "insensitive" as const },
+        },
+      },
+      {
+        invitedTeam: {
+          name: { contains: trimmedQuery, mode: "insensitive" as const },
+        },
+      },
+      { place: { contains: trimmedQuery, mode: "insensitive" as const } },
+    ],
+  };
+}
+
+// 과거 일정 조회 (검색 기능 포함)
+async function getPastSchedules(
+  searchQuery?: string
+): Promise<ScheduleWithDetails[]> {
+  const today = DateUtils.getStartOfDay();
 
   return prisma.schedule.findMany({
     where: {
@@ -87,6 +115,7 @@ async function getPastSchedules(): Promise<ScheduleWithDetails[]> {
           ],
         },
       },
+      ...createSearchCondition(searchQuery),
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
@@ -117,49 +146,54 @@ async function getUserTeamInfo(userId: string) {
   return {
     approvedTeamIds,
     manageableTeams,
-    // myTeams: player.teams.map((t) => t.team),
   };
 }
 
-// 오늘 일정 조회
+// 오늘 일정 조회 (검색 기능 포함)
 async function getTodaysSchedules(
-  teamIds: string[]
+  teamIds: string[],
+  searchQuery?: string
 ): Promise<ScheduleWithDetails[]> {
-  const today = getStartOfDay();
-  const endOfToday = getEndOfDay(today);
+  const today = DateUtils.getStartOfDay();
+  const endOfToday = DateUtils.getEndOfDay(today);
 
   return prisma.schedule.findMany({
     where: {
       date: { gte: today, lte: endOfToday },
       ...createScheduleWhereCondition(teamIds),
+      ...createSearchCondition(searchQuery),
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { createdAt: "desc" },
   }) as Promise<ScheduleWithDetails[]>;
 }
 
-// 예정된 일정 조회
+// 예정된 일정 조회 (검색 기능 포함)
 async function getUpcomingSchedules(
-  teamIds: string[]
+  teamIds: string[],
+  searchQuery?: string
 ): Promise<ScheduleWithDetails[]> {
-  const tomorrow = getNextDay(getStartOfDay());
+  const tomorrow = DateUtils.getNextDay(DateUtils.getStartOfDay());
 
   return prisma.schedule.findMany({
     where: {
       date: { gte: tomorrow },
       ...createScheduleWhereCondition(teamIds),
+      ...createSearchCondition(searchQuery),
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "asc" },
   }) as Promise<ScheduleWithDetails[]>;
 }
 
-export async function getSchedules(): Promise<GetSchedulesResponse> {
+export async function getSchedules(
+  searchQuery?: string
+): Promise<GetSchedulesResponse> {
   try {
     // 데이터베이스 연결 확인
     await prisma.$queryRaw`SELECT 1`;
 
-    const pastSchedules = await getPastSchedules();
+    const pastSchedules = await getPastSchedules(searchQuery);
     const session = await auth();
 
     // 로그인하지 않은 경우
@@ -171,7 +205,6 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
           upcomingSchedules: [],
           pastSchedules,
           manageableTeams: [],
-          // myTeams: [],
           likes: [],
         },
       };
@@ -184,6 +217,8 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
     const [todaysSchedules, upcomingSchedules] = await Promise.all([
       getTodaysSchedules(approvedTeamIds),
       getUpcomingSchedules(approvedTeamIds),
+      // getTodaysSchedules(approvedTeamIds, searchQuery),
+      // getUpcomingSchedules(approvedTeamIds, searchQuery),
     ]);
 
     return {
@@ -193,8 +228,7 @@ export async function getSchedules(): Promise<GetSchedulesResponse> {
         todaysSchedules,
         upcomingSchedules,
         manageableTeams,
-        // myTeams,
-        likes: [], // 필요시 별도 조회 로직 추가
+        likes: [],
       },
     };
   } catch (error) {
