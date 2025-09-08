@@ -679,6 +679,13 @@ const ScheduleContent = ({
                     className="size-7 text-stone-500"
                   />
                   <h2 className="text-lg font-semibold">공지사항</h2>
+                  <Separator
+                    orientation="vertical"
+                    className="!h-4 !bg-gray-300"
+                  />
+                  <span className="text-base font-medium text-gray-500">
+                    비공개
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   {!isEditingNotice && (

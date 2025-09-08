@@ -9,13 +9,10 @@ import { Label } from "@/shared/components/ui/label";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
-import { useSession } from "next-auth/react";
 import { UserCircleCheckIcon } from "@phosphor-icons/react";
 
 const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const currentUserId = session?.user?.id;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["scheduleAttendance", scheduleId],
@@ -163,64 +160,55 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           </div>
         </div>
 
-        {
-          attandances && attandances?.length > 0
-            ? data?.data?.attendances.some(
-                (attendance) => attendance.user.id === currentUserId
-              )
-              ? attandances.map((attendance) => (
-                  <div
-                    key={attendance.user.id}
-                    className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none px-4"
-                  >
-                    <div
-                      className="flex items-center gap-2"
-                      onClick={() => {
-                        router.push(`/players/${attendance.user.id}`);
-                      }}
-                    >
-                      {attendance.user.image ? (
-                        <Image
-                          src={attendance.user.image ?? ""}
-                          alt="user_image"
-                          width={32}
-                          height={32}
-                          className="rounded-full object-cover size-8 border"
-                        />
-                      ) : (
-                        <div className="size-8 rounded-full bg-gray-200" />
-                      )}
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-medium hover:underline underline-offset-2 cursor-pointer">
-                          {attendance.user.nickname}
-                        </span>
-                        <span className="text-sm font-medium text-gray-500">
-                          {attendance.user.name}
-                          {/* {`• ${attendance.user.name}`} */}
-                        </span>
-                      </div>
-                    </div>
-                    <span
-                      className={`font-medium mx-2 ${
-                        attendance.attendanceStatus === "ATTENDING"
-                          ? "text-emerald-600"
-                          : attendance.attendanceStatus === "NOT_ATTENDING"
-                          ? "text-destructive"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {getStatus(attendance.attendanceStatus)}
+        {attandances && attandances?.length > 0
+          ? // ? data?.data?.attendances.some(
+            //     (attendance) => attendance.user.id === currentUserId
+            //   )
+            attandances.map((attendance) => (
+              <div
+                key={attendance.user.id}
+                className="flex items-center justify-between h-12 border-b border-gray-100 last:border-b-0 select-none px-4"
+              >
+                <div
+                  className="flex items-center gap-2"
+                  onClick={() => {
+                    router.push(`/players/${attendance.user.id}`);
+                  }}
+                >
+                  {attendance.user.image ? (
+                    <Image
+                      src={attendance.user.image ?? ""}
+                      alt="user_image"
+                      width={32}
+                      height={32}
+                      className="rounded-full object-cover size-8 border"
+                    />
+                  ) : (
+                    <div className="size-8 rounded-full bg-gray-200" />
+                  )}
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium hover:underline underline-offset-2 cursor-pointer">
+                      {attendance.user.nickname}
+                    </span>
+                    <span className="text-sm font-medium text-gray-500">
+                      {attendance.user.name}
                     </span>
                   </div>
-                ))
-              : null
-            : null
-          // (
-          //   <div className="flex items-center justify-center h-40 text-muted-foreground">
-          //     참석자가 없습니다.
-          //   </div>
-          // )
-        }
+                </div>
+                <span
+                  className={`font-medium mx-2 ${
+                    attendance.attendanceStatus === "ATTENDING"
+                      ? "text-emerald-600"
+                      : attendance.attendanceStatus === "NOT_ATTENDING"
+                      ? "text-destructive"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {getStatus(attendance.attendanceStatus)}
+                </span>
+              </div>
+            ))
+          : null}
       </div>
     );
   };
@@ -237,7 +225,8 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
           />
           <h2 className="text-lg font-semibold ">참석인원</h2>
         </div>
-        {/* 경기 추가 버튼 */}
+
+        {/* 관리 버튼 */}
         {data?.data?.manageableTeams &&
           data?.data?.manageableTeams.length > 0 && (
             <Button

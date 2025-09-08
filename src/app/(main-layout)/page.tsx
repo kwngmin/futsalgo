@@ -10,6 +10,7 @@ import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
 import {
+  CalendarDotsIcon,
   HandshakeIcon,
   MapPinAreaIcon,
   SunHorizonIcon,
@@ -102,18 +103,24 @@ const HomePage = () => {
         <div className="grow overflow-hidden h-9 sm:h-8 flex items-start">
           <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+              <HandshakeIcon className="size-5 text-gray-700" weight="fill" />
+              경기구분
+            </div>
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
               지역
             </div>
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              <HandshakeIcon className="size-5 text-gray-700" weight="fill" />
-              경기구분
+              <CalendarDotsIcon
+                className="size-5 text-gray-700"
+                weight="fill"
+              />
+              요일
             </div>
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
               시간대
             </div>
-
             <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               친선전 <X className="size-4" />
             </div>
@@ -148,11 +155,11 @@ const HomePage = () => {
           data?.data?.todaysSchedules?.length > 0 && (
             <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
               <div className="size-2.5 sm:size-2 bg-red-500 rounded-full" />
-              <span className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
+              <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
                 오늘 일정
               </span>
               <Separator orientation="vertical" className="!h-3" />
-              <span className="text-sm sm:text-xs text-gray-400 shrink-0">
+              <span className="text-sm sm:text-xs text-muted-foreground shrink-0">
                 비공개
               </span>
               <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
@@ -174,11 +181,11 @@ const HomePage = () => {
           data?.data?.upcomingSchedules?.length > 0 && (
             <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
               <div className="size-2.5 sm:size-2 bg-amber-500 rounded-full" />
-              <span className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
+              <span className="text-sm sm:text-xs text-gray-700 font-medium shrink-0">
                 예정된 일정
               </span>
               <Separator orientation="vertical" className="!h-3" />
-              <span className="text-sm sm:text-xs text-gray-400 shrink-0">
+              <span className="text-sm sm:text-xs text-muted-foreground shrink-0">
                 비공개
               </span>
               <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
@@ -207,13 +214,13 @@ const HomePage = () => {
         {data?.data?.pastSchedules && data.data.pastSchedules.length > 0 && (
           <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
             <div className="size-2.5 sm:size-2 bg-gray-400 rounded-full" />
-            <span className="text-sm sm:text-xs font-medium text-muted-foreground shrink-0">
+            <span className="text-sm sm:text-xs text-gray-700 font-medium shrink-0">
               지난 일정
             </span>
             <Separator orientation="vertical" className="!h-3" />
-            <span className="text-sm sm:text-xs text-gray-400 shrink-0">
+            <span className="text-sm sm:text-xs text-muted-foreground shrink-0">
               {/* 공개됨 */}
-              전체공개 (비로그인 사용자 열람 가능)
+              전체공개
             </span>
             <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
           </div>
