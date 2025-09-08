@@ -104,7 +104,7 @@ const HomePage = () => {
           <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <HandshakeIcon className="size-5 text-gray-700" weight="fill" />
-              경기구분
+              분류
             </div>
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
@@ -153,7 +153,7 @@ const HomePage = () => {
       <div>
         {Array.isArray(data?.data?.todaysSchedules) &&
           data?.data?.todaysSchedules?.length > 0 && (
-            <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
+            <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
               <div className="size-2.5 sm:size-2 bg-red-500 rounded-full" />
               <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
                 오늘 일정
@@ -179,7 +179,7 @@ const HomePage = () => {
         {/* 예정된 경기 */}
         {Array.isArray(data?.data?.upcomingSchedules) &&
           data?.data?.upcomingSchedules?.length > 0 && (
-            <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
+            <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
               <div className="size-2.5 sm:size-2 bg-amber-500 rounded-full" />
               <span className="text-sm sm:text-xs text-gray-700 font-medium shrink-0">
                 예정된 일정
@@ -212,7 +212,7 @@ const HomePage = () => {
 
         {/* 지난 경기 구분선 */}
         {data?.data?.pastSchedules && data.data.pastSchedules.length > 0 && (
-          <div className="flex items-center gap-2 mt-2 overflow-hidden px-5 h-8">
+          <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
             <div className="size-2.5 sm:size-2 bg-gray-400 rounded-full" />
             <span className="text-sm sm:text-xs text-gray-700 font-medium shrink-0">
               지난 일정
