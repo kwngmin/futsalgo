@@ -54,7 +54,7 @@ const Header = memo(
     // 닫기 버튼 컴포넌트
     const CloseButton = () => (
       <button
-        className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer text-sm font-semibold active:bg-gray-200"
+        className="shrink-0 px-3 h-10 sm:h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer text-sm font-semibold active:bg-gray-200"
         onClick={onSearchClose}
       >
         닫기

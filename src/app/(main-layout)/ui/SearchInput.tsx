@@ -17,17 +17,17 @@ const SearchInput = memo(
     return (
       <div
         className={`${
-          isMobile ? "grow shrink-0" : "w-72 shrink-0"
-        } px-3 h-10 sm:h-9 ${
+          isMobile ? "grow shrink-0" : "w-56 shrink-0"
+        } pl-3 pr-10 h-10 sm:h-9 ${
           isMobile ? "flex sm:hidden" : "hidden sm:flex"
-        } items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors gap-2 bg-gray-100 hover:bg-gray-200`}
+        } items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors gap-2 bg-gray-100 hover:bg-gray-200 relative`}
       >
         <Search
           className={isMobile ? "size-5 shrink-0" : "size-4.5 shrink-0"}
         />
         <input
-          className="grow sm:placeholder:text-sm placeholder:text-gray-500 h-full border-none focus:outline-none sm:text-sm bg-transparent"
-          placeholder="팀 이름 또는 풋살장을 입력하세요"
+          className="grow w-28 sm:placeholder:text-sm placeholder:text-gray-500 h-full border-none focus:outline-none sm:text-sm bg-transparent"
+          placeholder="팀 이름 또는 풋살장 검색"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           autoComplete="off"
@@ -35,7 +35,7 @@ const SearchInput = memo(
         />
         {value && (
           <button
-            className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors shrink-0"
+            className="absolute right-3 top-1/2 -translate-y-1/2 size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors shrink-0"
             onClick={onClear}
             type="button"
             aria-label="검색어 지우기"
