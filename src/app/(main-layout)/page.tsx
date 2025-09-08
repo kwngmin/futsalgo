@@ -11,17 +11,10 @@ import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
 import {
   CalendarDotsIcon,
-  HandshakeIcon,
   MapPinAreaIcon,
+  SoccerBallIcon,
   SunHorizonIcon,
 } from "@phosphor-icons/react";
-// import {
-//   HandsClappingIcon,
-//
-//   MoonIcon,
-//   SlidersHorizontalIcon,
-//   SunIcon,
-// } from "@phosphor-icons/react";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -103,8 +96,8 @@ const HomePage = () => {
         <div className="grow overflow-hidden h-9 sm:h-8 flex items-start">
           <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
-              <HandshakeIcon className="size-5 text-gray-700" weight="fill" />
-              분류
+              <SoccerBallIcon className="size-5 text-gray-700" weight="fill" />
+              경기
             </div>
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
