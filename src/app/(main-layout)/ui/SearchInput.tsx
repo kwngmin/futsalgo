@@ -26,7 +26,7 @@ const SearchInput = memo(
           className={isMobile ? "size-5 shrink-0" : "size-4.5 shrink-0"}
         />
         <input
-          className="grow sm:placeholder:text-sm h-full border-none focus:outline-none sm:text-sm bg-transparent"
+          className="grow sm:placeholder:text-sm placeholder:text-gray-500 h-full border-none focus:outline-none sm:text-sm bg-transparent"
           placeholder="팀 이름 또는 풋살장을 입력하세요"
           value={value}
           onChange={(e) => onChange(e.target.value)}

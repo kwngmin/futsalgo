@@ -70,14 +70,11 @@ const Header = memo(
             <TabButton tab="my-schedules" label="내 일정" />
           </div>
           <div className="flex items-center gap-2">
-            {searchFocused && (
-              <SearchInput
-                value={searchValue}
-                onChange={onSearchChange}
-                onClear={onSearchClear}
-              />
-            )}
-            {!searchFocused ? <SearchButton /> : <CloseButton />}
+            <SearchInput
+              value={searchValue}
+              onChange={onSearchChange}
+              onClear={onSearchClear}
+            />
           </div>
         </div>
 

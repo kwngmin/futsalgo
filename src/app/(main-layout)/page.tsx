@@ -26,7 +26,7 @@ const HomePage = () => {
   const [searchValue, setSearchValue] = useState("");
 
   // 디바운스된 검색어
-  const debouncedSearchValue = useDebounce(searchValue, 300);
+  const debouncedSearchValue = useDebounce(searchValue, 500);
 
   // 데이터 조회 - 최적화된 설정
   const { data, isLoading, error } = useQuery({
