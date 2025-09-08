@@ -9,7 +9,7 @@ import {
   ChevronRight, //
   Plus,
   Search,
-  // X,
+  X,
 } from "lucide-react";
 import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
@@ -34,6 +34,9 @@ const HomePage = () => {
   const session = useSession();
   const [currentTab, setCurrentTab] = useState<TabType>("schedules");
 
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["schedules", session.data?.user?.id],
     queryFn: getSchedules,
@@ -57,8 +60,8 @@ const HomePage = () => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-4 h-16 shrink-0">
+      {/* 헤더(태블릿 ~ 데스크톱): 상단 탭, 검색 */}
+      <div className="hidden sm:flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-3">
           <h1
             className={`text-2xl font-bold cursor-pointer transition-opacity ${
@@ -78,24 +81,140 @@ const HomePage = () => {
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <Search className="size-5" />
-          </button>
-          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <ArrowDownUp className="size-5" />
-          </button> */}
-          {/* {Array.isArray(data?.data?.manageableTeams) &&
-            data?.data?.manageableTeams.length > 0 && (
-              <button
-                type="button"
-                onClick={() => router.push("/schedule/new")}
-                className="shrink-0 size-10 flex items-center justify-center bg-black text-white hover:bg-black/80 rounded-full transition-colors cursor-pointer font-semibold"
-              >
-                <Plus className="size-5" strokeWidth={2} />
-              </button>
-            )} */}
+          {searchFocused && (
+            <div className="w-72 shrink-0 px-3 h-9 hidden sm:flex items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors cursor-pointer gap-2 bg-gray-100 hover:bg-gray-200">
+              <Search className="size-4.5 shrink-0" />
+              <input
+                className="grow placeholder:text-sm h-full border-none focus:outline-none sm:text-sm"
+                placeholder="팀 이름 또는 풋살장을 입력하세요"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              {searchValue && (
+                <div
+                  className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors cursor-pointer shrink-0"
+                  onClick={() => setSearchValue("")}
+                >
+                  <X className="size-3 text-white/80" strokeWidth={2.5} />
+                </div>
+              )}
+            </div>
+          )}
+          {!searchFocused ? (
+            <button
+              className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+              onClick={() => {
+                setSearchFocused(true);
+              }}
+            >
+              <Search className="size-5" />
+            </button>
+          ) : (
+            <button
+              className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-sm font-medium"
+              onClick={() => {
+                setSearchFocused(false);
+              }}
+            >
+              닫기
+            </button>
+          )}
         </div>
       </div>
+
+      {/* 헤더(모바일): 상단 탭, 검색 */}
+      {!searchFocused ? (
+        <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0">
+          <div className="flex gap-3">
+            <h1
+              className={`text-2xl font-bold cursor-pointer transition-opacity ${
+                currentTab === "schedules" ? "" : "opacity-30 hover:opacity-50"
+              }`}
+              onClick={() => handleTabChange("schedules")}
+            >
+              경기일정
+            </h1>
+            <h1
+              className={`text-2xl font-bold cursor-pointer transition-opacity ${
+                currentTab === "my-schedules"
+                  ? ""
+                  : "opacity-30 hover:opacity-50"
+              }`}
+              onClick={() => handleTabChange("my-schedules")}
+            >
+              내 일정
+            </h1>
+          </div>
+          <div className="flex items-center gap-2">
+            {searchFocused && (
+              <div className="w-72 shrink-0 px-3 h-9 hidden sm:flex items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors cursor-pointer gap-2 bg-gray-100 hover:bg-gray-200">
+                <Search className="size-4.5 shrink-0" />
+                <input
+                  className="grow placeholder:text-sm h-full border-none focus:outline-none sm:text-sm"
+                  placeholder="팀 이름 또는 풋살장을 입력하세요"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                {searchValue && (
+                  <div
+                    className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors cursor-pointer shrink-0"
+                    onClick={() => setSearchValue("")}
+                  >
+                    <X className="size-3 text-white/80" strokeWidth={2.5} />
+                  </div>
+                )}
+              </div>
+            )}
+            {!searchFocused ? (
+              <button
+                className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+                onClick={() => {
+                  setSearchFocused(true);
+                }}
+              >
+                <Search className="size-5" />
+              </button>
+            ) : (
+              <button
+                className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-sm font-medium"
+                onClick={() => {
+                  setSearchFocused(false);
+                }}
+              >
+                닫기
+              </button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
+          <div className="grow shrink-0 px-3 h-9 flex sm:hidden items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors cursor-pointer gap-2 bg-gray-100 hover:bg-gray-200">
+            <Search className="size-5 shrink-0" />
+            <input
+              className="grow placeholder:text-sm h-full border-none focus:outline-none sm:text-sm"
+              placeholder="팀 이름 또는 풋살장을 입력하세요"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+            {searchValue && (
+              <div
+                className="size-4 rounded-full flex items-center justify-center bg-black/80 hover:bg-black transition-colors cursor-pointer shrink-0"
+                onClick={() => setSearchValue("")}
+              >
+                <X className="size-3 text-white/80" strokeWidth={2.5} />
+              </div>
+            )}
+          </div>
+          <button
+            className="shrink-0 px-3 h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-sm font-medium"
+            onClick={() => {
+              setSearchFocused(false);
+            }}
+          >
+            닫기
+          </button>
+        </div>
+      )}
 
       {/* 필터 */}
       <div className="flex items-center gap-2 select-none relative">
