@@ -17,15 +17,15 @@ const SideNav = () => {
         <div className="flex flex-col w-full">
           {/* 로고 */}
           <button
-            className="flex items-center justify-center h-28 px-4 cursor-pointer"
+            className="flex items-center justify-center h-20 px-8 cursor-pointer"
             type="button"
             onClick={() => router.push("/")}
           >
             <Image
-              src="/futsalgo_logo.svg"
-              alt="FUTSALGO"
-              width={127}
-              height={24}
+              src="/futsalgo_logo_v4.svg"
+              alt="FutsalGo logo"
+              width={130}
+              height={22}
             />
           </button>
 
@@ -77,7 +77,7 @@ const SideNav = () => {
           </button>
 
           {/* 태블릿 네비게이션 (아이콘만) */}
-          <nav className="flex-1 p-2 mb-4 space-y-1">
+          <nav className="flex-1 p-2 pt-0 mb-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeMenu === item.id;
