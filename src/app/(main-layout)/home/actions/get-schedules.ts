@@ -215,10 +215,10 @@ export async function getSchedules(
     );
 
     const [todaysSchedules, upcomingSchedules] = await Promise.all([
-      getTodaysSchedules(approvedTeamIds),
-      getUpcomingSchedules(approvedTeamIds),
-      // getTodaysSchedules(approvedTeamIds, searchQuery),
-      // getUpcomingSchedules(approvedTeamIds, searchQuery),
+      // getTodaysSchedules(approvedTeamIds),
+      // getUpcomingSchedules(approvedTeamIds),
+      getTodaysSchedules(approvedTeamIds, searchQuery),
+      getUpcomingSchedules(approvedTeamIds, searchQuery),
     ]);
 
     return {

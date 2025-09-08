@@ -16,7 +16,9 @@ const SearchInput = memo(
   ({ value, onChange, onClear, isMobile = false }: SearchInputProps) => {
     return (
       <div
-        className={`${isMobile ? "grow shrink-0" : "w-72 shrink-0"} px-3 h-9 ${
+        className={`${
+          isMobile ? "grow shrink-0" : "w-72 shrink-0"
+        } px-3 h-10 sm:h-9 ${
           isMobile ? "flex sm:hidden" : "hidden sm:flex"
         } items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors gap-2 bg-gray-100 hover:bg-gray-200`}
       >
