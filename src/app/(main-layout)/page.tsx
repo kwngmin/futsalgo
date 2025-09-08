@@ -4,7 +4,12 @@ import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, Plus, Search, X } from "lucide-react";
+import {
+  ChevronRight, //
+  Plus,
+  Search,
+  // X,
+} from "lucide-react";
 import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
@@ -114,12 +119,12 @@ const HomePage = () => {
               <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
               시간
             </div>
-            <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            {/* <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               친선전 <X className="size-4" />
             </div>
             <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               오전 <X className="size-4" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
