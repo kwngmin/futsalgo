@@ -112,7 +112,7 @@ const HomePage = () => {
             </div>
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-3.5 sm:pr-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
-              시간대
+              시간
             </div>
             <div className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               친선전 <X className="size-4" />
