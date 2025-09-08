@@ -15,6 +15,11 @@ import ScheduleList from "./ui/ScheduleList";
 import SchedulePageLoading from "./ui/loading";
 import { Separator } from "@/shared/components/ui/separator";
 import { useState } from "react";
+import {
+  CalendarDotsIcon,
+  MapPinAreaIcon,
+  SunHorizonIcon,
+} from "@phosphor-icons/react";
 // import {
 //   CalendarDotsIcon,
 //   MapPinAreaIcon,
@@ -104,27 +109,27 @@ const HomePage = () => {
             <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3.5 sm:pl-3 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
               {/* <SoccerBallIcon className="size-5 text-gray-700" weight="fill" /> */}
-              경기
+              경기 분류
               <ChevronDown className="size-4 text-muted-foreground" />
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3.5 sm:pl-3 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              {/* <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" /> */}
+              <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />
               지역
               <ChevronDown className="size-4 text-muted-foreground" />
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3.5 sm:pl-3 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              {/* <CalendarDotsIcon
+              <CalendarDotsIcon
                 className="size-5 text-gray-700"
                 weight="fill"
-              /> */}
+              />
               요일
               <ChevronDown className="size-4 text-muted-foreground" />
             </div>
-            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3.5 sm:pl-3 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
+            <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0">
               {/* <div className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-2.5 sm:pl-2 pr-3 sm:pr-2.5 h-9 sm:h-8 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"> */}
-              {/* <SunHorizonIcon className="size-5 text-gray-700" weight="fill" /> */}
+              <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />
               시간
               <ChevronDown className="size-4 text-muted-foreground" />
             </div>
