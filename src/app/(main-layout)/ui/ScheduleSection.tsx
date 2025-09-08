@@ -54,8 +54,8 @@ const ScheduleSection = ({
 
   // 빈 상태 컴포넌트
   const EmptyState = () => (
-    <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-14 flex justify-center items-center text-sm text-muted-foreground">
-      예정된 경기가 없습니다.
+    <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-24 flex justify-center items-center text-sm text-muted-foreground mt-3">
+      경기가 없습니다.
     </div>
   );
 
