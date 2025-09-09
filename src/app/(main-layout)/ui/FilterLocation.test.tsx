@@ -6,10 +6,21 @@ const FilterLocation = ({
   onClose: () => void;
   filterValues: { location: { city: string; district: string; label: string } };
   setFilterValues: (values: {
-    location: { city: string; district: string; label: string };
+    location?: { city: string; district: string; label: string };
   }) => void;
 }) => {
-  return <div onClick={onClose}>FilterLocation</div>;
+  console.log(filterValues, "filterValues");
+
+  return (
+    <div
+      onClick={() => {
+        onClose();
+        setFilterValues({ location: undefined });
+      }}
+    >
+      FilterLocation
+    </div>
+  );
 };
 
 export default FilterLocation;
