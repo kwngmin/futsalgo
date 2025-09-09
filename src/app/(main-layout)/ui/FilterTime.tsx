@@ -31,21 +31,6 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
   const [isDragging, setIsDragging] = useState<"start" | "end" | null>(null);
 
   const sliderRef = useRef<HTMLDivElement>(null);
-  const startThumbRef = useRef<HTMLDivElement>(null);
-  const endThumbRef = useRef<HTMLDivElement>(null);
-
-  // filterValues가 변경될 때 내부 상태 업데이트
-  useEffect(() => {
-    if (startHour && endHour) {
-      const start = parseInt(startHour.toString());
-      const end = parseInt(endHour.toString());
-      setStartHour(start);
-      setEndHour(end);
-    } else {
-      setStartHour(0);
-      setEndHour(24);
-    }
-  }, [startHour, endHour]);
 
   // 슬라이더 값 계산 함수
   const calculateValue = useCallback((clientX: number): number => {
@@ -77,9 +62,11 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
       const newValue = calculateValue(clientX);
 
       if (isDragging === "start") {
-        setStartHour(Math.min(newValue, endHour));
+        // startHour는 endHour를 넘을 수 없음
+        setStartHour(Math.min(newValue, endHour - 1));
       } else if (isDragging === "end") {
-        setEndHour(Math.max(newValue, startHour));
+        // endHour는 startHour보다 작을 수 없음
+        setEndHour(Math.max(newValue, startHour + 1));
       }
     },
     [isDragging, calculateValue, startHour, endHour]
@@ -97,7 +84,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
 
       document.addEventListener("mousemove", handleMove);
       document.addEventListener("mouseup", handleUp);
-      document.addEventListener("touchmove", handleMove);
+      document.addEventListener("touchmove", handleMove, { passive: false });
       document.addEventListener("touchend", handleUp);
 
       return () => {
@@ -120,9 +107,9 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
       const distToEnd = Math.abs(newValue - endHour);
 
       if (distToStart < distToEnd) {
-        setStartHour(Math.min(newValue, endHour));
+        setStartHour(Math.min(newValue, endHour - 1));
       } else {
-        setEndHour(Math.max(newValue, startHour));
+        setEndHour(Math.max(newValue, startHour + 1));
       }
     },
     [calculateValue, startHour, endHour]
@@ -179,6 +166,11 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
   const endPosition = (endHour / 24) * 100;
   const rangeWidth = endPosition - startPosition;
 
+  // 시간 마커 생성 함수
+  const timeMarkers = useMemo(() => {
+    return [0, 6, 12, 18, 24].map((hour) => formatHour(hour));
+  }, []);
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
@@ -186,20 +178,25 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
     >
       <div className="flex items-center justify-between">
         {/* 전체 선택 버튼 */}
-        <div onClick={handleSelectAll} className={allButtonClass}>
+        <button
+          type="button"
+          onClick={handleSelectAll}
+          className={allButtonClass}
+        >
           전체
-        </div>
+        </button>
 
         {/* 현재 선택된 시간 표시 */}
         <span className="font-medium text-gray-800">{currentLabel}</span>
 
         {/* 저장 버튼 */}
-        <div
+        <button
+          type="button"
           onClick={handleSave}
           className="cursor-pointer font-medium w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all"
         >
           저장
-        </div>
+        </button>
       </div>
 
       {/* 듀얼 레인지 슬라이더 */}
@@ -211,7 +208,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
         >
           {/* 선택된 범위 표시 */}
           <div
-            className="absolute h-full bg-indigo-500 rounded-lg"
+            className="absolute h-full bg-indigo-500 rounded-lg pointer-events-none"
             style={{
               left: `${startPosition}%`,
               width: `${rangeWidth}%`,
@@ -220,7 +217,6 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
 
           {/* 시작 썸 */}
           <div
-            ref={startThumbRef}
             className={cn(
               "absolute top-1/2 size-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab shadow-md transition-transform hover:scale-110",
               isDragging === "start" && "cursor-grabbing scale-110"
@@ -228,19 +224,21 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
             style={{
               left: `${startPosition}%`,
               transform: `translateX(-50%) translateY(-50%)`,
+              zIndex: isDragging === "start" ? 20 : 10,
             }}
             onMouseDown={handlePointerDown("start")}
             onTouchStart={handlePointerDown("start")}
           >
             {/* 툴팁 */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none opacity-0 hover:opacity-100 transition-opacity">
-              {formatHour(startHour)}
-            </div>
+            {isDragging === "start" && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
+                {formatHour(startHour)}
+              </div>
+            )}
           </div>
 
           {/* 종료 썸 */}
           <div
-            ref={endThumbRef}
             className={cn(
               "absolute top-1/2 size-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab shadow-md transition-transform hover:scale-110",
               isDragging === "end" && "cursor-grabbing scale-110"
@@ -248,24 +246,25 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
             style={{
               left: `${endPosition}%`,
               transform: `translateX(-50%) translateY(-50%)`,
+              zIndex: isDragging === "end" ? 20 : 10,
             }}
             onMouseDown={handlePointerDown("end")}
             onTouchStart={handlePointerDown("end")}
           >
             {/* 툴팁 */}
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none opacity-0 hover:opacity-100 transition-opacity">
-              {formatHour(endHour)}
-            </div>
+            {isDragging === "end" && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
+                {formatHour(endHour)}
+              </div>
+            )}
           </div>
         </div>
 
         {/* 시간 마커 */}
         <div className="flex justify-between text-xs text-gray-500 mt-6 pb-1">
-          <span>00:00</span>
-          <span>06:00</span>
-          <span>12:00</span>
-          <span>18:00</span>
-          <span>24:00</span>
+          {timeMarkers.map((marker, index) => (
+            <span key={index}>{marker}</span>
+          ))}
         </div>
       </div>
     </div>
