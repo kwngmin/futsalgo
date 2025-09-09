@@ -9,8 +9,27 @@ import {
   User,
   ScheduleLike,
   ScheduleStatus,
+  MatchType,
 } from "@prisma/client";
 
+// 필터 타입 정의
+export interface ScheduleFilters {
+  searchQuery?: string;
+  matchType?: MatchType;
+  // days?: {
+  //   mon: boolean;
+  //   tue: boolean;
+  //   wed: boolean;
+  //   thu: boolean;
+  //   fri: boolean;
+  //   sat: boolean;
+  //   sun: boolean;
+  // };
+  // time?: {
+  //   startTime: string;
+  //   endTime: string;
+  // };
+}
 export interface ScheduleWithDetails extends Schedule {
   hostTeam: Team;
   invitedTeam: Team | null;
@@ -98,7 +117,8 @@ function createSearchCondition(searchQuery?: string) {
 
 // 과거 일정 조회 (검색 기능 포함)
 async function getPastSchedules(
-  searchQuery?: string
+  // searchQuery?: string
+  filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
   const today = DateUtils.getStartOfDay();
 
@@ -115,7 +135,8 @@ async function getPastSchedules(
           ],
         },
       },
-      ...createSearchCondition(searchQuery),
+      ...createSearchCondition(filters?.searchQuery),
+      matchType: filters?.matchType,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
@@ -152,7 +173,7 @@ async function getUserTeamInfo(userId: string) {
 // 오늘 일정 조회 (검색 기능 포함)
 async function getTodaysSchedules(
   teamIds: string[],
-  searchQuery?: string
+  filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
   const today = DateUtils.getStartOfDay();
   const endOfToday = DateUtils.getEndOfDay(today);
@@ -161,7 +182,8 @@ async function getTodaysSchedules(
     where: {
       date: { gte: today, lte: endOfToday },
       ...createScheduleWhereCondition(teamIds),
-      ...createSearchCondition(searchQuery),
+      ...createSearchCondition(filters?.searchQuery),
+      matchType: filters?.matchType,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { createdAt: "desc" },
@@ -171,7 +193,7 @@ async function getTodaysSchedules(
 // 예정된 일정 조회 (검색 기능 포함)
 async function getUpcomingSchedules(
   teamIds: string[],
-  searchQuery?: string
+  filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
   const tomorrow = DateUtils.getNextDay(DateUtils.getStartOfDay());
 
@@ -179,7 +201,8 @@ async function getUpcomingSchedules(
     where: {
       date: { gte: tomorrow },
       ...createScheduleWhereCondition(teamIds),
-      ...createSearchCondition(searchQuery),
+      ...createSearchCondition(filters?.searchQuery),
+      matchType: filters?.matchType,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "asc" },
@@ -187,13 +210,14 @@ async function getUpcomingSchedules(
 }
 
 export async function getSchedules(
-  searchQuery?: string
+  // searchQuery?: string,
+  filters?: ScheduleFilters
 ): Promise<GetSchedulesResponse> {
   try {
     // 데이터베이스 연결 확인
     await prisma.$queryRaw`SELECT 1`;
 
-    const pastSchedules = await getPastSchedules(searchQuery);
+    const pastSchedules = await getPastSchedules(filters);
     const session = await auth();
 
     // 로그인하지 않은 경우
@@ -217,8 +241,8 @@ export async function getSchedules(
     const [todaysSchedules, upcomingSchedules] = await Promise.all([
       // getTodaysSchedules(approvedTeamIds),
       // getUpcomingSchedules(approvedTeamIds),
-      getTodaysSchedules(approvedTeamIds, searchQuery),
-      getUpcomingSchedules(approvedTeamIds, searchQuery),
+      getTodaysSchedules(approvedTeamIds, filters),
+      getUpcomingSchedules(approvedTeamIds, filters),
     ]);
 
     return {

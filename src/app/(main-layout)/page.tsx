@@ -1,10 +1,13 @@
 "use client";
 
-import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
+import {
+  getSchedules,
+  ScheduleFilters,
+} from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 
 // 컴포넌트별 분리
@@ -55,10 +58,45 @@ const HomePage = () => {
   // 디바운스된 검색어
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
+  // 필터 객체 생성 - 메모이제이션
+  const filters = useMemo<ScheduleFilters>(() => {
+    const filterObj: ScheduleFilters = {
+      searchQuery: debouncedSearchValue,
+    };
+
+    // matchType 필터
+    if (filterValues.matchType) {
+      filterObj.matchType = filterValues.matchType.value;
+    }
+
+    // days 필터
+    // if (filterValues.days) {
+    //   filterObj.days = {
+    //     mon: filterValues.days.mon,
+    //     tue: filterValues.days.tue,
+    //     wed: filterValues.days.wed,
+    //     thu: filterValues.days.thu,
+    //     fri: filterValues.days.fri,
+    //     sat: filterValues.days.sat,
+    //     sun: filterValues.days.sun,
+    //   };
+    // }
+
+    // time 필터
+    // if (filterValues.time) {
+    //   filterObj.time = {
+    //     startTime: filterValues.time.startTime,
+    //     endTime: filterValues.time.endTime,
+    //   };
+    // }
+
+    return filterObj;
+  }, [debouncedSearchValue, filterValues]);
+
   // 데이터 조회 - 최적화된 설정
   const { data, isLoading, error } = useQuery({
-    queryKey: ["schedules", session.data?.user?.id, debouncedSearchValue],
-    queryFn: () => getSchedules(debouncedSearchValue),
+    queryKey: ["schedules", session.data?.user?.id, filters],
+    queryFn: () => getSchedules(filters),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 2, // 2분간 fresh 상태 유지
     gcTime: 1000 * 60 * 10, // 10분간 가비지 컬렉션 방지
