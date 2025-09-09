@@ -99,7 +99,7 @@ const FilterBar = ({
           {filterOptions.map((option) =>
             filterValues[option.value as keyof typeof filterValues] ? (
               <div
-                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"
+                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"
                 key={option.value}
                 onClick={() => {
                   setFilterValues({
