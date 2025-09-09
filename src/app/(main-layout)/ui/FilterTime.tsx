@@ -9,9 +9,6 @@ export interface TimeFilter {
 
 interface FilterTimeProps {
   onClose: () => void;
-  filterValues: {
-    time?: TimeFilter;
-  };
   setFilterValues: (values: { time?: TimeFilter }) => void;
 }
 
@@ -27,11 +24,7 @@ const generateTimeLabel = (startHour: number, endHour: number): string => {
   return `${formatHour(startHour)} - ${formatHour(endHour)}`;
 };
 
-const FilterTime = ({
-  onClose,
-  filterValues,
-  setFilterValues,
-}: FilterTimeProps) => {
+const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
   // 내부 상태로 슬라이더 값 관리
   const [startHour, setStartHour] = useState<number>(0);
   const [endHour, setEndHour] = useState<number>(24);
@@ -43,16 +36,16 @@ const FilterTime = ({
 
   // filterValues가 변경될 때 내부 상태 업데이트
   useEffect(() => {
-    if (filterValues.time) {
-      const start = parseInt(filterValues.time.startTime);
-      const end = parseInt(filterValues.time.endTime);
+    if (startHour && endHour) {
+      const start = parseInt(startHour.toString());
+      const end = parseInt(endHour.toString());
       setStartHour(start);
       setEndHour(end);
     } else {
       setStartHour(0);
       setEndHour(24);
     }
-  }, [filterValues.time]);
+  }, [startHour, endHour]);
 
   // 슬라이더 값 계산 함수
   const calculateValue = useCallback((clientX: number): number => {
@@ -174,11 +167,11 @@ const FilterTime = ({
     () =>
       cn(
         "cursor-pointer w-16 h-10 sm:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
-        filterValues.time === undefined
+        startHour === 0 && endHour === 24
           ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
           : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
       ),
-    [filterValues.time]
+    [startHour, endHour]
   );
 
   // 위치 계산

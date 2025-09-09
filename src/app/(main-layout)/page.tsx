@@ -123,29 +123,31 @@ const HomePage = () => {
       {openFilter === "matchType" && (
         <FilterMatchType
           onClose={() => setOpenFilter(null)}
-          filterValues={filterValues}
-          setFilterValues={setFilterValues}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
         />
       )}
       {openFilter === "days" && (
         <FilterDays
           onClose={() => setOpenFilter(null)}
-          filterValues={filterValues}
-          setFilterValues={setFilterValues}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
         />
       )}
       {/* {openFilter === "location" && (
         <FilterLocation
           onClose={() => setOpenFilter(null)}
-          filterValues={filterValues}
           setFilterValues={setFilterValues}
         />
       )} */}
       {openFilter === "time" && (
         <FilterTime
           onClose={() => setOpenFilter(null)}
-          filterValues={filterValues}
-          setFilterValues={setFilterValues}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
         />
       )}
 

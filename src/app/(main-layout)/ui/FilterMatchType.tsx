@@ -1,5 +1,5 @@
 import { cn } from "@/shared/lib/utils";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 
 type MatchTypeValue = "TEAM" | "SQUAD";
 
@@ -10,9 +10,6 @@ export interface MatchTypeOption {
 
 interface FilterMatchTypeProps {
   onClose: () => void;
-  filterValues: {
-    matchType?: MatchTypeOption;
-  };
   setFilterValues: (values: { matchType?: MatchTypeOption }) => void;
 }
 
@@ -24,15 +21,18 @@ const MATCH_TYPE_OPTIONS: MatchTypeOption[] = [
 
 const FilterMatchType = ({
   onClose,
-  filterValues,
   setFilterValues,
 }: FilterMatchTypeProps) => {
+  const [matchType, setMatchType] = useState<MatchTypeOption | undefined>(
+    undefined
+  );
+
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionSelect = useCallback(
     (option?: MatchTypeOption) => {
-      setFilterValues({ matchType: option });
+      setMatchType(option);
     },
-    [setFilterValues]
+    [setMatchType]
   );
 
   // 전체 선택 핸들러 메모이제이션
@@ -65,17 +65,18 @@ const FilterMatchType = ({
 
   // 전체 버튼 클래스 메모이제이션
   const allButtonClass = useMemo(
-    () => getButtonClass(filterValues.matchType === undefined),
-    [filterValues.matchType, getButtonClass]
+    () => getButtonClass(matchType === undefined),
+    [matchType, getButtonClass]
   );
 
   // 닫기 핸들러 메모이제이션
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
+      setFilterValues({ matchType });
       onClose();
     },
-    [onClose]
+    [onClose, matchType, setFilterValues]
   );
 
   return (
@@ -89,9 +90,7 @@ const FilterMatchType = ({
           <div
             key={option.value}
             onClick={(e) => handleOptionClick(e, option)}
-            className={getButtonClass(
-              filterValues.matchType?.value === option.value
-            )}
+            className={getButtonClass(matchType?.value === option.value)}
           >
             {option.label}
           </div>
