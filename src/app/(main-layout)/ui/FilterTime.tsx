@@ -125,7 +125,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
         endTime: endHour.toString(),
         label: generateTimeLabel(startHour, endHour),
       };
-      if (startHour !== 0 && endHour !== 24) {
+      if (startHour !== 0 || endHour !== 24) {
         setFilterValues({ time: timeFilter });
       }
       onClose();
