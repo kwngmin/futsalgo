@@ -154,7 +154,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
   const allButtonClass = useMemo(
     () =>
       cn(
-        "cursor-pointer w-16 h-10 sm:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+        "cursor-pointer w-16 h-9 sm:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
         startHour === 0 && endHour === 24
           ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
           : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
