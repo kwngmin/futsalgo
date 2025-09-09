@@ -125,8 +125,9 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
         endTime: endHour.toString(),
         label: generateTimeLabel(startHour, endHour),
       };
-
-      setFilterValues({ time: timeFilter });
+      if (startHour !== 0 && endHour !== 24) {
+        setFilterValues({ time: timeFilter });
+      }
       onClose();
     },
     [startHour, endHour, setFilterValues, onClose]
@@ -193,9 +194,13 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
         <button
           type="button"
           onClick={handleSave}
-          className="cursor-pointer font-medium w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all"
+          className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
+            startHour === 0 && endHour === 24
+              ? "bg-gray-300 hover:bg-gray-400 text-gray-700"
+              : "bg-indigo-600 hover:bg-indigo-700 text-white"
+          }`}
         >
-          저장
+          {startHour === 0 && endHour === 24 ? "닫기" : "저장"}
         </button>
       </div>
 

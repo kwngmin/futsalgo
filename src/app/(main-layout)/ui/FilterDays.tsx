@@ -18,9 +18,6 @@ export interface DaysFilter {
 
 interface FilterDaysProps {
   onClose: () => void;
-  // filterValues: {
-  //   days?: DaysFilter;
-  // };
   setFilterValues: (values: { days?: DaysFilter }) => void;
 }
 
@@ -50,11 +47,12 @@ const createInitialDaysFilter = (): Omit<DaysFilter, "label"> => ({
   sun: false,
 });
 
-const FilterDays = ({
-  onClose,
-  // filterValues,
-  setFilterValues,
-}: FilterDaysProps) => {
+// 모든 요일이 선택되었는지 확인하는 헬퍼 함수
+const areAllDaysSelected = (days: Omit<DaysFilter, "label">): boolean => {
+  return DAYS_ORDER.every((day) => days[day]);
+};
+
+const FilterDays = ({ onClose, setFilterValues }: FilterDaysProps) => {
   const [days, setDays] = useState<DaysFilter | undefined>(undefined);
 
   // 라벨 생성 로직 개선 및 메모이제이션
@@ -84,13 +82,12 @@ const FilterDays = ({
         return selectedLabels[0] + "요일";
       }
 
-      // return selectedLabels.join(" • ");
       return selectedLabels.join(", ");
     },
     []
   );
 
-  // 현재 선택된 요일들과 라벨을 메모이제이션
+  // 현재 선택된 요일들을 메모이제이션
   const currentDays = useMemo(() => days || createInitialDaysFilter(), [days]);
 
   const handleDayToggle = useCallback(
@@ -100,6 +97,12 @@ const FilterDays = ({
         [day]: !currentDays[day],
       };
 
+      // 모든 요일이 선택되었으면 undefined로 설정 (전체 선택과 동일하게 처리)
+      if (areAllDaysSelected(newDays)) {
+        setDays(undefined);
+        return;
+      }
+
       const label = generateLabel(newDays);
 
       setDays({
@@ -107,12 +110,12 @@ const FilterDays = ({
         label,
       });
     },
-    [currentDays, generateLabel, setDays]
+    [currentDays, generateLabel]
   );
 
   const handleSelectAll = useCallback(() => {
     setDays(undefined);
-  }, [setDays]);
+  }, []);
 
   // 버튼 클래스 생성 함수 메모이제이션
   const getDayButtonClass = useCallback((isSelected: boolean) => {
@@ -139,17 +142,20 @@ const FilterDays = ({
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      setFilterValues({ days });
+      if (days !== undefined) {
+        setFilterValues({ days });
+      }
       onClose();
     },
     [onClose, days, setFilterValues]
   );
 
   return (
-    <div className="flex gap-2 mx-4 mt-3 bg-gray-100 rounded-md py-1">
+    <div className="flex items-center gap-2 mx-4 mt-3 pr-1 bg-gray-100 rounded-md py-1">
       <div className="grow h-10 sm:h-9 flex items-center overflow-hidden">
         <div className="px-1 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
-          <div
+          <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               handleSelectAll();
@@ -157,11 +163,12 @@ const FilterDays = ({
             className={allButtonClass}
           >
             전체
-          </div>
+          </button>
 
           {DAYS_ORDER.map((day) => (
-            <div
+            <button
               key={day}
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDayToggle(day);
@@ -169,17 +176,22 @@ const FilterDays = ({
               className={getDayButtonClass(days?.[day] || false)}
             >
               {DAY_LABELS[day]}
-            </div>
+            </button>
           ))}
         </div>
       </div>
 
-      <div
+      <button
+        type="button"
         onClick={handleClose}
-        className="cursor-pointer font-medium w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm bg-indigo-600 text-white hover:bg-indigo-600/80 active:scale-98 transition-all shrink-0"
+        className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
+          days === undefined
+            ? "bg-gray-300 hover:bg-gray-400 text-gray-700"
+            : "bg-indigo-600 hover:bg-indigo-700 text-white"
+        }`}
       >
-        저장
-      </div>
+        {days === undefined ? "닫기" : "저장"}
+      </button>
     </div>
   );
 };
