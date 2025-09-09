@@ -13,6 +13,10 @@ import FilterBar from "./ui/FilterBar";
 import ScheduleSection from "./ui/ScheduleSection";
 import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
+import FilterMatchType from "./ui/FilterMatchType";
+import FilterDays from "./ui/FilterDays";
+// import FilterLocation from "./ui/FilterLocation";
+import FilterTime from "./ui/FilterTime";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -27,6 +31,26 @@ const HomePage = () => {
   const [openFilter, setOpenFilter] = useState<
     null | "matchType" | "days" | "location" | "time"
   >(null);
+  const [filterValues, setFilterValues] = useState<{
+    matchType?: { value: "TEAM" | "SQUAD"; label: string };
+    days?: {
+      mon: boolean;
+      tue: boolean;
+      wed: boolean;
+      thu: boolean;
+      fri: boolean;
+      sat: boolean;
+      sun: boolean;
+      label: string;
+    };
+    location?: { city: string; district: string; label: string };
+    time?: { startTime: string; endTime: string; label: string };
+  }>({
+    matchType: undefined,
+    days: undefined,
+    location: undefined,
+    time: undefined,
+  });
 
   // 디바운스된 검색어
   const debouncedSearchValue = useDebounce(searchValue, 500);
@@ -88,7 +112,42 @@ const HomePage = () => {
       />
 
       {/* 필터 바 */}
-      <FilterBar openFilter={openFilter} setOpenFilter={setOpenFilter} />
+      <FilterBar
+        openFilter={openFilter}
+        setOpenFilter={setOpenFilter}
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+      />
+
+      {/* 필터 내용 */}
+      {openFilter === "matchType" && (
+        <FilterMatchType
+          onClose={() => setOpenFilter(null)}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+        />
+      )}
+      {openFilter === "days" && (
+        <FilterDays
+          onClose={() => setOpenFilter(null)}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+        />
+      )}
+      {/* {openFilter === "location" && (
+        <FilterLocation
+          onClose={() => setOpenFilter(null)}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+        />
+      )} */}
+      {openFilter === "time" && (
+        <FilterTime
+          onClose={() => setOpenFilter(null)}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+        />
+      )}
 
       {/* 새로운 일정 추가 버튼 */}
       {data?.data?.manageableTeams && data.data.manageableTeams.length > 0 && (

@@ -1,12 +1,15 @@
 // @/app/(main-layout)/home/components/FilterBar.tsx
 "use client";
 
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import {
   CalendarDotsIcon,
   MapPinAreaIcon,
   SunHorizonIcon,
 } from "@phosphor-icons/react";
+import { MatchTypeOption } from "./FilterMatchType";
+import { DaysFilter } from "./FilterDays";
+import { TimeFilter } from "./FilterTime";
 
 interface FilterOption {
   icon?: React.ReactNode;
@@ -17,11 +20,25 @@ interface FilterOption {
 const FilterBar = ({
   openFilter,
   setOpenFilter,
+  filterValues,
+  setFilterValues,
 }: {
   openFilter: null | "matchType" | "days" | "location" | "time";
   setOpenFilter: (
     filter: null | "matchType" | "days" | "location" | "time"
   ) => void;
+  filterValues: {
+    matchType?: MatchTypeOption;
+    days?: DaysFilter;
+    // location?: LocationFilter;
+    time?: TimeFilter;
+  };
+  setFilterValues: (values: {
+    matchType?: MatchTypeOption;
+    days?: DaysFilter;
+    // location?: LocationFilter;
+    time?: TimeFilter;
+  }) => void;
 }) => {
   // 필터 옵션 설정
   const filterOptions: FilterOption[] = [
@@ -77,9 +94,24 @@ const FilterBar = ({
       <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
       <div className="grow overflow-hidden h-9 sm:h-8 flex items-start">
         <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
-          {filterOptions.map((option) => (
-            <FilterButton key={option.value} option={option} />
-          ))}
+          {filterOptions.map((option) =>
+            filterValues[option.value as keyof typeof filterValues] ? (
+              <div
+                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 sm:pr-2 pl-3 sm:pl-2.5 h-8 sm:h-7 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"
+                key={option.value}
+                onClick={() => {
+                  setFilterValues({
+                    [option.value as keyof typeof filterValues]: undefined,
+                  });
+                }}
+              >
+                {filterValues[option.value as keyof typeof filterValues]?.label}{" "}
+                <X className="size-4" />
+              </div>
+            ) : (
+              <FilterButton key={option.value} option={option} />
+            )
+          )}
         </div>
       </div>
     </div>
