@@ -108,7 +108,9 @@ const FilterBar = ({
                   });
                 }}
               >
-                {filterValues[option.value as keyof typeof filterValues]?.label}{" "}
+                {`${
+                  filterValues[option.value as keyof typeof filterValues]?.label
+                } 경기만`}
                 <X className="size-4" />
               </div>
             ) : (
