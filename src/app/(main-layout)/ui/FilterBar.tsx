@@ -4,7 +4,7 @@
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import {
   CalendarDotsIcon,
-  MapPinAreaIcon,
+  // MapPinAreaIcon,
   SunHorizonIcon,
 } from "@phosphor-icons/react";
 import { MatchTypeOption } from "./FilterMatchType";
@@ -43,11 +43,11 @@ const FilterBar = ({
   // 필터 옵션 설정
   const filterOptions: FilterOption[] = [
     { label: "경기 분류", value: "matchType" },
-    {
-      icon: <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />,
-      label: "지역",
-      value: "location",
-    },
+    // {
+    //   icon: <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />,
+    //   label: "지역",
+    //   value: "location",
+    // },
     {
       icon: <CalendarDotsIcon className="size-5 text-gray-700" weight="fill" />,
       label: "요일",
