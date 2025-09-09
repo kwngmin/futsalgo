@@ -24,6 +24,9 @@ const HomePage = () => {
   const [currentTab, setCurrentTab] = useState<TabType>("schedules");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [openFilter, setOpenFilter] = useState<
+    null | "matchType" | "days" | "location" | "time"
+  >(null);
 
   // 디바운스된 검색어
   const debouncedSearchValue = useDebounce(searchValue, 500);
@@ -85,7 +88,7 @@ const HomePage = () => {
       />
 
       {/* 필터 바 */}
-      <FilterBar />
+      <FilterBar openFilter={openFilter} setOpenFilter={setOpenFilter} />
 
       {/* 새로운 일정 추가 버튼 */}
       {data?.data?.manageableTeams && data.data.manageableTeams.length > 0 && (

@@ -1,7 +1,7 @@
 // @/app/(main-layout)/home/components/FilterBar.tsx
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   CalendarDotsIcon,
   MapPinAreaIcon,
@@ -14,10 +14,18 @@ interface FilterOption {
   value: string;
 }
 
-const FilterBar = () => {
+const FilterBar = ({
+  openFilter,
+  setOpenFilter,
+}: {
+  openFilter: null | "matchType" | "days" | "location" | "time";
+  setOpenFilter: (
+    filter: null | "matchType" | "days" | "location" | "time"
+  ) => void;
+}) => {
   // 필터 옵션 설정
   const filterOptions: FilterOption[] = [
-    { label: "경기 분류", value: "match-type" },
+    { label: "경기 분류", value: "matchType" },
     {
       icon: <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />,
       label: "지역",
@@ -26,7 +34,7 @@ const FilterBar = () => {
     {
       icon: <CalendarDotsIcon className="size-5 text-gray-700" weight="fill" />,
       label: "요일",
-      value: "weekday",
+      value: "days",
     },
     {
       icon: <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />,
@@ -38,12 +46,29 @@ const FilterBar = () => {
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className="sm:text-sm font-medium border border-gray-300 bg-gray-50 hover:bg-gray-200/80 active:bg-gray-200 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0"
+      className={`sm:text-sm font-medium border hover:bg-gray-200/80 active:bg-gray-200 bg-gray-50 pl-3 sm:pl-2.5 pr-2 sm:pr-1.5 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-95 shrink-0 ${
+        openFilter === option.value
+          ? "border-gray-500 font-semibold"
+          : "border-gray-300"
+      }`}
       aria-label={`${option.label} 필터`}
+      onClick={() => {
+        if (openFilter === option.value) {
+          setOpenFilter(null);
+        } else {
+          setOpenFilter(
+            option.value as "matchType" | "days" | "location" | "time"
+          );
+        }
+      }}
     >
       {option.icon}
       {option.label}
-      <ChevronDown className="size-4 text-muted-foreground" />
+      {openFilter === option.value ? (
+        <ChevronUp className="size-4 text-muted-foreground" />
+      ) : (
+        <ChevronDown className="size-4 text-muted-foreground" />
+      )}
     </button>
   );
 
