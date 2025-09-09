@@ -189,7 +189,7 @@ const FilterTime = ({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="bg-gray-100 rounded flex flex-col gap-4 p-4 flex-1 mx-4 mt-3"
+      className="bg-gray-100 rounded flex flex-col gap-6 p-1 flex-1 mx-4 mt-3 select-none"
     >
       <div className="flex items-center justify-between">
         {/* 전체 선택 버튼 */}
@@ -210,7 +210,7 @@ const FilterTime = ({
       </div>
 
       {/* 듀얼 레인지 슬라이더 */}
-      <div className="relative px-2">
+      <div className="relative px-4">
         <div
           ref={sliderRef}
           className="relative h-1 bg-gray-200 rounded-lg cursor-pointer"
@@ -229,7 +229,7 @@ const FilterTime = ({
           <div
             ref={startThumbRef}
             className={cn(
-              "absolute top-1/2 size-4 bg-white border-2 border-indigo-500 rounded-full cursor-grab shadow-md transition-transform hover:scale-110",
+              "absolute top-1/2 size-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab shadow-md transition-transform hover:scale-110",
               isDragging === "start" && "cursor-grabbing scale-110"
             )}
             style={{
@@ -249,7 +249,7 @@ const FilterTime = ({
           <div
             ref={endThumbRef}
             className={cn(
-              "absolute top-1/2 size-4 bg-white border-2 border-indigo-500 rounded-full cursor-grab shadow-md transition-transform hover:scale-110",
+              "absolute top-1/2 size-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab shadow-md transition-transform hover:scale-110",
               isDragging === "end" && "cursor-grabbing scale-110"
             )}
             style={{
@@ -260,14 +260,14 @@ const FilterTime = ({
             onTouchStart={handlePointerDown("end")}
           >
             {/* 툴팁 */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none opacity-0 hover:opacity-100 transition-opacity">
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none opacity-0 hover:opacity-100 transition-opacity">
               {formatHour(endHour)}
             </div>
           </div>
         </div>
 
         {/* 시간 마커 */}
-        <div className="flex justify-between text-xs text-gray-500 mt-2">
+        <div className="flex justify-between text-xs text-gray-500 mt-6 pb-1">
           <span>00:00</span>
           <span>06:00</span>
           <span>12:00</span>

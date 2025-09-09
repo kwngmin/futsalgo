@@ -119,7 +119,7 @@ const FilterDays = ({
   // 버튼 클래스 생성 함수 메모이제이션
   const getDayButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer size-10 sm:size-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+      "shrink-0 cursor-pointer size-10 sm:size-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -130,7 +130,7 @@ const FilterDays = ({
   const allButtonClass = useMemo(
     () =>
       cn(
-        "cursor-pointer w-12 h-10 sm:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+        "cursor-pointer w-12 h-10 sm:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors shrink-0",
         filterValues.days === undefined
           ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
           : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -139,35 +139,37 @@ const FilterDays = ({
   );
 
   return (
-    <div className="flex items-center justify-between gap-2 mx-4 mt-3 bg-gray-100 rounded-md p-1">
-      <div className="bg-gray-100 rounded flex items-center gap-1">
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelectAll();
-          }}
-          className={allButtonClass}
-        >
-          전체
-        </div>
-
-        {DAYS_ORDER.map((day) => (
+    <div className="flex gap-2 mx-4 mt-3 bg-gray-100 rounded-md py-1">
+      <div className="grow h-10 sm:h-9 flex items-center overflow-hidden">
+        <div className="px-1 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
           <div
-            key={day}
             onClick={(e) => {
               e.stopPropagation();
-              handleDayToggle(day);
+              handleSelectAll();
             }}
-            className={getDayButtonClass(filterValues.days?.[day] || false)}
+            className={allButtonClass}
           >
-            {DAY_LABELS[day]}
+            전체
           </div>
-        ))}
+
+          {DAYS_ORDER.map((day) => (
+            <div
+              key={day}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDayToggle(day);
+              }}
+              className={getDayButtonClass(filterValues.days?.[day] || false)}
+            >
+              {DAY_LABELS[day]}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div
         onClick={onClose}
-        className="cursor-pointer font-medium w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm bg-indigo-600 text-white hover:bg-indigo-600/80 active:scale-98 transition-all"
+        className="cursor-pointer font-medium w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm bg-indigo-600 text-white hover:bg-indigo-600/80 active:scale-98 transition-all shrink-0"
       >
         저장
       </div>
