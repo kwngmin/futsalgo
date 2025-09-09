@@ -101,6 +101,7 @@ const FilterBar = ({
                 key={option.value}
                 onClick={() => {
                   setFilterValues({
+                    ...filterValues,
                     [option.value as keyof typeof filterValues]: undefined,
                   });
                 }}
