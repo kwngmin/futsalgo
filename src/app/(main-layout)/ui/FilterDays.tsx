@@ -120,7 +120,7 @@ const FilterDays = ({ onClose, setFilterValues }: FilterDaysProps) => {
   // 버튼 클래스 생성 함수 메모이제이션
   const getDayButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "shrink-0 cursor-pointer w-12 h-10 sm:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+      "shrink-0 cursor-pointer w-14 h-10 sm:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
