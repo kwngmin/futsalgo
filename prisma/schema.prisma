@@ -159,6 +159,16 @@ enum AttendanceStatus {
   NOT_ATTENDING // 불참
 }
 
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
 // ========== AUTHENTICATION MODELS ==========
 
 model Account {
@@ -399,6 +409,7 @@ model Schedule {
   place              String
   description        String?
   date               DateTime
+  dayOfWeek          DayOfWeek?
   year               Int            // 연도 기반 통계용
   startTime          DateTime
   endTime            DateTime
