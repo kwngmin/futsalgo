@@ -103,7 +103,7 @@ const FilterMatchType = ({
         onClick={handleClose}
         className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
           matchType === undefined
-            ? "bg-gray-300 hover:bg-gray-400 text-gray-700"
+            ? "bg-gray-300/80 hover:bg-gray-300 text-gray-700"
             : "bg-indigo-600 hover:bg-indigo-700 text-white"
         }`}
       >
