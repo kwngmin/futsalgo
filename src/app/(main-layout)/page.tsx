@@ -17,9 +17,10 @@ import ScheduleSection from "./ui/ScheduleSection";
 import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
 import FilterMatchType from "./ui/FilterMatchType";
-import FilterDays from "./ui/FilterDays";
+import FilterDays, { DaysFilter } from "./ui/FilterDays";
 // import FilterLocation from "./ui/FilterLocation";
 import FilterTime from "./ui/FilterTime";
+import { DayOfWeek } from "@prisma/client";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -37,13 +38,13 @@ const HomePage = () => {
   const [filterValues, setFilterValues] = useState<{
     matchType?: { value: "TEAM" | "SQUAD"; label: string };
     days?: {
-      mon: boolean;
-      tue: boolean;
-      wed: boolean;
-      thu: boolean;
-      fri: boolean;
-      sat: boolean;
-      sun: boolean;
+      [DayOfWeek.MONDAY]: boolean;
+      [DayOfWeek.TUESDAY]: boolean;
+      [DayOfWeek.WEDNESDAY]: boolean;
+      [DayOfWeek.THURSDAY]: boolean;
+      [DayOfWeek.FRIDAY]: boolean;
+      [DayOfWeek.SATURDAY]: boolean;
+      [DayOfWeek.SUNDAY]: boolean;
       label: string;
     };
     location?: { city: string; district: string; label: string };
@@ -58,6 +59,16 @@ const HomePage = () => {
   // 디바운스된 검색어
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
+  // DaysFilter를 DayOfWeek 배열로 변환하는 헬퍼 함수
+  const convertDaysFilterToArray = useCallback(
+    (daysFilter: DaysFilter): DayOfWeek[] => {
+      return Object.entries(daysFilter)
+        .filter(([key, value]) => key !== "label" && value === true)
+        .map(([key]) => key as DayOfWeek);
+    },
+    []
+  );
+
   // 필터 객체 생성 - 메모이제이션
   const filters = useMemo<ScheduleFilters>(() => {
     const filterObj: ScheduleFilters = {
@@ -69,18 +80,16 @@ const HomePage = () => {
       filterObj.matchType = filterValues.matchType.value;
     }
 
-    // days 필터
-    // if (filterValues.days) {
-    //   filterObj.days = {
-    //     mon: filterValues.days.mon,
-    //     tue: filterValues.days.tue,
-    //     wed: filterValues.days.wed,
-    //     thu: filterValues.days.thu,
-    //     fri: filterValues.days.fri,
-    //     sat: filterValues.days.sat,
-    //     sun: filterValues.days.sun,
-    //   };
-    // }
+    // days 필터 - 배열 방식으로 변경
+    if (filterValues.days) {
+      const selectedDays = convertDaysFilterToArray(filterValues.days);
+
+      // 선택된 요일이 있을 때만 필터 추가
+      if (selectedDays.length > 0 && selectedDays.length < 7) {
+        filterObj.days = selectedDays;
+      }
+      // 모든 요일이 선택되었거나 아무것도 선택되지 않았으면 필터를 추가하지 않음
+    }
 
     // time 필터
     // if (filterValues.time) {
@@ -91,7 +100,7 @@ const HomePage = () => {
     // }
 
     return filterObj;
-  }, [debouncedSearchValue, filterValues]);
+  }, [debouncedSearchValue, filterValues, convertDaysFilterToArray]);
 
   // 데이터 조회 - 최적화된 설정
   const { data, isLoading, error } = useQuery({

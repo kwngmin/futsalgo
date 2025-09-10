@@ -1,18 +1,17 @@
 "use client";
 
 import { cn } from "@/shared/lib/utils";
+import { DayOfWeek } from "@prisma/client";
 import { useMemo, useCallback, useState } from "react";
 
-type DayKey = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
-
 export interface DaysFilter {
-  mon: boolean;
-  tue: boolean;
-  wed: boolean;
-  thu: boolean;
-  fri: boolean;
-  sat: boolean;
-  sun: boolean;
+  [DayOfWeek.MONDAY]: boolean;
+  [DayOfWeek.TUESDAY]: boolean;
+  [DayOfWeek.WEDNESDAY]: boolean;
+  [DayOfWeek.THURSDAY]: boolean;
+  [DayOfWeek.FRIDAY]: boolean;
+  [DayOfWeek.SATURDAY]: boolean;
+  [DayOfWeek.SUNDAY]: boolean;
   label: string;
 }
 
@@ -22,29 +21,43 @@ interface FilterDaysProps {
 }
 
 // 상수를 컴포넌트 외부로 이동하여 재렌더링 시 재생성 방지
-const DAY_LABELS: Record<DayKey, string> = {
-  mon: "월",
-  tue: "화",
-  wed: "수",
-  thu: "목",
-  fri: "금",
-  sat: "토",
-  sun: "일",
+const DAY_LABELS: Record<DayOfWeek, string> = {
+  [DayOfWeek.MONDAY]: "월",
+  [DayOfWeek.TUESDAY]: "화",
+  [DayOfWeek.WEDNESDAY]: "수",
+  [DayOfWeek.THURSDAY]: "목",
+  [DayOfWeek.FRIDAY]: "금",
+  [DayOfWeek.SATURDAY]: "토",
+  [DayOfWeek.SUNDAY]: "일",
 };
 
-const DAYS_ORDER: DayKey[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-const WEEKDAYS: DayKey[] = ["mon", "tue", "wed", "thu", "fri"];
-const WEEKEND_DAYS: DayKey[] = ["sat", "sun"];
+const DAYS_ORDER: DayOfWeek[] = [
+  DayOfWeek.MONDAY,
+  DayOfWeek.TUESDAY,
+  DayOfWeek.WEDNESDAY,
+  DayOfWeek.THURSDAY,
+  DayOfWeek.FRIDAY,
+  DayOfWeek.SATURDAY,
+  DayOfWeek.SUNDAY,
+];
+const WEEKDAYS: DayOfWeek[] = [
+  DayOfWeek.MONDAY,
+  DayOfWeek.TUESDAY,
+  DayOfWeek.WEDNESDAY,
+  DayOfWeek.THURSDAY,
+  DayOfWeek.FRIDAY,
+];
+const WEEKEND_DAYS: DayOfWeek[] = [DayOfWeek.SATURDAY, DayOfWeek.SUNDAY];
 
 // 초기 필터 상태를 생성하는 헬퍼 함수
 const createInitialDaysFilter = (): Omit<DaysFilter, "label"> => ({
-  mon: false,
-  tue: false,
-  wed: false,
-  thu: false,
-  fri: false,
-  sat: false,
-  sun: false,
+  [DayOfWeek.MONDAY]: false,
+  [DayOfWeek.TUESDAY]: false,
+  [DayOfWeek.WEDNESDAY]: false,
+  [DayOfWeek.THURSDAY]: false,
+  [DayOfWeek.FRIDAY]: false,
+  [DayOfWeek.SATURDAY]: false,
+  [DayOfWeek.SUNDAY]: false,
 });
 
 // 모든 요일이 선택되었는지 확인하는 헬퍼 함수
@@ -91,7 +104,7 @@ const FilterDays = ({ onClose, setFilterValues }: FilterDaysProps) => {
   const currentDays = useMemo(() => days || createInitialDaysFilter(), [days]);
 
   const handleDayToggle = useCallback(
-    (day: DayKey) => {
+    (day: DayOfWeek) => {
       const newDays = {
         ...currentDays,
         [day]: !currentDays[day],

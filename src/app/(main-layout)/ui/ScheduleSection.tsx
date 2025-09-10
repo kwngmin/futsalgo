@@ -95,7 +95,8 @@ const ScheduleSection = ({
       {/* 빈 상태 */}
       {userId &&
         todaysSchedules?.length === 0 &&
-        upcomingSchedules?.length === 0 && <EmptyState />}
+        upcomingSchedules?.length === 0 &&
+        pastSchedules?.length === 0 && <EmptyState />}
 
       {/* 지난 일정 */}
       {pastSchedules && pastSchedules.length > 0 && (

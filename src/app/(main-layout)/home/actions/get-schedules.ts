@@ -10,21 +10,14 @@ import {
   ScheduleLike,
   ScheduleStatus,
   MatchType,
+  DayOfWeek,
 } from "@prisma/client";
 
 // 필터 타입 정의
 export interface ScheduleFilters {
   searchQuery?: string;
   matchType?: MatchType;
-  // days?: {
-  //   mon: boolean;
-  //   tue: boolean;
-  //   wed: boolean;
-  //   thu: boolean;
-  //   fri: boolean;
-  //   sat: boolean;
-  //   sun: boolean;
-  // };
+  days?: DayOfWeek[];
   // time?: {
   //   startTime: string;
   //   endTime: string;
@@ -137,6 +130,7 @@ async function getPastSchedules(
       },
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
+      dayOfWeek: { in: filters?.days },
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
@@ -184,6 +178,7 @@ async function getTodaysSchedules(
       ...createScheduleWhereCondition(teamIds),
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
+      dayOfWeek: { in: filters?.days },
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { createdAt: "desc" },
@@ -203,6 +198,7 @@ async function getUpcomingSchedules(
       ...createScheduleWhereCondition(teamIds),
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
+      dayOfWeek: { in: filters?.days },
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "asc" },
