@@ -92,12 +92,12 @@ const HomePage = () => {
     }
 
     // time 필터
-    // if (filterValues.time) {
-    //   filterObj.time = {
-    //     startTime: filterValues.time.startTime,
-    //     endTime: filterValues.time.endTime,
-    //   };
-    // }
+    if (filterValues.time) {
+      filterObj.time = {
+        startHour: Number(filterValues.time.startTime),
+        endHour: Number(filterValues.time.endTime),
+      };
+    }
 
     return filterObj;
   }, [debouncedSearchValue, filterValues, convertDaysFilterToArray]);

@@ -18,10 +18,10 @@ export interface ScheduleFilters {
   searchQuery?: string;
   matchType?: MatchType;
   days?: DayOfWeek[];
-  // time?: {
-  //   startTime: string;
-  //   endTime: string;
-  // };
+  time?: {
+    startHour: number;
+    endHour: number;
+  };
 }
 export interface ScheduleWithDetails extends Schedule {
   hostTeam: Team;
@@ -131,6 +131,24 @@ async function getPastSchedules(
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
       dayOfWeek: { in: filters?.days },
+      startTime: {
+        ...(filters?.time && {
+          gte: new Date(
+            `1970-01-01T${filters?.time?.startHour
+              .toString()
+              .padStart(2, "0")}:00:00.000Z`
+          ),
+        }),
+      },
+      endTime: {
+        ...(filters?.time && {
+          lte: new Date(
+            `1970-01-01T${filters?.time?.endHour
+              .toString()
+              .padStart(2, "0")}:59:59.999Z`
+          ),
+        }),
+      },
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
