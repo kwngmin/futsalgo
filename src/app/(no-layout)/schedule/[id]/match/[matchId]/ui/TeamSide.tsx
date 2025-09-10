@@ -27,7 +27,9 @@ const TeamSide = ({
         {logoUrl ? (
           <Image src={logoUrl} alt="home team logo" width={64} height={64} />
         ) : (
-          <div className="size-10 rounded-md bg-gray-100" />
+          <div className="size-16 rounded-full bg-gradient-to-br from-slate-300 to-gray-100 flex items-center justify-center text-2xl text-slate-700">
+            {name?.charAt(0)}
+          </div>
         )}
       </div>
       <div className="flex flex-col items-center">

@@ -46,7 +46,7 @@ const TeamList = ({
           <div
             className={`${
               size === "md" ? "size-14" : "size-10"
-            } bg-gray-100 rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}
+            } bg-gradient-to-br from-slate-300 to-gray-100 rounded-full flex items-center justify-center text-xl text-slate-700 flex-shrink-0`}
           >
             {team.name.charAt(0)}
           </div>

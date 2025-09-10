@@ -100,7 +100,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                   className="rounded-lg"
                 />
               ) : (
-                <div className="size-6 rounded-lg bg-gray-200" />
+                <div className="size-6 rounded-full bg-gradient-to-br from-slate-300 to-gray-100 flex items-center justify-center text-sm text-slate-700" />
               )}
               <div className="flex items-center gap-2">
                 <span

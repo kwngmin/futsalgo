@@ -160,7 +160,7 @@ const ScheduleList = ({
                   className="rounded-full"
                 />
               ) : (
-                <div className="size-4 rounded-full bg-gray-100" />
+                <div className="size-4 rounded-full bg-gradient-to-br from-slate-300 to-gray-100" />
               )}
               <span className="font-semibold tracking-tight truncate">
                 {schedule.hostTeam.name}
