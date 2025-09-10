@@ -48,6 +48,23 @@ import { Separator } from "@/shared/components/ui/separator";
 import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
 
+// function isSameDayOrPast(
+//   targetDate: Date,
+//   compareDate: Date = new Date()
+// ): boolean {
+//   const target = new Date(
+//     targetDate.getFullYear(),
+//     targetDate.getMonth(),
+//     targetDate.getDate()
+//   );
+//   const compare = new Date(
+//     compareDate.getFullYear(),
+//     compareDate.getMonth(),
+//     compareDate.getDate()
+//   );
+//   return target <= compare;
+// }
+
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
  * @param start 시작 시간 (Date 객체)
@@ -141,6 +158,9 @@ const ScheduleContent = ({
     queryFn: () => getSchedule(scheduleId),
     placeholderData: keepPreviousData,
   });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const queryClient = useQueryClient();
 
@@ -336,6 +356,8 @@ const ScheduleContent = ({
     "data.data.schedule.attendanceDeadline"
   );
 
+  console.log(data.data.schedule, "data.data.schedule.startTime");
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
@@ -395,13 +417,11 @@ const ScheduleContent = ({
         <div className="w-full flex justify-center items-center gap-2 text-base tracking-tight">
           <div className="flex items-center gap-1.5">
             <Calendar className="size-4 text-gray-500" strokeWidth={2} />
-            {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-              // year: "numeric",
+            {new Date(data.data.schedule?.date).toLocaleDateString("ko-KR", {
               month: "long",
               day: "numeric",
               weekday: "long",
             })}
-            {/* {data.data.schedule?.place} */}
           </div>
           <Separator
             orientation="vertical"
@@ -585,87 +605,100 @@ const ScheduleContent = ({
         )}
 
         {/* 경기 정보 */}
-        {(data.data.schedule.status === "READY" ||
-          data.data.schedule.status === "PLAY") &&
-          data.data.schedule.startTime <= new Date() && (
-            <div className="px-4">
-              {data.data.schedule.matches.length > 0 ? (
-                <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
-                  {data.data.schedule.matches.map((match, index) => (
+        {(() => {
+          // date 필드 사용 (날짜만 포함)
+          const scheduleDate = new Date(data.data.schedule.date);
+          const today = new Date();
+
+          // 날짜만 비교하기 위해 시간 제거
+          scheduleDate.setHours(0, 0, 0, 0);
+          today.setHours(0, 0, 0, 0);
+
+          // READY 상태: 오늘이거나 지난 날짜
+          // PLAY 상태: 항상 표시
+          return (
+            (data.data.schedule.status === "READY" && scheduleDate <= today) ||
+            data.data.schedule.status === "PLAY"
+          );
+        })() && (
+          <div className="px-4">
+            {data.data.schedule.matches.length > 0 ? (
+              <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
+                {data.data.schedule.matches.map((match, index) => (
+                  <div
+                    className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
+                    key={match.id}
+                  >
                     <div
-                      className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
-                      key={match.id}
+                      className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        router.push(
+                          `/schedule/${scheduleId}/match/${
+                            match.id
+                          }?tab=${searchParams.get("tab")}`
+                        );
+                      }}
                     >
-                      <div
-                        className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                        onClick={() => {
-                          router.push(
-                            `/schedule/${scheduleId}/match/${
-                              match.id
-                            }?tab=${searchParams.get("tab")}`
-                          );
-                        }}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <SoccerBallIcon
-                            weight="fill"
-                            className="size-5 text-gray-800"
-                          />
-                          <span className="font-medium">{index + 1}경기</span>
-                        </div>
-                        <div className="flex items-center gap-1 font-medium">
-                          {/* <span className="text-sm text-green-600 font-semibold px-1.5">
+                      <div className="flex items-center space-x-2">
+                        <SoccerBallIcon
+                          weight="fill"
+                          className="size-5 text-gray-800"
+                        />
+                        <span className="font-medium">{index + 1}경기</span>
+                      </div>
+                      <div className="flex items-center gap-1 font-medium">
+                        {/* <span className="text-sm text-green-600 font-semibold px-1.5">
                             스코어
                           </span> */}
-                          <span className="text-base text-gray-800 min-w-12 px-1 text-center">
-                            {match.homeScore} - {match.awayScore}
-                          </span>
-                          <ChevronRight className="size-5 text-gray-400" />
-                        </div>
+                        <span className="text-base text-gray-800 min-w-12 px-1 text-center">
+                          {match.homeScore} - {match.awayScore}
+                        </span>
+                        <ChevronRight className="size-5 text-gray-400" />
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
-                  경기가 없습니다.
-                </div>
-              )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
+                경기가 없습니다.
+              </div>
+            )}
 
-              {/* 경기 추가 버튼 */}
-              {canEditNotice && (
-                <div className="pt-3">
-                  <Button
-                    type="button"
-                    className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
-                    size="lg"
-                    onClick={async () => {
-                      try {
-                        const result = await addMatch(scheduleId);
-                        if (result.success) {
-                          refetch();
-                        } else {
-                          console.log(result.error, "result.error");
-                          alert(result.error);
-                        }
-                      } catch (error) {
-                        console.error(error, "error");
-                        alert("경기 추가에 실패했습니다.");
+            {/* 경기 추가 버튼 */}
+            {canEditNotice && (
+              <div className="pt-3">
+                <Button
+                  type="button"
+                  className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
+                  size="lg"
+                  onClick={async () => {
+                    try {
+                      const result = await addMatch(scheduleId);
+                      if (result.success) {
+                        refetch();
+                      } else {
+                        console.log(result.error, "result.error");
+                        alert(result.error);
                       }
-                    }}
-                  >
-                    <div className="size-6 rounded-full bg-white flex items-center justify-center">
-                      <PlusIcon
-                        className="size-5 text-indigo-700"
-                        strokeWidth={2.75}
-                      />
-                    </div>
-                    경기 추가
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
+                    } catch (error) {
+                      console.error(error, "error");
+                      alert("경기 추가에 실패했습니다.");
+                    }
+                  }}
+                >
+                  <div className="size-6 rounded-full bg-white flex items-center justify-center">
+                    <PlusIcon
+                      className="size-5 text-indigo-700"
+                      strokeWidth={2.75}
+                    />
+                  </div>
+                  경기 추가
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* 공지사항 */}
         {(data.data.schedule.status === "READY" ||

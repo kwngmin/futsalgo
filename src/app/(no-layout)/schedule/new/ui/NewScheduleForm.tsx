@@ -162,7 +162,7 @@ const NewScheduleForm = ({
         setValue("date", "");
       }
     }
-  }, [watch("matchType"), matchDate, setValue]);
+  }, [matchDate, setValue, watch]);
 
   // 팀 코드가 유효할 때 invitedTeamId 설정
   useEffect(() => {
