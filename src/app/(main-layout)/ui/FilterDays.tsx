@@ -60,11 +60,6 @@ const createInitialDaysFilter = (): Omit<DaysFilter, "label"> => ({
   [DayOfWeek.SUNDAY]: false,
 });
 
-// 모든 요일이 선택되었는지 확인하는 헬퍼 함수
-const areAllDaysSelected = (days: Omit<DaysFilter, "label">): boolean => {
-  return DAYS_ORDER.every((day) => days[day]);
-};
-
 const FilterDays = ({ onClose, setFilterValues }: FilterDaysProps) => {
   const [days, setDays] = useState<DaysFilter | undefined>(undefined);
 
@@ -110,8 +105,10 @@ const FilterDays = ({ onClose, setFilterValues }: FilterDaysProps) => {
         [day]: !currentDays[day],
       };
 
-      // 모든 요일이 선택되었으면 undefined로 설정 (전체 선택과 동일하게 처리)
-      if (areAllDaysSelected(newDays)) {
+      // 모든 요일이 선택되었거나, 아무것도 선택되지 않았으면 undefined로 설정
+      const selectedCount = DAYS_ORDER.filter((d) => newDays[d]).length;
+
+      if (selectedCount === 0 || selectedCount === DAYS_ORDER.length) {
         setDays(undefined);
         return;
       }

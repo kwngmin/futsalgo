@@ -47,13 +47,6 @@ const createInitialStartPeriodFilter = (): Omit<
   [Period.NIGHT]: false,
 });
 
-// 모든 요일이 선택되었는지 확인하는 헬퍼 함수
-const areAllPeriodsSelected = (
-  periods: Omit<StartPeriodFilter, "label">
-): boolean => {
-  return START_PERIOD_ORDER.every((period) => periods[period]);
-};
-
 const FilterStartPeriod = ({
   onClose,
   setFilterValues,
@@ -98,8 +91,13 @@ const FilterStartPeriod = ({
         [period]: !currentDays[period],
       };
 
-      // 모든 요일이 선택되었으면 undefined로 설정 (전체 선택과 동일하게 처리)
-      if (areAllPeriodsSelected(newPeriods)) {
+      // 선택된 시간대 개수 확인
+      const selectedCount = START_PERIOD_ORDER.filter(
+        (p) => newPeriods[p]
+      ).length;
+
+      // 모든 시간대가 선택되었거나, 아무것도 선택되지 않았으면 undefined로 설정
+      if (selectedCount === 0 || selectedCount === START_PERIOD_ORDER.length) {
         setStartPeriod(undefined);
         return;
       }
