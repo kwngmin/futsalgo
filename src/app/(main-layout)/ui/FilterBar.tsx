@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import {
   CalendarDotsIcon,
   ClockIcon,
+  FunnelIcon,
   MapPinAreaIcon,
 } from "@phosphor-icons/react";
 import { MatchTypeOption } from "./FilterMatchType";
@@ -43,7 +44,16 @@ const FilterBar = ({
 }) => {
   // 필터 옵션 설정
   const filterOptions: FilterOption[] = [
-    { label: "경기 분류", value: "matchType" },
+    {
+      icon: (
+        <FunnelIcon
+          className="size-4 text-gray-700"
+          // weight="fill"
+        />
+      ),
+      label: "분류",
+      value: "matchType",
+    },
     {
       icon: (
         <MapPinAreaIcon

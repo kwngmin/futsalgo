@@ -33,7 +33,7 @@ const FilterLocation = ({ onClose, setFilterValues }: FilterLocationProps) => {
   // 버튼 스타일 생성 함수 - 메모이제이션
   const createButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-16 sm:w-24 h-9 sm:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+      "cursor-pointer w-16 sm:w-24 h-9 sm:h-8 flex items-center shrink-0 justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -130,39 +130,41 @@ const FilterLocation = ({ onClose, setFilterValues }: FilterLocationProps) => {
   );
 
   return (
-    <div className="flex items-center justify-between gap-2 mx-4 mt-3 bg-gray-100 rounded-md p-1">
-      <div className="bg-gray-100 rounded flex items-center gap-1">
-        <button
-          type="button"
-          onClick={handleSelectAll}
-          className={allButtonClass}
-          aria-label="전체 선택"
-        >
-          전체
-        </button>
+    <div className="flex items-center gap-2 mx-4 mt-3 pr-1 bg-gray-100 rounded-md py-1">
+      <div className="grow h-9 sm:h-8 flex items-start overflow-hidden border-r border-gray-300 sm:border-none">
+        <div className="px-1 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
+          <button
+            type="button"
+            onClick={handleSelectAll}
+            className={allButtonClass}
+            aria-label="전체 선택"
+          >
+            전체
+          </button>
 
-        <CustomSelect
-          key={`city-${selectedCity}`}
-          placeholder="시도 선택"
-          className="w-36"
-          size="sm"
-          options={cityOptions}
-          value={selectedCity || ""}
-          onChange={handleCityChange}
-          aria-label="시도 선택"
-        />
+          <CustomSelect
+            key={`city-${selectedCity}`}
+            placeholder="시도 선택"
+            className="w-36 shrink-0"
+            size="sm"
+            options={cityOptions}
+            value={selectedCity || ""}
+            onChange={handleCityChange}
+            aria-label="시도 선택"
+          />
 
-        <CustomSelect
-          key={`district-${selectedDistrict}`}
-          disabled={!selectedCity || isDistrictsLoading}
-          placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
-          className="w-36"
-          size="sm"
-          options={districtOptions}
-          value={selectedDistrict || ""}
-          onChange={handleDistrictChange}
-          aria-label="시군구 선택"
-        />
+          <CustomSelect
+            key={`district-${selectedDistrict}`}
+            disabled={!selectedCity || isDistrictsLoading}
+            placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
+            className="w-36 shrink-0"
+            size="sm"
+            options={districtOptions}
+            value={selectedDistrict || ""}
+            onChange={handleDistrictChange}
+            aria-label="시군구 선택"
+          />
+        </div>
       </div>
 
       <button
