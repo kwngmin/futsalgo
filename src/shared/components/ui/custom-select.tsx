@@ -8,13 +8,14 @@ interface TimeSelectProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: React.ReactNode;
   error?: boolean;
-  hasPlaceholder?: boolean;
+  // hasPlaceholder?: boolean;
   isPlaceholderSelectable?: boolean;
   disabled?: boolean;
   className?: string;
   classNames?: {
     select?: string;
   };
+  placeholder?: string;
   size?: "default" | "sm";
 }
 
@@ -24,12 +25,13 @@ const CustomSelect = ({
   onChange,
   options,
   error,
-  hasPlaceholder,
+  // hasPlaceholder,
   isPlaceholderSelectable = true,
   disabled = false,
   className,
   classNames,
   size = "default",
+  placeholder,
 }: TimeSelectProps) => {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
@@ -54,9 +56,9 @@ const CustomSelect = ({
           )}
           disabled={disabled}
         >
-          {hasPlaceholder && (
+          {placeholder && (
             <option key="" value="" disabled={!isPlaceholderSelectable}>
-              선택
+              {placeholder}
             </option>
           )}
           {options}

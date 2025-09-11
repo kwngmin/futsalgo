@@ -247,7 +247,7 @@ const GoalRecord = ({
         </div>
         <div className="space-y-3">
           <CustomSelect
-            // value={watchValues.scorerId || ""}
+            // placeholder="선택"
             value={scorerSelectValue}
             onChange={handleScorerChange}
             options={

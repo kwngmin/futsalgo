@@ -229,7 +229,8 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 <div className="space-y-3">
                   <Label className="px-1">시/도</Label>
                   <CustomSelect
-                    hasPlaceholder
+                    // hasPlaceholder
+                    placeholder="선택"
                     options={koreanCities.map((city) => (
                       <option key={city} value={city}>
                         {city}

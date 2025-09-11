@@ -302,7 +302,8 @@ const NewScheduleForm = ({
           <div className="space-y-3">
             <Label className="px-1">주최팀</Label>
             <CustomSelect
-              hasPlaceholder
+              // hasPlaceholder
+              placeholder="선택"
               options={teams.map((t) => (
                 <option key={t.team.id} value={t.team.id}>
                   {t.team.name}

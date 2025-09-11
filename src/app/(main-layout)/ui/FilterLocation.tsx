@@ -3,7 +3,9 @@
 import { cityData } from "@/features/search-address-sgis/constants";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { cn } from "@/shared/lib/utils";
+// import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
+import { useDistricts } from "../home/lib/use-districts";
 
 export interface LocationFilter {
   city: string;
@@ -19,7 +21,25 @@ const FilterLocation = ({
   setFilterValues: (values: { location?: LocationFilter }) => void;
 }) => {
   const [city, setCity] = useState<string>();
+  const [cd, setCd] = useState<string>();
+  console.log(city, "city");
+  console.log(cd, "cd");
+
+  const { data: districts, isLoading } = useDistricts(cd);
+  console.log(districts, "districts");
+  console.log(isLoading, "isLoading");
+
   const [district, setDistrict] = useState<string>();
+
+  // 데이터 조회 - 최적화된 설정
+  // const { data, isLoading, error } = useQuery({
+  //   queryKey: ["location", city?.cd],
+  //   queryFn: () => getDistricts(city?.cd),
+  //   placeholderData: keepPreviousData,
+  //   staleTime: 1000 * 60 * 2, // 2분간 fresh 상태 유지
+  //   gcTime: 1000 * 60 * 10, // 10분간 가비지 컬렉션 방지
+  //   refetchOnWindowFocus: false, // 윈도우 포커스 시 재조회 방지
+  // });
 
   // 버튼 클래스 생성 함수 메모이제이션
   const getButtonClass = useCallback((isSelected: boolean) => {
@@ -68,17 +88,40 @@ const FilterLocation = ({
         </div>
         <CustomSelect
           key={city}
-          hasPlaceholder
+          // hasPlaceholder
+          placeholder="시도 선택"
           className="w-36"
           size="sm"
-          // label="시/도"
           options={cityData.map((city) => (
-            <option key={city.cd} value={city.cd}>
+            <option key={city.addr_name} value={city.addr_name}>
               {city.addr_name}
             </option>
           ))}
           value={city}
-          onChange={(e) => setCity(e.target.value)}
+          onChange={(e) => {
+            setCity(e.target.value);
+            setCd(
+              cityData.find((city) => city.addr_name === e.target.value)?.cd
+            );
+          }}
+        />
+        <CustomSelect
+          key={district}
+          disabled={!city}
+          placeholder="시군구 선택"
+          className="w-36"
+          size="sm"
+          options={districts?.result?.map(
+            (district: { cd: string; addr_name: string }) => (
+              <option key={district.addr_name} value={district.addr_name}>
+                {district.addr_name}
+              </option>
+            )
+          )}
+          value={district}
+          onChange={(e) => {
+            setDistrict(e.target.value);
+          }}
         />
       </div>
 
