@@ -5,12 +5,12 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import {
   CalendarDotsIcon,
   ClockIcon,
-  // MapPinAreaIcon,
-  // SunHorizonIcon,
+  MapPinAreaIcon,
 } from "@phosphor-icons/react";
 import { MatchTypeOption } from "./FilterMatchType";
 import { DaysFilter } from "./FilterDays";
 import { TimeFilter } from "./FilterTime.test";
+import { LocationFilter } from "./FilterLocation";
 
 interface FilterOption {
   icon?: React.ReactNode;
@@ -31,24 +31,29 @@ const FilterBar = ({
   filterValues: {
     matchType?: MatchTypeOption;
     days?: DaysFilter;
-    // location?: LocationFilter;
+    location?: LocationFilter;
     time?: TimeFilter;
   };
   setFilterValues: (values: {
     matchType?: MatchTypeOption;
     days?: DaysFilter;
-    // location?: LocationFilter;
+    location?: LocationFilter;
     time?: TimeFilter;
   }) => void;
 }) => {
   // 필터 옵션 설정
   const filterOptions: FilterOption[] = [
     { label: "경기 분류", value: "matchType" },
-    // {
-    //   icon: <MapPinAreaIcon className="size-5 text-gray-700" weight="fill" />,
-    //   label: "지역",
-    //   value: "location",
-    // },
+    {
+      icon: (
+        <MapPinAreaIcon
+          className="size-4 text-gray-700"
+          // weight="fill"
+        />
+      ),
+      label: "지역",
+      value: "location",
+    },
     {
       icon: (
         <CalendarDotsIcon
@@ -66,7 +71,7 @@ const FilterBar = ({
           // weight="fill"
         />
       ),
-      label: "시작 시간",
+      label: "시간대",
       value: "startPeriod",
     },
   ];

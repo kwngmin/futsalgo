@@ -18,9 +18,9 @@ import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
 import FilterMatchType from "./ui/FilterMatchType";
 import FilterDays, { DaysFilter } from "./ui/FilterDays";
-// import FilterLocation from "./ui/FilterLocation";
 import { DayOfWeek, Period } from "@prisma/client";
 import FilterStartPeriod, { StartPeriodFilter } from "./ui/FilterStartPeriod";
+import FilterLocation from "./ui/FilterLocation";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -47,7 +47,7 @@ const HomePage = () => {
       [DayOfWeek.SUNDAY]: boolean;
       label: string;
     };
-    location?: { city: string; district: string; label: string };
+    location?: { city: string; district?: string; label: string };
     startPeriod?: StartPeriodFilter;
   }>({
     matchType: undefined,
@@ -203,12 +203,14 @@ const HomePage = () => {
           }
         />
       )}
-      {/* {openFilter === "location" && (
+      {openFilter === "location" && (
         <FilterLocation
           onClose={() => setOpenFilter(null)}
-          setFilterValues={setFilterValues}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
         />
-      )} */}
+      )}
       {openFilter === "startPeriod" && (
         <FilterStartPeriod
           onClose={() => setOpenFilter(null)}
