@@ -169,6 +169,14 @@ enum DayOfWeek {
   SUNDAY
 }
 
+enum Period {
+  DAWN     // 새벽 (00:00 ~ 05:59)
+  MORNING  // 아침 (06:00 ~ 11:59)
+  DAY      // 낮 (12:00 ~ 17:59)
+  EVENING  // 저녁 (18:00 ~ 21:59)
+  NIGHT    // 밤 (22:00 ~ 23:59)
+}
+
 // ========== AUTHENTICATION MODELS ==========
 
 model Account {
@@ -412,6 +420,7 @@ model Schedule {
   dayOfWeek          DayOfWeek?
   year               Int            // 연도 기반 통계용
   startTime          DateTime
+  startPeriod        Period?         // 추가: 시작 시간 기준 시간대
   endTime            DateTime
   matchType          MatchType
   status             ScheduleStatus @default(PENDING)
@@ -453,6 +462,8 @@ model Schedule {
   @@index([year])
   @@index([city, district])           // 지역 검색용
   @@index([attendanceDeadline])       // 투표 마감 시간 검색용
+  @@index([startPeriod])              // 추가: 시간대 검색용 인덱스
+  @@index([date, startPeriod])        // 추가: 날짜와 시간대 복합 인덱스
   @@map("schedules")
 }
 
