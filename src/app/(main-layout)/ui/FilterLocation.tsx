@@ -86,13 +86,16 @@ const FilterLocation = ({ onClose, setFilterValues }: FilterLocationProps) => {
       e.stopPropagation();
 
       // 선택된 값이 있으면 저장, 없으면 초기화
-      if (selectedCity || selectedDistrict) {
+      if (
+        (selectedCity && !selectedDistrict) ||
+        (selectedCity && selectedDistrict)
+      ) {
         const locationFilter: LocationFilter = {
-          city: selectedCity || "",
+          city: selectedCity,
           district: selectedDistrict,
-          label: `${selectedCity || "전체"}${
-            selectedDistrict ? ` ${selectedDistrict}` : ""
-          }`,
+          label: selectedDistrict
+            ? `${selectedCity} • ${selectedDistrict}`
+            : selectedCity,
         };
         setFilterValues({ location: locationFilter });
       } else {
