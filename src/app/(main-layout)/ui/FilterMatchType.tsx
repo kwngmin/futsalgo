@@ -82,7 +82,7 @@ const FilterMatchType = ({
   );
 
   return (
-    <div className="flex items-center justify-between gap-2 mx-4 mt-3 bg-gray-100 rounded-md p-1">
+    <div className="flex items-center justify-between gap-2 mx-4 mt-2 bg-gray-100 rounded-md p-1">
       <div className="bg-gray-100 rounded grid grid-cols-3 items-center gap-1">
         <div onClick={handleSelectAll} className={allButtonClass}>
           전체
