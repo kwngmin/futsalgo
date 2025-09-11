@@ -67,7 +67,9 @@ const FilterLocation = ({
           전체
         </div>
         <CustomSelect
+          key={city}
           hasPlaceholder
+          className="w-36"
           size="sm"
           // label="시/도"
           options={cityData.map((city) => (
