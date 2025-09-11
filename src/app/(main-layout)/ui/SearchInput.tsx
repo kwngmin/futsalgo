@@ -1,7 +1,7 @@
 // @/app/(main-layout)/home/components/SearchInput.tsx
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { Search, X } from "lucide-react";
 
 interface SearchInputProps {
@@ -14,6 +14,14 @@ interface SearchInputProps {
 // React.memo로 감싸서 props가 변경될 때만 리렌더링
 const SearchInput = memo(
   ({ value, onChange, onClear, isMobile = false }: SearchInputProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (inputRef.current && isMobile) {
+        inputRef.current.focus();
+      }
+    }, [isMobile]);
+
     return (
       <div
         className={`${
