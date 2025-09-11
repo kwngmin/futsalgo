@@ -326,7 +326,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
         {/* 골 기록 입력 */}
         {data.permissions.isEditable &&
-          data.match.schedule.startTime <= new Date() && (
+          new Date(
+            `${data.match.schedule.date} ${data.match.schedule.startTime}`
+          ) <= new Date() && (
             <GoalRecord
               matchId={data.match.id}
               lineups={data.lineups}

@@ -138,7 +138,7 @@ const ScheduleContent = ({
 }: {
   scheduleId: string;
   isLikedSchedule?: boolean;
-  startTime?: Date;
+  startTime?: string;
   matchType?: MatchType;
 }) => {
   console.log(isLikedSchedule, "isLikedSchedule");

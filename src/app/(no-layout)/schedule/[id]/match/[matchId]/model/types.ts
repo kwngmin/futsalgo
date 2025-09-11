@@ -30,9 +30,9 @@ export interface MatchDataTeam {
 export interface MatchDataSchedule {
   id: string;
   place: string;
-  date: Date;
-  startTime: Date;
-  endTime: Date;
+  date: string;
+  startTime: string;
+  endTime: string;
   status: ScheduleStatus;
   description: string | null;
   matchType: MatchType;

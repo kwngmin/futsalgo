@@ -115,7 +115,7 @@ export async function getUserPhotos({
       schedule: {
         id: photo.schedule.id,
         place: photo.schedule.place,
-        date: photo.schedule.date.toISOString(),
+        date: photo.schedule.date,
         hostTeam: {
           id: photo.schedule.hostTeam.id,
           name: photo.schedule.hostTeam.name,
