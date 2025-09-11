@@ -416,12 +416,12 @@ model Schedule {
   id                 String         @id @default(cuid())
   place              String
   description        String?
-  date               DateTime
+  date               String
   dayOfWeek          DayOfWeek?
   year               Int            // 연도 기반 통계용
-  startTime          DateTime
+  startTime          String
   startPeriod        Period?         // 추가: 시작 시간 기준 시간대
-  endTime            DateTime
+  endTime            String
   matchType          MatchType
   status             ScheduleStatus @default(PENDING)
   

@@ -71,7 +71,7 @@ import { respondTeamInvitation } from "../actions/respond-team-invitation";
  * @param end 종료 시간 (Date 객체)
  * @returns 변환된 시간 문자열 (예: "오전 6:00 - 8:00" 또는 "오전 11:00 - 오후 1:00")
  */
-function formatTimeRange(start: Date, end: Date): string {
+function formatTimeRange(date: string, start: string, end: string): string {
   const startOptions: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
@@ -87,9 +87,10 @@ function formatTimeRange(start: Date, end: Date): string {
   const startParts = new Intl.DateTimeFormat(
     "ko-KR",
     startOptions
-  ).formatToParts(start);
+  ).formatToParts(new Date(`${date} ${start}`));
+
   const endParts = new Intl.DateTimeFormat("ko-KR", endOptions).formatToParts(
-    end
+    new Date(`${date} ${end}`)
   );
 
   const startPeriod =
@@ -430,8 +431,9 @@ const ScheduleContent = ({
           <div className="flex items-center gap-1.5">
             <ClockIcon className="size-4 text-gray-500" strokeWidth={2} />
             {formatTimeRange(
-              new Date(data.data.schedule?.startTime),
-              new Date(data.data.schedule?.endTime)
+              data.data.schedule?.date,
+              data.data.schedule?.startTime,
+              data.data.schedule?.endTime
             )}
           </div>
         </div>
@@ -815,7 +817,9 @@ const ScheduleContent = ({
           )}
 
         {/* MVP */}
-        {data.data.schedule.startTime <= new Date() &&
+        {new Date(
+          `${data.data.schedule.date} ${data.data.schedule.startTime}`
+        ) <= new Date() &&
           data.data.schedule.matches.length > 0 && (
             <ScheduleMvp scheduleId={scheduleId} />
           )}
@@ -852,9 +856,9 @@ const ScheduleContent = ({
         {/* 사진 */}
         {(data.data.schedule.status === "READY" ||
           data.data.schedule.status === "PLAY") &&
-          data.data.schedule.startTime <= new Date() && (
-            <SchedulePhotosGallery scheduleId={scheduleId} />
-          )}
+          new Date(
+            `${data.data.schedule.date} ${data.data.schedule.startTime}`
+          ) <= new Date() && <SchedulePhotosGallery scheduleId={scheduleId} />}
 
         {/* 댓글 */}
         <ScheduleComments scheduleId={scheduleId} />

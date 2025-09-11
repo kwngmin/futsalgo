@@ -1,15 +1,14 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-import { MatchType, Schedule, TeamMemberStatus } from "@prisma/client";
+import {
+  DayOfWeek,
+  MatchType,
+  Period,
+  Schedule,
+  TeamMemberStatus,
+} from "@prisma/client";
 import { revalidatePath } from "next/cache";
-
-// 한국 시간을 UTC로 변환하는 헬퍼 함수
-function convertKSTToUTC(dateStr: string, timeStr: string): Date {
-  // ISO 형식으로 만들어서 한국 시간임을 명시
-  const kstDateTime = new Date(`${dateStr}T${timeStr}:00+09:00`);
-  return kstDateTime;
-}
 
 export async function addNewSchedule({
   createdById,
@@ -22,6 +21,7 @@ export async function addNewSchedule({
     place: string;
     description?: string;
     date: string;
+    year: number;
     startTime: string;
     endTime: string;
     matchType: string;
@@ -30,6 +30,8 @@ export async function addNewSchedule({
     enableAttendanceVote: boolean;
     attendanceDeadline?: string;
     attendanceEndTime?: string;
+    startPeriod: Period;
+    dayOfWeek: DayOfWeek;
   };
 }): Promise<
   { success: true; data: Schedule } | { success: false; error: string }
@@ -58,16 +60,21 @@ export async function addNewSchedule({
       };
     }
 
+    console.log(formData.startTime, "startTime");
+    console.log(formData.endTime, "endTime");
+
     // 트랜잭션으로 처리
     const result = await prisma.$transaction(async (tx) => {
       // 1. 일정 생성
       const schedule = await tx.schedule.create({
         data: {
           place: formData.place,
-          date: new Date(formData.date),
-          year: new Date(formData.date).getFullYear(),
-          startTime: convertKSTToUTC(formData.date, formData.startTime),
-          endTime: convertKSTToUTC(formData.date, formData.endTime),
+          year: formData.year,
+          date: formData.date,
+          dayOfWeek: formData.dayOfWeek,
+          startTime: formData.startTime,
+          endTime: formData.endTime,
+          startPeriod: formData.startPeriod,
           matchType: formData.matchType as MatchType,
           status: formData.matchType === "TEAM" ? "PENDING" : "READY",
           createdById: createdById,

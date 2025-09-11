@@ -89,7 +89,7 @@ const ScheduleList = ({
   );
 
   const attendanceStatus = isAttendance ? isAttendance.attendanceStatus : null;
-  const weekday = schedule.date.toLocaleDateString("ko-KR", {
+  const weekday = new Date(schedule.date).toLocaleDateString("ko-KR", {
     weekday: "long",
   });
 
@@ -107,7 +107,9 @@ const ScheduleList = ({
         >
           <div className="font-medium text-xs text-gray-500">{weekday}</div>
           <div className="font-semibold">
-            {`${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`}
+            {`${new Date(schedule.date).getMonth() + 1}.${new Date(
+              schedule.date
+            ).getDate()}`}
           </div>
         </div>
         <div className="grow flex flex-col justify-center overflow-hidden">
@@ -143,7 +145,9 @@ const ScheduleList = ({
               className="!h-3 !w-0.25 bg-gray-300"
             />
             <span className="font-medium text-sm text-gray-600 shrink-0">
-              {schedule.startTime?.toLocaleTimeString("ko-KR", {
+              {new Date(
+                `${schedule.date} ${schedule.startTime}`
+              )?.toLocaleTimeString("ko-KR", {
                 hour: "numeric",
                 minute: "numeric",
               })}

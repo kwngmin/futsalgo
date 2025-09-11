@@ -24,6 +24,8 @@ import {
 } from "@/shared/components/ui/popover";
 import { useTeamCodeValidation } from "../lib/use-team-code-validation";
 import { useQueryClient } from "@tanstack/react-query";
+import { getPeriodFromHour } from "../lib/schedule-period";
+import { getDayOfWeekFromDate } from "../lib/day-of-week-mapper";
 
 const newFormSchema = z
   .object({
@@ -174,13 +176,25 @@ const NewScheduleForm = ({
     }
   }, [teamCode.status, teamCode.team?.id, setValue]);
 
+  console.log(watch("startTime"));
+
   const onSubmit = async (formData: NewFormData) => {
     setIsLoading(true);
 
     try {
+      // 한국 시간 기준으로 Period 계산
+      const [hour] = formData.startTime.split(":").map(Number);
+      const startPeriod = getPeriodFromHour(hour);
+      const dayOfWeek = getDayOfWeekFromDate(formData.date);
+
       const result = await addNewSchedule({
         createdById: userId,
-        formData,
+        formData: {
+          ...formData,
+          startPeriod,
+          year: new Date(formData.date).getFullYear(),
+          dayOfWeek,
+        },
       });
 
       if (result.success) {

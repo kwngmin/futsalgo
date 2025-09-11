@@ -19,8 +19,8 @@ import SchedulePageLoading from "./ui/loading";
 import FilterMatchType from "./ui/FilterMatchType";
 import FilterDays, { DaysFilter } from "./ui/FilterDays";
 // import FilterLocation from "./ui/FilterLocation";
-import FilterTime from "./ui/FilterTime";
-import { DayOfWeek } from "@prisma/client";
+import { DayOfWeek, Period } from "@prisma/client";
+import FilterStartPeriod, { StartPeriodFilter } from "./ui/FilterStartPeriod";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -33,7 +33,7 @@ const HomePage = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [openFilter, setOpenFilter] = useState<
-    null | "matchType" | "days" | "location" | "time"
+    null | "matchType" | "days" | "location" | "startPeriod"
   >(null);
   const [filterValues, setFilterValues] = useState<{
     matchType?: { value: "TEAM" | "SQUAD"; label: string };
@@ -48,12 +48,12 @@ const HomePage = () => {
       label: string;
     };
     location?: { city: string; district: string; label: string };
-    time?: { startTime: string; endTime: string; label: string };
+    startPeriod?: StartPeriodFilter;
   }>({
     matchType: undefined,
     days: undefined,
     location: undefined,
-    time: undefined,
+    startPeriod: undefined,
   });
 
   // 디바운스된 검색어
@@ -65,6 +65,16 @@ const HomePage = () => {
       return Object.entries(daysFilter)
         .filter(([key, value]) => key !== "label" && value === true)
         .map(([key]) => key as DayOfWeek);
+    },
+    []
+  );
+
+  // StartPeriodFilter를 Period 배열로 변환하는 헬퍼 함수
+  const convertStartPeriodFilterToArray = useCallback(
+    (startPeriodFilter: StartPeriodFilter): Period[] => {
+      return Object.entries(startPeriodFilter)
+        .filter(([key, value]) => key !== "label" && value === true)
+        .map(([key]) => key as Period);
     },
     []
   );
@@ -91,16 +101,26 @@ const HomePage = () => {
       // 모든 요일이 선택되었거나 아무것도 선택되지 않았으면 필터를 추가하지 않음
     }
 
-    // time 필터
-    if (filterValues.time) {
-      filterObj.time = {
-        startHour: Number(filterValues.time.startTime),
-        endHour: Number(filterValues.time.endTime),
-      };
+    // startPeriod 필터 - 배열 방식으로 변경
+    if (filterValues.startPeriod) {
+      const selectedPeriods = convertStartPeriodFilterToArray(
+        filterValues.startPeriod
+      );
+
+      // 선택된 시간대가 있을 때만 필터 추가
+      if (selectedPeriods.length > 0 && selectedPeriods.length < 5) {
+        filterObj.startPeriod = selectedPeriods;
+      }
+      // 모든 요일이 선택되었거나 아무것도 선택되지 않았으면 필터를 추가하지 않음
     }
 
     return filterObj;
-  }, [debouncedSearchValue, filterValues, convertDaysFilterToArray]);
+  }, [
+    debouncedSearchValue,
+    filterValues,
+    convertDaysFilterToArray,
+    convertStartPeriodFilterToArray,
+  ]);
 
   // 데이터 조회 - 최적화된 설정
   const { data, isLoading, error } = useQuery({
@@ -189,8 +209,8 @@ const HomePage = () => {
           setFilterValues={setFilterValues}
         />
       )} */}
-      {openFilter === "time" && (
-        <FilterTime
+      {openFilter === "startPeriod" && (
+        <FilterStartPeriod
           onClose={() => setOpenFilter(null)}
           setFilterValues={(values) =>
             setFilterValues({ ...filterValues, ...values })

@@ -11,6 +11,7 @@ import {
   ScheduleStatus,
   MatchType,
   DayOfWeek,
+  Period,
 } from "@prisma/client";
 
 // 필터 타입 정의
@@ -18,10 +19,7 @@ export interface ScheduleFilters {
   searchQuery?: string;
   matchType?: MatchType;
   days?: DayOfWeek[];
-  time?: {
-    startHour: number;
-    endHour: number;
-  };
+  startPeriod?: Period[];
 }
 export interface ScheduleWithDetails extends Schedule {
   hostTeam: Team;
@@ -52,24 +50,33 @@ const SCHEDULE_INCLUDE = {
   likes: true,
 } as const;
 
-// 날짜 유틸리티 함수들
+// 날짜 유틸리티 함수들 - String 기반으로 변경
 const DateUtils = {
-  getStartOfDay(date: Date = new Date()): Date {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    return startOfDay;
+  // 오늘 날짜를 YYYY-MM-DD 형식으로 반환
+  getTodayString(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   },
 
-  getEndOfDay(date: Date): Date {
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
-    return endOfDay;
+  // 내일 날짜를 YYYY-MM-DD 형식으로 반환
+  getTomorrowString(): string {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
+    const day = String(tomorrow.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   },
 
-  getNextDay(date: Date): Date {
-    const nextDay = new Date(date);
-    nextDay.setDate(date.getDate() + 1);
-    return nextDay;
+  // Date 객체를 YYYY-MM-DD 문자열로 변환
+  dateToString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   },
 };
 
@@ -113,11 +120,11 @@ async function getPastSchedules(
   // searchQuery?: string
   filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
-  const today = DateUtils.getStartOfDay();
+  const todayString = DateUtils.getTodayString();
 
   return prisma.schedule.findMany({
     where: {
-      date: { lt: today },
+      date: { lt: todayString },
       NOT: {
         status: {
           in: [
@@ -130,25 +137,10 @@ async function getPastSchedules(
       },
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
-      dayOfWeek: { in: filters?.days },
-      startTime: {
-        ...(filters?.time && {
-          gte: new Date(
-            `1970-01-01T${filters?.time?.startHour
-              .toString()
-              .padStart(2, "0")}:00:00.000Z`
-          ),
-        }),
-      },
-      endTime: {
-        ...(filters?.time && {
-          lte: new Date(
-            `1970-01-01T${filters?.time?.endHour
-              .toString()
-              .padStart(2, "0")}:59:59.999Z`
-          ),
-        }),
-      },
+      dayOfWeek: filters?.days ? { in: filters.days } : undefined,
+      startPeriod: filters?.startPeriod
+        ? { in: filters.startPeriod }
+        : undefined,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
@@ -187,16 +179,18 @@ async function getTodaysSchedules(
   teamIds: string[],
   filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
-  const today = DateUtils.getStartOfDay();
-  const endOfToday = DateUtils.getEndOfDay(today);
+  const todayString = DateUtils.getTodayString();
 
   return prisma.schedule.findMany({
     where: {
-      date: { gte: today, lte: endOfToday },
+      date: todayString,
       ...createScheduleWhereCondition(teamIds),
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
-      dayOfWeek: { in: filters?.days },
+      dayOfWeek: filters?.days ? { in: filters.days } : undefined,
+      startPeriod: filters?.startPeriod
+        ? { in: filters.startPeriod }
+        : undefined,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { createdAt: "desc" },
@@ -208,15 +202,18 @@ async function getUpcomingSchedules(
   teamIds: string[],
   filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
-  const tomorrow = DateUtils.getNextDay(DateUtils.getStartOfDay());
+  const tomorrowString = DateUtils.getTomorrowString();
 
   return prisma.schedule.findMany({
     where: {
-      date: { gte: tomorrow },
+      date: { gte: tomorrowString }, // 문자열 비교
       ...createScheduleWhereCondition(teamIds),
       ...createSearchCondition(filters?.searchQuery),
       matchType: filters?.matchType,
-      dayOfWeek: { in: filters?.days },
+      dayOfWeek: filters?.days ? { in: filters.days } : undefined,
+      startPeriod: filters?.startPeriod
+        ? { in: filters.startPeriod }
+        : undefined,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "asc" },

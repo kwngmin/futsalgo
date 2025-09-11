@@ -4,12 +4,13 @@
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import {
   CalendarDotsIcon,
+  ClockIcon,
   // MapPinAreaIcon,
-  SunHorizonIcon,
+  // SunHorizonIcon,
 } from "@phosphor-icons/react";
 import { MatchTypeOption } from "./FilterMatchType";
 import { DaysFilter } from "./FilterDays";
-import { TimeFilter } from "./FilterTime";
+import { TimeFilter } from "./FilterTime.test";
 
 interface FilterOption {
   icon?: React.ReactNode;
@@ -23,9 +24,9 @@ const FilterBar = ({
   filterValues,
   setFilterValues,
 }: {
-  openFilter: null | "matchType" | "days" | "location" | "time";
+  openFilter: null | "matchType" | "days" | "location" | "startPeriod";
   setOpenFilter: (
-    filter: null | "matchType" | "days" | "location" | "time"
+    filter: null | "matchType" | "days" | "location" | "startPeriod"
   ) => void;
   filterValues: {
     matchType?: MatchTypeOption;
@@ -49,14 +50,24 @@ const FilterBar = ({
     //   value: "location",
     // },
     {
-      icon: <CalendarDotsIcon className="size-5 text-gray-700" weight="fill" />,
+      icon: (
+        <CalendarDotsIcon
+          className="size-4 text-gray-700" //
+          // weight="fill"
+        />
+      ),
       label: "요일",
       value: "days",
     },
     {
-      icon: <SunHorizonIcon className="size-5 text-gray-700" weight="fill" />,
-      label: "시간",
-      value: "time",
+      icon: (
+        <ClockIcon
+          className="size-4 text-gray-700"
+          // weight="fill"
+        />
+      ),
+      label: "시작 시간",
+      value: "startPeriod",
     },
   ];
 
@@ -76,7 +87,7 @@ const FilterBar = ({
           setOpenFilter(null);
         } else {
           setOpenFilter(
-            option.value as "matchType" | "days" | "location" | "time"
+            option.value as "matchType" | "days" | "location" | "startPeriod"
           );
         }
       }}
