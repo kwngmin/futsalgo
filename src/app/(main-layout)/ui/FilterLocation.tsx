@@ -33,7 +33,7 @@ const FilterLocation = ({ onClose, setFilterValues }: FilterLocationProps) => {
   // 버튼 스타일 생성 함수 - 메모이제이션
   const createButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-20 sm:w-24 h-11 sm:h-8 flex items-center shrink-0 justify-center rounded-sm sm:text-sm border transition-colors",
+      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 lg:h-8 flex items-center shrink-0 justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
