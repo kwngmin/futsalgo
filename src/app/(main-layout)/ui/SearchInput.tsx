@@ -26,7 +26,7 @@ const SearchInput = memo(
       <div
         className={`${
           isMobile ? "grow shrink-0" : "w-56 shrink-0"
-        } pl-3 pr-10 h-10 sm:h-9 ${
+        } pl-3 pr-10 h-10 lg:h-9 ${
           isMobile ? "flex sm:hidden" : "hidden sm:flex"
         } items-center justify-center text-gray-600 hover:text-gray-900 rounded-md transition-colors gap-2 bg-gray-100 hover:bg-gray-200 relative focus-within:outline focus-within:outline-gray-500`}
       >
