@@ -12,7 +12,7 @@ const AddScheduleButton = ({ onClick }: AddScheduleButtonProps) => {
     <button
       type="button"
       onClick={onClick}
-      className="fixed bottom-20 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-2xs md:max-w-2xl mx-4 sm:mx-auto shrink-0 h-12 sm:h-10 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-3 sm:px-2.5 md:px-3 active:bg-black shadow-lg inset-shadow-sm inset-shadow-white/50"
+      className="fixed bottom-18 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-2xs md:max-w-2xl mx-4 sm:mx-auto shrink-0 h-12 sm:h-10 md:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-full md:rounded-b-none md:rounded-t-2xl transition-colors cursor-pointer font-semibold z-20 px-3 sm:px-2.5 md:px-3 active:bg-black shadow-lg inset-shadow-sm inset-shadow-white/50"
       aria-label="새로운 일정 추가"
     >
       <div className="flex items-center justify-center gap-3 sm:gap-2">
