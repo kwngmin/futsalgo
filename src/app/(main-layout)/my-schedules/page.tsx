@@ -8,7 +8,6 @@ import { getMySchedules } from "./actions/get-my-schedules";
 import SchedulePageLoading from "../ui/loading";
 import ScheduleList from "../ui/ScheduleList";
 import { useCallback, useMemo, useState } from "react";
-import ScheduleHeader from "../ui/ScheduleHeader";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { DayOfWeek, Period } from "@prisma/client";
@@ -20,14 +19,14 @@ import FilterBar from "../../../features/filter-list/ui/FilterBar";
 import FilterLocation from "@/features/filter-list/ui/FilterLocation";
 import FilterMatchType from "@/features/filter-list/ui/FilterMatchType";
 import AddScheduleButton from "../ui/AddScheduleButton";
-import { ScheduleTabType } from "@/entities/schedule/model/types";
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
+import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
 
 const MySchedulesPage = () => {
   const router = useRouter();
   const session = useSession();
 
-  const [currentTab, setCurrentTab] = useState<ScheduleTabType>("my-schedules");
+  const [currentTab, setCurrentTab] = useState<TabType>("my-schedules");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
@@ -126,7 +125,7 @@ const MySchedulesPage = () => {
   ]);
 
   const handleTabChange = useCallback(
-    (tab: ScheduleTabType) => {
+    (tab: TabType) => {
       setCurrentTab(tab);
       if (tab === "schedules") {
         router.push("/");
@@ -220,7 +219,12 @@ const MySchedulesPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <ScheduleHeader
+      <ListHeader
+        tabOptions={[
+          { tab: "schedules", label: "경기일정" },
+          { tab: "my-schedules", label: "내 일정" },
+        ]}
+        placeholder="팀 이름 또는 풋살장 검색"
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}

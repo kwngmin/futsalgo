@@ -5,9 +5,11 @@ import SearchInput from "@/features/filter-list/ui/SearchInput";
 import { Search } from "lucide-react";
 import { memo } from "react";
 
-type TabType = "teams" | "following";
+export type TabType = "schedules" | "my-schedules" | "teams" | "following";
 
 interface HeaderProps {
+  tabOptions: { tab: TabType; label: string }[];
+  placeholder?: string;
   currentTab: TabType;
   searchFocused: boolean;
   searchValue: string;
@@ -18,8 +20,10 @@ interface HeaderProps {
   onSearchClose: () => void;
 }
 
-const TeamHeader = memo(
+const ListHeader = memo(
   ({
+    tabOptions,
+    placeholder,
     currentTab,
     searchFocused,
     searchValue,
@@ -66,12 +70,13 @@ const TeamHeader = memo(
         {/* 데스크톱 헤더 */}
         <div className="hidden sm:flex items-center justify-between px-4 h-16 shrink-0">
           <div className="flex gap-3">
-            <TabButton tab="teams" label="팀" />
-            <TabButton tab="following" label="팔로잉" />
+            {tabOptions.map((tab) => (
+              <TabButton key={tab.tab} tab={tab.tab} label={tab.label} />
+            ))}
           </div>
           <div className="flex items-center gap-2">
             <SearchInput
-              placeholder="팀 이름 검색"
+              placeholder={placeholder}
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}
@@ -83,8 +88,9 @@ const TeamHeader = memo(
         {!searchFocused ? (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0">
             <div className="flex gap-3">
-              <TabButton tab="teams" label="팀" />
-              <TabButton tab="following" label="팔로잉" />
+              {tabOptions.map((tab) => (
+                <TabButton key={tab.tab} tab={tab.tab} label={tab.label} />
+              ))}
             </div>
             <div className="flex items-center gap-2">
               <SearchButton />
@@ -93,7 +99,7 @@ const TeamHeader = memo(
         ) : (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
             <SearchInput
-              placeholder="팀 이름 검색"
+              placeholder={placeholder}
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}
@@ -116,6 +122,6 @@ const TeamHeader = memo(
   }
 );
 
-TeamHeader.displayName = "TeamHeader";
+ListHeader.displayName = "ListHeader";
 
-export default TeamHeader;
+export default ListHeader;

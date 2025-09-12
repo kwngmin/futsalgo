@@ -10,10 +10,10 @@ import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import TeamList from "../ui/TeamList";
 import SkeletonContent from "../ui/SkeletonTeamContent";
 import { useRouter } from "next/navigation";
-import TeamHeader from "../ui/TeamHeader";
+import ListHeader, {
+  TabType,
+} from "../../../../features/tab-and-search/ui/ListHeader";
 import RegisterTeamButton from "../ui/RegisterTeamButton";
-
-type TabType = "teams" | "following";
 
 const FollowingTeamsPage = () => {
   const router = useRouter();
@@ -128,7 +128,12 @@ const FollowingTeamsPage = () => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
-      <TeamHeader
+      <ListHeader
+        tabOptions={[
+          { tab: "teams", label: "팀" },
+          { tab: "following", label: "팔로잉" },
+        ]}
+        placeholder="팀 이름 검색"
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}

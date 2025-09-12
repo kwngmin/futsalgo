@@ -7,11 +7,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import TeamList from "./ui/TeamList";
-import TeamHeader from "./ui/TeamHeader";
+import ListHeader, {
+  TabType,
+} from "../../../features/tab-and-search/ui/ListHeader";
 import RegisterTeamButton from "./ui/RegisterTeamButton";
 // import { useDebounce } from "@/shared/hooks/use-debounce";
-
-type TabType = "teams" | "following";
 
 const TeamsPage = () => {
   const router = useRouter();
@@ -126,7 +126,12 @@ const TeamsPage = () => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
-      <TeamHeader
+      <ListHeader
+        tabOptions={[
+          { tab: "teams", label: "팀" },
+          { tab: "following", label: "팔로잉" },
+        ]}
+        placeholder="팀 이름 검색"
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}
