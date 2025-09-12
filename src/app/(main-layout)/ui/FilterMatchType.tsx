@@ -56,7 +56,7 @@ const FilterMatchType = ({
   // 버튼 클래스 생성 함수 메모이제이션
   const getButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-20 sm:w-24 h-9 sm:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+      "cursor-pointer w-20 sm:w-24 h-11 sm:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -82,7 +82,7 @@ const FilterMatchType = ({
   );
 
   return (
-    <div className="flex items-center justify-between gap-2 mx-4 mt-3 bg-gray-100 rounded-md p-1">
+    <div className="flex items-center justify-between gap-2 mx-4 mt-3 bg-gray-100 rounded-md p-1 pr-2">
       <div className="bg-gray-100 rounded grid grid-cols-3 items-center gap-1">
         <div onClick={handleSelectAll} className={allButtonClass}>
           전체
