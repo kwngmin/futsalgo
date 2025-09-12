@@ -14,7 +14,7 @@ import { TimeFilter } from "../../../features/filter-list/ui/FilterSlider.test";
 import { LocationFilter } from "../../../features/filter-list/ui/FilterLocation";
 
 interface FilterOption {
-  icon?: React.ReactNode;
+  icon?: React.ElementType;
   label: string;
   value: string;
 }
@@ -45,22 +45,22 @@ const FilterBar = ({
   // 필터 옵션 설정
   const filterOptions: FilterOption[] = [
     {
-      icon: <FunnelIcon className="size-4.5 lg:size-4 text-gray-700" />,
+      icon: FunnelIcon,
       label: "분류",
       value: "matchType",
     },
     {
-      icon: <MapPinAreaIcon className="size-4.5 lg:size-4 text-gray-700" />,
+      icon: MapPinAreaIcon,
       label: "지역",
       value: "location",
     },
     {
-      icon: <CalendarDotsIcon className="size-4.5 lg:size-4 text-gray-700" />,
+      icon: CalendarDotsIcon,
       label: "요일",
       value: "days",
     },
     {
-      icon: <ClockIcon className="size-4.5 lg:size-4 text-gray-700" />,
+      icon: ClockIcon,
       label: "시간대",
       value: "startPeriod",
     },
@@ -87,7 +87,12 @@ const FilterBar = ({
         }
       }}
     >
-      {option.icon}
+      {option.icon && (
+        <option.icon
+          className="size-4.5 lg:size-4 text-gray-700"
+          weight={openFilter === option.value ? "fill" : "regular"}
+        />
+      )}
       {option.label}
       {openFilter === option.value ? (
         <ChevronUp className="size-4 text-muted-foreground" />
