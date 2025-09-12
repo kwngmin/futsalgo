@@ -30,7 +30,7 @@ const BottomNav = () => {
                 // className="mb-1 mt-0.5"
                 // className="w-6 h-6 mb-1"
                 // weight="fill"
-                size={28}
+                size={24}
                 weight={isActive ? "fill" : "regular"}
               />
               <span className="text-xs font-medium">{item.label}</span>
