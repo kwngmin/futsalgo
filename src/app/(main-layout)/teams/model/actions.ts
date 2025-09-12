@@ -53,6 +53,7 @@ export interface GetTeamsResponse {
 export interface GetFollowingTeamsResponse {
   success: boolean;
   data?: {
+    myTeams?: TeamWithDetails[];
     teams: TeamWithDetails[];
     hasMore: boolean;
     totalCount: number;
@@ -285,9 +286,63 @@ export async function getFollowingTeams(
 
     const hasMore = skip + followingTeams.length < totalCount;
 
+    // 첫 페이지에서만 사용자의 소속 팀들 조회
+    let myTeamsWithStats: TeamWithDetails[] = [];
+
+    if (page === 1) {
+      const myTeams = await prisma.team.findMany({
+        where: {
+          members: {
+            some: {
+              userId: session.user.id,
+              status: "APPROVED",
+            },
+          },
+        },
+        include: {
+          members: {
+            where: {
+              status: "APPROVED",
+            },
+            include: {
+              user: {
+                select: {
+                  playerBackground: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              members: {
+                where: {
+                  status: "APPROVED",
+                },
+              },
+              followers: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      // 내 팀들에도 프로 선수 통계 추가
+      myTeamsWithStats = myTeams.map((team) => ({
+        ...team,
+        stats: {
+          professionalCount: team.members.filter(
+            (member) => member.user.playerBackground === "PROFESSIONAL"
+          ).length,
+        },
+      })) as TeamWithDetails[];
+    }
+
     return {
       success: true,
       data: {
+        myTeams: myTeamsWithStats,
         teams: teamsWithStats as TeamWithDetails[],
         hasMore,
         totalCount,

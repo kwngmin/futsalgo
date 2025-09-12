@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Search, ArrowDownUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 import {
   getFollowingTeams,
@@ -11,6 +10,8 @@ import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import TeamList from "../ui/TeamList";
 import SkeletonContent from "../ui/SkeletonTeamContent";
 import { useRouter } from "next/navigation";
+import TeamHeader from "../ui/TeamHeader";
+import RegisterTeamButton from "../ui/RegisterTeamButton";
 
 type TabType = "teams" | "following";
 
@@ -20,6 +21,10 @@ const FollowingTeamsPage = () => {
   const isLoggedIn = session.status === "authenticated";
 
   const [currentTab, setCurrentTab] = useState<TabType>("following");
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  // 디바운스된 검색어
+  // const debouncedSearchValue = useDebounce(searchValue, 500);
 
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
@@ -27,6 +32,23 @@ const FollowingTeamsPage = () => {
       router.push("/teams");
     }
   };
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchValue(value);
+  }, []);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchValue("");
+  }, []);
+
+  const handleSearchFocus = useCallback(() => {
+    setSearchFocused(true);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setSearchFocused(false);
+    setSearchValue("");
+  }, []);
 
   // 로그인되지 않은 사용자는 전체 팀 페이지로 리다이렉트
   useEffect(() => {
@@ -87,6 +109,12 @@ const FollowingTeamsPage = () => {
       page?.success && page.data?.teams ? page.data.teams : []
     ) || [];
 
+  // 내 팀들은 첫 번째 페이지에서만 가져옴
+  const myTeams =
+    data?.pages?.[0]?.success && data.pages[0].data?.myTeams
+      ? data.pages[0].data.myTeams
+      : [];
+
   // 전체 팀 페이지로 이동
   // const handleAllTeamsClick = () => {
   //   router.push("/teams");
@@ -99,35 +127,23 @@ const FollowingTeamsPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <div className="flex gap-3">
-          <h1
-            className={`text-2xl font-bold cursor-pointer transition-opacity ${
-              currentTab === "teams" ? "" : "opacity-30 hover:opacity-50"
-            }`}
-            onClick={() => handleTabChange("teams")}
-          >
-            팀
-          </h1>
-          <h1
-            className={`text-2xl font-bold cursor-pointer transition-opacity ${
-              currentTab === "following" ? "" : "opacity-30 hover:opacity-50"
-            }`}
-            onClick={() => handleTabChange("following")}
-          >
-            팔로잉
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <Search className="size-5" />
-          </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <ArrowDownUp className="size-5" />
-          </button>
-        </div>
-      </div>
+      {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
+      <TeamHeader
+        currentTab={currentTab}
+        searchFocused={searchFocused}
+        searchValue={searchValue}
+        onTabChange={handleTabChange}
+        onSearchChange={handleSearchChange}
+        onSearchClear={handleSearchClear}
+        onSearchFocus={handleSearchFocus}
+        onSearchClose={handleSearchClose}
+      />
+
+      {isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6 && (
+        <RegisterTeamButton
+          onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
+        />
+      )}
 
       {isLoading ? (
         <SkeletonContent />
