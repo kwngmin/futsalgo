@@ -114,6 +114,11 @@ const HomePage = () => {
       // 모든 요일이 선택되었거나 아무것도 선택되지 않았으면 필터를 추가하지 않음
     }
 
+    if (filterValues.location) {
+      filterObj.city = filterValues.location.city;
+      filterObj.district = filterValues.location.district;
+    }
+
     return filterObj;
   }, [
     debouncedSearchValue,

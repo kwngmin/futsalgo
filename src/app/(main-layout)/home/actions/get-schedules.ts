@@ -20,6 +20,8 @@ export interface ScheduleFilters {
   matchType?: MatchType;
   days?: DayOfWeek[];
   startPeriod?: Period[];
+  city?: string;
+  district?: string;
 }
 export interface ScheduleWithDetails extends Schedule {
   hostTeam: Team;
@@ -141,6 +143,8 @@ async function getPastSchedules(
       startPeriod: filters?.startPeriod
         ? { in: filters.startPeriod }
         : undefined,
+      city: filters?.city,
+      district: filters?.district,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "desc" },
@@ -191,6 +195,8 @@ async function getTodaysSchedules(
       startPeriod: filters?.startPeriod
         ? { in: filters.startPeriod }
         : undefined,
+      city: filters?.city,
+      district: filters?.district,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { createdAt: "desc" },
@@ -214,6 +220,8 @@ async function getUpcomingSchedules(
       startPeriod: filters?.startPeriod
         ? { in: filters.startPeriod }
         : undefined,
+      city: filters?.city,
+      district: filters?.district,
     },
     include: SCHEDULE_INCLUDE,
     orderBy: { date: "asc" },
