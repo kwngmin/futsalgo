@@ -69,12 +69,12 @@ const FilterBar = ({
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className={`sm:text-sm font-medium border hover:bg-gray-200/80 active:bg-gray-200 bg-gray-50 pr-2 sm:pr-1.5 h-9 lg:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative ${
+      className={`sm:text-sm font-medium border hover:bg-gray-100 active:bg-gray-200 pr-2 sm:pr-1.5 h-9 lg:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative ${
         option.icon ? "pl-3 sm:pl-2.5 " : "pl-3.5 sm:pl-3"
       } ${
         openFilter === option.value
           ? "border-gray-500 font-semibold"
-          : "border-gray-300"
+          : "border-gray-400/80"
       }`}
       aria-label={`${option.label} 필터`}
       onClick={() => {
