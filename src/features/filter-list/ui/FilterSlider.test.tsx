@@ -175,7 +175,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="bg-gray-100 rounded flex flex-col gap-6 p-1 flex-1 mx-4 mt-3 select-none"
+      className="bg-gray-100 rounded flex flex-col gap-6 p-1 flex-1 mx-4 mt-2 select-none"
     >
       <div className="flex items-center justify-between">
         {/* 전체 선택 버튼 */}

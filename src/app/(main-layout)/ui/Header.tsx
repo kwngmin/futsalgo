@@ -71,6 +71,7 @@ const Header = memo(
           </div>
           <div className="flex items-center gap-2">
             <SearchInput
+              placeholder="팀 이름 또는 풋살장 검색"
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}
@@ -92,7 +93,7 @@ const Header = memo(
         ) : (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
             <SearchInput
-              // placeholderText="팀 이름 또는 풋살장 검색"
+              placeholder="팀 이름 또는 풋살장 검색"
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}

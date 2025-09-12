@@ -9,11 +9,18 @@ interface SearchInputProps {
   onChange: (value: string) => void;
   onClear: () => void;
   isMobile?: boolean;
+  placeholder?: string;
 }
 
 // React.memo로 감싸서 props가 변경될 때만 리렌더링
 const SearchInput = memo(
-  ({ value, onChange, onClear, isMobile = false }: SearchInputProps) => {
+  ({
+    value,
+    onChange,
+    onClear,
+    isMobile = false,
+    placeholder = "검색어 입력",
+  }: SearchInputProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -36,7 +43,7 @@ const SearchInput = memo(
         <input
           ref={inputRef}
           className="grow w-28 sm:placeholder:text-sm placeholder:text-gray-500 h-full border-none focus:outline-none sm:text-sm bg-transparent"
-          placeholder="팀 이름 또는 풋살장 검색"
+          placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           autoComplete="off"
