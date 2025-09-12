@@ -8,7 +8,7 @@ import { getMySchedules } from "./actions/get-my-schedules";
 import SchedulePageLoading from "../ui/loading";
 import ScheduleList from "../ui/ScheduleList";
 import { useCallback, useMemo, useState } from "react";
-import Header from "../ui/Header";
+import ScheduleHeader from "../ui/ScheduleHeader";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { DayOfWeek, Period } from "@prisma/client";
@@ -16,18 +16,18 @@ import FilterStartPeriod, {
   StartPeriodFilter,
 } from "@/features/filter-list/ui/FilterStartPeriod";
 import FilterDays, { DaysFilter } from "@/features/filter-list/ui/FilterDays";
-import FilterBar from "../ui/FilterBar";
+import FilterBar from "../../../features/filter-list/ui/FilterBar";
 import FilterLocation from "@/features/filter-list/ui/FilterLocation";
 import FilterMatchType from "@/features/filter-list/ui/FilterMatchType";
 import AddScheduleButton from "../ui/AddScheduleButton";
-
-type TabType = "schedules" | "my-schedules";
+import { ScheduleTabType } from "@/entities/schedule/model/types";
+import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
 
 const MySchedulesPage = () => {
   const router = useRouter();
   const session = useSession();
 
-  const [currentTab, setCurrentTab] = useState<TabType>("my-schedules");
+  const [currentTab, setCurrentTab] = useState<ScheduleTabType>("my-schedules");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
@@ -126,7 +126,7 @@ const MySchedulesPage = () => {
   ]);
 
   const handleTabChange = useCallback(
-    (tab: TabType) => {
+    (tab: ScheduleTabType) => {
       setCurrentTab(tab);
       if (tab === "schedules") {
         router.push("/");
@@ -220,7 +220,7 @@ const MySchedulesPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <Header
+      <ScheduleHeader
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}
@@ -233,6 +233,7 @@ const MySchedulesPage = () => {
 
       {/* 필터 바 */}
       <FilterBar
+        filterOptions={SCHEDULE_FILTER_OPTIONS}
         openFilter={openFilter}
         setOpenFilter={setOpenFilter}
         filterValues={filterValues}

@@ -1,11 +1,11 @@
 // @/app/(main-layout)/home/components/Header.tsx
 "use client";
 
+import SearchInput from "@/features/filter-list/ui/SearchInput";
 import { Search } from "lucide-react";
 import { memo } from "react";
-import SearchInput from "../../../features/filter-list/ui/SearchInput";
 
-type TabType = "schedules" | "my-schedules";
+type TabType = "teams" | "following";
 
 interface HeaderProps {
   currentTab: TabType;
@@ -18,7 +18,7 @@ interface HeaderProps {
   onSearchClose: () => void;
 }
 
-const Header = memo(
+const TeamHeader = memo(
   ({
     currentTab,
     searchFocused,
@@ -66,12 +66,12 @@ const Header = memo(
         {/* 데스크톱 헤더 */}
         <div className="hidden sm:flex items-center justify-between px-4 h-16 shrink-0">
           <div className="flex gap-3">
-            <TabButton tab="schedules" label="경기일정" />
-            <TabButton tab="my-schedules" label="내 일정" />
+            <TabButton tab="teams" label="팀" />
+            <TabButton tab="following" label="팔로잉" />
           </div>
           <div className="flex items-center gap-2">
             <SearchInput
-              placeholder="팀 이름 또는 풋살장 검색"
+              placeholder="팀 이름 검색"
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}
@@ -83,8 +83,8 @@ const Header = memo(
         {!searchFocused ? (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0">
             <div className="flex gap-3">
-              <TabButton tab="schedules" label="경기일정" />
-              <TabButton tab="my-schedules" label="내 일정" />
+              <TabButton tab="teams" label="팀" />
+              <TabButton tab="following" label="팔로잉" />
             </div>
             <div className="flex items-center gap-2">
               <SearchButton />
@@ -93,7 +93,7 @@ const Header = memo(
         ) : (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
             <SearchInput
-              placeholder="팀 이름 또는 풋살장 검색"
+              placeholder="팀 이름 검색"
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}
@@ -116,6 +116,6 @@ const Header = memo(
   }
 );
 
-Header.displayName = "Header";
+TeamHeader.displayName = "TeamHeader";
 
-export default Header;
+export default TeamHeader;

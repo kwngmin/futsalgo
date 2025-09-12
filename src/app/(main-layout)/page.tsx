@@ -8,8 +8,8 @@ import { useState, useCallback, useMemo } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 
 // 컴포넌트별 분리
-import Header from "./ui/Header";
-import FilterBar from "./ui/FilterBar";
+import ScheduleHeader from "./ui/ScheduleHeader";
+import FilterBar from "../../features/filter-list/ui/FilterBar";
 import ScheduleSection from "./ui/ScheduleSection";
 import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
@@ -23,15 +23,15 @@ import FilterStartPeriod, {
 } from "../../features/filter-list/ui/FilterStartPeriod";
 import FilterLocation from "../../features/filter-list/ui/FilterLocation";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
-
-type TabType = "schedules" | "my-schedules";
+import { ScheduleTabType } from "@/entities/schedule/model/types";
+import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
 
 const HomePage = () => {
   const router = useRouter();
   const session = useSession();
 
   // 상태 관리
-  const [currentTab, setCurrentTab] = useState<TabType>("schedules");
+  const [currentTab, setCurrentTab] = useState<ScheduleTabType>("schedules");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
@@ -141,7 +141,7 @@ const HomePage = () => {
 
   // 핸들러 함수들을 useCallback으로 메모이제이션
   const handleTabChange = useCallback(
-    (tab: TabType) => {
+    (tab: ScheduleTabType) => {
       setCurrentTab(tab);
       if (tab === "my-schedules") {
         router.push("/my-schedules");
@@ -174,7 +174,7 @@ const HomePage = () => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
-      <Header
+      <ScheduleHeader
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}
@@ -187,6 +187,7 @@ const HomePage = () => {
 
       {/* 필터 바 */}
       <FilterBar
+        filterOptions={SCHEDULE_FILTER_OPTIONS}
         openFilter={openFilter}
         setOpenFilter={setOpenFilter}
         filterValues={filterValues}

@@ -2,29 +2,25 @@
 "use client";
 
 import { ChevronDown, ChevronUp, X } from "lucide-react";
-import {
-  CalendarDotsIcon,
-  ClockIcon,
-  FunnelIcon,
-  MapPinAreaIcon,
-} from "@phosphor-icons/react";
-import { MatchTypeOption } from "../../../features/filter-list/ui/FilterMatchType";
-import { DaysFilter } from "../../../features/filter-list/ui/FilterDays";
-import { TimeFilter } from "../../../features/filter-list/ui/FilterSlider.test";
-import { LocationFilter } from "../../../features/filter-list/ui/FilterLocation";
+import { MatchTypeOption } from "./FilterMatchType";
+import { DaysFilter } from "./FilterDays";
+import { TimeFilter } from "./FilterSlider.test";
+import { LocationFilter } from "./FilterLocation";
 
-interface FilterOption {
+export interface FilterOption {
   icon?: React.ElementType;
   label: string;
   value: string;
 }
 
 const FilterBar = ({
+  filterOptions,
   openFilter,
   setOpenFilter,
   filterValues,
   setFilterValues,
 }: {
+  filterOptions: FilterOption[];
   openFilter: null | "matchType" | "days" | "location" | "startPeriod";
   setOpenFilter: (
     filter: null | "matchType" | "days" | "location" | "startPeriod"
@@ -42,30 +38,6 @@ const FilterBar = ({
     time?: TimeFilter;
   }) => void;
 }) => {
-  // 필터 옵션 설정
-  const filterOptions: FilterOption[] = [
-    {
-      icon: FunnelIcon,
-      label: "분류",
-      value: "matchType",
-    },
-    {
-      icon: MapPinAreaIcon,
-      label: "지역",
-      value: "location",
-    },
-    {
-      icon: CalendarDotsIcon,
-      label: "요일",
-      value: "days",
-    },
-    {
-      icon: ClockIcon,
-      label: "시간대",
-      value: "startPeriod",
-    },
-  ];
-
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button

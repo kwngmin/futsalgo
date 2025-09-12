@@ -1,13 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Search, ArrowDownUp, Plus, ChevronRight } from "lucide-react";
+import { Plus, ChevronRight } from "lucide-react";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { getTeams, type GetTeamsResponse } from "./model/actions";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SkeletonContent from "./ui/SkeletonTeamContent";
 import TeamList from "./ui/TeamList";
+import TeamHeader from "./ui/TeamHeader";
+// import { useDebounce } from "@/shared/hooks/use-debounce";
 
 type TabType = "teams" | "following";
 
@@ -19,6 +21,10 @@ const TeamsPage = () => {
   // const isFollowingPage = pathname === "/teams/following";
 
   const [currentTab, setCurrentTab] = useState<TabType>("teams");
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  // 디바운스된 검색어
+  // const debouncedSearchValue = useDebounce(searchValue, 500);
 
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
@@ -26,6 +32,23 @@ const TeamsPage = () => {
       router.push("/teams/following");
     }
   };
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchValue(value);
+  }, []);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchValue("");
+  }, []);
+
+  const handleSearchFocus = useCallback(() => {
+    setSearchFocused(true);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setSearchFocused(false);
+    setSearchValue("");
+  }, []);
 
   // 인피니티 쿼리 사용
   const {
@@ -102,50 +125,17 @@ const TeamsPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 상단: 제목과 검색 */}
-      <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <div className="flex gap-3">
-          <h1
-            className={`text-2xl font-bold cursor-pointer transition-opacity ${
-              currentTab === "teams" ? "" : "opacity-30 hover:opacity-50"
-            }`}
-            // onClick={handleAllTeamsClick}
-            onClick={() => handleTabChange("teams")}
-          >
-            팀
-          </h1>
-          {/* 로그인된 사용자에게만 팔로잉 버튼 표시 */}
-          {isLoggedIn && (
-            <h1
-              className={`text-2xl font-bold cursor-pointer transition-opacity ${
-                currentTab === "following" ? "" : "opacity-30 hover:opacity-50"
-              }`}
-              // onClick={handleFollowingClick}
-              onClick={() => handleTabChange("following")}
-            >
-              팔로잉
-            </h1>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <Search className="size-5" />
-          </button>
-          <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <ArrowDownUp className="size-5" />
-          </button>
-          {/* 팀 생성 버튼 (전체 팀 페이지에서만 표시) */}
-          {/* {Array.isArray(myTeams) && myTeams.length < 6 && (
-            <button
-              type="button"
-              onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
-              className="shrink-0 size-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors cursor-pointer font-semibold"
-            >
-              <Plus className="size-5" strokeWidth={2} />
-            </button>
-          )} */}
-        </div>
-      </div>
+      {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
+      <TeamHeader
+        currentTab={currentTab}
+        searchFocused={searchFocused}
+        searchValue={searchValue}
+        onTabChange={handleTabChange}
+        onSearchChange={handleSearchChange}
+        onSearchClear={handleSearchClear}
+        onSearchFocus={handleSearchFocus}
+        onSearchClose={handleSearchClose}
+      />
 
       {isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6 && (
         <button

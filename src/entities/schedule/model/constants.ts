@@ -1,3 +1,11 @@
+import { FilterOption } from "@/features/filter-list/ui/FilterBar";
+import {
+  CalendarDotsIcon,
+  ClockIcon,
+  FunnelIcon,
+  MapPinAreaIcon,
+} from "@phosphor-icons/react";
+
 export const SCHEDULE_STATUS = {
   PENDING: "PENDING",
   READY: "READY",
@@ -22,3 +30,27 @@ export const MATCH_TYPE = {
   SQUAD: "자체전",
   TEAM: "친선전",
 };
+
+// 필터 옵션 설정
+export const SCHEDULE_FILTER_OPTIONS: FilterOption[] = [
+  {
+    icon: FunnelIcon,
+    label: "분류",
+    value: "matchType",
+  },
+  {
+    icon: MapPinAreaIcon,
+    label: "지역",
+    value: "location",
+  },
+  {
+    icon: CalendarDotsIcon,
+    label: "요일",
+    value: "days",
+  },
+  {
+    icon: ClockIcon,
+    label: "시간대",
+    value: "startPeriod",
+  },
+];
