@@ -45,8 +45,8 @@ const FilterBar = ({
         option.icon ? "pl-1" : "pl-3.5 lg:pl-3"
       } ${
         openFilter === option.value
-          ? "border-indigo-600 font-semibold text-indigo-700"
-          : "border-gray-400 hover:border-gray-500"
+          ? "border-gray-600 font-semibold"
+          : "border-gray-300 hover:border-gray-400"
       }`}
       aria-label={`${option.label} 필터`}
       onClick={() => {
@@ -60,7 +60,7 @@ const FilterBar = ({
       }}
     >
       {option.icon && (
-        <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white inset-shadow-sm inset-shadow-gray-200 shadow-sm shadow-gray-300">
+        <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white inset-shadow-sm inset-shadow-gray-200 shadow-sm shadow-gray-400">
           <option.icon
             className="size-4.5 lg:size-4"
             weight={openFilter === option.value ? "fill" : "regular"}
