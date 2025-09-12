@@ -41,12 +41,12 @@ const FilterBar = ({
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className={`sm:text-sm font-medium border hover:bg-gray-100 active:bg-gray-200 pr-2 lg:pr-1.5 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 ${
-        option.icon ? "pl-1.5 lg:pl-1" : "pl-3.5 lg:pl-3"
+      className={`sm:text-sm font-medium bg-gray-50 border active:bg-gray-200 pr-2 lg:pr-1.5 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 ${
+        option.icon ? "pl-1" : "pl-3.5 lg:pl-3"
       } ${
         openFilter === option.value
           ? "border-gray-500 font-semibold"
-          : "border-gray-300 hover:border-gray-400 bg-gray-100"
+          : "border-gray-300 hover:border-gray-400"
       }`}
       aria-label={`${option.label} 필터`}
       onClick={() => {
@@ -60,9 +60,9 @@ const FilterBar = ({
       }}
     >
       {option.icon && (
-        <div className="size-7 bg-white rounded-full flex items-center justify-center border">
+        <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white text-gray-700 inset-shadow-sm inset-shadow-gray-200 shadow-sm shadow-gray-300">
           <option.icon
-            className="size-4.5 lg:size-4 text-gray-700"
+            className="size-4.5 lg:size-4"
             weight={openFilter === option.value ? "fill" : "regular"}
           />
         </div>
