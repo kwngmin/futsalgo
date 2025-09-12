@@ -69,7 +69,7 @@ const FilterBar = ({
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className={`sm:text-sm font-medium border hover:bg-gray-100 active:bg-gray-200 pr-2 sm:pr-1.5 h-9 lg:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative ${
+      className={`sm:text-sm font-medium border hover:bg-gray-100 active:bg-gray-200 pr-2 sm:pr-1.5 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative ${
         option.icon ? "pl-3 sm:pl-2.5 " : "pl-3.5 sm:pl-3"
       } ${
         openFilter === option.value
@@ -105,7 +105,7 @@ const FilterBar = ({
   return (
     <div className="flex items-center gap-2 select-none relative">
       <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-      <div className="grow overflow-hidden h-9 lg:h-8 flex items-start">
+      <div className="grow overflow-hidden h-10 lg:h-9 flex items-start">
         <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
           {filterOptions.map((option) =>
             filterValues[option.value as keyof typeof filterValues] ? (
