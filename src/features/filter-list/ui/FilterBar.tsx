@@ -41,12 +41,12 @@ const FilterBar = ({
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className={`sm:text-sm font-medium border hover:bg-gray-100 active:bg-gray-200 pr-2 sm:pr-1.5 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative ${
-        option.icon ? "pl-3 sm:pl-2.5 " : "pl-3.5 sm:pl-3"
+      className={`sm:text-sm font-medium border hover:bg-gray-100 active:bg-gray-200 pr-2 lg:pr-1.5 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 ${
+        option.icon ? "pl-1.5 lg:pl-1" : "pl-3.5 lg:pl-3"
       } ${
         openFilter === option.value
           ? "border-gray-500 font-semibold"
-          : "border-gray-400/80"
+          : "border-gray-300 hover:border-gray-400 bg-gray-100"
       }`}
       aria-label={`${option.label} 필터`}
       onClick={() => {
@@ -60,17 +60,21 @@ const FilterBar = ({
       }}
     >
       {option.icon && (
-        <option.icon
-          className="size-4.5 lg:size-4 text-gray-700"
-          weight={openFilter === option.value ? "fill" : "regular"}
-        />
+        <div className="size-7 bg-white rounded-full flex items-center justify-center border">
+          <option.icon
+            className="size-4.5 lg:size-4 text-gray-700"
+            weight={openFilter === option.value ? "fill" : "regular"}
+          />
+        </div>
       )}
-      {option.label}
-      {openFilter === option.value ? (
-        <ChevronUp className="size-4 text-muted-foreground" />
-      ) : (
-        <ChevronDown className="size-4 text-muted-foreground" />
-      )}
+      <div className="flex items-center gap-1">
+        {option.label}
+        {openFilter === option.value ? (
+          <ChevronUp className="size-4 text-muted-foreground" />
+        ) : (
+          <ChevronDown className="size-4 text-muted-foreground" />
+        )}
+      </div>
     </button>
   );
 
@@ -82,7 +86,7 @@ const FilterBar = ({
           {filterOptions.map((option) =>
             filterValues[option.value as keyof typeof filterValues] ? (
               <div
-                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2 sm:pr-1.5 pl-3.5 sm:pl-3 h-9 sm:h-8 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0"
+                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 lg:pr-2 pl-3.5 lg:pl-3 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0"
                 key={option.value}
                 onClick={() => {
                   setFilterValues({
