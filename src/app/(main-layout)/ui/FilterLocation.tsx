@@ -145,7 +145,7 @@ const FilterLocation = ({ onClose, setFilterValues }: FilterLocationProps) => {
           <CustomSelect
             key={`city-${selectedCity}`}
             placeholder="시도 선택"
-            className="w-36 shrink-0"
+            className="w-40 shrink-0"
             size="sm"
             options={cityOptions}
             value={selectedCity || ""}
@@ -157,7 +157,7 @@ const FilterLocation = ({ onClose, setFilterValues }: FilterLocationProps) => {
             key={`district-${selectedDistrict}`}
             disabled={!selectedCity || isDistrictsLoading}
             placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
-            className="w-36 shrink-0"
+            className="w-40 shrink-0"
             size="sm"
             options={districtOptions}
             value={selectedDistrict || ""}
