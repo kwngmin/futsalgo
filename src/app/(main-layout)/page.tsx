@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  getSchedules,
-  ScheduleFilters,
-} from "@/app/(main-layout)/home/actions/get-schedules";
+import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -16,11 +13,16 @@ import FilterBar from "./ui/FilterBar";
 import ScheduleSection from "./ui/ScheduleSection";
 import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
-import FilterMatchType from "./ui/FilterMatchType";
-import FilterDays, { DaysFilter } from "./ui/FilterDays";
+import FilterMatchType from "../../features/filter-list/ui/FilterMatchType";
+import FilterDays, {
+  DaysFilter,
+} from "../../features/filter-list/ui/FilterDays";
 import { DayOfWeek, Period } from "@prisma/client";
-import FilterStartPeriod, { StartPeriodFilter } from "./ui/FilterStartPeriod";
-import FilterLocation from "./ui/FilterLocation";
+import FilterStartPeriod, {
+  StartPeriodFilter,
+} from "../../features/filter-list/ui/FilterStartPeriod";
+import FilterLocation from "../../features/filter-list/ui/FilterLocation";
+import { ScheduleFilters } from "@/features/filter-list/model/types";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -32,6 +34,9 @@ const HomePage = () => {
   const [currentTab, setCurrentTab] = useState<TabType>("schedules");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  // 디바운스된 검색어
+  const debouncedSearchValue = useDebounce(searchValue, 500);
+
   const [openFilter, setOpenFilter] = useState<
     null | "matchType" | "days" | "location" | "startPeriod"
   >(null);
@@ -55,9 +60,6 @@ const HomePage = () => {
     location: undefined,
     startPeriod: undefined,
   });
-
-  // 디바운스된 검색어
-  const debouncedSearchValue = useDebounce(searchValue, 500);
 
   // DaysFilter를 DayOfWeek 배열로 변환하는 헬퍼 함수
   const convertDaysFilterToArray = useCallback(

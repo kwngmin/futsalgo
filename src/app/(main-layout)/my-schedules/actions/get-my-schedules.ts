@@ -1,5 +1,6 @@
 "use server";
 
+import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import {
@@ -23,6 +24,7 @@ export interface GetMySchedulesResponse {
   error?: string;
   data?: {
     schedules: ScheduleWithDetails[];
+    manageableTeams: Team[];
   };
 }
 
@@ -67,20 +69,61 @@ async function getUserTeamInfo(userId: string) {
     throw new Error("사용자를 찾을 수 없습니다");
   }
 
+  const approvedTeamIds = player.teams.map((t) => t.teamId);
+  const manageableTeams = player.teams
+    .filter((t) => ["OWNER", "MANAGER"].includes(t.role))
+    .map((t) => t.team);
+
   return {
-    approvedTeamIds: player.teams.map((t) => t.teamId),
-    // myTeams: player.teams.map((t) => t.team),
+    approvedTeamIds,
+    manageableTeams,
+  };
+}
+
+// 검색 조건 생성 함수
+function createSearchCondition(searchQuery?: string) {
+  if (!searchQuery || searchQuery.trim() === "") {
+    return {};
+  }
+
+  const trimmedQuery = searchQuery.trim();
+
+  return {
+    OR: [
+      {
+        hostTeam: {
+          name: { contains: trimmedQuery, mode: "insensitive" as const },
+        },
+      },
+      {
+        invitedTeam: {
+          name: { contains: trimmedQuery, mode: "insensitive" as const },
+        },
+      },
+      { place: { contains: trimmedQuery, mode: "insensitive" as const } },
+    ],
   };
 }
 
 // 모든 일정을 조회하는 통합 함수
 async function getAllSchedules(
-  teamIds: string[]
+  teamIds: string[],
+  filters?: ScheduleFilters
 ): Promise<ScheduleWithDetails[]> {
   // const today = getStartOfDay();
 
   return prisma.schedule.findMany({
-    where: createScheduleWhereCondition(teamIds),
+    where: {
+      ...createScheduleWhereCondition(teamIds),
+      ...createSearchCondition(filters?.searchQuery),
+      matchType: filters?.matchType,
+      dayOfWeek: filters?.days ? { in: filters.days } : undefined,
+      startPeriod: filters?.startPeriod
+        ? { in: filters.startPeriod }
+        : undefined,
+      city: filters?.city,
+      district: filters?.district,
+    },
     include: SCHEDULE_INCLUDE,
     orderBy: [
       // 오늘 날짜 기준으로 미래 일정은 오름차순, 과거 일정은 내림차순
@@ -110,7 +153,9 @@ function handleDatabaseError(error: unknown): string {
   return "서버 오류가 발생했습니다";
 }
 
-export async function getMySchedules(): Promise<GetMySchedulesResponse> {
+export async function getMySchedules(
+  filters?: ScheduleFilters
+): Promise<GetMySchedulesResponse> {
   try {
     // 데이터베이스 연결 확인
     await prisma.$queryRaw`SELECT 1`;
@@ -125,7 +170,9 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
       };
     }
 
-    const { approvedTeamIds } = await getUserTeamInfo(session.user.id);
+    const { approvedTeamIds, manageableTeams } = await getUserTeamInfo(
+      session.user.id
+    );
 
     // 팀에 속하지 않은 경우
     if (approvedTeamIds.length === 0) {
@@ -133,17 +180,19 @@ export async function getMySchedules(): Promise<GetMySchedulesResponse> {
         success: true,
         data: {
           schedules: [],
+          manageableTeams: [],
         },
       };
     }
 
     // 모든 일정을 한 번에 조회
-    const schedules = await getAllSchedules(approvedTeamIds);
+    const schedules = await getAllSchedules(approvedTeamIds, filters);
 
     return {
       success: true,
       data: {
         schedules,
+        manageableTeams,
       },
     };
   } catch (error) {

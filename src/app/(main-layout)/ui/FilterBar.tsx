@@ -8,10 +8,10 @@ import {
   FunnelIcon,
   MapPinAreaIcon,
 } from "@phosphor-icons/react";
-import { MatchTypeOption } from "./FilterMatchType";
-import { DaysFilter } from "./FilterDays";
-import { TimeFilter } from "./FilterTime.test";
-import { LocationFilter } from "./FilterLocation";
+import { MatchTypeOption } from "../../../features/filter-list/ui/FilterMatchType";
+import { DaysFilter } from "../../../features/filter-list/ui/FilterDays";
+import { TimeFilter } from "../../../features/filter-list/ui/FilterSlider.test";
+import { LocationFilter } from "../../../features/filter-list/ui/FilterLocation";
 
 interface FilterOption {
   icon?: React.ReactNode;

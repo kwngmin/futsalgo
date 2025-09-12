@@ -1,5 +1,6 @@
 "use server";
 
+import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import {
@@ -9,20 +10,8 @@ import {
   User,
   ScheduleLike,
   ScheduleStatus,
-  MatchType,
-  DayOfWeek,
-  Period,
 } from "@prisma/client";
 
-// 필터 타입 정의
-export interface ScheduleFilters {
-  searchQuery?: string;
-  matchType?: MatchType;
-  days?: DayOfWeek[];
-  startPeriod?: Period[];
-  city?: string;
-  district?: string;
-}
 export interface ScheduleWithDetails extends Schedule {
   hostTeam: Team;
   invitedTeam: Team | null;
@@ -229,7 +218,6 @@ async function getUpcomingSchedules(
 }
 
 export async function getSchedules(
-  // searchQuery?: string,
   filters?: ScheduleFilters
 ): Promise<GetSchedulesResponse> {
   try {

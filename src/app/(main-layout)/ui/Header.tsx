@@ -3,7 +3,7 @@
 
 import { Search } from "lucide-react";
 import { memo } from "react";
-import SearchInput from "./SearchInput";
+import SearchInput from "../../../features/filter-list/ui/SearchInput";
 
 type TabType = "schedules" | "my-schedules";
 
@@ -92,6 +92,7 @@ const Header = memo(
         ) : (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
             <SearchInput
+              // placeholderText="팀 이름 또는 풋살장 검색"
               value={searchValue}
               onChange={onSearchChange}
               onClear={onSearchClear}

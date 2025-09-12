@@ -4,7 +4,7 @@ import { cityData } from "@/features/search-address-sgis/constants";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { cn } from "@/shared/lib/utils";
 import { useCallback, useMemo, useState } from "react";
-import { useDistricts } from "../home/lib/use-districts";
+import { useDistricts } from "../../../app/(main-layout)/home/lib/use-districts";
 
 export interface LocationFilter {
   city: string;

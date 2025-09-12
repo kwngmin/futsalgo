@@ -49,7 +49,10 @@ const SearchInput = memo(
             type="button"
             aria-label="검색어 지우기"
           >
-            <X className="size-3 text-white/80" strokeWidth={2.5} />
+            <X
+              className="size-3 text-white/80 cursor-pointer active:scale-95"
+              strokeWidth={2.5}
+            />
           </button>
         )}
       </div>
