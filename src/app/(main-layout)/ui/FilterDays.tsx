@@ -163,7 +163,7 @@ const FilterDays = ({ onClose, setFilterValues }: FilterDaysProps) => {
   return (
     <div className="flex items-center gap-2 mx-4 mt-3 pr-2 bg-gray-100 rounded-md py-1">
       <div className="grow h-11 sm:h-8 flex items-start overflow-hidden border-r border-gray-300 sm:border-none">
-        <div className="px-1 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
+        <div className="pl-1 pr-2 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
           <button
             type="button"
             onClick={(e) => {
