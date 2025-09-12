@@ -26,11 +26,11 @@ const BottomNav = () => {
               type="button"
             >
               <Icon
-                className="my-1"
+                className="my-1 size-6 sm:size-7"
                 // className="mb-1 mt-0.5"
                 // className="w-6 h-6 mb-1"
                 // weight="fill"
-                size={24}
+                // size={24}
                 weight={isActive ? "fill" : "regular"}
               />
               <span className="text-xs font-medium">{item.label}</span>
