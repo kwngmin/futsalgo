@@ -133,7 +133,7 @@ const FollowingPlayersPage = () => {
     string[],
     number
   >({
-    queryKey: ["players", "all", JSON.stringify(filters)],
+    queryKey: ["players", "following", JSON.stringify(filters)],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getFollowingPlayers(pageParam, filters),
     getNextPageParam: (lastPage) => {

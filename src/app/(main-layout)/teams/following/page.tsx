@@ -150,7 +150,7 @@ const FollowingTeamsPage = () => {
     string[],
     number
   >({
-    queryKey: ["teams", "all", JSON.stringify(filters)],
+    queryKey: ["teams", "following", JSON.stringify(filters)],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getFollowingTeams(pageParam, filters),
     getNextPageParam: (lastPage) => {
