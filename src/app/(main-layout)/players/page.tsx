@@ -87,7 +87,7 @@ const PlayersPage = () => {
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
     if (tab === "following") {
-      router.push("/teams/following");
+      router.push("/players/following");
     }
   };
 

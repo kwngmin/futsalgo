@@ -233,7 +233,8 @@ export async function getPlayers(
 }
 
 export async function getFollowingPlayers(
-  page: number = 1
+  page: number = 1,
+  filters?: PlayerFilters
 ): Promise<FollowingPlayersResponse> {
   try {
     const session = await auth();
@@ -252,6 +253,12 @@ export async function getFollowingPlayers(
             followerId: session.user.id,
           },
         },
+        ...createSearchCondition(filters?.searchQuery),
+        gender: filters?.gender,
+        playerBackground: filters?.background,
+        // lowerAge: filters?.lowerAge,
+        // higherAge: filters?.higherAge,
+        skillLevel: { in: filters?.skillLevel },
       },
       include: {
         teams: {
