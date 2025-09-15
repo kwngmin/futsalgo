@@ -29,18 +29,20 @@ const ScheduleSection = ({
   // 섹션 헤더 컴포넌트
   const SectionHeader = ({ dotColor, title, subtitle }: SectionHeaderProps) => (
     <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
-      <div className={`size-2.5 sm:size-2 ${dotColor} rounded-full`} />
       <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
         {title}
       </span>
       <Separator orientation="vertical" className="!h-3" />
-      <span
-        className={`text-sm sm:text-xs ${
-          subtitle === "전체공개" ? "text-green-700" : "text-muted-foreground"
-        } shrink-0`}
-      >
-        {subtitle}
-      </span>
+      <div className="flex items-center gap-1.5">
+        <div className={`size-2.5 ${dotColor} rounded-full`} />
+        <span
+          className={`text-sm sm:text-xs font-medium ${
+            subtitle === "전체공개" ? "text-green-700" : "text-muted-foreground"
+          } shrink-0`}
+        >
+          {subtitle}
+        </span>
+      </div>
       <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
     </div>
   );
@@ -72,7 +74,7 @@ const ScheduleSection = ({
       {todaysSchedules && todaysSchedules.length > 0 && (
         <>
           <SectionHeader
-            dotColor="bg-red-500"
+            dotColor="bg-gray-300"
             title="오늘 일정"
             subtitle="비공개"
           />
@@ -84,7 +86,7 @@ const ScheduleSection = ({
       {upcomingSchedules && upcomingSchedules.length > 0 && (
         <>
           <SectionHeader
-            dotColor="bg-amber-500"
+            dotColor="bg-gray-300"
             title="예정된 일정"
             subtitle="비공개"
           />
@@ -102,7 +104,7 @@ const ScheduleSection = ({
       {pastSchedules && pastSchedules.length > 0 && (
         <>
           <SectionHeader
-            dotColor="bg-gray-400"
+            dotColor="bg-emerald-500"
             title="지난 일정"
             subtitle="전체공개"
           />

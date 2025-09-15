@@ -26,6 +26,7 @@ import FilterTeamLevel, {
 import { TeamLevel } from "@prisma/client";
 import { TeamFilters } from "@/features/filter-list/model/types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
+import { Separator } from "@/shared/components/ui/separator";
 
 const TeamsPage = () => {
   const router = useRouter();
@@ -277,20 +278,38 @@ const TeamsPage = () => {
       {isLoading ? (
         <SkeletonContent />
       ) : data ? (
-        <div className="space-y-3 mt-3">
+        <div className="">
           {/* 팀 목록 */}
-          <div className="bg-white rounded-2xl">
-            {allTeams.map((team) => (
-              <TeamList key={team.id} team={team} />
-            ))}
-
-            {/* 로딩 인디케이터 */}
-            {isFetchingNextPage && (
-              <div className="flex justify-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+          {myTeams && myTeams.length > 0 && (
+            <>
+              <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+                <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
+                  소속 팀
+                </span>
+                <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
               </div>
-            )}
+              {myTeams.map((team) => (
+                <TeamList key={team.id} team={team} />
+              ))}
+            </>
+          )}
+
+          <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+            <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
+              전체 팀
+            </span>
+            <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
           </div>
+          {allTeams.map((team) => (
+            <TeamList key={team.id} team={team} />
+          ))}
+
+          {/* 로딩 인디케이터 */}
+          {isFetchingNextPage && (
+            <div className="flex justify-center py-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+            </div>
+          )}
 
           {/* 팀이 없는 경우 */}
           {allTeams.length === 0 && !isLoading && (

@@ -43,7 +43,7 @@ const ScheduleFilterBar = ({
       } ${
         openFilter === option.value
           ? "border-gray-600 font-semibold"
-          : "border-gray-300 hover:border-gray-400"
+          : "border-gray-400/70 hover:border-gray-400"
       }`}
       aria-label={`${option.label} 필터`}
       onClick={() => {

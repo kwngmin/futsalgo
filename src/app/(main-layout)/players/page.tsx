@@ -22,6 +22,7 @@ import { PlayerFilters } from "@/features/filter-list/model/types";
 import FilterPlayerGender from "@/features/filter-list/ui/FilterPlayerGender";
 import FilterPlayerBackground from "@/features/filter-list/ui/FilterPlayerBackground";
 import FilterPlayerAge from "@/features/filter-list/ui/FilterPlayerAge";
+import { Separator } from "@/shared/components/ui/separator";
 
 const PlayersPage = () => {
   const router = useRouter();
@@ -229,48 +230,51 @@ const PlayersPage = () => {
       {isLoading ? (
         <SkeletonContent />
       ) : data ? (
-        <div className="space-y-3 mt-3">
-          {/* 회원 목록 */}
-          <div className="bg-white rounded-2xl">
-            {/* 내 프로필 섹션 (전체 회원 페이지에서만 표시) */}
-            {isLoggedIn && currentUser ? (
-              <PlayerList
-                player={currentUser}
-                isCurrentUser={true}
-                teamName={
-                  currentUser.teams.length > 1
-                    ? `${currentUser.teams[0]?.team?.name} 외 ${
-                        currentUser.teams.length - 1
-                      }개 팀`
-                    : currentUser.teams[0]?.team?.name
-                }
-                teamLogoUrl={currentUser.teams[0]?.team?.logoUrl || undefined}
-              />
-            ) : null}
+        <div className="mt-3">
+          {/* 내 프로필 섹션 (전체 회원 페이지에서만 표시) */}
+          {isLoggedIn && currentUser ? (
+            <PlayerList
+              player={currentUser}
+              isCurrentUser={true}
+              teamName={
+                currentUser.teams.length > 1
+                  ? `${currentUser.teams[0]?.team?.name} 외 ${
+                      currentUser.teams.length - 1
+                    }개 팀`
+                  : currentUser.teams[0]?.team?.name
+              }
+              teamLogoUrl={currentUser.teams[0]?.team?.logoUrl || undefined}
+            />
+          ) : null}
 
-            {/* 필터된 회원 목록 */}
-            {players?.map((player) => (
-              <PlayerList
-                key={player.id}
-                player={player}
-                teamName={
-                  player.teams.length > 1
-                    ? `${player.teams[0]?.team?.name} 외 ${
-                        player.teams.length - 1
-                      }개 팀`
-                    : player.teams[0]?.team?.name
-                }
-                teamLogoUrl={player.teams[0]?.team?.logoUrl || undefined}
-              />
-            ))}
-
-            {/* 로딩 인디케이터 */}
-            {isFetchingNextPage && (
-              <div className="flex justify-center py-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
-              </div>
-            )}
+          <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+            <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
+              전체 회원
+            </span>
+            <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
           </div>
+          {/* 필터된 회원 목록 */}
+          {players?.map((player) => (
+            <PlayerList
+              key={player.id}
+              player={player}
+              teamName={
+                player.teams.length > 1
+                  ? `${player.teams[0]?.team?.name} 외 ${
+                      player.teams.length - 1
+                    }개 팀`
+                  : player.teams[0]?.team?.name
+              }
+              teamLogoUrl={player.teams[0]?.team?.logoUrl || undefined}
+            />
+          ))}
+
+          {/* 로딩 인디케이터 */}
+          {isFetchingNextPage && (
+            <div className="flex justify-center py-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+            </div>
+          )}
 
           {/* 회원이 없는 경우 */}
           {players?.length === 0 && !isLoading && (

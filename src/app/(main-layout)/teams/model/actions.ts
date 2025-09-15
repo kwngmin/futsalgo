@@ -3,7 +3,7 @@
 import { TeamFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Prisma, TeamStatus } from "@prisma/client";
+import { Prisma, TeamStatus, TeamMemberStatus } from "@prisma/client";
 
 const TEAMS_PER_PAGE = 20;
 
@@ -76,6 +76,81 @@ function createSearchCondition(searchQuery?: string) {
   };
 }
 
+// 프로 선수 통계 추가 함수
+function addProfessionalStats<
+  T extends { members: Array<{ user: { playerBackground: string } }> }
+>(teams: T[]): (T & { stats: { professionalCount: number } })[] {
+  return teams.map((team) => ({
+    ...team,
+    stats: {
+      professionalCount: team.members.filter(
+        (member) => member.user.playerBackground === "PROFESSIONAL"
+      ).length,
+    },
+  }));
+}
+
+// 내가 속한 팀 조회 함수
+async function getMyTeams(userId: string): Promise<TeamWithDetails[]> {
+  const myTeams = await prisma.team.findMany({
+    where: {
+      members: {
+        some: {
+          userId: userId,
+          status: TeamMemberStatus.APPROVED,
+        },
+      },
+    },
+    include: {
+      members: {
+        where: {
+          status: TeamMemberStatus.APPROVED,
+        },
+        include: {
+          user: {
+            select: {
+              playerBackground: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          members: {
+            where: {
+              status: TeamMemberStatus.APPROVED,
+            },
+          },
+          followers: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return addProfessionalStats(myTeams) as TeamWithDetails[];
+}
+
+// 기본 팀 조회 조건 생성 함수
+function createBaseTeamCondition(filters?: TeamFilters) {
+  return {
+    NOT: {
+      status: {
+        in: [TeamStatus.DISBANDED, TeamStatus.INACTIVE],
+      },
+    },
+    ...createSearchCondition(filters?.searchQuery),
+    gender: filters?.gender,
+    city: filters?.city,
+    district: filters?.district,
+    recruitmentStatus: filters?.recruitment,
+    teamMatchAvailable: filters?.teamMatchAvailable,
+    level: { in: filters?.teamLevel },
+  };
+}
+
 export async function getTeams(
   page: number = 1,
   filters?: TeamFilters
@@ -86,26 +161,34 @@ export async function getTeams(
     const userId = session?.user?.id;
     const skip = (page - 1) * TEAMS_PER_PAGE;
 
-    // 모든 팀 조회 (페이지네이션 적용)
+    // 기본 조회 조건
+    const baseCondition = createBaseTeamCondition(filters);
+
+    // 로그인한 사용자의 경우 내가 속한 팀 제외
+    const whereCondition = userId
+      ? {
+          ...baseCondition,
+          NOT: [
+            baseCondition.NOT,
+            {
+              members: {
+                some: {
+                  userId: userId,
+                  status: TeamMemberStatus.APPROVED,
+                },
+              },
+            },
+          ].filter(Boolean),
+        }
+      : baseCondition;
+
+    // 모든 팀 조회 (내가 속한 팀 제외, 페이지네이션 적용)
     const teamsPromise = prisma.team.findMany({
-      where: {
-        NOT: {
-          status: {
-            in: [TeamStatus.DISBANDED, TeamStatus.INACTIVE],
-          },
-        },
-        ...createSearchCondition(filters?.searchQuery),
-        gender: filters?.gender,
-        city: filters?.city,
-        district: filters?.district,
-        recruitmentStatus: filters?.recruitment,
-        teamMatchAvailable: filters?.teamMatchAvailable,
-        level: { in: filters?.teamLevel },
-      },
+      where: whereCondition,
       include: {
         members: {
           where: {
-            status: "APPROVED",
+            status: TeamMemberStatus.APPROVED,
           },
           include: {
             user: {
@@ -119,7 +202,7 @@ export async function getTeams(
           select: {
             members: {
               where: {
-                status: "APPROVED",
+                status: TeamMemberStatus.APPROVED,
               },
             },
             followers: true,
@@ -133,8 +216,10 @@ export async function getTeams(
       take: TEAMS_PER_PAGE,
     });
 
-    // 총 팀 개수
-    const totalCountPromise = prisma.team.count();
+    // 총 팀 개수 (내가 속한 팀 제외)
+    const totalCountPromise = prisma.team.count({
+      where: whereCondition,
+    });
 
     const [teams, totalCount] = await Promise.all([
       teamsPromise,
@@ -142,76 +227,18 @@ export async function getTeams(
     ]);
 
     // 각 팀에 프로 선수 통계 추가
-    const teamsWithStats = teams.map((team) => ({
-      ...team,
-      stats: {
-        professionalCount: team.members.filter(
-          (member) => member.user.playerBackground === "PROFESSIONAL"
-        ).length,
-      },
-    }));
-
+    const teamsWithStats = addProfessionalStats(teams) as TeamWithDetails[];
     const hasMore = skip + teams.length < totalCount;
 
     if (userId) {
       // 첫 페이지에서만 사용자의 소속 팀들 조회
-      let myTeamsWithStats: TeamWithDetails[] = [];
-
-      if (page === 1) {
-        const myTeams = await prisma.team.findMany({
-          where: {
-            members: {
-              some: {
-                userId: userId,
-                status: "APPROVED",
-              },
-            },
-          },
-          include: {
-            members: {
-              where: {
-                status: "APPROVED",
-              },
-              include: {
-                user: {
-                  select: {
-                    playerBackground: true,
-                  },
-                },
-              },
-            },
-            _count: {
-              select: {
-                members: {
-                  where: {
-                    status: "APPROVED",
-                  },
-                },
-                followers: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        });
-
-        // 내 팀들에도 프로 선수 통계 추가
-        myTeamsWithStats = myTeams.map((team) => ({
-          ...team,
-          stats: {
-            professionalCount: team.members.filter(
-              (member) => member.user.playerBackground === "PROFESSIONAL"
-            ).length,
-          },
-        })) as TeamWithDetails[];
-      }
+      const myTeamsWithStats = page === 1 ? await getMyTeams(userId) : [];
 
       return {
         success: true,
         data: {
           myTeams: myTeamsWithStats,
-          teams: teamsWithStats as TeamWithDetails[],
+          teams: teamsWithStats,
           hasMore,
           totalCount,
           currentPage: page,
@@ -223,7 +250,7 @@ export async function getTeams(
     return {
       success: true,
       data: {
-        teams: teamsWithStats as TeamWithDetails[],
+        teams: teamsWithStats,
         hasMore,
         totalCount,
         currentPage: page,
@@ -250,6 +277,7 @@ export async function getFollowingTeams(
     }
 
     const skip = (page - 1) * TEAMS_PER_PAGE;
+    const baseCondition = createBaseTeamCondition(filters);
 
     // 내가 팔로우하는 팀들 가져오기
     const followingTeamsPromise = prisma.team.findMany({
@@ -259,23 +287,12 @@ export async function getFollowingTeams(
             userId: session.user.id,
           },
         },
-        NOT: {
-          status: {
-            in: [TeamStatus.DISBANDED, TeamStatus.INACTIVE],
-          },
-        },
-        ...createSearchCondition(filters?.searchQuery),
-        gender: filters?.gender,
-        city: filters?.city,
-        district: filters?.district,
-        recruitmentStatus: filters?.recruitment,
-        teamMatchAvailable: filters?.teamMatchAvailable,
-        level: { in: filters?.teamLevel },
+        ...baseCondition,
       },
       include: {
         members: {
           where: {
-            status: "APPROVED",
+            status: TeamMemberStatus.APPROVED,
           },
           include: {
             user: {
@@ -289,7 +306,7 @@ export async function getFollowingTeams(
           select: {
             members: {
               where: {
-                status: "APPROVED",
+                status: TeamMemberStatus.APPROVED,
               },
             },
             followers: true,
@@ -311,6 +328,7 @@ export async function getFollowingTeams(
             userId: session.user.id,
           },
         },
+        ...baseCondition,
       },
     });
 
@@ -320,75 +338,20 @@ export async function getFollowingTeams(
     ]);
 
     // 각 팀에 프로 선수 통계 추가
-    const teamsWithStats = followingTeams.map((team) => ({
-      ...team,
-      stats: {
-        professionalCount: team.members.filter(
-          (member) => member.user.playerBackground === "PROFESSIONAL"
-        ).length,
-      },
-    }));
-
+    const teamsWithStats = addProfessionalStats(
+      followingTeams
+    ) as TeamWithDetails[];
     const hasMore = skip + followingTeams.length < totalCount;
 
     // 첫 페이지에서만 사용자의 소속 팀들 조회
-    let myTeamsWithStats: TeamWithDetails[] = [];
-
-    if (page === 1) {
-      const myTeams = await prisma.team.findMany({
-        where: {
-          members: {
-            some: {
-              userId: session.user.id,
-              status: "APPROVED",
-            },
-          },
-        },
-        include: {
-          members: {
-            where: {
-              status: "APPROVED",
-            },
-            include: {
-              user: {
-                select: {
-                  playerBackground: true,
-                },
-              },
-            },
-          },
-          _count: {
-            select: {
-              members: {
-                where: {
-                  status: "APPROVED",
-                },
-              },
-              followers: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-      // 내 팀들에도 프로 선수 통계 추가
-      myTeamsWithStats = myTeams.map((team) => ({
-        ...team,
-        stats: {
-          professionalCount: team.members.filter(
-            (member) => member.user.playerBackground === "PROFESSIONAL"
-          ).length,
-        },
-      })) as TeamWithDetails[];
-    }
+    const myTeamsWithStats =
+      page === 1 ? await getMyTeams(session.user.id) : [];
 
     return {
       success: true,
       data: {
         myTeams: myTeamsWithStats,
-        teams: teamsWithStats as TeamWithDetails[],
+        teams: teamsWithStats,
         hasMore,
         totalCount,
         currentPage: page,
