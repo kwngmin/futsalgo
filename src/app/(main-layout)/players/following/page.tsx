@@ -240,7 +240,7 @@ const FollowingPlayersPage = () => {
       {isLoading ? (
         <SkeletonContent />
       ) : data ? (
-        <div className="space-y-3">
+        <div className="space-y-3 mt-3">
           {/* 회원 목록 */}
           <div className="bg-white rounded-2xl">
             {/* 필터된 회원 목록 */}
