@@ -172,7 +172,7 @@ const PlayersPage = () => {
           { tab: "players", label: "회원" },
           { tab: "following", label: "팔로잉" },
         ]}
-        placeholder="회원 이름 검색"
+        placeholder="회원 닉네임 검색"
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}
