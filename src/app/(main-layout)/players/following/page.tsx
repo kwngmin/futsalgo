@@ -31,7 +31,7 @@ const FollowingPlayersPage = () => {
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
 
-  const [currentTab, setCurrentTab] = useState<TabType>("players");
+  const [currentTab, setCurrentTab] = useState<TabType>("following");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
