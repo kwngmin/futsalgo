@@ -1,33 +1,34 @@
 import { cn } from "@/shared/lib/utils";
-import { TeamGender } from "@prisma/client";
+import { Gender } from "@prisma/client";
 import { useMemo, useCallback, useState } from "react";
 
-export interface TeamGenderFilter {
-  value: TeamGender;
+export interface PlayerGenderFilter {
+  value: Gender;
   label: string;
 }
 
-interface FilterTeamGenderProps {
+interface FilterPlayerGenderProps {
   onClose: () => void;
-  setFilterValues: (values: { gender?: TeamGenderFilter }) => void;
+  setFilterValues: (values: { gender?: PlayerGenderFilter }) => void;
 }
 
 // 상수를 컴포넌트 외부로 이동하여 재렌더링 시 재생성 방지
-const TEAM_GENDER_OPTIONS: TeamGenderFilter[] = [
-  { value: TeamGender.MIXED, label: "혼성팀" },
-  { value: TeamGender.MALE, label: "남성팀" },
-  { value: TeamGender.FEMALE, label: "여성팀" },
+const MATCH_TYPE_OPTIONS: PlayerGenderFilter[] = [
+  { value: Gender.MALE, label: "남자" },
+  { value: Gender.FEMALE, label: "여자" },
 ];
 
-const FilterTeamGender = ({
+const FilterPlayerGender = ({
   onClose,
   setFilterValues,
-}: FilterTeamGenderProps) => {
-  const [gender, setGender] = useState<TeamGenderFilter | undefined>(undefined);
+}: FilterPlayerGenderProps) => {
+  const [gender, setGender] = useState<PlayerGenderFilter | undefined>(
+    undefined
+  );
 
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionSelect = useCallback(
-    (option?: TeamGenderFilter) => {
+    (option?: PlayerGenderFilter) => {
       setGender(option);
     },
     [setGender]
@@ -44,7 +45,7 @@ const FilterTeamGender = ({
 
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionClick = useCallback(
-    (e: React.MouseEvent, option: TeamGenderFilter) => {
+    (e: React.MouseEvent, option: PlayerGenderFilter) => {
       e.stopPropagation();
       handleOptionSelect(option);
     },
@@ -54,7 +55,7 @@ const FilterTeamGender = ({
   // 버튼 클래스 생성 함수 메모이제이션
   const getButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors shrink-0",
+      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -80,23 +81,21 @@ const FilterTeamGender = ({
   );
 
   return (
-    <div className="flex items-center gap-2 mx-4 mt-2 pr-2 bg-gray-100 rounded-md py-1">
-      <div className="grow h-11 sm:h-10 md:h-9 flex items-start overflow-hidden border-r border-gray-300 sm:border-none">
-        <div className="pl-1 pr-2 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
-          <button onClick={handleSelectAll} className={allButtonClass}>
-            전체
-          </button>
-
-          {TEAM_GENDER_OPTIONS.map((option) => (
-            <div
-              key={option.value}
-              onClick={(e) => handleOptionClick(e, option)}
-              className={getButtonClass(gender?.value === option.value)}
-            >
-              {option.label}
-            </div>
-          ))}
+    <div className="flex items-center justify-between gap-2 mx-4 mt-2 bg-gray-100 rounded-md p-1 pr-2">
+      <div className="bg-gray-100 rounded grid grid-cols-3 items-center gap-1">
+        <div onClick={handleSelectAll} className={allButtonClass}>
+          전체
         </div>
+
+        {MATCH_TYPE_OPTIONS.map((option) => (
+          <div
+            key={option.value}
+            onClick={(e) => handleOptionClick(e, option)}
+            className={getButtonClass(gender?.value === option.value)}
+          >
+            {option.label}
+          </div>
+        ))}
       </div>
 
       <div
@@ -113,4 +112,4 @@ const FilterTeamGender = ({
   );
 };
 
-export default FilterTeamGender;
+export default FilterPlayerGender;

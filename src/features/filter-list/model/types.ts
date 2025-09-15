@@ -1,7 +1,10 @@
 import {
   DayOfWeek,
+  Gender,
   MatchType,
   Period,
+  PlayerBackground,
+  PlayerSkillLevel,
   RecruitmentStatus,
   TeamGender,
   TeamLevel,
@@ -31,4 +34,13 @@ export interface TeamFilters {
   recruitment?: RecruitmentStatus;
   teamMatchAvailable?: boolean;
   teamLevel?: TeamLevel[];
+}
+
+export interface PlayerFilters {
+  searchQuery?: string;
+  gender?: Gender;
+  background?: PlayerBackground;
+  lowerAge?: number;
+  higherAge?: number;
+  skillLevel?: PlayerSkillLevel[];
 }

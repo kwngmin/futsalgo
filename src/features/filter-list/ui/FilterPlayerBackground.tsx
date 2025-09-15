@@ -1,36 +1,37 @@
 import { cn } from "@/shared/lib/utils";
-import { TeamGender } from "@prisma/client";
+import { PlayerBackground } from "@prisma/client";
 import { useMemo, useCallback, useState } from "react";
 
-export interface TeamGenderFilter {
-  value: TeamGender;
+export interface PlayerBackgroundFilter {
+  value: PlayerBackground;
   label: string;
 }
 
-interface FilterTeamGenderProps {
+interface FilterPlayerBackgroundProps {
   onClose: () => void;
-  setFilterValues: (values: { gender?: TeamGenderFilter }) => void;
+  setFilterValues: (values: { background?: PlayerBackgroundFilter }) => void;
 }
 
 // 상수를 컴포넌트 외부로 이동하여 재렌더링 시 재생성 방지
-const TEAM_GENDER_OPTIONS: TeamGenderFilter[] = [
-  { value: TeamGender.MIXED, label: "혼성팀" },
-  { value: TeamGender.MALE, label: "남성팀" },
-  { value: TeamGender.FEMALE, label: "여성팀" },
+const PLAYER_BACKGROUND_OPTIONS: PlayerBackgroundFilter[] = [
+  { value: PlayerBackground.PROFESSIONAL, label: "선수 출신" },
+  { value: PlayerBackground.NON_PROFESSIONAL, label: "비선수 출신" },
 ];
 
-const FilterTeamGender = ({
+const FilterPlayerBackground = ({
   onClose,
   setFilterValues,
-}: FilterTeamGenderProps) => {
-  const [gender, setGender] = useState<TeamGenderFilter | undefined>(undefined);
+}: FilterPlayerBackgroundProps) => {
+  const [background, setBackground] = useState<
+    PlayerBackgroundFilter | undefined
+  >(undefined);
 
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionSelect = useCallback(
-    (option?: TeamGenderFilter) => {
-      setGender(option);
+    (option?: PlayerBackgroundFilter) => {
+      setBackground(option);
     },
-    [setGender]
+    [setBackground]
   );
 
   // 전체 선택 핸들러 메모이제이션
@@ -44,7 +45,7 @@ const FilterTeamGender = ({
 
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionClick = useCallback(
-    (e: React.MouseEvent, option: TeamGenderFilter) => {
+    (e: React.MouseEvent, option: PlayerBackgroundFilter) => {
       e.stopPropagation();
       handleOptionSelect(option);
     },
@@ -54,29 +55,29 @@ const FilterTeamGender = ({
   // 버튼 클래스 생성 함수 메모이제이션
   const getButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors shrink-0",
+      "cursor-pointer min-w-20 sm:min-w-24 px-4 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors shrink-0",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
-        : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
+        : "text-muted-foreground font-medium hover:bg-gray-200 border-transparent hover:text-gray-600"
     );
   }, []);
 
   // 전체 버튼 클래스 메모이제이션
   const allButtonClass = useMemo(
-    () => getButtonClass(gender === undefined),
-    [gender, getButtonClass]
+    () => getButtonClass(background === undefined),
+    [background, getButtonClass]
   );
 
   // 닫기 핸들러 메모이제이션
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (gender !== undefined) {
-        setFilterValues({ gender: gender });
+      if (background !== undefined) {
+        setFilterValues({ background: background });
       }
       onClose();
     },
-    [onClose, gender, setFilterValues]
+    [onClose, background, setFilterValues]
   );
 
   return (
@@ -87,11 +88,11 @@ const FilterTeamGender = ({
             전체
           </button>
 
-          {TEAM_GENDER_OPTIONS.map((option) => (
+          {PLAYER_BACKGROUND_OPTIONS.map((option) => (
             <div
               key={option.value}
               onClick={(e) => handleOptionClick(e, option)}
-              className={getButtonClass(gender?.value === option.value)}
+              className={getButtonClass(background?.value === option.value)}
             >
               {option.label}
             </div>
@@ -102,15 +103,15 @@ const FilterTeamGender = ({
       <div
         onClick={handleClose}
         className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
-          gender === undefined
+          background === undefined
             ? "bg-gray-300/80 hover:bg-gray-300 text-gray-700"
             : "bg-indigo-600 hover:bg-indigo-700 text-white"
         }`}
       >
-        {gender === undefined ? "닫기" : "저장"}
+        {background === undefined ? "닫기" : "저장"}
       </div>
     </div>
   );
 };
 
-export default FilterTeamGender;
+export default FilterPlayerBackground;

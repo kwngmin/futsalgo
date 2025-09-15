@@ -1,47 +1,47 @@
 import { cn } from "@/shared/lib/utils";
 import { useMemo, useCallback, useState, useEffect, useRef } from "react";
 
-export interface TimeFilter {
-  startTime: string;
-  endTime: string;
+export interface PlayerAgeFilter {
+  lowerAge: string;
+  higherAge: string;
   label: string;
 }
 
-interface FilterTimeProps {
+interface FilterPlayerAgeProps {
   onClose: () => void;
-  setFilterValues: (values: { time?: TimeFilter }) => void;
+  setFilterValues: (values: { age?: PlayerAgeFilter }) => void;
 }
 
-// 시간을 표시 형식으로 변환하는 함수
-const formatHour = (hour: number): string => {
-  if (hour === 0) return "00:00";
-  if (hour === 24) return "24:00";
-  return `${hour.toString().padStart(2, "0")}:00`;
-};
+// 나이 범위 상수
+const MIN_AGE = 10;
+const MAX_AGE = 60;
 
 // 라벨 생성 함수
-const generateTimeLabel = (startHour: number, endHour: number): string => {
-  return `${formatHour(startHour)} - ${formatHour(endHour)}`;
+const generateAgeLabel = (lowerAge: number, higherAge: number): string => {
+  return `${lowerAge}세 - ${higherAge}세`;
 };
 
-const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
+const FilterPlayerAge = ({
+  onClose,
+  setFilterValues,
+}: FilterPlayerAgeProps) => {
   // 내부 상태로 슬라이더 값 관리
-  const [startHour, setStartHour] = useState<number>(0);
-  const [endHour, setEndHour] = useState<number>(24);
+  const [lowerAge, setLowerAge] = useState<number>(MIN_AGE);
+  const [higherAge, setHigherAge] = useState<number>(MAX_AGE);
   const [isDragging, setIsDragging] = useState<"start" | "end" | null>(null);
 
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // 슬라이더 값 계산 함수
+  // 슬라이더 값 계산 함수 (나이 범위에 맞게 수정)
   const calculateValue = useCallback((clientX: number): number => {
-    if (!sliderRef.current) return 0;
+    if (!sliderRef.current) return MIN_AGE;
 
     const rect = sliderRef.current.getBoundingClientRect();
     const percentage = Math.max(
       0,
       Math.min(1, (clientX - rect.left) / rect.width)
     );
-    return Math.round(percentage * 24);
+    return Math.round(MIN_AGE + percentage * (MAX_AGE - MIN_AGE));
   }, []);
 
   // 마우스/터치 이벤트 핸들러
@@ -62,14 +62,14 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
       const newValue = calculateValue(clientX);
 
       if (isDragging === "start") {
-        // startHour는 endHour를 넘을 수 없음
-        setStartHour(Math.min(newValue, endHour - 1));
+        // lowerAge는 higherAge를 넘을 수 없음
+        setLowerAge(Math.min(newValue, higherAge - 1));
       } else if (isDragging === "end") {
-        // endHour는 startHour보다 작을 수 없음
-        setEndHour(Math.max(newValue, startHour + 1));
+        // higherAge는 lowerAge보다 작을 수 없음
+        setHigherAge(Math.max(newValue, lowerAge + 1));
       }
     },
-    [isDragging, calculateValue, startHour, endHour]
+    [isDragging, calculateValue, lowerAge, higherAge]
   );
 
   const handlePointerUp = useCallback(() => {
@@ -103,16 +103,16 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
       const newValue = calculateValue(e.clientX);
 
       // 클릭한 위치가 시작점에 더 가까운지 끝점에 더 가까운지 판단
-      const distToStart = Math.abs(newValue - startHour);
-      const distToEnd = Math.abs(newValue - endHour);
+      const distToStart = Math.abs(newValue - lowerAge);
+      const distToEnd = Math.abs(newValue - higherAge);
 
       if (distToStart < distToEnd) {
-        setStartHour(Math.min(newValue, endHour - 1));
+        setLowerAge(Math.min(newValue, higherAge - 1));
       } else {
-        setEndHour(Math.max(newValue, startHour + 1));
+        setHigherAge(Math.max(newValue, lowerAge + 1));
       }
     },
-    [calculateValue, startHour, endHour]
+    [calculateValue, lowerAge, higherAge]
   );
 
   // 저장 핸들러
@@ -120,34 +120,38 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
     (e: React.MouseEvent) => {
       e.stopPropagation();
 
-      const timeFilter: TimeFilter = {
-        startTime: startHour.toString(),
-        endTime: endHour.toString(),
-        label: generateTimeLabel(startHour, endHour),
+      const ageFilter: PlayerAgeFilter = {
+        lowerAge: lowerAge.toString(),
+        higherAge: higherAge.toString(),
+        label: generateAgeLabel(lowerAge, higherAge),
       };
-      if (startHour !== 0 || endHour !== 24) {
-        setFilterValues({ time: timeFilter });
+
+      // 전체 범위가 아닌 경우에만 필터 적용
+      if (lowerAge !== MIN_AGE || higherAge !== MAX_AGE) {
+        setFilterValues({ age: ageFilter });
+      } else {
+        setFilterValues({ age: undefined });
       }
       onClose();
     },
-    [startHour, endHour, setFilterValues, onClose]
+    [lowerAge, higherAge, setFilterValues, onClose]
   );
 
-  // 전체 선택 핸들러 (0시~24시)
+  // 전체 선택 핸들러
   const handleSelectAll = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      setStartHour(0);
-      setEndHour(24);
-      setFilterValues({ time: undefined });
+      setLowerAge(MIN_AGE);
+      setHigherAge(MAX_AGE);
+      setFilterValues({ age: undefined });
     },
     [setFilterValues]
   );
 
   // 현재 라벨 메모이제이션
   const currentLabel = useMemo(
-    () => generateTimeLabel(startHour, endHour),
-    [startHour, endHour]
+    () => generateAgeLabel(lowerAge, higherAge),
+    [lowerAge, higherAge]
   );
 
   // 전체 버튼 클래스 메모이제이션
@@ -155,21 +159,29 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
     () =>
       cn(
         "cursor-pointer w-16 h-9 sm:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
-        startHour === 0 && endHour === 24
+        lowerAge === MIN_AGE && higherAge === MAX_AGE
           ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
           : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
       ),
-    [startHour, endHour]
+    [lowerAge, higherAge]
   );
 
-  // 위치 계산
-  const startPosition = (startHour / 24) * 100;
-  const endPosition = (endHour / 24) * 100;
+  // 위치 계산 (나이 범위에 맞게 수정)
+  const startPosition = ((lowerAge - MIN_AGE) / (MAX_AGE - MIN_AGE)) * 100;
+  const endPosition = ((higherAge - MIN_AGE) / (MAX_AGE - MIN_AGE)) * 100;
   const rangeWidth = endPosition - startPosition;
 
-  // 시간 마커 생성 함수
-  const timeMarkers = useMemo(() => {
-    return [0, 6, 12, 18, 24].map((hour) => formatHour(hour));
+  // 나이 마커 생성 함수
+  const ageMarkers = useMemo(() => {
+    const markers = [];
+    for (let age = MIN_AGE; age <= MAX_AGE; age += 10) {
+      markers.push(age);
+    }
+    // 마지막 값이 MAX_AGE가 아니면 추가
+    if (markers[markers.length - 1] !== MAX_AGE) {
+      markers.push(MAX_AGE);
+    }
+    return markers.map((age) => `${age}세`);
   }, []);
 
   return (
@@ -187,7 +199,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
           전체
         </button>
 
-        {/* 현재 선택된 시간 표시 */}
+        {/* 현재 선택된 나이 표시 */}
         <span className="font-medium text-gray-800">{currentLabel}</span>
 
         {/* 저장 버튼 */}
@@ -195,12 +207,12 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
           type="button"
           onClick={handleSave}
           className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
-            startHour === 0 && endHour === 24
+            lowerAge === MIN_AGE && higherAge === MAX_AGE
               ? "bg-gray-300/80 hover:bg-gray-300 text-gray-700"
               : "bg-indigo-600 hover:bg-indigo-700 text-white"
           }`}
         >
-          {startHour === 0 && endHour === 24 ? "닫기" : "저장"}
+          {lowerAge === MIN_AGE && higherAge === MAX_AGE ? "닫기" : "저장"}
         </button>
       </div>
 
@@ -237,7 +249,7 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
             {/* 툴팁 */}
             {isDragging === "start" && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
-                {formatHour(startHour)}
+                {lowerAge}세
               </div>
             )}
           </div>
@@ -259,15 +271,15 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
             {/* 툴팁 */}
             {isDragging === "end" && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
-                {formatHour(endHour)}
+                {higherAge}세
               </div>
             )}
           </div>
         </div>
 
-        {/* 시간 마커 */}
+        {/* 나이 마커 */}
         <div className="flex justify-between text-xs text-gray-500 mt-6 pb-1">
-          {timeMarkers.map((marker, index) => (
+          {ageMarkers.map((marker, index) => (
             <span key={index}>{marker}</span>
           ))}
         </div>
@@ -276,4 +288,4 @@ const FilterTime = ({ onClose, setFilterValues }: FilterTimeProps) => {
   );
 };
 
-export default FilterTime;
+export default FilterPlayerAge;

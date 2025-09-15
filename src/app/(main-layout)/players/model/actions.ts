@@ -1,5 +1,6 @@
 "use server";
 
+import { PlayerFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import { Prisma } from "@prisma/client";
@@ -87,7 +88,25 @@ export type FollowingPlayersResponse =
       error: string;
     };
 
-export async function getPlayers(page: number = 1): Promise<PlayersResponse> {
+// 검색 조건 생성 함수
+function createSearchCondition(searchQuery?: string) {
+  if (!searchQuery || searchQuery.trim() === "") {
+    return {};
+  }
+
+  const trimmedQuery = searchQuery.trim();
+
+  return {
+    OR: [
+      { nickname: { contains: trimmedQuery, mode: "insensitive" as const } },
+    ],
+  };
+}
+
+export async function getPlayers(
+  page: number = 1,
+  filters?: PlayerFilters
+): Promise<PlayersResponse> {
   try {
     const session = await auth();
     const skip = (page - 1) * PLAYERS_PER_PAGE;
@@ -98,8 +117,21 @@ export async function getPlayers(page: number = 1): Promise<PlayersResponse> {
             NOT: {
               id: session.user.id,
             },
+            ...createSearchCondition(filters?.searchQuery),
+            gender: filters?.gender,
+            playerBackground: filters?.background,
+            // lowerAge: filters?.lowerAge,
+            // higherAge: filters?.higherAge,
+            skillLevel: { in: filters?.skillLevel },
           }
-        : {},
+        : {
+            ...createSearchCondition(filters?.searchQuery),
+            gender: filters?.gender,
+            playerBackground: filters?.background,
+            // lowerAge: filters?.lowerAge,
+            // higherAge: filters?.higherAge,
+            skillLevel: { in: filters?.skillLevel },
+          },
       include: {
         teams: {
           where: {

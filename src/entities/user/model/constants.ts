@@ -1,3 +1,11 @@
+import { FilterOption } from "@/features/filter-list/model/types";
+import {
+  FlagIcon,
+  FunnelIcon,
+  GaugeIcon,
+  UserIcon,
+} from "@phosphor-icons/react";
+
 export const FOOTBALL_POSITION_OPTIONS = [
   { value: "ST", label: "스트라이커" },
   { value: "LW", label: "왼쪽 윙어" },
@@ -122,3 +130,27 @@ export const SPORT_TYPE = {
   FOOTBALL: "축구",
   BOTH: "풋살, 축구",
 };
+
+// 필터 옵션 설정
+export const PLAYER_FILTER_OPTIONS: FilterOption[] = [
+  {
+    icon: FunnelIcon,
+    label: "성별",
+    value: "gender",
+  },
+  {
+    icon: FlagIcon,
+    label: "출신",
+    value: "background",
+  },
+  {
+    icon: UserIcon,
+    label: "나이",
+    value: "age",
+  },
+  {
+    icon: GaugeIcon,
+    label: "실력",
+    value: "skillLevel",
+  },
+];

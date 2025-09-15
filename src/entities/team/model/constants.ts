@@ -1,8 +1,8 @@
 import { FilterOption } from "@/features/filter-list/model/types";
 import {
   FunnelIcon,
+  GaugeIcon,
   HandshakeIcon,
-  MagicWandIcon,
   MapPinAreaIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
@@ -88,7 +88,7 @@ export const TEAM_FILTER_OPTIONS: FilterOption[] = [
     value: "teamMatchAvailable",
   },
   {
-    icon: MagicWandIcon,
+    icon: GaugeIcon,
     label: "실력",
     value: "teamLevel",
   },

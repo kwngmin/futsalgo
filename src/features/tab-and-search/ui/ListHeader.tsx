@@ -5,7 +5,12 @@ import SearchInput from "@/features/filter-list/ui/SearchInput";
 import { Search } from "lucide-react";
 import { memo } from "react";
 
-export type TabType = "schedules" | "my-schedules" | "teams" | "following";
+export type TabType =
+  | "schedules"
+  | "my-schedules"
+  | "teams"
+  | "following"
+  | "players";
 
 interface HeaderProps {
   tabOptions: { tab: TabType; label: string }[];

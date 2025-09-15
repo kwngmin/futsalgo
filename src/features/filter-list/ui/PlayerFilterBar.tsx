@@ -2,27 +2,27 @@
 "use client";
 
 import { ChevronDown, ChevronUp, X } from "lucide-react";
-import { MatchTypeOption } from "./FilterScheduleMatch";
-import { DaysFilter } from "./FilterScheduleDays";
-import { LocationFilter } from "./FilterLocation";
 import { FilterOption } from "../model/types";
-import { StartPeriodFilter } from "./FilterSchedulePeriod";
+import { PlayerGenderFilter } from "./FilterPlayerGender";
+import { PlayerBackgroundFilter } from "./FilterPlayerBackground";
+import { PlayerAgeFilter } from "./FilterPlayerAge";
+import { PlayerSkillLevelFilter } from "./FilterPlayerLevel";
 
-type ScheduleFilterType =
+export type PlayerFilterType =
   | null
-  | "matchType"
-  | "days"
-  | "location"
-  | "startPeriod";
+  | "gender"
+  | "background"
+  | "age"
+  | "skillLevel";
 
-interface ScheduleFilterValues {
-  matchType?: MatchTypeOption;
-  days?: DaysFilter;
-  location?: LocationFilter;
-  time?: StartPeriodFilter;
+export interface PlayerFilterValues {
+  gender?: PlayerGenderFilter;
+  background?: PlayerBackgroundFilter;
+  age?: PlayerAgeFilter;
+  skillLevel?: PlayerSkillLevelFilter;
 }
 
-const ScheduleFilterBar = ({
+const PlayerFilterBar = ({
   filterOptions,
   openFilter,
   setOpenFilter,
@@ -30,10 +30,10 @@ const ScheduleFilterBar = ({
   setFilterValues,
 }: {
   filterOptions: FilterOption[];
-  openFilter: ScheduleFilterType;
-  setOpenFilter: (filter: ScheduleFilterType) => void;
-  filterValues: ScheduleFilterValues;
-  setFilterValues: (values: ScheduleFilterValues) => void;
+  openFilter: PlayerFilterType;
+  setOpenFilter: (filter: PlayerFilterType) => void;
+  filterValues: PlayerFilterValues;
+  setFilterValues: (values: PlayerFilterValues) => void;
 }) => {
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
@@ -50,7 +50,7 @@ const ScheduleFilterBar = ({
         if (openFilter === option.value) {
           setOpenFilter(null);
         } else {
-          setOpenFilter(option.value as ScheduleFilterType);
+          setOpenFilter(option.value as PlayerFilterType);
         }
       }}
     >
@@ -88,7 +88,7 @@ const ScheduleFilterBar = ({
           {filterOptions.map((option) =>
             filterValues[option.value as keyof typeof filterValues] ? (
               <div
-                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 lg:pr-2 pl-3.5 lg:pl-3 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0"
+                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 lg:pr-2 pl-4.5 lg:pl-4 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0"
                 key={option.value}
                 onClick={() => {
                   setFilterValues({
@@ -112,4 +112,4 @@ const ScheduleFilterBar = ({
   );
 };
 
-export default ScheduleFilterBar;
+export default PlayerFilterBar;

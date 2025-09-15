@@ -29,7 +29,6 @@ import { useDebounce } from "@/shared/hooks/use-debounce";
 
 const TeamsPage = () => {
   const router = useRouter();
-  // const pathname = usePathname();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
 
