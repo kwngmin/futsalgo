@@ -31,7 +31,7 @@ const BottomNav = () => {
                 // className="w-6 h-6 mb-1"
                 // weight="fill"
                 // size={24}
-                weight={isActive ? "fill" : "regular"}
+                weight={isActive ? "fill" : "light"}
               />
               <span className="text-xs font-medium">{item.label}</span>
             </button>
