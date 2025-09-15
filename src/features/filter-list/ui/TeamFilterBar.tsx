@@ -80,7 +80,14 @@ const TeamFilterBar = ({
     <div className="flex items-center gap-2 select-none relative">
       <div className="absolute right-0 top-0 w-8 h-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
       <div className="grow overflow-hidden h-10 lg:h-9 flex items-start">
-        <div className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8">
+        <div
+          className="w-full overflow-y-hidden overflow-x-scroll flex gap-1.5 pl-4 pr-8 scrollbar-hide"
+          style={{
+            scrollbarWidth: "none" /* Firefox */,
+            msOverflowStyle: "none" /* IE/Edge */,
+            WebkitOverflowScrolling: "touch" /* iOS 부드러운 스크롤 */,
+          }}
+        >
           {filterOptions.map((option) =>
             filterValues[option.value as keyof typeof filterValues] ? (
               <div
