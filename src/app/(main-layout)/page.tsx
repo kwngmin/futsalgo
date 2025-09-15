@@ -8,18 +8,18 @@ import { useState, useCallback, useMemo } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 
 // 컴포넌트별 분리
-import FilterBar from "../../features/filter-list/ui/FilterBar";
+import ScheduleFilterBar from "../../features/filter-list/ui/ScheduleFilterBar";
 import ScheduleSection from "./ui/ScheduleSection";
 import AddScheduleButton from "./ui/AddScheduleButton";
 import SchedulePageLoading from "./ui/loading";
-import FilterMatchType from "../../features/filter-list/ui/FilterMatchType";
+import FilterMatchType from "../../features/filter-list/ui/FilterScheduleMatch";
 import FilterDays, {
   DaysFilter,
-} from "../../features/filter-list/ui/FilterDays";
+} from "../../features/filter-list/ui/FilterScheduleDays";
 import { DayOfWeek, Period } from "@prisma/client";
 import FilterStartPeriod, {
   StartPeriodFilter,
-} from "../../features/filter-list/ui/FilterStartPeriod";
+} from "../../features/filter-list/ui/FilterSchedulePeriod";
 import FilterLocation from "../../features/filter-list/ui/FilterLocation";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
@@ -200,7 +200,7 @@ const HomePage = () => {
       />
 
       {/* 필터 바 */}
-      <FilterBar
+      <ScheduleFilterBar
         filterOptions={SCHEDULE_FILTER_OPTIONS}
         openFilter={openFilter}
         setOpenFilter={setOpenFilter}

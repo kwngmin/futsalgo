@@ -1,3 +1,12 @@
+import { FilterOption } from "@/features/filter-list/model/types";
+import {
+  FunnelIcon,
+  MagicWandIcon,
+  MapPinAreaIcon,
+  PuzzlePieceIcon,
+  SwordIcon,
+} from "@phosphor-icons/react";
+
 export const TEAM_GENDER_OPTIONS = [
   { value: "MIXED", label: "혼성팀" },
   { value: "MALE", label: "남성팀" },
@@ -55,3 +64,32 @@ export const TEAM_RECRUITMENT_STATUS = {
   RECRUITING: "모집중",
   NOT_RECRUITING: "모집마감",
 };
+
+// 필터 옵션 설정
+export const TEAM_FILTER_OPTIONS: FilterOption[] = [
+  {
+    icon: FunnelIcon,
+    label: "분류",
+    value: "gender",
+  },
+  {
+    icon: MapPinAreaIcon,
+    label: "지역",
+    value: "location",
+  },
+  {
+    icon: PuzzlePieceIcon,
+    label: "팀원모집",
+    value: "recruitment",
+  },
+  {
+    icon: SwordIcon,
+    label: "친선전",
+    value: "teamMatchAvailable",
+  },
+  {
+    icon: MagicWandIcon,
+    label: "실력",
+    value: "teamLevel",
+  },
+];

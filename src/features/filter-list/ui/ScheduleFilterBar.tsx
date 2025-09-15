@@ -2,18 +2,27 @@
 "use client";
 
 import { ChevronDown, ChevronUp, X } from "lucide-react";
-import { MatchTypeOption } from "./FilterMatchType";
-import { DaysFilter } from "./FilterDays";
+import { MatchTypeOption } from "./FilterScheduleMatch";
+import { DaysFilter } from "./FilterScheduleDays";
 import { TimeFilter } from "./FilterSlider.test";
 import { LocationFilter } from "./FilterLocation";
+import { FilterOption } from "../model/types";
 
-export interface FilterOption {
-  icon?: React.ElementType;
-  label: string;
-  value: string;
+type ScheduleFilterType =
+  | null
+  | "matchType"
+  | "days"
+  | "location"
+  | "startPeriod";
+
+interface ScheduleFilterValues {
+  matchType?: MatchTypeOption;
+  days?: DaysFilter;
+  location?: LocationFilter;
+  time?: TimeFilter;
 }
 
-const FilterBar = ({
+const ScheduleFilterBar = ({
   filterOptions,
   openFilter,
   setOpenFilter,
@@ -21,22 +30,10 @@ const FilterBar = ({
   setFilterValues,
 }: {
   filterOptions: FilterOption[];
-  openFilter: null | "matchType" | "days" | "location" | "startPeriod";
-  setOpenFilter: (
-    filter: null | "matchType" | "days" | "location" | "startPeriod"
-  ) => void;
-  filterValues: {
-    matchType?: MatchTypeOption;
-    days?: DaysFilter;
-    location?: LocationFilter;
-    time?: TimeFilter;
-  };
-  setFilterValues: (values: {
-    matchType?: MatchTypeOption;
-    days?: DaysFilter;
-    location?: LocationFilter;
-    time?: TimeFilter;
-  }) => void;
+  openFilter: ScheduleFilterType;
+  setOpenFilter: (filter: ScheduleFilterType) => void;
+  filterValues: ScheduleFilterValues;
+  setFilterValues: (values: ScheduleFilterValues) => void;
 }) => {
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
@@ -53,9 +50,7 @@ const FilterBar = ({
         if (openFilter === option.value) {
           setOpenFilter(null);
         } else {
-          setOpenFilter(
-            option.value as "matchType" | "days" | "location" | "startPeriod"
-          );
+          setOpenFilter(option.value as ScheduleFilterType);
         }
       }}
     >
@@ -110,4 +105,4 @@ const FilterBar = ({
   );
 };
 
-export default FilterBar;
+export default ScheduleFilterBar;

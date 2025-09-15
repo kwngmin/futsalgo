@@ -1,4 +1,4 @@
-import { FilterOption } from "@/features/filter-list/ui/FilterBar";
+import { FilterOption } from "@/features/filter-list/model/types";
 import {
   CalendarDotsIcon,
   ClockIcon,

@@ -11,6 +11,16 @@ import ListHeader, {
   TabType,
 } from "../../../features/tab-and-search/ui/ListHeader";
 import RegisterTeamButton from "./ui/RegisterTeamButton";
+import TeamFilterBar, {
+  TeamFilterType,
+  TeamFilterValues,
+} from "@/features/filter-list/ui/TeamFilterBar";
+import { TEAM_FILTER_OPTIONS } from "@/entities/team/model/constants";
+import FilterTeamGender from "@/features/filter-list/ui/FilterTeamGender";
+import FilterLocation from "@/features/filter-list/ui/FilterLocation";
+import FilterTeamRecruitment from "@/features/filter-list/ui/FilterTeamRecruitment";
+import FilterTeamMatchAvailable from "@/features/filter-list/ui/FilterTeamMatchAvailable";
+import FilterTeamLevel from "@/features/filter-list/ui/FilterTeamLevel";
 // import { useDebounce } from "@/shared/hooks/use-debounce";
 
 const TeamsPage = () => {
@@ -25,6 +35,15 @@ const TeamsPage = () => {
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
   // const debouncedSearchValue = useDebounce(searchValue, 500);
+
+  const [openFilter, setOpenFilter] = useState<TeamFilterType>(null);
+  const [filterValues, setFilterValues] = useState<TeamFilterValues>({
+    gender: undefined,
+    location: undefined,
+    recruitment: undefined,
+    teamMatchAvailable: undefined,
+    teamLevel: undefined,
+  });
 
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
@@ -142,6 +161,56 @@ const TeamsPage = () => {
         onSearchClose={handleSearchClose}
       />
 
+      {/* 필터 바 */}
+      <TeamFilterBar
+        filterOptions={TEAM_FILTER_OPTIONS}
+        openFilter={openFilter}
+        setOpenFilter={setOpenFilter}
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+      />
+      {/* 필터 내용 */}
+      {openFilter === "gender" && (
+        <FilterTeamGender
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "location" && (
+        <FilterLocation
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "recruitment" && (
+        <FilterTeamRecruitment
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "teamMatchAvailable" && (
+        <FilterTeamMatchAvailable
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "teamLevel" && (
+        <FilterTeamLevel
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+
       {isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6 && (
         <RegisterTeamButton
           onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
@@ -151,7 +220,7 @@ const TeamsPage = () => {
       {isLoading ? (
         <SkeletonContent />
       ) : data ? (
-        <div className="space-y-3">
+        <div className="space-y-3 mt-3">
           {/* 팀 목록 */}
           <div className="bg-white rounded-2xl">
             {allTeams.map((team) => (

@@ -1,38 +1,37 @@
 import { cn } from "@/shared/lib/utils";
+import { RecruitmentStatus } from "@prisma/client";
 import { useMemo, useCallback, useState } from "react";
 
-type MatchTypeValue = "TEAM" | "SQUAD";
-
-export interface MatchTypeOption {
-  value: MatchTypeValue;
+export interface TeamRecruitmentFilter {
+  value: RecruitmentStatus;
   label: string;
 }
 
-interface FilterMatchTypeProps {
+interface FilterTeamRecruitmentProps {
   onClose: () => void;
-  setFilterValues: (values: { matchType?: MatchTypeOption }) => void;
+  setFilterValues: (values: { recruitment?: TeamRecruitmentFilter }) => void;
 }
 
 // 상수를 컴포넌트 외부로 이동하여 재렌더링 시 재생성 방지
-const MATCH_TYPE_OPTIONS: MatchTypeOption[] = [
-  { value: "SQUAD", label: "자체전" },
-  { value: "TEAM", label: "친선전" },
+const MATCH_TYPE_OPTIONS: TeamRecruitmentFilter[] = [
+  { value: RecruitmentStatus.RECRUITING, label: "모집중" },
+  { value: RecruitmentStatus.NOT_RECRUITING, label: "모집마감" },
 ];
 
-const FilterMatchType = ({
+const FilterTeamRecruitment = ({
   onClose,
   setFilterValues,
-}: FilterMatchTypeProps) => {
-  const [matchType, setMatchType] = useState<MatchTypeOption | undefined>(
-    undefined
-  );
+}: FilterTeamRecruitmentProps) => {
+  const [recruitment, setRecruitment] = useState<
+    TeamRecruitmentFilter | undefined
+  >(undefined);
 
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionSelect = useCallback(
-    (option?: MatchTypeOption) => {
-      setMatchType(option);
+    (option?: TeamRecruitmentFilter) => {
+      setRecruitment(option);
     },
-    [setMatchType]
+    [setRecruitment]
   );
 
   // 전체 선택 핸들러 메모이제이션
@@ -46,7 +45,7 @@ const FilterMatchType = ({
 
   // 옵션 선택 핸들러 메모이제이션
   const handleOptionClick = useCallback(
-    (e: React.MouseEvent, option: MatchTypeOption) => {
+    (e: React.MouseEvent, option: TeamRecruitmentFilter) => {
       e.stopPropagation();
       handleOptionSelect(option);
     },
@@ -56,7 +55,7 @@ const FilterMatchType = ({
   // 버튼 클래스 생성 함수 메모이제이션
   const getButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 lg:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+      "cursor-pointer w-20 sm:w-24 h-10 sm:h-9 md:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -65,20 +64,20 @@ const FilterMatchType = ({
 
   // 전체 버튼 클래스 메모이제이션
   const allButtonClass = useMemo(
-    () => getButtonClass(matchType === undefined),
-    [matchType, getButtonClass]
+    () => getButtonClass(recruitment === undefined),
+    [recruitment, getButtonClass]
   );
 
   // 닫기 핸들러 메모이제이션
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (matchType !== undefined) {
-        setFilterValues({ matchType });
+      if (recruitment !== undefined) {
+        setFilterValues({ recruitment: recruitment });
       }
       onClose();
     },
-    [onClose, matchType, setFilterValues]
+    [onClose, recruitment, setFilterValues]
   );
 
   return (
@@ -92,7 +91,7 @@ const FilterMatchType = ({
           <div
             key={option.value}
             onClick={(e) => handleOptionClick(e, option)}
-            className={getButtonClass(matchType?.value === option.value)}
+            className={getButtonClass(recruitment?.value === option.value)}
           >
             {option.label}
           </div>
@@ -102,15 +101,15 @@ const FilterMatchType = ({
       <div
         onClick={handleClose}
         className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
-          matchType === undefined
+          recruitment === undefined
             ? "bg-gray-300/80 hover:bg-gray-300 text-gray-700"
             : "bg-indigo-600 hover:bg-indigo-700 text-white"
         }`}
       >
-        {matchType === undefined ? "닫기" : "저장"}
+        {recruitment === undefined ? "닫기" : "저장"}
       </div>
     </div>
   );
 };
 
-export default FilterMatchType;
+export default FilterTeamRecruitment;

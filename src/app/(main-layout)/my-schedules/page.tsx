@@ -13,11 +13,13 @@ import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { DayOfWeek, Period } from "@prisma/client";
 import FilterStartPeriod, {
   StartPeriodFilter,
-} from "@/features/filter-list/ui/FilterStartPeriod";
-import FilterDays, { DaysFilter } from "@/features/filter-list/ui/FilterDays";
-import FilterBar from "../../../features/filter-list/ui/FilterBar";
+} from "@/features/filter-list/ui/FilterSchedulePeriod";
+import FilterDays, {
+  DaysFilter,
+} from "@/features/filter-list/ui/FilterScheduleDays";
+import ScheduleFilterBar from "../../../features/filter-list/ui/ScheduleFilterBar";
 import FilterLocation from "@/features/filter-list/ui/FilterLocation";
-import FilterMatchType from "@/features/filter-list/ui/FilterMatchType";
+import FilterMatchType from "@/features/filter-list/ui/FilterScheduleMatch";
 import AddScheduleButton from "../ui/AddScheduleButton";
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
@@ -236,7 +238,7 @@ const MySchedulesPage = () => {
       />
 
       {/* 필터 바 */}
-      <FilterBar
+      <ScheduleFilterBar
         filterOptions={SCHEDULE_FILTER_OPTIONS}
         openFilter={openFilter}
         setOpenFilter={setOpenFilter}
