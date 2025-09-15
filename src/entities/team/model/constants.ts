@@ -4,7 +4,7 @@ import {
   MagicWandIcon,
   MapPinAreaIcon,
   PuzzlePieceIcon,
-  SwordIcon,
+  SoccerBallIcon,
 } from "@phosphor-icons/react";
 
 export const TEAM_GENDER_OPTIONS = [
@@ -83,7 +83,7 @@ export const TEAM_FILTER_OPTIONS: FilterOption[] = [
     value: "recruitment",
   },
   {
-    icon: SwordIcon,
+    icon: SoccerBallIcon,
     label: "친선전",
     value: "teamMatchAvailable",
   },
