@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { getTeams, type GetTeamsResponse } from "./model/actions";
 import { useSession } from "next-auth/react";
@@ -20,7 +20,12 @@ import FilterTeamGender from "@/features/filter-list/ui/FilterTeamGender";
 import FilterLocation from "@/features/filter-list/ui/FilterLocation";
 import FilterTeamRecruitment from "@/features/filter-list/ui/FilterTeamRecruitment";
 import FilterTeamMatchAvailable from "@/features/filter-list/ui/FilterTeamMatchAvailable";
-import FilterTeamLevel from "@/features/filter-list/ui/FilterTeamLevel";
+import FilterTeamLevel, {
+  TeamLevelFilter,
+} from "@/features/filter-list/ui/FilterTeamLevel";
+import { TeamLevel } from "@prisma/client";
+import { TeamFilters } from "@/features/filter-list/model/types";
+import { useDebounce } from "@/shared/hooks/use-debounce";
 // import { useDebounce } from "@/shared/hooks/use-debounce";
 
 const TeamsPage = () => {
@@ -34,7 +39,7 @@ const TeamsPage = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
-  // const debouncedSearchValue = useDebounce(searchValue, 500);
+  const debouncedSearchValue = useDebounce(searchValue, 500);
 
   const [openFilter, setOpenFilter] = useState<TeamFilterType>(null);
   const [filterValues, setFilterValues] = useState<TeamFilterValues>({
@@ -45,6 +50,60 @@ const TeamsPage = () => {
     teamLevel: undefined,
   });
 
+  // TeamLevelFilter를 TeamLevel 배열로 변환하는 헬퍼 함수
+  const convertTeamLevelFilterToArray = useCallback(
+    (teamLevelFilter: TeamLevelFilter): TeamLevel[] => {
+      return Object.entries(teamLevelFilter)
+        .filter(([key, value]) => key !== "label" && value === true)
+        .map(([key]) => key as TeamLevel);
+    },
+    []
+  );
+
+  // 필터 객체 생성 - 메모이제이션
+  const filters = useMemo<TeamFilters>(() => {
+    const filterObj: TeamFilters = {
+      searchQuery: debouncedSearchValue,
+    };
+
+    // gender 필터
+    if (filterValues.gender) {
+      filterObj.gender = filterValues.gender.value;
+    }
+
+    // teamLevel 필터 - 배열 방식으로 변경
+    if (filterValues.teamLevel) {
+      const selectedTeamLevels = convertTeamLevelFilterToArray(
+        filterValues.teamLevel
+      );
+
+      // 선택된 팀 레벨이 있을 때만 필터 추가
+      if (selectedTeamLevels.length > 0 && selectedTeamLevels.length < 5) {
+        filterObj.teamLevel = selectedTeamLevels;
+      }
+      // 모든 팀 레벨이 선택되었거나 아무것도 선택되지 않았으면 필터를 추가하지 않음
+    }
+
+    // location 필터
+    if (filterValues.location) {
+      filterObj.city = filterValues.location.city;
+      filterObj.district = filterValues.location.district;
+    }
+
+    // recruitment 필터
+    if (filterValues.recruitment) {
+      filterObj.recruitment = filterValues.recruitment.value;
+    }
+
+    // teamMatchAvailable 필터
+    if (filterValues.teamMatchAvailable) {
+      filterObj.teamMatchAvailable = filterValues.teamMatchAvailable.value;
+      console.log("filterObj.teamMatchAvailable", filterObj.teamMatchAvailable);
+    }
+
+    return filterObj;
+  }, [debouncedSearchValue, filterValues, convertTeamLevelFilterToArray]);
+  console.log("filters", filters);
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
     if (tab === "following") {
@@ -84,8 +143,9 @@ const TeamsPage = () => {
     string[],
     number
   >({
-    queryKey: ["teams", "all"],
-    queryFn: ({ pageParam }: { pageParam: number }) => getTeams(pageParam),
+    queryKey: ["teams", "all", JSON.stringify(filters)],
+    queryFn: ({ pageParam }: { pageParam: number }) =>
+      getTeams(pageParam, filters),
     getNextPageParam: (lastPage) => {
       if (lastPage?.success && lastPage.data?.hasMore) {
         return lastPage.data.currentPage + 1;

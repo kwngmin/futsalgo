@@ -1,4 +1,11 @@
-import { DayOfWeek, MatchType, Period } from "@prisma/client";
+import {
+  DayOfWeek,
+  MatchType,
+  Period,
+  RecruitmentStatus,
+  TeamGender,
+  TeamLevel,
+} from "@prisma/client";
 
 export interface FilterOption {
   icon?: React.ElementType;
@@ -14,4 +21,14 @@ export interface ScheduleFilters {
   startPeriod?: Period[];
   city?: string;
   district?: string;
+}
+
+export interface TeamFilters {
+  searchQuery?: string;
+  gender?: TeamGender;
+  city?: string;
+  district?: string;
+  recruitment?: RecruitmentStatus;
+  teamMatchAvailable?: boolean;
+  teamLevel?: TeamLevel[];
 }

@@ -1,8 +1,9 @@
 "use server";
 
+import { TeamFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, TeamStatus } from "@prisma/client";
 
 const TEAMS_PER_PAGE = 20;
 
@@ -62,7 +63,24 @@ export interface GetFollowingTeamsResponse {
   error?: string;
 }
 
-export async function getTeams(page: number = 1): Promise<GetTeamsResponse> {
+// 검색 조건 생성 함수
+function createSearchCondition(searchQuery?: string) {
+  if (!searchQuery || searchQuery.trim() === "") {
+    return {};
+  }
+
+  const trimmedQuery = searchQuery.trim();
+
+  return {
+    OR: [{ name: { contains: trimmedQuery, mode: "insensitive" as const } }],
+  };
+}
+
+export async function getTeams(
+  page: number = 1,
+  filters?: TeamFilters
+): Promise<GetTeamsResponse> {
+  console.log("filters", filters);
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -70,6 +88,20 @@ export async function getTeams(page: number = 1): Promise<GetTeamsResponse> {
 
     // 모든 팀 조회 (페이지네이션 적용)
     const teamsPromise = prisma.team.findMany({
+      where: {
+        NOT: {
+          status: {
+            in: [TeamStatus.DISBANDED, TeamStatus.INACTIVE],
+          },
+        },
+        ...createSearchCondition(filters?.searchQuery),
+        gender: filters?.gender,
+        city: filters?.city,
+        district: filters?.district,
+        recruitmentStatus: filters?.recruitment,
+        teamMatchAvailable: filters?.teamMatchAvailable,
+        level: { in: filters?.teamLevel },
+      },
       include: {
         members: {
           where: {

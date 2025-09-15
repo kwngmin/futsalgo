@@ -1,10 +1,10 @@
 import { FilterOption } from "@/features/filter-list/model/types";
 import {
   FunnelIcon,
+  HandshakeIcon,
   MagicWandIcon,
   MapPinAreaIcon,
-  PuzzlePieceIcon,
-  SoccerBallIcon,
+  UsersIcon,
 } from "@phosphor-icons/react";
 
 export const TEAM_GENDER_OPTIONS = [
@@ -78,12 +78,12 @@ export const TEAM_FILTER_OPTIONS: FilterOption[] = [
     value: "location",
   },
   {
-    icon: PuzzlePieceIcon,
+    icon: UsersIcon,
     label: "팀원모집",
     value: "recruitment",
   },
   {
-    icon: SoccerBallIcon,
+    icon: HandshakeIcon,
     label: "친선전",
     value: "teamMatchAvailable",
   },

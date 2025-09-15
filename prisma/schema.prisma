@@ -314,6 +314,7 @@ model Team {
 
   status        TeamStatus @default(ACTIVE)
   recruitmentStatus RecruitmentStatus @default(RECRUITING)
+  teamMatchAvailable Boolean? @default(true)
 
   gender        TeamGender
   level         TeamLevel @default(MID)
