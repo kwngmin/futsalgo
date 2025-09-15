@@ -69,7 +69,7 @@ const ScheduleSection = ({
   );
 
   return (
-    <div>
+    <div className={userId ? "" : "mt-3"}>
       {/* 오늘 일정 */}
       {todaysSchedules && todaysSchedules.length > 0 && (
         <>
@@ -103,11 +103,13 @@ const ScheduleSection = ({
       {/* 지난 일정 */}
       {pastSchedules && pastSchedules.length > 0 && (
         <>
-          <SectionHeader
-            dotColor="bg-emerald-500"
-            title="지난 일정"
-            subtitle="전체공개"
-          />
+          {userId && (
+            <SectionHeader
+              dotColor="bg-emerald-500"
+              title="지난 일정"
+              subtitle="전체공개"
+            />
+          )}
           {renderScheduleList(pastSchedules)}
         </>
       )}

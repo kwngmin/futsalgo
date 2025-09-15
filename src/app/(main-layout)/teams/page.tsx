@@ -278,11 +278,11 @@ const TeamsPage = () => {
       {isLoading ? (
         <SkeletonContent />
       ) : data ? (
-        <div className="">
+        <div className="mt-3">
           {/* 팀 목록 */}
           {myTeams && myTeams.length > 0 && (
             <>
-              <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+              <div className="flex items-center gap-2 overflow-hidden px-5 h-8">
                 <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
                   소속 팀
                 </span>
@@ -294,12 +294,14 @@ const TeamsPage = () => {
             </>
           )}
 
-          <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
-            <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
-              전체 팀
-            </span>
-            <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
-          </div>
+          {myTeams && myTeams.length > 0 && (
+            <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+              <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
+                전체 팀
+              </span>
+              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
+            </div>
+          )}
           {allTeams.map((team) => (
             <TeamList key={team.id} team={team} />
           ))}

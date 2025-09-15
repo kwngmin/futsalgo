@@ -247,12 +247,14 @@ const PlayersPage = () => {
             />
           ) : null}
 
-          <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
-            <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
-              전체 회원
-            </span>
-            <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
-          </div>
+          {isLoggedIn && currentUser && (
+            <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+              <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
+                전체 회원
+              </span>
+              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
+            </div>
+          )}
           {/* 필터된 회원 목록 */}
           {players?.map((player) => (
             <PlayerList
