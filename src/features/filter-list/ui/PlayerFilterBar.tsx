@@ -38,12 +38,12 @@ const PlayerFilterBar = ({
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className={`sm:text-sm font-medium bg-gray-50 hover:bg-gray-100 border active:bg-gray-200 pr-2 lg:pr-1.5 h-10 lg:h-9 flex items-center gap-2 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 ${
+      className={`sm:text-sm font-medium bg-gray-50 hover:bg-gray-100 border active:bg-gray-200 pr-2 lg:pr-1.5 h-10 lg:h-9 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 inset-shadow-sm inset-shadow-white ${
         option.icon ? "pl-1" : "pl-3.5 lg:pl-3"
       } ${
         openFilter === option.value
           ? "border-gray-600 font-semibold"
-          : "border-gray-200 hover:border-gray-400"
+          : "border-gray-300 hover:border-gray-400"
       }`}
       aria-label={`${option.label} 필터`}
       onClick={() => {
@@ -55,7 +55,7 @@ const PlayerFilterBar = ({
       }}
     >
       {option.icon && (
-        <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white inset-shadow-sm inset-shadow-gray-300 shadow-sm shadow-gray-400">
+        <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white border">
           <option.icon
             className="size-4.5 lg:size-4"
             weight={openFilter === option.value ? "fill" : "regular"}
