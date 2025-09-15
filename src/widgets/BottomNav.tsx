@@ -9,7 +9,7 @@ const BottomNav = () => {
   };
 
   return (
-    <nav className="z-20 fixed bottom-6 mx-4 left-0 right-0 bg-gradient-to-b from-white/30 to-white backdrop-blur-xl rounded-2xl md:hidden sm:max-w-lg sm:mx-auto px-1 sm:px-2 inset-shadow-sm inset-shadow-white shadow-xs border">
+    <nav className="z-20 fixed bottom-6 mx-4 left-0 right-0 bg-gradient-to-b from-white/40 to-white backdrop-blur-xl rounded-2xl md:hidden sm:max-w-lg sm:mx-auto px-1 sm:px-2 inset-shadow-sm inset-shadow-white shadow-xs border">
       <div className="flex my-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -31,7 +31,7 @@ const BottomNav = () => {
                 // className="w-6 h-6 mb-1"
                 // weight="fill"
                 // size={24}
-                weight={isActive ? "fill" : "light"}
+                weight={isActive ? "fill" : "regular"}
               />
               <span className="text-xs font-medium">{item.label}</span>
             </button>
