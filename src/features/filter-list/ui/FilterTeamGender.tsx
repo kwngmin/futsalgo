@@ -54,7 +54,7 @@ const FilterTeamGender = ({
   // 버튼 클래스 생성 함수 메모이제이션
   const getButtonClass = useCallback((isSelected: boolean) => {
     return cn(
-      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+      "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors shrink-0",
       isSelected
         ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
         : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
@@ -80,21 +80,23 @@ const FilterTeamGender = ({
   );
 
   return (
-    <div className="flex items-center justify-between gap-2 mx-4 mt-2 bg-gray-100 rounded-md p-1 pr-2">
-      <div className="bg-gray-100 rounded grid grid-cols-4 items-center gap-1">
-        <div onClick={handleSelectAll} className={allButtonClass}>
-          전체
-        </div>
+    <div className="flex items-center gap-2 mx-4 mt-2 pr-2 bg-gray-100 rounded-md py-1">
+      <div className="grow h-11 sm:h-10 md:h-9 flex items-start overflow-hidden border-r border-gray-300 sm:border-none">
+        <div className="pl-1 pr-2 w-full overflow-y-hidden flex gap-1 overflow-x-scroll shrink-0">
+          <button onClick={handleSelectAll} className={allButtonClass}>
+            전체
+          </button>
 
-        {MATCH_TYPE_OPTIONS.map((option) => (
-          <div
-            key={option.value}
-            onClick={(e) => handleOptionClick(e, option)}
-            className={getButtonClass(gender?.value === option.value)}
-          >
-            {option.label}
-          </div>
-        ))}
+          {MATCH_TYPE_OPTIONS.map((option) => (
+            <div
+              key={option.value}
+              onClick={(e) => handleOptionClick(e, option)}
+              className={getButtonClass(gender?.value === option.value)}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div

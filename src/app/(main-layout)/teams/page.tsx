@@ -26,14 +26,12 @@ import FilterTeamLevel, {
 import { TeamLevel } from "@prisma/client";
 import { TeamFilters } from "@/features/filter-list/model/types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
-// import { useDebounce } from "@/shared/hooks/use-debounce";
 
 const TeamsPage = () => {
   const router = useRouter();
   // const pathname = usePathname();
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
-  // const isFollowingPage = pathname === "/teams/following";
 
   const [currentTab, setCurrentTab] = useState<TabType>("teams");
   const [searchFocused, setSearchFocused] = useState(false);
@@ -103,7 +101,7 @@ const TeamsPage = () => {
 
     return filterObj;
   }, [debouncedSearchValue, filterValues, convertTeamLevelFilterToArray]);
-  console.log("filters", filters);
+
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
     if (tab === "following") {

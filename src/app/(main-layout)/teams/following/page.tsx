@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   getFollowingTeams,
@@ -14,6 +14,21 @@ import ListHeader, {
   TabType,
 } from "../../../../features/tab-and-search/ui/ListHeader";
 import RegisterTeamButton from "../ui/RegisterTeamButton";
+import { useDebounce } from "@/shared/hooks/use-debounce";
+import { TeamFilters } from "@/features/filter-list/model/types";
+import TeamFilterBar, {
+  TeamFilterType,
+  TeamFilterValues,
+} from "@/features/filter-list/ui/TeamFilterBar";
+import FilterTeamLevel, {
+  TeamLevelFilter,
+} from "@/features/filter-list/ui/FilterTeamLevel";
+import { TeamLevel } from "@prisma/client";
+import FilterTeamMatchAvailable from "@/features/filter-list/ui/FilterTeamMatchAvailable";
+import FilterTeamRecruitment from "@/features/filter-list/ui/FilterTeamRecruitment";
+import FilterLocation from "@/features/filter-list/ui/FilterLocation";
+import FilterTeamGender from "@/features/filter-list/ui/FilterTeamGender";
+import { TEAM_FILTER_OPTIONS } from "@/entities/team/model/constants";
 
 const FollowingTeamsPage = () => {
   const router = useRouter();
@@ -24,7 +39,70 @@ const FollowingTeamsPage = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
-  // const debouncedSearchValue = useDebounce(searchValue, 500);
+  const debouncedSearchValue = useDebounce(searchValue, 500);
+
+  const [openFilter, setOpenFilter] = useState<TeamFilterType>(null);
+  const [filterValues, setFilterValues] = useState<TeamFilterValues>({
+    gender: undefined,
+    location: undefined,
+    recruitment: undefined,
+    teamMatchAvailable: undefined,
+    teamLevel: undefined,
+  });
+
+  // TeamLevelFilter를 TeamLevel 배열로 변환하는 헬퍼 함수
+  const convertTeamLevelFilterToArray = useCallback(
+    (teamLevelFilter: TeamLevelFilter): TeamLevel[] => {
+      return Object.entries(teamLevelFilter)
+        .filter(([key, value]) => key !== "label" && value === true)
+        .map(([key]) => key as TeamLevel);
+    },
+    []
+  );
+
+  // 필터 객체 생성 - 메모이제이션
+  const filters = useMemo<TeamFilters>(() => {
+    const filterObj: TeamFilters = {
+      searchQuery: debouncedSearchValue,
+    };
+
+    // gender 필터
+    if (filterValues.gender) {
+      filterObj.gender = filterValues.gender.value;
+    }
+
+    // teamLevel 필터 - 배열 방식으로 변경
+    if (filterValues.teamLevel) {
+      const selectedTeamLevels = convertTeamLevelFilterToArray(
+        filterValues.teamLevel
+      );
+
+      // 선택된 팀 레벨이 있을 때만 필터 추가
+      if (selectedTeamLevels.length > 0 && selectedTeamLevels.length < 5) {
+        filterObj.teamLevel = selectedTeamLevels;
+      }
+      // 모든 팀 레벨이 선택되었거나 아무것도 선택되지 않았으면 필터를 추가하지 않음
+    }
+
+    // location 필터
+    if (filterValues.location) {
+      filterObj.city = filterValues.location.city;
+      filterObj.district = filterValues.location.district;
+    }
+
+    // recruitment 필터
+    if (filterValues.recruitment) {
+      filterObj.recruitment = filterValues.recruitment.value;
+    }
+
+    // teamMatchAvailable 필터
+    if (filterValues.teamMatchAvailable) {
+      filterObj.teamMatchAvailable = filterValues.teamMatchAvailable.value;
+      console.log("filterObj.teamMatchAvailable", filterObj.teamMatchAvailable);
+    }
+
+    return filterObj;
+  }, [debouncedSearchValue, filterValues, convertTeamLevelFilterToArray]);
 
   const handleTabChange = (tab: TabType) => {
     setCurrentTab(tab);
@@ -72,9 +150,9 @@ const FollowingTeamsPage = () => {
     string[],
     number
   >({
-    queryKey: ["teams", "following"],
+    queryKey: ["teams", "all", JSON.stringify(filters)],
     queryFn: ({ pageParam }: { pageParam: number }) =>
-      getFollowingTeams(pageParam),
+      getFollowingTeams(pageParam, filters),
     getNextPageParam: (lastPage) => {
       if (lastPage?.success && lastPage.data?.hasMore) {
         return lastPage.data.currentPage + 1;
@@ -144,6 +222,56 @@ const FollowingTeamsPage = () => {
         onSearchClose={handleSearchClose}
       />
 
+      {/* 필터 바 */}
+      <TeamFilterBar
+        filterOptions={TEAM_FILTER_OPTIONS}
+        openFilter={openFilter}
+        setOpenFilter={setOpenFilter}
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+      />
+      {/* 필터 내용 */}
+      {openFilter === "gender" && (
+        <FilterTeamGender
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "location" && (
+        <FilterLocation
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "recruitment" && (
+        <FilterTeamRecruitment
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "teamMatchAvailable" && (
+        <FilterTeamMatchAvailable
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "teamLevel" && (
+        <FilterTeamLevel
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+
       {isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6 && (
         <RegisterTeamButton
           onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
@@ -153,7 +281,7 @@ const FollowingTeamsPage = () => {
       {isLoading ? (
         <SkeletonContent />
       ) : data ? (
-        <div className="space-y-3">
+        <div className="space-y-3 mt-3">
           {/* 팀 목록 */}
           <div className="bg-white rounded-2xl">
             {/* 팔로잉한 팀 목록 */}

@@ -239,7 +239,8 @@ export async function getTeams(
 }
 
 export async function getFollowingTeams(
-  page: number = 1
+  page: number = 1,
+  filters?: TeamFilters
 ): Promise<GetFollowingTeamsResponse> {
   try {
     const session = await auth();
@@ -258,6 +259,18 @@ export async function getFollowingTeams(
             userId: session.user.id,
           },
         },
+        NOT: {
+          status: {
+            in: [TeamStatus.DISBANDED, TeamStatus.INACTIVE],
+          },
+        },
+        ...createSearchCondition(filters?.searchQuery),
+        gender: filters?.gender,
+        city: filters?.city,
+        district: filters?.district,
+        recruitmentStatus: filters?.recruitment,
+        teamMatchAvailable: filters?.teamMatchAvailable,
+        level: { in: filters?.teamLevel },
       },
       include: {
         members: {
