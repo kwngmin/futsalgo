@@ -28,7 +28,7 @@ const PlayersPage = () => {
   const session = useSession();
   const isLoggedIn = session.status === "authenticated";
 
-  const [currentTab, setCurrentTab] = useState<TabType>("teams");
+  const [currentTab, setCurrentTab] = useState<TabType>("players");
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   // 디바운스된 검색어
@@ -169,10 +169,10 @@ const PlayersPage = () => {
       {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
       <ListHeader
         tabOptions={[
-          { tab: "teams", label: "팀" },
+          { tab: "players", label: "회원" },
           { tab: "following", label: "팔로잉" },
         ]}
-        placeholder="팀 이름 검색"
+        placeholder="회원 이름 검색"
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}
