@@ -26,7 +26,7 @@ const BottomNav = () => {
               type="button"
             >
               <Icon
-                className="my-1 size-7"
+                className="my-0.5 size-7"
                 // className="mb-1 mt-0.5"
                 // className="w-6 h-6 mb-1"
                 // weight="fill"
