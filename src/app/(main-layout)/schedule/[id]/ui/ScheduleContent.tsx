@@ -245,6 +245,12 @@ const ScheduleContent = ({
     try {
       const result = await deleteSchedule(scheduleId);
       if (result.success) {
+        await queryClient.invalidateQueries({
+          queryKey: ["schedules"],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["my-schedules"],
+        });
         router.push("/"); // 메인 페이지로 이동
       } else {
         alert(result.error);

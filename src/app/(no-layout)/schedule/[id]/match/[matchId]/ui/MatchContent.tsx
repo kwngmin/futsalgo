@@ -177,6 +177,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
     }
   };
 
+  console.log(data.match.homeTeamMercenaryCount, "homeTeamMercenaryCount");
+  console.log(data.match.awayTeamMercenaryCount, "awayTeamMercenaryCount");
+  console.log(
+    data.match.undecidedTeamMercenaryCount,
+    "undecidedTeamMercenaryCount"
+  );
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 네비게이션 */}
@@ -389,8 +396,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
           {mode === "view" ? (
             <div className="grid grid-cols-2 gap-2">
-              <Lineup lineups={homeLineup} />
-              <Lineup lineups={awayLineup} />
+              <Lineup
+                lineups={homeLineup}
+                MercenaryCount={data.match.homeTeamMercenaryCount}
+              />
+              <Lineup
+                lineups={awayLineup}
+                MercenaryCount={data.match.awayTeamMercenaryCount}
+              />
             </div>
           ) : data.match.schedule.matchType === "SQUAD" ? (
             <div className="border rounded-2xl overflow-hidden">
@@ -402,6 +415,15 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   isMember={data.permissions.isMember}
                 />
               ))}
+              {/* {data.lineups.map((lineup, index) => (
+                <SquadLineupEditItem
+                  undecidedTeamMercenaryCount={
+                    data.match.undecidedTeamMercenaryCount
+                  }
+                  awayTeamMercenaryCount={data.match.awayTeamMercenaryCount}
+                  homeTeamMercenaryCount={data.match.homeTeamMercenaryCount}
+                />
+              ))} */}
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2">

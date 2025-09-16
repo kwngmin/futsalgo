@@ -30,6 +30,8 @@ export async function addMatch(scheduleId: string) {
             teamType: true,
           },
         },
+        hostTeamMercenaryCount: true,
+        invitedTeamMercenaryCount: true,
       },
     });
 
@@ -65,6 +67,18 @@ export async function addMatch(scheduleId: string) {
           createdById: userId,
           homeTeamId: hostTeamId,
           awayTeamId,
+          undecidedTeamMercenaryCount:
+            matchType === "SQUAD"
+              ? scheduleWithAttendances.hostTeamMercenaryCount
+              : 0,
+          awayTeamMercenaryCount:
+            matchType === "TEAM"
+              ? scheduleWithAttendances.invitedTeamMercenaryCount || 0
+              : 0,
+          homeTeamMercenaryCount:
+            matchType === "TEAM"
+              ? scheduleWithAttendances.hostTeamMercenaryCount
+              : 0,
         },
       });
 

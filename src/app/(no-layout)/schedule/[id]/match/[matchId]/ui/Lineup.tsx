@@ -1,6 +1,7 @@
 "use client";
 
 import { LineupsData, LineupsWithNameData } from "@/entities/match/model/types";
+import { UserIcon } from "@phosphor-icons/react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,12 +10,15 @@ type Lineup = LineupsData | LineupsWithNameData;
 
 const Lineup = ({
   lineups,
+  MercenaryCount,
 }: // side,
 {
   lineups: Lineup;
+  MercenaryCount: number | null;
   // side: "home" | "away";
 }) => {
   const router = useRouter();
+  console.log(MercenaryCount, "MercenaryCount");
 
   if (!lineups) {
     return <div className="text-center text-sm text-gray-500">미정</div>;
@@ -36,7 +40,7 @@ const Lineup = ({
           {side === "home" ? "홈" : "어웨이"}
         </span>
       </div> */}
-      {lineups.length > 0 ? (
+      {lineups.length > 0 &&
         lineups.map((player) => (
           <div
             key={player.id}
@@ -52,7 +56,7 @@ const Lineup = ({
                 className="object-cover size-8 sm:size-9 rounded-full shrink-0 ring ring-gray-200"
               />
             ) : (
-              <div className="size-10 rounded-md bg-gray-100"></div>
+              <div className="size-10 rounded-full bg-gray-100"></div>
             )}
             <div className="w-full flex flex-col justify-center">
               <span className="text-sm font-semibold leading-tight group-hover:underline underline-offset-2">
@@ -67,8 +71,18 @@ const Lineup = ({
             </div>
             <ChevronRight className="hidden md:group-hover:block size-4 text-gray-500 shrink-0" />
           </div>
-        ))
-      ) : (
+        ))}
+      {MercenaryCount !== null && MercenaryCount > 0 && (
+        <div className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200">
+          <div className="size-8 sm:size-9 rounded-full bg-gray-100 flex items-center justify-center">
+            <UserIcon className="size-6 text-gray-600" />
+          </div>
+          <span className="text-sm font-medium text-gray-700">
+            용병 {MercenaryCount}명
+          </span>
+        </div>
+      )}
+      {lineups.length === 0 && !MercenaryCount && (
         <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14">
           명단이 없습니다.
         </div>

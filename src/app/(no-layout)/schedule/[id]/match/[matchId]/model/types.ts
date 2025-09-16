@@ -47,6 +47,7 @@ export interface MatchDataMatch {
   createdById: string;
   homeTeamId: string;
   awayTeamId: string;
+  undecidedTeamMercenaryCount: number;
   awayTeamMercenaryCount: number;
   homeTeamMercenaryCount: number;
   createdAt: Date;

@@ -572,6 +572,7 @@ model Match {
   lineups         Lineup[]
   goals           GoalRecord[]
 
+  undecidedTeamMercenaryCount Int @default(0)
   awayTeamMercenaryCount Int @default(0)
   homeTeamMercenaryCount Int @default(0)
 
