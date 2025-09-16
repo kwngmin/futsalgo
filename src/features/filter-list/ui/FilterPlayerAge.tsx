@@ -2,8 +2,8 @@ import { cn } from "@/shared/lib/utils";
 import { useMemo, useCallback, useState, useEffect, useRef } from "react";
 
 export interface PlayerAgeFilter {
-  lowerAge: string;
-  higherAge: string;
+  minAge: string;
+  maxAge: string;
   label: string;
 }
 
@@ -17,8 +17,8 @@ const MIN_AGE = 10;
 const MAX_AGE = 60;
 
 // 라벨 생성 함수
-const generateAgeLabel = (lowerAge: number, higherAge: number): string => {
-  return `${lowerAge}세 - ${higherAge}세`;
+const generateAgeLabel = (minAge: number, maxAge: number): string => {
+  return `${minAge}세 - ${maxAge}세`;
 };
 
 const FilterPlayerAge = ({
@@ -26,8 +26,8 @@ const FilterPlayerAge = ({
   setFilterValues,
 }: FilterPlayerAgeProps) => {
   // 내부 상태로 슬라이더 값 관리
-  const [lowerAge, setLowerAge] = useState<number>(MIN_AGE);
-  const [higherAge, setHigherAge] = useState<number>(MAX_AGE);
+  const [minAge, setMinAge] = useState<number>(MIN_AGE);
+  const [maxAge, setMaxAge] = useState<number>(MAX_AGE);
   const [isDragging, setIsDragging] = useState<"start" | "end" | null>(null);
 
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -62,14 +62,14 @@ const FilterPlayerAge = ({
       const newValue = calculateValue(clientX);
 
       if (isDragging === "start") {
-        // lowerAge는 higherAge를 넘을 수 없음
-        setLowerAge(Math.min(newValue, higherAge - 1));
+        // minAge는 maxAge를 넘을 수 없음
+        setMinAge(Math.min(newValue, maxAge - 1));
       } else if (isDragging === "end") {
-        // higherAge는 lowerAge보다 작을 수 없음
-        setHigherAge(Math.max(newValue, lowerAge + 1));
+        // maxAge는 minAge보다 작을 수 없음
+        setMaxAge(Math.max(newValue, minAge + 1));
       }
     },
-    [isDragging, calculateValue, lowerAge, higherAge]
+    [isDragging, calculateValue, minAge, maxAge]
   );
 
   const handlePointerUp = useCallback(() => {
@@ -103,16 +103,16 @@ const FilterPlayerAge = ({
       const newValue = calculateValue(e.clientX);
 
       // 클릭한 위치가 시작점에 더 가까운지 끝점에 더 가까운지 판단
-      const distToStart = Math.abs(newValue - lowerAge);
-      const distToEnd = Math.abs(newValue - higherAge);
+      const distToStart = Math.abs(newValue - minAge);
+      const distToEnd = Math.abs(newValue - maxAge);
 
       if (distToStart < distToEnd) {
-        setLowerAge(Math.min(newValue, higherAge - 1));
+        setMinAge(Math.min(newValue, maxAge - 1));
       } else {
-        setHigherAge(Math.max(newValue, lowerAge + 1));
+        setMaxAge(Math.max(newValue, minAge + 1));
       }
     },
-    [calculateValue, lowerAge, higherAge]
+    [calculateValue, minAge, maxAge]
   );
 
   // 저장 핸들러
@@ -121,28 +121,28 @@ const FilterPlayerAge = ({
       e.stopPropagation();
 
       const ageFilter: PlayerAgeFilter = {
-        lowerAge: lowerAge.toString(),
-        higherAge: higherAge.toString(),
-        label: generateAgeLabel(lowerAge, higherAge),
+        minAge: minAge.toString(),
+        maxAge: maxAge.toString(),
+        label: generateAgeLabel(minAge, maxAge),
       };
 
       // 전체 범위가 아닌 경우에만 필터 적용
-      if (lowerAge !== MIN_AGE || higherAge !== MAX_AGE) {
+      if (minAge !== MIN_AGE || maxAge !== MAX_AGE) {
         setFilterValues({ age: ageFilter });
       } else {
         setFilterValues({ age: undefined });
       }
       onClose();
     },
-    [lowerAge, higherAge, setFilterValues, onClose]
+    [minAge, maxAge, setFilterValues, onClose]
   );
 
   // 전체 선택 핸들러
   const handleSelectAll = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      setLowerAge(MIN_AGE);
-      setHigherAge(MAX_AGE);
+      setMinAge(MIN_AGE);
+      setMaxAge(MAX_AGE);
       setFilterValues({ age: undefined });
     },
     [setFilterValues]
@@ -150,25 +150,25 @@ const FilterPlayerAge = ({
 
   // 현재 라벨 메모이제이션
   const currentLabel = useMemo(
-    () => generateAgeLabel(lowerAge, higherAge),
-    [lowerAge, higherAge]
+    () => generateAgeLabel(minAge, maxAge),
+    [minAge, maxAge]
   );
 
   // 전체 버튼 클래스 메모이제이션
   const allButtonClass = useMemo(
     () =>
       cn(
-        "cursor-pointer w-16 h-9 sm:h-8 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
-        lowerAge === MIN_AGE && higherAge === MAX_AGE
+        "cursor-pointer w-20 sm:w-24 h-11 sm:h-10 md:h-9 flex items-center justify-center rounded-sm sm:text-sm border transition-colors",
+        minAge === MIN_AGE && maxAge === MAX_AGE
           ? "bg-white font-semibold border-gray-300 hover:border-gray-400 shadow-sm"
           : "text-muted-foreground font-medium hover:bg-gray-200 border-none hover:text-gray-600"
       ),
-    [lowerAge, higherAge]
+    [minAge, maxAge]
   );
 
   // 위치 계산 (나이 범위에 맞게 수정)
-  const startPosition = ((lowerAge - MIN_AGE) / (MAX_AGE - MIN_AGE)) * 100;
-  const endPosition = ((higherAge - MIN_AGE) / (MAX_AGE - MIN_AGE)) * 100;
+  const startPosition = ((minAge - MIN_AGE) / (MAX_AGE - MIN_AGE)) * 100;
+  const endPosition = ((maxAge - MIN_AGE) / (MAX_AGE - MIN_AGE)) * 100;
   const rangeWidth = endPosition - startPosition;
 
   // 나이 마커 생성 함수
@@ -187,7 +187,7 @@ const FilterPlayerAge = ({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="bg-gray-100 rounded flex flex-col gap-6 p-1 flex-1 mx-4 mt-2 select-none"
+      className="bg-gray-100 rounded-md flex flex-col gap-6 p-1 flex-1 mx-4 mt-2 select-none"
     >
       <div className="flex items-center justify-between">
         {/* 전체 선택 버튼 */}
@@ -206,21 +206,21 @@ const FilterPlayerAge = ({
         <button
           type="button"
           onClick={handleSave}
-          className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 ${
-            lowerAge === MIN_AGE && higherAge === MAX_AGE
+          className={`cursor-pointer font-semibold w-16 h-9 sm:h-8 flex items-center justify-center rounded-full sm:text-sm shrink-0 mr-1 ${
+            minAge === MIN_AGE && maxAge === MAX_AGE
               ? "bg-gray-300/80 hover:bg-gray-300 text-gray-700"
               : "bg-indigo-600 hover:bg-indigo-700 text-white"
           }`}
         >
-          {lowerAge === MIN_AGE && higherAge === MAX_AGE ? "닫기" : "저장"}
+          {minAge === MIN_AGE && maxAge === MAX_AGE ? "닫기" : "저장"}
         </button>
       </div>
 
       {/* 듀얼 레인지 슬라이더 */}
-      <div className="relative px-4">
+      <div className="relative px-3">
         <div
           ref={sliderRef}
-          className="relative h-1 bg-gray-200 rounded-lg cursor-pointer"
+          className="relative h-1 bg-gray-300 rounded-full cursor-pointer mx-2"
           onClick={handleTrackClick}
         >
           {/* 선택된 범위 표시 */}
@@ -249,7 +249,7 @@ const FilterPlayerAge = ({
             {/* 툴팁 */}
             {isDragging === "start" && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
-                {lowerAge}세
+                {minAge}세
               </div>
             )}
           </div>
@@ -271,7 +271,7 @@ const FilterPlayerAge = ({
             {/* 툴팁 */}
             {isDragging === "end" && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
-                {higherAge}세
+                {maxAge}세
               </div>
             )}
           </div>

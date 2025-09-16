@@ -82,6 +82,12 @@ const PlayersPage = () => {
       filterObj.background = filterValues.background.value;
     }
 
+    // age 필터
+    if (filterValues.age) {
+      filterObj.minAge = Number(filterValues.age.minAge) || undefined;
+      filterObj.maxAge = Number(filterValues.age.maxAge) || undefined;
+    }
+
     return filterObj;
   }, [debouncedSearchValue, filterValues, convertTeamLevelFilterToArray]);
 

@@ -88,9 +88,36 @@ export type FollowingPlayersResponse =
       error: string;
     };
 
+// 나이를 생년월일 범위로 변환하는 헬퍼 함수
+function convertAgeToBirthDateRange(minAge?: number, maxAge?: number) {
+  const currentYear = new Date().getFullYear();
+  const birthDateConditions: {
+    gte?: string;
+    lte?: string;
+  } = {};
+
+  if (maxAge) {
+    // maxAge보다 나이가 적거나 같은 사람 = 생년월일이 특정 년도 1월 1일 이후인 사람
+    const birthYearForMaxAge = currentYear - maxAge;
+    const minBirthDate = `${birthYearForMaxAge}0101`; // YYYYMMDD 형식
+    birthDateConditions.gte = minBirthDate;
+  }
+
+  if (minAge) {
+    // minAge보다 나이가 많거나 같은 사람 = 생년월일이 특정 년도 12월 31일 이전인 사람
+    const birthYearForMinAge = currentYear - minAge;
+    const maxBirthDate = `${birthYearForMinAge}1231`; // YYYYMMDD 형식
+    birthDateConditions.lte = maxBirthDate;
+  }
+
+  return Object.keys(birthDateConditions).length > 0
+    ? { birthDate: birthDateConditions }
+    : {};
+}
+
 // 검색 조건 생성 함수
 function createSearchCondition(searchQuery?: string) {
-  if (!searchQuery || searchQuery.trim() === "") {
+  if (!searchQuery?.trim()) {
     return {};
   }
 
@@ -103,6 +130,49 @@ function createSearchCondition(searchQuery?: string) {
   };
 }
 
+// 필터 조건 생성 함수 (DRY 원칙 적용)
+function createFilterConditions(filters?: PlayerFilters) {
+  return {
+    ...createSearchCondition(filters?.searchQuery),
+    ...(filters?.gender && { gender: filters.gender }),
+    ...(filters?.background && { playerBackground: filters.background }),
+    ...(filters?.skillLevel?.length && {
+      skillLevel: { in: filters.skillLevel },
+    }),
+    ...convertAgeToBirthDateRange(filters?.minAge, filters?.maxAge),
+  };
+}
+
+// 팀 정보 포함 옵션 생성 함수 (DRY 원칙 적용)
+function createTeamIncludeOptions() {
+  return {
+    teams: {
+      where: {
+        status: "APPROVED" as const,
+      },
+      select: {
+        team: {
+          select: {
+            id: true,
+            name: true,
+            logoUrl: true,
+            description: true,
+            city: true,
+            district: true,
+            status: true,
+            recruitmentStatus: true,
+            gender: true,
+            level: true,
+          },
+        },
+        status: true,
+        role: true,
+        joinedAt: true,
+      },
+    },
+  };
+}
+
 export async function getPlayers(
   page: number = 1,
   filters?: PlayerFilters
@@ -111,53 +181,17 @@ export async function getPlayers(
     const session = await auth();
     const skip = (page - 1) * PLAYERS_PER_PAGE;
 
+    const filterConditions = createFilterConditions(filters);
+    const whereCondition = session?.user?.id
+      ? {
+          NOT: { id: session.user.id },
+          ...filterConditions,
+        }
+      : filterConditions;
+
     const playersPromise = prisma.user.findMany({
-      where: session?.user?.id
-        ? {
-            NOT: {
-              id: session.user.id,
-            },
-            ...createSearchCondition(filters?.searchQuery),
-            gender: filters?.gender,
-            playerBackground: filters?.background,
-            // lowerAge: filters?.lowerAge,
-            // higherAge: filters?.higherAge,
-            skillLevel: { in: filters?.skillLevel },
-          }
-        : {
-            ...createSearchCondition(filters?.searchQuery),
-            gender: filters?.gender,
-            playerBackground: filters?.background,
-            // lowerAge: filters?.lowerAge,
-            // higherAge: filters?.higherAge,
-            skillLevel: { in: filters?.skillLevel },
-          },
-      include: {
-        teams: {
-          where: {
-            status: "APPROVED", // 승인된 팀 멤버십만 포함
-          },
-          select: {
-            team: {
-              select: {
-                id: true,
-                name: true,
-                logoUrl: true,
-                description: true,
-                city: true,
-                district: true,
-                status: true,
-                recruitmentStatus: true,
-                gender: true,
-                level: true,
-              },
-            },
-            status: true,
-            role: true,
-            joinedAt: true,
-          },
-        },
-      },
+      where: whereCondition,
+      include: createTeamIncludeOptions(),
       orderBy: {
         createdAt: "desc",
       },
@@ -165,46 +199,15 @@ export async function getPlayers(
       take: PLAYERS_PER_PAGE,
     });
 
-    // 총 개수도 함께 가져오기
+    // 총 개수도 필터 조건 적용
     const totalCountPromise = prisma.user.count({
-      where: session?.user?.id
-        ? {
-            NOT: {
-              id: session.user.id,
-            },
-          }
-        : {},
+      where: whereCondition,
     });
 
     const userPromise = session?.user?.id
       ? prisma.user.findUnique({
           where: { id: session.user.id },
-          include: {
-            teams: {
-              where: {
-                status: "APPROVED", // 현재 사용자의 승인된 팀 멤버십도 포함
-              },
-              select: {
-                team: {
-                  select: {
-                    id: true,
-                    name: true,
-                    logoUrl: true,
-                    description: true,
-                    city: true,
-                    district: true,
-                    status: true,
-                    recruitmentStatus: true,
-                    gender: true,
-                    level: true,
-                  },
-                },
-                status: true,
-                role: true,
-                joinedAt: true,
-              },
-            },
-          },
+          include: createTeamIncludeOptions(),
         })
       : Promise.resolve(null);
 
@@ -244,6 +247,7 @@ export async function getFollowingPlayers(
     }
 
     const skip = (page - 1) * PLAYERS_PER_PAGE;
+    const filterConditions = createFilterConditions(filters);
 
     // 내가 팔로우하는 사용자들 가져오기
     const followingUsersPromise = prisma.user.findMany({
@@ -253,39 +257,9 @@ export async function getFollowingPlayers(
             followerId: session.user.id,
           },
         },
-        ...createSearchCondition(filters?.searchQuery),
-        gender: filters?.gender,
-        playerBackground: filters?.background,
-        // lowerAge: filters?.lowerAge,
-        // higherAge: filters?.higherAge,
-        skillLevel: { in: filters?.skillLevel },
+        ...filterConditions,
       },
-      include: {
-        teams: {
-          where: {
-            status: "APPROVED",
-          },
-          select: {
-            team: {
-              select: {
-                id: true,
-                name: true,
-                logoUrl: true,
-                description: true,
-                city: true,
-                district: true,
-                status: true,
-                recruitmentStatus: true,
-                gender: true,
-                level: true,
-              },
-            },
-            status: true,
-            role: true,
-            joinedAt: true,
-          },
-        },
-      },
+      include: createTeamIncludeOptions(),
       orderBy: {
         createdAt: "desc",
       },
@@ -293,7 +267,7 @@ export async function getFollowingPlayers(
       take: PLAYERS_PER_PAGE,
     });
 
-    // 팔로잉하는 사용자 총 개수
+    // 팔로잉하는 사용자 총 개수 (필터 조건 적용)
     const totalCountPromise = prisma.user.count({
       where: {
         followers: {
@@ -301,6 +275,7 @@ export async function getFollowingPlayers(
             followerId: session.user.id,
           },
         },
+        ...filterConditions,
       },
     });
 

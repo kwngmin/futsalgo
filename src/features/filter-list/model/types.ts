@@ -40,7 +40,7 @@ export interface PlayerFilters {
   searchQuery?: string;
   gender?: Gender;
   background?: PlayerBackground;
-  lowerAge?: number;
-  higherAge?: number;
+  minAge?: number;
+  maxAge?: number;
   skillLevel?: PlayerSkillLevel[];
 }
