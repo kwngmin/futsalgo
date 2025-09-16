@@ -61,7 +61,7 @@ const TeamFilterBar = ({
         <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white border inset-shadow-sm shadow-sm">
           <option.icon
             className="size-4.5 lg:size-4"
-            weight={openFilter === option.value ? "duotone" : "regular"}
+            // weight={openFilter === option.value ? "duotone" : "regular"}
           />
         </div>
       )}
