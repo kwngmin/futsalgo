@@ -384,58 +384,86 @@ const ManageAttendanceContent = ({
               </span>
             </div>
             <div className="flex items-center gap-2 sm:min-w-72 h-10 rounded-md bg-gray-100 p-0.5">
-              <button
+              {/* <button
                 type="button"
                 disabled={isMercenaryUpdating || mercenaryCount <= 0}
                 className="h-9 w-20 grow rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opaci ty-50 disabled:cursor-not-allowed transition-colors text-sm font-medium cursor-pointer"
                 onClick={() => handleMercenaryCountChange(0)}
               >
                 없음
-              </button>
-              {/* <button
-                type="button"
-                disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                onClick={() => handleMercenaryCountChange(0)}
-              >
-                0
-              </button>
-              <button
-                type="button"
-                disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                onClick={() => handleMercenaryCountChange(1)}
-              >
-                1
-              </button>
-              <button
-                type="button"
-                disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                onClick={() => handleMercenaryCountChange(2)}
-              >
-                2
               </button> */}
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  disabled={isMercenaryUpdating || mercenaryCount === 0}
+                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
+                    mercenaryCount === 0
+                      ? "bg-white border-gray-300"
+                      : "border-transparent"
+                  }`}
+                  onClick={() => handleMercenaryCountChange(0)}
+                >
+                  0
+                </button>
+                <button
+                  type="button"
+                  disabled={isMercenaryUpdating || mercenaryCount === 1}
+                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
+                    mercenaryCount === 1
+                      ? "bg-white border-gray-300"
+                      : "border-transparent"
+                  }`}
+                  onClick={() => handleMercenaryCountChange(1)}
+                >
+                  1
+                </button>
+                <button
+                  type="button"
+                  disabled={isMercenaryUpdating || mercenaryCount === 2}
+                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
+                    mercenaryCount === 2
+                      ? "bg-white border-gray-300"
+                      : "border-transparent"
+                  }`}
+                  onClick={() => handleMercenaryCountChange(2)}
+                >
+                  2
+                </button>
+                <button
+                  type="button"
+                  disabled={isMercenaryUpdating || mercenaryCount === 3}
+                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
+                    mercenaryCount === 3
+                      ? "bg-white border-gray-300"
+                      : "border-transparent"
+                  }`}
+                  onClick={() => handleMercenaryCountChange(3)}
+                >
+                  3
+                </button>
+              </div>
               <Separator orientation="vertical" className="!h-7 w-px" />
-              <button
-                type="button"
-                disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                onClick={() => handleMercenaryCountChange(2)}
-              >
-                <Minus className="size-4.5 sm:size-4" />
-              </button>
-              <span className="min-w-[3rem] text-center font-semibold text-lg">
-                {mercenaryCount}
-              </span>
-              <button
-                type="button"
-                disabled={isMercenaryUpdating}
-                className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
-                onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
-              >
-                <Plus className="size-4.5 sm:size-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  disabled={isMercenaryUpdating || mercenaryCount <= 0}
+                  className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  onClick={() => handleMercenaryCountChange(mercenaryCount - 1)}
+                >
+                  <Minus className="size-4.5 sm:size-4" />
+                </button>
+                <span className="min-w-[2rem] text-center font-semibold text-lg">
+                  {mercenaryCount}
+                </span>
+                <button
+                  type="button"
+                  disabled={isMercenaryUpdating}
+                  className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
+                >
+                  <Plus className="size-4.5 sm:size-4" />
+                </button>
+              </div>
             </div>
           </div>
         </article>
