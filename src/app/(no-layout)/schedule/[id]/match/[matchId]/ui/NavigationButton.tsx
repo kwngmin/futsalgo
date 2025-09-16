@@ -20,23 +20,29 @@ export const NavigationButton = ({
 
   return (
     <button
-      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors ${
+      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors border ${
         disabled
-          ? "opacity-30 cursor-default pointer-events-none"
-          : "cursor-pointer"
+          ? "bg-gray-200 opacity-30 cursor-default pointer-events-none"
+          : "cursor-pointer border-gray-300"
       }`}
       onClick={onClick}
       disabled={disabled}
     >
       {isPrev ? (
         <>
-          <Icon className="size-6" />
+          <Icon
+            className="size-6.5 mr-0.5"
+            // strokeWidth={1.75}
+          />
           {/* {label} */}
         </>
       ) : (
         <>
           {/* {label} */}
-          <Icon className="size-6" />
+          <Icon
+            className="size-6.5 ml-0.5"
+            // strokeWidth={1.75}
+          />
         </>
       )}
     </button>
