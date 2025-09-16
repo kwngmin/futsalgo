@@ -25,6 +25,7 @@ import {
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TeamLineupEditItem } from "./TeamLineupEdititem";
+import CustomSelect from "@/shared/components/ui/custom-select";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -487,6 +488,30 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </div>
                 </div>
               )}
+              <div className="flex flex-col sm:grid grid-cols-2 gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center h-12 sm:h-11 shrink-0 px-4">
+                    <span className="text-base font-medium">용병</span>
+                  </div>
+                  <CustomSelect
+                    size="sm"
+                    className="w-full"
+                    options={Array.from({ length: 10 }, (_, index) => (
+                      <option key={index} value={index}>
+                        {index + 1}명
+                      </option>
+                    ))}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="border rounded-md overflow-hidden">
+                  <div className="flex items-center justify-center h-12 sm:h-11">
+                    <span className="text-base font-medium">명단 업데이트</span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           {goalsWithScore.length > 0 && data.permissions.isEditable && (

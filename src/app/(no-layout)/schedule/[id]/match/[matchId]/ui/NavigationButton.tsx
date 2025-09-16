@@ -20,10 +20,10 @@ export const NavigationButton = ({
 
   return (
     <button
-      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors border ${
+      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors ${
         disabled
-          ? "bg-gray-200 opacity-30 cursor-default pointer-events-none"
-          : "cursor-pointer border-gray-300"
+          ? "bg-gray-200 opacity-40 cursor-default pointer-events-none"
+          : "cursor-pointer"
       }`}
       onClick={onClick}
       disabled={disabled}
