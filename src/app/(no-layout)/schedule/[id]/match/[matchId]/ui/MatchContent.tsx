@@ -18,10 +18,10 @@ import {
   updateTeamMatchLineup,
 } from "../actions/match-actions";
 import {
-  ClipboardTextIcon,
   ClockCounterClockwiseIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
+  UserListIcon,
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TeamLineupEditItem } from "./TeamLineupEdititem";
@@ -347,15 +347,25 @@ const MatchContent = ({ data }: MatchContentProps) => {
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
-              <ClipboardTextIcon
+              <UserListIcon
                 className="size-7 text-stone-500"
-                weight="fill"
+                // weight="fill"
               />
               <h2 className="text-lg font-semibold">팀 명단</h2>
             </div>
-            {data.permissions.isEditable && (
+            {data.permissions.isEditable && goalsWithScore.length === 0 && (
+              <button
+                type="button"
+                className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border border-gray-300 hover:border-gray-400`}
+                onClick={() =>
+                  mode !== "view" ? setMode("view") : setMode("edit")
+                }
+              >
+                {mode !== "view" ? "완료" : "수정"}
+              </button>
+            )}
+            {/* {data.permissions.isEditable && goalsWithScore.length === 0 && (
               <div className="flex items-center gap-3">
-                {/* <span className="text-sm text-gray-500">모드</span> */}
                 <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
                   <button
                     type="button"
@@ -376,23 +386,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                     onClick={() => setMode("edit")}
-                    disabled={goalsWithScore.length > 0}
+                    // disabled={goalsWithScore.length > 0}
                   >
                     수정
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
-
-          {goalsWithScore.length > 0 && data.permissions.isEditable && (
-            <div className="h-8 mb-2 flex items-center gap-2 px-3 bg-amber-50 rounded-md border border-amber-100">
-              <Info className="size-4 text-amber-600" />
-              <span className="text-sm text-amber-700">
-                명단 수정은 득점기록이 존재하지 않아야 가능합니다
-              </span>
-            </div>
-          )}
 
           {mode === "view" ? (
             <div className="grid grid-cols-2 gap-2">
@@ -405,56 +406,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 MercenaryCount={data.match.awayTeamMercenaryCount}
               />
             </div>
-          ) : data.match.schedule.matchType === "SQUAD" ? (
-            <div className="border rounded-2xl overflow-hidden">
-              {data.lineups.map((lineup, index) => (
-                <SquadLineupEditItem
-                  key={lineup.id}
-                  lineup={lineup}
-                  index={index}
-                  isMember={data.permissions.isMember}
-                />
-              ))}
-              {/* {data.lineups.map((lineup, index) => (
-                <SquadLineupEditItem
-                  undecidedTeamMercenaryCount={
-                    data.match.undecidedTeamMercenaryCount
-                  }
-                  awayTeamMercenaryCount={data.match.awayTeamMercenaryCount}
-                  homeTeamMercenaryCount={data.match.homeTeamMercenaryCount}
-                />
-              ))} */}
-            </div>
           ) : (
-            <div className="grid grid-cols-2 gap-2">
-              <div className="border rounded-2xl overflow-hidden">
-                {homeLineup.map((lineup, index) => (
-                  <TeamLineupEditItem
-                    key={lineup.id}
-                    lineup={lineup}
-                    index={index}
-                    isMember={data.permissions.isMember}
-                  />
-                ))}
-              </div>
-              <div className="border rounded-2xl overflow-hidden">
-                {awayLineup.map((lineup, index) => (
-                  <TeamLineupEditItem
-                    key={lineup.id}
-                    lineup={lineup}
-                    index={index}
-                    isMember={data.permissions.isMember}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 관리 버튼들 */}
-          {goalsWithScore.length === 0 && data.permissions.isEditable && (
-            <div>
+            <div className="space-y-3">
               {data.match.schedule.matchType === "SQUAD" ? (
-                <div className="grid grid-cols-2 gap-2 pt-4">
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     disabled={isLoading}
@@ -497,16 +452,62 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </button>
                 </div>
               )}
-
-              <button
-                type="button"
-                disabled={isLoading}
-                className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={handleDeleteMatch}
-              >
-                경기 삭제
-              </button>
+              {data.match.schedule.matchType === "SQUAD" ? (
+                <div className="border rounded-2xl overflow-hidden">
+                  {data.lineups.map((lineup, index) => (
+                    <SquadLineupEditItem
+                      key={lineup.id}
+                      lineup={lineup}
+                      index={index}
+                      isMember={data.permissions.isMember}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="border rounded-2xl overflow-hidden">
+                    {homeLineup.map((lineup, index) => (
+                      <TeamLineupEditItem
+                        key={lineup.id}
+                        lineup={lineup}
+                        index={index}
+                        isMember={data.permissions.isMember}
+                      />
+                    ))}
+                  </div>
+                  <div className="border rounded-2xl overflow-hidden">
+                    {awayLineup.map((lineup, index) => (
+                      <TeamLineupEditItem
+                        key={lineup.id}
+                        lineup={lineup}
+                        index={index}
+                        isMember={data.permissions.isMember}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+          )}
+          {goalsWithScore.length > 0 && data.permissions.isEditable && (
+            <div className="h-8 mb-2 flex items-center gap-2 px-3 mt-2 bg-amber-500/10 rounded-md border border-amber-100">
+              <Info className="size-4 text-amber-600" />
+              <span className="text-sm text-amber-700">
+                명단 수정은 득점기록이 존재하지 않아야 가능합니다
+              </span>
+            </div>
+          )}
+
+          {/* 관리 버튼들 */}
+          {goalsWithScore.length === 0 && data.permissions.isEditable && (
+            <button
+              type="button"
+              disabled={isLoading}
+              className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleDeleteMatch}
+            >
+              경기 삭제
+            </button>
           )}
 
           {/* 생성일 */}

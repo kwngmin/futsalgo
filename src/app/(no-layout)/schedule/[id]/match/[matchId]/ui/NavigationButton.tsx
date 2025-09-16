@@ -20,7 +20,7 @@ export const NavigationButton = ({
 
   return (
     <button
-      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors ${
+      className={`shrink-0 size-10 flex items-center font-semibold justify-center text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors ${
         disabled
           ? "opacity-30 cursor-default pointer-events-none"
           : "cursor-pointer"
@@ -30,13 +30,13 @@ export const NavigationButton = ({
     >
       {isPrev ? (
         <>
-          <Icon className="size-5" />
+          <Icon className="size-6" />
           {/* {label} */}
         </>
       ) : (
         <>
           {/* {label} */}
-          <Icon className="size-5" />
+          <Icon className="size-6" />
         </>
       )}
     </button>

@@ -43,7 +43,7 @@ const ListHeader = memo(
     // 탭 컴포넌트
     const TabButton = ({ tab, label }: { tab: TabType; label: string }) => (
       <h1
-        className={`text-2xl font-bold cursor-pointer transition-opacity ${
+        className={`text-[1.625rem] font-bold cursor-pointer transition-opacity ${
           currentTab === tab ? "" : "opacity-30 hover:opacity-50"
         }`}
         onClick={() => onTabChange(tab)}
@@ -63,12 +63,12 @@ const ListHeader = memo(
     );
 
     // 검색 버튼 컴포넌트
-    const RegisterButton = () => (
+    const PlusButton = () => (
       <button
         className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
         onClick={onPlusAction}
       >
-        <Plus className="size-5" />
+        <Plus className="size-6.5" strokeWidth={1.75} />
       </button>
     );
 
@@ -92,7 +92,7 @@ const ListHeader = memo(
             ))}
           </div>
           <div className="flex items-center gap-2">
-            {onPlusAction && <RegisterButton />}
+            {onPlusAction && <PlusButton />}
             <SearchInput
               placeholder={placeholder}
               value={searchValue}
@@ -111,7 +111,7 @@ const ListHeader = memo(
               ))}
             </div>
             <div className="flex items-center gap-2">
-              {onPlusAction && <RegisterButton />}
+              {onPlusAction && <PlusButton />}
               <SearchButton />
             </div>
           </div>
