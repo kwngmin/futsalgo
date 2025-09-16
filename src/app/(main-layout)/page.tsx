@@ -173,16 +173,6 @@ const HomePage = () => {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 헤더 - 메모이제이션되어 data 변경 시 리렌더링 안 됨 */}
-      {/* <ScheduleHeader
-        currentTab={currentTab}
-        searchFocused={searchFocused}
-        searchValue={searchValue}
-        onTabChange={handleTabChange}
-        onSearchChange={handleSearchChange}
-        onSearchClear={handleSearchClear}
-        onSearchFocus={handleSearchFocus}
-        onSearchClose={handleSearchClose}
-      /> */}
       <ListHeader
         tabOptions={[
           { tab: "schedules", label: "경기일정" },
@@ -197,6 +187,13 @@ const HomePage = () => {
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
         onSearchClose={handleSearchClose}
+        onPlusAction={
+          data?.data?.manageableTeams && data?.data?.manageableTeams.length > 0
+            ? () => {
+                router.push("/schedule/new");
+              }
+            : undefined
+        }
       />
 
       {/* 필터 바 */}

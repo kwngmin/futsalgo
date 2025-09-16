@@ -220,6 +220,13 @@ const FollowingTeamsPage = () => {
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
         onSearchClose={handleSearchClose}
+        onPlusAction={
+          isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6
+            ? () => {
+                router.push("/teams/create");
+              }
+            : undefined
+        }
       />
 
       {/* 필터 바 */}
@@ -272,7 +279,7 @@ const FollowingTeamsPage = () => {
         />
       )}
 
-      {isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6 && (
+      {isLoggedIn && !myTeams && Array.isArray(myTeams) && (
         <RegisterTeamButton
           onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
         />

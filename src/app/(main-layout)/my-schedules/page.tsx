@@ -235,6 +235,13 @@ const MySchedulesPage = () => {
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
         onSearchClose={handleSearchClose}
+        onPlusAction={
+          data?.data?.manageableTeams && data?.data?.manageableTeams.length > 0
+            ? () => {
+                router.push("/schedule/new");
+              }
+            : undefined
+        }
       />
 
       {/* 필터 바 */}

@@ -217,6 +217,13 @@ const TeamsPage = () => {
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
         onSearchClose={handleSearchClose}
+        onPlusAction={
+          isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6
+            ? () => {
+                router.push("/teams/create");
+              }
+            : undefined
+        }
       />
 
       {/* 필터 바 */}
@@ -269,10 +276,8 @@ const TeamsPage = () => {
         />
       )}
 
-      {isLoggedIn && Array.isArray(myTeams) && myTeams.length < 6 && (
-        <RegisterTeamButton
-          onClick={() => router.push(isLoggedIn ? "/teams/create" : "/")}
-        />
+      {isLoggedIn && !myTeams && Array.isArray(myTeams) && (
+        <RegisterTeamButton onClick={() => router.push("/teams/create")} />
       )}
 
       {isLoading ? (
@@ -318,23 +323,9 @@ const TeamsPage = () => {
             <div className="text-center py-12">
               <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {/* {isFollowingPage ? "팔로잉한 팀이 없습니다" : "팀이 없습니다"} */}
                 팀이 없습니다
               </h3>
-              <p className="text-gray-500 mb-6">
-                {/* {isFollowingPage
-                  ? "다른 팀을 팔로우해보세요"
-                  : "새로운 팀을 만들어보세요"} */}
-                새로운 팀을 만들어보세요
-              </p>
-              {/* {isFollowingPage && (
-                <button
-                  onClick={handleAllTeamsClick}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                >
-                  전체 팀 보기
-                </button>
-              )} */}
+              <p className="text-gray-500 mb-6">새로운 팀을 만들어보세요</p>
             </div>
           )}
 

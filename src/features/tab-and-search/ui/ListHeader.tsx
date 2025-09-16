@@ -2,7 +2,7 @@
 "use client";
 
 import SearchInput from "@/features/filter-list/ui/SearchInput";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { memo } from "react";
 
 export type TabType =
@@ -23,6 +23,7 @@ interface HeaderProps {
   onSearchClear: () => void;
   onSearchFocus: () => void;
   onSearchClose: () => void;
+  onPlusAction?: () => void;
 }
 
 const ListHeader = memo(
@@ -37,6 +38,7 @@ const ListHeader = memo(
     onSearchClear,
     onSearchFocus,
     onSearchClose,
+    onPlusAction,
   }: HeaderProps) => {
     // 탭 컴포넌트
     const TabButton = ({ tab, label }: { tab: TabType; label: string }) => (
@@ -60,6 +62,16 @@ const ListHeader = memo(
       </button>
     );
 
+    // 검색 버튼 컴포넌트
+    const RegisterButton = () => (
+      <button
+        className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+        onClick={onPlusAction}
+      >
+        <Plus className="size-5" />
+      </button>
+    );
+
     // 닫기 버튼 컴포넌트
     const CloseButton = () => (
       <button
@@ -80,6 +92,7 @@ const ListHeader = memo(
             ))}
           </div>
           <div className="flex items-center gap-2">
+            {onPlusAction && <RegisterButton />}
             <SearchInput
               placeholder={placeholder}
               value={searchValue}
@@ -98,6 +111,7 @@ const ListHeader = memo(
               ))}
             </div>
             <div className="flex items-center gap-2">
+              {onPlusAction && <RegisterButton />}
               <SearchButton />
             </div>
           </div>
