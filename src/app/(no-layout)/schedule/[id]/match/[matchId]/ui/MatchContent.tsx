@@ -189,8 +189,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 상단: 제목과 네비게이션 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-2 items-center">
-          <h1 className="text-2xl font-bold min-w-16">
-            {/* <h1 className="text-2xl font-bold min-w-32 flex items-center gap-2"> */}
+          <h1 className="text-[1.625rem] font-bold min-w-16">
+            {/* <h1 className="text-[1.625rem] font-bold min-w-32 flex items-center gap-2"> */}
             {data.matchOrder}경기
             {/* <Separator
               className="!h-4 bg-gray-400 !w-0.25"

@@ -32,7 +32,7 @@ const ScheduleHeader = memo(
     // 탭 컴포넌트
     const TabButton = ({ tab, label }: { tab: TabType; label: string }) => (
       <h1
-        className={`text-2xl font-bold cursor-pointer transition-opacity ${
+        className={`text-[1.625rem] font-bold cursor-pointer transition-opacity ${
           currentTab === tab ? "" : "opacity-30 hover:opacity-50"
         }`}
         onClick={() => onTabChange(tab)}

@@ -272,7 +272,7 @@ const ManageAttendanceContent = ({
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 닫기 버튼 */}
       <header className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-2xl font-bold">팀원 명단</h1>
+        <h1 className="text-[1.625rem] font-bold">팀원 명단</h1>
         <button
           type="button"
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"

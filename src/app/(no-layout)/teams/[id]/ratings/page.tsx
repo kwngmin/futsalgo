@@ -114,7 +114,7 @@ export default async function TeamRatingPage({
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <TeamMemberHeader id={id} />
       <div className="mx-4 bg-slate-100 rounded px-4 h-9 flex items-center mb-4 text-sm">
-        <h1 className="text-2xl font-bold text-gray-900"></h1>
+        <h1 className="text-[1.625rem] font-bold text-gray-900"></h1>
         <p className="text-gray-600">
           {data.team.name} 팀원들의 실력을 평가해주세요.
         </p>

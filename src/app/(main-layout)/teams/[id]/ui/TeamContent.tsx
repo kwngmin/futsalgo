@@ -201,7 +201,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       className="object-cover"
                     />
                   ) : (
-                    <div className="size-16 bg-gray-100 text-2xl flex items-center justify-center">
+                    <div className="size-16 bg-gray-100 text-[1.625rem] flex items-center justify-center">
                       {data?.data?.name.charAt(0)}
                     </div>
                   )}

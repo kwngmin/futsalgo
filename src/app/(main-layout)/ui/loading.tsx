@@ -11,14 +11,14 @@ const SchedulePageLoading = ({
         <div className="flex items-center justify-between px-4 h-16 shrink-0">
           <div className="flex gap-3">
             <h1
-              className={`text-2xl font-bold cursor-default ${
+              className={`text-[1.625rem] font-bold cursor-default ${
                 isMySchedules ? "opacity-30" : ""
               }`}
             >
               경기일정
             </h1>
             <h1
-              className={`text-2xl font-bold cursor-default ${
+              className={`text-[1.625rem] font-bold cursor-default ${
                 isMySchedules ? "" : "opacity-30"
               }`}
             >

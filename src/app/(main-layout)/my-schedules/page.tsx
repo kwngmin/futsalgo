@@ -185,7 +185,9 @@ const MySchedulesPage = () => {
             >
               <ArrowLeft style={{ width: "24px", height: "24px" }} />
             </button>
-            <h1 className="text-2xl font-bold cursor-default">내 일정</h1>
+            <h1 className="text-[1.625rem] font-bold cursor-default">
+              내 일정
+            </h1>
           </div>
         </div>
         <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-muted-foreground">
@@ -207,7 +209,9 @@ const MySchedulesPage = () => {
             >
               <ArrowLeft style={{ width: "24px", height: "24px" }} />
             </button>
-            <h1 className="text-2xl font-bold cursor-default">내 일정</h1>
+            <h1 className="text-[1.625rem] font-bold cursor-default">
+              내 일정
+            </h1>
           </div>
         </div>
         <div className="mx-4 bg-red-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-red-600">

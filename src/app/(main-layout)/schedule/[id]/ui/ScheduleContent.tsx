@@ -418,7 +418,7 @@ const ScheduleContent = ({
             weekday: "long",
           })}
         </span> */}
-        <span className="flex items-center gap-1 justify-center font-semibold text-2xl">
+        <span className="flex items-center gap-1 justify-center font-semibold text-[1.625rem]">
           {data.data.schedule?.place}
         </span>
         <div className="w-full flex justify-center items-center gap-2 text-base tracking-tight">
