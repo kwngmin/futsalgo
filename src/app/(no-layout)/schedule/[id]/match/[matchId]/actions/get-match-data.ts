@@ -21,6 +21,8 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           status: true,
           description: true,
           matchType: true,
+          hostTeamMercenaryCount: true,
+          invitedTeamMercenaryCount: true,
         },
       },
       homeTeam: {

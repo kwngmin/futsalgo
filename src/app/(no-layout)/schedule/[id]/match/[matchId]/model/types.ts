@@ -36,6 +36,8 @@ export interface MatchDataSchedule {
   status: ScheduleStatus;
   description: string | null;
   matchType: MatchType;
+  hostTeamMercenaryCount: number;
+  invitedTeamMercenaryCount?: number;
 }
 
 export interface MatchDataMatch {

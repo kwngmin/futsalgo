@@ -21,11 +21,12 @@ import {
   ClockCounterClockwiseIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
-  UserListIcon,
+  UsersIcon,
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TeamLineupEditItem } from "./TeamLineupEdititem";
 import CustomSelect from "@/shared/components/ui/custom-select";
+import { Separator } from "@/shared/components/ui/separator";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -238,6 +239,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
             teamId={data.match.homeTeam.id}
+            label="HOME"
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
             <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
@@ -250,6 +252,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.awayTeam.logoUrl}
             name={data.match.awayTeam.name}
             teamId={data.match.awayTeam.id}
+            label="AWAY"
           />
         </div>
 
@@ -264,27 +267,29 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 />
                 <h2 className="text-lg font-semibold">득점기록</h2>
               </div>
-              <div className="flex items-center gap-1 justify-center">
+              <div className="flex items-center justify-center">
                 <div className="flex items-center gap-1 rounded-full px-2 h-6">
                   <SoccerBallIcon
-                    className="size-3 text-gray-700"
+                    className="size-4 text-gray-800"
                     weight="fill"
                   />
-                  <span className="text-xs font-medium">골</span>
+                  <span className="text-sm font-medium text-gray-700">골</span>
                 </div>
                 <div className="flex items-center gap-1 rounded-full px-2 h-6">
                   <SneakerMoveIcon
-                    className="size-3 text-gray-700"
+                    className="size-4 text-gray-800"
                     weight="fill"
                   />
-                  <span className="text-xs font-medium">어시스트</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    어시스트
+                  </span>
                 </div>
                 <div className="flex items-center gap-1 rounded-full px-2 h-6">
                   <SoccerBallIcon
-                    className="size-3 text-destructive"
+                    className="size-4 text-destructive"
                     weight="fill"
                   />
-                  <span className="text-xs font-medium text-destructive">
+                  <span className="text-sm font-medium text-destructive">
                     자책골
                   </span>
                 </div>
@@ -344,20 +349,33 @@ const MatchContent = ({ data }: MatchContentProps) => {
             />
           )}
 
-        {/* 팀 명단 */}
+        {/* 출전 명단 */}
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
-              <UserListIcon
-                className="size-7 text-stone-500"
-                // weight="fill"
-              />
-              <h2 className="text-lg font-semibold">팀 명단</h2>
+              <UsersIcon className="size-7 text-stone-500" />
+              <h2 className="text-lg font-semibold">출전 명단</h2>
+              <span className="font-medium text-amber-600">
+                {data.match.undecidedTeamMercenaryCount
+                  ? data.match.undecidedTeamMercenaryCount + data.lineups.length
+                  : data.lineups.length}
+              </span>
+              {data.match.undecidedTeamMercenaryCount && (
+                <div className="px-2 border-l border-gray-200 h-4 flex items-center">
+                  <span className="text-sm font-medium text-gray-700">
+                    용병 {data.match.undecidedTeamMercenaryCount}명
+                  </span>
+                </div>
+              )}
             </div>
             {data.permissions.isEditable && goalsWithScore.length === 0 && (
               <button
                 type="button"
-                className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border border-gray-300 hover:border-gray-400`}
+                className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all  ${
+                  mode !== "view"
+                    ? "bg-gray-800 text-white hover:bg-gray-600"
+                    : "text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border border-gray-300 hover:border-gray-400"
+                }`}
                 onClick={() =>
                   mode !== "view" ? setMode("view") : setMode("edit")
                 }
@@ -365,35 +383,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 {mode !== "view" ? "완료" : "수정"}
               </button>
             )}
-            {/* {data.permissions.isEditable && goalsWithScore.length === 0 && (
-              <div className="flex items-center gap-3">
-                <div className="flex items-center p-0.5 bg-gray-100 rounded-full">
-                  <button
-                    type="button"
-                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all ${
-                      mode === "view"
-                        ? "bg-white shadow-xs"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
-                    onClick={() => setMode("view")}
-                  >
-                    보기
-                  </button>
-                  <button
-                    type="button"
-                    className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
-                      mode === "edit"
-                        ? "bg-white shadow-xs"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
-                    onClick={() => setMode("edit")}
-                    // disabled={goalsWithScore.length > 0}
-                  >
-                    수정
-                  </button>
-                </div>
-              </div>
-            )} */}
           </div>
 
           {mode === "view" ? (
@@ -488,30 +477,57 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </div>
                 </div>
               )}
-              <div className="flex flex-col sm:grid grid-cols-2 gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center h-12 sm:h-11 shrink-0 px-4">
-                    <span className="text-base font-medium">용병</span>
+              {data.match.schedule.matchType === "SQUAD" &&
+                data.match.schedule.hostTeamMercenaryCount && (
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-4 *:leading-tight gap-2">
+                        <span className="font-medium text-gray-800">용병</span>
+                        <Separator orientation="vertical" className="!h-5" />
+                        <span className="text-sm text-gray-500">HOME</span>
+                      </div>
+                      <CustomSelect
+                        size="sm"
+                        className="w-full"
+                        options={Array.from(
+                          { length: data.match.undecidedTeamMercenaryCount },
+                          (_, index) => (
+                            <option key={index} value={index}>
+                              {index + 1}명
+                            </option>
+                          )
+                        )}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div className="hidden sm:block w-px border-l border-gray-200 h-8" />
+                    <div className="sm:hidden w-full border-b border-gray-200" />
+                    <div className="flex items-center gap-2 w-full">
+                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-4 *:leading-tight gap-2">
+                        <span className="font-medium text-gray-800">용병</span>
+                        <Separator orientation="vertical" className="!h-5" />
+                        <span className="text-sm text-gray-500">AWAY</span>
+                      </div>
+                      <CustomSelect
+                        size="sm"
+                        className="w-full"
+                        options={Array.from(
+                          { length: data.match.undecidedTeamMercenaryCount },
+                          (_, index) => (
+                            <option key={index} value={index}>
+                              {index + 1}명
+                            </option>
+                          )
+                        )}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                        }}
+                      />
+                    </div>
                   </div>
-                  <CustomSelect
-                    size="sm"
-                    className="w-full"
-                    options={Array.from({ length: 10 }, (_, index) => (
-                      <option key={index} value={index}>
-                        {index + 1}명
-                      </option>
-                    ))}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="border rounded-md overflow-hidden">
-                  <div className="flex items-center justify-center h-12 sm:h-11">
-                    <span className="text-base font-medium">명단 업데이트</span>
-                  </div>
-                </div>
-              </div>
+                )}
             </div>
           )}
           {goalsWithScore.length > 0 && data.permissions.isEditable && (
