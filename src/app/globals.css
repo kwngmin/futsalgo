@@ -151,24 +151,3 @@ input::-webkit-inner-spin-button {
   will-change: scroll-position;
   transform: translateZ(0); /* 하드웨어 가속 활성화 */
 }
-
-/* iOS Safari 셀렉트박스 포커스 유지 */
-@supports (-webkit-touch-callout: none) {
-  select {
-    /* -webkit-user-select: none; */
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-  }
-
-  /* 포커스 상태 강제 유지 */
-  select:focus {
-    -webkit-user-modify: read-write-plaintext-only;
-  }
-}
-
-/* iOS에서 blur 애니메이션 지연 */
-@media (pointer: coarse) {
-  select {
-    transition: opacity 0ms ease 300ms;
-  }
-}
