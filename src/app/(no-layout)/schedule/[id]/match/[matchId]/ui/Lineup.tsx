@@ -1,7 +1,6 @@
 "use client";
 
 import { LineupsData, LineupsWithNameData } from "@/entities/match/model/types";
-import { UserIcon } from "@phosphor-icons/react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -74,8 +73,15 @@ const Lineup = ({
         ))}
       {MercenaryCount !== null && MercenaryCount > 0 && (
         <div className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200">
-          <div className="size-8 sm:size-9 rounded-full bg-gray-100 flex items-center justify-center">
-            <UserIcon className="size-5 text-gray-400" />
+          <div className="size-8 sm:size-9 rounded-full bg-slate-400/50 flex items-center justify-center">
+            <div className="size-6 sm:size-7 rounded-full flex items-center justify-center overflow-hidden relative">
+              {/* <UserIcon
+                className="size-9 sm:size-10 text-white"
+                weight="fill"
+              /> */}
+              <div className="absolute top-1 size-2.5 sm:size-3 bg-white rounded-full" />
+              <div className="absolute bottom-0 w-5 sm:w-6 h-2 sm:h-2.5 bg-white rounded-t-full" />
+            </div>
           </div>
           <span className="text-sm font-medium text-gray-700">
             용병 {MercenaryCount}명

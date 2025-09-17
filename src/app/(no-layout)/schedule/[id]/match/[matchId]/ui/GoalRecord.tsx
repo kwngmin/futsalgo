@@ -76,10 +76,14 @@ const GoalRecord = ({
   matchId,
   lineups,
   scheduleId,
+  homeMercenaryCount,
+  awayMercenaryCount,
 }: {
   matchId: string;
   lineups: LineupsData | LineupsWithNameData;
   scheduleId: string;
+  homeMercenaryCount?: number;
+  awayMercenaryCount?: number;
 }) => {
   const queryClient = useQueryClient();
 
@@ -255,11 +259,15 @@ const GoalRecord = ({
                 <option value="">선택</option>
                 <optgroup label={`HOME`}>
                   {renderPlayerOptions(homeLineups)}
-                  <option value="mercenary_home_side">용병</option>
+                  {homeMercenaryCount && (
+                    <option value="mercenary_home_side">용병</option>
+                  )}
                 </optgroup>
                 <optgroup label="AWAY">
                   {renderPlayerOptions(awayLineups)}
-                  <option value="mercenary_away_side">용병</option>
+                  {awayMercenaryCount && (
+                    <option value="mercenary_away_side">용병</option>
+                  )}
                 </optgroup>
               </>
             }
@@ -318,11 +326,14 @@ const GoalRecord = ({
           )}
         </div>
       )}
-      {watchValues.scorerId && (
+      {(watchValues.scorerId || watchValues.isScoredByMercenary) && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center gap-2">
           <Button
             type="button"
-            disabled={isSubmitting || !watchValues.scorerId}
+            disabled={
+              isSubmitting ||
+              !(watchValues.scorerId || watchValues.isScoredByMercenary)
+            }
             className="w-full font-medium tracking-tight disabled:opacity-50 disabled:pointer-events-none"
             size="lg"
             variant="secondary"
@@ -332,7 +343,10 @@ const GoalRecord = ({
           </Button>
           <Button
             type="submit"
-            disabled={isSubmitting || !watchValues.scorerId}
+            disabled={
+              isSubmitting ||
+              !(watchValues.scorerId || watchValues.isScoredByMercenary)
+            }
             // type="button"
             className="w-full font-bold bg-black text-white tracking-tight disabled:opacity-50 disabled:pointer-events-none"
             size="lg"

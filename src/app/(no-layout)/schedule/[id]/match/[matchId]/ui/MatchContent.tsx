@@ -398,6 +398,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
               matchId={data.match.id}
               lineups={data.lineups}
               scheduleId={data.match.scheduleId}
+              homeMercenaryCount={homeMercenaryCount}
+              awayMercenaryCount={awayMercenaryCount}
             />
           )}
 
