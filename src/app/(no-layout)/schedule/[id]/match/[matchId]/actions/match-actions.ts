@@ -286,3 +286,61 @@ export async function removeFromLineup(lineupId: string) {
     return { success: false, error: "선수 제거에 실패했습니다" };
   }
 }
+
+/**
+ * 용병 수 업데이트 (자체전용)
+ */
+export async function updateMercenaryCount(
+  matchId: string,
+  homeCount: number,
+  awayCount: number
+) {
+  try {
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        schedule: {
+          select: {
+            matchType: true,
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!match) {
+      return { success: false, error: "매치를 찾을 수 없습니다" };
+    }
+
+    if (match.schedule.matchType !== MatchType.SQUAD) {
+      return { success: false, error: "자체전이 아닙니다" };
+    }
+
+    // 총 용병 수 계산 (homeCount + awayCount)
+    const totalMercenaryCount = homeCount + awayCount;
+
+    // undecided 용병 수 계산 (총 용병 수에서 배정된 용병 수를 뺀 값)
+    const undecidedCount = Math.max(
+      0,
+      match.undecidedTeamMercenaryCount -
+        (totalMercenaryCount -
+          match.homeTeamMercenaryCount -
+          match.awayTeamMercenaryCount)
+    );
+
+    await prisma.match.update({
+      where: { id: matchId },
+      data: {
+        homeTeamMercenaryCount: homeCount,
+        awayTeamMercenaryCount: awayCount,
+        undecidedTeamMercenaryCount: undecidedCount,
+      },
+    });
+
+    revalidatePath(`/schedule/${match.schedule.id}/match/${matchId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("용병 수 업데이트 실패:", error);
+    return { success: false, error: "용병 수 업데이트에 실패했습니다" };
+  }
+}

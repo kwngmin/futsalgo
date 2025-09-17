@@ -75,7 +75,7 @@ const Lineup = ({
       {MercenaryCount !== null && MercenaryCount > 0 && (
         <div className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200">
           <div className="size-8 sm:size-9 rounded-full bg-gray-100 flex items-center justify-center">
-            <UserIcon className="size-6 text-gray-600" />
+            <UserIcon className="size-5 text-gray-400" />
           </div>
           <span className="text-sm font-medium text-gray-700">
             용병 {MercenaryCount}명

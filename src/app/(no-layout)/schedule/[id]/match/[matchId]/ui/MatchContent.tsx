@@ -16,6 +16,7 @@ import {
   deleteMatch,
   updateSquadLineup,
   updateTeamMatchLineup,
+  updateMercenaryCount,
 } from "../actions/match-actions";
 import {
   ClockCounterClockwiseIcon,
@@ -38,6 +39,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
   const queryClient = useQueryClient();
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [isLoading, setIsLoading] = useState(false);
+
+  // 용병 수 상태 관리
+  const [homeMercenaryCount, setHomeMercenaryCount] = useState(
+    data?.match.homeTeamMercenaryCount ?? 0
+  );
+  const [awayMercenaryCount, setAwayMercenaryCount] = useState(
+    data?.match.awayTeamMercenaryCount ?? 0
+  );
 
   // 골 기록을 기반으로 각 시점의 점수 계산 (useMemo로 최적화)
   const goalsWithScore = useMemo((): GoalWithScore[] => {
@@ -67,6 +76,28 @@ const MatchContent = ({ data }: MatchContentProps) => {
       };
     });
   }, [data]);
+
+  // 용병 수 계산 로직
+  const mercenaryCalculation = useMemo(() => {
+    if (!data) return { homeMax: 0, awayMax: 0, undecidedCount: 0 };
+
+    const totalMercenaryCount =
+      data.match.homeTeamMercenaryCount +
+      data.match.awayTeamMercenaryCount +
+      data.match.undecidedTeamMercenaryCount;
+
+    // HOME 최대 선택 가능 수: undecided + 현재 home count
+    const homeMax = data.match.undecidedTeamMercenaryCount + homeMercenaryCount;
+
+    // AWAY 최대 선택 가능 수: undecided + 현재 away count
+    const awayMax = data.match.undecidedTeamMercenaryCount + awayMercenaryCount;
+
+    // 현재 undecided 수: 전체 - 현재 배정된 수
+    const undecidedCount =
+      totalMercenaryCount - homeMercenaryCount - awayMercenaryCount;
+
+    return { homeMax, awayMax, undecidedCount };
+  }, [data, homeMercenaryCount, awayMercenaryCount]);
 
   // 타입 가드
   if (!data) {
@@ -151,6 +182,42 @@ const MatchContent = ({ data }: MatchContentProps) => {
     }
   };
 
+  // 용병 수 업데이트 핸들러
+  const handleMercenaryUpdate = async (
+    side: "home" | "away",
+    count: number
+  ) => {
+    if (isLoading) return;
+
+    const newHomeCount = side === "home" ? count : homeMercenaryCount;
+    const newAwayCount = side === "away" ? count : awayMercenaryCount;
+
+    setIsLoading(true);
+    try {
+      const result = await updateMercenaryCount(
+        data.match.id,
+        newHomeCount,
+        newAwayCount
+      );
+
+      if (result.success) {
+        // 로컬 상태 업데이트
+        if (side === "home") {
+          setHomeMercenaryCount(count);
+        } else {
+          setAwayMercenaryCount(count);
+        }
+      } else {
+        alert(result.error || "용병 수 업데이트에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("용병 수 업데이트 오류:", error);
+      alert("오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // 경기 삭제 핸들러
   const handleDeleteMatch = async () => {
     if (isLoading) return;
@@ -179,28 +246,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
     }
   };
 
-  console.log(data.match.homeTeamMercenaryCount, "homeTeamMercenaryCount");
-  console.log(data.match.awayTeamMercenaryCount, "awayTeamMercenaryCount");
-  console.log(
-    data.match.undecidedTeamMercenaryCount,
-    "undecidedTeamMercenaryCount"
-  );
-
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 네비게이션 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
         <div className="flex gap-2 items-center">
           <h1 className="text-[1.625rem] font-bold min-w-16">
-            {/* <h1 className="text-[1.625rem] font-bold min-w-32 flex items-center gap-2"> */}
             {data.matchOrder}경기
-            {/* <Separator
-              className="!h-4 bg-gray-400 !w-0.25"
-              orientation="vertical"
-            />
-            <span className="text-lg font-medium text-gray-800">
-              {data.match.schedule.matchType === "SQUAD" ? "자체전" : "친선전"}
-            </span> */}
           </h1>
           <NavigationButton
             direction="prev"
@@ -356,14 +408,15 @@ const MatchContent = ({ data }: MatchContentProps) => {
               <UsersIcon className="size-7 text-stone-500" />
               <h2 className="text-lg font-semibold">출전 명단</h2>
               <span className="font-medium text-amber-600">
-                {data.match.undecidedTeamMercenaryCount
-                  ? data.match.undecidedTeamMercenaryCount + data.lineups.length
-                  : data.lineups.length}
+                {mercenaryCalculation.undecidedCount +
+                  homeMercenaryCount +
+                  awayMercenaryCount +
+                  data.lineups.length}
               </span>
-              {data.match.undecidedTeamMercenaryCount && (
+              {mercenaryCalculation.undecidedCount > 0 && (
                 <div className="px-2 border-l border-gray-200 h-4 flex items-center">
                   <span className="text-sm font-medium text-gray-700">
-                    용병 {data.match.undecidedTeamMercenaryCount}명
+                    용병 {mercenaryCalculation.undecidedCount}명
                   </span>
                 </div>
               )}
@@ -389,11 +442,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
             <div className="grid grid-cols-2 gap-2">
               <Lineup
                 lineups={homeLineup}
-                MercenaryCount={data.match.homeTeamMercenaryCount}
+                MercenaryCount={homeMercenaryCount}
               />
               <Lineup
                 lineups={awayLineup}
-                MercenaryCount={data.match.awayTeamMercenaryCount}
+                MercenaryCount={awayMercenaryCount}
               />
             </div>
           ) : (
@@ -481,7 +534,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 data.match.schedule.hostTeamMercenaryCount && (
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <div className="flex items-center gap-2 w-full">
-                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-4 *:leading-tight gap-2">
+                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2">
                         <span className="font-medium text-gray-800">용병</span>
                         <Separator orientation="vertical" className="!h-5" />
                         <span className="text-sm text-gray-500">HOME</span>
@@ -489,23 +542,26 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       <CustomSelect
                         size="sm"
                         className="w-full"
+                        value={homeMercenaryCount.toString()}
+                        disabled={isLoading}
+                        onChange={async (e) => {
+                          const newCount = parseInt(e.target.value);
+                          await handleMercenaryUpdate("home", newCount);
+                        }}
                         options={Array.from(
-                          { length: data.match.undecidedTeamMercenaryCount },
+                          { length: mercenaryCalculation.homeMax + 1 },
                           (_, index) => (
                             <option key={index} value={index}>
-                              {index + 1}명
+                              {index}명
                             </option>
                           )
                         )}
-                        onChange={(e) => {
-                          console.log(e.target.value);
-                        }}
                       />
                     </div>
                     <div className="hidden sm:block w-px border-l border-gray-200 h-8" />
                     <div className="sm:hidden w-full border-b border-gray-200" />
                     <div className="flex items-center gap-2 w-full">
-                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-4 *:leading-tight gap-2">
+                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2">
                         <span className="font-medium text-gray-800">용병</span>
                         <Separator orientation="vertical" className="!h-5" />
                         <span className="text-sm text-gray-500">AWAY</span>
@@ -513,17 +569,20 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       <CustomSelect
                         size="sm"
                         className="w-full"
+                        value={awayMercenaryCount.toString()}
+                        disabled={isLoading}
+                        onChange={async (e) => {
+                          const newCount = parseInt(e.target.value);
+                          await handleMercenaryUpdate("away", newCount);
+                        }}
                         options={Array.from(
-                          { length: data.match.undecidedTeamMercenaryCount },
+                          { length: mercenaryCalculation.awayMax + 1 },
                           (_, index) => (
                             <option key={index} value={index}>
-                              {index + 1}명
+                              {index}명
                             </option>
                           )
                         )}
-                        onChange={(e) => {
-                          console.log(e.target.value);
-                        }}
                       />
                     </div>
                   </div>
