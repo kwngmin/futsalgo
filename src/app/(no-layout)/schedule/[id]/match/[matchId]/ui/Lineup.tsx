@@ -71,23 +71,24 @@ const Lineup = ({
             <ChevronRight className="hidden md:group-hover:block size-4 text-gray-500 shrink-0" />
           </div>
         ))}
-      {MercenaryCount !== null && MercenaryCount > 0 && (
-        <div className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200">
-          <div className="size-8 sm:size-9 rounded-full bg-slate-400/50 flex items-center justify-center">
-            <div className="size-6 sm:size-7 rounded-full flex items-center justify-center overflow-hidden relative">
-              {/* <UserIcon
-                className="size-9 sm:size-10 text-white"
-                weight="fill"
-              /> */}
-              <div className="absolute top-1 size-2.5 sm:size-3 bg-white rounded-full" />
-              <div className="absolute bottom-0 w-5 sm:w-6 h-2 sm:h-2.5 bg-white rounded-t-full" />
+      {MercenaryCount !== null &&
+        MercenaryCount > 0 &&
+        Array.from({ length: MercenaryCount }).map((_, index) => (
+          <div
+            key={index}
+            className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200"
+          >
+            <div className="size-8 sm:size-9 rounded-full bg-slate-400/50 flex items-center justify-center">
+              <div className="size-6 sm:size-7 rounded-full flex items-center justify-center overflow-hidden relative">
+                <div className="absolute top-1 size-2.5 sm:size-3 bg-white rounded-full" />
+                <div className="absolute bottom-0 w-5 sm:w-6 h-2 sm:h-2.5 bg-white rounded-t-full" />
+              </div>
             </div>
+            <span className="text-sm font-medium text-gray-700">
+              용병 {index + 1}
+            </span>
           </div>
-          <span className="text-sm font-medium text-gray-700">
-            용병 {MercenaryCount}명
-          </span>
-        </div>
-      )}
+        ))}
       {lineups.length === 0 && !MercenaryCount && (
         <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14">
           명단이 없습니다.

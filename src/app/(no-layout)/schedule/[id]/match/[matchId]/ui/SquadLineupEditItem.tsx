@@ -65,11 +65,11 @@ export const SquadLineupEditItem = ({
   };
 
   return (
-    <div className="flex items-center gap-2 h-14 px-3 sm:px-4 border-b last:border-b-0 hover:bg-gray-50 group">
-      <div className="hidden sm:flex items-center justify-center text-sm font-medium text-muted-foreground size-8 sm:size-9 shrink-0 pr-1">
+    <div className="flex items-center gap-2 sm:h-14 px-3 sm:px-4 border-b last:border-b-0 hover:bg-gray-50 group">
+      <div className="flex items-center justify-center text-sm font-medium text-muted-foreground size-8 sm:size-9 shrink-0 pr-1">
         {index + 1}
       </div>
-      <div className="flex justify-between gap-2 grow">
+      <div className="flex flex-col sm:flex-row justify-between gap-1 grow py-2 sm:py-0">
         <div className="flex items-center gap-2 grow">
           {lineup.user.image ? (
             <Image
@@ -77,13 +77,13 @@ export const SquadLineupEditItem = ({
               alt={lineup.user.nickname || lineup.user.name || ""}
               width={36}
               height={36}
-              className="hidden sm:block size-8 rounded-full object-cover ring ring-gray-200"
+              className="size-8 rounded-full object-cover ring ring-gray-200"
             />
           ) : (
-            <div className="hidden sm:block size-8 rounded-full bg-gray-200" />
+            <div className="size-8 rounded-full bg-gray-200" />
           )}
-          <div className="grow flex flex-col justify-center">
-            <span className="text-sm font-semibold leading-tight">
+          <div className="grow flex items-center sm:items-start sm:flex-col sm:justify-center gap-1.5 sm:gap-0">
+            <span className="sm:text-sm font-semibold leading-tight">
               {lineup.user.nickname}
             </span>
             {isMember && lineup.user.name && (
@@ -94,11 +94,11 @@ export const SquadLineupEditItem = ({
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">
-          <div className="grow grid grid-cols-3 gap-1 p-1 rounded-full bg-gray-100 select-none group-hover:bg-white group-hover:ring group-hover:ring-gray-300">
+          <div className="grow grid grid-cols-3 gap-2 p-1 rounded-full bg-gray-100 select-none group-hover:bg-white group-hover:ring group-hover:ring-gray-300">
             <button
               type="button"
               disabled={isLoading}
-              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 px-3 border ${
+              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 px-2 min-w-16 border ${
                 lineup.side === "HOME"
                   ? "bg-white border-gray-400 pointer-events-none cursor-default hover:border-gray-400 font-medium"
                   : "border-transparent cursor-pointer hover:bg-gray-200"
@@ -120,7 +120,7 @@ export const SquadLineupEditItem = ({
             <button
               type="button"
               disabled={isLoading}
-              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 px-3 border ${
+              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 px-2 min-w-16 border ${
                 lineup.side === "AWAY"
                   ? "bg-white border-gray-400 pointer-events-none cursor-default hover:border-gray-400 font-medium"
                   : "border-transparent cursor-pointer hover:bg-gray-200"
