@@ -42,7 +42,7 @@ const ScheduleFilterBar = ({
         option.icon ? "pl-1" : "pl-3.5 lg:pl-3"
       } ${
         openFilter === option.value
-          ? "border-gray-600 font-semibold"
+          ? "border-gray-600 font-semibold text-gray-700"
           : "border-gray-400/50 hover:border-gray-400"
       }`}
       aria-label={`${option.label} 필터`}
