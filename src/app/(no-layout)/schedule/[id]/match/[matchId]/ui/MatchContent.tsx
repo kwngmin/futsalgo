@@ -415,26 +415,31 @@ const MatchContent = ({ data }: MatchContentProps) => {
               <UsersIcon className="size-7 text-stone-500" />
               <h2 className="text-lg font-semibold">출전 명단</h2>
               <span className="font-medium text-amber-600">
-                {mercenaryCalculation.undecidedCount +
-                  homeMercenaryCount +
+                {homeMercenaryCount +
                   awayMercenaryCount +
-                  data.lineups.length}
+                  data.lineups.filter((lineup) => lineup.side !== "UNDECIDED")
+                    .length}
               </span>
-              {mercenaryCalculation.undecidedCount > 0 && (
-                <div className="px-2 border-l border-gray-200 h-4 flex items-center">
-                  <span className="text-sm font-medium text-gray-700">
-                    용병 {mercenaryCalculation.undecidedCount}명
-                  </span>
+              {/* {(data.match.schedule.hostTeamMercenaryCount > 0 ||
+                (data.match.schedule.invitedTeamMercenaryCount &&
+                  data.match.schedule.invitedTeamMercenaryCount > 0)) && (
+                <div className="px-2 border-l border-gray-200 h-4 flex items-center text-sm text-gray-500">
+                  {`팀원 ${data.lineups.length} • 용병
+                    ${
+                      data.match.undecidedTeamMercenaryCount +
+                      homeMercenaryCount +
+                      awayMercenaryCount
+                    }`}
                 </div>
-              )}
+              )} */}
             </div>
             {data.permissions.isEditable && goalsWithScore.length === 0 && (
               <button
                 type="button"
-                className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all  ${
+                className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all border ${
                   mode !== "view"
-                    ? "bg-gray-800 text-white hover:bg-gray-600"
-                    : "text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border border-gray-300 hover:border-gray-400"
+                    ? "bg-gray-800 text-white hover:bg-gray-600 border-transparent"
+                    : "text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border-gray-300 hover:border-gray-400"
                 }`}
                 onClick={() =>
                   mode !== "view" ? setMode("view") : setMode("edit")
