@@ -201,6 +201,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
       );
 
       if (result.success) {
+        queryClient.invalidateQueries({
+          queryKey: ["matchData"],
+        });
         // 로컬 상태 업데이트
         if (side === "home") {
           setHomeMercenaryCount(count);
@@ -611,7 +614,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           )}
 
           {/* 관리 버튼들 */}
-          {goalsWithScore.length === 0 && data.permissions.isEditable && (
+          {data.permissions.isEditable && (
             <button
               type="button"
               disabled={isLoading}

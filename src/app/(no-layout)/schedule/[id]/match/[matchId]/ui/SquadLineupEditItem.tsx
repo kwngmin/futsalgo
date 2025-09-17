@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import Image from "next/image";
 import { LogOut } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LineupEditItemProps {
   lineup: MatchDataLineup;
@@ -22,6 +23,7 @@ export const SquadLineupEditItem = ({
   index,
   isMember,
 }: LineupEditItemProps) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSideChange = async (side: "HOME" | "AWAY" | "UNDECIDED") => {
@@ -30,6 +32,9 @@ export const SquadLineupEditItem = ({
     setIsLoading(true);
     try {
       const result = await updateLineupSide(lineup.id, side);
+      queryClient.invalidateQueries({
+        queryKey: ["matchData"],
+      });
       if (!result.success) {
         console.error(result.error);
         alert("사이드 변경에 실패했습니다.");
