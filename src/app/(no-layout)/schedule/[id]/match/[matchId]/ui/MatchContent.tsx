@@ -541,7 +541,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 data.match.schedule.hostTeamMercenaryCount !== 0 && (
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <div className="flex items-center gap-2 w-full">
-                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2">
+                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2 min-w-32">
                         <span className="font-medium text-gray-800">용병</span>
                         <Separator orientation="vertical" className="!h-5" />
                         <span className="text-sm text-gray-500">HOME</span>
@@ -568,7 +568,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     <div className="hidden sm:block w-px border-l border-gray-200 h-8" />
                     <div className="sm:hidden w-full border-b border-gray-200" />
                     <div className="flex items-center gap-2 w-full">
-                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2">
+                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2 min-w-32">
                         <span className="font-medium text-gray-800">용병</span>
                         <Separator orientation="vertical" className="!h-5" />
                         <span className="text-sm text-gray-500">AWAY</span>
