@@ -381,6 +381,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       setIsLoading(true);
                       try {
                         await deleteGoalRecord(goal.id);
+                        queryClient.invalidateQueries({
+                          queryKey: [
+                            "matchData",
+                            data.match.id,
+                            data.match.scheduleId,
+                          ],
+                        });
                       } catch (error) {
                         console.error("골 기록 삭제 실패:", error);
                       } finally {

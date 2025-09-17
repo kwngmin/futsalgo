@@ -218,6 +218,9 @@ const GoalRecord = ({
       queryClient.invalidateQueries({
         queryKey: ["schedule", scheduleId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["matchData", matchId, scheduleId],
+      });
       reset();
     } catch (error) {
       console.error(error);
