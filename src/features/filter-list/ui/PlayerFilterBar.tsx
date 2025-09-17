@@ -38,7 +38,7 @@ const PlayerFilterBar = ({
   // 필터 버튼 컴포넌트
   const FilterButton = ({ option }: { option: FilterOption }) => (
     <button
-      className={`sm:text-sm font-medium border bg-gray-100 hover:bg-white pr-2 lg:pr-1.5 h-10 lg:h-9 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 group ${
+      className={`sm:text-sm font-medium border bg-gray-100 hover:bg-white pr-2 lg:pr-1.5 flex items-center gap-1.5 justify-center rounded-full cursor-pointer active:scale-98 shrink-0 relative p-1 group ${
         option.icon ? "pl-1" : "pl-3.5 lg:pl-3"
       } ${
         openFilter === option.value
@@ -55,7 +55,7 @@ const PlayerFilterBar = ({
       }}
     >
       {option.icon && (
-        <div className="size-8 lg:size-7 rounded-full flex items-center justify-center bg-white group-hover:bg-gray-100">
+        <div className="size-7 lg:size-6 rounded-full flex items-center justify-center bg-white group-hover:bg-gray-100">
           <option.icon
             className="size-4.5 lg:size-4"
             weight={openFilter === option.value ? "fill" : "regular"}
@@ -88,7 +88,7 @@ const PlayerFilterBar = ({
           {filterOptions.map((option) =>
             filterValues[option.value as keyof typeof filterValues] ? (
               <div
-                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 lg:pr-2 pl-4 h-10 lg:h-9 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0"
+                className="sm:text-sm font-semibold text-white bg-black/80 hover:bg-black pr-2.5 lg:pr-2 pl-4 flex items-center gap-1 justify-center rounded-full cursor-pointer active:scale-98 shrink-0"
                 key={option.value}
                 onClick={() => {
                   setFilterValues({
