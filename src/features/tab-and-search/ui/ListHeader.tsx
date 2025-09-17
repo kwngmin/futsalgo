@@ -68,7 +68,7 @@ const ListHeader = memo(
         className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
         onClick={onPlusAction}
       >
-        <Plus className="size-6.5" strokeWidth={1.75} />
+        <Plus className="size-6" strokeWidth={1.75} />
       </button>
     );
 
