@@ -43,16 +43,6 @@ const CustomSelect = ({
     );
   }, []);
 
-  // blur 이벤트 처리
-  const handleBlur = useCallback(() => {
-    if (!isIOS()) return;
-
-    // blur 이벤트를 지연 처리
-    blurTimeoutRef.current = setTimeout(() => {
-      // 실제 blur 처리 로직이 있다면 여기에 추가
-    }, 100);
-  }, [isIOS]);
-
   // focus 이벤트 처리
   const handleFocus = useCallback(() => {
     if (!isIOS()) return;
@@ -93,7 +83,6 @@ const CustomSelect = ({
           ref={selectRef}
           value={value}
           onChange={onChange}
-          onBlur={handleBlur}
           onFocus={handleFocus}
           onTouchStart={handleTouchStart}
           data-error={error}
