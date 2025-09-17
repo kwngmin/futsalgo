@@ -19,6 +19,10 @@ interface CustomSelectProps {
   size?: "default" | "sm";
 }
 
+// 전역 상태로 현재 활성화된 select 관리
+let activeSelectRef: HTMLSelectElement | null = null;
+const blurTimeouts = new Map<HTMLSelectElement, NodeJS.Timeout>();
+
 const CustomSelect = ({
   label,
   value,
@@ -33,130 +37,117 @@ const CustomSelect = ({
   placeholder,
 }: CustomSelectProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
-  const isSelectOpenRef = useRef(false);
-  const preventBlurRef = useRef(false);
 
   // iOS 감지 함수
   const isIOS = useCallback(() => {
-    if (typeof window === "undefined") return false;
     return (
       /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
     );
   }, []);
 
-  // 컴포넌트 마운트 시 전역 이벤트 리스너 설정
-  useEffect(() => {
-    if (!isIOS()) return;
-
-    const handleGlobalTouchStart = (e: TouchEvent) => {
-      // 다른 select 요소를 터치하는 경우
-      if (
-        e.target instanceof HTMLSelectElement &&
-        e.target !== selectRef.current
-      ) {
-        preventBlurRef.current = true;
-        setTimeout(() => {
-          preventBlurRef.current = false;
-        }, 300);
-      }
-    };
-
-    const handleGlobalMouseDown = (e: MouseEvent) => {
-      // select 외부 클릭 시에만 blur 허용
-      if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
-        preventBlurRef.current = false;
-      }
-    };
-
-    document.addEventListener("touchstart", handleGlobalTouchStart, true);
-    document.addEventListener("mousedown", handleGlobalMouseDown, true);
-
-    return () => {
-      document.removeEventListener("touchstart", handleGlobalTouchStart, true);
-      document.removeEventListener("mousedown", handleGlobalMouseDown, true);
-    };
-  }, [isIOS]);
-
-  // blur 이벤트 처리
-  const handleBlur = useCallback(
-    (e: React.FocusEvent<HTMLSelectElement>) => {
-      if (!isIOS()) return;
-
-      // blur 방지 플래그가 설정되어 있으면 포커스 유지
-      if (preventBlurRef.current) {
-        e.preventDefault();
-        e.stopPropagation();
-        setTimeout(() => {
-          selectRef.current?.focus();
-        }, 0);
-        return;
-      }
-
-      // select가 열려있는 경우 blur 방지
-      if (isSelectOpenRef.current) {
-        e.preventDefault();
-        e.stopPropagation();
-        selectRef.current?.focus();
-      }
-    },
-    [isIOS]
-  );
+  // 모든 blur 타임아웃 클리어
+  const clearAllBlurTimeouts = useCallback(() => {
+    blurTimeouts.forEach((timeout) => {
+      clearTimeout(timeout);
+    });
+    blurTimeouts.clear();
+  }, []);
 
   // focus 이벤트 처리
   const handleFocus = useCallback(() => {
-    if (!isIOS()) return;
-    isSelectOpenRef.current = true;
-    preventBlurRef.current = true;
+    if (!isIOS() || !selectRef.current) return;
 
-    // 일정 시간 후 플래그 해제
-    setTimeout(() => {
-      preventBlurRef.current = false;
-    }, 500);
+    // 모든 blur 타임아웃 취소
+    clearAllBlurTimeouts();
+
+    // 현재 select를 활성화된 것으로 설정
+    activeSelectRef = selectRef.current;
+  }, [isIOS, clearAllBlurTimeouts]);
+
+  // blur 이벤트 처리
+  const handleBlur = useCallback(() => {
+    if (!isIOS() || !selectRef.current) return;
+
+    const currentSelect = selectRef.current;
+
+    // 다른 select로 포커스가 이동하는 경우를 대비해 약간의 지연
+    const timeoutId = setTimeout(() => {
+      // 현재 활성화된 select가 이 select인 경우에만 null로 설정
+      if (activeSelectRef === currentSelect) {
+        activeSelectRef = null;
+      }
+      blurTimeouts.delete(currentSelect);
+    }, 150);
+
+    blurTimeouts.set(currentSelect, timeoutId);
   }, [isIOS]);
 
-  // change 이벤트 처리 - 옵션 선택 시
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      isSelectOpenRef.current = false;
-      preventBlurRef.current = false;
-      onChange(e);
-    },
-    [onChange]
-  );
+  // 터치 시작 이벤트 처리
+  const handleTouchStart = useCallback(() => {
+    if (!isIOS() || !selectRef.current) return;
 
-  // 터치 이벤트 처리
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      if (!isIOS()) return;
+    const currentSelect = selectRef.current;
 
-      // 현재 select를 터치한 경우
-      preventBlurRef.current = true;
-      isSelectOpenRef.current = true;
+    // 다른 select에서 이 select로 이동하는 경우
+    if (activeSelectRef && activeSelectRef !== currentSelect) {
+      // 이전 select의 blur 타임아웃 취소
+      const prevTimeout = blurTimeouts.get(activeSelectRef);
+      if (prevTimeout) {
+        clearTimeout(prevTimeout);
+        blurTimeouts.delete(activeSelectRef);
+      }
+    }
 
-      // 포커스 강제 설정
-      if (selectRef.current && document.activeElement !== selectRef.current) {
-        e.preventDefault();
+    // 현재 select의 blur 타임아웃도 취소
+    const currentTimeout = blurTimeouts.get(currentSelect);
+    if (currentTimeout) {
+      clearTimeout(currentTimeout);
+      blurTimeouts.delete(currentSelect);
+    }
+
+    // 현재 select를 활성화
+    activeSelectRef = currentSelect;
+
+    // iOS에서 select 드롭다운이 제대로 열리도록 포커스 설정
+    setTimeout(() => {
+      if (selectRef.current && !selectRef.current.disabled) {
         selectRef.current.focus();
       }
+    }, 50);
+  }, [isIOS]);
+
+  // change 이벤트 처리
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onChange(e);
+
+      // iOS에서 선택 후에도 포커스 유지
+      if (isIOS() && selectRef.current) {
+        setTimeout(() => {
+          selectRef.current?.focus();
+        }, 50);
+      }
     },
-    [isIOS]
+    [onChange, isIOS]
   );
 
-  // 마우스다운 이벤트 처리 (추가 보호)
-  const handleMouseDown = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_e: React.MouseEvent) => {
-      if (!isIOS()) return;
+  // 컴포넌트 언마운트 시 정리
+  useEffect(() => {
+    return () => {
+      if (selectRef.current) {
+        const timeout = blurTimeouts.get(selectRef.current);
+        if (timeout) {
+          clearTimeout(timeout);
+          blurTimeouts.delete(selectRef.current);
+        }
 
-      // select 클릭 시 blur 방지
-      preventBlurRef.current = true;
-      setTimeout(() => {
-        preventBlurRef.current = false;
-      }, 300);
-    },
-    [isIOS]
-  );
+        if (activeSelectRef === selectRef.current) {
+          activeSelectRef = null;
+        }
+      }
+    };
+  }, []);
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
@@ -173,10 +164,9 @@ const CustomSelect = ({
           ref={selectRef}
           value={value}
           onChange={handleChange}
-          onBlur={handleBlur}
           onFocus={handleFocus}
+          onBlur={handleBlur}
           onTouchStart={handleTouchStart}
-          onMouseDown={handleMouseDown}
           data-error={error}
           className={cn(
             "appearance-none text-sm border border-input px-3",
