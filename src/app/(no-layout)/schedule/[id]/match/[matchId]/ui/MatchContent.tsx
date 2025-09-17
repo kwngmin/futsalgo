@@ -291,7 +291,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
             teamId={data.match.homeTeam.id}
-            label="HOME"
+            label={
+              data.match.schedule.matchType === "SQUAD" ? "HOME" : "주최팀"
+            }
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
             <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
@@ -304,7 +306,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.awayTeam.logoUrl}
             name={data.match.awayTeam.name}
             teamId={data.match.awayTeam.id}
-            label="AWAY"
+            label={
+              data.match.schedule.matchType === "SQUAD" ? "AWAY" : "초청팀"
+            }
           />
         </div>
 
@@ -400,6 +404,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
               scheduleId={data.match.scheduleId}
               homeMercenaryCount={homeMercenaryCount}
               awayMercenaryCount={awayMercenaryCount}
+              matchType={data.match.schedule.matchType}
             />
           )}
 

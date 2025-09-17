@@ -12,6 +12,7 @@ import { useMemo } from "react";
 import { Switch } from "@/shared/components/ui/switch";
 import { SneakerMoveIcon, SoccerBallIcon } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { MatchType } from "@prisma/client";
 
 export const goalRecordSchema = z
   .object({
@@ -77,12 +78,14 @@ const GoalRecord = ({
   scheduleId,
   homeMercenaryCount,
   awayMercenaryCount,
+  matchType,
 }: {
   matchId: string;
   lineups: LineupsData | LineupsWithNameData;
   scheduleId: string;
   homeMercenaryCount?: number;
   awayMercenaryCount?: number;
+  matchType: MatchType;
 }) => {
   const queryClient = useQueryClient();
 
@@ -275,13 +278,13 @@ const GoalRecord = ({
             options={
               <>
                 <option value="">선택</option>
-                <optgroup label="HOME">
+                <optgroup label={matchType === "SQUAD" ? "HOME" : "주최팀"}>
                   {renderPlayerOptions(homeLineups)}
                   {homeMercenaryCount && homeMercenaryCount > 0 && (
                     <option value="mercenary_home_side">용병</option>
                   )}
                 </optgroup>
-                <optgroup label="AWAY">
+                <optgroup label={matchType === "SQUAD" ? "AWAY" : "초청팀"}>
                   {renderPlayerOptions(awayLineups)}
                   {awayMercenaryCount && awayMercenaryCount > 0 && (
                     <option value="mercenary_away_side">용병</option>
