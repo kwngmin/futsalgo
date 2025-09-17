@@ -1,7 +1,7 @@
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/lib/utils";
 import { ChevronDown } from "lucide-react";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 
 interface CustomSelectProps {
   label?: string;
@@ -19,6 +19,10 @@ interface CustomSelectProps {
   size?: "default" | "sm";
 }
 
+// 전역 상태로 현재 활성화된 select 관리
+let activeSelectRef: HTMLSelectElement | null = null;
+const blurTimeouts = new Map<HTMLSelectElement, NodeJS.Timeout>();
+
 const CustomSelect = ({
   label,
   value,
@@ -33,7 +37,6 @@ const CustomSelect = ({
   placeholder,
 }: CustomSelectProps) => {
   const selectRef = useRef<HTMLSelectElement>(null);
-  const blurTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // iOS 감지 함수
   const isIOS = useCallback(() => {
@@ -43,30 +46,108 @@ const CustomSelect = ({
     );
   }, []);
 
+  // 모든 blur 타임아웃 클리어
+  const clearAllBlurTimeouts = useCallback(() => {
+    blurTimeouts.forEach((timeout) => {
+      clearTimeout(timeout);
+    });
+    blurTimeouts.clear();
+  }, []);
+
   // focus 이벤트 처리
   const handleFocus = useCallback(() => {
-    if (!isIOS()) return;
+    if (!isIOS() || !selectRef.current) return;
 
-    // 이전 blur 타임아웃이 있다면 취소
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current);
-    }
+    // 모든 blur 타임아웃 취소
+    clearAllBlurTimeouts();
+
+    // 현재 select를 활성화된 것으로 설정
+    activeSelectRef = selectRef.current;
+  }, [isIOS, clearAllBlurTimeouts]);
+
+  // blur 이벤트 처리
+  const handleBlur = useCallback(() => {
+    if (!isIOS() || !selectRef.current) return;
+
+    const currentSelect = selectRef.current;
+
+    // 다른 select로 포커스가 이동하는 경우를 대비해 약간의 지연
+    const timeoutId = setTimeout(() => {
+      // 현재 활성화된 select가 이 select인 경우에만 null로 설정
+      if (activeSelectRef === currentSelect) {
+        activeSelectRef = null;
+      }
+      blurTimeouts.delete(currentSelect);
+    }, 150);
+
+    blurTimeouts.set(currentSelect, timeoutId);
   }, [isIOS]);
 
   // 터치 시작 이벤트 처리
   const handleTouchStart = useCallback(() => {
-    if (!isIOS()) return;
+    if (!isIOS() || !selectRef.current) return;
 
-    // 다른 셀렉트박스의 blur 타임아웃 취소
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current);
+    const currentSelect = selectRef.current;
+
+    // 다른 select에서 이 select로 이동하는 경우
+    if (activeSelectRef && activeSelectRef !== currentSelect) {
+      // 이전 select의 blur 타임아웃 취소
+      const prevTimeout = blurTimeouts.get(activeSelectRef);
+      if (prevTimeout) {
+        clearTimeout(prevTimeout);
+        blurTimeouts.delete(activeSelectRef);
+      }
     }
 
-    // 현재 요소에 포커스 강제 설정
+    // 현재 select의 blur 타임아웃도 취소
+    const currentTimeout = blurTimeouts.get(currentSelect);
+    if (currentTimeout) {
+      clearTimeout(currentTimeout);
+      blurTimeouts.delete(currentSelect);
+    }
+
+    // 현재 select를 활성화
+    activeSelectRef = currentSelect;
+
+    // iOS에서 select 드롭다운이 제대로 열리도록 포커스 설정
     setTimeout(() => {
-      selectRef.current?.focus();
-    }, 100);
+      if (selectRef.current && !selectRef.current.disabled) {
+        selectRef.current.focus();
+      }
+    }, 50);
   }, [isIOS]);
+
+  // change 이벤트 처리
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onChange(e);
+
+      // iOS에서 선택 후에도 포커스 유지
+      if (isIOS() && selectRef.current) {
+        setTimeout(() => {
+          selectRef.current?.focus();
+        }, 50);
+      }
+    },
+    [onChange, isIOS]
+  );
+
+  // 컴포넌트 언마운트 시 정리
+  useEffect(() => {
+    return () => {
+      if (selectRef.current) {
+        const timeout = blurTimeouts.get(selectRef.current);
+        if (timeout) {
+          clearTimeout(timeout);
+          blurTimeouts.delete(selectRef.current);
+        }
+
+        if (activeSelectRef === selectRef.current) {
+          activeSelectRef = null;
+        }
+      }
+    };
+  }, []);
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
@@ -82,8 +163,9 @@ const CustomSelect = ({
         <select
           ref={selectRef}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           onFocus={handleFocus}
+          onBlur={handleBlur}
           onTouchStart={handleTouchStart}
           data-error={error}
           className={cn(
