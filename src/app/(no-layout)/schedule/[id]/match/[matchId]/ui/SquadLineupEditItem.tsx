@@ -6,7 +6,7 @@ import { updateLineupSide, removeFromLineup } from "../actions/match-actions";
 import {
   CaretLeftIcon,
   CaretRightIcon,
-  ChairIcon,
+  // ChairIcon,
 } from "@phosphor-icons/react";
 import Image from "next/image";
 import { LogOut } from "lucide-react";
@@ -70,95 +70,64 @@ export const SquadLineupEditItem = ({
         {index + 1}
       </div>
       <div className="flex justify-between gap-2 grow">
-        <div className="grow flex flex-col justify-center">
-          <span className="text-sm font-semibold leading-tight">
-            {lineup.user.nickname}
-          </span>
-          {isMember && lineup.user.name && (
-            <span className="text-sm font-medium text-muted-foreground leading-tight">
-              {lineup.user.name}
-            </span>
+        <div className="flex items-center gap-2 grow">
+          {lineup.user.image ? (
+            <Image
+              src={lineup.user.image}
+              alt={lineup.user.nickname || lineup.user.name || ""}
+              width={36}
+              height={36}
+              className="hidden sm:block size-8 rounded-full object-cover ring ring-gray-200"
+            />
+          ) : (
+            <div className="hidden sm:block size-8 rounded-full bg-gray-200" />
           )}
+          <div className="grow flex flex-col justify-center">
+            <span className="text-sm font-semibold leading-tight">
+              {lineup.user.nickname}
+            </span>
+            {isMember && lineup.user.name && (
+              <span className="text-sm font-medium text-muted-foreground leading-tight">
+                {lineup.user.name}
+              </span>
+            )}
+          </div>
         </div>
         <div className="flex items-center justify-end gap-2">
-          <div className="grow grid grid-cols-3 gap-2 p-0.5 rounded-full bg-gray-100 group-hover:bg-white group-hover:ring group-hover:ring-gray-300 hover:ring-gray-400">
+          <div className="grow grid grid-cols-3 gap-1 p-1 rounded-full bg-gray-100 select-none group-hover:bg-white group-hover:ring group-hover:ring-gray-300">
             <button
               type="button"
               disabled={isLoading}
-              className={`text-sm rounded-full flex items-center justify-center transition-colors cursor-pointer tracking-tight disabled:opacity-50 disabled:cursor-not-allowed size-9 hover:bg-gray-100`}
+              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 px-3 border ${
+                lineup.side === "HOME"
+                  ? "bg-white border-gray-400 pointer-events-none cursor-default hover:border-gray-400 font-medium"
+                  : "border-transparent cursor-pointer hover:bg-gray-200"
+              }`}
               onClick={() => handleSideChange("HOME")}
             >
-              {/* 홈 */}
-              {lineup.side === "HOME" ? (
-                <div>
-                  {lineup.user.image ? (
-                    <Image
-                      src={lineup.user.image}
-                      alt={lineup.user.nickname || lineup.user.name || ""}
-                      width={36}
-                      height={36}
-                      className="size-8 rounded-full object-cover ring ring-gray-200"
-                    />
-                  ) : (
-                    <div className="size-8 rounded-full bg-gray-200" />
-                  )}
-                </div>
-              ) : (
-                <CaretLeftIcon className="size-4 text-gray-700" weight="fill" />
-              )}
+              HOME
             </button>
             <button
               type="button"
               disabled={isLoading}
-              className={`text-sm rounded-full flex items-center justify-center transition-colors cursor-pointer tracking-tight disabled:opacity-50 disabled:cursor-not-allowed size-9 hover:bg-gray-100`}
+              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors cursor-pointer tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 text-gray-600 hover:bg-gray-200`}
               onClick={() => handleSideChange("UNDECIDED")}
             >
-              {/* 휴식 */}
-              {lineup.side === "UNDECIDED" ? (
-                <div>
-                  {lineup.user.image ? (
-                    <Image
-                      src={lineup.user.image}
-                      alt={lineup.user.nickname || lineup.user.name || ""}
-                      width={36}
-                      height={36}
-                      className="size-8 rounded-full object-cover ring ring-gray-200"
-                    />
-                  ) : (
-                    <div className="size-8 rounded-full bg-gray-200" />
-                  )}
-                </div>
-              ) : (
-                <ChairIcon className="size-4 text-gray-700" weight="fill" />
-              )}
+              <CaretLeftIcon className="size-3 text-gray-400" weight="fill" />
+              선택
+              <CaretRightIcon className="size-3 text-gray-400" weight="fill" />
             </button>
             <button
               type="button"
               disabled={isLoading}
-              className={`text-sm rounded-full flex items-center justify-center transition-colors cursor-pointer tracking-tight disabled:opacity-50 disabled:cursor-not-allowed size-9 hover:bg-gray-100`}
+              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 px-3 border ${
+                lineup.side === "AWAY"
+                  ? "bg-white border-gray-400 pointer-events-none cursor-default hover:border-gray-400 font-medium"
+                  : "border-transparent cursor-pointer hover:bg-gray-200"
+              }`}
               onClick={() => handleSideChange("AWAY")}
             >
-              {/* 어웨이 */}
-              {lineup.side === "AWAY" ? (
-                <div>
-                  {lineup.user.image ? (
-                    <Image
-                      src={lineup.user.image}
-                      alt={lineup.user.nickname || lineup.user.name || ""}
-                      width={36}
-                      height={36}
-                      className="size-8 rounded-full object-cover ring ring-gray-200"
-                    />
-                  ) : (
-                    <div className="size-8 rounded-full bg-gray-200" />
-                  )}
-                </div>
-              ) : (
-                <CaretRightIcon
-                  className="size-4 text-gray-700"
-                  weight="fill"
-                />
-              )}
+              AWAY
             </button>
           </div>
           <button

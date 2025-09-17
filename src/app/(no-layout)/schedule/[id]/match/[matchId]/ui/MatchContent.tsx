@@ -533,7 +533,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 </div>
               )}
               {data.match.schedule.matchType === "SQUAD" &&
-                data.match.schedule.hostTeamMercenaryCount && (
+                data.match.schedule.hostTeamMercenaryCount !== 0 && (
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                     <div className="flex items-center gap-2 w-full">
                       <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2">

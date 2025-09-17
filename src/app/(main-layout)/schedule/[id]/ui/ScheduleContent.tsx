@@ -875,7 +875,7 @@ const ScheduleContent = ({
         <span className="text-center text-sm text-gray-500">
           만든 날:{" "}
           {data?.data?.schedule?.startTime
-            ? new Date(data?.data?.schedule?.startTime).toLocaleDateString(
+            ? new Date(data?.data?.schedule?.createdAt).toLocaleDateString(
                 "ko-KR",
                 {
                   year: "numeric",

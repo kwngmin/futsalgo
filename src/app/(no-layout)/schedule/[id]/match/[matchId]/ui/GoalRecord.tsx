@@ -4,7 +4,6 @@ import { LineupsData, LineupsWithNameData } from "@/entities/match/model/types";
 import { Button } from "@/shared/components/ui/button";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Label } from "@/shared/components/ui/label";
-// import { Checkbox } from "@/shared/components/ui/checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod/v4";
@@ -99,6 +98,7 @@ const GoalRecord = ({
       isOwnGoal: false,
       isScoredByMercenary: false,
       isAssistedByMercenary: false,
+      scorerSide: "HOME", // 기본값 설정
     },
   });
 
@@ -138,6 +138,12 @@ const GoalRecord = ({
     return "";
   }, [assistId, isAssistedByMercenary]);
 
+  // 자책골일 때 실제로 득점하는 팀 (상대팀)
+  const actualScoringTeam = useMemo(() => {
+    if (!isOwnGoal) return scorerSide;
+    return scorerSide === "HOME" ? "AWAY" : "HOME";
+  }, [isOwnGoal, scorerSide]);
+
   const handleScorerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
 
@@ -149,17 +155,20 @@ const GoalRecord = ({
       setValue("isScoredByMercenary", true);
       setValue("scorerId", "");
       setValue("scorerSide", "AWAY");
+    } else if (value === "") {
+      // 선택 해제
+      setValue("isScoredByMercenary", false);
+      setValue("scorerId", "");
+      setValue("isOwnGoal", false); // 자책골도 초기화
+      setValue("assistId", "");
+      setValue("isAssistedByMercenary", false);
     } else {
       setValue("isScoredByMercenary", false);
       setValue("scorerId", value);
 
-      if (value) {
-        const selectedLineup = lineups.find(
-          (lineup) => lineup.userId === value
-        );
-        if (selectedLineup) {
-          setValue("scorerSide", selectedLineup.side as "HOME" | "AWAY");
-        }
+      const selectedLineup = lineups.find((lineup) => lineup.userId === value);
+      if (selectedLineup) {
+        setValue("scorerSide", selectedLineup.side as "HOME" | "AWAY");
       }
     }
   };
@@ -177,20 +186,31 @@ const GoalRecord = ({
   };
 
   const handleOwnGoalChange = (checked: boolean | "indeterminate") => {
-    setValue("isOwnGoal", !!checked);
-    if (checked) {
+    const isChecked = !!checked;
+    setValue("isOwnGoal", isChecked);
+
+    if (isChecked) {
       // 자책골일 때 어시스트 관련 필드 초기화
       setValue("assistId", "");
       setValue("isAssistedByMercenary", false);
-      setValue("scorerSide", scorerSide === "HOME" ? "AWAY" : "HOME");
-    } else {
-      setValue("scorerSide", scorerSide);
     }
+    // scorerSide는 변경하지 않음 - 자책골을 넣은 선수의 팀은 그대로 유지
   };
 
   const onSubmit: SubmitHandler<GoalRecordFormData> = async (data) => {
     try {
-      await createGoalRecord(matchId, data);
+      // 서버로 전송할 때 자책골인 경우 실제 득점팀 정보를 함께 보낼 수 있도록
+      const submitData = {
+        ...data,
+        // 필요시 actualScoringTeam을 추가로 전송
+        actualScoringTeam: data.isOwnGoal
+          ? data.scorerSide === "HOME"
+            ? "AWAY"
+            : "HOME"
+          : data.scorerSide,
+      };
+
+      await createGoalRecord(matchId, submitData);
       alert("골이 기록되었습니다!");
       queryClient.invalidateQueries({
         queryKey: ["schedule", scheduleId],
@@ -215,16 +235,13 @@ const GoalRecord = ({
         </option>
       ));
 
-  console.log(watchValues.scorerId, "watchValues.scorerId");
-  console.log(
-    watchValues.isScoredByMercenary,
-    "watchValues.isScoredByMercenary"
-  );
-
-  console.log(
-    Boolean(watchValues.scorerId || watchValues.isScoredByMercenary),
-    "watchValues.scorerId || watchValues.isScoredByMercenary"
-  );
+  // 디버깅용 로그 제거 (프로덕션 환경에서는 제거 권장)
+  if (process.env.NODE_ENV === "development") {
+    console.log("scorerId:", scorerId);
+    console.log("isScoredByMercenary:", isScoredByMercenary);
+    console.log("scorerSide:", scorerSide);
+    console.log("isOwnGoal:", isOwnGoal);
+  }
 
   // 라인업 필터링
   const homeLineup = lineups.filter((lineup) => lineup.side === "HOME");
@@ -237,6 +254,8 @@ const GoalRecord = ({
       </div>
     );
   }
+
+  const hasScorer = Boolean(scorerId || isScoredByMercenary);
 
   return (
     <form
@@ -251,21 +270,20 @@ const GoalRecord = ({
         </div>
         <div className="space-y-3">
           <CustomSelect
-            // placeholder="선택"
             value={scorerSelectValue}
             onChange={handleScorerChange}
             options={
               <>
                 <option value="">선택</option>
-                <optgroup label={`HOME`}>
+                <optgroup label="HOME">
                   {renderPlayerOptions(homeLineups)}
-                  {homeMercenaryCount && (
+                  {homeMercenaryCount && homeMercenaryCount > 0 && (
                     <option value="mercenary_home_side">용병</option>
                   )}
                 </optgroup>
                 <optgroup label="AWAY">
                   {renderPlayerOptions(awayLineups)}
-                  {awayMercenaryCount && (
+                  {awayMercenaryCount && awayMercenaryCount > 0 && (
                     <option value="mercenary_away_side">용병</option>
                   )}
                 </optgroup>
@@ -274,7 +292,7 @@ const GoalRecord = ({
           />
 
           {/* 자책골 여부 */}
-          {Boolean(scorerId || isScoredByMercenary) && (
+          {hasScorer && (
             <div className="flex justify-between items-center space-x-2 h-11 bg-white rounded-md px-2">
               <div className="flex items-center gap-2 px-1">
                 <SoccerBallIcon
@@ -299,7 +317,7 @@ const GoalRecord = ({
       </div>
 
       {/* 어시스트 (자책골이 아닐 때만) */}
-      {!isOwnGoal && Boolean(scorerId || isScoredByMercenary) && (
+      {!isOwnGoal && hasScorer && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <SneakerMoveIcon className="size-5" weight="fill" />
@@ -307,13 +325,12 @@ const GoalRecord = ({
           </div>
           <div className="space-y-3">
             <CustomSelect
-              // value={watchValues.assistId || ""}
               value={assistSelectValue}
               onChange={handleAssistChange}
               options={
                 <>
                   <option value="">없음</option>
-                  {scorerSide === "HOME"
+                  {actualScoringTeam === "HOME"
                     ? renderPlayerOptions(homeLineups, scorerId)
                     : renderPlayerOptions(awayLineups, scorerId)}
                   <option value="mercenary_assist">용병</option>
@@ -326,32 +343,25 @@ const GoalRecord = ({
           )}
         </div>
       )}
-      {(watchValues.scorerId || watchValues.isScoredByMercenary) && (
+
+      {hasScorer && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center gap-2">
           <Button
             type="button"
-            disabled={
-              isSubmitting ||
-              !(watchValues.scorerId || watchValues.isScoredByMercenary)
-            }
+            disabled={isSubmitting}
             className="w-full font-medium tracking-tight disabled:opacity-50 disabled:pointer-events-none"
             size="lg"
             variant="secondary"
-            onClick={() => reset({})}
+            onClick={() => reset()}
           >
             취소
           </Button>
           <Button
             type="submit"
-            disabled={
-              isSubmitting ||
-              !(watchValues.scorerId || watchValues.isScoredByMercenary)
-            }
-            // type="button"
+            disabled={isSubmitting || !hasScorer}
             className="w-full font-bold bg-black text-white tracking-tight disabled:opacity-50 disabled:pointer-events-none"
             size="lg"
           >
-            {/* GOAL ! */}
             {isSubmitting ? "저장하는 중..." : "저장"}
           </Button>
         </div>
