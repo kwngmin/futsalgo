@@ -112,11 +112,16 @@ export async function shuffleLineupsAdvanced(matchId: string) {
             userId: true,
           },
         },
+        schedule: {
+          select: {
+            hostTeamMercenaryCount: true,
+          },
+        },
       },
     });
 
     if (!match) {
-      return { success: false, error: "매치를 찾을 수 없습니다" };
+      return { success: false, error: "경기를 찾을 수 없습니다" };
     }
 
     const lineups = match.lineups;
@@ -164,6 +169,65 @@ export async function shuffleLineupsAdvanced(matchId: string) {
 
     await prisma.$transaction(updatePromises);
 
+    // 5. 용병 분배 로직
+    const totalMercenaryCount = match.schedule.hostTeamMercenaryCount;
+    let homeMercenaryCount = 0;
+    let awayMercenaryCount = 0;
+
+    if (totalMercenaryCount > 0) {
+      const isLineupEven = lineups.length % 2 === 0;
+      const isMercenaryEven = totalMercenaryCount % 2 === 0;
+
+      if (isLineupEven) {
+        if (isMercenaryEven) {
+          // 라인업 짝수 & 용병 짝수: 반반 나누기
+          homeMercenaryCount = totalMercenaryCount / 2;
+          awayMercenaryCount = totalMercenaryCount / 2;
+        } else {
+          // 라인업 짝수 & 용병 홀수: 랜덤하게 한쪽에 더 많이
+          const extraMercenary = 1;
+          const baseMercenary = Math.floor(totalMercenaryCount / 2);
+          if (Math.random() < 0.5) {
+            homeMercenaryCount = baseMercenary + extraMercenary;
+            awayMercenaryCount = baseMercenary;
+          } else {
+            homeMercenaryCount = baseMercenary;
+            awayMercenaryCount = baseMercenary + extraMercenary;
+          }
+        }
+      } else {
+        // 라인업이 홀수인 경우
+        if (isMercenaryEven) {
+          // 라인업 홀수 & 용병 짝수: 반반 나누기
+          homeMercenaryCount = totalMercenaryCount / 2;
+          awayMercenaryCount = totalMercenaryCount / 2;
+        } else {
+          // 라인업 홀수 & 용병 홀수: 라인업이 적은 팀에 용병 더 많이
+          const baseMercenary = Math.floor(totalMercenaryCount / 2);
+          const extraMercenary = 1;
+
+          if (homeCount < awayCount) {
+            // HOME 팀 라인업이 적으면 HOME에 용병 더 많이
+            homeMercenaryCount = baseMercenary + extraMercenary;
+            awayMercenaryCount = baseMercenary;
+          } else {
+            // AWAY 팀 라인업이 적으면 AWAY에 용병 더 많이
+            homeMercenaryCount = baseMercenary;
+            awayMercenaryCount = baseMercenary + extraMercenary;
+          }
+        }
+      }
+    }
+
+    await prisma.match.update({
+      where: { id: matchId },
+      data: {
+        homeTeamMercenaryCount: homeMercenaryCount,
+        awayTeamMercenaryCount: awayMercenaryCount,
+        undecidedTeamMercenaryCount: 0,
+      },
+    });
+
     revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
 
     return {
@@ -172,6 +236,8 @@ export async function shuffleLineupsAdvanced(matchId: string) {
         totalPlayers,
         homeCount,
         awayCount,
+        homeMercenaryCount,
+        awayMercenaryCount,
         distribution: `HOME: ${homeCount}명, AWAY: ${awayCount}명`,
       },
     };

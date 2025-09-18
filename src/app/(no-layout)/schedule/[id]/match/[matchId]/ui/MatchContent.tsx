@@ -137,7 +137,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
   // 공통 에러 처리 함수
   const handleAsyncOperation = useCallback(
     async (
-      operation: () => Promise<{ success: boolean; error?: string }>,
+      operation: () => Promise<{
+        success: boolean;
+        error?: string;
+        data?: { homeMercenaryCount?: number; awayMercenaryCount?: number };
+      }>,
       successMessage?: string
     ) => {
       if (isLoading) return;
@@ -148,7 +152,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
         if (result?.success) {
           if (successMessage) alert(successMessage);
           invalidateMatchQueries();
-          return true;
+          return result;
         } else {
           console.error(result?.error);
           alert(result?.error || "작업에 실패했습니다.");
@@ -206,10 +210,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
       if (!confirmed) return;
     }
 
-    await handleAsyncOperation(
+    const result = await handleAsyncOperation(
       () => shuffleLineupsAdvanced(data.match.id),
       "랜덤 팀 나누기 완료"
     );
+    if (result && typeof result === "object" && "data" in result) {
+      setHomeMercenaryCount(result.data?.homeMercenaryCount ?? 0);
+      setAwayMercenaryCount(result.data?.awayMercenaryCount ?? 0);
+    }
   };
 
   // 명단 업데이트 핸들러
