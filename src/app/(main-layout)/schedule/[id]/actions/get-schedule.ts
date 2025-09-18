@@ -29,7 +29,15 @@ export async function getSchedule(scheduleId: string) {
         },
         attendances: true,
         matches: {
-          include: {
+          select: {
+            id: true,
+            homeScore: true,
+            awayScore: true,
+            homeTeamMercenaryCount: true,
+            awayTeamMercenaryCount: true,
+            lineups: {
+              select: { id: true, side: true, matchId: true, userId: true },
+            },
             goals: {
               include: {
                 scorer: true,

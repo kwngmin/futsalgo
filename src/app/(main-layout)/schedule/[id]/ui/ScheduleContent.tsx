@@ -47,6 +47,7 @@ import { updateAttendanceStatus } from "../actions/update-attendance-status";
 import { Separator } from "@/shared/components/ui/separator";
 import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
+import { getMatchLineupCount } from "../lib/summary-versus";
 
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
@@ -636,15 +637,18 @@ const ScheduleContent = ({
                           className="size-5 text-gray-800"
                         />
                         <span className="font-medium">{index + 1}경기</span>
-                        {/* <Separator
+                        <Separator
                           orientation="vertical"
                           className="!h-4 !w-px bg-gray-300"
-                        /> */}
-                        {/* <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-14 px-2 text-center flex items-center justify-center h-7">
-                          {match.homeScore} - {match.awayScore}
-                        </span> */}
+                        />
+                        <span className="tracking-tight text-gray-600">
+                          {getMatchLineupCount(match)}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1 font-medium">
+                        <span className="hidden sm:inline px-2 text-sm tracking-tight text-gray-400">
+                          스코어
+                        </span>
                         <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-14 px-2 text-center flex items-center justify-center h-7">
                           {match.homeScore} - {match.awayScore}
                         </span>
