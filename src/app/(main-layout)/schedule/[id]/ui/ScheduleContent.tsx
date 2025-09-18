@@ -48,23 +48,6 @@ import { Separator } from "@/shared/components/ui/separator";
 import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
 
-// function isSameDayOrPast(
-//   targetDate: Date,
-//   compareDate: Date = new Date()
-// ): boolean {
-//   const target = new Date(
-//     targetDate.getFullYear(),
-//     targetDate.getMonth(),
-//     targetDate.getDate()
-//   );
-//   const compare = new Date(
-//     compareDate.getFullYear(),
-//     compareDate.getMonth(),
-//     compareDate.getDate()
-//   );
-//   return target <= compare;
-// }
-
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
  * @param start 시작 시간 (Date 객체)
@@ -647,26 +630,36 @@ const ScheduleContent = ({
                         );
                       }}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 shrink-0">
                         <SoccerBallIcon
                           weight="fill"
                           className="size-5 text-gray-800"
                         />
                         <span className="font-medium">{index + 1}경기</span>
-                        <Separator
+                        {/* <Separator
                           orientation="vertical"
                           className="!h-4 !w-px bg-gray-300"
-                        />
-                        <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-12 px-1 text-center">
+                        /> */}
+                        {/* <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-14 px-2 text-center flex items-center justify-center h-7">
                           {match.homeScore} - {match.awayScore}
-                        </span>
+                        </span> */}
                       </div>
                       <div className="flex items-center gap-1 font-medium">
-                        <span className="text-sm">
-                          {/* {match.goals[0].scorer?.nickname || "용병"} */}
-                          {/* 여기에 골 넣은 사람 이름 표시 */}
+                        <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-14 px-2 text-center flex items-center justify-center h-7">
+                          {match.homeScore} - {match.awayScore}
                         </span>
-                        <ChevronRight className="size-5 text-gray-400" />
+                        {/* <span className="text-sm text-gray-600 max-w-32 truncate">
+                          {match.homeScore > match.awayScore
+                            ? data.data.schedule.matchType === "SQUAD"
+                              ? "HOME 승리"
+                              : "주최팀 승리"
+                            : match.homeScore < match.awayScore
+                            ? data.data.schedule.matchType === "SQUAD"
+                              ? "AWAY 승리"
+                              : "초청팀 승리"
+                            : "무승부"}
+                        </span> */}
+                        <ChevronRight className="size-5 text-gray-400 shrink-0" />
                       </div>
                     </div>
                   </div>
