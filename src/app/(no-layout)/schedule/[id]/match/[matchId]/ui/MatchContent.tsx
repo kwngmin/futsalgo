@@ -385,22 +385,38 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {/* 골 기록 */}
         {goalsWithScore.length > 0 && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-13 border-b border-gray-300">
-              <div className="flex items-center gap-2">
-                <ClockCounterClockwiseIcon
-                  className="size-7 text-stone-500"
-                  weight="fill"
-                />
-                <h2 className="text-lg font-semibold">득점기록</h2>
+            {data.permissions.isEditable && (
+              <div className="flex justify-between items-center py-2 min-h-13 border-b border-gray-200">
+                <div className="flex items-center gap-2">
+                  <ClockCounterClockwiseIcon
+                    className="size-7 text-stone-500"
+                    weight="fill"
+                  />
+                  <h2 className="text-lg font-semibold">득점기록</h2>
+                </div>
+                <button
+                  type="button"
+                  className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all border ${
+                    mode !== "view"
+                      ? "bg-gray-800 text-white hover:bg-gray-600 border-transparent"
+                      : "text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border-gray-300 hover:border-gray-400"
+                  }`}
+                  // onClick={() =>
+                  //   mode !== "view" ? setMode("view") : setMode("edit")
+                  // }
+                >
+                  수정
+                  {/* {mode !== "view" ? "완료" : "수정"} */}
+                </button>
               </div>
-            </div>
+            )}
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
-                className="px-2 flex items-center border-b border-gray-200 relative"
+                className="px-2 flex items-center border-b border-gray-100 relative hover:bg-gray-50 transition-colors select-none"
               >
                 {/* 순서 */}
-                <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0">
+                <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0 sm:left-4">
                   {index + 1}
                 </div>
 
@@ -415,7 +431,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 {data.permissions.isEditable && (
                   <button
                     type="button"
-                    className="absolute right-0 text-sm font-medium size-9 sm:size-8 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur z-10"
+                    className="absolute right-0 sm:right-4 text-sm font-medium size-9 sm:size-8 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur z-10"
                     disabled={isLoading}
                     onClick={() => handleDeleteGoal(goal.id)}
                   >
@@ -424,17 +440,17 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 )}
               </div>
             ))}
-            <div className="flex items-center justify-center h-9 rounded-sm">
+            <div className="flex items-center h-14 rounded-sm select-none">
               <div className="flex items-center gap-1 rounded-full px-2 h-6">
                 <SoccerBallIcon
-                  className="size-4 text-gray-800"
+                  className="size-4 text-gray-400"
                   weight="fill"
                 />
                 <span className="text-sm font-medium text-gray-700">골</span>
               </div>
               <div className="flex items-center gap-1 rounded-full px-2 h-6">
                 <SneakerMoveIcon
-                  className="size-4 text-gray-800"
+                  className="size-4 text-gray-400"
                   weight="fill"
                 />
                 <span className="text-sm font-medium text-gray-700">
@@ -443,10 +459,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
               </div>
               <div className="flex items-center gap-1 rounded-full px-2 h-6">
                 <SoccerBallIcon
-                  className="size-4 text-destructive"
+                  className="size-4 text-destructive/50"
                   weight="fill"
                 />
-                <span className="text-sm font-medium text-destructive">
+                <span className="text-sm font-medium text-destructive/80">
                   자책골
                 </span>
               </div>
