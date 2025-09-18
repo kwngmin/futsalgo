@@ -636,12 +636,14 @@ const ScheduleContent = ({
                           weight="fill"
                           className="size-5 text-gray-800"
                         />
-                        <span className="font-medium">{index + 1}경기</span>
+                        <span className="font-medium min-w-10">
+                          {index + 1}경기
+                        </span>
                         <Separator
                           orientation="vertical"
                           className="!h-4 !w-px bg-gray-300"
                         />
-                        <span className="tracking-tight text-gray-600">
+                        <span className="tracking-tight text-slate-500 min-w-11 text-center">
                           {getMatchLineupCount(match)}
                         </span>
                       </div>
