@@ -441,28 +441,29 @@ const MatchContent = ({ data }: MatchContentProps) => {
               </div>
             ))}
             <div className="flex items-center h-14 rounded-sm select-none">
+              <div className="text-sm text-gray-500 h-5 flex items-center border-l-2 border-gray-300 mr-2" />
               <div className="flex items-center gap-1 rounded-full px-2 h-6">
                 <SoccerBallIcon
-                  className="size-4 text-gray-400"
+                  className="size-4 text-gray-600"
                   weight="fill"
                 />
-                <span className="text-sm font-medium text-gray-700">골</span>
+                <span className="text-sm font-medium text-gray-800">골</span>
               </div>
               <div className="flex items-center gap-1 rounded-full px-2 h-6">
                 <SneakerMoveIcon
-                  className="size-4 text-gray-400"
+                  className="size-4 text-gray-600"
                   weight="fill"
                 />
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-800">
                   어시스트
                 </span>
               </div>
               <div className="flex items-center gap-1 rounded-full px-2 h-6">
                 <SoccerBallIcon
-                  className="size-4 text-destructive/50"
+                  className="size-4 text-destructive/80"
                   weight="fill"
                 />
-                <span className="text-sm font-medium text-destructive/80">
+                <span className="text-sm font-medium text-destructive">
                   자책골
                 </span>
               </div>
