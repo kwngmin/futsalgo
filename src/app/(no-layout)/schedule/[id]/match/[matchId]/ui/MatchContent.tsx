@@ -509,7 +509,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {data.permissions.isEditable &&
           new Date(
             `${data.match.schedule.date} ${data.match.schedule.startTime}`
-          ) <= new Date() && (
+          ) <= new Date() &&
+          homeLineup.length > 0 &&
+          awayLineup.length > 0 && (
             <GoalRecord
               matchId={data.match.id}
               lineups={data.lineups}
