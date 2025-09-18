@@ -312,30 +312,36 @@ export async function updateMercenaryCount(
       return { success: false, error: "매치를 찾을 수 없습니다" };
     }
 
-    if (match.schedule.matchType !== MatchType.SQUAD) {
-      return { success: false, error: "자체전이 아닙니다" };
+    if (match.schedule.matchType === MatchType.SQUAD) {
+      // 총 용병 수 계산 (homeCount + awayCount)
+      const totalMercenaryCount = homeCount + awayCount;
+
+      // undecided 용병 수 계산 (총 용병 수에서 배정된 용병 수를 뺀 값)
+      const undecidedCount = Math.max(
+        0,
+        match.undecidedTeamMercenaryCount -
+          (totalMercenaryCount -
+            match.homeTeamMercenaryCount -
+            match.awayTeamMercenaryCount)
+      );
+
+      await prisma.match.update({
+        where: { id: matchId },
+        data: {
+          homeTeamMercenaryCount: homeCount,
+          awayTeamMercenaryCount: awayCount,
+          undecidedTeamMercenaryCount: undecidedCount,
+        },
+      });
+    } else {
+      await prisma.match.update({
+        where: { id: matchId },
+        data: {
+          homeTeamMercenaryCount: homeCount,
+          awayTeamMercenaryCount: awayCount,
+        },
+      });
     }
-
-    // 총 용병 수 계산 (homeCount + awayCount)
-    const totalMercenaryCount = homeCount + awayCount;
-
-    // undecided 용병 수 계산 (총 용병 수에서 배정된 용병 수를 뺀 값)
-    const undecidedCount = Math.max(
-      0,
-      match.undecidedTeamMercenaryCount -
-        (totalMercenaryCount -
-          match.homeTeamMercenaryCount -
-          match.awayTeamMercenaryCount)
-    );
-
-    await prisma.match.update({
-      where: { id: matchId },
-      data: {
-        homeTeamMercenaryCount: homeCount,
-        awayTeamMercenaryCount: awayCount,
-        undecidedTeamMercenaryCount: undecidedCount,
-      },
-    });
 
     revalidatePath(`/schedule/${match.schedule.id}/match/${matchId}`);
     return { success: true };

@@ -82,6 +82,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
   const mercenaryCalculation = useMemo(() => {
     if (!data) return { homeMax: 0, awayMax: 0, undecidedCount: 0 };
 
+    if (data.match.schedule.matchType === "TEAM") {
+      return {
+        homeMax: data.match.schedule.hostTeamMercenaryCount,
+        awayMax: data.match.schedule.invitedTeamMercenaryCount || 0,
+        undecidedCount: 0,
+      };
+    }
+
     const totalMercenaryCount =
       data.match.homeTeamMercenaryCount +
       data.match.awayTeamMercenaryCount +
@@ -592,67 +600,70 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </div>
                 </div>
               )}
-              {data.match.schedule.matchType === "SQUAD" &&
-                data.match.schedule.hostTeamMercenaryCount !== 0 && (
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <div className="flex items-center gap-2 w-full">
-                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2 min-w-32">
-                        <span className="font-medium text-gray-800">용병</span>
-                        <Separator orientation="vertical" className="!h-5" />
-                        <span className="text-sm text-gray-500">HOME</span>
-                      </div>
-                      <CustomSelect
-                        size="sm"
-                        className="w-full"
-                        value={homeMercenaryCount.toString()}
-                        disabled={
-                          isLoading || mercenaryCalculation.homeMax + 1 === 1
-                        }
-                        onChange={async (e) => {
-                          const newCount = parseInt(e.target.value);
-                          await handleMercenaryUpdate("home", newCount);
-                        }}
-                        options={Array.from(
-                          { length: mercenaryCalculation.homeMax + 1 },
-                          (_, index) => (
-                            <option key={index} value={index}>
-                              {index}명
-                            </option>
-                          )
-                        )}
-                      />
+              {((data.match.schedule.matchType === "SQUAD" &&
+                data.match.schedule.hostTeamMercenaryCount !== 0) ||
+                (data.match.schedule.matchType === "TEAM" &&
+                  (data.match.schedule.hostTeamMercenaryCount !== 0 ||
+                    data.match.schedule.invitedTeamMercenaryCount !== 0))) && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                  <div className="flex items-center gap-2 w-full">
+                    <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2 min-w-32">
+                      <span className="font-medium text-gray-800">용병</span>
+                      <Separator orientation="vertical" className="!h-5" />
+                      <span className="text-sm text-gray-500">HOME</span>
                     </div>
-                    <div className="hidden sm:block w-px border-l border-gray-200 h-8" />
-                    <div className="sm:hidden w-full border-b border-gray-200" />
-                    <div className="flex items-center gap-2 w-full">
-                      <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2 min-w-32">
-                        <span className="font-medium text-gray-800">용병</span>
-                        <Separator orientation="vertical" className="!h-5" />
-                        <span className="text-sm text-gray-500">AWAY</span>
-                      </div>
-                      <CustomSelect
-                        size="sm"
-                        className="w-full"
-                        value={awayMercenaryCount.toString()}
-                        disabled={
-                          isLoading || mercenaryCalculation.awayMax + 1 === 1
-                        }
-                        onChange={async (e) => {
-                          const newCount = parseInt(e.target.value);
-                          await handleMercenaryUpdate("away", newCount);
-                        }}
-                        options={Array.from(
-                          { length: mercenaryCalculation.awayMax + 1 },
-                          (_, index) => (
-                            <option key={index} value={index}>
-                              {index}명
-                            </option>
-                          )
-                        )}
-                      />
-                    </div>
+                    <CustomSelect
+                      size="sm"
+                      className="w-full"
+                      value={homeMercenaryCount.toString()}
+                      disabled={
+                        isLoading || mercenaryCalculation.homeMax + 1 === 1
+                      }
+                      onChange={async (e) => {
+                        const newCount = parseInt(e.target.value);
+                        await handleMercenaryUpdate("home", newCount);
+                      }}
+                      options={Array.from(
+                        { length: mercenaryCalculation.homeMax + 1 },
+                        (_, index) => (
+                          <option key={index} value={index}>
+                            {index}명
+                          </option>
+                        )
+                      )}
+                    />
                   </div>
-                )}
+                  <div className="hidden sm:block w-px border-l border-gray-200 h-8" />
+                  <div className="sm:hidden w-full border-b border-gray-200" />
+                  <div className="flex items-center gap-2 w-full">
+                    <div className="flex items-center h-12 sm:h-11 shrink-0 px-3.5 sm:px-4 *:leading-tight gap-2 min-w-32">
+                      <span className="font-medium text-gray-800">용병</span>
+                      <Separator orientation="vertical" className="!h-5" />
+                      <span className="text-sm text-gray-500">AWAY</span>
+                    </div>
+                    <CustomSelect
+                      size="sm"
+                      className="w-full"
+                      value={awayMercenaryCount.toString()}
+                      disabled={
+                        isLoading || mercenaryCalculation.awayMax + 1 === 1
+                      }
+                      onChange={async (e) => {
+                        const newCount = parseInt(e.target.value);
+                        await handleMercenaryUpdate("away", newCount);
+                      }}
+                      options={Array.from(
+                        { length: mercenaryCalculation.awayMax + 1 },
+                        (_, index) => (
+                          <option key={index} value={index}>
+                            {index}명
+                          </option>
+                        )
+                      )}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
           {goalsWithScore.length > 0 && data.permissions.isEditable && (
