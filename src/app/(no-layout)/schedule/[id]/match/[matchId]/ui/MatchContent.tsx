@@ -20,7 +20,7 @@ import {
   resetLineups, // 새로운 액션 함수
 } from "../actions/match-actions";
 import {
-  ClockCounterClockwiseIcon,
+  // ClockCounterClockwiseIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
   UsersIcon,
@@ -356,7 +356,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
       {/* 콘텐트 영역 */}
       <div className="space-y-3">
         {/* 팀 정보 및 점수 */}
-        <div className="relative grid grid-cols-2 px-4 pt-6 pb-3 sm:pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
+        <div className="relative grid grid-cols-2 p-4 sm:pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
           <TeamSide
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
@@ -385,7 +385,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {/* 골 기록 */}
         {goalsWithScore.length > 0 && (
           <div className="px-4">
-            {data.permissions.isEditable && (
+            {/* {data.permissions.isEditable && (
               <div className="flex justify-between items-center py-2 min-h-13 border-b border-gray-200">
                 <div className="flex items-center gap-2">
                   <ClockCounterClockwiseIcon
@@ -401,19 +401,15 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       ? "bg-gray-800 text-white hover:bg-gray-600 border-transparent"
                       : "text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border-gray-300 hover:border-gray-400"
                   }`}
-                  // onClick={() =>
-                  //   mode !== "view" ? setMode("view") : setMode("edit")
-                  // }
                 >
                   수정
-                  {/* {mode !== "view" ? "완료" : "수정"} */}
                 </button>
               </div>
-            )}
+            )} */}
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
-                className="px-2 flex items-center border-b border-gray-100 relative hover:bg-gray-50 transition-colors select-none"
+                className="px-2 flex items-center border-t first:border-t-0 border-gray-100 relative hover:bg-gray-50 transition-colors select-none"
               >
                 {/* 순서 */}
                 <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0 sm:left-4">
@@ -440,33 +436,39 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 )}
               </div>
             ))}
-            <div className="flex items-center h-14 rounded-sm select-none">
-              <div className="text-sm text-gray-500 h-5 flex items-center border-l-2 border-gray-300 mr-2" />
-              <div className="flex items-center gap-1 rounded-full px-2 h-6">
-                <SoccerBallIcon
-                  className="size-4 text-gray-600"
-                  weight="fill"
-                />
-                <span className="text-sm font-medium text-gray-800">골</span>
+
+            <div className="flex items-center justify-center px-2 h-16 select-none mt-2">
+              <div className="text-sm text-gray-500 h-5 flex items-center border-l-2 border-gray-200" />
+              <div className="grow border-t border-gray-200" />
+              <div className="flex items-center px-2 gap-1.5">
+                <div className="flex items-center gap-1 rounded-full pl-2 pr-2.5 h-7">
+                  <SoccerBallIcon
+                    className="size-3.5 text-gray-600"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium text-gray-800">골</span>
+                </div>
+                <div className="flex items-center gap-1 rounded-full pl-2 pr-2.5 h-7">
+                  <SneakerMoveIcon
+                    className="size-3.5 text-gray-600"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium text-gray-800">
+                    어시스트
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 rounded-full pl-2 pr-2.5 h-7">
+                  <SoccerBallIcon
+                    className="size-3.5 text-destructive/80"
+                    weight="fill"
+                  />
+                  <span className="text-xs font-medium text-destructive">
+                    자책골
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1 rounded-full px-2 h-6">
-                <SneakerMoveIcon
-                  className="size-4 text-gray-600"
-                  weight="fill"
-                />
-                <span className="text-sm font-medium text-gray-800">
-                  어시스트
-                </span>
-              </div>
-              <div className="flex items-center gap-1 rounded-full px-2 h-6">
-                <SoccerBallIcon
-                  className="size-4 text-destructive/80"
-                  weight="fill"
-                />
-                <span className="text-sm font-medium text-destructive">
-                  자책골
-                </span>
-              </div>
+              <div className="grow border-t border-gray-200" />
+              <div className="text-sm text-gray-500 h-5 flex items-center border-l-2 border-gray-200" />
             </div>
           </div>
         )}

@@ -23,6 +23,7 @@ const TeamSide = ({
         }
       }}
     >
+      {label && <span className="text-sm text-gray-600">{label}</span>}
       <div>
         {logoUrl ? (
           <Image src={logoUrl} alt="home team logo" width={64} height={64} />
@@ -42,7 +43,7 @@ const TeamSide = ({
         >
           {name || "팀 이름 없음"}
         </span>
-        {label && <span className="text-sm text-gray-600">{label}</span>}
+        {/* {label && <span className="text-sm text-gray-600">{label}</span>} */}
       </div>
     </div>
   );
