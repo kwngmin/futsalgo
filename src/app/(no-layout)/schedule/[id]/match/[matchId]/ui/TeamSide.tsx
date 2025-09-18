@@ -33,18 +33,15 @@ const TeamSide = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col items-center">
-        <span
-          className={`text-base tracking-tight font-semibold ${
-            teamId
-              ? "group-hover:underline underline-offset-4 cursor-pointer"
-              : ""
-          }`}
-        >
-          {name || "팀 이름 없음"}
-        </span>
-        {/* {label && <span className="text-sm text-gray-600">{label}</span>} */}
-      </div>
+      <span
+        className={`text-base tracking-tight font-semibold ${
+          teamId
+            ? "group-hover:underline underline-offset-4 cursor-pointer"
+            : ""
+        }`}
+      >
+        {name || "팀 이름 없음"}
+      </span>
     </div>
   );
 };

@@ -29,30 +29,35 @@ const MatchPage = () => {
   if (isLoading) {
     return (
       <div className="max-w-2xl mx-auto pb-16">
-        <div className="flex items-center justify-between px-4 h-16">
-          <div className="h-8 w-20 bg-neutral-200 animate-pulse rounded" />
+        <div className="flex items-center justify-between px-4 h-16 shrink-0">
+          <div className="flex gap-2 items-center">
+            <div className="h-8 w-20 bg-neutral-200 animate-pulse rounded" />
+            <div className="size-10 bg-neutral-200 animate-pulse rounded-full" />
+            <div className="size-10 bg-neutral-200 animate-pulse rounded-full" />
+          </div>
           <div className="size-10 bg-neutral-200 animate-pulse rounded-full" />
         </div>
 
         {/* 팀 정보 스켈레톤 */}
-        <div className="px-4 pt-6 pb-3 sm:pb-6">
-          <div className="grid grid-cols-2 gap-8">
-            <div className="flex flex-col items-center gap-2">
-              <div className="size-16 bg-neutral-200 animate-pulse rounded-lg" />
-              <div className="h-6 w-24 bg-neutral-200 animate-pulse rounded" />
+        <div className="relative grid grid-cols-2 p-4 sm:pb-6 gap-8 bg-gradient-to-b from-slate-100 to-white sm:to-slate-50 sm:mx-4 sm:rounded-md">
+          <div className="grow flex flex-col items-center gap-2 min-w-28 group select-none">
+            <div className="h-4 w-12 bg-neutral-200 animate-pulse rounded" />
+            <div>
+              <div className="size-16 rounded-full bg-gradient-to-br from-slate-300 to-gray-100 flex items-center justify-center text-[1.625rem] text-slate-700" />
             </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className="size-16 bg-neutral-200 animate-pulse rounded-lg" />
-              <div className="h-6 w-24 bg-neutral-200 animate-pulse rounded" />
-            </div>
+            <div className="w-24 h-5 bg-neutral-200 animate-pulse rounded" />
           </div>
-          <div className="text-center mt-4">
-            <div className="h-12 w-20 bg-neutral-200 animate-pulse rounded mx-auto" />
+          <div className="grow flex flex-col items-center gap-2 min-w-28 group select-none">
+            <div className="h-4 w-12 bg-neutral-200 animate-pulse rounded" />
+            <div>
+              <div className="size-16 rounded-full bg-gradient-to-br from-slate-300 to-gray-100 flex items-center justify-center text-[1.625rem] text-slate-700" />
+            </div>
+            <div className="w-24 h-5 bg-neutral-200 animate-pulse rounded" />
           </div>
         </div>
 
         {/* 라인업 스켈레톤 */}
-        <div className="px-4 space-y-3">
+        <div className="px-4 space-y-3 mt-4">
           <div className="h-6 w-32 bg-neutral-200 animate-pulse rounded" />
           <div className="grid grid-cols-2 gap-2">
             {Array.from({ length: 8 }).map((_, index) => (

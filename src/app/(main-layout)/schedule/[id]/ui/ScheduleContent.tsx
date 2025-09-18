@@ -647,26 +647,19 @@ const ScheduleContent = ({
                           {getMatchLineupCount(match)}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1 font-medium">
-                        <span className="hidden sm:inline px-2 text-sm tracking-tight text-gray-400">
-                          스코어
-                        </span>
-                        <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-14 px-2 text-center flex items-center justify-center h-7">
-                          {match.homeScore} - {match.awayScore}
-                        </span>
-                        {/* <span className="text-sm text-gray-600 max-w-32 truncate">
-                          {match.homeScore > match.awayScore
-                            ? data.data.schedule.matchType === "SQUAD"
-                              ? "HOME 승리"
-                              : "주최팀 승리"
-                            : match.homeScore < match.awayScore
-                            ? data.data.schedule.matchType === "SQUAD"
-                              ? "AWAY 승리"
-                              : "초청팀 승리"
-                            : "무승부"}
-                        </span> */}
+                      {match.isLinedUp ? (
+                        <div className="flex items-center gap-1 font-medium">
+                          <span className="hidden sm:inline px-2 text-sm tracking-tight text-gray-400">
+                            스코어
+                          </span>
+                          <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-14 px-2 text-center flex items-center justify-center h-7">
+                            {match.homeScore} - {match.awayScore}
+                          </span>
+                          <ChevronRight className="size-5 text-gray-400 shrink-0" />
+                        </div>
+                      ) : (
                         <ChevronRight className="size-5 text-gray-400 shrink-0" />
-                      </div>
+                      )}
                     </div>
                   </div>
                 ))}
