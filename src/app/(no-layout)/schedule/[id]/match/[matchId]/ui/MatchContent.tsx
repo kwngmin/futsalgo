@@ -1,6 +1,6 @@
 "use client";
 
-import { Dices, Info, Minus, RefreshCcw, X } from "lucide-react";
+import { Info, Minus, Power, RotateCw, Shuffle, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -318,7 +318,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
         {/* 골 기록 */}
         {goalsWithScore.length > 0 && (
           <div className="px-4">
-            <div className="flex justify-between items-center py-2 min-h-13">
+            <div className="flex justify-between items-center py-2 min-h-13 border-b border-gray-300">
               <div className="flex items-center gap-2">
                 <ClockCounterClockwiseIcon
                   className="size-7 text-stone-500"
@@ -326,38 +326,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 />
                 <h2 className="text-lg font-semibold">득점기록</h2>
               </div>
-              <div className="flex items-center justify-center">
-                <div className="flex items-center gap-1 rounded-full px-2 h-6">
-                  <SoccerBallIcon
-                    className="size-4 text-gray-800"
-                    weight="fill"
-                  />
-                  <span className="text-sm font-medium text-gray-700">골</span>
-                </div>
-                <div className="flex items-center gap-1 rounded-full px-2 h-6">
-                  <SneakerMoveIcon
-                    className="size-4 text-gray-800"
-                    weight="fill"
-                  />
-                  <span className="text-sm font-medium text-gray-700">
-                    어시스트
-                  </span>
-                </div>
-                <div className="flex items-center gap-1 rounded-full px-2 h-6">
-                  <SoccerBallIcon
-                    className="size-4 text-destructive"
-                    weight="fill"
-                  />
-                  <span className="text-sm font-medium text-destructive">
-                    자책골
-                  </span>
-                </div>
-              </div>
             </div>
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
-                className="px-2 flex items-center border-t border-gray-100 relative"
+                className="px-2 flex items-center border-b border-gray-200 relative"
               >
                 {/* 순서 */}
                 <div className="text-sm size-9 sm:size-8 flex items-center text-zinc-500/50 shrink-0 absolute left-0">
@@ -400,6 +373,33 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 )}
               </div>
             ))}
+            <div className="flex items-center justify-center h-9 rounded-sm">
+              <div className="flex items-center gap-1 rounded-full px-2 h-6">
+                <SoccerBallIcon
+                  className="size-4 text-gray-800"
+                  weight="fill"
+                />
+                <span className="text-sm font-medium text-gray-700">골</span>
+              </div>
+              <div className="flex items-center gap-1 rounded-full px-2 h-6">
+                <SneakerMoveIcon
+                  className="size-4 text-gray-800"
+                  weight="fill"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  어시스트
+                </span>
+              </div>
+              <div className="flex items-center gap-1 rounded-full px-2 h-6">
+                <SoccerBallIcon
+                  className="size-4 text-destructive"
+                  weight="fill"
+                />
+                <span className="text-sm font-medium text-destructive">
+                  자책골
+                </span>
+              </div>
+            </div>
           </div>
         )}
 
@@ -474,30 +474,37 @@ const MatchContent = ({ data }: MatchContentProps) => {
           ) : (
             <div className="space-y-3">
               {data.match.schedule.matchType === "SQUAD" ? (
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-md px-3 w-full flex items-center h-11 sm:h-10 gap-2 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
-                      <RefreshCcw className="size-5 text-gray-400" />
-                      <span className="text-base font-medium">
-                        명단 업데이트
-                      </span>
+                      <RotateCw
+                        className="size-5 text-gray-400"
+                        // weight="bold"
+                      />
+                      <span className="text-base font-medium">새로고침</span>
                     </div>
                   </button>
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-md px-3 w-full flex items-center h-11 sm:h-10 gap-2 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleShuffleLineups}
                   >
-                    <Dices className="size-5 text-gray-400" />
-                    <span className="text-base font-medium">
-                      랜덤 팀 나누기
-                    </span>
+                    <Shuffle className="size-5 text-gray-400" />
+                    <span className="text-base font-medium">랜덤 팀</span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isLoading}
+                    className="rounded-md px-3 w-full flex items-center h-11 sm:h-10 gap-2 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Power className="size-5 text-gray-400" />
+                    <span className="text-base font-medium">초기화</span>
                   </button>
                 </div>
               ) : (
@@ -505,14 +512,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   <button
                     type="button"
                     disabled={isLoading}
-                    className="rounded-md px-3 w-full flex items-center justify-between h-12 sm:h-11 gap-3 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-md px-3 w-full flex items-center h-11 sm:h-10 gap-2 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
-                      <RefreshCcw className="size-5 text-gray-400" />
-                      <span className="text-base font-medium">
-                        명단 업데이트
-                      </span>
+                      <RotateCw className="size-5 text-gray-400" />
+                      <span className="text-base font-medium">새로고침</span>
                     </div>
                   </button>
                 </div>
@@ -565,7 +570,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         size="sm"
                         className="w-full"
                         value={homeMercenaryCount.toString()}
-                        disabled={isLoading}
+                        disabled={
+                          isLoading || mercenaryCalculation.homeMax + 1 === 1
+                        }
                         onChange={async (e) => {
                           const newCount = parseInt(e.target.value);
                           await handleMercenaryUpdate("home", newCount);
@@ -592,7 +599,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         size="sm"
                         className="w-full"
                         value={awayMercenaryCount.toString()}
-                        disabled={isLoading}
+                        disabled={
+                          isLoading || mercenaryCalculation.awayMax + 1 === 1
+                        }
                         onChange={async (e) => {
                           const newCount = parseInt(e.target.value);
                           await handleMercenaryUpdate("away", newCount);
@@ -612,7 +621,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             </div>
           )}
           {goalsWithScore.length > 0 && data.permissions.isEditable && (
-            <div className="h-8 mb-2 flex items-center gap-2 px-3 mt-2 bg-amber-500/10 rounded-md border border-amber-100">
+            <div className="h-9 mb-2 flex items-center gap-2 px-3 mt-2 bg-amber-500/5 rounded-sm">
               <Info className="size-4 text-amber-600" />
               <span className="text-sm text-amber-700">
                 명단 수정은 득점기록이 존재하지 않아야 가능합니다

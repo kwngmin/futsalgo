@@ -1,16 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import type { MatchDataLineup } from "../model/types";
+import type { MatchDataLineup, MatchDataResult } from "../model/types";
 import { updateLineupSide, removeFromLineup } from "../actions/match-actions";
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  // ChairIcon,
-} from "@phosphor-icons/react";
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import Image from "next/image";
 import { LogOut } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
 interface LineupEditItemProps {
   lineup: MatchDataLineup;
@@ -24,24 +21,49 @@ export const SquadLineupEditItem = ({
   isMember,
 }: LineupEditItemProps) => {
   const queryClient = useQueryClient();
+  const params = useParams();
+  const matchId = params.matchId as string;
+  const scheduleId = params.id as string;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSideChange = async (side: "HOME" | "AWAY" | "UNDECIDED") => {
     if (isLoading) return;
 
     setIsLoading(true);
+
+    // 낙관적 업데이트: 즉시 UI 업데이트
+    const queryKey = ["matchData", matchId, scheduleId];
+
+    queryClient.setQueryData(
+      queryKey,
+      (oldData: MatchDataResult | undefined) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          lineups: oldData.lineups.map((item: MatchDataLineup) =>
+            item.id === lineup.id ? { ...item, side } : item
+          ),
+        };
+      }
+    );
+
     try {
       const result = await updateLineupSide(lineup.id, side);
-      queryClient.invalidateQueries({
-        queryKey: ["matchData"],
-      });
+
       if (!result.success) {
         console.error(result.error);
         alert("사이드 변경에 실패했습니다.");
+
+        // 실패 시 데이터 다시 가져오기
+        queryClient.invalidateQueries({ queryKey });
       }
     } catch (error) {
       console.error("사이드 변경 오류:", error);
       alert("오류가 발생했습니다.");
+
+      // 실패 시 데이터 다시 가져오기
+      queryClient.invalidateQueries({ queryKey });
     } finally {
       setIsLoading(false);
     }
@@ -55,15 +77,40 @@ export const SquadLineupEditItem = ({
     }
 
     setIsLoading(true);
+
+    // 낙관적 업데이트: 즉시 UI에서 제거
+    const queryKey = ["matchData", matchId, scheduleId];
+
+    queryClient.setQueryData(
+      queryKey,
+      (oldData: MatchDataResult | undefined) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          lineups: oldData.lineups.filter(
+            (item: MatchDataLineup) => item.id !== lineup.id
+          ),
+        };
+      }
+    );
+
     try {
       const result = await removeFromLineup(lineup.id);
+
       if (!result.success) {
         console.error(result.error);
         alert("선수 제거에 실패했습니다.");
+
+        // 실패 시 데이터 다시 가져오기
+        queryClient.invalidateQueries({ queryKey });
       }
     } catch (error) {
       console.error("선수 제거 오류:", error);
       alert("오류가 발생했습니다.");
+
+      // 실패 시 데이터 다시 가져오기
+      queryClient.invalidateQueries({ queryKey });
     } finally {
       setIsLoading(false);
     }
