@@ -344,3 +344,59 @@ export async function updateMercenaryCount(
     return { success: false, error: "용병 수 업데이트에 실패했습니다" };
   }
 }
+
+//
+export async function resetLineups(matchId: string) {
+  try {
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        schedule: {
+          select: {
+            matchType: true,
+            id: true,
+            hostTeamMercenaryCount: true,
+          },
+        },
+        lineups: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!match) {
+      return { success: false, error: "매치를 찾을 수 없습니다" };
+    }
+
+    if (match.schedule.matchType !== MatchType.SQUAD) {
+      return { success: false, error: "자체전이 아닙니다" };
+    }
+
+    // 업데이트 실행
+    const updatePromises = match.lineups.map((lineup) => {
+      return prisma.lineup.update({
+        where: { id: lineup.id },
+        data: { side: "UNDECIDED" },
+      });
+    });
+
+    await prisma.$transaction(updatePromises);
+
+    await prisma.match.update({
+      where: { id: matchId },
+      data: {
+        homeTeamMercenaryCount: 0,
+        awayTeamMercenaryCount: 0,
+        undecidedTeamMercenaryCount: match.schedule.hostTeamMercenaryCount,
+      },
+    });
+
+    revalidatePath(`/schedule/${match.schedule.id}/match/${matchId}`);
+    return { success: true };
+  } catch (error) {
+    console.error("출전 명단 초기화 실패:", error);
+    return { success: false, error: "출전 명단 초기화에 실패했습니다" };
+  }
+}

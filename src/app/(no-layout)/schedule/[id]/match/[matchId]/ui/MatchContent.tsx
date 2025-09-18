@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
 import { shuffleLineupsAdvanced } from "../actions/shuffle-lineups";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import GoalRecord from "./GoalRecord";
 import type { MatchDataResult, GoalWithScore } from "../model/types";
 import { NavigationButton } from "./NavigationButton";
@@ -17,6 +17,7 @@ import {
   updateSquadLineup,
   updateTeamMatchLineup,
   updateMercenaryCount,
+  resetLineups, // 새로운 액션 함수
 } from "../actions/match-actions";
 import {
   ClockCounterClockwiseIcon,
@@ -25,9 +26,9 @@ import {
   UsersIcon,
 } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { TeamLineupEditItem } from "./TeamLineupEdititem";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Separator } from "@/shared/components/ui/separator";
+import { TeamLineupEditItem } from "./TeamLineupEdititem";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -99,87 +100,129 @@ const MatchContent = ({ data }: MatchContentProps) => {
     return { homeMax, awayMax, undecidedCount };
   }, [data, homeMercenaryCount, awayMercenaryCount]);
 
+  // 라인업 필터링 (useMemo로 최적화)
+  const { homeLineup, awayLineup } = useMemo(() => {
+    if (!data) return { homeLineup: [], awayLineup: [] };
+
+    return {
+      homeLineup: data.lineups.filter((lineup) => lineup.side === "HOME"),
+      awayLineup: data.lineups.filter((lineup) => lineup.side === "AWAY"),
+    };
+  }, [data]);
+
+  // 네비게이션 관련 계산 (useMemo로 최적화)
+  const navigationInfo = useMemo(() => {
+    if (!data)
+      return { currentIndex: -1, isPrevDisabled: true, isNextDisabled: true };
+
+    const currentIndex = data.allMatches.findIndex(
+      (match) => match.id === data.match.id
+    );
+
+    return {
+      currentIndex,
+      isPrevDisabled: currentIndex === 0,
+      isNextDisabled: currentIndex === data.allMatches.length - 1,
+    };
+  }, [data]);
+
+  // 공통 쿼리 무효화 함수
+  const invalidateMatchQueries = useCallback(() => {
+    if (!data) return;
+    queryClient.invalidateQueries({
+      queryKey: ["matchData", data.match.id, data.match.scheduleId],
+    });
+  }, [queryClient, data]);
+
+  // 공통 에러 처리 함수
+  const handleAsyncOperation = useCallback(
+    async (
+      operation: () => Promise<{ success: boolean; error?: string }>,
+      successMessage?: string
+    ) => {
+      if (isLoading) return;
+
+      setIsLoading(true);
+      try {
+        const result = await operation();
+        if (result?.success) {
+          if (successMessage) alert(successMessage);
+          invalidateMatchQueries();
+          return true;
+        } else {
+          console.error(result?.error);
+          alert(result?.error || "작업에 실패했습니다.");
+          return false;
+        }
+      } catch (error) {
+        console.error("작업 오류:", error);
+        alert("오류가 발생했습니다.");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isLoading, invalidateMatchQueries]
+  );
+
+  // 네비게이션 핸들러
+  const handleNavigation = useCallback(
+    (direction: "prev" | "next") => {
+      if (!data || navigationInfo.currentIndex === -1) return;
+
+      const targetIndex =
+        direction === "prev"
+          ? navigationInfo.currentIndex - 1
+          : navigationInfo.currentIndex + 1;
+      const targetMatch = data.allMatches[targetIndex];
+
+      if (targetMatch) {
+        router.push(
+          `/schedule/${data.match.scheduleId}/match/${targetMatch.id}${
+            searchParams.get("tab") === "/my-schedules"
+              ? `?tab=/my-schedules`
+              : ""
+          }`
+        );
+      }
+    },
+    [data, navigationInfo.currentIndex, router, searchParams]
+  );
+
   // 타입 가드
   if (!data) {
     return <div>데이터를 찾을 수 없습니다.</div>;
   }
 
-  const currentIndex = data.allMatches.findIndex(
-    (match) => match.id === data.match.id
-  );
-
-  // 라인업 필터링
-  const homeLineup = data.lineups.filter((lineup) => lineup.side === "HOME");
-  const awayLineup = data.lineups.filter((lineup) => lineup.side === "AWAY");
-
-  // 네비게이션 핸들러
-  const handleNavigation = (direction: "prev" | "next") => {
-    if (currentIndex === -1) return;
-
-    const targetIndex =
-      direction === "prev" ? currentIndex - 1 : currentIndex + 1;
-    const targetMatch = data.allMatches[targetIndex];
-
-    if (targetMatch) {
-      router.push(
-        `/schedule/${data.match.scheduleId}/match/${targetMatch.id}${
-          searchParams.get("tab") === "/my-schedules"
-            ? `?tab=/my-schedules`
-            : ""
-        }`
-      );
-    }
-  };
-
-  const isPrevDisabled = currentIndex === 0;
-  const isNextDisabled = currentIndex === data.allMatches.length - 1;
-
-  // 랜덤 팀 나누기 핸들러
+  // 랜덤 팀 나누기 핸들러 (개선됨)
   const handleShuffleLineups = async () => {
-    if (isLoading) return;
+    // 이미 팀이 나뉘어져 있는지 확인
+    const hasExistingTeams = homeLineup.length > 0 || awayLineup.length > 0;
 
-    setIsLoading(true);
-    try {
-      const result = await shuffleLineupsAdvanced(data.match.id);
-      if (result.success) {
-        alert("랜덤 팀 나누기 완료");
-      } else {
-        console.error(result.error);
-        alert("랜덤 팀 나누기에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("Shuffle error:", error);
-      alert("오류가 발생했습니다.");
-    } finally {
-      setIsLoading(false);
+    if (hasExistingTeams) {
+      const confirmed = confirm(
+        "이미 팀이 구성되어 있습니다. 다시 랜덤으로 팀을 나누시겠습니까?"
+      );
+      if (!confirmed) return;
     }
+
+    await handleAsyncOperation(
+      () => shuffleLineupsAdvanced(data.match.id),
+      "랜덤 팀 나누기 완료"
+    );
   };
 
   // 명단 업데이트 핸들러
   const handleUpdateLineup = async () => {
-    if (isLoading) return;
+    const operation =
+      data.match.schedule.matchType === "SQUAD"
+        ? () => updateSquadLineup(data.match.id)
+        : () => updateTeamMatchLineup(data.match.id);
 
-    setIsLoading(true);
-    try {
-      let result;
-      if (data.match.schedule.matchType === "SQUAD") {
-        result = await updateSquadLineup(data.match.id);
-      } else {
-        result = await updateTeamMatchLineup(data.match.id);
-      }
-
-      if (result.success) {
-        alert(result.message || "명단 업데이트가 완료되었습니다");
-      } else {
-        console.error(result.error);
-        alert(result.error || "명단 업데이트에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("명단 업데이트 오류:", error);
-      alert("오류가 발생했습니다.");
-    } finally {
-      setIsLoading(false);
-    }
+    await handleAsyncOperation(
+      operation,
+      "출전 명단 업데이트가 완료되었습니다"
+    );
   };
 
   // 용병 수 업데이트 핸들러
@@ -187,44 +230,44 @@ const MatchContent = ({ data }: MatchContentProps) => {
     side: "home" | "away",
     count: number
   ) => {
-    if (isLoading) return;
-
     const newHomeCount = side === "home" ? count : homeMercenaryCount;
     const newAwayCount = side === "away" ? count : awayMercenaryCount;
 
-    setIsLoading(true);
-    try {
-      const result = await updateMercenaryCount(
-        data.match.id,
-        newHomeCount,
-        newAwayCount
-      );
+    const success = await handleAsyncOperation(() =>
+      updateMercenaryCount(data.match.id, newHomeCount, newAwayCount)
+    );
 
-      if (result.success) {
-        queryClient.invalidateQueries({
-          queryKey: ["matchData"],
-        });
-        // 로컬 상태 업데이트
-        if (side === "home") {
-          setHomeMercenaryCount(count);
-        } else {
-          setAwayMercenaryCount(count);
-        }
+    if (success) {
+      // 로컬 상태 업데이트
+      if (side === "home") {
+        setHomeMercenaryCount(count);
       } else {
-        alert(result.error || "용병 수 업데이트에 실패했습니다.");
+        setAwayMercenaryCount(count);
       }
-    } catch (error) {
-      console.error("용병 수 업데이트 오류:", error);
-      alert("오류가 발생했습니다.");
-    } finally {
-      setIsLoading(false);
+    }
+  };
+
+  // 초기화 핸들러 (새로 구현됨)
+  const handleResetLineups = async () => {
+    const confirmed = confirm(
+      "출전 명단을 초기화하시겠습니까? 모든 팀 배정이 취소됩니다."
+    );
+    if (!confirmed) return;
+
+    const success = await handleAsyncOperation(
+      () => resetLineups(data.match.id),
+      "출전 명단이 초기화되었습니다"
+    );
+
+    if (success) {
+      // 로컬 상태 초기화
+      setHomeMercenaryCount(0);
+      setAwayMercenaryCount(0);
     }
   };
 
   // 경기 삭제 핸들러
   const handleDeleteMatch = async () => {
-    if (isLoading) return;
-
     if (!confirm("경기를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
       return;
     }
@@ -249,6 +292,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
     }
   };
 
+  // 골 삭제 핸들러
+  const handleDeleteGoal = async (goalId: string) => {
+    await handleAsyncOperation(async () => {
+      await deleteGoalRecord(goalId);
+      return { success: true };
+    });
+  };
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 제목과 네비게이션 */}
@@ -259,12 +310,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
           </h1>
           <NavigationButton
             direction="prev"
-            disabled={isPrevDisabled}
+            disabled={navigationInfo.isPrevDisabled}
             onClick={() => handleNavigation("prev")}
           />
           <NavigationButton
             direction="next"
-            disabled={isNextDisabled}
+            disabled={navigationInfo.isNextDisabled}
             onClick={() => handleNavigation("next")}
           />
         </div>
@@ -350,23 +401,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     type="button"
                     className="absolute right-0 text-sm font-medium size-9 sm:size-8 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur z-10"
                     disabled={isLoading}
-                    onClick={async () => {
-                      setIsLoading(true);
-                      try {
-                        await deleteGoalRecord(goal.id);
-                        queryClient.invalidateQueries({
-                          queryKey: [
-                            "matchData",
-                            data.match.id,
-                            data.match.scheduleId,
-                          ],
-                        });
-                      } catch (error) {
-                        console.error("골 기록 삭제 실패:", error);
-                      } finally {
-                        setIsLoading(false);
-                      }
-                    }}
+                    onClick={() => handleDeleteGoal(goal.id)}
                   >
                     <Minus className="size-4.5 sm:size-4 text-destructive" />
                   </button>
@@ -430,18 +465,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   data.lineups.filter((lineup) => lineup.side !== "UNDECIDED")
                     .length}
               </span>
-              {/* {(data.match.schedule.hostTeamMercenaryCount > 0 ||
-                (data.match.schedule.invitedTeamMercenaryCount &&
-                  data.match.schedule.invitedTeamMercenaryCount > 0)) && (
-                <div className="px-2 border-l border-gray-200 h-4 flex items-center text-sm text-gray-500">
-                  {`팀원 ${data.lineups.length} • 용병
-                    ${
-                      data.match.undecidedTeamMercenaryCount +
-                      homeMercenaryCount +
-                      awayMercenaryCount
-                    }`}
-                </div>
-              )} */}
             </div>
             {data.permissions.isEditable && goalsWithScore.length === 0 && (
               <button
@@ -482,10 +505,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     onClick={handleUpdateLineup}
                   >
                     <div className="flex items-center gap-2">
-                      <RotateCw
-                        className="size-5 text-gray-400"
-                        // weight="bold"
-                      />
+                      <RotateCw className="size-5 text-gray-400" />
                       <span className="text-base font-medium">새로고침</span>
                     </div>
                   </button>
@@ -502,6 +522,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     type="button"
                     disabled={isLoading}
                     className="rounded-md px-3 w-full flex items-center h-11 sm:h-10 gap-2 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleResetLineups}
                   >
                     <Power className="size-5 text-gray-400" />
                     <span className="text-base font-medium">초기화</span>
