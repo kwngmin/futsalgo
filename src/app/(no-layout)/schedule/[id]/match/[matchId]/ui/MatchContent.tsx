@@ -17,7 +17,8 @@ import {
   updateSquadLineup,
   updateTeamMatchLineup,
   updateMercenaryCount,
-  resetLineups, // 새로운 액션 함수
+  resetLineups,
+  updateTeamMatchLineupSide, // 새로운 액션 함수
 } from "../actions/match-actions";
 import {
   // ClockCounterClockwiseIcon,
@@ -228,7 +229,26 @@ const MatchContent = ({ data }: MatchContentProps) => {
     }
   };
 
-  // 명단 업데이트 핸들러
+  // 명단 사이드 업데이트 핸들러
+  const handleUpdateLineupSide = async (side: "HOME" | "AWAY") => {
+    try {
+      await handleAsyncOperation(() =>
+        updateTeamMatchLineupSide(data.match.id, side)
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["matchData", data.match.id, data.match.scheduleId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", data.match.scheduleId],
+      });
+      alert("출전 명단 업데이트가 완료되었습니다");
+    } catch (error) {
+      console.error("출전 명단 업데이트 오류:", error);
+      alert("출전 명단 업데이트에 실패했습니다.");
+    }
+  };
+
+  // 명단 전체 업데이트 핸들러
   const handleUpdateLineup = async () => {
     const operation =
       data.match.schedule.matchType === "SQUAD"
@@ -418,6 +438,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 </button>
               </div>
             )} */}
+
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}
@@ -449,8 +470,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
               </div>
             ))}
 
-            <div className="flex items-center justify-center px-2 h-16 select-none mt-2">
-              <div className="text-sm text-gray-500 h-5 flex items-center border-l-2 border-gray-200" />
+            {/* 범례 */}
+            <div className="flex items-center justify-center px-2 h-12 mt-3 select-none">
               <div className="grow border-t border-gray-200" />
               <div className="flex items-center px-2 gap-1.5">
                 <div className="flex items-center gap-1 rounded-full pl-2 pr-2.5 h-7">
@@ -480,7 +501,6 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 </div>
               </div>
               <div className="grow border-t border-gray-200" />
-              <div className="text-sm text-gray-500 h-5 flex items-center border-l-2 border-gray-200" />
             </div>
           </div>
         )}
@@ -612,7 +632,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
               ) : (
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center shrink-0 h-10 border-l-2">
+                    <div className="flex justify-between items-center shrink-0 h-10 border-l">
                       <div className="flex items-center *:leading-tight gap-2 px-3">
                         <span className="font-medium text-gray-800">
                           주최팀
@@ -620,9 +640,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         <Separator orientation="vertical" className="!h-5" />
                         <span className="text-sm text-gray-500">팀원</span>
                       </div>
-                      <div className="mx-2 p-2 rounded-full border">
+                      <button
+                        type="button"
+                        disabled={isLoading}
+                        onClick={() => handleUpdateLineupSide("HOME")}
+                        className="mx-2 p-2 rounded-full border cursor-pointer active:scale-95 hover:bg-gray-100"
+                      >
                         <RotateCw className="size-4 text-gray-600" />
-                      </div>
+                      </button>
                     </div>
                     <div className="border rounded-2xl overflow-hidden">
                       {homeLineup.length > 0 ? (
@@ -642,7 +667,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center shrink-0 h-10 border-l-2">
+                    <div className="flex justify-between items-center shrink-0 h-10 border-l">
                       <div className="flex items-center *:leading-tight gap-2 px-3">
                         <span className="font-medium text-gray-800">
                           초청팀
@@ -650,9 +675,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         <Separator orientation="vertical" className="!h-5" />
                         <span className="text-sm text-gray-500">팀원</span>
                       </div>
-                      <div className="mx-2 p-2 rounded-full border">
+                      <button
+                        type="button"
+                        disabled={isLoading}
+                        onClick={() => handleUpdateLineupSide("AWAY")}
+                        className="mx-2 p-2 rounded-full border cursor-pointer active:scale-95 hover:bg-gray-100"
+                      >
                         <RotateCw className="size-4 text-gray-600" />
-                      </div>
+                      </button>
                     </div>
                     <div className="border rounded-2xl overflow-hidden">
                       {awayLineup.length > 0 ? (

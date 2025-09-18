@@ -156,7 +156,7 @@ export async function updateSquadLineup(matchId: string) {
 }
 
 /**
- * 친선전 명단 업데이트: 참석자들을 팀별로 사이드 배정
+ * 친선전 명단 전체 업데이트: 참석자들을 팀별로 사이드 배정
  */
 export async function updateTeamMatchLineup(matchId: string) {
   try {
@@ -190,6 +190,79 @@ export async function updateTeamMatchLineup(matchId: string) {
     // 기존 라인업 삭제
     await prisma.lineup.deleteMany({
       where: { matchId },
+    });
+
+    // 사이드가 변경되었는지 확인하는 로직이 필요하지만,
+    // 여기서는 간단히 HOST팀은 HOME, INVITED팀은 AWAY로 배정
+    // 실제 구현에서는 사이드 변경 상태를 어딘가에 저장해야 함
+
+    const newLineups = match.schedule.attendances.map((attendance) => {
+      // TeamType에 따라 사이드 결정
+      const side: TeamSide = attendance.teamType === "HOST" ? "HOME" : "AWAY";
+
+      return {
+        matchId,
+        userId: attendance.userId,
+        side,
+      };
+    });
+
+    if (newLineups.length > 0) {
+      await prisma.lineup.createMany({
+        data: newLineups,
+      });
+    }
+
+    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    return {
+      success: true,
+      message: `${newLineups.length}명의 명단이 업데이트되었습니다`,
+    };
+  } catch (error) {
+    console.error("친선전 명단 업데이트 실패:", error);
+    return { success: false, error: "명단 업데이트에 실패했습니다" };
+  }
+}
+
+/**
+ * 친선전 명단 사이드 업데이트: 참석자들을 팀별로 사이드 배정
+ */
+export async function updateTeamMatchLineupSide(
+  matchId: string,
+  side: TeamSide
+) {
+  try {
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        schedule: {
+          include: {
+            attendances: {
+              where: {
+                attendanceStatus: AttendanceStatus.ATTENDING,
+                teamType: side === "HOME" ? "HOST" : "INVITED",
+              },
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        lineups: true,
+      },
+    });
+
+    if (!match) {
+      return { success: false, error: "매치를 찾을 수 없습니다" };
+    }
+
+    if (match.schedule.matchType !== MatchType.TEAM) {
+      return { success: false, error: "친선전이 아닙니다" };
+    }
+
+    // 기존 라인업 삭제
+    await prisma.lineup.deleteMany({
+      where: { matchId, side },
     });
 
     // 사이드가 변경되었는지 확인하는 로직이 필요하지만,
