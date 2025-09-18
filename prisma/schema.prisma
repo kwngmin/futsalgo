@@ -562,6 +562,7 @@ model Match {
   createdById     String
   homeTeamId      String
   awayTeamId      String
+  isLinedUp       Boolean  @default(false)
 
   // 관계들
   schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)

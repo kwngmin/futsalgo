@@ -716,16 +716,18 @@ const ScheduleContent = ({
         {new Date(
           `${data.data.schedule.date} ${data.data.schedule.startTime}`
         ) <= new Date() &&
-          data.data.schedule.matches.length > 0 && (
-            <ScheduleMvp scheduleId={scheduleId} />
-          )}
+          data.data.schedule.matches.length > 0 &&
+          data.data.schedule.matches.filter((match) => match.isLinedUp).length >
+            0 && <ScheduleMvp scheduleId={scheduleId} />}
 
         {/* 사진 */}
         {(data.data.schedule.status === "READY" ||
           data.data.schedule.status === "PLAY") &&
           new Date(
             `${data.data.schedule.date} ${data.data.schedule.startTime}`
-          ) <= new Date() && <SchedulePhotosGallery scheduleId={scheduleId} />}
+          ) <= new Date() &&
+          data.data.schedule.matches.filter((match) => match.isLinedUp).length >
+            0 && <SchedulePhotosGallery scheduleId={scheduleId} />}
 
         {/* 공지사항 */}
         {(data.data.schedule.status === "READY" ||

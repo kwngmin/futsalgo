@@ -31,6 +31,7 @@ export async function getSchedule(scheduleId: string) {
         matches: {
           select: {
             id: true,
+            isLinedUp: true,
             homeScore: true,
             awayScore: true,
             homeTeamMercenaryCount: true,
