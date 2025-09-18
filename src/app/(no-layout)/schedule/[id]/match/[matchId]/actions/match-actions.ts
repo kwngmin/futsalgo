@@ -273,6 +273,29 @@ export async function removeFromLineup(lineupId: string) {
       return { success: false, error: "라인업을 찾을 수 없습니다" };
     }
 
+    const lineups = await prisma.lineup.findMany({
+      where: { matchId: lineup.matchId },
+      select: {
+        side: true,
+      },
+    });
+
+    const homeCount = lineups.filter((lineup) => lineup.side === "HOME").length;
+    const awayCount = lineups.filter((lineup) => lineup.side === "AWAY").length;
+
+    if (homeCount === 0 || awayCount === 0) {
+      await prisma.match.update({
+        where: { id: lineup.matchId },
+        data: {
+          isLinedUp: false,
+        },
+      });
+    }
+
+    if (homeCount === 0 && awayCount === 0) {
+      return { success: false, error: "라인업이 없습니다" };
+    }
+
     await prisma.lineup.delete({
       where: { id: lineupId },
     });

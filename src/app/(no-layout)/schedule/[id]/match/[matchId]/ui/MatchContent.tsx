@@ -235,10 +235,22 @@ const MatchContent = ({ data }: MatchContentProps) => {
         ? () => updateSquadLineup(data.match.id)
         : () => updateTeamMatchLineup(data.match.id);
 
-    await handleAsyncOperation(
-      operation,
-      "출전 명단 업데이트가 완료되었습니다"
-    );
+    try {
+      await handleAsyncOperation(
+        operation,
+        "출전 명단 업데이트가 완료되었습니다"
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: ["matchData", data.match.id, data.match.scheduleId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", data.match.scheduleId],
+      });
+    } catch (error) {
+      console.error("출전 명단 업데이트 오류:", error);
+      alert("출전 명단 업데이트에 실패했습니다.");
+    }
   };
 
   // 용병 수 업데이트 핸들러
@@ -541,7 +553,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   >
                     <div className="flex items-center gap-2">
                       <div className="p-1.5 rounded-full bg-white">
-                        <RotateCw className="size-5 sm:size-4 text-gray-500" />
+                        <RotateCw className="size-4 text-gray-600" />
                       </div>
                       <span className="sm:text-sm font-medium">새로고침</span>
                     </div>
@@ -553,7 +565,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     onClick={handleShuffleLineups}
                   >
                     <div className="p-1.5 rounded-full bg-white">
-                      <Shuffle className="size-5 sm:size-4 text-gray-500" />
+                      <Shuffle className="size-4 text-gray-600" />
                     </div>
                     <span className="sm:text-sm font-medium">랜덤 팀</span>
                   </button>
@@ -564,7 +576,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     onClick={handleResetLineups}
                   >
                     <div className="p-1.5 rounded-full bg-white">
-                      <Power className="size-5 sm:size-4 text-gray-500" />
+                      <Power className="size-4 text-gray-600" />
                     </div>
                     <span className="sm:text-sm font-medium">초기화</span>
                   </button>
@@ -578,9 +590,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     onClick={handleUpdateLineup}
                   >
                     <div className="p-1.5 rounded-full bg-white">
-                      <RotateCw className="size-5 sm:size-4 text-gray-500" />
+                      <RotateCw className="size-4 text-gray-600" />
                     </div>
-                    <span className="sm:text-sm font-medium">새로고침</span>
+                    <span className="sm:text-sm font-medium">
+                      전체 새로고침
+                    </span>
                   </button>
                 </div>
               )}
@@ -598,37 +612,63 @@ const MatchContent = ({ data }: MatchContentProps) => {
               ) : (
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center shrink-0 *:leading-tight gap-2 px-3.5 h-8 border-l-2">
-                      <span className="font-medium text-gray-800">주최팀</span>
-                      <Separator orientation="vertical" className="!h-5" />
-                      <span className="text-sm text-gray-500">팀원</span>
+                    <div className="flex justify-between items-center shrink-0 h-10 border-l-2">
+                      <div className="flex items-center *:leading-tight gap-2 px-3">
+                        <span className="font-medium text-gray-800">
+                          주최팀
+                        </span>
+                        <Separator orientation="vertical" className="!h-5" />
+                        <span className="text-sm text-gray-500">팀원</span>
+                      </div>
+                      <div className="mx-2 p-2 rounded-full border">
+                        <RotateCw className="size-4 text-gray-600" />
+                      </div>
                     </div>
                     <div className="border rounded-2xl overflow-hidden">
-                      {homeLineup.map((lineup, index) => (
-                        <TeamLineupEditItem
-                          key={lineup.id}
-                          lineup={lineup}
-                          index={index}
-                          isMember={data.permissions.isMember}
-                        />
-                      ))}
+                      {homeLineup.length > 0 ? (
+                        homeLineup.map((lineup, index) => (
+                          <TeamLineupEditItem
+                            key={lineup.id}
+                            lineup={lineup}
+                            index={index}
+                            isMember={data.permissions.isMember}
+                          />
+                        ))
+                      ) : (
+                        <div className="px-3 py-4.5 text-sm text-gray-500">
+                          모든 팀원이 제외되었습니다.
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center shrink-0 *:leading-tight gap-2 px-3.5 h-8 border-l-2">
-                      <span className="font-medium text-gray-800">초청팀</span>
-                      <Separator orientation="vertical" className="!h-5" />
-                      <span className="text-sm text-gray-500">팀원</span>
+                    <div className="flex justify-between items-center shrink-0 h-10 border-l-2">
+                      <div className="flex items-center *:leading-tight gap-2 px-3">
+                        <span className="font-medium text-gray-800">
+                          초청팀
+                        </span>
+                        <Separator orientation="vertical" className="!h-5" />
+                        <span className="text-sm text-gray-500">팀원</span>
+                      </div>
+                      <div className="mx-2 p-2 rounded-full border">
+                        <RotateCw className="size-4 text-gray-600" />
+                      </div>
                     </div>
                     <div className="border rounded-2xl overflow-hidden">
-                      {awayLineup.map((lineup, index) => (
-                        <TeamLineupEditItem
-                          key={lineup.id}
-                          lineup={lineup}
-                          index={index}
-                          isMember={data.permissions.isMember}
-                        />
-                      ))}
+                      {awayLineup.length > 0 ? (
+                        awayLineup.map((lineup, index) => (
+                          <TeamLineupEditItem
+                            key={lineup.id}
+                            lineup={lineup}
+                            index={index}
+                            isMember={data.permissions.isMember}
+                          />
+                        ))
+                      ) : (
+                        <div className="px-3 py-4.5 text-sm text-gray-500">
+                          모든 팀원이 제외되었습니다.
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

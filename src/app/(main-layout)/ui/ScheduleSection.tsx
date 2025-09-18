@@ -74,7 +74,7 @@ const ScheduleSection = ({
       {todaysSchedules && todaysSchedules.length > 0 && (
         <>
           <SectionHeader
-            dotColor="bg-gray-300"
+            dotColor="bg-gray-400"
             title="오늘 일정"
             subtitle="비공개"
           />
@@ -86,7 +86,7 @@ const ScheduleSection = ({
       {upcomingSchedules && upcomingSchedules.length > 0 && (
         <>
           <SectionHeader
-            dotColor="bg-gray-300"
+            dotColor="bg-gray-400"
             title="예정된 일정"
             subtitle="비공개"
           />

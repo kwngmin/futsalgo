@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { MatchDataLineup } from "../model/types";
 import { removeFromLineup } from "../actions/match-actions";
 import { LogOut } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LineupEditItemProps {
   lineup: MatchDataLineup;
@@ -16,12 +17,15 @@ export const TeamLineupEditItem = ({
   index,
   isMember,
 }: LineupEditItemProps) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRemove = async () => {
     if (isLoading) return;
 
-    if (!confirm(`${lineup.user.nickname}님을 명단에서 제외하시겠습니까?`)) {
+    if (
+      !confirm(`${lineup.user.nickname}을(를) 출전 명단에서 제외하시겠습니까?`)
+    ) {
       return;
     }
 
@@ -30,11 +34,14 @@ export const TeamLineupEditItem = ({
       const result = await removeFromLineup(lineup.id);
       if (!result.success) {
         console.error(result.error);
-        alert("선수 제거에 실패했습니다.");
+        alert("출전 명단에서 제외하는 데 실패했습니다.");
       }
+      queryClient.invalidateQueries({
+        queryKey: ["matchData"],
+      });
     } catch (error) {
-      console.error("선수 제거 오류:", error);
-      alert("오류가 발생했습니다.");
+      console.error("출전 명단에서 제외하는 데 실패했습니다:", error);
+      alert("출전 명단에서 제외하는 데 실패했습니다.");
     } finally {
       setIsLoading(false);
     }

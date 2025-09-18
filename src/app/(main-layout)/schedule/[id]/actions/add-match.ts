@@ -58,6 +58,19 @@ export async function addMatch(scheduleId: string) {
     // awayTeamId 결정 로직 개선
     const awayTeamId = matchType === "TEAM" ? invitedTeamId! : hostTeamId;
 
+    const homeTeamAttendances = attendances.filter(
+      (attendance) => attendance.teamType === "HOST"
+    );
+
+    const awayTeamAttendances = attendances.filter(
+      (attendance) => attendance.teamType === "INVITED"
+    );
+
+    const isLinedUp =
+      matchType === "SQUAD"
+        ? false
+        : homeTeamAttendances.length > 0 && awayTeamAttendances.length > 0;
+
     // 트랜잭션으로 매치 생성과 라인업 추가를 원자적으로 처리
     const result = await prisma.$transaction(async (tx) => {
       // 매치 생성
@@ -67,6 +80,7 @@ export async function addMatch(scheduleId: string) {
           createdById: userId,
           homeTeamId: hostTeamId,
           awayTeamId,
+          isLinedUp,
           undecidedTeamMercenaryCount:
             matchType === "SQUAD"
               ? scheduleWithAttendances.hostTeamMercenaryCount
