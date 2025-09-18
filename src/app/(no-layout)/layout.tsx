@@ -12,7 +12,7 @@ const NoLayout = async ({ children }: MainLayoutProps) => {
       <SideNav />
 
       {/* 콘텐츠 */}
-      <main className="md:pl-20 lg:pl-72 pb-24 md:pb-0">{children}</main>
+      <main className="md:pl-20 lg:pl-72 pb-28 md:pb-0">{children}</main>
     </div>
   );
 };
