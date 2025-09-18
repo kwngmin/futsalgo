@@ -213,6 +213,20 @@ export async function updateTeamMatchLineup(matchId: string) {
       });
     }
 
+    const homeCount = newLineups.filter(
+      (lineup) => lineup.side === "HOME"
+    ).length;
+    const awayCount = newLineups.filter(
+      (lineup) => lineup.side === "AWAY"
+    ).length;
+
+    const isLinedUp = homeCount > 0 && awayCount > 0;
+
+    await prisma.match.update({
+      where: { id: matchId },
+      data: { isLinedUp },
+    });
+
     revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
     return {
       success: true,
@@ -260,36 +274,67 @@ export async function updateTeamMatchLineupSide(
       return { success: false, error: "친선전이 아닙니다" };
     }
 
-    // 기존 라인업 삭제
-    await prisma.lineup.deleteMany({
-      where: { matchId, side },
-    });
+    // 트랜잭션으로 처리하여 데이터 일관성 보장
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. 기존 라인업 삭제 (특정 사이드만)
+      await tx.lineup.deleteMany({
+        where: { matchId, side },
+      });
 
-    // 사이드가 변경되었는지 확인하는 로직이 필요하지만,
-    // 여기서는 간단히 HOST팀은 HOME, INVITED팀은 AWAY로 배정
-    // 실제 구현에서는 사이드 변경 상태를 어딘가에 저장해야 함
+      // 2. 새로운 라인업 생성
+      const newLineups = match.schedule.attendances.map((attendance) => {
+        // TeamType에 따라 사이드 결정
+        const assignedSide: TeamSide =
+          attendance.teamType === "HOST" ? "HOME" : "AWAY";
 
-    const newLineups = match.schedule.attendances.map((attendance) => {
-      // TeamType에 따라 사이드 결정
-      const side: TeamSide = attendance.teamType === "HOST" ? "HOME" : "AWAY";
+        return {
+          matchId,
+          userId: attendance.userId,
+          side: assignedSide,
+        };
+      });
+
+      if (newLineups.length > 0) {
+        await tx.lineup.createMany({
+          data: newLineups,
+        });
+      }
+
+      // 3. 업데이트 후 전체 라인업 상태 확인
+      const allLineups = await tx.lineup.findMany({
+        where: { matchId },
+        select: { side: true },
+      });
+
+      const homeCount = allLineups.filter(
+        (lineup) => lineup.side === "HOME"
+      ).length;
+      const awayCount = allLineups.filter(
+        (lineup) => lineup.side === "AWAY"
+      ).length;
+
+      // 4. isLinedUp 상태 업데이트 (덮어씌우기 방식)
+      const isLinedUp = homeCount > 0 && awayCount > 0;
+
+      await tx.match.update({
+        where: { id: matchId },
+        data: { isLinedUp },
+      });
 
       return {
-        matchId,
-        userId: attendance.userId,
-        side,
+        lineupsCreated: newLineups.length,
+        homeCount,
+        awayCount,
+        isLinedUp,
       };
     });
 
-    if (newLineups.length > 0) {
-      await prisma.lineup.createMany({
-        data: newLineups,
-      });
-    }
-
     revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+
     return {
       success: true,
-      message: `${newLineups.length}명의 명단이 업데이트되었습니다`,
+      message: `${result.lineupsCreated}명의 명단이 업데이트되었습니다 (HOME: ${result.homeCount}명, AWAY: ${result.awayCount}명)`,
+      isLinedUp: result.isLinedUp,
     };
   } catch (error) {
     console.error("친선전 명단 업데이트 실패:", error);
@@ -346,31 +391,37 @@ export async function removeFromLineup(lineupId: string) {
       return { success: false, error: "라인업을 찾을 수 없습니다" };
     }
 
-    const lineups = await prisma.lineup.findMany({
-      where: { matchId: lineup.matchId },
-      select: {
-        side: true,
-      },
-    });
+    // 트랜잭션으로 처리하여 데이터 일관성 보장
+    await prisma.$transaction(async (tx) => {
+      // 1. 먼저 lineup 삭제
+      await tx.lineup.delete({
+        where: { id: lineupId },
+      });
 
-    const homeCount = lineups.filter((lineup) => lineup.side === "HOME").length;
-    const awayCount = lineups.filter((lineup) => lineup.side === "AWAY").length;
-
-    if (homeCount === 0 || awayCount === 0) {
-      await prisma.match.update({
-        where: { id: lineup.matchId },
-        data: {
-          isLinedUp: false,
+      // 2. 삭제 후 남은 lineup 개수 확인
+      const remainingLineups = await tx.lineup.findMany({
+        where: { matchId: lineup.matchId },
+        select: {
+          side: true,
         },
       });
-    }
 
-    if (homeCount === 0 && awayCount === 0) {
-      return { success: false, error: "라인업이 없습니다" };
-    }
+      const homeCount = remainingLineups.filter(
+        (lineup) => lineup.side === "HOME"
+      ).length;
+      const awayCount = remainingLineups.filter(
+        (lineup) => lineup.side === "AWAY"
+      ).length;
 
-    await prisma.lineup.delete({
-      where: { id: lineupId },
+      // 3. HOME 또는 AWAY 중 하나라도 비어있으면 isLinedUp을 false로 설정
+      if (homeCount === 0 || awayCount === 0) {
+        await tx.match.update({
+          where: { id: lineup.matchId },
+          data: {
+            isLinedUp: false,
+          },
+        });
+      }
     });
 
     revalidatePath(

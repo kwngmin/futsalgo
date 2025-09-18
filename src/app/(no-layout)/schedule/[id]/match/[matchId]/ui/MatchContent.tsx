@@ -571,12 +571,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     className="rounded-md px-2 w-full flex items-center h-11 sm:h-10 gap-1.5 cursor-pointer bg-gray-50 hover:bg-gray-100 border border-gray-300 hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleUpdateLineup}
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-full bg-white">
-                        <RotateCw className="size-4 text-gray-600" />
-                      </div>
-                      <span className="sm:text-sm font-medium">새로고침</span>
+                    <div className="p-1.5 rounded-full bg-white">
+                      <RotateCw className="size-4 text-gray-600" />
                     </div>
+                    <span className="sm:text-sm font-medium">업데이트</span>
                   </button>
                   <button
                     type="button"
@@ -613,7 +611,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       <RotateCw className="size-4 text-gray-600" />
                     </div>
                     <span className="sm:text-sm font-medium">
-                      전체 새로고침
+                      양팀 참석인원 업데이트
                     </span>
                   </button>
                 </div>
@@ -661,7 +659,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         ))
                       ) : (
                         <div className="px-3 py-4.5 text-sm text-gray-500">
-                          모든 팀원이 제외되었습니다.
+                          모두 제외되었습니다.
                         </div>
                       )}
                     </div>
@@ -696,7 +694,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         ))
                       ) : (
                         <div className="px-3 py-4.5 text-sm text-gray-500">
-                          모든 팀원이 제외되었습니다.
+                          모두 제외되었습니다.
                         </div>
                       )}
                     </div>
