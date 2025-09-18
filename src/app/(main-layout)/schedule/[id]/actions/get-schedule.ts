@@ -29,6 +29,9 @@ export async function getSchedule(scheduleId: string) {
         },
         attendances: true,
         matches: {
+          include: {
+            goals: true,
+          },
           orderBy: {
             createdAt: "asc",
           },

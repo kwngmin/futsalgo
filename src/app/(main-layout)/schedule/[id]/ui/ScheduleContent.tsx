@@ -653,13 +653,18 @@ const ScheduleContent = ({
                           className="size-5 text-gray-800"
                         />
                         <span className="font-medium">{index + 1}경기</span>
+                        <Separator
+                          orientation="vertical"
+                          className="!h-4 !w-px bg-gray-300"
+                        />
+                        <span className="bg-gray-100 rounded-sm text-base text-gray-800 min-w-12 px-1 text-center">
+                          {match.homeScore} - {match.awayScore}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1 font-medium">
-                        {/* <span className="text-sm text-green-600 font-semibold px-1.5">
-                            스코어
-                          </span> */}
-                        <span className="text-base text-gray-800 min-w-12 px-1 text-center">
-                          {match.homeScore} - {match.awayScore}
+                        <span className="text-sm">
+                          {/* {match.goals[0].scorer?.nickname || "용병"} */}
+                          {/* 여기에 골 넣은 사람 이름 표시 */}
                         </span>
                         <ChevronRight className="size-5 text-gray-400" />
                       </div>

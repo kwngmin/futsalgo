@@ -146,7 +146,7 @@ export const SquadLineupEditItem = ({
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">
-          <div className="grow grid grid-cols-3 gap-2 p-1 rounded-full bg-gray-100 select-none group-hover:bg-white group-hover:ring group-hover:ring-gray-300">
+          <div className="grow grid grid-cols-3 gap-1 p-1 rounded-full bg-gray-100 select-none group-hover:bg-white group-hover:ring group-hover:ring-gray-300">
             <button
               type="button"
               disabled={isLoading}
@@ -162,7 +162,7 @@ export const SquadLineupEditItem = ({
             <button
               type="button"
               disabled={isLoading}
-              className={`text-sm rounded-full flex items-center gap-1 justify-center transition-colors cursor-pointer tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 text-gray-600 hover:bg-gray-200`}
+              className={`text-sm rounded-full flex items-center px-1 justify-between transition-colors cursor-pointer tracking-tight disabled:opacity-50 disabled:cursor-not-allowed h-9 text-gray-600 hover:bg-gray-200`}
               onClick={() => handleSideChange("UNDECIDED")}
             >
               <CaretLeftIcon className="size-3 text-gray-400" weight="fill" />
