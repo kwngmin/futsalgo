@@ -56,8 +56,11 @@ export const SquadLineupEditItem = ({
         alert("사이드 변경에 실패했습니다.");
 
         // 실패 시 데이터 다시 가져오기
-        queryClient.invalidateQueries({ queryKey });
+        // queryClient.invalidateQueries({ queryKey });
       }
+
+      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ["schedule", scheduleId] });
     } catch (error) {
       console.error("사이드 변경 오류:", error);
       alert("오류가 발생했습니다.");

@@ -225,6 +225,7 @@ export async function shuffleLineupsAdvanced(matchId: string) {
         homeTeamMercenaryCount: homeMercenaryCount,
         awayTeamMercenaryCount: awayMercenaryCount,
         undecidedTeamMercenaryCount: 0,
+        isLinedUp: homeCount > 0 && awayCount > 0,
       },
     });
 

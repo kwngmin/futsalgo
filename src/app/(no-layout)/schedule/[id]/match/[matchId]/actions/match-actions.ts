@@ -360,6 +360,21 @@ export async function updateLineupSide(lineupId: string, side: TeamSide) {
       },
     });
 
+    const lineups = await prisma.lineup.findMany({
+      where: { matchId: lineup.matchId },
+      select: { side: true },
+    });
+
+    const homeCount = lineups.filter((lineup) => lineup.side === "HOME").length;
+    const awayCount = lineups.filter((lineup) => lineup.side === "AWAY").length;
+
+    const isLinedUp = homeCount > 0 && awayCount > 0;
+
+    await prisma.match.update({
+      where: { id: lineup.matchId },
+      data: { isLinedUp },
+    });
+
     revalidatePath(
       `/schedule/${lineup.match.scheduleId}/match/${lineup.match.id}`
     );
@@ -543,6 +558,7 @@ export async function resetLineups(matchId: string) {
         homeTeamMercenaryCount: 0,
         awayTeamMercenaryCount: 0,
         undecidedTeamMercenaryCount: match.schedule.hostTeamMercenaryCount,
+        isLinedUp: false,
       },
     });
 

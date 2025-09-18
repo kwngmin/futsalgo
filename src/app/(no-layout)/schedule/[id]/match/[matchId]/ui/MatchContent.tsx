@@ -223,9 +223,18 @@ const MatchContent = ({ data }: MatchContentProps) => {
       () => shuffleLineupsAdvanced(data.match.id),
       "랜덤 팀 나누기 완료"
     );
-    if (result && typeof result === "object" && "data" in result) {
-      setHomeMercenaryCount(result.data?.homeMercenaryCount ?? 0);
-      setAwayMercenaryCount(result.data?.awayMercenaryCount ?? 0);
+
+    if (result && result.success) {
+      queryClient.invalidateQueries({
+        queryKey: ["matchData", data.match.id, data.match.scheduleId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", data.match.scheduleId],
+      });
+      if (typeof result === "object" && "data" in result) {
+        setHomeMercenaryCount(result.data?.homeMercenaryCount ?? 0);
+        setAwayMercenaryCount(result.data?.awayMercenaryCount ?? 0);
+      }
     }
   };
 
@@ -311,6 +320,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
       // 로컬 상태 초기화
       setHomeMercenaryCount(0);
       setAwayMercenaryCount(0);
+      queryClient.invalidateQueries({
+        queryKey: ["matchData", data.match.id, data.match.scheduleId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", data.match.scheduleId],
+      });
     }
   };
 
