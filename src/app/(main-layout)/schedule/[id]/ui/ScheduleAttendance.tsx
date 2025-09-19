@@ -219,7 +219,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
         <div className="flex items-center gap-2">
           <UserCircleCheckIcon //
             weight="fill"
-            className="size-7 text-green-600"
+            className="size-7 text-zinc-600"
           />
           <h2 className="text-lg font-semibold ">참석인원</h2>
         </div>

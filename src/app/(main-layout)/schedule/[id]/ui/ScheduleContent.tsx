@@ -734,7 +734,7 @@ const ScheduleContent = ({
                 <div className="flex items-center gap-2">
                   <MegaphoneSimpleIcon
                     weight="fill"
-                    className="size-7 text-red-500"
+                    className="size-7 text-zinc-500"
                   />
                   <h2 className="text-lg font-semibold">공지사항</h2>
                   {/* <Separator
