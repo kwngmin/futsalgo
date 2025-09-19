@@ -1,6 +1,6 @@
 "use client";
 
-import { Minus, Power, RotateCw, Shuffle, X } from "lucide-react";
+import { Info, Minus, Power, RotateCw, Shuffle, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -21,7 +21,6 @@ import {
   updateTeamMatchLineupSide, // 새로운 액션 함수
 } from "../actions/match-actions";
 import {
-  InfoIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
   UsersIcon,
@@ -816,7 +815,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           )}
           {goalsWithScore.length > 0 && data.permissions.isEditable && (
             <div className="h-9 my-2 flex items-center gap-2 px-4 bg-amber-400/10 rounded-sm text-amber-700">
-              <InfoIcon className="size-5" weight="fill" />
+              <Info className="size-5" />
               <span className="text-sm">
                 명단 수정은 득점기록이 존재하지 않아야 가능합니다
               </span>

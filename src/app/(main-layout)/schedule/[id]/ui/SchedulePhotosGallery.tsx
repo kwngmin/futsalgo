@@ -154,10 +154,17 @@ export const SchedulePhotosGallery = ({
             </div>
           )}
         </div>
-      ) : !isLoading ? (
-        <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
-          사진이 없습니다.
-        </p>
+      ) : // ) : !isLoading ? (
+      //   <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
+      //     사진이 없습니다.
+      //   </p>
+      !isLoading ? (
+        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+          <p className="font-medium text-gray-700">사진이 없습니다.</p>
+          <p className="whitespace-pre-line break-keep text-sm">
+            단체 사진 또는 경기 사진을 업로드해주세요.
+          </p>
+        </div>
       ) : (
         <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">
           <Loader2 className="animate-spin mx-auto mb-4" size={48} />

@@ -593,9 +593,12 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (
-        <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
-          댓글이 없습니다.
-        </p>
+        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+          <p className="font-medium text-gray-700">댓글이 없습니다.</p>
+          <p className="whitespace-pre-line break-keep text-sm">
+            일정에 대한 문의 또는 다양한 의견을 남겨주세요.
+          </p>
+        </div>
       ) : (
         <div className="relative space-y-6 mt-1">
           {optimisticComments.map((comment) => renderComment(comment))}

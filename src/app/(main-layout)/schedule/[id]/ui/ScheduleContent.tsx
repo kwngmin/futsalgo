@@ -15,6 +15,7 @@ import {
   X,
   ClockIcon,
   Calendar,
+  Info,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
@@ -23,7 +24,6 @@ import {
   CalendarCheckIcon,
   CalendarXIcon,
   HourglassHighIcon,
-  InfoIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
@@ -665,8 +665,11 @@ const ScheduleContent = ({
                 ))}
               </div>
             ) : (
-              <div className="px-4 py-8 sm:text-sm text-gray-500 text-center bg-gray-50 rounded-2xl min-h-16 flex items-center justify-center">
-                경기가 없습니다.
+              <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+                <p className="font-medium text-gray-700">경기가 없습니다.</p>
+                <p className="whitespace-pre-line break-keep text-sm">
+                  경기를 추가하고 득점 기록을 남겨주세요.
+                </p>
               </div>
             )}
 
@@ -762,7 +765,7 @@ const ScheduleContent = ({
 
               {/* 비공개 안내 */}
               <div className="h-9 mb-2 flex items-center gap-2 px-4 bg-amber-400/10 rounded-sm text-amber-700">
-                <InfoIcon className="size-5" weight="fill" />
+                <Info className="size-5" />
                 <span className="text-sm">
                   공지사항은{" "}
                   <span className="font-medium text-amber-800">주최팀</span>{" "}
@@ -783,7 +786,9 @@ const ScheduleContent = ({
                         </div>
                       ) : (
                         <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
-                          <p className="font-medium">공지사항이 없습니다.</p>
+                          <p className="font-medium text-gray-700">
+                            공지사항이 없습니다.
+                          </p>
                           <p className="whitespace-pre-line break-keep text-sm">
                             예약자, 풋살장 출입 방법, 주차장 이용 방법, 주의
                             사항 등을 알려주세요.
