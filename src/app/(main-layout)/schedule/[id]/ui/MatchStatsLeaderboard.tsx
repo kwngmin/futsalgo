@@ -148,7 +148,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       case "bronze":
         return "bg-gradient-to-br from-amber-500 to-amber-700 inset-shadow-sm inset-shadow-amber-300 shadow-md text-white";
       default:
-        return "bg-gray-100 text-gray-600";
+        return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -160,7 +160,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
           <ChartBarIcon weight="fill" className="size-7 text-zinc-500" />
           <h2 className="text-lg font-semibold">경기 통계</h2>
         </div>
-        <div className="flex items-center gap-1 text-sm text-gray-500">
+        <div className="flex items-center gap-2 text-sm text-gray-500 px-2">
           <span className="w-9 text-center">득점</span>
           <span className="w-9 text-center">도움</span>
           <span className="w-9 text-center">합계</span>
@@ -180,7 +180,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
             return (
               <div
                 key={stat.user.id}
-                className={`flex items-center justify-between py-2 transition-colors hover:bg-gray-50`}
+                className="flex items-center justify-between p-2 transition-colors hover:bg-gray-50"
               >
                 {/* 왼쪽: 프로필 정보 */}
                 <div className="flex items-center gap-2">
@@ -233,11 +233,11 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
                 </div>
 
                 {/* 오른쪽: 통계 정보 */}
-                <div className="flex items-center gap-1">
-                  <div className="size-9 rounded-full flex justify-center items-center font-medium text-gray-900">
+                <div className="flex items-center gap-2">
+                  <div className="size-9 rounded-full flex justify-center items-center text-gray-700">
                     {stat.goals}
                   </div>
-                  <div className="size-9 rounded-full flex justify-center items-center font-medium text-gray-900">
+                  <div className="size-9 rounded-full flex justify-center items-center text-gray-700">
                     {stat.assists}
                   </div>
                   <div
