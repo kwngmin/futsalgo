@@ -52,10 +52,10 @@ const Lineup = ({
                 alt="player image"
                 width={36}
                 height={36}
-                className="object-cover size-8 sm:size-9 rounded-full shrink-0 ring ring-gray-200"
+                className="hidden sm:block object-cover size-8 sm:size-9 rounded-full shrink-0 ring ring-gray-200"
               />
             ) : (
-              <div className="size-10 rounded-full bg-gray-100"></div>
+              <div className="hidden sm:block size-10 rounded-full bg-gray-100"></div>
             )}
             <div className="w-full flex flex-col justify-center">
               <span className="text-sm font-semibold leading-tight group-hover:underline underline-offset-2">
@@ -78,7 +78,7 @@ const Lineup = ({
             key={index}
             className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200"
           >
-            <div className="size-8 sm:size-9 rounded-full bg-slate-400/50 flex items-center justify-center">
+            <div className="hidden sm:flex items-center justify-center size-8 sm:size-9 rounded-full bg-slate-400/50">
               <div className="size-6 sm:size-7 rounded-full flex items-center justify-center overflow-hidden relative">
                 <div className="absolute top-1 size-2.5 sm:size-3 bg-white rounded-full" />
                 <div className="absolute bottom-0 w-5 sm:w-6 h-2 sm:h-2.5 bg-white rounded-t-full" />
