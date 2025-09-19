@@ -566,8 +566,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
           {mode === "view" ? (
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col bg-gray-50 p-1 rounded-2xl">
-                <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-14 sm:h-10 *:leading-tight px-3 sm:px-4">
-                  <span className="text-sm font-medium text-gray-800">
+                <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-12 sm:h-10 *:leading-tight px-3 sm:px-4">
+                  <span className="sm:text-sm font-medium text-gray-800">
                     {data.match.schedule.matchType === "SQUAD"
                       ? `A팀`
                       : `주최팀`}
@@ -576,7 +576,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     orientation="vertical"
                     className="hidden sm:flex !h-4"
                   />
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="hidden sm:inline text-sm font-medium text-gray-700">
                     {data.match.homeTeam.name}
                   </span>
                 </div>
@@ -586,8 +586,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 />
               </div>
               <div className="flex flex-col bg-gray-50 p-1 rounded-2xl">
-                <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-14 sm:h-10 *:leading-tight px-3 sm:px-4">
-                  <span className="text-sm font-medium text-gray-800">
+                <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-12 sm:h-10 *:leading-tight px-3 sm:px-4">
+                  <span className="sm:text-sm font-medium text-gray-800">
                     {data.match.schedule.matchType === "SQUAD"
                       ? `B팀`
                       : `초청팀`}
@@ -596,7 +596,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                     orientation="vertical"
                     className="hidden sm:flex !h-4"
                   />
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="hidden sm:inline text-sm font-medium text-gray-700">
                     {data.match.awayTeam.name}
                   </span>
                 </div>
