@@ -138,11 +138,11 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
   const getRankBadgeStyle = (rank: PlayerStats["rank"]) => {
     switch (rank) {
       case "gold":
-        return "bg-gradient-to-br from-yellow-400 to-yellow-500 inset-shadow-sm inset-shadow-yellow-200 shadow-md text-white border border-yellow-300";
+        return "bg-yellow-500 inset-shadow-sm inset-shadow-yellow-100 shadow-md text-white";
       case "silver":
-        return "bg-gradient-to-br from-gray-100 to-gray-300 inset-shadow-sm inset-shadow-white shadow-md text-gray-800 border border-gray-200";
+        return "bg-gray-300 inset-shadow-sm inset-shadow-white shadow-md text-gray-800";
       case "bronze":
-        return "bg-gradient-to-br from-amber-500 to-amber-700 inset-shadow-sm inset-shadow-amber-300 shadow-md text-white border border-amber-400";
+        return "bg-amber-700 inset-shadow-sm inset-shadow-amber-300 shadow-md text-white";
       default:
         return "bg-gray-100 text-gray-700 group-hover:bg-gray-200";
     }
