@@ -254,7 +254,7 @@ const GoalRecord = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-gray-50 rounded-2xl border border-gray-200 mx-4"
+      className="space-y-6 p-4 bg-gray-50 rounded-2xl border border-gray-300 mx-4"
     >
       {/* 득점 */}
       <div className="space-y-3">
@@ -269,13 +269,13 @@ const GoalRecord = ({
             options={
               <>
                 <option value="">선택</option>
-                <optgroup label={matchType === "SQUAD" ? "HOME" : "주최팀"}>
+                <optgroup label={matchType === "SQUAD" ? "A팀" : "주최팀"}>
                   {renderPlayerOptions(homeLineups)}
                   {homeMercenaryCount && homeMercenaryCount > 0 && (
                     <option value="mercenary_home_side">용병</option>
                   )}
                 </optgroup>
-                <optgroup label={matchType === "SQUAD" ? "AWAY" : "초청팀"}>
+                <optgroup label={matchType === "SQUAD" ? "B팀" : "초청팀"}>
                   {renderPlayerOptions(awayLineups)}
                   {awayMercenaryCount && awayMercenaryCount > 0 && (
                     <option value="mercenary_away_side">용병</option>
