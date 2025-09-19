@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, Minus, Power, RotateCw, Shuffle, X } from "lucide-react";
+import { Minus, Power, RotateCw, Shuffle, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TeamSide from "./TeamSide";
 import Lineup from "./Lineup";
@@ -21,7 +21,7 @@ import {
   updateTeamMatchLineupSide, // 새로운 액션 함수
 } from "../actions/match-actions";
 import {
-  // ClockCounterClockwiseIcon,
+  InfoIcon,
   SneakerMoveIcon,
   SoccerBallIcon,
   UsersIcon,
@@ -408,9 +408,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.homeTeam.logoUrl}
             name={data.match.homeTeam.name}
             teamId={data.match.homeTeam.id}
-            label={
-              data.match.schedule.matchType === "SQUAD" ? "HOME" : "주최팀"
-            }
+            label={data.match.schedule.matchType === "SQUAD" ? "A팀" : "주최팀"}
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
             <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
@@ -423,9 +421,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             logoUrl={data.match.awayTeam.logoUrl}
             name={data.match.awayTeam.name}
             teamId={data.match.awayTeam.id}
-            label={
-              data.match.schedule.matchType === "SQUAD" ? "AWAY" : "초청팀"
-            }
+            label={data.match.schedule.matchType === "SQUAD" ? "B팀" : "초청팀"}
           />
         </div>
 
@@ -569,14 +565,46 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
           {mode === "view" ? (
             <div className="grid grid-cols-2 gap-2">
-              <Lineup
-                lineups={homeLineup}
-                MercenaryCount={homeMercenaryCount}
-              />
-              <Lineup
-                lineups={awayLineup}
-                MercenaryCount={awayMercenaryCount}
-              />
+              <div className="flex flex-col bg-gray-50 p-1 rounded-2xl">
+                <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-14 sm:h-10 *:leading-tight px-4">
+                  <span className="text-sm font-medium text-gray-800">
+                    {data.match.schedule.matchType === "SQUAD"
+                      ? `A팀`
+                      : `주최팀`}
+                  </span>
+                  <Separator
+                    orientation="vertical"
+                    className="hidden sm:flex !h-4"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    {data.match.homeTeam.name}
+                  </span>
+                </div>
+                <Lineup
+                  lineups={homeLineup}
+                  MercenaryCount={homeMercenaryCount}
+                />
+              </div>
+              <div className="flex flex-col bg-gray-50 p-1 rounded-2xl">
+                <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-14 sm:h-10 *:leading-tight px-4">
+                  <span className="text-sm font-medium text-gray-800">
+                    {data.match.schedule.matchType === "SQUAD"
+                      ? `B팀`
+                      : `초청팀`}
+                  </span>
+                  <Separator
+                    orientation="vertical"
+                    className="hidden sm:flex !h-4"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    {data.match.awayTeam.name}
+                  </span>
+                </div>
+                <Lineup
+                  lineups={awayLineup}
+                  MercenaryCount={awayMercenaryCount}
+                />
+              </div>
             </div>
           ) : (
             <div className="space-y-3">
@@ -648,12 +676,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center shrink-0 h-10 border-l">
-                      <div className="flex items-center *:leading-tight gap-2 px-3">
+                      <div className="flex items-center *:leading-tight gap-2 px-3 sm:px-5 text-sm">
                         <span className="font-medium text-gray-800">
                           주최팀
                         </span>
-                        <Separator orientation="vertical" className="!h-5" />
-                        <span className="text-sm text-gray-500">팀원</span>
+                        <span className="text-gray-500">팀원</span>
                       </div>
                       <button
                         type="button"
@@ -683,12 +710,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   </div>
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center shrink-0 h-10 border-l">
-                      <div className="flex items-center *:leading-tight gap-2 px-3">
+                      <div className="flex items-center *:leading-tight gap-2 px-3 sm:px-5 text-sm">
                         <span className="font-medium text-gray-800">
                           초청팀
                         </span>
-                        <Separator orientation="vertical" className="!h-5" />
-                        <span className="text-sm text-gray-500">팀원</span>
+                        <span className="text-gray-500">팀원</span>
                       </div>
                       <button
                         type="button"
@@ -724,15 +750,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
                   (data.match.schedule.hostTeamMercenaryCount !== 0 ||
                     data.match.schedule.invitedTeamMercenaryCount !== 0))) && (
                 <div className="flex items-center gap-2">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full p-4 sm:p-3 border rounded-2xl">
-                    <div className="sm:px-2 flex items-center shrink-0 *:leading-tight gap-2 min-w-32">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-y-2 gap-x-3 w-full p-3 sm:px-4 border rounded-2xl">
+                    <div className="sm:px-2 flex items-center shrink-0 *:leading-tight gap-2 min-w-32 text-sm">
                       <span className="font-medium text-gray-800">
                         {data.match.schedule.matchType === "SQUAD"
-                          ? "HOME"
+                          ? "A팀"
                           : "주최팀"}
                       </span>
-                      <Separator orientation="vertical" className="!h-5" />
-                      <span className="text-sm text-gray-500">용병</span>
+                      <span className="text-gray-500">용병</span>
                     </div>
                     <CustomSelect
                       size="sm"
@@ -755,18 +780,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       )}
                     />
                   </div>
-                  {/* <div className="w-px border-l border-gray-200 h-8" /> */}
-                  {/* <div className="hidden sm:block w-px border-l border-gray-200 h-8" /> */}
-                  {/* <div className="sm:hidden w-full border-b border-gray-200" /> */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full p-4 sm:p-3 border rounded-2xl">
-                    <div className="sm:px-2 flex items-center shrink-0 *:leading-tight gap-2 min-w-32">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-y-2 gap-x-3 w-full p-3 sm:px-4 border rounded-2xl">
+                    <div className="sm:px-2 flex items-center shrink-0 *:leading-tight gap-2 min-w-32 text-sm">
                       <span className="font-medium text-gray-800">
                         {data.match.schedule.matchType === "SQUAD"
-                          ? "AWAY"
+                          ? "B팀"
                           : "초청팀"}
                       </span>
-                      <Separator orientation="vertical" className="!h-5" />
-                      <span className="text-sm text-gray-500">용병</span>
+                      <span className="text-gray-500">용병</span>
                     </div>
                     <CustomSelect
                       size="sm"
@@ -794,9 +815,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
             </div>
           )}
           {goalsWithScore.length > 0 && data.permissions.isEditable && (
-            <div className="h-9 mb-2 flex items-center gap-2 px-3 mt-2 bg-amber-500/5 rounded-sm">
-              <Info className="size-4 text-amber-600" />
-              <span className="text-sm text-amber-700">
+            <div className="h-9 my-2 flex items-center gap-2 px-4 bg-amber-400/10 rounded-sm text-amber-700">
+              <InfoIcon className="size-5" weight="fill" />
+              <span className="text-sm">
                 명단 수정은 득점기록이 존재하지 않아야 가능합니다
               </span>
             </div>

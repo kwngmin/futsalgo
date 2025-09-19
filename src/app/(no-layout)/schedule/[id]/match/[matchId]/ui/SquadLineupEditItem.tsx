@@ -160,7 +160,7 @@ export const SquadLineupEditItem = ({
               }`}
               onClick={() => handleSideChange("HOME")}
             >
-              HOME
+              A팀
             </button>
             <button
               type="button"
@@ -182,7 +182,7 @@ export const SquadLineupEditItem = ({
               }`}
               onClick={() => handleSideChange("AWAY")}
             >
-              AWAY
+              B팀
             </button>
           </div>
           <button

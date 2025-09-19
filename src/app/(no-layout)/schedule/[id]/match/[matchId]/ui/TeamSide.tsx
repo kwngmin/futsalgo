@@ -23,7 +23,7 @@ const TeamSide = ({
         }
       }}
     >
-      {label && <span className="text-sm text-gray-600">{label}</span>}
+      {label && <span className="font-medium text-gray-700">{label}</span>}
       <div>
         {logoUrl ? (
           <Image src={logoUrl} alt="home team logo" width={64} height={64} />

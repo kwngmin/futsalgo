@@ -24,7 +24,7 @@ const Lineup = ({
   }
 
   return (
-    <div className="border rounded-2xl overflow-hidden">
+    <div className="border rounded-2xl overflow-hidden bg-white">
       {/* <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
         <div
           className={`size-2 rounded-full ${

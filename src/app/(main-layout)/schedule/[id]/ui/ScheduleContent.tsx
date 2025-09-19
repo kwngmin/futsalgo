@@ -15,7 +15,6 @@ import {
   X,
   ClockIcon,
   Calendar,
-  // MapPinIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
@@ -24,6 +23,7 @@ import {
   CalendarCheckIcon,
   CalendarXIcon,
   HourglassHighIcon,
+  InfoIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
@@ -731,16 +731,16 @@ const ScheduleContent = ({
                 <div className="flex items-center gap-2">
                   <MegaphoneSimpleIcon
                     weight="fill"
-                    className="size-7 text-stone-500"
+                    className="size-7 text-red-500"
                   />
                   <h2 className="text-lg font-semibold">공지사항</h2>
-                  <Separator
+                  {/* <Separator
                     orientation="vertical"
                     className="!h-4 !bg-gray-300"
                   />
                   <span className="text-base font-medium text-gray-500">
                     비공개
-                  </span>
+                  </span> */}
                 </div>
                 <div className="flex items-center gap-2">
                   {!isEditingNotice && (
@@ -760,6 +760,18 @@ const ScheduleContent = ({
                 </div>
               </div>
 
+              {/* 비공개 안내 */}
+              <div className="h-9 mb-2 flex items-center gap-2 px-4 bg-amber-400/10 rounded-sm text-amber-700">
+                <InfoIcon className="size-5" weight="fill" />
+                <span className="text-sm">
+                  공지사항은{" "}
+                  <span className="font-medium text-amber-800">주최팀</span>{" "}
+                  또는{" "}
+                  <span className="font-medium text-amber-800">초청팀</span>만
+                  볼 수 있습니다.
+                </span>
+              </div>
+
               {isNoticeOpen && (
                 <div className="space-y-3">
                   {!isEditingNotice ? (
@@ -770,8 +782,12 @@ const ScheduleContent = ({
                           {data?.data?.schedule?.description}
                         </div>
                       ) : (
-                        <div className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line break-words min-h-16 flex items-center justify-center sm:text-sm">
-                          공지사항이 없습니다.
+                        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+                          <p className="font-medium">공지사항이 없습니다.</p>
+                          <p className="whitespace-pre-line break-keep text-sm">
+                            예약자, 풋살장 출입 방법, 주차장 이용 방법, 주의
+                            사항 등을 알려주세요.
+                          </p>
                         </div>
                       )}
 

@@ -77,9 +77,7 @@ export const SchedulePhotosGallery = ({
           <div className="flex items-center gap-2">
             <ImagesIcon //
               weight="fill"
-              // weight="light"
-              // weight="duotone"
-              className="size-7 text-zinc-700"
+              className="size-7 text-blue-600"
             />
             <h2 className="text-lg font-semibold ">사진</h2>
           </div>
