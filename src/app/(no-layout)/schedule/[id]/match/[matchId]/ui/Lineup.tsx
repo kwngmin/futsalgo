@@ -24,7 +24,7 @@ const Lineup = ({
   }
 
   return (
-    <div className="border rounded-2xl overflow-hidden bg-white">
+    <div className="border rounded-xl overflow-hidden bg-white hover:border-gray-400 transition-colors">
       {/* <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
         <div
           className={`size-2 rounded-full ${
@@ -40,12 +40,15 @@ const Lineup = ({
         </span>
       </div> */}
       {lineups.length > 0 &&
-        lineups.map((player) => (
+        lineups.map((player, index) => (
           <div
             key={player.id}
             className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group cursor-pointer hover:bg-gray-50 border-b last:border-b-0 border-gray-200"
             onClick={() => router.push(`/players/${player.user.id}`)}
           >
+            <span className="text-sm text-gray-400/80 mr-0.5 sm:mr-1">
+              {index + 1}
+            </span>
             {player.user.image ? (
               <Image
                 src={player.user.image}
@@ -78,6 +81,9 @@ const Lineup = ({
             key={index}
             className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200"
           >
+            <span className="text-sm text-gray-400/80 mr-0.5 sm:mr-1">
+              {lineups.length + index + 1}
+            </span>
             <div className="hidden sm:flex items-center justify-center size-8 sm:size-9 rounded-full bg-slate-400/50">
               <div className="size-6 sm:size-7 rounded-full flex items-center justify-center overflow-hidden relative">
                 <div className="absolute top-1 size-2.5 sm:size-3 bg-white rounded-full" />
