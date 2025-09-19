@@ -674,8 +674,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center shrink-0 h-10 border-l">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex justify-between items-center shrink-0 h-8 border-l">
                       <div className="flex items-center *:leading-tight gap-2 px-3 sm:px-5 text-sm">
                         <span className="font-medium text-gray-800">
                           주최팀
@@ -686,7 +686,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         type="button"
                         disabled={isLoading}
                         onClick={() => handleUpdateLineupSide("HOME")}
-                        className="mx-2 p-2 rounded-full border cursor-pointer active:scale-95 hover:bg-gray-100"
+                        className="mx-2 p-1.5 rounded-full border cursor-pointer active:scale-95 hover:bg-gray-100"
                       >
                         <RotateCw className="size-4 text-gray-600" />
                       </button>
@@ -708,8 +708,8 @@ const MatchContent = ({ data }: MatchContentProps) => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center shrink-0 h-10 border-l">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex justify-between items-center shrink-0 h-8 border-l">
                       <div className="flex items-center *:leading-tight gap-2 px-3 sm:px-5 text-sm">
                         <span className="font-medium text-gray-800">
                           초청팀
@@ -720,7 +720,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
                         type="button"
                         disabled={isLoading}
                         onClick={() => handleUpdateLineupSide("AWAY")}
-                        className="mx-2 p-2 rounded-full border cursor-pointer active:scale-95 hover:bg-gray-100"
+                        className="mx-2 p-1.5 rounded-full border cursor-pointer active:scale-95 hover:bg-gray-100"
                       >
                         <RotateCw className="size-4 text-gray-600" />
                       </button>
