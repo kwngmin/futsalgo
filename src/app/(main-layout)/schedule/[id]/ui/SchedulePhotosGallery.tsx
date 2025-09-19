@@ -159,9 +159,9 @@ export const SchedulePhotosGallery = ({
       //     사진이 없습니다.
       //   </p>
       !isLoading ? (
-        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center rounded-2xl min-h-16 text-gray-500">
           <p className="font-medium text-gray-700">사진이 없습니다.</p>
-          <p className="whitespace-pre-line break-keep text-sm">
+          <p className="whitespace-pre-line break-keep text-sm mb-2">
             단체 사진 또는 경기 사진을 업로드해주세요.
           </p>
         </div>

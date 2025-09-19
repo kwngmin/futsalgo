@@ -665,9 +665,9 @@ const ScheduleContent = ({
                 ))}
               </div>
             ) : (
-              <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+              <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center rounded-2xl min-h-16 text-gray-500">
                 <p className="font-medium text-gray-700">경기가 없습니다.</p>
-                <p className="whitespace-pre-line break-keep text-sm">
+                <p className="whitespace-pre-line break-keep text-sm mb-2">
                   경기를 추가하고 득점 기록을 남겨주세요.
                 </p>
               </div>
@@ -785,11 +785,11 @@ const ScheduleContent = ({
                           {data?.data?.schedule?.description}
                         </div>
                       ) : (
-                        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center gap-1 rounded-2xl min-h-16 text-gray-500">
+                        <div className="p-8 bg-gray-50 flex flex-col sm:items-center justify-center rounded-2xl min-h-16 text-gray-500">
                           <p className="font-medium text-gray-700">
                             공지사항이 없습니다.
                           </p>
-                          <p className="whitespace-pre-line break-keep text-sm">
+                          <p className="whitespace-pre-line break-keep text-sm mb-2">
                             예약자, 풋살장 출입 방법, 주차장 이용 방법, 주의
                             사항 등을 알려주세요.
                           </p>
