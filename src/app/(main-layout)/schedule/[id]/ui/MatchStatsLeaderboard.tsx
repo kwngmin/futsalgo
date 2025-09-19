@@ -153,8 +153,8 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       {/* 경기 타이틀 바 */}
       <div className="flex justify-between items-center py-2 min-h-13 border-b border-slate-200 mb-2">
         <div className="flex items-center gap-2">
-          <ChartBarIcon weight="fill" className="size-7 text-slate-500" />
-          <h2 className="text-lg font-semibold">경기 통계</h2>
+          <ChartBarIcon weight="fill" className="size-7 text-zinc-500" />
+          <h2 className="text-lg font-semibold">통계</h2>
         </div>
         <div className="flex items-center gap-2 sm:gap-10 text-sm text-slate-500 px-2 sm:px-4">
           <span className="w-9 text-center font-medium">득점</span>
