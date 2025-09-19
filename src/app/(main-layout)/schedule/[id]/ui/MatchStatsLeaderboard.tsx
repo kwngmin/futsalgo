@@ -156,10 +156,10 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
           <ChartBarIcon weight="fill" className="size-7 text-zinc-500" />
           <h2 className="text-lg font-semibold">경기 통계</h2>
         </div>
-        <div className="flex items-center gap-2 sm:gap-10 text-sm text-gray-500 px-2 sm:px-4">
-          <span className="w-9 text-center">득점</span>
-          <span className="w-9 text-center">도움</span>
-          <span className="w-9 text-center">합계</span>
+        <div className="flex items-center gap-2 sm:gap-10 text-sm text-slate-500 px-2 sm:px-4">
+          <span className="w-9 text-center font-medium">득점</span>
+          <span className="w-9 text-center font-medium">도움</span>
+          <span className="w-9 text-center font-medium">합계</span>
         </div>
       </div>
 
