@@ -48,6 +48,7 @@ import { Separator } from "@/shared/components/ui/separator";
 import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import { getMatchLineupCount } from "../lib/summary-versus";
+import MatchStatsLeaderboard from "./MatchStatsLeaderboard";
 
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
@@ -707,6 +708,12 @@ const ScheduleContent = ({
             )}
           </div>
         )}
+
+        {/* 경기 통계 */}
+        <MatchStatsLeaderboard
+          schedule={data.data.schedule}
+          isMember={data.data.isMember}
+        />
 
         {/* MVP */}
         {new Date(
