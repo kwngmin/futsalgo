@@ -151,7 +151,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
   return (
     <div className="px-4">
       {/* 경기 타이틀 바 */}
-      <div className="flex justify-between items-center py-2 min-h-13">
+      <div className="flex justify-between items-center py-2 min-h-13 border-b border-slate-200 mb-2">
         <div className="flex items-center gap-2">
           <ChartBarIcon weight="fill" className="size-7 text-slate-500" />
           <h2 className="text-lg font-semibold">경기 통계</h2>
