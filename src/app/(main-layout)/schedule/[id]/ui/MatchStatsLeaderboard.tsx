@@ -132,11 +132,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
   const hasMoreItems = playerStats.length > 3;
 
   if (playerStats.length === 0) {
-    return (
-      <div className="flex items-center justify-center p-8 bg-gray-50 rounded-lg">
-        <p className="text-gray-500">아직 기록된 득점이 없습니다</p>
-      </div>
-    );
+    return null;
   }
 
   const getRankBadgeStyle = (rank: PlayerStats["rank"]) => {

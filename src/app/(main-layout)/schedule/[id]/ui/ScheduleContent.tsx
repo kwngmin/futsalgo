@@ -710,10 +710,12 @@ const ScheduleContent = ({
         )}
 
         {/* 경기 통계 */}
-        <MatchStatsLeaderboard
-          schedule={data.data.schedule}
-          isMember={data.data.isMember}
-        />
+        {data.data.schedule.matches.length > 0 && (
+          <MatchStatsLeaderboard
+            schedule={data.data.schedule}
+            isMember={data.data.isMember}
+          />
+        )}
 
         {/* MVP */}
         {new Date(
