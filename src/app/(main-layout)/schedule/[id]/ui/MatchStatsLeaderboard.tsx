@@ -180,12 +180,12 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
             return (
               <div
                 key={stat.user.id}
-                className="flex items-center justify-between p-2 sm:px-4 transition-colors hover:bg-gray-50 group"
+                className="flex items-center justify-between p-2 pl-0 sm:pr-4 transition-colors hover:bg-gray-50 group"
               >
                 {/* 왼쪽: 프로필 정보 */}
                 <div className="flex items-center gap-2">
                   {/* 순위 표시 */}
-                  <div className="text-gray-400 text-sm text-center w-4">
+                  <div className="text-gray-400 text-sm text-center w-4 sm:w-6">
                     {actualRank}
                   </div>
 
