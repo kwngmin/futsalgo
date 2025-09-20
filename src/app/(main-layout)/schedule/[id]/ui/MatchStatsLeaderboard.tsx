@@ -145,7 +145,6 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
         return "bg-gradient-to-br from-amber-600/80 to-amber-700 text-white";
       default:
         return "text-gray-700";
-      // return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -165,90 +164,76 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       </div>
 
       {/* 경기 통계 내용 */}
-      <div
-      //   className="rounded-md border border-gray-200 overflow-hidden shadow-xs group"
-      >
+      <div>
         <div className="divide-y divide-gray-100">
-          {displayedStats.map((stat) => {
-            // 실제 순위 계산 (동점자 고려)
-            // const actualRank =
-            //   playerStats.filter((s) => s.total > stat.total).length + 1;
-
-            return (
-              <div
-                key={stat.user.id}
-                className="sm:rounded-md flex items-center justify-between py-2 transition-colors"
-              >
-                {/* 왼쪽: 프로필 정보 */}
-                <div className="flex items-center gap-2">
-                  {/* 순위 표시 */}
-                  {/* <div className="hidden sm:block text-gray-400 text-sm text-center w-4 sm:w-6">
-                    {index + 1}
-                    {actualRank}
-                  </div> */}
-
-                  {/* 프로필 이미지 */}
-                  <div className="relative">
-                    {stat.user.image ? (
-                      <Image
-                        src={stat.user.image}
-                        alt={stat.user.nickname || stat.user.name || ""}
-                        className="size-12 rounded-full object-cover border border-gray-200"
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          target.src = "";
-                          target.style.display = "none";
-                          const sibling = target.nextElementSibling;
-                          if (sibling) {
-                            sibling.classList.remove("hidden");
-                          }
-                        }}
-                        width={64}
-                        height={64}
-                      />
-                    ) : null}
-                    <div
-                      className={`w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center ${
-                        stat.user.image ? "hidden" : ""
-                      }`}
-                    >
-                      <UserCircle className="w-8 h-8 text-gray-400" />
-                    </div>
-                  </div>
-
-                  {/* 이름 정보 */}
-                  <div className="flex flex-col *:leading-tight">
-                    <span className="font-medium text-gray-900">
-                      {stat.user.nickname || stat.user.name || "선수"}
-                    </span>
-                    {/* 실명은 멤버일 때만 표시 */}
-                    {isMember && stat.user.name && stat.user.nickname && (
-                      <span className="text-sm text-gray-500">
-                        {stat.user.name}
-                      </span>
-                    )}
+          {displayedStats.map((stat) => (
+            <div
+              key={stat.user.id}
+              className="sm:rounded-md flex items-center justify-between py-2 transition-colors"
+            >
+              {/* 왼쪽: 프로필 정보 */}
+              <div className="flex items-center gap-2">
+                {/* 프로필 이미지 */}
+                <div className="relative">
+                  {stat.user.image ? (
+                    <Image
+                      src={stat.user.image}
+                      alt={stat.user.nickname || stat.user.name || ""}
+                      className="size-12 rounded-full object-cover border border-gray-200"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.src = "";
+                        target.style.display = "none";
+                        const sibling = target.nextElementSibling;
+                        if (sibling) {
+                          sibling.classList.remove("hidden");
+                        }
+                      }}
+                      width={64}
+                      height={64}
+                    />
+                  ) : null}
+                  <div
+                    className={`w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center ${
+                      stat.user.image ? "hidden" : ""
+                    }`}
+                  >
+                    <UserCircle className="w-8 h-8 text-gray-400" />
                   </div>
                 </div>
 
-                {/* 오른쪽: 통계 정보 */}
-                <div className="flex items-center gap-3 sm:gap-10 px-2 sm:px-4">
-                  <div className="size-9 flex justify-center items-center text-gray-700">
-                    {stat.goals}
-                  </div>
-                  <div className="size-9 flex justify-center items-center text-gray-700">
-                    {stat.assists}
-                  </div>
-                  <div
-                    className={`size-9 rounded-full flex justify-center items-center font-medium ${getRankBadgeStyle(
-                      stat.rank
-                    )}`}
-                  >
-                    {stat.total}
-                  </div>
+                {/* 이름 정보 */}
+                <div className="flex flex-col *:leading-tight">
+                  <span className="font-medium text-gray-900">
+                    {stat.user.nickname || stat.user.name || "선수"}
+                  </span>
+                  {/* 실명은 멤버일 때만 표시 */}
+                  {isMember && stat.user.name && stat.user.nickname && (
+                    <span className="text-sm text-gray-500">
+                      {stat.user.name}
+                    </span>
+                  )}
                 </div>
               </div>
-            );
-          })}
+
+              {/* 오른쪽: 통계 정보 */}
+              <div className="flex items-center gap-3 sm:gap-10 px-2 sm:px-4">
+                <div className="size-9 flex justify-center items-center text-gray-700">
+                  {stat.goals}
+                </div>
+                <div className="size-9 flex justify-center items-center text-gray-700">
+                  {stat.assists}
+                </div>
+                <div
+                  className={`size-9 rounded-full flex justify-center items-center font-medium ${getRankBadgeStyle(
+                    stat.rank
+                  )}`}
+                >
+                  {stat.total}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* 더보기/접기 버튼 */}
