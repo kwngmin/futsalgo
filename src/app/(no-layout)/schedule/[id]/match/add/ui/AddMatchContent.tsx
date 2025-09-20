@@ -17,7 +17,7 @@ const AddMatchContent = ({ scheduleId }: { scheduleId: string }) => {
             router.push(`/schedule/${scheduleId}`);
           }}
         >
-          <X className="size-5" />
+          <X className="size-6" />
         </button>
       </div>
       {/* <div className="space-y-6">

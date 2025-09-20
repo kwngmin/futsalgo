@@ -279,7 +279,7 @@ const ManageAttendanceContent = ({
           onClick={() => router.push(`/schedule/${scheduleId}?tab=attendance`)}
           aria-label="닫기"
         >
-          <X className="size-5" />
+          <X className="size-6" />
         </button>
       </header>
 

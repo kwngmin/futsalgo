@@ -394,7 +394,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
               )
             }
           >
-            <X className="size-5" />
+            <X className="size-6" />
           </button>
         </div>
       </div>

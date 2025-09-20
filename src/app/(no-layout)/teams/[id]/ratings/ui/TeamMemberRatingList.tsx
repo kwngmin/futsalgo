@@ -231,7 +231,7 @@ export default function TeamMemberRatingList({
                   onClick={closeModal}
                   className="text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
-                  <X className="size-5" />
+                  <X className="size-6" />
                 </button>
               </div>
 

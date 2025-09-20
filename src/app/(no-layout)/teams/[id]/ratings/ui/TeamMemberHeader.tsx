@@ -17,7 +17,7 @@ const TeamMemberHeader = ({ id }: { id: string }) => {
         className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
         onClick={handleGoBack}
       >
-        <X className="size-5" />
+        <X className="size-6" />
       </button>
     </div>
   );
