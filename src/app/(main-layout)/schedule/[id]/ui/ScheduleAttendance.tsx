@@ -221,7 +221,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
             weight="fill"
             className="size-7 text-zinc-600"
           />
-          <h2 className="text-xl font-semibold ">참석인원</h2>
+          <h2 className="text-xl font-semibold">참석인원</h2>
         </div>
 
         {/* 관리 버튼 */}

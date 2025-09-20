@@ -224,7 +224,7 @@ export default function TeamMemberRatingList({
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-medium text-gray-900">
                   {selectedMember.user.nickname || selectedMember.user.name}{" "}
                 </h2>
                 <button

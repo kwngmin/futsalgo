@@ -79,7 +79,7 @@ export const SchedulePhotosGallery = ({
               weight="fill"
               className="size-7 text-zinc-600"
             />
-            <h2 className="text-xl font-semibold ">사진</h2>
+            <h2 className="text-xl font-semibold">사진</h2>
           </div>
         </div>
       )}
