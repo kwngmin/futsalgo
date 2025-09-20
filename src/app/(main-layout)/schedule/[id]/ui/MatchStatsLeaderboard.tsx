@@ -255,7 +255,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
         {hasMoreItems && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-11 sm:h-10 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+            className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-12 sm:h-11 sm:text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
           >
             {isExpanded ? (
               <>
