@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { UserCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { ChartBarIcon } from "@phosphor-icons/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // 타입 정의
 interface User {
@@ -120,6 +121,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
   schedule,
   isMember = false,
 }) => {
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
 
   // 통계 계산 및 순위 부여
@@ -218,10 +220,14 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
             {/* 프로필 정보 */}
             <div className="flex items-center gap-2">
               <ProfileImage user={stat.user} />
-              <div className="flex flex-col *:leading-tight">
-                <span className="font-medium text-gray-900">
+              <div className="flex flex-col items-start">
+                <button
+                  type="button"
+                  onClick={() => router.push(`/players/${stat.user.id}`)}
+                  className="font-medium text-gray-900 hover:underline underline-offset-4 cursor-pointer hover:font-semibold"
+                >
                   {stat.user.nickname || stat.user.name || "선수"}
-                </span>
+                </button>
                 {isMember && stat.user.name && stat.user.nickname && (
                   <span className="text-sm text-gray-500">
                     {stat.user.name}
@@ -244,7 +250,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       {hasMoreItems && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-12 sm:h-11 sm:text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+          className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-12 sm:h-11 sm:text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer active:scale-98"
         >
           {isExpanded ? "접기" : "더보기"}
           {isExpanded ? (
