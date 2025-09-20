@@ -745,7 +745,7 @@ const ScheduleContent = ({
                     weight="fill"
                     className="size-7 text-zinc-500"
                   />
-                  <h2 className="text-lg font-semibold">공지사항</h2>
+                  <h2 className="text-xl font-semibold">공지사항</h2>
                   {/* <Separator
                     orientation="vertical"
                     className="!h-4 !bg-gray-300"

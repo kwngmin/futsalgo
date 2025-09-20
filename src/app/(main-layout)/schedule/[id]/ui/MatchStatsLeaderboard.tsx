@@ -199,7 +199,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       <div className="flex justify-between items-center py-2 min-h-13 border-b border-slate-200 mb-2">
         <div className="flex items-center gap-2">
           <ChartBarIcon weight="fill" className="size-7 text-zinc-500" />
-          <h2 className="text-lg font-semibold">통계</h2>
+          <h2 className="text-xl font-semibold">통계</h2>
         </div>
         <div className="flex items-center gap-3 sm:gap-10 text-sm text-slate-500 px-2 sm:px-4">
           {["득점", "도움", "합계"].map((label) => (
@@ -250,7 +250,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       {hasMoreItems && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-12 sm:h-11 sm:text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer active:scale-98"
+          className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-12 sm:h-11 sm:text-sm font-semibold text-gray-700 border border-gray-300 hover:bg-gray-100 rounded-md transition-colors cursor-pointer active:scale-98"
         >
           {isExpanded ? "접기" : "더보기"}
           {isExpanded ? (

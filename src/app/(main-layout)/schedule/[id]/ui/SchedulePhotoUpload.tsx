@@ -215,7 +215,7 @@ const SchedulePhotoUpload = ({
             weight="fill"
             className="size-7 text-zinc-600"
           />
-          <h2 className="text-lg font-semibold ">사진</h2>
+          <h2 className="text-xl font-semibold ">사진</h2>
         </div>
         <label
           htmlFor="schedule-photos"
@@ -246,7 +246,7 @@ const SchedulePhotoUpload = ({
             weight="fill"
             className="size-7 text-zinc-600"
           />
-          <h2 className="text-lg font-semibold ">사진</h2>
+          <h2 className="text-xl font-semibold ">사진</h2>
         </div>
         <button
           onClick={clearAllFiles}

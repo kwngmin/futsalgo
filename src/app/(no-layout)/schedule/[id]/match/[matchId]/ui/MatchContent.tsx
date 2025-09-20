@@ -537,7 +537,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
           <div className="flex justify-between items-center py-2 min-h-13">
             <div className="flex items-center gap-2">
               <UsersIcon className="size-7 text-stone-500" />
-              <h2 className="text-lg font-semibold">출전 명단</h2>
+              <h2 className="text-xl font-semibold">출전 명단</h2>
               <span className="font-medium text-amber-600">
                 {homeMercenaryCount +
                   awayMercenaryCount +
