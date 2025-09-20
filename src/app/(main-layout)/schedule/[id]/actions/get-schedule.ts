@@ -42,6 +42,7 @@ export async function getSchedule(scheduleId: string) {
             goals: {
               include: {
                 scorer: true,
+                assist: true,
               },
             },
           },

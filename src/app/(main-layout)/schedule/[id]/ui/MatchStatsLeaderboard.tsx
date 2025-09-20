@@ -144,7 +144,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
       case "bronze":
         return "bg-gradient-to-br from-amber-600/80 to-amber-700 text-white";
       default:
-        return "text-gray-700";
+        return "bg-gray-100 text-gray-700";
     }
   };
 
