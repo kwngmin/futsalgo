@@ -138,25 +138,26 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
   const getRankBadgeStyle = (rank: PlayerStats["rank"]) => {
     switch (rank) {
       case "gold":
-        return "bg-yellow-500 inset-shadow-sm inset-shadow-yellow-100 shadow-md text-white";
+        return "bg-gradient-to-br from-yellow-400/80 to-yellow-500 text-white";
       case "silver":
-        return "bg-gray-300 inset-shadow-sm inset-shadow-white shadow-md text-gray-800";
+        return "bg-gradient-to-br from-gray-200/80 to-gray-300 text-gray-800";
       case "bronze":
-        return "bg-amber-700 inset-shadow-sm inset-shadow-amber-300 shadow-md text-white";
+        return "bg-gradient-to-br from-amber-600/80 to-amber-700 text-white";
       default:
-        return "bg-gray-100 text-gray-700 group-hover:bg-gray-200";
+        return "text-gray-700";
+      // return "bg-gray-100 text-gray-700";
     }
   };
 
   return (
-    <div className="px-4">
+    <div className="px-4 select-none">
       {/* 경기 타이틀 바 */}
       <div className="flex justify-between items-center py-2 min-h-13 border-b border-slate-200 mb-2">
         <div className="flex items-center gap-2">
           <ChartBarIcon weight="fill" className="size-7 text-zinc-500" />
           <h2 className="text-lg font-semibold">통계</h2>
         </div>
-        <div className="flex items-center gap-2 sm:gap-10 text-sm text-slate-500 px-2 sm:px-4">
+        <div className="flex items-center gap-3 sm:gap-10 text-sm text-slate-500 px-2 sm:px-4">
           <span className="w-9 text-center font-medium">득점</span>
           <span className="w-9 text-center font-medium">도움</span>
           <span className="w-9 text-center font-medium">합계</span>
@@ -170,20 +171,21 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
         <div className="divide-y divide-gray-100">
           {displayedStats.map((stat) => {
             // 실제 순위 계산 (동점자 고려)
-            const actualRank =
-              playerStats.filter((s) => s.total > stat.total).length + 1;
+            // const actualRank =
+            //   playerStats.filter((s) => s.total > stat.total).length + 1;
 
             return (
               <div
                 key={stat.user.id}
-                className="flex items-center justify-between p-2 pl-0 sm:pr-4 transition-colors hover:bg-gray-50 group"
+                className="sm:rounded-md flex items-center justify-between py-2 transition-colors"
               >
                 {/* 왼쪽: 프로필 정보 */}
                 <div className="flex items-center gap-2">
                   {/* 순위 표시 */}
-                  <div className="text-gray-400 text-sm text-center w-4 sm:w-6">
+                  {/* <div className="hidden sm:block text-gray-400 text-sm text-center w-4 sm:w-6">
+                    {index + 1}
                     {actualRank}
-                  </div>
+                  </div> */}
 
                   {/* 프로필 이미지 */}
                   <div className="relative">
@@ -229,11 +231,11 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
                 </div>
 
                 {/* 오른쪽: 통계 정보 */}
-                <div className="flex items-center gap-2 sm:gap-10">
-                  <div className="size-9 rounded-full flex justify-center items-center text-gray-700 group-hover:bg-white">
+                <div className="flex items-center gap-3 sm:gap-10 px-2 sm:px-4">
+                  <div className="size-9 flex justify-center items-center text-gray-700">
                     {stat.goals}
                   </div>
-                  <div className="size-9 rounded-full flex justify-center items-center text-gray-700 group-hover:bg-white">
+                  <div className="size-9 flex justify-center items-center text-gray-700">
                     {stat.assists}
                   </div>
                   <div
