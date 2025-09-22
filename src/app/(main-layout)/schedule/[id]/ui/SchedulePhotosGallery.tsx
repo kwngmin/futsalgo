@@ -159,7 +159,7 @@ export const SchedulePhotosGallery = ({
       //     사진이 없습니다.
       //   </p>
       !isLoading ? (
-        <div className="p-6 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
+        <div className="py-6 px-8 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
           <p className="text-lg sm:text-base font-medium text-gray-600">
             사진이 없습니다.
           </p>
