@@ -637,7 +637,7 @@ const ScheduleContent = ({
                           weight="fill"
                           className="size-5 text-gray-800"
                         />
-                        <span className="font-medium min-w-10">
+                        <span className="text-lg font-medium min-w-10">
                           {index + 1}경기
                         </span>
                         <Separator
