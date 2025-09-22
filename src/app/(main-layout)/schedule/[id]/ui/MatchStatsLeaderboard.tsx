@@ -215,7 +215,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
         {displayedStats.map((stat) => (
           <div
             key={stat.user.id}
-            className="sm:rounded-md flex items-center justify-between py-1 transition-colors"
+            className="sm:rounded-md flex items-center justify-between py-2 transition-colors"
           >
             {/* 프로필 정보 */}
             <div className="flex items-center gap-3">
