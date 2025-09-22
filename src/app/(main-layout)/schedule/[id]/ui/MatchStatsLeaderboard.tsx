@@ -215,16 +215,16 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
         {displayedStats.map((stat) => (
           <div
             key={stat.user.id}
-            className="sm:rounded-md flex items-center justify-between py-2 transition-colors"
+            className="sm:rounded-md flex items-center justify-between py-1 transition-colors"
           >
             {/* 프로필 정보 */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <ProfileImage user={stat.user} />
               <div className="flex flex-col items-start">
                 <button
                   type="button"
                   onClick={() => router.push(`/players/${stat.user.id}`)}
-                  className="font-medium text-gray-900 hover:underline underline-offset-4 cursor-pointer hover:font-semibold"
+                  className="font-medium text-gray-900 hover:underline underline-offset-4 cursor-pointer hover:font-semibold leading-tight"
                 >
                   {stat.user.nickname || stat.user.name || "선수"}
                 </button>

@@ -623,7 +623,7 @@ const ScheduleContent = ({
                     key={match.id}
                   >
                     <div
-                      className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                      className="w-full flex items-center justify-between px-4 h-13 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
                       onClick={() => {
                         router.push(
                           `/schedule/${scheduleId}/match/${
