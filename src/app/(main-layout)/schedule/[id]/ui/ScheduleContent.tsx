@@ -666,7 +666,7 @@ const ScheduleContent = ({
                 ))}
               </div>
             ) : (
-              <div className="px-8 py-6 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
+              <div className="p-6 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
                 <p className="text-lg sm:text-base font-medium text-gray-600">
                   경기가 없습니다.
                 </p>
@@ -796,7 +796,7 @@ const ScheduleContent = ({
                           {data?.data?.schedule?.description}
                         </div>
                       ) : (
-                        <div className="px-8 py-6 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
+                        <div className="p-6 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
                           <p className="text-lg sm:text-base font-medium text-gray-600">
                             공지사항이 없습니다.
                           </p>
