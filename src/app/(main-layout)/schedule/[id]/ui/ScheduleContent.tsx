@@ -777,14 +777,18 @@ const ScheduleContent = ({
               {/* 비공개 안내 */}
               <div className="h-9 mb-2 flex items-center gap-1.5 px-4 bg-amber-400/10 rounded-sm text-amber-700">
                 <Info className="size-4" />
-                <span className="text-sm">
-                  {/* 일정에 참가하는{" "} */}
-                  <span className="font-medium text-amber-800">
-                    주최팀
-                  </span>과{" "}
-                  <span className="font-medium text-amber-800">초청팀</span>의
-                  팀원만 볼 수 있습니다.
-                </span>
+                {data.data.schedule.matchType === "TEAM" ? (
+                  <span className="text-sm">
+                    <span className="font-medium text-amber-800">주최팀</span>과{" "}
+                    <span className="font-medium text-amber-800">초청팀</span>의
+                    팀원만 볼 수 있습니다.
+                  </span>
+                ) : (
+                  <span className="text-sm">
+                    <span className="font-medium text-amber-800">주최팀</span>{" "}
+                    팀원만 볼 수 있습니다.
+                  </span>
+                )}
               </div>
 
               {isNoticeOpen && (

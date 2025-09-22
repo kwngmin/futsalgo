@@ -13,11 +13,11 @@ const SideNav = () => {
   return (
     <Fragment>
       {/* 데스크톱 사이드바 */}
-      <div className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-0 lg:w-72 lg:bg-white lg:border-r lg:border-gray-200">
+      <div className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-1/2 -translate-x-[31.5rem] lg:w-64 lg:bg-white lg:border-r lg:border-gray-200">
         <div className="flex flex-col w-full">
           {/* 로고 */}
           <button
-            className="flex items-center justify-center h-20 px-8 cursor-pointer"
+            className="flex items-center justify-center h-15 px-8 cursor-pointer my-1"
             type="button"
             onClick={() => router.push("/")}
           >

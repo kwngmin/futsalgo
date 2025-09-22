@@ -229,7 +229,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
       <div className="">
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* MVP 투표 현황 */}
-          <div className="grid grid-cols-3 gap-3 px-4 py-4 mb-1">
+          <div className="grid grid-cols-3 gap-3 p-3 mb-1">
             <div className="flex flex-col gap-1 items-center my-2">
               <div className="font-semibold">
                 {mvpStats.voted === 0 ? "-" : `${mvpStats.voted}`}
