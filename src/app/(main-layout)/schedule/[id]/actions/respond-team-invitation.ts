@@ -123,7 +123,7 @@ export async function respondTeamInvitation(
 
       // 일정 상태 업데이트
       const newScheduleStatus: ScheduleStatus =
-        response === "ACCEPT" ? "READY" : "REJECTED";
+        response === "ACCEPT" ? "CONFIRMED" : "REJECTED";
 
       const updatedSchedule = await tx.schedule.update({
         where: { id: scheduleId },

@@ -76,7 +76,7 @@ export async function addNewSchedule({
           endTime: formData.endTime,
           startPeriod: formData.startPeriod,
           matchType: formData.matchType as MatchType,
-          status: formData.matchType === "TEAM" ? "PENDING" : "READY",
+          status: formData.matchType === "TEAM" ? "PENDING" : "CONFIRMED",
           createdById: createdById,
           hostTeamId: formData.hostTeamId,
           invitedTeamId: formData.invitedTeamId,
@@ -152,7 +152,7 @@ export async function acceptTeamMatchInvitation({
       // 2. 일정 상태를 READY로 변경
       await tx.schedule.update({
         where: { id: scheduleId },
-        data: { status: "READY" },
+        data: { status: "CONFIRMED" },
       });
 
       // 3. 이제 양 팀 멤버들을 참석자로 추가

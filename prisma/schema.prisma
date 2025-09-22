@@ -128,10 +128,11 @@ enum MatchType {
 }
 
 enum ScheduleStatus {
-  PENDING      // 팀매치 수락 대기
-  READY        // 경기 준비 완료 
-  REJECTED     // 팀매치 거절됨
-  PLAY         // 경기 시작됨 → 참가 여부 변경 불가
+  PENDING      // 친선전 수락 대기
+  CONFIRMED    // 일정 확정됨 (자체전: 생성 즉시, 친선전: 상대 수락)
+  READY        // 경기 생성됨, 라인업(출전명단) 대기 중
+  PLAY         // 경기 진행 가능 → 참가 여부 변경 불가
+  REJECTED     // 친선전 거절됨
   DELETED      // 삭제됨
 }
 

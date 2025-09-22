@@ -9,48 +9,110 @@ import {
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { PrismaClient } from "@prisma/client";
+
+// 타입 정의
+type TransactionClient = Omit<
+  PrismaClient,
+  "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+>;
+
+/**
+ * 스케줄 상태를 확인하고 업데이트하는 통합 헬퍼 함수
+ * CONFIRMED: 일정 확정, 경기 없음
+ * READY: 경기 있으나 모두 isLinedUp false
+ * PLAY: 경기 있고 최소 1개 isLinedUp true
+ */
+async function updateScheduleStatusBasedOnMatches(
+  scheduleId: string,
+  tx: TransactionClient
+) {
+  // 스케줄과 모든 매치 정보 조회
+  const schedule = await tx.schedule.findUnique({
+    where: { id: scheduleId },
+    select: {
+      status: true,
+      matchType: true,
+    },
+  });
+
+  if (!schedule) return;
+
+  // PENDING이나 REJECTED 상태는 변경하지 않음
+  if (
+    schedule.status === ScheduleStatus.PENDING ||
+    schedule.status === ScheduleStatus.REJECTED ||
+    schedule.status === ScheduleStatus.DELETED
+  ) {
+    return;
+  }
+
+  // 스케줄의 모든 매치들 조회
+  const matches = await tx.match.findMany({
+    where: { scheduleId },
+    select: { isLinedUp: true },
+  });
+
+  let targetStatus: ScheduleStatus;
+
+  if (matches.length === 0) {
+    // 경기가 없으면 CONFIRMED 상태로
+    targetStatus = ScheduleStatus.CONFIRMED;
+  } else {
+    // 경기가 있는 경우, isLinedUp 상태 확인
+    const hasLinedUpMatch = matches.some((match) => match.isLinedUp);
+
+    if (hasLinedUpMatch) {
+      // 최소 1개의 경기가 isLinedUp true면 PLAY
+      targetStatus = ScheduleStatus.PLAY;
+    } else {
+      // 모든 경기가 isLinedUp false면 READY
+      targetStatus = ScheduleStatus.READY;
+    }
+  }
+
+  // 상태가 다를 때만 업데이트
+  if (schedule.status !== targetStatus) {
+    await tx.schedule.update({
+      where: { id: scheduleId },
+      data: { status: targetStatus },
+    });
+  }
+}
+
+/**
+ * 라인업 상태를 확인하는 헬퍼 함수
+ */
+const checkLineupStatus = (lineups: Array<{ side: TeamSide }>) => {
+  const homeCount = lineups.filter((lineup) => lineup.side === "HOME").length;
+  const awayCount = lineups.filter((lineup) => lineup.side === "AWAY").length;
+  return {
+    homeCount,
+    awayCount,
+    isLinedUp: homeCount > 0 && awayCount > 0,
+  };
+};
+
+/**
+ * 팀 타입을 팀 사이드로 매핑하는 헬퍼 함수
+ */
+const mapTeamTypeToSide = (teamType: string): TeamSide => {
+  return teamType === "HOST" ? "HOME" : "AWAY";
+};
 
 /**
  * 경기 삭제
  */
 export async function deleteMatch(matchId: string, scheduleId: string) {
   try {
-    // 트랜잭션으로 관련된 모든 데이터 삭제 및 스케줄 상태 업데이트
     await prisma.$transaction(async (tx) => {
-      // 골 기록 삭제
-      await tx.goalRecord.deleteMany({
-        where: { matchId },
-      });
-
-      // 라인업 삭제
-      await tx.lineup.deleteMany({
-        where: { matchId },
-      });
-
-      // 매치 삭제
+      // 매치 삭제 (연관된 라인업, 골 기록은 onDelete: Cascade로 자동 삭제)
       await tx.match.delete({
         where: { id: matchId },
       });
 
-      // 스케줄의 남은 매치 수 확인
-      const remainingMatches = await tx.match.count({
-        where: { scheduleId },
-      });
-
-      // 매치가 모두 삭제되었고 상태가 PLAY라면 READY로 변경
-      if (remainingMatches === 0) {
-        const schedule = await tx.schedule.findUnique({
-          where: { id: scheduleId },
-          select: { status: true },
-        });
-
-        if (schedule?.status === ScheduleStatus.PLAY) {
-          await tx.schedule.update({
-            where: { id: scheduleId },
-            data: { status: ScheduleStatus.READY },
-          });
-        }
-      }
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(scheduleId, tx);
     });
 
     revalidatePath(`/schedule/${scheduleId}`);
@@ -112,24 +174,22 @@ export async function updateSquadLineup(matchId: string) {
     }
 
     // 현재 HOME과 AWAY 팀 인원 수 계산
-    const homeCount = match.lineups.filter(
-      (lineup) => lineup.side === "HOME"
-    ).length;
-    const awayCount = match.lineups.filter(
-      (lineup) => lineup.side === "AWAY"
-    ).length;
+    const lineupStatus = checkLineupStatus(match.lineups);
 
-    const newLineups = missingAttendees.map((attendance) => {
+    const newLineups = missingAttendees.map((attendance, index) => {
       let side: TeamSide;
 
-      if (homeCount === awayCount) {
-        // 인원이 같으면 무작위로 배정
-        side = Math.random() < 0.5 ? "HOME" : "AWAY";
-      } else if (homeCount < awayCount) {
-        // HOME팀이 적으면 HOME에 우선 배정
+      // 인원 수를 고려하여 균등하게 배정
+      const currentHomeCount =
+        lineupStatus.homeCount +
+        newLineups.slice(0, index).filter((l) => l.side === "HOME").length;
+      const currentAwayCount =
+        lineupStatus.awayCount +
+        newLineups.slice(0, index).filter((l) => l.side === "AWAY").length;
+
+      if (currentHomeCount <= currentAwayCount) {
         side = "HOME";
       } else {
-        // AWAY팀이 적으면 AWAY에 우선 배정
         side = "AWAY";
       }
 
@@ -187,50 +247,52 @@ export async function updateTeamMatchLineup(matchId: string) {
       return { success: false, error: "친선전이 아닙니다" };
     }
 
-    // 기존 라인업 삭제
-    await prisma.lineup.deleteMany({
-      where: { matchId },
-    });
+    // 새 라인업 데이터 준비
+    const newLineupData = match.schedule.attendances.map((attendance) => ({
+      matchId,
+      userId: attendance.userId,
+      side: mapTeamTypeToSide(attendance.teamType),
+    }));
 
-    // 사이드가 변경되었는지 확인하는 로직이 필요하지만,
-    // 여기서는 간단히 HOST팀은 HOME, INVITED팀은 AWAY로 배정
-    // 실제 구현에서는 사이드 변경 상태를 어딘가에 저장해야 함
+    const lineupStatus = checkLineupStatus(newLineupData);
 
-    const newLineups = match.schedule.attendances.map((attendance) => {
-      // TeamType에 따라 사이드 결정
-      const side: TeamSide = attendance.teamType === "HOST" ? "HOME" : "AWAY";
+    // 트랜잭션으로 모든 업데이트를 원자적으로 처리
+    const result = await prisma.$transaction(async (tx) => {
+      // 기존 라인업 삭제
+      await tx.lineup.deleteMany({
+        where: { matchId },
+      });
+
+      // 새 라인업 생성
+      if (newLineupData.length > 0) {
+        await tx.lineup.createMany({
+          data: newLineupData,
+        });
+      }
+
+      // 매치의 isLinedUp 상태 업데이트
+      await tx.match.update({
+        where: { id: matchId },
+        data: { isLinedUp: lineupStatus.isLinedUp },
+      });
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
 
       return {
-        matchId,
-        userId: attendance.userId,
-        side,
+        lineupCount: newLineupData.length,
+        homeCount: lineupStatus.homeCount,
+        awayCount: lineupStatus.awayCount,
+        isLinedUp: lineupStatus.isLinedUp,
       };
     });
 
-    if (newLineups.length > 0) {
-      await prisma.lineup.createMany({
-        data: newLineups,
-      });
-    }
-
-    const homeCount = newLineups.filter(
-      (lineup) => lineup.side === "HOME"
-    ).length;
-    const awayCount = newLineups.filter(
-      (lineup) => lineup.side === "AWAY"
-    ).length;
-
-    const isLinedUp = homeCount > 0 && awayCount > 0;
-
-    await prisma.match.update({
-      where: { id: matchId },
-      data: { isLinedUp },
-    });
-
     revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+
     return {
       success: true,
-      message: `${newLineups.length}명의 명단이 업데이트되었습니다`,
+      message: `${result.lineupCount}명의 명단이 업데이트되었습니다`,
+      data: result,
     };
   } catch (error) {
     console.error("친선전 명단 업데이트 실패:", error);
@@ -276,23 +338,17 @@ export async function updateTeamMatchLineupSide(
 
     // 트랜잭션으로 처리하여 데이터 일관성 보장
     const result = await prisma.$transaction(async (tx) => {
-      // 1. 기존 라인업 삭제 (특정 사이드만)
+      // 기존 라인업 삭제 (특정 사이드만)
       await tx.lineup.deleteMany({
         where: { matchId, side },
       });
 
-      // 2. 새로운 라인업 생성
-      const newLineups = match.schedule.attendances.map((attendance) => {
-        // TeamType에 따라 사이드 결정
-        const assignedSide: TeamSide =
-          attendance.teamType === "HOST" ? "HOME" : "AWAY";
-
-        return {
-          matchId,
-          userId: attendance.userId,
-          side: assignedSide,
-        };
-      });
+      // 새로운 라인업 생성
+      const newLineups = match.schedule.attendances.map((attendance) => ({
+        matchId,
+        userId: attendance.userId,
+        side: mapTeamTypeToSide(attendance.teamType),
+      }));
 
       if (newLineups.length > 0) {
         await tx.lineup.createMany({
@@ -300,32 +356,28 @@ export async function updateTeamMatchLineupSide(
         });
       }
 
-      // 3. 업데이트 후 전체 라인업 상태 확인
+      // 업데이트 후 전체 라인업 상태 확인
       const allLineups = await tx.lineup.findMany({
         where: { matchId },
         select: { side: true },
       });
 
-      const homeCount = allLineups.filter(
-        (lineup) => lineup.side === "HOME"
-      ).length;
-      const awayCount = allLineups.filter(
-        (lineup) => lineup.side === "AWAY"
-      ).length;
+      const lineupStatus = checkLineupStatus(allLineups);
 
-      // 4. isLinedUp 상태 업데이트 (덮어씌우기 방식)
-      const isLinedUp = homeCount > 0 && awayCount > 0;
-
+      // isLinedUp 상태 업데이트
       await tx.match.update({
         where: { id: matchId },
-        data: { isLinedUp },
+        data: { isLinedUp: lineupStatus.isLinedUp },
       });
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
 
       return {
         lineupsCreated: newLineups.length,
-        homeCount,
-        awayCount,
-        isLinedUp,
+        homeCount: lineupStatus.homeCount,
+        awayCount: lineupStatus.awayCount,
+        isLinedUp: lineupStatus.isLinedUp,
       };
     });
 
@@ -343,41 +395,49 @@ export async function updateTeamMatchLineupSide(
 }
 
 /**
- * 라인업 사이드 변경
+ * 라인업 사이드 변경 (자체전용)
  */
 export async function updateLineupSide(lineupId: string, side: TeamSide) {
   try {
-    const lineup = await prisma.lineup.update({
-      where: { id: lineupId },
-      data: { side },
-      include: {
-        match: {
-          select: {
-            scheduleId: true,
-            id: true,
+    const result = await prisma.$transaction(async (tx) => {
+      // 라인업 업데이트
+      const lineup = await tx.lineup.update({
+        where: { id: lineupId },
+        data: { side },
+        include: {
+          match: {
+            select: {
+              scheduleId: true,
+              id: true,
+            },
           },
         },
-      },
+      });
+
+      // 현재 매치의 모든 라인업 조회
+      const lineups = await tx.lineup.findMany({
+        where: { matchId: lineup.matchId },
+        select: { side: true },
+      });
+
+      const lineupStatus = checkLineupStatus(lineups);
+
+      // 매치의 isLinedUp 상태 업데이트
+      await tx.match.update({
+        where: { id: lineup.matchId },
+        data: { isLinedUp: lineupStatus.isLinedUp },
+      });
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(lineup.match.scheduleId, tx);
+
+      return {
+        scheduleId: lineup.match.scheduleId,
+        matchId: lineup.match.id,
+      };
     });
 
-    const lineups = await prisma.lineup.findMany({
-      where: { matchId: lineup.matchId },
-      select: { side: true },
-    });
-
-    const homeCount = lineups.filter((lineup) => lineup.side === "HOME").length;
-    const awayCount = lineups.filter((lineup) => lineup.side === "AWAY").length;
-
-    const isLinedUp = homeCount > 0 && awayCount > 0;
-
-    await prisma.match.update({
-      where: { id: lineup.matchId },
-      data: { isLinedUp },
-    });
-
-    revalidatePath(
-      `/schedule/${lineup.match.scheduleId}/match/${lineup.match.id}`
-    );
+    revalidatePath(`/schedule/${result.scheduleId}/match/${result.matchId}`);
     return { success: true };
   } catch (error) {
     console.error("라인업 사이드 변경 실패:", error);
@@ -386,7 +446,7 @@ export async function updateLineupSide(lineupId: string, side: TeamSide) {
 }
 
 /**
- * 라인업에서 선수 제거
+ * 라인업에서 선수 제거 (자체전용, 친선전용)
  */
 export async function removeFromLineup(lineupId: string) {
   try {
@@ -408,35 +468,27 @@ export async function removeFromLineup(lineupId: string) {
 
     // 트랜잭션으로 처리하여 데이터 일관성 보장
     await prisma.$transaction(async (tx) => {
-      // 1. 먼저 lineup 삭제
+      // 라인업 삭제
       await tx.lineup.delete({
         where: { id: lineupId },
       });
 
-      // 2. 삭제 후 남은 lineup 개수 확인
+      // 삭제 후 남은 라인업 확인
       const remainingLineups = await tx.lineup.findMany({
         where: { matchId: lineup.matchId },
-        select: {
-          side: true,
-        },
+        select: { side: true },
       });
 
-      const homeCount = remainingLineups.filter(
-        (lineup) => lineup.side === "HOME"
-      ).length;
-      const awayCount = remainingLineups.filter(
-        (lineup) => lineup.side === "AWAY"
-      ).length;
+      const lineupStatus = checkLineupStatus(remainingLineups);
 
-      // 3. HOME 또는 AWAY 중 하나라도 비어있으면 isLinedUp을 false로 설정
-      if (homeCount === 0 || awayCount === 0) {
-        await tx.match.update({
-          where: { id: lineup.matchId },
-          data: {
-            isLinedUp: false,
-          },
-        });
-      }
+      // 매치의 isLinedUp 상태 업데이트
+      await tx.match.update({
+        where: { id: lineup.matchId },
+        data: { isLinedUp: lineupStatus.isLinedUp },
+      });
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(lineup.match.scheduleId, tx);
     });
 
     revalidatePath(
@@ -450,7 +502,7 @@ export async function removeFromLineup(lineupId: string) {
 }
 
 /**
- * 용병 수 업데이트 (자체전용)
+ * 용병 수 업데이트
  */
 export async function updateMercenaryCount(
   matchId: string,
@@ -475,10 +527,10 @@ export async function updateMercenaryCount(
     }
 
     if (match.schedule.matchType === MatchType.SQUAD) {
-      // 총 용병 수 계산 (homeCount + awayCount)
+      // 총 용병 수 계산
       const totalMercenaryCount = homeCount + awayCount;
 
-      // undecided 용병 수 계산 (총 용병 수에서 배정된 용병 수를 뺀 값)
+      // undecided 용병 수 계산
       const undecidedCount = Math.max(
         0,
         match.undecidedTeamMercenaryCount -
@@ -513,7 +565,9 @@ export async function updateMercenaryCount(
   }
 }
 
-//
+/**
+ * 출전 명단 초기화 (자체전용)
+ */
 export async function resetLineups(matchId: string) {
   try {
     const match = await prisma.match.findUnique({
@@ -542,24 +596,31 @@ export async function resetLineups(matchId: string) {
       return { success: false, error: "자체전이 아닙니다" };
     }
 
-    // 업데이트 실행
-    const updatePromises = match.lineups.map((lineup) => {
-      return prisma.lineup.update({
-        where: { id: lineup.id },
-        data: { side: "UNDECIDED" },
+    // 트랜잭션으로 처리
+    await prisma.$transaction(async (tx) => {
+      // 모든 라인업을 UNDECIDED로 변경
+      const updatePromises = match.lineups.map((lineup) =>
+        tx.lineup.update({
+          where: { id: lineup.id },
+          data: { side: "UNDECIDED" },
+        })
+      );
+
+      await Promise.all(updatePromises);
+
+      // 매치 정보 업데이트
+      await tx.match.update({
+        where: { id: matchId },
+        data: {
+          homeTeamMercenaryCount: 0,
+          awayTeamMercenaryCount: 0,
+          undecidedTeamMercenaryCount: match.schedule.hostTeamMercenaryCount,
+          isLinedUp: false,
+        },
       });
-    });
 
-    await prisma.$transaction(updatePromises);
-
-    await prisma.match.update({
-      where: { id: matchId },
-      data: {
-        homeTeamMercenaryCount: 0,
-        awayTeamMercenaryCount: 0,
-        undecidedTeamMercenaryCount: match.schedule.hostTeamMercenaryCount,
-        isLinedUp: false,
-      },
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(match.schedule.id, tx);
     });
 
     revalidatePath(`/schedule/${match.schedule.id}/match/${matchId}`);

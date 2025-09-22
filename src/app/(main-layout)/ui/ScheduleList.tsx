@@ -115,21 +115,28 @@ const ScheduleList = ({
         <div className="grow flex flex-col justify-center overflow-hidden">
           <div className="flex items-center gap-1.5 leading-none h-5 tracking-tight">
             {(schedule.status === "PENDING" ||
-              schedule.status === "REJECTED") && (
+              schedule.status === "REJECTED" ||
+              schedule.status === "READY") && (
               <Fragment>
                 <div
                   className={`shrink-0 flex items-center gap-0.5 font-medium text-sm rounded-full pb-px ${
                     schedule.status === "REJECTED"
                       ? "text-red-600"
-                      : "text-amber-700"
+                      : schedule.status === "PENDING"
+                      ? "text-amber-700"
+                      : "text-slate-500"
                   }`}
                 >
                   {schedule.status === "REJECTED" ? (
                     <Ban className="size-3" strokeWidth={2.25} />
-                  ) : (
+                  ) : schedule.status === "PENDING" ? (
                     <Hourglass className="size-3" strokeWidth={2.25} />
-                  )}
-                  {schedule.status === "REJECTED" ? "거절됨" : "대기중"}
+                  ) : null}
+                  {schedule.status === "REJECTED"
+                    ? "거절됨"
+                    : schedule.status === "PENDING"
+                    ? "대기중"
+                    : "준비"}
                 </div>
                 <Separator
                   orientation="vertical"
