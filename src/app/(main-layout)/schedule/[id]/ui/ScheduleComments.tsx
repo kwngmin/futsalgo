@@ -595,7 +595,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       {/* 댓글 목록 */}
       {optimisticComments.length === 0 ? (
         <div className="px-8 py-6 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
-          <p className="text-lg sm:text-base font-medium text-gray-700">
+          <p className="text-lg sm:text-base font-medium text-gray-600">
             댓글이 없습니다.
           </p>
           <p className="whitespace-pre-line break-keep sm:text-sm">
