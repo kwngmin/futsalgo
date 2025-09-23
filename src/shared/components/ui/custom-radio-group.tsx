@@ -20,7 +20,7 @@ const CustomRadioGroup = ({
     <RadioGroup
       className={`flex ${
         direction === "vertical" ? "flex-col" : "flex-wrap"
-      } gap-2`}
+      } gap-1`}
       value={value}
       onValueChange={onValueChange}
     >

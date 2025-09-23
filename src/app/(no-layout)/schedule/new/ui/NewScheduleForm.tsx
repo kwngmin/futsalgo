@@ -1,7 +1,16 @@
 "use client";
 
 import { Label } from "@/shared/components/ui/label";
-import { CalendarIcon, Check, ChevronDownIcon, Loader2, X } from "lucide-react";
+import {
+  Blend,
+  CalendarIcon,
+  Check,
+  ChevronDownIcon,
+  Loader2,
+  Mars,
+  Venus,
+  X,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
@@ -26,6 +35,9 @@ import { useTeamCodeValidation } from "../lib/use-team-code-validation";
 import { useQueryClient } from "@tanstack/react-query";
 import { getPeriodFromHour } from "../lib/schedule-period";
 import { getDayOfWeekFromDate } from "../lib/day-of-week-mapper";
+import { TEAM_GENDER } from "@/entities/team/model/constants";
+import { formatCityName } from "@/entities/team/lib/format-city-name";
+import Image from "next/image";
 
 const newFormSchema = z
   .object({
@@ -228,6 +240,140 @@ const NewScheduleForm = ({
       className="space-y-6 px-4 py-2 bg-white rounded-2xl"
     >
       <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
+        <div className="flex flex-col gap-6 grow">
+          {/* 경기 구분 */}
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <Label className="px-1">경기 구분</Label>
+              <div className="space-y-2">
+                <CustomRadioGroup
+                  options={getMatchTypeOptions()}
+                  value={watch("matchType")}
+                  onValueChange={(value) =>
+                    setValue("matchType", value as "TEAM" | "SQUAD")
+                  }
+                  error={errors.matchType?.message}
+                  direction="horizontal"
+                />
+                {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
+                {matchDate && isPastDate(matchDate) && (
+                  <div className="text-sm text-muted-foreground px-1">
+                    과거 날짜는 자체전만 선택 가능합니다
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 팀 코드 입력 - 친선전일 때만 */}
+            {watch("matchType") === "TEAM" && (
+              <div className="space-y-3">
+                <Label htmlFor="invited-team-code">초청팀 코드</Label>
+                <div className="relative">
+                  <Input
+                    id="invited-team-code"
+                    type="text"
+                    value={teamCode.value}
+                    onChange={(e) => onChange(e.target.value)}
+                    placeholder="초청팀 코드를 입력하세요"
+                    maxLength={6}
+                  />
+                  {teamCode.status === "checking" && (
+                    <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin" />
+                  )}
+                  {teamCode.status === "valid" && (
+                    <Check className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-green-600" />
+                  )}
+                  {teamCode.status === "invalid" && (
+                    <X className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-red-600" />
+                  )}
+                </div>
+                {teamCode.error && (
+                  <Alert
+                    variant="destructive"
+                    className="bg-destructive/5 border-none"
+                  >
+                    <AlertDescription>{teamCode.error}</AlertDescription>
+                  </Alert>
+                )}
+
+                {/* 초청팀 정보 표시 */}
+                {teamCode.status === "valid" && teamCode.team && (
+                  <div className="p-3 bg-gray-100 rounded-md flex items-center gap-2">
+                    {/* 팀 로고 */}
+                    <div className="size-10 rounded-lg flex items-center justify-center text-[1.625rem] flex-shrink-0">
+                      {teamCode.team.logoUrl ? (
+                        <Image
+                          src={teamCode.team.logoUrl}
+                          alt={teamCode.team.name}
+                          width={40}
+                          height={40}
+                        />
+                      ) : (
+                        <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full flex items-center justify-center text-xl text-slate-700 flex-shrink-0">
+                          {teamCode.team.name.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-700">
+                      <div className="font-semibold">{teamCode.team.name}</div>
+                      <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
+                        <div className="text-sm mb-0.5 w-full tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
+                          {teamCode.team.gender === "MALE" ? (
+                            <Mars className="size-4 text-sky-700" />
+                          ) : teamCode.team.gender === "FEMALE" ? (
+                            <Venus className="size-4 text-pink-700" />
+                          ) : (
+                            <Blend className="size-4 text-gray-700" />
+                          )}
+                          {`${
+                            TEAM_GENDER[
+                              teamCode.team.gender as keyof typeof TEAM_GENDER
+                            ]
+                          }`}
+                          {` • ${`${formatCityName(teamCode.team.city)} ${
+                            teamCode.team.district
+                          }`}`}
+                        </div>
+                      </div>
+                      {/* <div className="text-xs text-gray-600">
+                        {teamCode.team.city} {teamCode.team.district} ·{" "}
+                        {teamCode.team.level} 레벨
+                      </div> */}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* 주최팀 */}
+          <div className="space-y-3">
+            <Label className="px-1">주최팀</Label>
+            <CustomSelect
+              // hasPlaceholder
+              placeholder="선택"
+              options={teams.map((t) => (
+                <option key={t.team.id} value={t.team.id}>
+                  {t.team.name}
+                </option>
+              ))}
+              value={watch("hostTeamId")}
+              onChange={(e) => setValue("hostTeamId", e.target.value)}
+              disabled={teams.length === 1}
+            />
+          </div>
+
+          {/* 풋살장 */}
+          <div className="space-y-3">
+            <Label className="">풋살장</Label>
+            <Input
+              type="text"
+              placeholder="풋살장을 입력하세요"
+              {...register("place")}
+            />
+          </div>
+        </div>
+
         <div className="flex flex-col gap-6">
           {/* 날짜 선택 */}
           <div className="flex flex-col gap-3 pb-3 sm:pb-0">
@@ -285,109 +431,6 @@ const NewScheduleForm = ({
               />
             </div>
           </div>
-        </div>
-
-        <div className="flex flex-col gap-6 grow">
-          {/* 풋살장 */}
-          <div className="space-y-3">
-            <Label className="">풋살장</Label>
-            <Input
-              type="text"
-              placeholder="풋살장을 입력하세요"
-              {...register("place")}
-            />
-          </div>
-
-          {/* 주최팀 */}
-          <div className="space-y-3">
-            <Label className="px-1">주최팀</Label>
-            <CustomSelect
-              // hasPlaceholder
-              placeholder="선택"
-              options={teams.map((t) => (
-                <option key={t.team.id} value={t.team.id}>
-                  {t.team.name}
-                </option>
-              ))}
-              value={watch("hostTeamId")}
-              onChange={(e) => setValue("hostTeamId", e.target.value)}
-              disabled={teams.length === 1}
-            />
-          </div>
-
-          {/* 경기 구분 */}
-          <div className="space-y-3">
-            <Label className="px-1">경기 구분</Label>
-            <div className="space-y-2">
-              <CustomRadioGroup
-                options={getMatchTypeOptions()}
-                value={watch("matchType")}
-                onValueChange={(value) =>
-                  setValue("matchType", value as "TEAM" | "SQUAD")
-                }
-                error={errors.matchType?.message}
-                direction="vertical"
-              />
-              {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
-              {matchDate && isPastDate(matchDate) && (
-                <div className="text-sm text-muted-foreground px-1">
-                  과거 날짜는 자체전만 선택 가능합니다
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 팀 코드 입력 - 친선전일 때만 */}
-          {watch("matchType") === "TEAM" && (
-            <div className="space-y-3">
-              <Label htmlFor="invited-team-code">초청팀 코드</Label>
-              <div className="relative">
-                <Input
-                  id="invited-team-code"
-                  type="text"
-                  value={teamCode.value}
-                  onChange={(e) => onChange(e.target.value)}
-                  placeholder="초청팀 코드를 입력하세요"
-                  maxLength={6}
-                />
-                {teamCode.status === "checking" && (
-                  <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin" />
-                )}
-                {teamCode.status === "valid" && (
-                  <Check className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-green-600" />
-                )}
-                {teamCode.status === "invalid" && (
-                  <X className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-red-600" />
-                )}
-              </div>
-              {teamCode.error && (
-                <Alert
-                  variant="destructive"
-                  className="bg-destructive/5 border-none"
-                >
-                  <AlertDescription>{teamCode.error}</AlertDescription>
-                </Alert>
-              )}
-            </div>
-          )}
-
-          {/* 초청팀 정보 표시 */}
-          {teamCode.status === "valid" && teamCode.team && (
-            <div className="space-y-2 p-3 bg-green-50 rounded-lg border border-green-200">
-              <div className="text-sm font-medium text-green-800">
-                초청팀 정보
-              </div>
-              <div className="text-sm text-green-700">
-                <div>
-                  <strong>{teamCode.team.name}</strong>
-                </div>
-                <div className="text-xs text-green-600">
-                  {teamCode.team.city} {teamCode.team.district} ·{" "}
-                  {teamCode.team.level} 레벨
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
