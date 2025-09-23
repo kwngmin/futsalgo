@@ -1,8 +1,9 @@
 import { cn } from "@/shared/lib/utils";
+import { TeamMatchAvailable } from "@prisma/client";
 import { useMemo, useCallback, useState } from "react";
 
 export interface TeamMatchAvailableFilter {
-  value: boolean;
+  value: TeamMatchAvailable;
   label: string;
 }
 
@@ -15,8 +16,8 @@ interface FilterTeamMatchAvailableProps {
 
 // 상수를 컴포넌트 외부로 이동하여 재렌더링 시 재생성 방지
 const MATCH_TYPE_OPTIONS: TeamMatchAvailableFilter[] = [
-  { value: true, label: "초청가능" },
-  { value: false, label: "초청불가" },
+  { value: "AVAILABLE", label: "초청가능" },
+  { value: "UNAVAILABLE", label: "초청불가" },
 ];
 
 const FilterTeamMatchAvailable = ({

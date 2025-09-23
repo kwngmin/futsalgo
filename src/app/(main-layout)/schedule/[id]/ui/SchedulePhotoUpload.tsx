@@ -34,15 +34,18 @@ const SchedulePhotoUpload = ({
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
   // 파일 검증 함수
-  const validateFile = useCallback((file: File): string | null => {
-    if (file.size > MAX_FILE_SIZE) {
-      return "파일 크기가 10MB를 초과합니다.";
-    }
-    if (!file.type.startsWith("image/")) {
-      return "이미지 파일만 업로드 가능합니다.";
-    }
-    return null;
-  }, []);
+  const validateFile = useCallback(
+    (file: File): string | null => {
+      if (file.size > MAX_FILE_SIZE) {
+        return "파일 크기가 10MB를 초과합니다.";
+      }
+      if (!file.type.startsWith("image/")) {
+        return "이미지 파일만 업로드 가능합니다.";
+      }
+      return null;
+    },
+    [MAX_FILE_SIZE]
+  );
 
   // 개별 파일 제거
   const removeFile = useCallback((fileId: string) => {

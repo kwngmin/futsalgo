@@ -111,7 +111,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
     const voteRate = total > 0 ? Math.round((voted / total) * 100) : 0;
 
     return { voted, notVoted, voteRate };
-  }, [data?.data?.mvpStats]);
+  }, [data?.data]);
 
   const handleVoteStart = () => {
     setIsVoting(true);

@@ -8,6 +8,7 @@ import {
   RecruitmentStatus,
   TeamGender,
   TeamLevel,
+  TeamMatchAvailable,
 } from "@prisma/client";
 
 export interface FilterOption {
@@ -32,7 +33,7 @@ export interface TeamFilters {
   city?: string;
   district?: string;
   recruitment?: RecruitmentStatus;
-  teamMatchAvailable?: boolean;
+  teamMatchAvailable?: TeamMatchAvailable;
   teamLevel?: TeamLevel[];
 }
 
