@@ -178,6 +178,11 @@ enum Period {
   NIGHT    // 밤 (22:00 ~ 23:59)
 }
 
+enum TeamMatchAvailable {
+  AVAILABLE
+  UNAVAILABLE
+}
+
 // ========== AUTHENTICATION MODELS ==========
 
 model Account {
@@ -315,7 +320,7 @@ model Team {
 
   status        TeamStatus @default(ACTIVE)
   recruitmentStatus RecruitmentStatus @default(RECRUITING)
-  teamMatchAvailable Boolean? @default(true)
+  teamMatchAvailable TeamMatchAvailable @default(AVAILABLE)
 
   gender        TeamGender
   level         TeamLevel @default(MID)

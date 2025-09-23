@@ -55,7 +55,7 @@ const newFormSchema = z
     district: z.string().min(1).optional(),
     enableAttendanceVote: z.boolean(),
     attendanceDeadline: z.string().optional(),
-    teamShareFee: z.number().optional(),
+    teamShareFee: z.number().min(0).max(999999).optional(),
     message: z.string().optional(),
   })
   .refine(
@@ -642,7 +642,11 @@ const NewScheduleForm = ({
                       }
                     },
                   })}
+                  className="pr-8"
                 />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                  원
+                </span>
               </div>
             </div>
           </div>

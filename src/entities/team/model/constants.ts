@@ -13,6 +13,11 @@ export const TEAM_GENDER_OPTIONS = [
   { value: "FEMALE", label: "여성팀" },
 ];
 
+export const TEAM_MATCH_AVAILABLE_OPTIONS = [
+  { value: "AVAILABLE", label: "신청가능" },
+  { value: "UNAVAILABLE", label: "신청불가" },
+];
+
 export const TEAM_GENDER = {
   MIXED: "혼성팀",
   MALE: "남성팀",

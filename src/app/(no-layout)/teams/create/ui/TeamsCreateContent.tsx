@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Camera, Upload, MapPin, ScrollText } from "lucide-react";
 import { Label } from "@/shared/components/ui/label";
 import { Input } from "@/shared/components/ui/input";
@@ -8,6 +8,7 @@ import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import {
   TEAM_GENDER_OPTIONS,
   TEAM_LEVEL_OPTIONS,
+  TEAM_MATCH_AVAILABLE_OPTIONS,
 } from "@/entities/team/model/constants";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
@@ -19,6 +20,8 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Button } from "@/shared/components/ui/button";
 import { TeamLevel } from "@prisma/client";
+import { cityData } from "@/features/search-address-sgis/constants";
+import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
 
 const teamSchema = z.object({
   name: z.string().min(1, "팀 이름을 입력해주세요"),
@@ -31,11 +34,17 @@ const teamSchema = z.object({
   level: z.enum(["VERY_LOW", "LOW", "MID", "HIGH", "VERY_HIGH"], {
     error: () => "팀 실력을 선택해주세요",
   }),
+  teamMatchAvailable: z.enum(["AVAILABLE", "UNAVAILABLE"], {
+    error: () => "친선전 초청 가능 여부를 선택해주세요",
+  }),
 });
 
 export type TeamFormData = z.infer<typeof teamSchema>;
 
 const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
+  const [selectedCity, setSelectedCity] = useState<string>();
+  const [selectedDistrict, setSelectedDistrict] = useState<string>();
+
   const router = useRouter();
   const {
     register,
@@ -52,8 +61,57 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
       description: "",
       city: "",
       district: "",
+      teamMatchAvailable: "AVAILABLE",
     },
   });
+
+  // 선택된 도시의 코드 조회
+  const selectedCityCode = useMemo(() => {
+    return cityData.find((city) => city.addr_name === selectedCity)?.cd;
+  }, [selectedCity]);
+
+  // 시군구 데이터 조회
+  const { data: districtsData, isLoading: isDistrictsLoading } =
+    useDistricts(selectedCityCode);
+
+  // 시도 옵션 - 메모이제이션
+  const cityOptions = useMemo(
+    () =>
+      cityData.map((city) => (
+        <option key={city.addr_name} value={city.addr_name}>
+          {city.addr_name}
+        </option>
+      )),
+    []
+  );
+
+  // 시군구 옵션 - 메모이제이션
+  const districtOptions = useMemo(
+    () =>
+      districtsData?.result?.map((district) => (
+        <option key={district.addr_name} value={district.addr_name}>
+          {district.addr_name}
+        </option>
+      )) || [],
+    [districtsData?.result]
+  );
+
+  const handleCityChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const cityName = e.target.value;
+      setSelectedCity(cityName);
+      // 도시 변경 시 구/군 선택 초기화
+      setSelectedDistrict(undefined);
+    },
+    []
+  );
+
+  const handleDistrictChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedDistrict(e.target.value);
+    },
+    []
+  );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -63,7 +121,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
     try {
       // 여기에 팀 생성 API 호출 로직 추가
       const team = await createTeam({
-        data,
+        ...{ data, city: selectedCity, district: selectedDistrict },
         ownerId,
       });
 
@@ -83,33 +141,6 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
       setIsSubmitting(false);
     }
   };
-
-  // const frequencyOptions = [
-  //   { value: "WEEKLY", label: "주 1회" },
-  //   { value: "BIWEEKLY", label: "격주" },
-  //   { value: "MONTHLY", label: "월 1회" },
-  //   { value: "IRREGULAR", label: "불규칙" },
-  // ];
-
-  const koreanCities = [
-    "서울특별시",
-    "부산광역시",
-    "대구광역시",
-    "인천광역시",
-    "광주광역시",
-    "대전광역시",
-    "울산광역시",
-    "세종특별자치시",
-    "경기도",
-    "강원도",
-    "충청북도",
-    "충청남도",
-    "전라북도",
-    "전라남도",
-    "경상북도",
-    "경상남도",
-    "제주특별자치도",
-  ];
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -187,18 +218,23 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                   />
                 </div>
 
-                {/* 팀 실력 */}
-                {/* <div className="space-y-3 hidden sm:block">
-                  <Label className="px-1">팀 실력</Label>
+                <div className="space-y-3">
+                  <Label className="px-1">친선전 초청 여부</Label>
                   <CustomRadioGroup
-                    options={TEAM_LEVEL_OPTIONS}
-                    value={watch("level")}
+                    options={TEAM_MATCH_AVAILABLE_OPTIONS}
+                    value={watch("teamMatchAvailable")}
                     onValueChange={(value) =>
-                      setValue("level", value as TeamLevel)
+                      setValue(
+                        "teamMatchAvailable",
+                        value as "AVAILABLE" | "UNAVAILABLE"
+                      )
                     }
-                    error={errors.level?.message}
+                    // className="min-w-40"
+                    error={errors.teamMatchAvailable?.message}
                   />
-                </div> */}
+                </div>
+
+                {/* 팀 실력 */}
                 <div className="space-y-3">
                   <Label className="px-1">팀 실력</Label>
                   <CustomRadioGroup
@@ -216,7 +252,6 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
           </div>
 
           {/* 활동 지역 섹션 */}
-
           <div className="bg-white rounded-lg overflow-hidden">
             <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
@@ -224,32 +259,29 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 <span className="font-medium">활동 지역</span>
               </div>
             </div>
-            <div className="space-y-6 p-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-3">
-                  <Label className="px-1">시/도</Label>
-                  <CustomSelect
-                    // hasPlaceholder
-                    placeholder="선택"
-                    options={koreanCities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                    value={watch("city")}
-                    onChange={(e) => setValue("city", e.target.value)}
-                  />
-                </div>
+            <div className="grid grid-cols-2 gap-1 shrink-0 p-4">
+              <CustomSelect
+                key={`city-${selectedCity}`}
+                placeholder="시도 선택"
+                className="min-w-32 shrink-0"
+                // size="sm"
+                options={cityOptions}
+                value={selectedCity || ""}
+                onChange={handleCityChange}
+                aria-label="시도 선택"
+              />
 
-                <div className="space-y-3">
-                  <Label className="px-1">구/군</Label>
-                  <Input
-                    type="text"
-                    {...register("district")}
-                    placeholder="구/군을 입력하세요"
-                  />
-                </div>
-              </div>
+              <CustomSelect
+                key={`district-${selectedDistrict}`}
+                disabled={!selectedCity || isDistrictsLoading}
+                placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
+                className="min-w-32 shrink-0"
+                // size="sm"
+                options={districtOptions}
+                value={selectedDistrict || ""}
+                onChange={handleDistrictChange}
+                aria-label="시군구 선택"
+              />
             </div>
           </div>
 
@@ -259,25 +291,27 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
             </Alert>
           )}
 
-          {/* 제출 버튼 */}
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full h-12 text-base font-semibold"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "팀 등록 중..." : "팀 등록하기"}
-          </Button>
-          <Button
-            onClick={() => router.back()}
-            type="button"
-            size="lg"
-            variant="ghost"
-            className="w-full h-10 text-base font-semibold"
-            disabled={isSubmitting}
-          >
-            취소
-          </Button>
+          <div className="mt-8 space-y-2 sm:grid grid-cols-3 gap-2">
+            {/* 제출 버튼 */}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-12 text-base font-semibold"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "팀 등록 중..." : "팀 등록하기"}
+            </Button>
+            <Button
+              onClick={() => router.back()}
+              type="button"
+              size="lg"
+              variant="ghost"
+              className="w-full h-10 text-base font-semibold"
+              disabled={isSubmitting}
+            >
+              취소
+            </Button>
+          </div>
         </div>
       </form>
     </div>
