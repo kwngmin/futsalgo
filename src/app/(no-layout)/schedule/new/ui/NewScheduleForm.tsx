@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 // import { Textarea } from "@/shared/components/ui/textarea";
@@ -38,6 +38,9 @@ import { getDayOfWeekFromDate } from "../lib/day-of-week-mapper";
 import { TEAM_GENDER } from "@/entities/team/model/constants";
 import { formatCityName } from "@/entities/team/lib/format-city-name";
 import Image from "next/image";
+import { cityData } from "@/features/search-address-sgis/constants";
+import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
+import { Textarea } from "@/shared/components/ui/textarea";
 
 const newFormSchema = z
   .object({
@@ -84,7 +87,58 @@ const NewScheduleForm = ({
   const [deadlineDate, setDeadlineDate] = useState<Date>();
   const queryClient = useQueryClient();
 
-  const { teamCode, onChange } = useTeamCodeValidation();
+  const { teamCode, onChange, resetValidation } = useTeamCodeValidation();
+
+  const [selectedCity, setSelectedCity] = useState<string>();
+  const [selectedDistrict, setSelectedDistrict] = useState<string>();
+
+  // 선택된 도시의 코드 조회
+  const selectedCityCode = useMemo(() => {
+    return cityData.find((city) => city.addr_name === selectedCity)?.cd;
+  }, [selectedCity]);
+
+  // 시군구 데이터 조회
+  const { data: districtsData, isLoading: isDistrictsLoading } =
+    useDistricts(selectedCityCode);
+
+  // 시도 옵션 - 메모이제이션
+  const cityOptions = useMemo(
+    () =>
+      cityData.map((city) => (
+        <option key={city.addr_name} value={city.addr_name}>
+          {city.addr_name}
+        </option>
+      )),
+    []
+  );
+
+  // 시군구 옵션 - 메모이제이션
+  const districtOptions = useMemo(
+    () =>
+      districtsData?.result?.map((district) => (
+        <option key={district.addr_name} value={district.addr_name}>
+          {district.addr_name}
+        </option>
+      )) || [],
+    [districtsData?.result]
+  );
+
+  const handleCityChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const cityName = e.target.value;
+      setSelectedCity(cityName);
+      // 도시 변경 시 구/군 선택 초기화
+      setSelectedDistrict(undefined);
+    },
+    []
+  );
+
+  const handleDistrictChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedDistrict(e.target.value);
+    },
+    []
+  );
 
   // 날짜 관련 헬퍼 함수들
   const isPastDate = (date: Date) => {
@@ -135,6 +189,7 @@ const NewScheduleForm = ({
     setError,
     setValue,
     watch,
+    resetField,
   } = useForm<NewFormData>({
     resolver: zodResolver(newFormSchema),
     defaultValues: {
@@ -239,34 +294,38 @@ const NewScheduleForm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 px-4 py-2 bg-white rounded-2xl"
     >
-      <div className="flex flex-col sm:flex-row gap-x-4 gap-y-6">
+      <div className="flex flex-col sm:flex-row gap-6">
         <div className="flex flex-col gap-6 grow">
           {/* 경기 구분 */}
           <div className="space-y-6">
-            <div className="space-y-3">
+            <div className="space-y-2">
               <Label className="px-1">경기 구분</Label>
               <div className="space-y-2">
                 <CustomRadioGroup
                   options={getMatchTypeOptions()}
                   value={watch("matchType")}
-                  onValueChange={(value) =>
-                    setValue("matchType", value as "TEAM" | "SQUAD")
-                  }
+                  onValueChange={(value) => {
+                    setValue("matchType", value as "TEAM" | "SQUAD");
+                    if (value === "SQUAD") {
+                      resetField("invitedTeamId");
+                      resetValidation();
+                    }
+                  }}
                   error={errors.matchType?.message}
                   direction="horizontal"
                 />
-                {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
-                {matchDate && isPastDate(matchDate) && (
-                  <div className="text-sm text-muted-foreground px-1">
-                    과거 날짜는 자체전만 선택 가능합니다
-                  </div>
-                )}
               </div>
+              {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
+              {matchDate && isPastDate(matchDate) && (
+                <div className="text-sm text-muted-foreground px-1">
+                  과거 날짜는 자체전만 선택 가능합니다
+                </div>
+              )}
             </div>
 
             {/* 팀 코드 입력 - 친선전일 때만 */}
             {watch("matchType") === "TEAM" && (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <Label htmlFor="invited-team-code">초청팀 코드</Label>
                 <div className="relative">
                   <Input
@@ -347,10 +406,10 @@ const NewScheduleForm = ({
           </div>
 
           {/* 주최팀 */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label className="px-1">주최팀</Label>
             <CustomSelect
-              // hasPlaceholder
+              size="sm"
               placeholder="선택"
               options={teams.map((t) => (
                 <option key={t.team.id} value={t.team.id}>
@@ -364,13 +423,42 @@ const NewScheduleForm = ({
           </div>
 
           {/* 풋살장 */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label className="">풋살장</Label>
             <Input
               type="text"
               placeholder="풋살장을 입력하세요"
               {...register("place")}
             />
+          </div>
+
+          {/* 위치 */}
+          <div className="space-y-2">
+            <Label className="px-1">위치</Label>
+            <div className="grid grid-cols-2 gap-1 shrink-0">
+              <CustomSelect
+                key={`city-${selectedCity}`}
+                placeholder="시도 선택"
+                className="min-w-32 shrink-0"
+                size="sm"
+                options={cityOptions}
+                value={selectedCity || ""}
+                onChange={handleCityChange}
+                aria-label="시도 선택"
+              />
+
+              <CustomSelect
+                key={`district-${selectedDistrict}`}
+                disabled={!selectedCity || isDistrictsLoading}
+                placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
+                className="min-w-32 shrink-0"
+                size="sm"
+                options={districtOptions}
+                value={selectedDistrict || ""}
+                onChange={handleDistrictChange}
+                aria-label="시군구 선택"
+              />
+            </div>
           </div>
         </div>
 
@@ -434,20 +522,20 @@ const NewScheduleForm = ({
         </div>
       </div>
 
-      {/* 공지사항 */}
-      {/* <div className="space-y-3">
-        <Label className="">공지사항</Label>
+      {/* 메시지 */}
+      <div className="space-y-2">
+        <Label className="">메시지</Label>
         <Textarea
           {...register("description")}
           className="min-h-24"
-          placeholder="공지사항을 작성해주세요"
+          placeholder="초청팀에게 전달 할 메시지를 작성해주세요"
         />
-      </div> */}
+      </div>
 
       {/* 참석여부 투표 - 과거 날짜가 아닌 경우에만 표시 */}
       {shouldShowAttendanceVote() && (
         <div className="flex flex-col sm:flex-row gap-y-6 gap-x-2">
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label className="">참석여부 투표</Label>
             <div className="flex items-center p-0.5 bg-muted w-fit rounded-lg">
               <button
@@ -616,7 +704,7 @@ const NewScheduleForm = ({
       )}
 
       {/* 버튼들 */}
-      <div className="mt-12 space-y-3 sm:grid grid-cols-3 gap-2">
+      <div className="mt-12 space-y-2 sm:grid grid-cols-3 gap-2">
         <Button
           type="submit"
           disabled={

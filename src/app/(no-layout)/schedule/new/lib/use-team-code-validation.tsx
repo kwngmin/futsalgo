@@ -110,9 +110,19 @@ export function useTeamCodeValidation() {
     }));
   };
 
+  const resetValidation = () => {
+    setTeamCode({
+      value: "",
+      status: "idle",
+      error: undefined,
+      team: undefined,
+    });
+  };
+
   return {
     teamCode,
     setTeamCode,
     onChange,
+    resetValidation,
   };
 }
