@@ -22,6 +22,7 @@ import { Button } from "@/shared/components/ui/button";
 import { TeamLevel } from "@prisma/client";
 import { cityData } from "@/features/search-address-sgis/constants";
 import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
+import { useQueryClient } from "@tanstack/react-query";
 
 const teamSchema = z.object({
   name: z.string().min(1, "팀 이름을 입력해주세요"),
@@ -42,6 +43,7 @@ const teamSchema = z.object({
 export type TeamFormData = z.infer<typeof teamSchema>;
 
 const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
+  const queryClient = useQueryClient();
   const [selectedCity, setSelectedCity] = useState<string>();
   const [selectedDistrict, setSelectedDistrict] = useState<string>();
 
@@ -100,17 +102,20 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       const cityName = e.target.value;
       setSelectedCity(cityName);
+      setValue("city", cityName);
       // 도시 변경 시 구/군 선택 초기화
       setSelectedDistrict(undefined);
+      setValue("district", "");
     },
-    []
+    [setSelectedCity, setValue]
   );
 
   const handleDistrictChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedDistrict(e.target.value);
+      setValue("district", e.target.value);
     },
-    []
+    [setSelectedDistrict, setValue]
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -127,6 +132,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
 
       if (team) {
         alert("팀이 성공적으로 생성되었습니다!");
+        queryClient.invalidateQueries({ queryKey: ["teams"] });
         router.push(`/teams`);
       } else {
         throw new Error("팀 생성에 실패했습니다.");
@@ -141,6 +147,8 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
       setIsSubmitting(false);
     }
   };
+
+  console.log(errors, "errors");
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -264,7 +272,6 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 key={`city-${selectedCity}`}
                 placeholder="시도 선택"
                 className="min-w-32 shrink-0"
-                // size="sm"
                 options={cityOptions}
                 value={selectedCity || ""}
                 onChange={handleCityChange}
@@ -276,7 +283,6 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 disabled={!selectedCity || isDistrictsLoading}
                 placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
                 className="min-w-32 shrink-0"
-                // size="sm"
                 options={districtOptions}
                 value={selectedDistrict || ""}
                 onChange={handleDistrictChange}

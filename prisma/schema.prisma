@@ -321,7 +321,7 @@ model Team {
   status        TeamStatus @default(ACTIVE)
   recruitmentStatus RecruitmentStatus @default(RECRUITING)
   teamMatchAvailable TeamMatchAvailable @default(AVAILABLE)
-
+  
   gender        TeamGender
   level         TeamLevel @default(MID)
   activityFrequency ActivityFrequency @default(WEEKLY)
