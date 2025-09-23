@@ -426,6 +426,7 @@ model Schedule {
   endTime            String
   matchType          MatchType
   status             ScheduleStatus @default(PENDING)
+  teamShareFee       Int?           // 참가비(풋살장 이용 분담금액)
   
   // 참석 투표 관련 필드
   enableAttendanceVote Boolean      @default(false)  // 참석 투표 활성화 여부
@@ -540,6 +541,7 @@ model TeamMatchInvitation {
   invitedTeamId   String
   status          InvitationStatus @default(PENDING)
   reason          String?          // 거절 사유
+  message         String?          // 초청 메시지
 
   schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   invitedTeam     Team     @relation(fields: [invitedTeamId], references: [id])

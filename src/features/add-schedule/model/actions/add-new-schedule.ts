@@ -32,6 +32,8 @@ export async function addNewSchedule({
     attendanceEndTime?: string;
     startPeriod: Period;
     dayOfWeek: DayOfWeek;
+    teamShareFee?: number;
+    message?: string;
   };
 }): Promise<
   { success: true; data: Schedule } | { success: false; error: string }
@@ -84,6 +86,7 @@ export async function addNewSchedule({
           city: formData.city,
           district: formData.district,
           enableAttendanceVote: formData.enableAttendanceVote,
+          teamShareFee: formData.teamShareFee,
           attendanceDeadline: formData.attendanceDeadline
             ? new Date(formData.attendanceDeadline)
             : null,
@@ -110,6 +113,7 @@ export async function addNewSchedule({
             scheduleId: schedule.id,
             invitedTeamId: formData.invitedTeamId,
             status: "PENDING",
+            message: formData.message,
           },
         });
       }

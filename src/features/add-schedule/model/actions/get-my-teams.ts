@@ -11,6 +11,8 @@ const teamSelect = Prisma.validator<Prisma.TeamMemberFindManyArgs>()({
         id: true,
         name: true,
         logoUrl: true,
+        city: true,
+        district: true,
       },
     },
   },

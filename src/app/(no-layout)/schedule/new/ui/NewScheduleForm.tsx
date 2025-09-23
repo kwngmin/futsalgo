@@ -18,7 +18,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
-// import { Textarea } from "@/shared/components/ui/textarea";
 import { Input } from "@/shared/components/ui/input";
 import { Calendar } from "@/shared/components/ui/calendar";
 import { addNewSchedule } from "@/features/add-schedule/model/actions/add-new-schedule";
@@ -56,6 +55,8 @@ const newFormSchema = z
     district: z.string().min(1).optional(),
     enableAttendanceVote: z.boolean(),
     attendanceDeadline: z.string().optional(),
+    teamShareFee: z.number().optional(),
+    message: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -72,6 +73,39 @@ const newFormSchema = z
   );
 
 export type NewFormData = z.infer<typeof newFormSchema>;
+
+// 날짜 관련 유틸리티 함수들 - DRY 원칙
+const dateUtils = {
+  isPastDate: (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  },
+
+  isToday: (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    return compareDate.getTime() === today.getTime();
+  },
+
+  isTomorrow: (date: Date) => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    return compareDate.getTime() === tomorrow.getTime();
+  },
+
+  formatDateString: (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  },
+};
 
 const NewScheduleForm = ({
   teams,
@@ -91,6 +125,8 @@ const NewScheduleForm = ({
 
   const [selectedCity, setSelectedCity] = useState<string>();
   const [selectedDistrict, setSelectedDistrict] = useState<string>();
+  // 주최팀 정보가 초기 설정되었는지 추적하는 플래그
+  const [isHostTeamInitialized, setIsHostTeamInitialized] = useState(false);
 
   // 선택된 도시의 코드 조회
   const selectedCityCode = useMemo(() => {
@@ -140,34 +176,14 @@ const NewScheduleForm = ({
     []
   );
 
-  // 날짜 관련 헬퍼 함수들
-  const isPastDate = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
-
-  const isToday = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const compareDate = new Date(date);
-    compareDate.setHours(0, 0, 0, 0);
-    return compareDate.getTime() === today.getTime();
-  };
-
-  const isTomorrow = (date: Date) => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-    const compareDate = new Date(date);
-    compareDate.setHours(0, 0, 0, 0);
-    return compareDate.getTime() === tomorrow.getTime();
-  };
-
   // 참석여부 투표 표시 여부 결정 - 과거 날짜와 오늘은 표시하지 않음
   const shouldShowAttendanceVote = () => {
     if (!matchDate) return false;
-    return !isPastDate(matchDate) && !isToday(matchDate); // 내일 이후 날짜에만 표시
+    return (
+      !dateUtils.isPastDate(matchDate) &&
+      !dateUtils.isToday(matchDate) &&
+      !dateUtils.isTomorrow(matchDate)
+    ); // 내일 이후 날짜에만 표시
   };
 
   // 동적 경기구분 옵션 생성
@@ -175,7 +191,7 @@ const NewScheduleForm = ({
     const baseOptions = [{ label: "자체전", value: "SQUAD" }];
 
     // 과거 날짜가 아닌 경우에만 친선전 추가
-    if (!matchDate || !isPastDate(matchDate)) {
+    if (!matchDate || !dateUtils.isPastDate(matchDate)) {
       baseOptions.push({ label: "친선전", value: "TEAM" });
     }
 
@@ -196,17 +212,46 @@ const NewScheduleForm = ({
       matchType: "SQUAD",
       enableAttendanceVote: false,
       hostTeamId: teams.length === 1 ? teams[0].team.id : "",
+      teamShareFee: 0,
     },
   });
+
+  const hostTeamId = watch("hostTeamId");
+  const matchType = watch("matchType");
+
+  // 주최팀 정보 가져오기 - 메모이제이션으로 최적화
+  const hostTeamInfo = useMemo(() => {
+    if (!hostTeamId) return null;
+    return teams.find((t) => t.team.id === hostTeamId)?.team;
+  }, [hostTeamId, teams]);
+
+  // 주최팀이 변경될 때만 초기 설정 (한 번만 실행)
+  useEffect(() => {
+    if (hostTeamInfo && !isHostTeamInitialized) {
+      setSelectedCity(hostTeamInfo.city);
+      setSelectedDistrict(hostTeamInfo.district);
+      setIsHostTeamInitialized(true);
+    } else if (!hostTeamInfo && isHostTeamInitialized) {
+      // 주최팀이 없어지면 초기화
+      setSelectedCity(undefined);
+      setSelectedDistrict(undefined);
+      setIsHostTeamInitialized(false);
+    }
+  }, [hostTeamInfo, isHostTeamInitialized]);
+
+  // 주최팀이 변경되면 초기화 플래그를 리셋
+  useEffect(() => {
+    setIsHostTeamInitialized(false);
+  }, [hostTeamId]);
 
   // 날짜 변경 시 로직 처리
   useEffect(() => {
     if (!matchDate) return;
 
     // 과거 날짜이거나 오늘 선택 시
-    if (isPastDate(matchDate) || isToday(matchDate)) {
+    if (dateUtils.isPastDate(matchDate) || dateUtils.isToday(matchDate)) {
       // 1. 과거 날짜에서 친선전이 선택되어 있다면 자체전으로 변경
-      if (isPastDate(matchDate) && watch("matchType") === "TEAM") {
+      if (dateUtils.isPastDate(matchDate) && matchType === "TEAM") {
         setValue("matchType", "SQUAD");
       }
 
@@ -215,23 +260,21 @@ const NewScheduleForm = ({
       setValue("attendanceDeadline", undefined);
       setDeadlineDate(undefined);
     }
-  }, [matchDate, setValue, watch]);
+  }, [matchDate, setValue, matchType]);
 
   // 경기구분 변경 시 처리
   useEffect(() => {
-    const currentMatchType = watch("matchType");
-
-    if (currentMatchType === "SQUAD") {
+    if (matchType === "SQUAD") {
       // 자체전 선택 시 invitedTeamId 초기화
       setValue("invitedTeamId", undefined);
-    } else if (currentMatchType === "TEAM") {
+    } else if (matchType === "TEAM") {
       // 친선전 선택 시 과거 날짜가 선택되어 있다면 날짜 초기화
-      if (matchDate && isPastDate(matchDate)) {
+      if (matchDate && dateUtils.isPastDate(matchDate)) {
         setMatchDate(undefined);
         setValue("date", "");
       }
     }
-  }, [matchDate, setValue, watch]);
+  }, [matchType, matchDate, setValue]);
 
   // 팀 코드가 유효할 때 invitedTeamId 설정
   useEffect(() => {
@@ -243,7 +286,31 @@ const NewScheduleForm = ({
     }
   }, [teamCode.status, teamCode.team?.id, setValue]);
 
-  console.log(watch("startTime"));
+  // 캘린더 disabled 로직 재사용을 위한 함수
+  const getDeadlineDisabledDates = useCallback(
+    (date: Date) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (matchDate) {
+        // 내일 경기면 오늘만 선택 가능
+        if (dateUtils.isTomorrow(matchDate)) {
+          const compareDate = new Date(date);
+          compareDate.setHours(0, 0, 0, 0);
+          return compareDate.getTime() !== today.getTime();
+        }
+
+        // 그 외의 경우 경기 전날까지 선택 가능
+        const match = new Date(matchDate);
+        match.setDate(match.getDate() - 1);
+        match.setHours(23, 59, 59, 999);
+        return date < today || date > match;
+      }
+
+      return date < today;
+    },
+    [matchDate]
+  );
 
   const onSubmit = async (formData: NewFormData) => {
     setIsLoading(true);
@@ -261,6 +328,8 @@ const NewScheduleForm = ({
           startPeriod,
           year: new Date(formData.date).getFullYear(),
           dayOfWeek,
+          city: selectedCity,
+          district: selectedDistrict,
         },
       });
 
@@ -289,6 +358,75 @@ const NewScheduleForm = ({
     }
   };
 
+  // 팀 정보 표시 컴포넌트 - DRY 원칙
+  const TeamInfoDisplay = ({ team }: { team: typeof teamCode.team }) => {
+    if (!team) return null;
+
+    return (
+      <div className="p-3 bg-gray-100 rounded-md flex items-center gap-2">
+        {/* 팀 로고 */}
+        <div className="size-10 rounded-lg flex items-center justify-center text-[1.625rem] flex-shrink-0">
+          {team.logoUrl ? (
+            <Image src={team.logoUrl} alt={team.name} width={40} height={40} />
+          ) : (
+            <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full flex items-center justify-center text-xl text-slate-700 flex-shrink-0">
+              {team.name.charAt(0)}
+            </div>
+          )}
+        </div>
+        <div className="text-sm text-gray-700">
+          <div className="font-semibold">{team.name}</div>
+          <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
+            <div className="text-sm mb-0.5 w-full tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
+              {team.gender === "MALE" ? (
+                <Mars className="size-4 text-sky-700" />
+              ) : team.gender === "FEMALE" ? (
+                <Venus className="size-4 text-pink-700" />
+              ) : (
+                <Blend className="size-4 text-gray-700" />
+              )}
+              {`${TEAM_GENDER[team.gender as keyof typeof TEAM_GENDER]}`}
+              {` • ${`${formatCityName(team.city)} ${team.district}`}`}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // 투표 마감일자 캘린더 컴포넌트 - DRY 원칙
+  const DeadlineCalendar = ({
+    isMobile = false,
+    onSelect,
+  }: {
+    isMobile?: boolean;
+    onSelect?: (date: Date | undefined) => void;
+  }) => {
+    const handleSelect = (date: Date | undefined) => {
+      if (!date) return;
+      setValue("attendanceDeadline", dateUtils.formatDateString(date));
+      setDeadlineDate(date);
+      if (onSelect) onSelect(date);
+    };
+
+    return (
+      <Calendar
+        mode="single"
+        selected={deadlineDate}
+        className={`rounded-md border ${
+          isMobile ? "pb-12 sm:pb-6" : ""
+        } w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
+          !matchDate ? "opacity-50 pointer-events-none" : ""
+        }`}
+        disabled={getDeadlineDisabledDates}
+        locale={ko}
+        onSelect={handleSelect}
+      />
+    );
+  };
+
+  console.log(errors);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -303,7 +441,7 @@ const NewScheduleForm = ({
               <div className="space-y-2">
                 <CustomRadioGroup
                   options={getMatchTypeOptions()}
-                  value={watch("matchType")}
+                  value={matchType}
                   onValueChange={(value) => {
                     setValue("matchType", value as "TEAM" | "SQUAD");
                     if (value === "SQUAD") {
@@ -316,7 +454,7 @@ const NewScheduleForm = ({
                 />
               </div>
               {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}
-              {matchDate && isPastDate(matchDate) && (
+              {matchDate && dateUtils.isPastDate(matchDate) && (
                 <div className="text-sm text-muted-foreground px-1">
                   과거 날짜는 자체전만 선택 가능합니다
                 </div>
@@ -324,16 +462,18 @@ const NewScheduleForm = ({
             </div>
 
             {/* 팀 코드 입력 - 친선전일 때만 */}
-            {watch("matchType") === "TEAM" && (
+            {matchType === "TEAM" && (
               <div className="space-y-2">
-                <Label htmlFor="invited-team-code">초청팀 코드</Label>
+                <Label htmlFor="invited-team-code">
+                  초청팀 코드 - 6자리 숫자
+                </Label>
                 <div className="relative">
                   <Input
                     id="invited-team-code"
                     type="text"
                     value={teamCode.value}
                     onChange={(e) => onChange(e.target.value)}
-                    placeholder="초청팀 코드를 입력하세요"
+                    placeholder="예) 123456"
                     maxLength={6}
                   />
                   {teamCode.status === "checking" && (
@@ -357,49 +497,7 @@ const NewScheduleForm = ({
 
                 {/* 초청팀 정보 표시 */}
                 {teamCode.status === "valid" && teamCode.team && (
-                  <div className="p-3 bg-gray-100 rounded-md flex items-center gap-2">
-                    {/* 팀 로고 */}
-                    <div className="size-10 rounded-lg flex items-center justify-center text-[1.625rem] flex-shrink-0">
-                      {teamCode.team.logoUrl ? (
-                        <Image
-                          src={teamCode.team.logoUrl}
-                          alt={teamCode.team.name}
-                          width={40}
-                          height={40}
-                        />
-                      ) : (
-                        <div className="size-10 bg-gradient-to-br from-slate-300 to-gray-100 rounded-full flex items-center justify-center text-xl text-slate-700 flex-shrink-0">
-                          {teamCode.team.name.charAt(0)}
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-sm text-gray-700">
-                      <div className="font-semibold">{teamCode.team.name}</div>
-                      <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-3">
-                        <div className="text-sm mb-0.5 w-full tracking-tight flex items-center gap-1 text-muted-foreground font-medium">
-                          {teamCode.team.gender === "MALE" ? (
-                            <Mars className="size-4 text-sky-700" />
-                          ) : teamCode.team.gender === "FEMALE" ? (
-                            <Venus className="size-4 text-pink-700" />
-                          ) : (
-                            <Blend className="size-4 text-gray-700" />
-                          )}
-                          {`${
-                            TEAM_GENDER[
-                              teamCode.team.gender as keyof typeof TEAM_GENDER
-                            ]
-                          }`}
-                          {` • ${`${formatCityName(teamCode.team.city)} ${
-                            teamCode.team.district
-                          }`}`}
-                        </div>
-                      </div>
-                      {/* <div className="text-xs text-gray-600">
-                        {teamCode.team.city} {teamCode.team.district} ·{" "}
-                        {teamCode.team.level} 레벨
-                      </div> */}
-                    </div>
-                  </div>
+                  <TeamInfoDisplay team={teamCode.team} />
                 )}
               </div>
             )}
@@ -416,7 +514,7 @@ const NewScheduleForm = ({
                   {t.team.name}
                 </option>
               ))}
-              value={watch("hostTeamId")}
+              value={hostTeamId}
               onChange={(e) => setValue("hostTeamId", e.target.value)}
               disabled={teams.length === 1}
             />
@@ -475,22 +573,14 @@ const NewScheduleForm = ({
               locale={ko}
               disabled={(date) => {
                 // 친선전 선택 시 과거 날짜 비활성화
-                if (watch("matchType") === "TEAM") {
-                  return isPastDate(date);
+                if (matchType === "TEAM") {
+                  return dateUtils.isPastDate(date);
                 }
                 return false; // 자체전은 모든 날짜 허용
               }}
               onSelect={(date) => {
                 if (!date) return;
-                const dateData = new Date(date);
-                const year = dateData.getFullYear();
-                setValue(
-                  "date",
-                  `${year}-${String(dateData.getMonth() + 1).padStart(
-                    2,
-                    "0"
-                  )}-${String(dateData.getDate()).padStart(2, "0")}`
-                );
+                setValue("date", dateUtils.formatDateString(date));
                 setMatchDate(date);
               }}
             />
@@ -522,15 +612,42 @@ const NewScheduleForm = ({
         </div>
       </div>
 
-      {/* 메시지 */}
-      <div className="space-y-2">
-        <Label className="">메시지</Label>
-        <Textarea
-          {...register("description")}
-          className="min-h-24"
-          placeholder="초청팀에게 전달 할 메시지를 작성해주세요"
-        />
-      </div>
+      {matchType === "TEAM" && teamCode.status === "valid" && (
+        <div className="space-y-6">
+          {/* 메시지 */}
+          <div className="space-y-2">
+            <Label className="">메시지</Label>
+            <Textarea
+              {...register("description")}
+              className="min-h-24"
+              placeholder="초청팀에게 전달 할 메시지를 작성해주세요"
+            />
+          </div>
+
+          {/* 비용 */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-2">
+              <Label htmlFor="invited-team-code">
+                풋살장 이용요금 분담금액
+              </Label>
+              <div className="relative">
+                <Input
+                  id="invited-team-code"
+                  type="number"
+                  {...register("teamShareFee", {
+                    valueAsNumber: true,
+                    onChange: (e) => {
+                      if (Number(e.target.value)) {
+                        setValue("teamShareFee", e.target.valueAsNumber);
+                      }
+                    },
+                  })}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 참석여부 투표 - 과거 날짜가 아닌 경우에만 표시 */}
       {shouldShowAttendanceVote() && (
@@ -571,7 +688,7 @@ const NewScheduleForm = ({
             <>
               {/* 데스크톱 버전 - 투표 마감일자 */}
               <div className="hidden sm:block">
-                <div className="flex flex-col gap-3 max-w-64">
+                <div className="flex flex-col gap-2 max-w-64">
                   <Label htmlFor="deadline-date-picker" className="px-1">
                     투표 마감일자 (자정 마감)
                   </Label>
@@ -596,46 +713,7 @@ const NewScheduleForm = ({
                       className="w-auto overflow-hidden p-0"
                       align="start"
                     >
-                      <Calendar
-                        mode="single"
-                        selected={deadlineDate}
-                        locale={ko}
-                        disabled={(date) => {
-                          const today = new Date();
-                          today.setHours(0, 0, 0, 0);
-
-                          if (matchDate) {
-                            // 내일 경기면 오늘만 선택 가능
-                            if (isTomorrow(matchDate)) {
-                              const compareDate = new Date(date);
-                              compareDate.setHours(0, 0, 0, 0);
-                              return compareDate.getTime() !== today.getTime();
-                            }
-
-                            // 그 외의 경우 경기 전날까지 선택 가능
-                            const match = new Date(matchDate);
-                            match.setDate(match.getDate() - 1);
-                            match.setHours(23, 59, 59, 999);
-                            return date < today || date > match;
-                          }
-
-                          return date < today;
-                        }}
-                        onSelect={(date) => {
-                          if (!date) return;
-                          const dateData = new Date(date);
-                          const year = dateData.getFullYear();
-                          setValue(
-                            "attendanceDeadline",
-                            `${year}-${String(dateData.getMonth() + 1).padStart(
-                              2,
-                              "0"
-                            )}-${String(dateData.getDate()).padStart(2, "0")}`
-                          );
-                          setDeadlineDate(date);
-                          setOpen(false);
-                        }}
-                      />
+                      <DeadlineCalendar onSelect={() => setOpen(false)} />
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -647,48 +725,7 @@ const NewScheduleForm = ({
                   <Label htmlFor="mobile-deadline-picker" className="px-1">
                     투표 마감일자 (자정 마감)
                   </Label>
-                  <Calendar
-                    mode="single"
-                    selected={deadlineDate}
-                    className={`rounded-md border pb-12 sm:pb-6 w-full [--cell-size:--spacing(11.75)] sm:[--cell-size:--spacing(10)] mx-auto ${
-                      !matchDate ? "opacity-50 pointer-events-none" : ""
-                    }`}
-                    disabled={(date) => {
-                      const today = new Date();
-                      today.setHours(0, 0, 0, 0);
-
-                      if (matchDate) {
-                        // 내일 경기면 오늘만 선택 가능
-                        if (isTomorrow(matchDate)) {
-                          const compareDate = new Date(date);
-                          compareDate.setHours(0, 0, 0, 0);
-                          return compareDate.getTime() !== today.getTime();
-                        }
-
-                        // 그 외의 경우 경기 전날까지 선택 가능
-                        const match = new Date(matchDate);
-                        match.setDate(match.getDate() - 1);
-                        match.setHours(23, 59, 59, 999);
-                        return date < today || date > match;
-                      }
-
-                      return date < today;
-                    }}
-                    locale={ko}
-                    onSelect={(date) => {
-                      if (!date) return;
-                      const dateData = new Date(date);
-                      const year = dateData.getFullYear();
-                      setValue(
-                        "attendanceDeadline",
-                        `${year}-${String(dateData.getMonth() + 1).padStart(
-                          2,
-                          "0"
-                        )}-${String(dateData.getDate()).padStart(2, "0")}`
-                      );
-                      setDeadlineDate(date);
-                    }}
-                  />
+                  <DeadlineCalendar isMobile={true} />
                 </div>
               </div>
             </>
@@ -710,7 +747,7 @@ const NewScheduleForm = ({
           disabled={
             isLoading ||
             !matchDate ||
-            (watch("matchType") === "TEAM" && teamCode.status !== "valid")
+            (matchType === "TEAM" && teamCode.status !== "valid")
           }
           className="w-full font-semibold text-base disabled:opacity-50 disabled:pointer-events-none"
           size="lg"
