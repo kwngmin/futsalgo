@@ -154,12 +154,16 @@ export async function getTeam(id: string) {
 
       // Match가 있는 모든 경기들 (lineup이 있는 것만)
       const allMatches = allSchedules.flatMap((schedule) =>
-        schedule.matches.filter((match) => match.lineups.length > 0)
+        schedule.matches.filter(
+          (match) => match.lineups.length > 0 && match.isLinedUp
+        )
       );
 
       // 일정 수: Match가 있는 Schedule들만 (lineup이 있는 match가 있어야 함)
       const totalSchedules = allSchedules.filter((schedule) =>
-        schedule.matches.some((match) => match.lineups.length > 0)
+        schedule.matches.some(
+          (match) => match.lineups.length > 0 && match.isLinedUp
+        )
       ).length;
 
       // 경기 수: lineup이 있는 Match들의 개수
@@ -169,14 +173,18 @@ export async function getTeam(id: string) {
       const selfMatches = allSchedules.filter(
         (schedule) =>
           schedule.matchType === "SQUAD" &&
-          schedule.matches.some((match) => match.lineups.length > 0)
+          schedule.matches.some(
+            (match) => match.lineups.length > 0 && match.isLinedUp
+          )
       ).length;
 
       // 친선전 수: matchType이 TEAM이고 lineup이 있는 match가 있는 schedule
       const friendlyMatches = allSchedules.filter(
         (schedule) =>
           schedule.matchType === "TEAM" &&
-          schedule.matches.some((match) => match.lineups.length > 0)
+          schedule.matches.some(
+            (match) => match.lineups.length > 0 && match.isLinedUp
+          )
       ).length;
 
       return {

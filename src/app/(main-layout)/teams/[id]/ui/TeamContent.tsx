@@ -630,9 +630,9 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            {/* 라인 프로필 */}
+            {/* 경기 통계 */}
             <div className="divide-y divide-gray-100">
-              {/* 총 경기 수 */}
+              {/* 전체 경기 수 */}
               <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 gap-2">
                 <div className="flex items-center space-x-3">
                   <SoccerBallIcon
@@ -647,7 +647,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </span>
                 </div>
               </div>
-              {/* 활동 지역 */}
+              {/* 평균 경기 수 */}
               <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 gap-2">
                 <div className="flex items-center space-x-3">
                   <CalculatorIcon
@@ -658,8 +658,11 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
-                    {data.data.stats.scheduleStats.totalMatches /
-                      data.data.stats.scheduleStats.totalSchedules || "0"}
+                    {Math.round(
+                      (data.data.stats.scheduleStats.totalMatches /
+                        data.data.stats.scheduleStats.totalSchedules) *
+                        10
+                    ) / 10 || "0"}
                   </span>
                 </div>
               </div>
