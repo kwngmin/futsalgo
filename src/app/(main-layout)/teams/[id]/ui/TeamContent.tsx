@@ -198,7 +198,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="space-y-4 px-4">
               <div className="flex gap-3 px-8">
                 {/* 프로필 사진 */}
-                <div className="size-14 sm:size-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="size-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
                     <Image
                       width={80}
@@ -449,7 +449,10 @@ const TeamContent = ({ id }: { id: string }) => {
             {/* 활동 지역 */}
             <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 gap-2">
               <div className="flex items-center space-x-3">
-                <MapPinAreaIcon className="size-6 text-gray-500" />
+                <MapPinAreaIcon
+                  className="size-6 text-gray-500"
+                  weight="fill"
+                />
                 <span className="font-medium">활동 지역</span>
               </div>
               <div className="flex items-center gap-1">
@@ -481,7 +484,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <span className="text-base font-semibold text-gray-800 group-hover:underline underline-offset-4">
                       {data.data.instagram}
                     </span>
-                    <SquareArrowOutUpRight className="size-4 text-gray-500" />
+                    <SquareArrowOutUpRight className="size-4.5 text-gray-500" />
                   </a>
                 </div>
               </div>
@@ -506,7 +509,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     <span className="text-base font-semibold text-gray-800 group-hover:underline underline-offset-4">
                       {data.data.youtube}
                     </span>
-                    <SquareArrowOutUpRight className="size-4 text-gray-500" />
+                    <SquareArrowOutUpRight className="size-4.5 text-gray-500" />
                   </a>
                 </div>
               </div>
