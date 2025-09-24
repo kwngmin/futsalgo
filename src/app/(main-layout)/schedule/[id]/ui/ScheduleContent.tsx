@@ -700,7 +700,7 @@ const ScheduleContent = ({
                   경기가 없습니다.
                 </p>
                 <p className="whitespace-pre-line break-keep sm:text-sm">
-                  경기를 추가하고 득점 기록을 남겨주세요.
+                  경기를 추가하고 골과 어시스트를 기록하세요.
                 </p>
               </div>
             ) : (

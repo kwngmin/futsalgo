@@ -599,7 +599,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             댓글이 없습니다.
           </p>
           <p className="whitespace-pre-line break-keep sm:text-sm">
-            일정에 대한 문의 또는 다양한 의견을 남겨주세요.
+            일정에 대한 문의 또는 다양한 의견을 남겨보세요.
           </p>
         </div>
       ) : (

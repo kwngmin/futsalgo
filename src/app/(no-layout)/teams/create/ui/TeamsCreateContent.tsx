@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { Camera, Upload, MapPin, ScrollText } from "lucide-react";
+import { Camera, Upload, MapPin, ScrollText, X } from "lucide-react";
 import { Label } from "@/shared/components/ui/label";
 import { Input } from "@/shared/components/ui/input";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
@@ -152,8 +152,15 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <div className="flex items-center justify-between h-16 shrink-0 px-3">
-        <h1 className="text-[1.625rem] font-bold">팀 등록하기</h1>
+      {/* 상단: 제목과 검색 */}
+      <div className="flex items-center justify-between px-4 h-16 shrink-0">
+        <h1 className="text-[1.625rem] font-bold">새로운 팀</h1>
+        <button
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <X className="size-6" />
+        </button>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="px-3 space-y-6">
@@ -305,7 +312,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
               className="w-full h-12 text-base font-semibold"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "팀 등록 중..." : "팀 등록하기"}
+              {isSubmitting ? "등록 중..." : "등록하기"}
             </Button>
             <Button
               onClick={() => router.back()}
