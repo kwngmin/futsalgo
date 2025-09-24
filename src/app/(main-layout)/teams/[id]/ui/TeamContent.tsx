@@ -654,7 +654,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     className="size-6 text-gray-500"
                     weight="fill"
                   />
-                  <span className="font-medium">일정당 평균 경기 수</span>
+                  <span className="font-medium">평균 경기 수</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-base font-medium text-gray-500">
