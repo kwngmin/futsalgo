@@ -391,7 +391,7 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
-                {data.data.members.approved.length}명
+                {data.data.members.approved.length}
               </div>
               <Label className="text-muted-foreground leading-snug">
                 팀원 수
@@ -400,7 +400,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
                 {data.data.stats.professionalCount
-                  ? `${data.data.stats.professionalCount}명`
+                  ? `${data.data.stats.professionalCount}`
                   : "선출 없음"}
               </div>
               <Label className="text-muted-foreground leading-snug">
@@ -408,9 +408,7 @@ const TeamContent = ({ id }: { id: string }) => {
               </Label>
             </div>
             <div className="flex flex-col gap-1 items-center">
-              <div className="font-semibold">
-                {data.data.stats.averageAge}살
-              </div>
+              <div className="font-semibold">{data.data.stats.averageAge}</div>
               <Label className="text-muted-foreground leading-snug">
                 평균 연령
               </Label>
