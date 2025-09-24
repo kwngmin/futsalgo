@@ -14,6 +14,8 @@ import {
   SquareArrowOutUpRight,
   Copy,
   Pencil,
+  ChevronRight,
+  Info,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -26,12 +28,14 @@ import {
 import { useState } from "react";
 import TeamMemberList from "./TeamMemberList";
 import {
+  CalculatorIcon,
   CalendarBlankIcon,
   ChatCenteredDotsIcon,
   CheckCircleIcon,
   HashIcon,
   InstagramLogoIcon,
   MapPinAreaIcon,
+  SoccerBallIcon,
   UsersIcon,
   YoutubeLogoIcon,
 } from "@phosphor-icons/react";
@@ -63,7 +67,6 @@ const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
   const searchParams = useSearchParams();
-  // const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
   const [isLoading, setIsLoading] = useState(false);
   const [copy, setCopy] = useState(false);
 
@@ -368,20 +371,12 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
-                {data.data.stats.professionalCount
-                  ? `${data.data.stats.professionalCount}명`
-                  : "선출 없음"}
+                {data.data.recruitmentStatus === "RECRUITING"
+                  ? "모집중"
+                  : "모집마감"}
               </div>
               <Label className="text-muted-foreground leading-snug">
-                선수 출신
-              </Label>
-            </div>
-            <div className="flex flex-col gap-1 items-center">
-              <div className="font-semibold">
-                {data.data.stats.averageAge}살
-              </div>
-              <Label className="text-muted-foreground leading-snug">
-                평균 연령
+                팀원 모집
               </Label>
             </div>
             <div className="flex flex-col gap-1 items-center">
@@ -404,12 +399,20 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
-                {data.data.recruitmentStatus === "RECRUITING"
-                  ? "모집중"
-                  : "모집마감"}
+                {data.data.stats.professionalCount
+                  ? `${data.data.stats.professionalCount}명`
+                  : "선출 없음"}
               </div>
               <Label className="text-muted-foreground leading-snug">
-                팀원 모집
+                선수 출신
+              </Label>
+            </div>
+            <div className="flex flex-col gap-1 items-center">
+              <div className="font-semibold">
+                {data.data.stats.averageAge}살
+              </div>
+              <Label className="text-muted-foreground leading-snug">
+                평균 연령
               </Label>
             </div>
           </div>
@@ -552,7 +555,7 @@ const TeamContent = ({ id }: { id: string }) => {
             )}
           </div>
 
-          {/* 경기일정 요약 */}
+          {/* 경기일정 */}
           <div className="px-4">
             <div className="flex justify-between items-center p-2 min-h-13">
               <div className="flex items-center gap-3">
@@ -562,30 +565,44 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl font-semibold">경기일정</h2>
-                  {/* <div className="font-medium text-lg text-amber-600">
-                        {data.data.members.approved.length}
-                      </div> */}
                 </div>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-base sm:text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 gap-1 hover:bg-blue-50"
+                onClick={() => {
+                  // router.push(`?search=${data.data.name}`);
+                  const params = new URLSearchParams({
+                    search: data.data.name,
+                  });
+                  router.push(`/?${params.toString()}`);
+                }}
+              >
+                조회
+                <ChevronRight
+                  className="size-4 text-blue-800"
+                  strokeWidth={2.5}
+                />
+              </Button>
+            </div>
+            <div className="h-9 mb-2 flex items-center gap-1.5 px-4 bg-amber-400/10 rounded-sm text-amber-700">
+              <Info className="size-4" />
+              <span className="text-sm">
+                {/* 출전 명단이 있는 경기가 속해있는 일정만 집계됩니다. */}
+                출전 명단이 있는 경기가 포함된 일정만 집계됩니다.
+              </span>
             </div>
             <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
-              <div className="grid grid-cols-4 gap-3 p-3 h-24 items-center">
-                <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
-                    {data.data.stats.scheduleStats.totalSchedules || "0"}
-                  </div>
-                  <Label className="text-muted-foreground leading-snug">
-                    일정
-                  </Label>
-                </div>
-                <div className="flex flex-col gap-1 items-center">
+              <div className="grid grid-cols-3 gap-3 p-3 h-24 items-center">
+                {/* <div className="flex flex-col gap-1 items-center">
                   <div className="font-semibold">
                     {data.data.stats.scheduleStats.totalMatches || "0"}
                   </div>
                   <Label className="text-muted-foreground leading-snug">
                     경기
                   </Label>
-                </div>
+                </div> */}
                 <div className="flex flex-col gap-1 items-center">
                   <div className="font-semibold">
                     {data.data.stats.scheduleStats.selfMatches || "0"}
@@ -601,6 +618,49 @@ const TeamContent = ({ id }: { id: string }) => {
                   <Label className="text-muted-foreground leading-snug">
                     친선전
                   </Label>
+                </div>
+                <div className="flex flex-col gap-1 items-center">
+                  <div className="font-semibold">
+                    {data.data.stats.scheduleStats.totalSchedules || "0"}
+                  </div>
+                  <Label className="text-muted-foreground leading-snug">
+                    합계
+                  </Label>
+                </div>
+              </div>
+            </div>
+
+            {/* 라인 프로필 */}
+            <div className="divide-y divide-gray-100">
+              {/* 총 경기 수 */}
+              <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 gap-2">
+                <div className="flex items-center space-x-3">
+                  <SoccerBallIcon
+                    className="size-6 text-gray-500"
+                    weight="fill"
+                  />
+                  <span className="font-medium">전체 경기 수</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.stats.scheduleStats.totalMatches || "0"}
+                  </span>
+                </div>
+              </div>
+              {/* 활동 지역 */}
+              <div className="w-full flex items-center justify-between px-2 h-12 sm:h-11 gap-2">
+                <div className="flex items-center space-x-3">
+                  <CalculatorIcon
+                    className="size-6 text-gray-500"
+                    weight="fill"
+                  />
+                  <span className="font-medium">일정당 평균 경기 수</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-base font-medium text-gray-500">
+                    {data.data.stats.scheduleStats.totalMatches /
+                      data.data.stats.scheduleStats.totalSchedules || "0"}
+                  </span>
                 </div>
               </div>
             </div>

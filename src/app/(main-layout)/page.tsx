@@ -3,7 +3,7 @@
 import { getSchedules } from "@/app/(main-layout)/home/actions/get-schedules";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useMemo } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 
@@ -28,11 +28,15 @@ import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
 const HomePage = () => {
   const router = useRouter();
   const session = useSession();
+  const searchParams = useSearchParams();
+  console.log("searchParams", searchParams.get("search"));
 
   // 상태 관리
   const [currentTab, setCurrentTab] = useState<TabType>("schedules");
   const [searchFocused, setSearchFocused] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(
+    searchParams.get("search") || ""
+  );
   // 디바운스된 검색어
   const debouncedSearchValue = useDebounce(searchValue, 500);
 
