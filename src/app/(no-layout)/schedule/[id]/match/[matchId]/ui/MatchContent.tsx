@@ -340,6 +340,12 @@ const MatchContent = ({ data }: MatchContentProps) => {
       queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["schedules"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["my-schedule"],
+      });
       router.push(
         `/schedule/${data.match.scheduleId}${
           searchParams.get("tab") === "/my-schedules"

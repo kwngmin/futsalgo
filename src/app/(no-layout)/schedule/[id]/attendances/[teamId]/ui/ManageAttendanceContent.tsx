@@ -137,6 +137,9 @@ const ManageAttendanceContent = ({
         queryClient.invalidateQueries({
           queryKey: ["scheduleAttendance", scheduleId, teamId],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["schedule", scheduleId],
+        });
         setShowAllAttendanceMenu(false);
       } else {
         alert(result.error || "전체 참석처리에 실패했습니다.");

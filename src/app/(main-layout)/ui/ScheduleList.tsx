@@ -140,7 +140,7 @@ const ScheduleList = ({
                     : schedule.status === "PENDING"
                     ? "응답 대기"
                     : schedule.status === "CONFIRMED"
-                    ? "일정 확정"
+                    ? "경기 없음"
                     : "출전 준비"}
                 </div>
                 <Separator

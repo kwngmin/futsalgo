@@ -344,11 +344,39 @@ const ScheduleContent = ({
   console.log(attendanceIds, "attendances");
 
   console.log(
-    data.data.schedule.attendanceDeadline,
-    "data.data.schedule.attendanceDeadline"
+    data.data.schedule.attendances.filter(
+      (attendance) => attendance.attendanceStatus === "ATTENDING"
+    ).length > 1,
+    "sdsds"
   );
 
-  console.log(data.data.schedule, "data.data.schedule.startTime");
+  console.log(
+    data.data.schedule.attendances.filter(
+      (attendance) => attendance.attendanceStatus === "ATTENDING"
+    ),
+    "11111sdsds"
+  );
+
+  const attendances = data.data.schedule.attendances.filter(
+    (attendance) => attendance.attendanceStatus === "ATTENDING"
+  );
+
+  const hostAttendances = attendances.filter(
+    (attendance) => attendance.teamType === "HOST"
+  );
+
+  const invitedAttendances =
+    data.data.schedule.matchType === "SQUAD"
+      ? []
+      : attendances.filter((attendance) => attendance.teamType === "INVITED");
+
+  const isAvailableAddMatch =
+    data.data.schedule.matchType === "SQUAD"
+      ? hostAttendances.length > 1
+      : hostAttendances.length > 0 && invitedAttendances.length > 0;
+
+  console.log(isAvailableAddMatch, "isAvailableAddMatch");
+  console.log(hostAttendances.length, "hostAttendances.length");
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
@@ -501,7 +529,8 @@ const ScheduleContent = ({
 
       {/* 경기일정 참석여부 투표 */}
       {isAttendance &&
-        data.data.schedule.status === "READY" &&
+        (data.data.schedule.status === "CONFIRMED" ||
+          data.data.schedule.status === "READY") &&
         data.data.schedule.enableAttendanceVote &&
         data.data.schedule.attendanceDeadline &&
         data.data.schedule.attendanceDeadline > new Date() && (
@@ -607,10 +636,10 @@ const ScheduleContent = ({
           scheduleDate.setHours(0, 0, 0, 0);
           today.setHours(0, 0, 0, 0);
 
-          // READY 상태: 오늘이거나 지난 날짜
-          // PLAY 상태: 항상 표시
           return (
-            (data.data.schedule.status === "READY" && scheduleDate <= today) ||
+            (data.data.schedule.status === "CONFIRMED" &&
+              scheduleDate <= today) ||
+            data.data.schedule.status === "READY" ||
             data.data.schedule.status === "PLAY"
           );
         })() && (
@@ -665,7 +694,7 @@ const ScheduleContent = ({
                   </div>
                 ))}
               </div>
-            ) : (
+            ) : isAvailableAddMatch ? (
               <div className="py-6 px-8 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
                 <p className="text-lg sm:text-base font-medium text-gray-600">
                   경기가 없습니다.
@@ -674,20 +703,35 @@ const ScheduleContent = ({
                   경기를 추가하고 득점 기록을 남겨주세요.
                 </p>
               </div>
+            ) : (
+              <div className="py-6 px-8 bg-red-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-red-600/80">
+                <p className="text-lg sm:text-base font-medium text-red-600">
+                  참석 인원이 부족합니다.
+                </p>
+                <p className="whitespace-pre-line break-keep sm:text-sm">
+                  참석자가 2명 이상이 되어야 경기를 추가할 수 있습니다.
+                </p>
+              </div>
             )}
 
             {/* 경기 추가 버튼 */}
-            {canEditNotice && (
+            {canEditNotice && isAvailableAddMatch && (
               <div className="pt-3">
                 <Button
                   type="button"
-                  className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600"
+                  className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 disabled:opacity-40 disabled:cursor-default"
                   size="lg"
                   onClick={async () => {
                     try {
                       const result = await addMatch(scheduleId);
                       if (result.success) {
                         refetch();
+                        queryClient.invalidateQueries({
+                          queryKey: ["schedules"],
+                        });
+                        queryClient.invalidateQueries({
+                          queryKey: ["my-schedules"],
+                        });
                       } else {
                         console.log(result.error, "result.error");
                         alert(result.error);
@@ -737,7 +781,8 @@ const ScheduleContent = ({
             0 && <SchedulePhotosGallery scheduleId={scheduleId} />}
 
         {/* 공지사항 */}
-        {(data.data.schedule.status === "READY" ||
+        {(data.data.schedule.status === "CONFIRMED" ||
+          data.data.schedule.status === "READY" ||
           data.data.schedule.status === "PLAY") &&
           data?.data?.isMember && (
             <div className="px-4">
@@ -874,7 +919,8 @@ const ScheduleContent = ({
           )}
 
         {/* 참석 인원 탭 내용 */}
-        {(data.data.schedule.status === "READY" ||
+        {(data.data.schedule.status === "CONFIRMED" ||
+          data.data.schedule.status === "READY" ||
           data.data.schedule.status === "PLAY") && (
           <ScheduleAttendance scheduleId={scheduleId} />
         )}

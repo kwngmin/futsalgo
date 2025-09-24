@@ -76,11 +76,7 @@ function createScheduleWhereCondition(teamIds: string[]) {
   return {
     NOT: {
       status: {
-        in: [
-          ScheduleStatus.REJECTED,
-          ScheduleStatus.DELETED,
-          ScheduleStatus.CONFIRMED,
-        ],
+        in: [ScheduleStatus.REJECTED, ScheduleStatus.DELETED],
       },
     },
     OR: [{ hostTeamId: { in: teamIds } }, { invitedTeamId: { in: teamIds } }],

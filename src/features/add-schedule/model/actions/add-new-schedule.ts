@@ -153,7 +153,7 @@ export async function acceptTeamMatchInvitation({
         },
       });
 
-      // 2. 일정 상태를 READY로 변경
+      // 2. 일정 상태를 CONFIRMED로 변경
       await tx.schedule.update({
         where: { id: scheduleId },
         data: { status: "CONFIRMED" },
