@@ -681,7 +681,7 @@ const ScheduleContent = ({
               <div className="pt-3">
                 <Button
                   type="button"
-                  className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 tracking-tight !h-12 sm:!h-11 !text-lg"
+                  className="w-full font-bold bg-gradient-to-r from-indigo-600 to-emerald-600"
                   size="lg"
                   onClick={async () => {
                     try {

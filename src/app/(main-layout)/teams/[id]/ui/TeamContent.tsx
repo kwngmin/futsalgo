@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { cancelJoinTeam, getTeam, joinTeam } from "../model/actions";
-import { followTeam } from "../actions/follow-team"; // 새로 추가한 액션 import
+import { followTeam } from "../actions/follow-team";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -13,6 +13,7 @@ import {
   ChevronDown,
   SquareArrowOutUpRight,
   Copy,
+  Pencil,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -198,7 +199,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="space-y-4 px-4">
               <div className="flex gap-3 px-4 sm:px-8">
                 {/* 프로필 사진 */}
-                <div className="size-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="size-14 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
                     <Image
                       width={80}
@@ -213,9 +214,9 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                   )}
                 </div>
-                <div className="grow flex flex-col gap-0.5">
+                <div className="grow flex flex-col">
                   <h1 className="text-2xl font-semibold">{data?.data?.name}</h1>
-                  <span className="text-muted-foreground tracking-tight leading-tight">
+                  <span className="text-muted-foreground tracking-tight leading-normal">
                     {
                       TEAM_LEVEL_DESCRIPTION[
                         data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
@@ -349,6 +350,9 @@ const TeamContent = ({ id }: { id: string }) => {
                   router.push(`/teams/${id}/ratings`);
                 }}
               >
+                <div className="size-6 rounded-full bg-white flex items-center justify-center">
+                  <Pencil className="size-4 text-gray-700" strokeWidth={2.75} />
+                </div>
                 팀원 평가
               </Button>
             )}
