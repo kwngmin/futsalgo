@@ -943,16 +943,6 @@ const ScheduleContent = ({
       {/* 수정 및 삭제 */}
       {canEditNotice && (
         <div className="px-4 flex flex-col gap-2 mt-6">
-          {/* <Button variant="destructive" type="button">
-            {isDeleting ? (
-              <>
-                <Loader2 className="size-4 animate-spin mr-2" />
-                삭제 중...
-              </>
-            ) : (
-              "삭제"
-            )}
-          </Button> */}
           <button
             type="button"
             className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-30 disabled:cursor-default"

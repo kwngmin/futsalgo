@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
 import { Separator } from "@/shared/components/ui/separator";
-import { Ban, Hourglass } from "lucide-react";
+// import { Ban, Hourglass } from "lucide-react";
 
 type ScheduleListProps = Prisma.ScheduleGetPayload<{
   include: {
@@ -115,6 +115,7 @@ const ScheduleList = ({
         <div className="grow flex flex-col justify-center overflow-hidden">
           <div className="flex items-center gap-1.5 leading-none h-5 tracking-tight">
             {(schedule.status === "PENDING" ||
+              schedule.status === "CONFIRMED" ||
               schedule.status === "REJECTED" ||
               schedule.status === "READY") && (
               <Fragment>
@@ -123,20 +124,24 @@ const ScheduleList = ({
                     schedule.status === "REJECTED"
                       ? "text-red-600"
                       : schedule.status === "PENDING"
-                      ? "text-amber-700"
-                      : "text-slate-500"
+                      ? "text-amber-600"
+                      : schedule.status === "CONFIRMED"
+                      ? "text-slate-500"
+                      : "text-sky-700"
                   }`}
                 >
-                  {schedule.status === "REJECTED" ? (
+                  {/* {schedule.status === "REJECTED" ? (
                     <Ban className="size-3" strokeWidth={2.25} />
                   ) : schedule.status === "PENDING" ? (
                     <Hourglass className="size-3" strokeWidth={2.25} />
-                  ) : null}
+                  ) : null} */}
                   {schedule.status === "REJECTED"
-                    ? "거절됨"
+                    ? "초청 거절"
                     : schedule.status === "PENDING"
-                    ? "대기중"
-                    : "준비"}
+                    ? "응답 대기"
+                    : schedule.status === "CONFIRMED"
+                    ? "일정 확정"
+                    : "출전 준비"}
                 </div>
                 <Separator
                   orientation="vertical"

@@ -229,22 +229,33 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
       <div className="">
         <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
           {/* MVP 투표 현황 */}
-          <div className="grid grid-cols-3 gap-3 p-3 mb-1">
-            <div className="flex flex-col gap-1 items-center my-2">
+          <div className="grid grid-cols-3 gap-3 p-3 items-center h-24">
+            <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
                 {mvpStats.voted === 0 ? "-" : `${mvpStats.voted}`}
               </div>
-              <Label className="text-muted-foreground">투표완료</Label>
+              <Label className="text-muted-foreground leading-snug">
+                투표완료
+              </Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-2">
+            <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
                 {mvpStats.notVoted === 0 ? "-" : `${mvpStats.notVoted}`}
               </div>
-              <Label className="text-muted-foreground">미투표</Label>
+              <Label className="text-muted-foreground leading-snug">
+                미투표
+              </Label>
             </div>
-            <div className="flex flex-col gap-1 items-center my-2">
-              <div className="font-semibold">{mvpStats.voteRate || 0}%</div>
-              <Label className="text-muted-foreground">투표율</Label>
+            <div className="flex flex-col gap-1 items-center">
+              <div className="font-semibold">
+                {mvpStats.voteRate || 0}
+                <span className="text-sm font-medium pl-0.5 text-gray-500">
+                  %
+                </span>
+              </div>
+              <Label className="text-muted-foreground leading-snug">
+                투표율
+              </Label>
             </div>
           </div>
         </div>

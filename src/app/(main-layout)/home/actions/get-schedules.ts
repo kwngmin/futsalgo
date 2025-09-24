@@ -75,7 +75,13 @@ const DateUtils = {
 function createScheduleWhereCondition(teamIds: string[]) {
   return {
     NOT: {
-      status: { in: [ScheduleStatus.REJECTED, ScheduleStatus.DELETED] },
+      status: {
+        in: [
+          ScheduleStatus.REJECTED,
+          ScheduleStatus.DELETED,
+          ScheduleStatus.CONFIRMED,
+        ],
+      },
     },
     OR: [{ hostTeamId: { in: teamIds } }, { invitedTeamId: { in: teamIds } }],
   };
@@ -123,6 +129,7 @@ async function getPastSchedules(
             ScheduleStatus.REJECTED,
             ScheduleStatus.READY,
             ScheduleStatus.DELETED,
+            ScheduleStatus.CONFIRMED,
           ],
         },
       },

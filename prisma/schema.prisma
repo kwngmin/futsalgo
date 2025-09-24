@@ -317,6 +317,8 @@ model Team {
   city          String
   district      String
   description   String?
+  instagram     String?
+  youtube       String?
 
   status        TeamStatus @default(ACTIVE)
   recruitmentStatus RecruitmentStatus @default(RECRUITING)
