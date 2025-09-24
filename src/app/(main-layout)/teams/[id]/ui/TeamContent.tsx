@@ -391,7 +391,7 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
             <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
-                {data.data.members.approved.length}
+                {data.data.members.approved.length}명
               </div>
               <Label className="text-muted-foreground leading-snug">
                 팀원 수
@@ -400,7 +400,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="flex flex-col gap-1 items-center">
               <div className="font-semibold">
                 {data.data.stats.professionalCount
-                  ? `${data.data.stats.professionalCount}`
+                  ? `${data.data.stats.professionalCount}명`
                   : "선출 없음"}
               </div>
               <Label className="text-muted-foreground leading-snug">
