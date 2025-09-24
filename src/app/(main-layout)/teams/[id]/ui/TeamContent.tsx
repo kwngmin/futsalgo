@@ -344,14 +344,14 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
             ) : (
               <Button
-                className="w-full text-base font-semibold"
+                className="w-full font-semibold"
                 size="lg"
                 onClick={() => {
                   router.push(`/teams/${id}/ratings`);
                 }}
               >
                 <div className="size-6 rounded-full bg-white flex items-center justify-center">
-                  <Pencil className="size-4 text-gray-700" strokeWidth={2.75} />
+                  <Pencil className="size-3.5 text-gray-700" strokeWidth={3} />
                 </div>
                 팀원 평가
               </Button>
