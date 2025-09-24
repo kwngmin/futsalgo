@@ -589,8 +589,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="h-9 mb-2 flex items-center gap-1.5 px-4 bg-amber-400/10 rounded-sm text-amber-700">
               <Info className="size-4" />
               <span className="text-sm">
-                {/* 출전 명단이 있는 경기가 속해있는 일정만 집계됩니다. */}
-                출전 명단이 있는 경기가 포함된 일정만 집계됩니다.
+                출전 명단이 있는 경기가 1개 이상인 일정만 집계됩니다.
               </span>
             </div>
             <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
