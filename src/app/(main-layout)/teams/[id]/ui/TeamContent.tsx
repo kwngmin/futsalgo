@@ -14,7 +14,7 @@ import {
   SquareArrowOutUpRight,
   Copy,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Label } from "@/shared/components/ui/label";
@@ -61,6 +61,7 @@ import {
 const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
+  const searchParams = useSearchParams();
   // const [selectedTab, setSelectedTab] = useState<string>(tabs[0].value);
   const [isLoading, setIsLoading] = useState(false);
   const [copy, setCopy] = useState(false);
@@ -73,10 +74,13 @@ const TeamContent = ({ id }: { id: string }) => {
     placeholderData: keepPreviousData,
     enabled: !!id, // id 없으면 fetch 안 함
   });
-  console.log(data, "team");
 
   const handleGoBack = () => {
-    router.back();
+    if (searchParams.get("goback") === "false") {
+      router.push(`/teams`);
+    } else {
+      router.back();
+    }
   };
 
   // 팔로우 처리 함수 추가
@@ -194,7 +198,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="space-y-4 px-4">
               <div className="flex gap-3 px-8">
                 {/* 프로필 사진 */}
-                <div className="size-16 sm:size-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <div className="size-14 sm:size-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {data?.data?.logoUrl ? (
                     <Image
                       width={80}
@@ -209,7 +213,7 @@ const TeamContent = ({ id }: { id: string }) => {
                     </div>
                   )}
                 </div>
-                <div className="grow flex flex-col gap-1">
+                <div className="grow flex flex-col gap-0.5">
                   <h1 className="text-2xl font-semibold">{data?.data?.name}</h1>
                   <span className="text-muted-foreground tracking-tight leading-tight">
                     {
@@ -515,7 +519,7 @@ const TeamContent = ({ id }: { id: string }) => {
               <div className="flex items-center gap-3">
                 <ChatCenteredDotsIcon
                   className="size-7 text-zinc-500"
-                  weight="fill"
+                  // weight="fill"
                 />
                 <h2 className="text-xl font-semibold">소개</h2>
               </div>
@@ -607,11 +611,11 @@ const TeamContent = ({ id }: { id: string }) => {
                   <div className="font-medium text-lg text-amber-600">
                     {data.data.members.approved.length}
                   </div>
-                  <div className="font-medium text-sm text-muted-foreground">
+                  {/* <div className="font-medium text-sm text-muted-foreground">
                     {data.data.stats.professionalCount
                       ? `선출 ${data.data.stats.professionalCount}명`
                       : "선출 없음"}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

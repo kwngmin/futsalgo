@@ -7,7 +7,7 @@ const TeamMemberHeader = ({ id }: { id: string }) => {
   const router = useRouter();
 
   const handleGoBack = () => {
-    router.push(`/teams/${id}`);
+    router.push(`/teams/${id}?goback=false`);
   };
 
   return (
