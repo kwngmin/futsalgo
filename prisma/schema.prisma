@@ -322,6 +322,7 @@ model Team {
 
   status        TeamStatus @default(ACTIVE)
   recruitmentStatus RecruitmentStatus @default(RECRUITING)
+  hasFormerPro  Boolean @default(false)
   teamMatchAvailable TeamMatchAvailable @default(AVAILABLE)
   
   gender        TeamGender
