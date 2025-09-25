@@ -127,7 +127,7 @@ const MemberList = ({
             <div className="sm:text-sm text-gray-500 tracking-tight flex items-center">
               {member.user.playerBackground === "PROFESSIONAL" && (
                 <span className="text-gray-600 font-medium pr-2 py-0.5 mr-2 border-r border-gray-300 h-4 flex items-center">
-                  선수 출신
+                  선출
                 </span>
               )}
               {getMemberInfoText(member.user)}
@@ -138,11 +138,11 @@ const MemberList = ({
         {/* 우측 콘텐츠 */}
         <div className="flex items-center gap-1">
           {showRealName ? (
-            <span className="text-base font-medium text-gray-500">
+            <span className="text-sm font-medium text-gray-500">
               {member.user.name || "미설정"}
             </span>
           ) : isPending ? (
-            <span className="text-base font-medium text-amber-600">대기중</span>
+            <span className="text-sm font-medium text-amber-600">대기중</span>
           ) : null}
           <ChevronRight className="size-5 text-gray-400" />
         </div>
