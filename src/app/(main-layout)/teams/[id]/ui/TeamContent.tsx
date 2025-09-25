@@ -675,9 +675,9 @@ const TeamContent = ({ id }: { id: string }) => {
                 />
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl font-semibold">팀원</h2>
-                  <div className="font-medium text-lg text-amber-600">
+                  {/* <div className="font-medium text-lg text-amber-600">
                     {data.data.members.approved.length}
-                  </div>
+                  </div> */}
                   {/* <div className="font-medium text-sm text-muted-foreground">
                     {data.data.stats.professionalCount
                       ? `선출 ${data.data.stats.professionalCount}명`
