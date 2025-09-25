@@ -315,9 +315,9 @@ const ScheduleContent = ({
 
   if (!data) {
     return (
-      <div className="p-8 text-center min-h-[50vh] flex flex-col items-center justify-center">
+      <div className="p-8 text-center min-h-[80vh] flex flex-col items-center justify-center">
         <Loader2 className="animate-spin mx-auto mb-4" size={48} />
-        <p className="text-gray-500">개요를 불러오는 중...</p>
+        <p className="text-gray-500">데이터를 불러오는 중...</p>
       </div>
     );
   }
