@@ -712,7 +712,9 @@ const TeamContent = ({ id }: { id: string }) => {
             </div>
 
             {/* 권한 설정 */}
-            {data.data.currentUserMembership.role === "OWNER" && <TeamManage />}
+            {data.data.currentUserMembership.role === "OWNER" && (
+              <TeamManage members={data.data.members.approved} teamId={id} />
+            )}
 
             {/* 팀원 통계 */}
             <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
