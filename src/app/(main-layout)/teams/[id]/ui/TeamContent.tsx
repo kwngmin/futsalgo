@@ -87,6 +87,28 @@ const TeamContent = ({ id }: { id: string }) => {
     }
   };
 
+  const handleLeaveTeam = async () => {
+    if (!confirm("정말로 팀을 탈퇴하시겠습니까?")) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await leaveTeam(id);
+      if (result?.success) {
+        alert("팀 탈퇴가 완료되었습니다.");
+        await refetch();
+      } else {
+        alert(result?.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("팀 탈퇴에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // 팔로우 처리 함수 추가
   const handleFollowClick = async (teamId: string) => {
     if (!session.data) {
@@ -798,27 +820,7 @@ const TeamContent = ({ id }: { id: string }) => {
             {data.data.currentUserMembership.status === "APPROVED" &&
               data.data.currentUserMembership.role !== "OWNER" && (
                 <button
-                  onClick={async () => {
-                    if (!confirm("정말로 팀을 탈퇴하시겠습니까?")) {
-                      return;
-                    }
-
-                    setIsLoading(true);
-                    try {
-                      const result = await leaveTeam(id);
-                      if (result?.success) {
-                        alert("팀 탈퇴가 완료되었습니다.");
-                        await refetch();
-                      } else {
-                        alert(result?.error);
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      alert("팀 탈퇴에 실패했습니다.");
-                    } finally {
-                      setIsLoading(false);
-                    }
-                  }}
+                  onClick={handleLeaveTeam}
                   type="button"
                   className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                 >

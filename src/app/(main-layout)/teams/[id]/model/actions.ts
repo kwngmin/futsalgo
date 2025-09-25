@@ -588,55 +588,63 @@ export async function leaveTeam(teamId: string) {
       };
     }
 
-    // 5. 팀 탈퇴 처리 (상태를 LEAVE로 변경)
-    const leftMember = await prisma.teamMember.update({
-      where: { id: existingMember.id },
-      data: {
-        status: "LEAVE",
-        joinedAt: null, // 탈퇴 시 가입일 초기화
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            nickname: true,
+    // 5. 트랜잭션으로 탈퇴 처리
+    const result = await prisma.$transaction(async (tx) => {
+      // 팀 탈퇴 처리 (상태를 LEAVE로 변경)
+      const leftMember = await tx.teamMember.update({
+        where: { id: existingMember.id },
+        data: {
+          status: "LEAVE",
+          joinedAt: null,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              nickname: true,
+              playerBackground: true,
+            },
+          },
+          team: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
         },
-        team: {
-          select: {
-            id: true,
-            name: true,
+      });
+
+      // hasFormerPro 상태 업데이트 (탈퇴한 멤버가 PROFESSIONAL이었다면)
+      if (leftMember.user.playerBackground === "PROFESSIONAL") {
+        const remainingMembers = await tx.teamMember.findMany({
+          where: {
+            teamId,
+            status: "APPROVED",
+            NOT: {
+              id: leftMember.id, // 탈퇴한 멤버 제외
+            },
           },
-        },
-      },
-    });
-
-    // 2. 현재 사용자의 팀 멤버십 확인
-    const currentMembers = await prisma.teamMember.findMany({
-      where: {
-        teamId,
-        status: "APPROVED",
-      },
-      select: {
-        id: true,
-        user: {
           select: {
-            playerBackground: true,
+            user: {
+              select: {
+                playerBackground: true,
+              },
+            },
           },
-        },
-      },
-    });
+        });
 
-    const hasFormerPro = currentMembers.some(
-      (member) => member.user.playerBackground === "PROFESSIONAL"
-    );
+        const hasFormerPro = remainingMembers.some(
+          (member) => member.user.playerBackground === "PROFESSIONAL"
+        );
 
-    await prisma.team.update({
-      where: { id: teamId },
-      data: {
-        hasFormerPro,
-      },
+        await tx.team.update({
+          where: { id: teamId },
+          data: { hasFormerPro },
+        });
+      }
+
+      return leftMember;
     });
 
     revalidatePath(`/teams/${teamId}`);
@@ -644,7 +652,7 @@ export async function leaveTeam(teamId: string) {
     return {
       success: true,
       message: "팀에서 탈퇴했습니다",
-      data: leftMember,
+      data: result,
     };
   } catch (error) {
     console.error("팀 탈퇴 실패:", error);
