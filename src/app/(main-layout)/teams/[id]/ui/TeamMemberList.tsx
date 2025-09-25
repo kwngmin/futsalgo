@@ -270,14 +270,13 @@ const TeamMemberList = ({
             onClick={() => router.push(`/players/${member.userId}`)}
             isPending={true}
           >
-            {role === "OWNER" ||
-              (role === "MANAGER" && (
-                <PendingMemberActions
-                  member={member}
-                  teamId={teamId}
-                  onApprove={refetch}
-                />
-              ))}
+            {(role === "OWNER" || role === "MANAGER") && (
+              <PendingMemberActions
+                member={member}
+                teamId={teamId}
+                onApprove={refetch}
+              />
+            )}
           </MemberList>
         ))}
 
