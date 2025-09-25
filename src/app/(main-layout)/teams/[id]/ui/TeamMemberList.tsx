@@ -7,13 +7,13 @@ import {
   TeamMemberStatus,
   User,
 } from "@prisma/client";
-import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER, SKILL_LEVEL } from "@/entities/user/model/constants";
+import { PhoneIcon } from "@phosphor-icons/react";
 
 // 타입 정의
 interface TeamMemberWithUser extends TeamMember {
@@ -63,13 +63,13 @@ const getMemberInfoText = (user: TeamMemberWithUser["user"]): string => {
       : "생년월일 미설정"
     : "생년월일 미설정";
 
-  const professional = user.playerBackground === "PROFESSIONAL" ? "(선출)" : "";
+  // const professional = user.playerBackground === "PROFESSIONAL" ? "(선출)" : "";
 
   const skillLevel =
     SKILL_LEVEL[user.skillLevel as keyof typeof SKILL_LEVEL] || "미설정";
 
-  // return `${gender} • ${age} • ${skillLevel}`;
-  return `${gender} • ${age} • ${skillLevel}${professional}`;
+  return `${gender} • ${age} • ${skillLevel}`;
+  // return `${gender} • ${age} • ${skillLevel}${professional}`;
 };
 
 // 역할 배지 컴포넌트
@@ -97,11 +97,11 @@ const MemberList = ({
 }: MemberCardProps) => {
   return (
     <div className="border-t border-gray-100 first:border-t-0 w-full flex flex-col sm:flex-row sm:gap-0">
-      <button
-        onClick={onClick}
-        className="flex items-center justify-between gap-3 cursor-pointer sm:grow p-2 hover:bg-gray-50 transition-colors group"
-      >
-        <div className="flex items-center space-x-3 grow">
+      <button className="flex items-center justify-between gap-3 cursor-pointer sm:grow p-2 hover:bg-gray-50 transition-colors">
+        <div
+          className="flex items-center space-x-3 grow group"
+          onClick={onClick}
+        >
           {/* 프로필 이미지 */}
           <div className="relative">
             <Image
@@ -110,7 +110,7 @@ const MemberList = ({
               width={56}
               height={56}
               loading="lazy"
-              className="size-12 rounded-full border object-cover"
+              className="size-10 sm:size-12 rounded-full border object-cover"
             />
             {member.user.condition === "INJURED" && <InjuredBadge />}
           </div>
@@ -123,27 +123,43 @@ const MemberList = ({
               </span>
               <RoleBadge role={member.role} />
             </h3>
-            <div className="sm:text-sm text-gray-500 tracking-tight flex items-center leading-tight">
-              {/* {member.user.playerBackground === "PROFESSIONAL" && (
-                <span className="text-amber-600 font-medium pr-2 py-0.5 mr-2 border-r border-gray-300 h-4 flex items-center">
-                  선출
-                </span>
-              )} */}
-              {getMemberInfoText(member.user)}
-            </div>
+            {showRealName ? (
+              <span className="sm:text-sm font-medium text-gray-500 leading-tight tracking-tight">
+                {member.user.name || "미설정"}
+              </span>
+            ) : isPending ? (
+              <span className="sm:text-sm font-medium text-amber-600 leading-tight tracking-tight">
+                대기중
+              </span>
+            ) : (
+              <div className="sm:text-sm text-gray-500 tracking-tight flex items-center leading-tight">
+                {getMemberInfoText(member.user)}
+                {member.user.playerBackground === "PROFESSIONAL" && (
+                  <span className="text-red-600 pl-1.5 ml-1.5 border-l border-gray-300 h-3 flex items-center">
+                    선출
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {/* 우측 콘텐츠 */}
         <div className="flex items-center gap-1">
-          {showRealName ? (
-            <span className="text-sm font-medium text-gray-500">
-              {member.user.name || "미설정"}
-            </span>
-          ) : isPending ? (
-            <span className="text-sm font-medium text-amber-600">대기중</span>
-          ) : null}
-          <ChevronRight className="size-5 text-gray-400" />
+          {showRealName && (
+            <div className="flex sm:hidden items-center justify-center rounded-full bg-white size-10 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer">
+              <PhoneIcon weight="fill" className="size-6 text-green-600" />
+            </div>
+          )}
+          {showRealName && (
+            <div className="hidden sm:flex items-center justify-center rounded-full bg-white h-8 pl-2 pr-3 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer gap-2">
+              <PhoneIcon weight="fill" className="size-4.5 text-green-600" />
+              010-8800-2220
+              {/* {member.user.name || "미설정"} */}
+            </div>
+          )}
+
+          {/* <ChevronRight className="size-5 text-gray-400" /> */}
         </div>
       </button>
 
