@@ -111,7 +111,7 @@ const MemberList = ({
               width={56}
               height={56}
               loading="lazy"
-              className="size-14 rounded-full border object-cover"
+              className="size-12 rounded-full border object-cover"
             />
             {member.user.condition === "INJURED" && <InjuredBadge />}
           </div>
@@ -142,9 +142,7 @@ const MemberList = ({
               {member.user.name || "미설정"}
             </span>
           ) : isPending ? (
-            <span className="text-base font-medium text-amber-600">
-              가입 대기중
-            </span>
+            <span className="text-base font-medium text-amber-600">대기중</span>
           ) : null}
           <ChevronRight className="size-5 text-gray-400" />
         </div>
