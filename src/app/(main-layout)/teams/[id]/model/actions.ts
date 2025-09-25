@@ -22,18 +22,33 @@ export async function getTeam(id: string) {
         members: {
           include: {
             user: {
+              // select: {
+              //   id: true,
+              //   name: true,
+              //   nickname: true,
+              //   image: true,
+              //   skillLevel: true,
+              //   playerBackground: true,
+              //   position: true,
+              //   birthDate: true,
+              //   height: true,
+              //   gender: true,
+              //   condition: true,
+              //   phone: true,
+              // },
               select: {
                 id: true,
-                name: true,
-                nickname: true,
-                image: true,
-                skillLevel: true,
-                playerBackground: true,
-                position: true,
-                birthDate: true,
-                height: true,
-                gender: true,
-                condition: true,
+                // name: true,
+                // nickname: true,
+                // image: true,
+                // skillLevel: true,
+                // playerBackground: true,
+                // position: true,
+                // birthDate: true,
+                // height: true,
+                // gender: true,
+                // condition: true,
+                // phone: true,
               },
             },
           },
@@ -69,21 +84,12 @@ export async function getTeam(id: string) {
       };
     }
 
-    // 승인된 멤버들만 필터링
-    const approvedMembers = team.members.filter(
-      (member) => member.status === "APPROVED"
-    );
-
-    // 승인된 멤버들만 필터링
-    const pendingMembers = team.members.filter(
-      (member) => member.status === "PENDING"
-    );
-
     // 현재 사용자의 멤버십 정보 확인
     const currentUserMembership: UserMembershipInfo = session?.user?.id
       ? (() => {
           const userMember = team.members.find(
-            (member) => member.user.id === session.user.id
+            (member) =>
+              member.user.id === session.user.id && member.status === "APPROVED"
           );
 
           return {
@@ -99,6 +105,40 @@ export async function getTeam(id: string) {
           status: null,
           joinedAt: null,
         };
+
+    const members = await prisma.teamMember.findMany({
+      where: {
+        teamId: id,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: currentUserMembership.isMember,
+            nickname: true,
+            image: true,
+            skillLevel: true,
+            playerBackground: true,
+            position: true,
+            birthDate: true,
+            height: true,
+            gender: true,
+            condition: true,
+            phone: currentUserMembership.isMember,
+          },
+        },
+      },
+    });
+
+    // 승인된 멤버들만 필터링
+    const approvedMembers = members.filter(
+      (member) => member.status === "APPROVED"
+    );
+
+    // 승인된 멤버들만 필터링
+    const pendingMembers = members.filter(
+      (member) => member.status === "PENDING"
+    );
 
     // 통계 계산을 위한 헬퍼 함수들
     const calculateAverageAge = (members: typeof approvedMembers) => {

@@ -13,7 +13,7 @@ import { approveTeamMember } from "../model/actions";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 import { getCurrentAge } from "@/entities/user/model/actions";
 import { GENDER, SKILL_LEVEL } from "@/entities/user/model/constants";
-import { PhoneIcon } from "@phosphor-icons/react";
+import { Phone } from "lucide-react";
 
 // 타입 정의
 interface TeamMemberWithUser extends TeamMember {
@@ -30,6 +30,7 @@ interface TeamMemberWithUser extends TeamMember {
     | "height"
     | "gender"
     | "condition"
+    | "phone"
   >;
 }
 
@@ -97,9 +98,9 @@ const MemberList = ({
 }: MemberCardProps) => {
   return (
     <div className="border-t border-gray-100 first:border-t-0 w-full flex flex-col sm:flex-row sm:gap-0">
-      <button className="flex items-center justify-between gap-3 cursor-pointer sm:grow p-2 hover:bg-gray-50 transition-colors">
+      <button className="flex items-center justify-between gap-3 sm:grow p-2 hover:bg-gray-50 transition-colors">
         <div
-          className="flex items-center space-x-3 grow group"
+          className="flex items-center space-x-3 group cursor-pointer"
           onClick={onClick}
         >
           {/* 프로필 이미지 */}
@@ -110,7 +111,7 @@ const MemberList = ({
               width={56}
               height={56}
               loading="lazy"
-              className="size-10 sm:size-12 rounded-full border object-cover"
+              className="size-11 sm:size-12 rounded-full border object-cover"
             />
             {member.user.condition === "INJURED" && <InjuredBadge />}
           </div>
@@ -147,14 +148,24 @@ const MemberList = ({
         {/* 우측 콘텐츠 */}
         <div className="flex items-center gap-1">
           {showRealName && (
-            <div className="flex sm:hidden items-center justify-center rounded-full bg-white size-10 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer">
-              <PhoneIcon weight="fill" className="size-6 text-green-600" />
+            <div className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer">
+              <Phone
+                fill="oklch(62.7% 0.194 149.214)"
+                strokeWidth={0}
+                className="size-6"
+              />
+              {/* <Phone weight="fill" className="size-6 text-green-600" /> */}
             </div>
           )}
           {showRealName && (
             <div className="hidden sm:flex items-center justify-center rounded-full bg-white h-8 pl-2 pr-3 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer gap-2">
-              <PhoneIcon weight="fill" className="size-4.5 text-green-600" />
-              010-8800-2220
+              {/* <PhoneIcon weight="fill" className="size-4.5 text-green-600" /> */}
+              <Phone
+                fill="oklch(62.7% 0.194 149.214)"
+                strokeWidth={0}
+                className="size-4"
+              />
+              {member.user.phone || "미설정"}
               {/* {member.user.name || "미설정"} */}
             </div>
           )}

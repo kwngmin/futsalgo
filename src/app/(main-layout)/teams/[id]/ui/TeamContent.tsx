@@ -79,7 +79,7 @@ const TeamContent = ({ id }: { id: string }) => {
     placeholderData: keepPreviousData,
     enabled: !!id, // id 없으면 fetch 안 함
   });
-
+  console.log(data, "datadata");
   const handleGoBack = () => {
     if (searchParams.get("goback") === "false") {
       router.push(`/teams`);
@@ -625,7 +625,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Label>
                 </div> */}
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.scheduleStats.selfMatches || "0"}
                   </div>
                   <Label className="text-muted-foreground leading-snug">
@@ -633,7 +633,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.scheduleStats.friendlyMatches || "0"}
                   </div>
                   <Label className="text-muted-foreground leading-snug">
@@ -641,7 +641,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.scheduleStats.totalSchedules || "0"}
                   </div>
                   <Label className="text-muted-foreground leading-snug">
@@ -720,7 +720,7 @@ const TeamContent = ({ id }: { id: string }) => {
             <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
               <div className="grid grid-cols-4 gap-3 p-3 h-24 items-center">
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.beginnerCount
                       ? `${data.data.stats.beginnerCount}`
                       : "-"}
@@ -730,7 +730,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.amateurCount
                       ? `${data.data.stats.amateurCount}`
                       : "-"}
@@ -740,7 +740,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.aceCount
                       ? `${data.data.stats.aceCount}`
                       : "-"}
@@ -750,7 +750,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Label>
                 </div>
                 <div className="flex flex-col gap-1 items-center">
-                  <div className="font-semibold">
+                  <div className="text-lg font-medium">
                     {data.data.stats.semiproCount
                       ? `${data.data.stats.semiproCount}`
                       : "-"}
