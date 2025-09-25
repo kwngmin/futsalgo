@@ -159,7 +159,7 @@ const MemberList = ({
             {showRealName && (
               <a
                 href={`tel:${formatPhoneNumber(member.user.phone!)}`}
-                className="flex sm:hidden items-center justify-center rounded-full bg-white size-10 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
+                className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
               >
                 <Phone
                   fill="oklch(62.7% 0.194 149.214)"
@@ -171,7 +171,7 @@ const MemberList = ({
             {showRealName && (
               <a
                 href={`sms:${formatPhoneNumber(member.user.phone!)}`}
-                className="flex sm:hidden items-center justify-center rounded-full bg-white size-10 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
+                className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-zinc-600 transition-shadow cursor-pointer"
               >
                 <MessageCircle
                   fill="oklch(44.4% 0.011 73.639)"
