@@ -185,7 +185,7 @@ const MemberCard = ({
 
   return (
     <div className="w-full flex flex-col sm:flex-row sm:gap-0">
-      <div className="flex items-center justify-between gap-3 sm:grow p-2 hover:bg-gray-50 transition-colors">
+      <div className="flex items-center justify-between gap-3 sm:grow px-2 py-3 sm:py-2 hover:bg-gray-50 transition-colors">
         <div
           className="flex items-center space-x-3 group cursor-pointer"
           onClick={onClick}
