@@ -218,7 +218,7 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
             className="sm:rounded-md flex items-center justify-between py-2 transition-colors"
           >
             {/* 프로필 정보 */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 px-2">
               <ProfileImage user={stat.user} />
               <div className="flex flex-col items-start">
                 <button

@@ -39,6 +39,7 @@ import {
   UsersIcon,
   YoutubeLogoIcon,
 } from "@phosphor-icons/react";
+import TeamManage from "./TeamManage";
 
 // const tabs = [
 //   {
@@ -709,6 +710,11 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
+
+            {/* 권한 설정 */}
+            {data.data.currentUserMembership.role === "OWNER" && <TeamManage />}
+
+            {/* 팀원 통계 */}
             <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
               <div className="grid grid-cols-4 gap-3 p-3 h-24 items-center">
                 <div className="flex flex-col gap-1 items-center">
@@ -762,23 +768,6 @@ const TeamContent = ({ id }: { id: string }) => {
               teamId={id}
             />
           </div>
-
-          {/* <div className="flex items-center gap-2 mt-2 text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <CalendarCheck2 className="size-3.5" />
-                      <span className="text-sm tracking-tight mr-1">
-                        {data?.data?.createdAt
-                          ? `${new Date(
-                              data?.data?.createdAt
-                            ).toLocaleDateString("ko-KR", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })} 등록`
-                          : "데이터 없음"}
-                      </span>
-                    </div>
-                  </div> */}
 
           {/* 등록 날짜와 만든이 */}
           <div className="flex items-center justify-center gap-2 pt-6">
