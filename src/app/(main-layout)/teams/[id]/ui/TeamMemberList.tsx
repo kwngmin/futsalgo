@@ -63,14 +63,13 @@ const getMemberInfoText = (user: TeamMemberWithUser["user"]): string => {
       : "생년월일 미설정"
     : "생년월일 미설정";
 
-  // const professional =
-  //   user.playerBackground === "PROFESSIONAL" ? " • 선출" : "";
+  const professional = user.playerBackground === "PROFESSIONAL" ? "(선출)" : "";
 
   const skillLevel =
     SKILL_LEVEL[user.skillLevel as keyof typeof SKILL_LEVEL] || "미설정";
 
-  return `${gender} • ${age} • ${skillLevel}`;
-  // return `${gender} • ${age} • ${skillLevel}${professional}`;
+  // return `${gender} • ${age} • ${skillLevel}`;
+  return `${gender} • ${age} • ${skillLevel}${professional}`;
 };
 
 // 역할 배지 컴포넌트
@@ -118,18 +117,18 @@ const MemberList = ({
 
           {/* 멤버 정보 */}
           <div className="flex flex-col items-start grow">
-            <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-none h-5 sm:h-6">
+            <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-snug">
               <span className="group-hover:underline underline-offset-4">
                 {member.user.nickname || "닉네임 없음"}
               </span>
               <RoleBadge role={member.role} />
             </h3>
-            <div className="sm:text-sm text-gray-500 tracking-tight flex items-center">
-              {member.user.playerBackground === "PROFESSIONAL" && (
-                <span className="text-red-600 font-medium pr-2 py-0.5 mr-2 border-r border-gray-300 h-4 flex items-center">
+            <div className="sm:text-sm text-gray-500 tracking-tight flex items-center leading-tight">
+              {/* {member.user.playerBackground === "PROFESSIONAL" && (
+                <span className="text-amber-600 font-medium pr-2 py-0.5 mr-2 border-r border-gray-300 h-4 flex items-center">
                   선출
                 </span>
-              )}
+              )} */}
               {getMemberInfoText(member.user)}
             </div>
           </div>
