@@ -538,6 +538,9 @@ export async function leaveTeam(teamId: string) {
     // 1. 팀이 존재하는지 확인
     const existingTeam = await prisma.team.findUnique({
       where: { id: teamId },
+      select: {
+        hasFormerPro: true,
+      },
     });
 
     if (!existingTeam) {
@@ -609,6 +612,33 @@ export async function leaveTeam(teamId: string) {
       },
     });
 
+    // 2. 현재 사용자의 팀 멤버십 확인
+    const currentMembers = await prisma.teamMember.findMany({
+      where: {
+        teamId,
+        status: "APPROVED",
+      },
+      select: {
+        id: true,
+        user: {
+          select: {
+            playerBackground: true,
+          },
+        },
+      },
+    });
+
+    const hasFormerPro = currentMembers.some(
+      (member) => member.user.playerBackground === "PROFESSIONAL"
+    );
+
+    await prisma.team.update({
+      where: { id: teamId },
+      data: {
+        hasFormerPro,
+      },
+    });
+
     revalidatePath(`/teams/${teamId}`);
 
     return {
@@ -656,6 +686,9 @@ export async function approveTeamMember(teamId: string, targetUserId: string) {
     // 1. 팀이 존재하는지 확인
     const existingTeam = await prisma.team.findUnique({
       where: { id: teamId },
+      select: {
+        hasFormerPro: true,
+      },
     });
 
     if (!existingTeam) {
@@ -719,6 +752,7 @@ export async function approveTeamMember(teamId: string, targetUserId: string) {
             name: true,
             nickname: true,
             image: true,
+            playerBackground: true,
           },
         },
       },
@@ -790,6 +824,15 @@ export async function approveTeamMember(teamId: string, targetUserId: string) {
         },
       },
     });
+
+    if (targetMember.user.playerBackground === "PROFESSIONAL") {
+      await prisma.team.update({
+        where: { id: teamId },
+        data: {
+          hasFormerPro: true,
+        },
+      });
+    }
 
     revalidatePath(`/teams/${teamId}`);
     revalidatePath(`/teams`);
