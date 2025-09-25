@@ -711,11 +711,6 @@ const TeamContent = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            {/* 권한 설정 */}
-            {data.data.currentUserMembership.role === "OWNER" && (
-              <TeamManage members={data.data.members.approved} teamId={id} />
-            )}
-
             {/* 팀원 통계 */}
             <div className="bg-neutral-100 overflow-hidden rounded-2xl mb-2">
               <div className="grid grid-cols-4 gap-3 p-3 h-24 items-center">
@@ -761,6 +756,8 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
+
+            {/* 팀원 목록 */}
             <TeamMemberList
               members={data.data.members}
               isMember={data.data.currentUserMembership.isMember}
@@ -770,6 +767,11 @@ const TeamContent = ({ id }: { id: string }) => {
               teamId={id}
               userId={session.data?.user?.id}
             />
+
+            {/* 권한 설정 */}
+            {data.data.currentUserMembership.role === "OWNER" && (
+              <TeamManage members={data.data.members.approved} teamId={id} />
+            )}
           </div>
 
           {/* 등록 날짜와 만든이 */}
