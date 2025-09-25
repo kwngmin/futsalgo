@@ -47,6 +47,7 @@ interface TeamMemberListProps {
   status: TeamMemberStatus | null;
   refetch: () => void;
   teamId: string;
+  userId?: string;
 }
 
 interface MemberCardProps {
@@ -55,6 +56,7 @@ interface MemberCardProps {
   showRealName?: boolean;
   children?: React.ReactNode;
   isPending?: boolean;
+  isMe?: boolean;
 }
 
 // 멤버 정보 문자열 생성 유틸리티 함수
@@ -98,6 +100,7 @@ const MemberList = ({
   showRealName = false,
   children,
   isPending = false,
+  isMe = false,
 }: MemberCardProps) => {
   return (
     <div className="border-t border-gray-100 first:border-t-0 w-full flex flex-col sm:flex-row sm:gap-0">
@@ -149,48 +152,50 @@ const MemberList = ({
         </div>
 
         {/* 우측 콘텐츠 */}
-        <div className="flex items-center gap-2">
-          {showRealName && (
-            <a
-              href={`tel:${formatPhoneNumber(member.user.phone!)}`}
-              className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
-            >
-              <Phone
-                fill="oklch(62.7% 0.194 149.214)"
-                strokeWidth={0}
-                className="size-6"
-              />
-            </a>
-          )}
-          {showRealName && (
-            <a
-              href={`sms:${formatPhoneNumber(member.user.phone!)}`}
-              className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
-            >
-              <MessageCircle
-                fill="oklch(44.4% 0.011 73.639)"
-                strokeWidth={0}
-                className="size-6"
-              />
-            </a>
-          )}
-          {showRealName && (
-            <div className="hidden sm:flex items-center justify-center rounded-full bg-white h-8 pl-2 pr-3 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer gap-2">
-              {/* <PhoneIcon weight="fill" className="size-4.5 text-green-600" /> */}
-              <Phone
-                fill="oklch(62.7% 0.194 149.214)"
-                strokeWidth={0}
-                className="size-4"
-              />
-              {member.user.phone
-                ? formatPhoneNumber(member.user.phone)
-                : "미설정"}
-              {/* {member.user.name || "미설정"} */}
-            </div>
-          )}
+        {isMe ? null : (
+          <div className="flex items-center gap-2">
+            {showRealName && (
+              <a
+                href={`tel:${formatPhoneNumber(member.user.phone!)}`}
+                className="flex sm:hidden items-center justify-center rounded-full bg-white size-10 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
+              >
+                <Phone
+                  fill="oklch(62.7% 0.194 149.214)"
+                  strokeWidth={0}
+                  className="size-5"
+                />
+              </a>
+            )}
+            {showRealName && (
+              <a
+                href={`sms:${formatPhoneNumber(member.user.phone!)}`}
+                className="flex sm:hidden items-center justify-center rounded-full bg-white size-10 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
+              >
+                <MessageCircle
+                  fill="oklch(44.4% 0.011 73.639)"
+                  strokeWidth={0}
+                  className="size-5"
+                />
+              </a>
+            )}
+            {showRealName && (
+              <div className="hidden sm:flex items-center justify-center rounded-full bg-white h-8 pl-2 pr-3 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer gap-2">
+                {/* <PhoneIcon weight="fill" className="size-4.5 text-green-600" /> */}
+                <Phone
+                  fill="oklch(62.7% 0.194 149.214)"
+                  strokeWidth={0}
+                  className="size-4"
+                />
+                {member.user.phone
+                  ? formatPhoneNumber(member.user.phone)
+                  : "미설정"}
+                {/* {member.user.name || "미설정"} */}
+              </div>
+            )}
 
-          {/* <ChevronRight className="size-5 text-gray-400" /> */}
-        </div>
+            {/* <ChevronRight className="size-5 text-gray-400" /> */}
+          </div>
+        )}
       </button>
 
       {/* 추가 액션 버튼 (승인/거절) */}
@@ -251,6 +256,7 @@ const TeamMemberList = ({
   status,
   refetch,
   teamId,
+  userId,
 }: TeamMemberListProps) => {
   const router = useRouter();
   console.log(role, "role");
@@ -299,6 +305,7 @@ const TeamMemberList = ({
             member={member}
             onClick={() => router.push(`/players/${member.userId}`)}
             showRealName
+            isMe={member.userId === userId}
           />
         ))}
       </div>

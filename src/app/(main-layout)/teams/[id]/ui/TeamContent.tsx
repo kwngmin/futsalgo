@@ -768,6 +768,7 @@ const TeamContent = ({ id }: { id: string }) => {
               status={data.data.currentUserMembership.status}
               refetch={refetch}
               teamId={id}
+              userId={session.data?.user?.id}
             />
           </div>
 
