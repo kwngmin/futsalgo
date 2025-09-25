@@ -5,6 +5,7 @@ import { auth } from "@/shared/lib/auth";
 import { SessionProviderWrapper } from "@/shared/components/providers/session-provider";
 import { QueryProvider } from "@/shared/components/providers/query-provider";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "@/shared/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-y-scroll`}
       >
+        <Toaster position="top-center" />
         <SessionProviderWrapper session={session}>
           <QueryProvider>{children}</QueryProvider>
         </SessionProviderWrapper>

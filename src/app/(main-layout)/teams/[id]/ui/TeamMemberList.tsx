@@ -16,7 +16,22 @@ import {
   getCurrentAge,
 } from "@/entities/user/model/actions";
 import { GENDER, SKILL_LEVEL } from "@/entities/user/model/constants";
-import { MessageCircle, Phone } from "lucide-react";
+import { Copy, MessageCircle, Phone } from "lucide-react";
+import { useState, useCallback } from "react";
+import { CheckCircleIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
+
+const ROLE_CONFIG = {
+  MANAGER: { label: "부팀장", className: "text-sky-700" },
+  OWNER: { label: "팀장", className: "text-indigo-700" },
+} as const;
+
+const TOAST_MESSAGES = {
+  PHONE_COPIED: "전화번호가 복사되었습니다.",
+  COPY_FAILED: "복사에 실패했습니다.",
+  MEMBER_APPROVED: "팀원 승인이 완료되었습니다.",
+  APPROVAL_FAILED: "승인 처리 중 오류가 발생했습니다.",
+} as const;
 
 // 타입 정의
 interface TeamMemberWithUser extends TeamMember {
@@ -59,42 +74,105 @@ interface MemberCardProps {
   isMe?: boolean;
 }
 
-// 멤버 정보 문자열 생성 유틸리티 함수
+// 유틸리티 함수들
 const getMemberInfoText = (user: TeamMemberWithUser["user"]): string => {
   const gender = GENDER[user.gender as keyof typeof GENDER];
-
   const age = user.birthDate
     ? getCurrentAge(user.birthDate).success
       ? `${getCurrentAge(user.birthDate).age}살`
       : "생년월일 미설정"
     : "생년월일 미설정";
 
-  // const professional = user.playerBackground === "PROFESSIONAL" ? "(선출)" : "";
-
   const skillLevel =
     SKILL_LEVEL[user.skillLevel as keyof typeof SKILL_LEVEL] || "미설정";
 
   return `${gender} • ${age} • ${skillLevel}`;
-  // return `${gender} • ${age} • ${skillLevel}${professional}`;
+};
+
+const getContactUrl = (type: "tel" | "sms", phone: string): string => {
+  return `${type}:${formatPhoneNumber(phone)}`;
 };
 
 // 역할 배지 컴포넌트
 const RoleBadge = ({ role }: { role: TeamMemberRole }) => {
-  if (role === "MANAGER") {
-    return (
-      <span className="text-sm text-sky-700 font-medium mb-px">부팀장</span>
-    );
-  }
-  if (role === "OWNER") {
-    return (
-      <span className="text-sm text-indigo-700 font-medium mb-px">팀장</span>
-    );
-  }
-  return null;
+  const config = ROLE_CONFIG[role as keyof typeof ROLE_CONFIG];
+
+  if (!config) return null;
+
+  return (
+    <span className={`text-sm font-medium mb-px ${config.className}`}>
+      {config.label}
+    </span>
+  );
+};
+
+// 연락처 액션 버튼 컴포넌트
+const ContactActionButton = ({
+  type,
+  phone,
+  className,
+}: {
+  type: "tel" | "sms";
+  phone: string;
+  className?: string;
+}) => {
+  const IconComponent = type === "tel" ? Phone : MessageCircle;
+  const fillColor =
+    type === "tel" ? "oklch(62.7% 0.194 149.214)" : "oklch(44.4% 0.011 73.639)";
+  const hoverBorder =
+    type === "tel" ? "hover:border-green-600" : "hover:border-zinc-600";
+
+  return (
+    <a
+      href={getContactUrl(type, phone)}
+      className={`flex items-center justify-center rounded-full bg-white size-11 border hover:shadow-md ${hoverBorder} transition-shadow cursor-pointer ${className}`}
+    >
+      <IconComponent fill={fillColor} strokeWidth={0} className="size-5" />
+    </a>
+  );
+};
+
+// 전화번호 복사 버튼 컴포넌트
+const PhoneCopyButton = ({ phone }: { phone?: string }) => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = useCallback(async () => {
+    if (!phone) return;
+
+    try {
+      await navigator.clipboard.writeText(formatPhoneNumber(phone));
+      setIsCopied(true);
+      toast.success(TOAST_MESSAGES.PHONE_COPIED);
+
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Copy failed:", error);
+      toast.error(TOAST_MESSAGES.COPY_FAILED);
+    }
+  }, [phone]);
+
+  return (
+    <button
+      type="button"
+      className="hidden sm:flex items-center justify-center rounded-full bg-white h-9 pr-1.5 pl-4 border border-gray-300 hover:shadow-md hover:border-gray-600 transition-shadow cursor-pointer gap-1.5 active:scale-98 font-medium"
+      onClick={handleCopy}
+    >
+      {phone ? formatPhoneNumber(phone) : "미설정"}
+      <div className="w-6 flex justify-center">
+        {isCopied ? (
+          <CheckCircleIcon weight="fill" className="size-6 text-blue-600" />
+        ) : (
+          <Copy className="size-4" />
+        )}
+      </div>
+    </button>
+  );
 };
 
 // 멤버 카드 컴포넌트
-const MemberList = ({
+const MemberCard = ({
   member,
   onClick,
   showRealName = false,
@@ -102,9 +180,12 @@ const MemberList = ({
   isPending = false,
   isMe = false,
 }: MemberCardProps) => {
+  const displayName = member.user.nickname || "닉네임 없음";
+  const realName = member.user.name || "미설정";
+
   return (
-    <div className="border-t border-gray-100 first:border-t-0 w-full flex flex-col sm:flex-row sm:gap-0">
-      <button className="flex items-center justify-between gap-3 sm:grow p-2 hover:bg-gray-50 transition-colors">
+    <div className="w-full flex flex-col sm:flex-row sm:gap-0">
+      <div className="flex items-center justify-between gap-3 sm:grow p-2 hover:bg-gray-50 transition-colors">
         <div
           className="flex items-center space-x-3 group cursor-pointer"
           onClick={onClick}
@@ -113,7 +194,7 @@ const MemberList = ({
           <div className="relative">
             <Image
               src={member.user.image || "/assets/images/default-profile.png"}
-              alt="profile"
+              alt={`${displayName}의 프로필`}
               width={56}
               height={56}
               loading="lazy"
@@ -124,15 +205,16 @@ const MemberList = ({
 
           {/* 멤버 정보 */}
           <div className="flex flex-col items-start grow">
-            <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 leading-snug">
+            <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 h-6">
               <span className="group-hover:underline underline-offset-4">
-                {member.user.nickname || "닉네임 없음"}
+                {displayName}
               </span>
               <RoleBadge role={member.role} />
             </h3>
+
             {showRealName ? (
               <span className="sm:text-sm font-medium text-gray-500 leading-tight tracking-tight">
-                {member.user.name || "미설정"}
+                {realName}
               </span>
             ) : isPending ? (
               <span className="sm:text-sm font-medium text-amber-600 leading-tight tracking-tight">
@@ -156,51 +238,25 @@ const MemberList = ({
           <span className="px-2 text-muted-foreground">내 계정</span>
         ) : (
           <div className="flex items-center gap-2">
-            {showRealName && (
-              <a
-                href={`tel:${formatPhoneNumber(member.user.phone!)}`}
-                className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
-              >
-                <Phone
-                  fill="oklch(62.7% 0.194 149.214)"
-                  strokeWidth={0}
-                  className="size-5"
+            {showRealName && member.user.phone && (
+              <>
+                <ContactActionButton
+                  type="tel"
+                  phone={member.user.phone}
+                  className="sm:hidden"
                 />
-              </a>
-            )}
-            {showRealName && (
-              <a
-                href={`sms:${formatPhoneNumber(member.user.phone!)}`}
-                className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-zinc-600 transition-shadow cursor-pointer"
-              >
-                <MessageCircle
-                  fill="oklch(44.4% 0.011 73.639)"
-                  strokeWidth={0}
-                  className="size-5"
+                <ContactActionButton
+                  type="sms"
+                  phone={member.user.phone}
+                  className="sm:hidden"
                 />
-              </a>
+                <PhoneCopyButton phone={member.user.phone} />
+              </>
             )}
-            {showRealName && (
-              <div className="hidden sm:flex items-center justify-center rounded-full bg-white h-8 pl-2 pr-3 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer gap-2">
-                {/* <PhoneIcon weight="fill" className="size-4.5 text-green-600" /> */}
-                <Phone
-                  fill="oklch(62.7% 0.194 149.214)"
-                  strokeWidth={0}
-                  className="size-4"
-                />
-                {member.user.phone
-                  ? formatPhoneNumber(member.user.phone)
-                  : "미설정"}
-                {/* {member.user.name || "미설정"} */}
-              </div>
-            )}
-
-            {/* <ChevronRight className="size-5 text-gray-400" /> */}
           </div>
         )}
-      </button>
+      </div>
 
-      {/* 추가 액션 버튼 (승인/거절) */}
       {children}
     </div>
   );
@@ -216,18 +272,23 @@ const PendingMemberActions = ({
   teamId: string;
   onApprove: () => void;
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleApprove = async () => {
+    setIsLoading(true);
     try {
       const result = await approveTeamMember(teamId, member.userId);
       if (result?.success) {
-        // TODO: toast 라이브러리 사용 권장
-        alert("팀원 승인이 완료되었습니다.");
+        toast.success(TOAST_MESSAGES.MEMBER_APPROVED);
         onApprove();
       } else {
-        alert(result?.error);
+        toast.error(result?.error || TOAST_MESSAGES.APPROVAL_FAILED);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Approval error:", error);
+      toast.error(TOAST_MESSAGES.APPROVAL_FAILED);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -237,17 +298,44 @@ const PendingMemberActions = ({
         variant="outline"
         className="font-semibold"
         onClick={handleApprove}
+        disabled={isLoading}
       >
-        승인
+        {isLoading ? "승인 중..." : "승인"}
       </Button>
       <Button
         variant="secondary"
         className="text-destructive bg-destructive/10 hover:bg-destructive/20"
+        disabled={isLoading}
       >
         거절
       </Button>
     </div>
   );
+};
+
+// 멤버 리스트 렌더링 함수
+const renderMemberList = (
+  members: TeamMemberWithUser[],
+  userId: string | undefined,
+  router: ReturnType<typeof useRouter>,
+  options: {
+    showRealName?: boolean;
+    isPending?: boolean;
+    renderActions?: (member: TeamMemberWithUser) => React.ReactNode;
+  } = {}
+) => {
+  return members.map((member) => (
+    <MemberCard
+      key={member.id}
+      member={member}
+      onClick={() => router.push(`/players/${member.userId}`)}
+      showRealName={options.showRealName}
+      isPending={options.isPending}
+      isMe={member.userId === userId}
+    >
+      {options.renderActions?.(member)}
+    </MemberCard>
+  ));
 };
 
 // 메인 컴포넌트
@@ -261,55 +349,39 @@ const TeamMemberList = ({
   userId,
 }: TeamMemberListProps) => {
   const router = useRouter();
-  console.log(role, "role");
+  const canManageMembers = role === "OWNER" || role === "MANAGER";
 
   // 비회원 또는 승인 대기 중인 회원이 보는 뷰
   if (!isMember || status === "PENDING") {
     return (
       <div className="bg-white rounded-lg overflow-hidden">
-        {members.approved.map((member) => (
-          <MemberList
-            key={member.id}
-            member={member}
-            onClick={() => router.push(`/players/${member.userId}`)}
-          />
-        ))}
+        {renderMemberList(members.approved, userId, router)}
       </div>
     );
   }
 
-  // 정식 회원이 보는 뷰 (승인 대기 + 승인 완료 멤버)
+  // 정식 회원이 보는 뷰
   return (
     <div className="flex flex-col space-y-3">
-      <div className="bg-white rounded-lg overflow-hidden">
+      <div className="bg-white rounded-lg overflow-hidden divide-y divide-gray-100">
         {/* 승인 대기 멤버 */}
-        {members.pending.map((member) => (
-          <MemberList
-            key={member.id}
-            member={member}
-            onClick={() => router.push(`/players/${member.userId}`)}
-            isPending={true}
-          >
-            {(role === "OWNER" || role === "MANAGER") && (
-              <PendingMemberActions
-                member={member}
-                teamId={teamId}
-                onApprove={refetch}
-              />
-            )}
-          </MemberList>
-        ))}
+        {renderMemberList(members.pending, userId, router, {
+          isPending: true,
+          renderActions: canManageMembers
+            ? (member) => (
+                <PendingMemberActions
+                  member={member}
+                  teamId={teamId}
+                  onApprove={refetch}
+                />
+              )
+            : undefined,
+        })}
 
         {/* 승인 완료 멤버 */}
-        {members.approved.map((member) => (
-          <MemberList
-            key={member.id}
-            member={member}
-            onClick={() => router.push(`/players/${member.userId}`)}
-            showRealName
-            isMe={member.userId === userId}
-          />
-        ))}
+        {renderMemberList(members.approved, userId, router, {
+          showRealName: true,
+        })}
       </div>
     </div>
   );

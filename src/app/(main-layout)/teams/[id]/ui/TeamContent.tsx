@@ -814,7 +814,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <button
                   onClick={handleLeaveTeam}
                   type="button"
-                  className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                  className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer active:bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
                 >
                   팀 탈퇴
                 </button>
