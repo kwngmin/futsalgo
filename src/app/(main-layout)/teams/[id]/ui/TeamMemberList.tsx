@@ -126,7 +126,7 @@ const MemberList = ({
             </h3>
             <div className="sm:text-sm text-gray-500 tracking-tight flex items-center">
               {member.user.playerBackground === "PROFESSIONAL" && (
-                <span className="text-gray-600 font-medium pr-2 py-0.5 mr-2 border-r border-gray-300 h-4 flex items-center">
+                <span className="text-red-600 font-medium pr-2 py-0.5 mr-2 border-r border-gray-300 h-4 flex items-center">
                   선출
                 </span>
               )}
