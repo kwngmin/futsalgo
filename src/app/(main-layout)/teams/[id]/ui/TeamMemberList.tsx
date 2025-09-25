@@ -152,7 +152,9 @@ const MemberList = ({
         </div>
 
         {/* 우측 콘텐츠 */}
-        {isMe ? null : (
+        {isMe ? (
+          <span className="px-2 text-muted-foreground">내 계정</span>
+        ) : (
           <div className="flex items-center gap-2">
             {showRealName && (
               <a
