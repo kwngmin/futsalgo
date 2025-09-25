@@ -106,26 +106,29 @@ export async function getTeam(id: string) {
           joinedAt: null,
         };
 
+    // 조건부 select 객체 생성
+    const getUserSelectFields = (isMember: boolean) => ({
+      id: true,
+      name: isMember,
+      nickname: true,
+      image: true,
+      skillLevel: true,
+      playerBackground: true,
+      position: true,
+      birthDate: true,
+      height: true,
+      gender: true,
+      condition: true,
+      phone: isMember,
+    });
+
     const members = await prisma.teamMember.findMany({
       where: {
         teamId: id,
       },
       include: {
         user: {
-          select: {
-            id: true,
-            name: currentUserMembership.isMember,
-            nickname: true,
-            image: true,
-            skillLevel: true,
-            playerBackground: true,
-            position: true,
-            birthDate: true,
-            height: true,
-            gender: true,
-            condition: true,
-            phone: currentUserMembership.isMember,
-          },
+          select: getUserSelectFields(currentUserMembership.isMember),
         },
       },
     });

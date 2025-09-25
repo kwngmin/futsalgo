@@ -11,7 +11,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { approveTeamMember } from "../model/actions";
 import InjuredBadge from "@/shared/components/ui/InjuredBadge";
-import { getCurrentAge } from "@/entities/user/model/actions";
+import {
+  formatPhoneNumber,
+  getCurrentAge,
+} from "@/entities/user/model/actions";
 import { GENDER, SKILL_LEVEL } from "@/entities/user/model/constants";
 import { Phone } from "lucide-react";
 
@@ -148,14 +151,16 @@ const MemberList = ({
         {/* 우측 콘텐츠 */}
         <div className="flex items-center gap-1">
           {showRealName && (
-            <div className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer">
+            <a
+              href={`tel:${formatPhoneNumber(member.user.phone!)}`}
+              className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
+            >
               <Phone
                 fill="oklch(62.7% 0.194 149.214)"
                 strokeWidth={0}
                 className="size-6"
               />
-              {/* <Phone weight="fill" className="size-6 text-green-600" /> */}
-            </div>
+            </a>
           )}
           {showRealName && (
             <div className="hidden sm:flex items-center justify-center rounded-full bg-white h-8 pl-2 pr-3 border border-gray-300 hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer gap-2">
@@ -165,7 +170,9 @@ const MemberList = ({
                 strokeWidth={0}
                 className="size-4"
               />
-              {member.user.phone || "미설정"}
+              {member.user.phone
+                ? formatPhoneNumber(member.user.phone)
+                : "미설정"}
               {/* {member.user.name || "미설정"} */}
             </div>
           )}

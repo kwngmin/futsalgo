@@ -69,9 +69,22 @@ export const getCurrentAge = (
  * @param input 숫자로 이루어진 문자열 (ex: "01012345678")
  * @returns 포맷팅된 전화번호 문자열 (ex: "010-1234-5678")
  */
-export function formatPhoneNumber(input: string): string {
-  // 숫자만 필터링
-  const digits = input.replace(/\D/g, "");
+export const formatPhoneNumber = (phoneNumber: string): string => {
+  // 입력값이 문자열이 아니거나 빈 문자열인 경우 그대로 반환
+  if (!phoneNumber || typeof phoneNumber !== "string") {
+    return phoneNumber;
+  }
+
+  // 숫자만 추출
+  const numbersOnly = phoneNumber.replace(/\D/g, "");
+
+  // "10"으로 시작하면 "010"으로 변환
+  const digits = numbersOnly.startsWith("10") ? "0" + numbersOnly : numbersOnly;
+
+  // "010"으로 시작하지 않으면 그대로 반환
+  if (!digits.startsWith("010")) {
+    return phoneNumber;
+  }
 
   if (digits.length === 10) {
     // 000-000-0000
@@ -83,9 +96,9 @@ export function formatPhoneNumber(input: string): string {
     return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
   }
 
-  // 그 외는 원본 반환
-  return input;
-}
+  // 기본적으로 원본 반환
+  return phoneNumber;
+};
 
 /**
  * 이름의 첫 글자만 남기고 나머지는 *로 마스킹 처리함
