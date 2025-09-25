@@ -16,7 +16,7 @@ import {
   getCurrentAge,
 } from "@/entities/user/model/actions";
 import { GENDER, SKILL_LEVEL } from "@/entities/user/model/constants";
-import { Phone } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 
 // 타입 정의
 interface TeamMemberWithUser extends TeamMember {
@@ -149,7 +149,7 @@ const MemberList = ({
         </div>
 
         {/* 우측 콘텐츠 */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {showRealName && (
             <a
               href={`tel:${formatPhoneNumber(member.user.phone!)}`}
@@ -157,6 +157,18 @@ const MemberList = ({
             >
               <Phone
                 fill="oklch(62.7% 0.194 149.214)"
+                strokeWidth={0}
+                className="size-6"
+              />
+            </a>
+          )}
+          {showRealName && (
+            <a
+              href={`sms:${formatPhoneNumber(member.user.phone!)}`}
+              className="flex sm:hidden items-center justify-center rounded-full bg-white size-11 border hover:shadow-md hover:border-green-600 transition-shadow cursor-pointer"
+            >
+              <MessageCircle
+                fill="oklch(44.4% 0.011 73.639)"
                 strokeWidth={0}
                 className="size-6"
               />
