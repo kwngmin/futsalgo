@@ -101,10 +101,10 @@ const TeamManage = ({
   return (
     <div className="select-none mt-6">
       {isOpen === null && (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 poin">
           <button
             type="button"
-            className="cursor-pointer rounded-md flex flex-col sm:flex-row justify-center sm:items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-0 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full text-start disabled:opacity-40 disabled:cursor-default"
+            className="cursor-pointer rounded-md flex flex-col sm:flex-row justify-center sm:items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-0 sm:h-11 font-semibold bg-white border border-gray-300 hover:border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full text-start disabled:opacity-40 disabled:cursor-default disabled:pointer-events-none"
             onClick={() => setIsOpen("change-owner")}
           >
             <ArrowsLeftRightIcon className="size-6 text-gray-600" />
@@ -112,7 +112,7 @@ const TeamManage = ({
           </button>
           <button
             type="button"
-            className="cursor-pointer rounded-md flex flex-col sm:flex-row justify-center sm:items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-0 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full text-start disabled:opacity-40 disabled:cursor-default"
+            className="cursor-pointer rounded-md flex flex-col sm:flex-row justify-center sm:items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-0 sm:h-11 font-semibold bg-white border border-gray-300 hover:border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full text-start disabled:opacity-40 disabled:cursor-default disabled:pointer-events-none"
             disabled={managerRemoveOptions.length >= 2}
             onClick={() => setIsOpen("add-manager")}
           >
@@ -121,7 +121,7 @@ const TeamManage = ({
           </button>
           <button
             type="button"
-            className="cursor-pointer rounded-md flex flex-col sm:flex-row justify-center sm:items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-0 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full text-start disabled:opacity-40 disabled:cursor-default"
+            className="cursor-pointer rounded-md flex flex-col sm:flex-row justify-center sm:items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-0 sm:h-11 font-semibold bg-white border border-gray-300 hover:border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full text-start disabled:opacity-40 disabled:cursor-default disabled:pointer-events-none"
             disabled={managerRemoveOptions.length === 0}
             onClick={() => setIsOpen("remove-manager")}
           >
