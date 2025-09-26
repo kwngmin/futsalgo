@@ -97,4 +97,9 @@ export const TEAM_FILTER_OPTIONS: FilterOption[] = [
     label: "실력",
     value: "teamLevel",
   },
+  {
+    icon: GaugeIcon,
+    label: "선수출신",
+    value: "hasFormerPro",
+  },
 ];

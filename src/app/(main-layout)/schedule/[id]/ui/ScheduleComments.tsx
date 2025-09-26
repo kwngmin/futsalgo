@@ -538,7 +538,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                         )
                       }
                       disabled={isDeleting}
-                      className="text-sm flex items-center gap-1 text-gray-500 disabled:opacity-50 cursor-pointer"
+                      className="text-sm flex items-center gap-1 text-gray-500 disabled:opacity-50 cursor-pointer px-2"
                     >
                       삭제
                     </button>
@@ -552,7 +552,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 <button
                   onClick={() => handleDeleteComment(comment.id, false)}
                   disabled={isDeleting}
-                  className="text-sm flex items-center gap-1 text-gray-500 disabled:opacity-50 cursor-pointer"
+                  className="text-sm flex items-center gap-1 text-gray-500 disabled:opacity-50 cursor-pointer px-2"
                 >
                   삭제
                 </button>
