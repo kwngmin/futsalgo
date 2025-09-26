@@ -16,7 +16,6 @@ import {
   ChevronDown,
   ChevronUp,
   MessageSquareText,
-  Trash2,
 } from "lucide-react";
 import {
   addComment,
@@ -522,14 +521,11 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                       >
                         <MessageSquareText className="size-4 text-gray-500" />
                         답글 {comment.replies.length}개
-                        <span className="text-gray-500 flex items-center text-xs rounded-full pl-2 pr-1 py-0.5 bg-zinc-50 hover:bg-zinc-200/50 transition-colors">
-                          {isExpanded ? "접기" : "펼치기"}
-                          {isExpanded ? (
-                            <ChevronUp className="size-4 text-gray-500" />
-                          ) : (
-                            <ChevronDown className="size-4 text-gray-500" />
-                          )}
-                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="size-4 text-gray-500" />
+                        ) : (
+                          <ChevronDown className="size-4 text-gray-500" />
+                        )}
                       </button>
                     )}
                   </div>
@@ -542,9 +538,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                         )
                       }
                       disabled={isDeleting}
-                      className="text-sm flex items-center gap-1 text-red-600 disabled:opacity-50 cursor-pointer"
+                      className="text-sm flex items-center gap-1 text-gray-500 disabled:opacity-50 cursor-pointer"
                     >
-                      <Trash2 className="size-4" />
                       삭제
                     </button>
                   )}
@@ -557,9 +552,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 <button
                   onClick={() => handleDeleteComment(comment.id, false)}
                   disabled={isDeleting}
-                  className="text-sm flex items-center gap-1 text-red-600 disabled:opacity-50 cursor-pointer"
+                  className="text-sm flex items-center gap-1 text-gray-500 disabled:opacity-50 cursor-pointer"
                 >
-                  <Trash2 className="size-4" />
                   삭제
                 </button>
               </div>
