@@ -22,8 +22,8 @@ import { CheckCircleIcon } from "@phosphor-icons/react";
 import { toast } from "sonner";
 
 const ROLE_CONFIG = {
-  MANAGER: { label: "부팀장", className: "text-sky-700" },
-  OWNER: { label: "팀장", className: "text-indigo-700" },
+  MANAGER: { label: "부팀장", className: "text-sky-600" },
+  OWNER: { label: "팀장", className: "text-indigo-700 font-semibold" },
 } as const;
 
 const TOAST_MESSAGES = {
@@ -100,9 +100,7 @@ const RoleBadge = ({ role }: { role: TeamMemberRole }) => {
   if (!config) return null;
 
   return (
-    <span className={`text-sm font-medium mb-px ${config.className}`}>
-      {config.label}
-    </span>
+    <span className={`text-sm mb-px ${config.className}`}>{config.label}</span>
   );
 };
 
@@ -205,8 +203,8 @@ const MemberCard = ({
 
           {/* 멤버 정보 */}
           <div className="flex flex-col items-start grow">
-            <h3 className="text-lg sm:text-base font-semibold flex items-center gap-1.5 h-6">
-              <span className="group-hover:underline underline-offset-4">
+            <h3 className="text-lg sm:text-base flex items-center gap-1.5 h-6">
+              <span className="group-hover:underline underline-offset-4 font-semibold">
                 {displayName}
               </span>
               <RoleBadge role={member.role} />
