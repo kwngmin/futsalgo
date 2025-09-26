@@ -16,10 +16,12 @@ import {
   ChevronDown,
   ChevronUp,
   MessageSquareText,
+  Trash2,
 } from "lucide-react";
 import {
   addComment,
   getScheduleComments,
+  deleteComment,
 } from "../actions/get-schedule-comments";
 import Image from "next/image";
 import { ChatCircleDotsIcon } from "@phosphor-icons/react";
@@ -40,6 +42,7 @@ interface Comment {
   author: User;
   replies: Comment[];
   parentId?: string;
+  isDeleted?: boolean; // 삭제 여부 추가
 }
 
 interface TeamMember {
@@ -68,7 +71,7 @@ interface Schedule {
 interface ScheduleCommentsData {
   schedule: Schedule;
   comments: Comment[];
-  currentUser?: User; // 로그인하지 않은 경우 undefined
+  currentUser?: User;
 }
 
 interface ScheduleCommentsProps {
@@ -81,13 +84,18 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
   const [replyContent, setReplyContent] = useState("");
   const [isPending, startTransition] = useTransition();
   const [focusNewComment, setFocusNewComment] = useState(false);
+  const [focusReply, setFocusReply] = useState<string | null>(null);
   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(
     new Set()
+  );
+  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(
+    null
   );
   const router = useRouter();
 
   // useRef로 textarea 참조
   const newCommentRef = useRef<HTMLTextAreaElement>(null);
+  const replyRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>({});
 
   const queryClient = useQueryClient();
 
@@ -97,6 +105,15 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       newCommentRef.current.focus();
     }
   }, [focusNewComment]);
+
+  // 답글 쓰기 시 textarea 포커스
+  useEffect(() => {
+    if (focusReply && replyRefs.current[focusReply]) {
+      setTimeout(() => {
+        replyRefs.current[focusReply]?.focus();
+      }, 0);
+    }
+  }, [focusReply]);
 
   // 답글 펼치기/접기 토글 함수
   const toggleReplies = (commentId: string) => {
@@ -111,22 +128,12 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     });
   };
 
-  // focusNewComment가 true로 변경될 때 포커스 처리
-  useEffect(() => {
-    if (focusNewComment && newCommentRef.current) {
-      // 다음 tick에서 포커스 설정
-      setTimeout(() => {
-        newCommentRef.current?.focus();
-      }, 0);
-    }
-  }, [focusNewComment]);
-
   // 댓글 데이터 조회
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["schedule-comments", scheduleId],
     queryFn: () => getScheduleComments(scheduleId),
-    staleTime: 30000, // 30초
-    gcTime: 5 * 60 * 1000, // 5분
+    staleTime: 30000,
+    gcTime: 5 * 60 * 1000,
     retry: 2,
   });
 
@@ -140,19 +147,16 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
       parentId?: string;
     }) => addComment(scheduleId, content, parentId),
     onSuccess: (newComment) => {
-      // 답글 추가 시 해당 댓글의 답글을 자동으로 펼치기
       if (newComment.parentId) {
         setExpandedReplies((prev) => new Set(prev).add(newComment.parentId!));
       }
 
-      // 캐시 업데이트
       queryClient.setQueryData(
         ["schedule-comments", scheduleId],
         (oldData: ScheduleCommentsData | undefined) => {
           if (!oldData) return oldData;
 
           if (newComment.parentId) {
-            // 답글 추가
             const updateComments = (comments: Comment[]): Comment[] => {
               return comments.map((comment) => {
                 if (comment.id === newComment.parentId) {
@@ -176,7 +180,6 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               comments: updateComments(oldData.comments),
             };
           } else {
-            // 새 댓글 추가
             return {
               ...oldData,
               comments: [...oldData.comments, newComment],
@@ -187,7 +190,74 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     },
     onError: (error) => {
       console.error("댓글 작성 실패:", error);
-      // 에러 시 데이터 다시 조회
+      refetch();
+    },
+  });
+
+  // 댓글 삭제 mutation
+  const deleteCommentMutation = useMutation({
+    mutationFn: (commentId: string) => deleteComment(commentId),
+    onMutate: async (commentId) => {
+      setDeletingCommentId(commentId);
+    },
+    onSuccess: (result, commentId) => {
+      // 캐시 업데이트
+      queryClient.setQueryData(
+        ["schedule-comments", scheduleId],
+        (oldData: ScheduleCommentsData | undefined) => {
+          if (!oldData) return oldData;
+
+          const updateComments = (comments: Comment[]): Comment[] => {
+            return comments
+              .map((comment) => {
+                if (comment.id === commentId) {
+                  // soft delete인 경우
+                  if (result.softDeleted) {
+                    return {
+                      ...comment,
+                      isDeleted: true,
+                      content: "댓글이 삭제되었습니다",
+                    };
+                  }
+                  // hard delete인 경우 null 반환 (나중에 필터링)
+                  return null;
+                }
+                // 답글 처리
+                if (comment.replies.length > 0) {
+                  const filteredReplies = comment.replies.filter(
+                    (reply) => reply.id !== commentId || result.softDeleted
+                  );
+                  const updatedReplies = filteredReplies.map((reply) => {
+                    if (reply.id === commentId && result.softDeleted) {
+                      return {
+                        ...reply,
+                        isDeleted: true,
+                        content: "댓글이 삭제되었습니다",
+                      };
+                    }
+                    return reply;
+                  });
+                  return {
+                    ...comment,
+                    replies: updatedReplies,
+                  };
+                }
+                return comment;
+              })
+              .filter((comment): comment is Comment => comment !== null);
+          };
+
+          return {
+            ...oldData,
+            comments: updateComments(oldData.comments),
+          };
+        }
+      );
+      setDeletingCommentId(null);
+    },
+    onError: (error) => {
+      console.error("댓글 삭제 실패:", error);
+      setDeletingCommentId(null);
       refetch();
     },
   });
@@ -197,7 +267,6 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     data?.comments || [],
     (state: Comment[], newComment: Comment) => {
       if (newComment.parentId) {
-        // 답글 추가
         const updateComments = (comments: Comment[]): Comment[] => {
           return comments.map((comment) => {
             if (comment.id === newComment.parentId) {
@@ -211,11 +280,30 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         };
         return updateComments(state);
       } else {
-        // 새 댓글 추가
         return [...state, newComment];
       }
     }
   );
+
+  // 답글 쓰기 핸들러
+  const handleReplyClick = (commentId: string) => {
+    setReplyingTo(commentId);
+    setFocusReply(commentId);
+  };
+
+  // 댓글 삭제 확인
+  const handleDeleteComment = async (
+    commentId: string,
+    hasReplies: boolean
+  ) => {
+    const message = hasReplies
+      ? "답글이 있는 댓글입니다. 댓글 내용만 삭제되고 답글은 유지됩니다. 삭제하시겠습니까?"
+      : "댓글을 삭제하시겠습니까?";
+
+    if (window.confirm(message)) {
+      await deleteCommentMutation.mutateAsync(commentId);
+    }
+  };
 
   // 로딩 상태
   if (isLoading) {
@@ -253,24 +341,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     );
   }
 
-  const {
-    // schedule, //
-    currentUser,
-  } = data;
-
-  // 사용자가 어떤 팀에 속하는지 확인
-  // const getUserTeamType = (userId: string) => {
-  //   const isHostTeamMember = schedule.hostTeam.members.some(
-  //     (member) => member.userId === userId
-  //   );
-  //   const isInvitedTeamMember = schedule.invitedTeam?.members.some(
-  //     (member) => member.userId === userId
-  //   );
-
-  //   if (isHostTeamMember) return "HOST";
-  //   if (isInvitedTeamMember) return "INVITED";
-  //   return null;
-  // };
+  const { currentUser } = data;
 
   // 댓글 제출
   const handleSubmitComment = async () => {
@@ -295,7 +366,6 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         await addCommentMutation.mutateAsync({ content: currentContent });
       } catch (error) {
         console.error("댓글 작성 실패:", error);
-        // 실패 시 입력값 복원
         setNewComment(currentContent);
       }
     });
@@ -318,6 +388,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     const currentContent = replyContent;
     setReplyContent("");
     setReplyingTo(null);
+    setFocusReply(null);
 
     startTransition(async () => {
       addOptimisticComment(optimisticReply);
@@ -329,7 +400,6 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
         });
       } catch (error) {
         console.error("답글 작성 실패:", error);
-        // 실패 시 상태 복원
         setReplyContent(currentContent);
         setReplyingTo(parentId);
       }
@@ -344,57 +414,33 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     }
   };
 
-  // 팀 배지 렌더링
-  // const renderTeamBadge = (userId: string) => {
-  //   const teamType = getUserTeamType(userId);
-
-  //   if (teamType === "HOST") {
-  //     return (
-  //       <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
-  //         {`${schedule.hostTeam.name} • 주최팀`}
-  //       </span>
-  //     );
-  //   }
-
-  //   if (teamType === "INVITED" && schedule.invitedTeam) {
-  //     return (
-  //       <span className="tracking-tight text-sm sm:text-xs text-muted-foreground">
-  //         {`${schedule.invitedTeam.name} • 초청팀`}
-  //       </span>
-  //     );
-  //   }
-
-  //   return null;
-  // };
-
   // 댓글 아이템 렌더링
   const renderComment = (comment: Comment, isReply = false) => {
-    // 임시 댓글인지 확인 (Optimistic update)
     const isOptimistic = comment.id.startsWith("temp-");
     const isExpanded = expandedReplies.has(comment.id);
+    const isDeleting = deletingCommentId === comment.id;
+    const canDelete =
+      currentUser && currentUser.id === comment.author.id && !comment.isDeleted;
 
     return (
-      <div
-        key={comment.id} //
-        className="space-y-6"
-        // className={`${isReply ? "mt-2" : ""}`}
-      >
-        {/* <div key={comment.id} className={`${isReply ? "ml-10 my-2" : "mb-2"}`}> */}
+      <div key={comment.id} className="space-y-6">
         <div
           className={`z-10 flex gap-1.5 ${isOptimistic ? "opacity-60" : ""} ${
             isReply ? "ml-10" : ""
-          }`}
+          } ${isDeleting ? "opacity-50" : ""}`}
         >
           {/* 프로필 이미지, 닉네임, 작성일시 */}
-          <div className={`h-10 flex items-center gap-2 mb-0.5`}>
-            {/* 프로필 이미지 */}
+          <div className="h-10 flex items-center gap-2 mb-0.5">
             <div
-              className="w-8 flex flex-col z-20"
-              onClick={() => {
-                router.push(`/players/${comment.author.id}`);
-              }}
+              className={`w-8 flex flex-col z-20 ${
+                !comment.isDeleted ? "cursor-pointer" : ""
+              }`}
+              onClick={() =>
+                !comment.isDeleted &&
+                router.push(`/players/${comment.author.id}`)
+              }
             >
-              {comment.author.image ? (
+              {!comment.isDeleted && comment.author.image ? (
                 <Image
                   src={comment.author.image}
                   alt={comment.author.name || ""}
@@ -409,88 +455,125 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               )}
             </div>
           </div>
+
           {/* 댓글 내용, 답글 버튼, 답글 수 */}
           <div className="flex-1 min-w-0">
             {/* 닉네임, 작성일시 */}
             <div className="flex items-center gap-1.5 mb-1">
-              <span
-                className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
-                onClick={() => {
-                  router.push(`/players/${comment.author.id}`);
-                }}
-              >
-                {comment.author.nickname || comment.author.name}
-              </span>
-              {/* <span className="text-gray-500">•</span> */}
-              <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
-                {isOptimistic ? (
-                  <span className="flex items-center gap-1">
-                    <Loader2 size={12} className="animate-spin" />
-                    전송 중...
+              {!comment.isDeleted ? (
+                <>
+                  <span
+                    className="sm:text-sm font-medium hover:underline hover:underline-offset-2 cursor-pointer"
+                    onClick={() => router.push(`/players/${comment.author.id}`)}
+                  >
+                    {comment.author.nickname || comment.author.name}
                   </span>
-                ) : (
-                  new Date(comment.createdAt).toLocaleDateString("ko-KR", {
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  })
-                )}
-              </span>
+                  <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
+                    {isOptimistic ? (
+                      <span className="flex items-center gap-1">
+                        <Loader2 size={12} className="animate-spin" />
+                        전송 중...
+                      </span>
+                    ) : (
+                      new Date(comment.createdAt).toLocaleDateString("ko-KR", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })
+                    )}
+                  </span>
+                </>
+              ) : (
+                <span className="text-sm text-gray-500">삭제된 댓글</span>
+              )}
             </div>
 
             {/* 댓글 내용 */}
-            <p className="text-gray-700 whitespace-pre-wrap sm:text-sm font-medium bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-md">
+            <p
+              className={`whitespace-pre-wrap sm:text-sm font-medium px-3 py-1.5 rounded-md ${
+                comment.isDeleted
+                  ? "text-gray-500 bg-gray-100 italic"
+                  : "text-gray-700 bg-gray-50 hover:bg-gray-100"
+              }`}
+            >
               {comment.content}
             </p>
 
             {!isReply &&
               !isOptimistic &&
               (comment.replies.length > 0 || currentUser) && (
-                <div className="flex items-center gap-4 mt-3 h-4">
-                  {currentUser && (
+                <div className="flex items-center justify-between mt-3 h-4">
+                  <div className="flex items-center gap-4">
+                    {currentUser && !comment.isDeleted && (
+                      <button
+                        onClick={() => handleReplyClick(comment.id)}
+                        disabled={addCommentMutation.isPending}
+                        className="text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                      >
+                        <PencilLine className="size-4 text-gray-500" />
+                        답글 쓰기
+                      </button>
+                    )}
+                    {comment.replies.length > 0 && (
+                      <button
+                        onClick={() => toggleReplies(comment.id)}
+                        className="text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
+                      >
+                        <MessageSquareText className="size-4 text-gray-500" />
+                        답글 {comment.replies.length}개
+                        <span className="text-gray-500 flex items-center text-xs rounded-full pl-2 pr-1 py-0.5 bg-zinc-50 hover:bg-zinc-200/50 transition-colors">
+                          {isExpanded ? "접기" : "펼치기"}
+                          {isExpanded ? (
+                            <ChevronUp className="size-4 text-gray-500" />
+                          ) : (
+                            <ChevronDown className="size-4 text-gray-500" />
+                          )}
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                  {canDelete && (
                     <button
-                      onClick={() => setReplyingTo(comment.id)}
-                      disabled={addCommentMutation.isPending}
-                      className="text-sm flex items-center gap-1 justify-center disabled:opacity-50 cursor-pointer font-medium"
+                      onClick={() =>
+                        handleDeleteComment(
+                          comment.id,
+                          comment.replies.length > 0
+                        )
+                      }
+                      disabled={isDeleting}
+                      className="text-sm flex items-center gap-1 text-red-600 disabled:opacity-50 cursor-pointer"
                     >
-                      <PencilLine className="size-4 text-gray-500" />
-                      답글 쓰기
-                    </button>
-                  )}
-                  {/* {comment.replies.length > 0 && currentUser && (
-                  <span className="text-gray-500 leading-tight">•</span>
-                )} */}
-                  {comment.replies.length > 0 && (
-                    <button
-                      onClick={() => toggleReplies(comment.id)}
-                      className="text-sm flex items-center gap-1 justify-center cursor-pointer font-medium"
-                    >
-                      <MessageSquareText className="size-4 text-gray-500" />
-                      답글 {comment.replies.length}개
-                      <span className="text-gray-500 flex items-center text-xs rounded-full pl-2 pr-1 py-0.5 bg-zinc-50 hover:bg-zinc-200/50 transition-colors">
-                        {isExpanded ? "접기" : "펼치기"}
-                        {isExpanded ? (
-                          <ChevronUp className="size-4 text-gray-500" />
-                        ) : (
-                          <ChevronDown className="size-4 text-gray-500" />
-                        )}
-                      </span>
+                      <Trash2 className="size-4" />
+                      삭제
                     </button>
                   )}
                 </div>
               )}
+
+            {/* 답글인 경우 삭제 버튼 */}
+            {isReply && canDelete && (
+              <div className="flex justify-end mt-2">
+                <button
+                  onClick={() => handleDeleteComment(comment.id, false)}
+                  disabled={isDeleting}
+                  className="text-sm flex items-center gap-1 text-red-600 disabled:opacity-50 cursor-pointer"
+                >
+                  <Trash2 className="size-4" />
+                  삭제
+                </button>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* {!isReply && (
-          <div className="absolute top-4 -bottom-5 left-4 sm:left-0 border-r w-4 z-0" />
-        )} */}
 
         {/* 답글 작성 폼 */}
         {replyingTo === comment.id && currentUser && (
           <div className="ml-10 space-y-1 border-b pb-4">
             <textarea
+              ref={(el) => {
+                if (el) replyRefs.current[comment.id] = el;
+              }}
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
               onKeyPress={(e) =>
@@ -506,6 +589,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 onClick={() => {
                   setReplyingTo(null);
                   setReplyContent("");
+                  setFocusReply(null);
                 }}
                 disabled={addCommentMutation.isPending}
                 className="px-4 py-1 text-sm text-gray-600 hover:text-gray-800 disabled:opacity-50 cursor-pointer hover:bg-gray-50 rounded-full"
@@ -523,7 +607,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
           </div>
         )}
 
-        {/* 답글 목록 - 펼쳐진 경우에만 표시 */}
+        {/* 답글 목록 */}
         {comment.replies.length > 0 &&
           isExpanded &&
           comment.replies.map((reply) => renderComment(reply, true))}
@@ -537,10 +621,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
     <div className="px-4">
       <div className="flex justify-between items-center py-2 min-h-13">
         <div className="flex items-center gap-2">
-          <ChatCircleDotsIcon //
-            weight="fill"
-            className="size-7 text-zinc-500"
-          />
+          <ChatCircleDotsIcon weight="fill" className="size-7 text-zinc-500" />
           <h2 className="text-xl font-semibold">댓글</h2>
         </div>
       </div>

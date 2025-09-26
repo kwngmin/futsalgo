@@ -655,6 +655,9 @@ model ScheduleComment {
   // 자기 참조 관계 (대댓글)
   parent      ScheduleComment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies     ScheduleComment[] @relation("CommentReplies")
+
+  isDeleted  Boolean  @default(false)
+  deletedAt  DateTime?
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

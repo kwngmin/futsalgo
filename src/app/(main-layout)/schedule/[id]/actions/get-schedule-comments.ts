@@ -19,6 +19,7 @@ interface Comment {
   author: User;
   replies: Comment[];
   parentId?: string;
+  isDeleted?: boolean; // 삭제 여부 필드 추가
 }
 
 interface TeamMember {
@@ -47,7 +48,7 @@ interface Schedule {
 interface ScheduleCommentsData {
   schedule: Schedule;
   comments: Comment[];
-  currentUser?: User; // 로그인하지 않은 경우 undefined
+  currentUser?: User;
 }
 
 /**
@@ -57,12 +58,11 @@ export async function getScheduleComments(
   scheduleId: string
 ): Promise<ScheduleCommentsData> {
   try {
-    // 현재 사용자 확인 (로그인하지 않아도 댓글 조회 가능)
     const session = await auth();
 
     // 스케줄 정보와 댓글 데이터를 병렬로 조회
     const [schedule, comments] = await Promise.all([
-      // 스케줄 정보 조회 (팀 정보 포함)
+      // 스케줄 정보 조회
       prisma.schedule.findUnique({
         where: { id: scheduleId },
         include: {
@@ -72,8 +72,8 @@ export async function getScheduleComments(
               name: true,
               members: {
                 where: {
-                  status: "APPROVED", // 승인된 멤버만
-                  banned: false, // 밴되지 않은 멤버만
+                  status: "APPROVED",
+                  banned: false,
                 },
                 select: {
                   userId: true,
@@ -119,11 +119,12 @@ export async function getScheduleComments(
         },
       }),
 
-      // 댓글 조회 (최상위 댓글만, 답글은 replies로 포함)
+      // 댓글 조회 (최상위 댓글과 모든 답글 포함)
       prisma.scheduleComment.findMany({
         where: {
           scheduleId,
-          parentId: null, // 최상위 댓글만
+          parentId: null,
+          // soft delete된 댓글도 조회 (답글이 있을 수 있으므로)
         },
         include: {
           author: {
@@ -135,6 +136,7 @@ export async function getScheduleComments(
             },
           },
           replies: {
+            // 답글은 삭제 여부 관계없이 모두 조회
             include: {
               author: {
                 select: {
@@ -145,10 +147,10 @@ export async function getScheduleComments(
                 },
               },
             },
-            orderBy: { createdAt: "asc" }, // 답글은 작성 순서대로
+            orderBy: { createdAt: "asc" },
           },
         },
-        orderBy: { createdAt: "asc" }, // 댓글도 작성 순서대로 (오래된 것부터)
+        orderBy: { createdAt: "asc" },
       }),
     ]);
 
@@ -156,27 +158,43 @@ export async function getScheduleComments(
       throw new Error("스케줄을 찾을 수 없습니다");
     }
 
-    // 데이터 변환
+    // 데이터 변환 - isDeleted 필드 처리
     const transformedComments: Comment[] = comments.map((comment) => ({
       id: comment.id,
-      content: comment.content,
+      content: comment.isDeleted ? "댓글이 삭제되었습니다" : comment.content,
       createdAt: comment.createdAt.toISOString(),
-      author: {
-        id: comment.author.id,
-        name: comment.author.name || "",
-        nickname: comment.author.nickname || undefined,
-        image: comment.author.image || undefined,
-      },
+      author: comment.isDeleted
+        ? {
+            id: comment.author.id,
+            name: "삭제됨",
+            nickname: undefined,
+            image: undefined,
+          }
+        : {
+            id: comment.author.id,
+            name: comment.author.name || "",
+            nickname: comment.author.nickname || undefined,
+            image: comment.author.image || undefined,
+          },
+      isDeleted: comment.isDeleted,
       replies: comment.replies.map((reply) => ({
         id: reply.id,
-        content: reply.content,
+        content: reply.isDeleted ? "댓글이 삭제되었습니다" : reply.content,
         createdAt: reply.createdAt.toISOString(),
-        author: {
-          id: reply.author.id,
-          name: reply.author.name || "",
-          nickname: reply.author.nickname || undefined,
-          image: reply.author.image || undefined,
-        },
+        author: reply.isDeleted
+          ? {
+              id: reply.author.id,
+              name: "삭제됨",
+              nickname: undefined,
+              image: undefined,
+            }
+          : {
+              id: reply.author.id,
+              name: reply.author.name || "",
+              nickname: reply.author.nickname || undefined,
+              image: reply.author.image || undefined,
+            },
+        isDeleted: reply.isDeleted,
         replies: [],
         parentId: reply.parentId || undefined,
       })),
@@ -248,7 +266,6 @@ export async function addComment(
   parentId?: string
 ): Promise<Comment> {
   try {
-    // 현재 사용자 확인
     const session = await auth();
     if (!session?.user) {
       throw new Error("로그인이 필요합니다");
@@ -280,7 +297,8 @@ export async function addComment(
         select: {
           id: true,
           scheduleId: true,
-          parentId: true, // 답글의 답글 방지
+          parentId: true,
+          isDeleted: true,
         },
       });
 
@@ -292,7 +310,12 @@ export async function addComment(
         throw new Error("잘못된 댓글 참조입니다");
       }
 
-      // 답글의 답글 방지 (2단계 depth만 허용)
+      // 삭제된 댓글에는 답글 불가
+      if (parentComment.isDeleted) {
+        throw new Error("삭제된 댓글에는 답글을 달 수 없습니다");
+      }
+
+      // 답글의 답글 방지
       if (parentComment.parentId) {
         throw new Error("답글에는 답글을 달 수 없습니다");
       }
@@ -318,10 +341,9 @@ export async function addComment(
       },
     });
 
-    // 페이지 재검증 (캐시 무효화)
+    // 페이지 재검증
     revalidatePath(`/schedules/${scheduleId}`);
 
-    // 댓글 데이터 변환하여 반환
     return {
       id: comment.id,
       content: comment.content,
@@ -338,7 +360,6 @@ export async function addComment(
   } catch (error) {
     console.error("댓글 작성 실패:", error);
 
-    // 에러 메시지 정제
     if (error instanceof Error) {
       throw error;
     }
@@ -348,9 +369,12 @@ export async function addComment(
 }
 
 /**
- * 댓글 삭제 (추가 기능)
+ * 댓글 삭제
+ * @returns { softDeleted: boolean } - soft delete 여부
  */
-export async function deleteComment(commentId: string): Promise<void> {
+export async function deleteComment(commentId: string): Promise<{
+  softDeleted: boolean;
+}> {
   try {
     const session = await auth();
     if (!session?.user) {
@@ -364,7 +388,13 @@ export async function deleteComment(commentId: string): Promise<void> {
         id: true,
         authorId: true,
         scheduleId: true,
-        replies: { select: { id: true } },
+        isDeleted: true,
+        replies: {
+          select: {
+            id: true,
+            isDeleted: true,
+          },
+        },
       },
     });
 
@@ -372,22 +402,38 @@ export async function deleteComment(commentId: string): Promise<void> {
       throw new Error("존재하지 않는 댓글입니다");
     }
 
+    if (comment.isDeleted) {
+      throw new Error("이미 삭제된 댓글입니다");
+    }
+
     if (comment.authorId !== session.user.id) {
       throw new Error("댓글 작성자만 삭제할 수 있습니다");
     }
 
-    // 답글이 있는 경우 삭제 방지
-    if (comment.replies.length > 0) {
-      throw new Error("답글이 있는 댓글은 삭제할 수 없습니다");
+    // 삭제되지 않은 답글이 있는지 확인
+    const hasActiveReplies = comment.replies.some((reply) => !reply.isDeleted);
+
+    if (hasActiveReplies) {
+      // Soft delete: 답글이 있는 경우
+      await prisma.scheduleComment.update({
+        where: { id: commentId },
+        data: {
+          isDeleted: true,
+          deletedAt: new Date(),
+        },
+      });
+
+      revalidatePath(`/schedules/${comment.scheduleId}`);
+      return { softDeleted: true };
+    } else {
+      // Hard delete: 답글이 없거나 모든 답글이 삭제된 경우
+      await prisma.scheduleComment.delete({
+        where: { id: commentId },
+      });
+
+      revalidatePath(`/schedules/${comment.scheduleId}`);
+      return { softDeleted: false };
     }
-
-    // 댓글 삭제
-    await prisma.scheduleComment.delete({
-      where: { id: commentId },
-    });
-
-    // 페이지 재검증
-    revalidatePath(`/schedules/${comment.scheduleId}`);
   } catch (error) {
     console.error("댓글 삭제 실패:", error);
 
