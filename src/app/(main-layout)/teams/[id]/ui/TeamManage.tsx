@@ -3,7 +3,7 @@
 import CustomSelect from "@/shared/components/ui/custom-select";
 import {
   ArrowsLeftRightIcon,
-  //   GearIcon,
+  GearIcon,
   UserMinusIcon,
   UserPlusIcon,
 } from "@phosphor-icons/react";
@@ -99,7 +99,19 @@ const TeamManage = ({
   }, []);
 
   return (
-    <div className="select-none mt-6">
+    <div className="select-none px-4">
+      <div className="flex justify-between items-center py-2 min-h-13">
+        <div className="flex items-center gap-2">
+          <GearIcon //
+            weight="fill"
+            // weight="light"
+            // weight="duotone"
+            className="size-7 text-zinc-500"
+          />
+          <h2 className="text-xl font-semibold">권한 설정</h2>
+        </div>
+      </div>
+
       {isOpen === null && (
         <div className="grid grid-cols-3 gap-2 poin">
           <button
@@ -132,7 +144,7 @@ const TeamManage = ({
       )}
 
       {isOpen === "change-owner" && (
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1 select-none mb-3">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1">
           <div className="grow flex items-center gap-2 sm:gap-1">
             <ArrowsLeftRightIcon className="size-7 sm:size-6 text-gray-600 mx-3" />
             <CustomSelect
@@ -174,7 +186,7 @@ const TeamManage = ({
       )}
 
       {isOpen === "add-manager" && (
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1 select-none mb-3">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1">
           <div className="grow flex items-center gap-2 sm:gap-1">
             <UserPlusIcon className="size-7 sm:size-6 text-gray-600 mx-3" />
             <CustomSelect
@@ -216,7 +228,7 @@ const TeamManage = ({
       )}
 
       {isOpen === "remove-manager" && (
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1 select-none mb-3">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1">
           <div className="grow flex items-center gap-2 sm:gap-1">
             <UserMinusIcon className="size-7 sm:size-6 text-gray-600 mx-3" />
             <CustomSelect

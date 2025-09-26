@@ -767,12 +767,12 @@ const TeamContent = ({ id }: { id: string }) => {
               teamId={id}
               userId={session.data?.user?.id}
             />
-
-            {/* 권한 설정 */}
-            {data.data.currentUserMembership.role === "OWNER" && (
-              <TeamManage members={data.data.members.approved} teamId={id} />
-            )}
           </div>
+
+          {/* 권한 설정 */}
+          {data.data.currentUserMembership.role === "OWNER" && (
+            <TeamManage members={data.data.members.approved} teamId={id} />
+          )}
 
           {/* 등록 날짜와 만든이 */}
           <div className="flex items-center justify-center gap-2 pt-6">

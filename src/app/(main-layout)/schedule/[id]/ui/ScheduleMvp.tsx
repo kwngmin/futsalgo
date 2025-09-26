@@ -12,7 +12,7 @@ import { voteMvp } from "../actions/vote-mvp";
 import { useRouter } from "next/navigation";
 // import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
-import { ChevronDown, Vote } from "lucide-react";
+import { ChevronDown, CircleUserRound, Vote } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { CrownIcon } from "@phosphor-icons/react";
@@ -180,12 +180,13 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
               className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 font-semibold bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-3"
               onClick={handleVoteStart}
             >
-              <Vote className="w-5 h-5 text-gray-600" />
+              <Vote className="size-6 text-gray-600" />
               <span>투표하기</span>
             </button>
           ) : (
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-slate-100 rounded-2xl p-3 sm:px-4 select-none mb-3">
-              <div className="flex items-center gap-2 grow">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1 select-none mb-3">
+              <div className="grow flex items-center gap-2 sm:gap-1">
+                <CircleUserRound className="size-7 sm:size-6 text-gray-600 mx-3" />
                 <div className="relative w-full">
                   <select
                     value={selectedMvpId}
