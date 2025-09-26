@@ -881,7 +881,7 @@ const ScheduleContent = ({
                         onChange={(e) => setNoticeContent(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="공지사항을 입력해주세요..."
-                        className="w-full min-h-40 p-4 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        className="w-full min-h-40 p-4 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400 sm:scrollbar-hide"
                       />
                       <div className="flex gap-2">
                         <Button
@@ -908,7 +908,7 @@ const ScheduleContent = ({
                           취소
                         </Button>
                       </div>
-                      <p className="text-sm text-gray-500">
+                      <p className="hidden sm:block text-sm text-gray-500">
                         ESC로 취소, Ctrl+Enter로 저장
                       </p>
                     </div>
@@ -991,7 +991,7 @@ const ScheduleContent = ({
         <div className="px-4 flex flex-col gap-2 mt-6">
           <button
             type="button"
-            className="my-4 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-30 disabled:cursor-default"
+            className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer active:bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium disabled:opacity-30 disabled:cursor-default"
             onClick={() => setShowDeleteConfirm(true)}
             disabled={isDeleting}
           >

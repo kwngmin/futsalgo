@@ -91,6 +91,13 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
   const queryClient = useQueryClient();
 
+  // 댓글 쓰기 시 textarea 포커스
+  useEffect(() => {
+    if (focusNewComment && newCommentRef.current) {
+      newCommentRef.current.focus();
+    }
+  }, [focusNewComment]);
+
   // 답글 펼치기/접기 토글 함수
   const toggleReplies = (commentId: string) => {
     setExpandedReplies((prev) => {
@@ -490,7 +497,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
                 handleKeyPress(e, () => handleSubmitReply(comment.id))
               }
               placeholder="답글을 입력하세요..."
-              className="w-full px-4 py-3 border border-gray-400 rounded-md resize-none focus:ring-4 focus:ring-gray-200 focus:!border-gray-500 focus:!outline-none"
+              className="w-full px-4 py-3 border border-gray-400 rounded-md resize-none focus:ring-4 focus:ring-gray-200 focus:!border-gray-500 focus:!outline-none sm:scrollbar-hide"
               rows={2}
               disabled={addCommentMutation.isPending}
             />
@@ -567,7 +574,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
               onChange={(e) => setNewComment(e.target.value)}
               onKeyPress={(e) => handleKeyPress(e, handleSubmitComment)}
               placeholder="댓글을 입력하세요..."
-              className="w-full px-4 py-3 border border-gray-400 rounded-md resize-none focus:ring-4 focus:ring-gray-200 focus:!border-gray-500 focus:!outline-none"
+              className="w-full px-4 py-3 border border-gray-400 rounded-md resize-none focus:ring-4 focus:ring-gray-200 focus:!border-gray-500 focus:!outline-none sm:scrollbar-hide"
               rows={3}
               disabled={isSubmitting}
             />
