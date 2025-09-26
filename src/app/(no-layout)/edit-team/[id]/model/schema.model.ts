@@ -17,4 +17,6 @@ export const editTeamFormSchema = z.object({
   teamMatchAvailable: z.enum(["AVAILABLE", "UNAVAILABLE"], {
     error: () => "친선전 초청 가능 여부를 선택해주세요",
   }),
+  instagram: z.string().min(1, "인스타그램 아이디를 입력해주세요").optional(),
+  youtube: z.string().min(1, "유튜브 채널명을 입력해주세요").optional(),
 });

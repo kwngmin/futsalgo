@@ -23,6 +23,7 @@ import { editTeamFormSchema } from "../model/schema.model";
 import { useRouter } from "next/navigation";
 import { cityData } from "@/features/search-address-sgis/constants";
 import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
+import { Input } from "@/shared/components/ui/input";
 
 export type EditTeamFormData = z.infer<typeof editTeamFormSchema>;
 
@@ -54,6 +55,8 @@ const EditTeamForm = ({
       teamMatchAvailable: data.teamMatchAvailable,
       level: data.level,
       recruitmentStatus: data.recruitmentStatus,
+      instagram: data.instagram || undefined,
+      youtube: data.youtube || undefined,
     },
   });
 
@@ -224,6 +227,7 @@ const EditTeamForm = ({
         />
       </div>
 
+      {/* 팀 실력 */}
       <div className="space-y-3">
         <Label className="px-1">팀 실력</Label>
         <CustomRadioGroup
@@ -235,15 +239,36 @@ const EditTeamForm = ({
         />
       </div>
 
+      {/* 인스타그램, 유튜브 */}
+      <div className="grid grid-cols-3 gap-1">
+        <div className="space-y-3">
+          <Label className="px-1">인스타그램</Label>
+          <Input
+            type="text"
+            {...register("instagram")}
+            placeholder="아이디를 입력하세요"
+          />
+        </div>
+
+        <div className="space-y-3">
+          <Label className="px-1">유튜브</Label>
+          <Input
+            type="text"
+            {...register("youtube")}
+            placeholder="채널명을 입력하세요"
+          />
+        </div>
+      </div>
+
       {/* 활동 지역 섹션 */}
       <div className="bg-white rounded-lg overflow-hidden">
-        <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <div className="w-full flex items-center justify-between py-3 border-b border-gray-100">
           <div className="flex items-center space-x-3">
             <MapPin className="size-5" />
             <span className="font-medium">활동 지역</span>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-1 shrink-0 p-4">
+        <div className="grid grid-cols-2 gap-1 shrink-0 py-4">
           <CustomSelect
             key={`city-${selectedCity}`}
             placeholder="시도 선택"
