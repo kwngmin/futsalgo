@@ -1,5 +1,6 @@
 import { FilterOption } from "@/features/filter-list/model/types";
 import {
+  FlagIcon,
   FunnelIcon,
   GaugeIcon,
   HandshakeIcon,
@@ -84,7 +85,7 @@ export const TEAM_FILTER_OPTIONS: FilterOption[] = [
   },
   {
     icon: UsersIcon,
-    label: "팀원모집",
+    label: "팀원 모집",
     value: "recruitment",
   },
   {
@@ -98,8 +99,8 @@ export const TEAM_FILTER_OPTIONS: FilterOption[] = [
     value: "teamLevel",
   },
   {
-    icon: GaugeIcon,
-    label: "선수출신",
+    icon: FlagIcon,
+    label: "선출 유무",
     value: "hasFormerPro",
   },
 ];

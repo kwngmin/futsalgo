@@ -91,7 +91,10 @@ function addProfessionalStats<
 }
 
 // 내가 속한 팀 조회 함수
-async function getMyTeams(userId: string): Promise<TeamWithDetails[]> {
+async function getMyTeams(
+  userId: string,
+  filters?: TeamFilters
+): Promise<TeamWithDetails[]> {
   const myTeams = await prisma.team.findMany({
     where: {
       members: {
@@ -100,6 +103,14 @@ async function getMyTeams(userId: string): Promise<TeamWithDetails[]> {
           status: TeamMemberStatus.APPROVED,
         },
       },
+      ...createSearchCondition(filters?.searchQuery),
+      gender: filters?.gender,
+      city: filters?.city,
+      district: filters?.district,
+      recruitmentStatus: filters?.recruitment,
+      teamMatchAvailable: filters?.teamMatchAvailable,
+      level: { in: filters?.teamLevel },
+      hasFormerPro: filters?.hasFormerPro,
     },
     include: {
       members: {
@@ -148,6 +159,7 @@ function createBaseTeamCondition(filters?: TeamFilters) {
     recruitmentStatus: filters?.recruitment,
     teamMatchAvailable: filters?.teamMatchAvailable,
     level: { in: filters?.teamLevel },
+    hasFormerPro: filters?.hasFormerPro,
   };
 }
 
@@ -232,7 +244,8 @@ export async function getTeams(
 
     if (userId) {
       // 첫 페이지에서만 사용자의 소속 팀들 조회
-      const myTeamsWithStats = page === 1 ? await getMyTeams(userId) : [];
+      const myTeamsWithStats =
+        page === 1 ? await getMyTeams(userId, filters) : [];
 
       return {
         success: true,

@@ -27,6 +27,7 @@ import { TeamLevel } from "@prisma/client";
 import { TeamFilters } from "@/features/filter-list/model/types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { Separator } from "@/shared/components/ui/separator";
+import FilterTeamHasFormerPro from "@/features/filter-list/ui/FilterTeamHasFormerPro";
 
 const TeamsPage = () => {
   const router = useRouter();
@@ -46,6 +47,7 @@ const TeamsPage = () => {
     recruitment: undefined,
     teamMatchAvailable: undefined,
     teamLevel: undefined,
+    hasFormerPro: undefined,
   });
 
   // TeamLevelFilter를 TeamLevel 배열로 변환하는 헬퍼 함수
@@ -97,6 +99,11 @@ const TeamsPage = () => {
     if (filterValues.teamMatchAvailable) {
       filterObj.teamMatchAvailable = filterValues.teamMatchAvailable.value;
       console.log("filterObj.teamMatchAvailable", filterObj.teamMatchAvailable);
+    }
+
+    // hasFormerPro 필터
+    if (filterValues.hasFormerPro) {
+      filterObj.hasFormerPro = filterValues.hasFormerPro.value === "TRUE";
     }
 
     return filterObj;
@@ -269,6 +276,14 @@ const TeamsPage = () => {
       )}
       {openFilter === "teamLevel" && (
         <FilterTeamLevel
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "hasFormerPro" && (
+        <FilterTeamHasFormerPro
           onClose={() => setOpenFilter(null)}
           setFilterValues={(values) =>
             setFilterValues({ ...filterValues, ...values })

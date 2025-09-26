@@ -35,6 +35,7 @@ export interface TeamFilters {
   recruitment?: RecruitmentStatus;
   teamMatchAvailable?: TeamMatchAvailable;
   teamLevel?: TeamLevel[];
+  hasFormerPro?: boolean;
 }
 
 export interface PlayerFilters {

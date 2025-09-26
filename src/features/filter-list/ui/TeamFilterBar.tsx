@@ -8,6 +8,7 @@ import { TeamGenderFilter } from "./FilterTeamGender";
 import { TeamRecruitmentFilter } from "./FilterTeamRecruitment";
 import { TeamLevelFilter } from "./FilterTeamLevel";
 import { TeamMatchAvailableFilter } from "./FilterTeamMatchAvailable";
+import { TeamHasFormerProFilter } from "./FilterTeamHasFormerPro";
 
 export type TeamFilterType =
   | null
@@ -15,7 +16,8 @@ export type TeamFilterType =
   | "location"
   | "recruitment"
   | "teamMatchAvailable"
-  | "teamLevel";
+  | "teamLevel"
+  | "hasFormerPro";
 
 export interface TeamFilterValues {
   gender?: TeamGenderFilter;
@@ -23,6 +25,7 @@ export interface TeamFilterValues {
   recruitment?: TeamRecruitmentFilter;
   teamMatchAvailable?: TeamMatchAvailableFilter;
   teamLevel?: TeamLevelFilter;
+  hasFormerPro?: TeamHasFormerProFilter;
 }
 
 const TeamFilterBar = ({
