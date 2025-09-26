@@ -771,7 +771,11 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 권한 설정 */}
           {data.data.currentUserMembership.role === "OWNER" && (
-            <TeamManage members={data.data.members.approved} teamId={id} />
+            <TeamManage
+              members={data.data.members.approved}
+              teamId={id}
+              onRefetch={refetch}
+            />
           )}
 
           {/* 등록 날짜와 만든이 */}

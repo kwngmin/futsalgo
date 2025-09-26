@@ -12,7 +12,7 @@ import { voteMvp } from "../actions/vote-mvp";
 import { useRouter } from "next/navigation";
 // import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
-import { ChevronDown, CircleUserRound, Vote } from "lucide-react";
+import { ChevronDown, Vote } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { CrownIcon } from "@phosphor-icons/react";
@@ -186,7 +186,7 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
           ) : (
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-2 bg-slate-100 rounded-2xl sm:rounded-md p-3 sm:p-1 select-none mb-3">
               <div className="grow flex items-center gap-2 sm:gap-1">
-                <CircleUserRound className="size-7 sm:size-6 text-gray-600 mx-3" />
+                <Vote className="size-8 sm:size-7 text-gray-600 mx-3" />
                 <div className="relative w-full">
                   <select
                     value={selectedMvpId}
