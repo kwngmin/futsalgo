@@ -244,7 +244,6 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                         value as "AVAILABLE" | "UNAVAILABLE"
                       )
                     }
-                    // className="min-w-40"
                     error={errors.teamMatchAvailable?.message}
                   />
                 </div>

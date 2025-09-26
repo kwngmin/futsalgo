@@ -14,4 +14,7 @@ export const editTeamFormSchema = z.object({
   recruitmentStatus: z.enum(["RECRUITING", "NOT_RECRUITING"], {
     error: () => "팀원 모집 상태를 선택해주세요",
   }),
+  teamMatchAvailable: z.enum(["AVAILABLE", "UNAVAILABLE"], {
+    error: () => "친선전 초청 가능 여부를 선택해주세요",
+  }),
 });

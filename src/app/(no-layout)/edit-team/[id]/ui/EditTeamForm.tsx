@@ -1,12 +1,12 @@
 "use client";
 
 import { Label } from "@/shared/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Loader2, MapPin } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Team, TeamLevel } from "@prisma/client";
 import { Button } from "@/shared/components/ui/button";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
@@ -14,41 +14,22 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import {
   TEAM_GENDER_OPTIONS,
   TEAM_LEVEL_OPTIONS,
+  TEAM_MATCH_AVAILABLE_OPTIONS,
   TEAM_RECRUITMENT_STATUS_OPTIONS,
 } from "@/entities/team/model/constants";
-import { Input } from "@/shared/components/ui/input";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { updateTeam } from "../model/actions";
 import { editTeamFormSchema } from "../model/schema.model";
 import { useRouter } from "next/navigation";
+import { cityData } from "@/features/search-address-sgis/constants";
+import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
 
 export type EditTeamFormData = z.infer<typeof editTeamFormSchema>;
-
-const koreanCities = [
-  "서울특별시",
-  "부산광역시",
-  "대구광역시",
-  "인천광역시",
-  "광주광역시",
-  "대전광역시",
-  "울산광역시",
-  "세종특별자치시",
-  "경기도",
-  "강원도",
-  "충청북도",
-  "충청남도",
-  "전라북도",
-  "전라남도",
-  "경상북도",
-  "경상남도",
-  "제주특별자치도",
-];
 
 const EditTeamForm = ({
   data,
   teamId,
-}: // userId,
-{
+}: {
   data: Team;
   teamId: string;
   userId: string;
@@ -70,10 +51,69 @@ const EditTeamForm = ({
       description: data.description || undefined,
       city: data.city,
       district: data.district,
+      teamMatchAvailable: data.teamMatchAvailable,
       level: data.level,
       recruitmentStatus: data.recruitmentStatus,
     },
   });
+
+  const [selectedCity, setSelectedCity] = useState<string>(data.city);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | undefined>(
+    data.district
+  );
+
+  console.log(selectedCity, selectedDistrict, "selectedCity, selectedDistrict");
+
+  // 선택된 도시의 코드 조회
+  const selectedCityCode = useMemo(() => {
+    return cityData.find((city) => city.addr_name === selectedCity)?.cd;
+  }, [selectedCity]);
+
+  // 시군구 데이터 조회
+  const { data: districtsData, isLoading: isDistrictsLoading } =
+    useDistricts(selectedCityCode);
+
+  // 시도 옵션 - 메모이제이션
+  const cityOptions = useMemo(
+    () =>
+      cityData.map((city) => (
+        <option key={city.addr_name} value={city.addr_name}>
+          {city.addr_name}
+        </option>
+      )),
+    []
+  );
+
+  // 시군구 옵션 - 메모이제이션
+  const districtOptions = useMemo(
+    () =>
+      districtsData?.result?.map((district) => (
+        <option key={district.addr_name} value={district.addr_name}>
+          {district.addr_name}
+        </option>
+      )) || [],
+    [districtsData?.result]
+  );
+
+  const handleCityChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const cityName = e.target.value;
+      setSelectedCity(cityName);
+      setValue("city", cityName);
+      // 도시 변경 시 구/군 선택 초기화
+      setSelectedDistrict(undefined);
+      setValue("district", "");
+    },
+    [setSelectedCity, setValue]
+  );
+
+  const handleDistrictChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedDistrict(e.target.value);
+      setValue("district", e.target.value);
+    },
+    [setSelectedDistrict, setValue]
+  );
 
   const onSubmit = async (formData: EditTeamFormData) => {
     setIsLoading(true);
@@ -173,6 +213,18 @@ const EditTeamForm = ({
       </div>
 
       <div className="space-y-3">
+        <Label className="px-1">친선전 초청 여부</Label>
+        <CustomRadioGroup
+          options={TEAM_MATCH_AVAILABLE_OPTIONS}
+          value={watch("teamMatchAvailable")}
+          onValueChange={(value) =>
+            setValue("teamMatchAvailable", value as "AVAILABLE" | "UNAVAILABLE")
+          }
+          error={errors.teamMatchAvailable?.message}
+        />
+      </div>
+
+      <div className="space-y-3">
         <Label className="px-1">팀 실력</Label>
         <CustomRadioGroup
           options={TEAM_LEVEL_OPTIONS}
@@ -183,31 +235,35 @@ const EditTeamForm = ({
         />
       </div>
 
-      <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-3">
-            <Label className="px-1">시/도</Label>
-            <CustomSelect
-              // hasPlaceholder
-              placeholder="선택"
-              options={koreanCities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-              value={watch("city")}
-              onChange={(e) => setValue("city", e.target.value)}
-            />
+      {/* 활동 지역 섹션 */}
+      <div className="bg-white rounded-lg overflow-hidden">
+        <div className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-100">
+          <div className="flex items-center space-x-3">
+            <MapPin className="size-5" />
+            <span className="font-medium">활동 지역</span>
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-1 shrink-0 p-4">
+          <CustomSelect
+            key={`city-${selectedCity}`}
+            placeholder="시도 선택"
+            className="min-w-32 shrink-0"
+            options={cityOptions}
+            value={selectedCity || ""}
+            onChange={handleCityChange}
+            aria-label="시도 선택"
+          />
 
-          <div className="space-y-3">
-            <Label className="px-1">구/군</Label>
-            <Input
-              type="text"
-              {...register("district")}
-              placeholder="구/군을 입력하세요"
-            />
-          </div>
+          <CustomSelect
+            key={`district-${selectedDistrict}`}
+            disabled={!selectedCity || isDistrictsLoading}
+            placeholder={isDistrictsLoading ? "로딩 중..." : "시군구 선택"}
+            className="min-w-32 shrink-0"
+            options={districtOptions}
+            value={selectedDistrict || ""}
+            onChange={handleDistrictChange}
+            aria-label="시군구 선택"
+          />
         </div>
       </div>
 
