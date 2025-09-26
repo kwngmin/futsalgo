@@ -206,7 +206,7 @@ export async function getPlayers(
 
     const userPromise = session?.user?.id
       ? prisma.user.findUnique({
-          where: { id: session.user.id },
+          where: { id: session.user.id, ...filterConditions },
           include: createTeamIncludeOptions(),
         })
       : Promise.resolve(null);

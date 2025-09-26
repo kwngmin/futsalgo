@@ -253,8 +253,18 @@ const PlayersPage = () => {
             />
           ) : null}
 
+          {/* {isLoggedIn && currentUser  */}
+
           {isLoggedIn && currentUser && (
             <div className="flex items-center gap-2 mt-3 overflow-hidden px-5 h-8">
+              <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
+                전체 회원
+              </span>
+              <Separator className="min-w-20 grow data-[orientation=horizontal]:w-auto" />
+            </div>
+          )}
+          {!currentUser && players.length > 0 && (
+            <div className="flex items-center gap-2 overflow-hidden px-5 h-8">
               <span className="text-sm sm:text-xs font-medium text-gray-700 shrink-0">
                 전체 회원
               </span>
