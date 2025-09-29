@@ -240,7 +240,7 @@ const EditTeamForm = ({
       </div>
 
       {/* 인스타그램, 유튜브 */}
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
         <div className="space-y-3">
           <Label className="px-1">인스타그램</Label>
           <Input
