@@ -499,47 +499,49 @@ const PlayerContent = ({ id }: { id: string }) => {
             <div className="flex items-center gap-2">2025년</div>
           </div>
 
-          {/* 자체전 통계 */}
-          <div className="overflow-hidden rounded-2xl mb-3">
-            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
-              <div className="flex items-center space-x-3">
-                {/* <ChartPie className="size-5 text-gray-600" /> */}
-                <span className="font-medium">자체전</span>
-              </div>
-              {/* <div className="flex items-center gap-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {/* 자체전 통계 */}
+            <div className="overflow-hidden rounded-2xl mb-3">
+              <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
+                <div className="flex items-center space-x-3">
+                  {/* <ChartPie className="size-5 text-gray-600" /> */}
+                  <span className="font-medium">자체전</span>
+                </div>
+                {/* <div className="flex items-center gap-1">
               <span className="text-base font-medium text-gray-500">
                 {new Date().getFullYear()}년
               </span>
               <ChevronRight className="size-5 text-gray-400" />
             </div> */}
+              </div>
+              <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
+                <StatCard label="경기" value={playerData.stats.squad.matches} />
+                <StatCard label="득점" value={playerData.stats.squad.goals} />
+                <StatCard label="도움" value={playerData.stats.squad.assists} />
+                <StatCard label="MVP" value={playerData.stats.squad.mvp} />
+              </div>
             </div>
-            <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
-              <StatCard label="경기" value={playerData.stats.squad.matches} />
-              <StatCard label="득점" value={playerData.stats.squad.goals} />
-              <StatCard label="도움" value={playerData.stats.squad.assists} />
-              <StatCard label="MVP" value={playerData.stats.squad.mvp} />
-            </div>
-          </div>
 
-          {/* 친선전 통계 */}
-          <div className="overflow-hidden rounded-2xl mb-3">
-            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
-              <div className="flex items-center space-x-3">
-                {/* <ChartPie className="size-5 text-gray-600" /> */}
-                <span className="font-medium">친선전</span>
-              </div>
-              {/* <div className="flex items-center gap-1">
+            {/* 친선전 통계 */}
+            <div className="overflow-hidden rounded-2xl mb-3">
+              <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
+                <div className="flex items-center space-x-3">
+                  {/* <ChartPie className="size-5 text-gray-600" /> */}
+                  <span className="font-medium">친선전</span>
+                </div>
+                {/* <div className="flex items-center gap-1">
               <span className="text-base font-medium text-gray-500">
                 {new Date().getFullYear()}년
               </span>
               <ChevronRight className="size-5 text-gray-400" />
             </div> */}
-            </div>
-            <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
-              <StatCard label="경기" value={playerData.stats.team.matches} />
-              <StatCard label="득점" value={playerData.stats.team.goals} />
-              <StatCard label="도움" value={playerData.stats.team.assists} />
-              <StatCard label="MVP" value={playerData.stats.team.mvp} />
+              </div>
+              <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
+                <StatCard label="경기" value={playerData.stats.team.matches} />
+                <StatCard label="득점" value={playerData.stats.team.goals} />
+                <StatCard label="도움" value={playerData.stats.team.assists} />
+                <StatCard label="MVP" value={playerData.stats.team.mvp} />
+              </div>
             </div>
           </div>
         </div>
