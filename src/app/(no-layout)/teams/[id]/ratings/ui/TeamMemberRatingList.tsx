@@ -222,67 +222,70 @@ export default function TeamMemberRatingList({
       {isModalOpen && selectedMember && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-medium text-gray-900">
-                  {selectedMember.user.nickname || selectedMember.user.name}{" "}
-                </h2>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-400 hover:text-gray-600 cursor-pointer"
-                >
-                  <X className="size-6" />
-                </button>
-              </div>
+            {/* header */}
+            <div className="flex items-center justify-between px-4 h-16">
+              <h2 className="text-xl font-medium text-gray-900">
+                {selectedMember.user.nickname || selectedMember.user.name}{" "}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-600 cursor-pointer"
+              >
+                <X className="size-6" />
+              </button>
+            </div>
 
-              <div className="space-y-6">
-                {RATING_ITEMS.map((item) => (
-                  <div key={item.key} className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg">{item.icon}</span>
-                      <label className="font-medium text-gray-700">
-                        {item.label}
-                      </label>
-                      <span className="ml-auto text-lg font-semibold text-blue-600">
-                        {ratings[item.key]}점
+            {/* rating items */}
+            <div className="px-4 divide-y divide-gray-100">
+              {RATING_ITEMS.map((item) => (
+                <div
+                  key={item.key}
+                  className="h-18 sm:h-16 flex items-center justify-between space-x-2 gap-1"
+                >
+                  <label className="text-lg font-medium text-gray-700">
+                    {item.label}
+                  </label>
+                  <div className="flex gap-2 items-center">
+                    {[1, 2, 3, 4, 5].map((score) => (
+                      <button
+                        key={score}
+                        onClick={() => handleRatingChange(item.key, score)}
+                        className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
+                          ratings[item.key] >= score
+                            ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
+                            : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700"
+                        }`}
+                      >
+                        {score}
+                      </button>
+                    ))}
+                    <span className="hidden sm:block text-gray-600 ml-4">
+                      <span className="font-medium text-gray-800">
+                        {ratings[item.key]}
                       </span>
-                    </div>
-
-                    <div className="flex space-x-2">
-                      {[1, 2, 3, 4, 5].map((score) => (
-                        <button
-                          key={score}
-                          onClick={() => handleRatingChange(item.key, score)}
-                          className={`w-10 h-10 rounded-full border-2 font-semibold transition-colors ${
-                            ratings[item.key] >= score
-                              ? "bg-blue-500 border-blue-500 text-white"
-                              : "border-gray-300 text-gray-400 hover:border-blue-300"
-                          }`}
-                        >
-                          {score}
-                        </button>
-                      ))}
-                    </div>
+                      점
+                    </span>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
+            </div>
 
-              <div className="flex space-x-3 mt-8">
-                <button
-                  onClick={closeModal}
-                  disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
-                >
-                  취소
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
-                >
-                  {isSubmitting ? "저장 중..." : "저장"}
-                </button>
-              </div>
+            {/* footer */}
+            <div className="flex space-x-1 p-4">
+              <button
+                onClick={closeModal}
+                disabled={isSubmitting}
+                className="flex-1 px-4 h-11 sm:h-10 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="flex-1 px-4 h-11 sm:h-10 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 cursor-pointer font-medium"
+              >
+                {isSubmitting ? "저장 중..." : "저장"}
+              </button>
             </div>
           </div>
         </div>
