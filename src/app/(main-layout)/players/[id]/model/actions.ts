@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import { MatchType, type Prisma } from "@prisma/client";
 
 // 기본 사용자 정보와 팀 정보
 const baseUserInclude = {
@@ -157,12 +157,6 @@ function getUniqueMatchesCount(lineups: LineupWithMatch[]): number {
 
 export async function getPlayer(id: string) {
   try {
-    // const currentYear = new Date().getFullYear();
-    // 현재 날짜 정보
-    // const currentDate = new Date();
-    // const currentYear = currentDate.getFullYear();
-    // const currentMonth = currentDate.getMonth() + 1;
-
     // 기본 사용자 정보 조회
     const player = await prisma.user.findUnique({
       where: { id },
@@ -176,13 +170,19 @@ export async function getPlayer(id: string) {
       } as const;
     }
 
-    // 통계 데이터를 별도로 조회
-    const [lineups, goals, assists, attendances, playerRatings] =
+    // 친선전 통계 데이터를 별도로 조회
+    const [teamLineups, teamGoals, teamAssists, teamAttendances] =
       await Promise.all([
         // 경기 참여 데이터
         prisma.lineup.findMany({
           where: {
             userId: id,
+            match: {
+              isLinedUp: true,
+              schedule: {
+                matchType: MatchType.TEAM,
+              },
+            },
           },
           include: {
             match: {
@@ -198,6 +198,12 @@ export async function getPlayer(id: string) {
           where: {
             scorerId: id,
             isOwnGoal: false,
+            match: {
+              isLinedUp: true,
+              schedule: {
+                matchType: MatchType.TEAM,
+              },
+            },
           },
           include: {
             match: {
@@ -212,6 +218,12 @@ export async function getPlayer(id: string) {
         prisma.goalRecord.findMany({
           where: {
             assistId: id,
+            match: {
+              isLinedUp: true,
+              schedule: {
+                matchType: MatchType.TEAM,
+              },
+            },
           },
           include: {
             match: {
@@ -228,6 +240,90 @@ export async function getPlayer(id: string) {
             userId: id,
             mvpReceived: {
               gt: 0,
+            },
+            schedule: {
+              matchType: MatchType.TEAM,
+            },
+          },
+          include: {
+            schedule: true,
+          },
+        }),
+      ]);
+
+    // 자체전 통계 데이터를 별도로 조회
+    const [squadLineups, squadGoals, squadAssists, squadAttendances] =
+      await Promise.all([
+        // 경기 참여 데이터
+        prisma.lineup.findMany({
+          where: {
+            userId: id,
+            match: {
+              isLinedUp: true,
+              schedule: {
+                matchType: MatchType.SQUAD,
+              },
+            },
+          },
+          include: {
+            match: {
+              include: {
+                schedule: true,
+              },
+            },
+          },
+        }),
+
+        // 득점 데이터
+        prisma.goalRecord.findMany({
+          where: {
+            scorerId: id,
+            isOwnGoal: false,
+            match: {
+              isLinedUp: true,
+              schedule: {
+                matchType: MatchType.SQUAD,
+              },
+            },
+          },
+          include: {
+            match: {
+              include: {
+                schedule: true,
+              },
+            },
+          },
+        }),
+
+        // 어시스트 데이터
+        prisma.goalRecord.findMany({
+          where: {
+            assistId: id,
+            match: {
+              isLinedUp: true,
+              schedule: {
+                matchType: MatchType.SQUAD,
+              },
+            },
+          },
+          include: {
+            match: {
+              include: {
+                schedule: true,
+              },
+            },
+          },
+        }),
+
+        // MVP 데이터
+        prisma.scheduleAttendance.findMany({
+          where: {
+            userId: id,
+            mvpReceived: {
+              gt: 0,
+            },
+            schedule: {
+              matchType: MatchType.SQUAD,
             },
           },
           include: {
@@ -261,20 +357,57 @@ export async function getPlayer(id: string) {
         }),
       ]);
 
+    // 팀원 평가 데이터
+    const playerRatings = await prisma.teamMemberRating.findMany({
+      where: {
+        toUserId: id,
+        // periodYear: currentYear,
+        // periodMonth: currentMonth,
+      },
+      include: {
+        fromUser: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+            image: true,
+          },
+        },
+        team: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
     const filteredTeams = player.teams.filter(
       (team) => team.team.status === "ACTIVE"
     );
 
     // 통계 계산
     const stats = {
-      matches: getUniqueMatchesCount(lineups),
-      goals: goals.length,
-      assists: assists.length,
-      mvp: attendances.reduce(
-        (total: number, attendance: AttendanceWithSchedule) =>
-          total + attendance.mvpReceived,
-        0
-      ),
+      team: {
+        matches: getUniqueMatchesCount(teamLineups),
+        goals: teamGoals.length,
+        assists: teamAssists.length,
+        mvp: teamAttendances.reduce(
+          (total: number, attendance: AttendanceWithSchedule) =>
+            total + attendance.mvpReceived,
+          0
+        ),
+      },
+      squad: {
+        matches: getUniqueMatchesCount(squadLineups),
+        goals: squadGoals.length,
+        assists: squadAssists.length,
+        mvp: squadAttendances.reduce(
+          (total: number, attendance: AttendanceWithSchedule) =>
+            total + attendance.mvpReceived,
+          0
+        ),
+      },
     };
 
     // 평가 데이터 처리
@@ -301,10 +434,18 @@ export async function getPlayer(id: string) {
 // 컴포넌트에서 사용할 수 있도록 타입 내보내기
 export type PlayerData = PlayerWithTeams & {
   stats: {
-    matches: number;
-    goals: number;
-    assists: number;
-    mvp: number;
+    team: {
+      matches: number;
+      goals: number;
+      assists: number;
+      mvp: number;
+    };
+    squad: {
+      matches: number;
+      goals: number;
+      assists: number;
+      mvp: number;
+    };
   };
   ratings: ProcessedRatings;
 };

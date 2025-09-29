@@ -11,8 +11,6 @@ import {
   Cake,
   CalendarCheck2,
   CalendarDays,
-  ChartPie,
-  ChevronRight,
   Footprints,
   History,
   Loader2,
@@ -37,12 +35,13 @@ import InjuredBadge from "@/shared/components/ui/InjuredBadge";
 // import PlayerPhotosGallery from "./PlayerPhotosGallery";
 // import PlayerSchedule from "./PlayerSchedule";
 import PlayerRatingRadarChart from "./PlayerRadarChart";
+import { ChartBarIcon } from "@phosphor-icons/react";
 
 // 서버 액션에서 가져온 타입을 그대로 사용
 
 const StatCard = ({ label, value }: { label: string; value: number }) => (
-  <div className="flex flex-col gap-1 items-center my-3">
-    <div className="font-medium">{value}</div>
+  <div className="flex flex-col gap-1 items-center my-2 pb-2">
+    <div className="font-semibold">{value}</div>
     <Label className="text-muted-foreground">{label}</Label>
   </div>
 );
@@ -491,28 +490,57 @@ const PlayerContent = ({ id }: { id: string }) => {
         {/* 레이더 차트 */}
         <PlayerRatingRadarChart ratingsData={playerData.ratings} />
 
-        {/* 통계 */}
-        <div className="border rounded-2xl overflow-hidden mx-4">
-          <div
-            className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors"
-            onClick={() => alert("통계")}
-          >
-            <div className="flex items-center space-x-3">
-              <ChartPie className="size-5 text-gray-600" />
-              <span className="font-medium">통계</span>
+        <div className="px-4">
+          <div className="flex justify-between items-center py-2 min-h-13">
+            <div className="flex items-center gap-2">
+              <ChartBarIcon weight="fill" className="size-7 text-zinc-500" />
+              <h2 className="text-xl font-semibold">통계</h2>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">2025년</div>
+          </div>
+
+          {/* 자체전 통계 */}
+          <div className="overflow-hidden rounded-2xl mb-3">
+            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
+              <div className="flex items-center space-x-3">
+                {/* <ChartPie className="size-5 text-gray-600" /> */}
+                <span className="font-medium">자체전</span>
+              </div>
+              {/* <div className="flex items-center gap-1">
               <span className="text-base font-medium text-gray-500">
                 {new Date().getFullYear()}년
               </span>
               <ChevronRight className="size-5 text-gray-400" />
+            </div> */}
+            </div>
+            <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
+              <StatCard label="경기" value={playerData.stats.squad.matches} />
+              <StatCard label="득점" value={playerData.stats.squad.goals} />
+              <StatCard label="도움" value={playerData.stats.squad.assists} />
+              <StatCard label="MVP" value={playerData.stats.squad.mvp} />
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-3 px-4 py-2 mb-2">
-            <StatCard label="경기" value={playerData.stats.matches} />
-            <StatCard label="득점" value={playerData.stats.goals} />
-            <StatCard label="어시스트" value={playerData.stats.assists} />
-            <StatCard label="MVP" value={playerData.stats.mvp} />
+
+          {/* 친선전 통계 */}
+          <div className="overflow-hidden rounded-2xl mb-3">
+            <div className="w-full flex items-center justify-between px-4 h-12 gap-3 bg-neutral-50">
+              <div className="flex items-center space-x-3">
+                {/* <ChartPie className="size-5 text-gray-600" /> */}
+                <span className="font-medium">친선전</span>
+              </div>
+              {/* <div className="flex items-center gap-1">
+              <span className="text-base font-medium text-gray-500">
+                {new Date().getFullYear()}년
+              </span>
+              <ChevronRight className="size-5 text-gray-400" />
+            </div> */}
+            </div>
+            <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
+              <StatCard label="경기" value={playerData.stats.team.matches} />
+              <StatCard label="득점" value={playerData.stats.team.goals} />
+              <StatCard label="도움" value={playerData.stats.team.assists} />
+              <StatCard label="MVP" value={playerData.stats.team.mvp} />
+            </div>
           </div>
         </div>
 
