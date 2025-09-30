@@ -426,12 +426,20 @@ const PlayerContent = ({ id }: { id: string }) => {
                   className="object-cover"
                 />
               </div>
-              <div className="absolute w-full h-full top-0 left-0 flex pl-4">
-                <div className="w-1/4 shrink-0" />
+              <div className="absolute w-full h-full top-0 left-0 flex">
+                <div className="h-full w-1/4 flex items-center justify-center">
+                  <div
+                    className={`mr-3 size-4 rounded-full ${
+                      playerData.position === "GOLEIRO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
                 <div className="h-full w-1/4 flex items-center justify-center">
                   <div
                     className={`size-4 rounded-full ${
-                      playerData.position === "PIVO"
+                      playerData.position === "FIXO"
                         ? "bg-red-500"
                         : "bg-white/50"
                     }`}
@@ -456,21 +464,13 @@ const PlayerContent = ({ id }: { id: string }) => {
                 <div className="h-full w-1/4 flex items-center justify-center">
                   <div
                     className={`size-4 rounded-full ${
-                      playerData.position === "FIXO"
+                      playerData.position === "PIVO"
                         ? "bg-red-500"
                         : "bg-white/50"
                     }`}
                   />
                 </div>
-                <div className="h-full w-1/4 flex items-center justify-center">
-                  <div
-                    className={`size-4 rounded-full ${
-                      playerData.position === "GOLEIRO"
-                        ? "bg-red-500"
-                        : "bg-white/50"
-                    }`}
-                  />
-                </div>
+                <div className="w-1/5 shrink-0" />
               </div>
             </div>
             {/* 포지션 표시 */}

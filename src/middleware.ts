@@ -17,35 +17,38 @@ export default async function middleware(request: NextRequest) {
   }
 
   // 로그인하지 않은 사용자 - 로그인 페이지로
-  if (!session?.user) {
-    console.log("로그인하지 않은 사용자");
-    const isPublicPage = pathname === "/login" || pathname === "/signup";
-    if (!isPublicPage) {
-      console.log("로그인 페이지로 리다이렉트");
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-    return NextResponse.next();
-  }
+  // if (!session?.user) {
+  //   console.log("로그인하지 않은 사용자");
+  //   const isPublicPage = pathname === "/login" || pathname === "/signup";
+  //   if (!isPublicPage) {
+  //     console.log("로그인 페이지로 리다이렉트");
+  //     return NextResponse.redirect(new URL("/login", request.url));
+  //   }
+  //   return NextResponse.next();
+  // }
 
   // 로그인한 사용자
-  const isOnboardingComplete = session.user.onboardingStep === "COMPLETE";
+  if (session?.user) {
+    // 로그인한 사용자 온보딩 완료 여부
+    const isOnboardingComplete = session.user.onboardingStep === "COMPLETE";
 
-  // 온보딩 미완료 사용자는 무조건 온보딩 페이지로
-  if (!isOnboardingComplete && !isOnboardingPage) {
-    console.log("온보딩 미완료 사용자는 무조건 온보딩 페이지로 리다이렉트");
-    return NextResponse.redirect(new URL("/onboarding", request.url));
-  }
+    // 온보딩 미완료 사용자는 무조건 온보딩 페이지로
+    if (!isOnboardingComplete && !isOnboardingPage) {
+      console.log("온보딩 미완료 사용자는 무조건 온보딩 페이지로 리다이렉트");
+      return NextResponse.redirect(new URL("/onboarding", request.url));
+    }
 
-  // 온보딩 완료 사용자가 온보딩 페이지 접근 시 홈으로
-  if (isOnboardingComplete && isOnboardingPage) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+    // 온보딩 완료 사용자가 온보딩 페이지 접근 시 홈으로
+    if (isOnboardingComplete && isOnboardingPage) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
 
-  // 로그인 완료 사용자가 로그인/회원가입 페이지 접근 시
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
-  if (isAuthPage) {
-    const redirectUrl = isOnboardingComplete ? "/" : "/onboarding";
-    return NextResponse.redirect(new URL(redirectUrl, request.url));
+    // 로그인 완료 사용자가 로그인/회원가입 페이지 접근 시
+    const isAuthPage = pathname === "/login" || pathname === "/signup";
+    if (isAuthPage) {
+      const redirectUrl = isOnboardingComplete ? "/" : "/onboarding";
+      return NextResponse.redirect(new URL(redirectUrl, request.url));
+    }
   }
 
   return NextResponse.next();

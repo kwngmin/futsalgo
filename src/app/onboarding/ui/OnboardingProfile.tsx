@@ -35,6 +35,7 @@ import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { validateBirthDate } from "@/features/validation/model/actions";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -62,6 +63,8 @@ const profileSchema = z.object({
   skillLevel: z.enum(["BEGINNER", "AMATEUR", "ACE", "SEMIPRO"], {
     error: () => "실력 수준을 선택해주세요",
   }),
+  instagram: z.string().optional(),
+  youtube: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -237,6 +240,59 @@ export function OnboardingProfile({
           {/* 포지션 */}
           <div className="space-y-3">
             <Label className="px-1">선호하는 포지션</Label>
+            <div className="relative select-none sm:hidden">
+              <div className="w-full h-full flex items-center justify-center ">
+                <Image
+                  src="/full_pitch.svg"
+                  alt="position"
+                  width={806}
+                  height={406}
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute w-full h-full top-0 left-0 flex">
+                <div className="h-full w-1/4 flex items-center justify-center">
+                  <div
+                    className={`mr-3 size-4 rounded-full ${
+                      watch("position") === "GOLEIRO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="h-full w-1/4 flex items-center justify-center">
+                  <div
+                    className={`size-4 rounded-full ${
+                      watch("position") === "FIXO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="h-full w-1/4 flex flex-col justify-between items-center py-5 sm:py-4">
+                  <div
+                    className={`size-4 rounded-full ${
+                      watch("position") === "ALA" ? "bg-red-500" : "bg-white/50"
+                    }`}
+                  />
+                  <div
+                    className={`size-4 rounded-full ${
+                      watch("position") === "ALA" ? "bg-red-500" : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="h-full w-1/4 flex items-center justify-center">
+                  <div
+                    className={`size-4 rounded-full ${
+                      watch("position") === "PIVO"
+                        ? "bg-red-500"
+                        : "bg-white/50"
+                    }`}
+                  />
+                </div>
+                <div className="w-1/5 shrink-0" />
+              </div>
+            </div>
             <CustomRadioGroup
               options={FUTSAL_POSITION_OPTIONS}
               value={watch("position") ?? ""}
@@ -246,52 +302,33 @@ export function OnboardingProfile({
             />
           </div>
 
-          {/* 축구 포지션 */}
-          {/* {(watch("sportType") === "FOOTBALL" ||
-            watch("sportType") === "BOTH") && (
-            <div className="space-y-3">
-              <Label className="px-1">
-                선호하는 축구 포지션 • {selectedPositions?.length || 0}/5
-              </Label>
-              <div className="flex flex-wrap gap-2">
-                {FOOTBALL_POSITION_OPTIONS.map((position) => (
-                  <Badge
-                    key={position.value}
-                    variant={
-                      selectedPositions?.includes(position.value)
-                        ? "default"
-                        : "outline"
-                    }
-                    className="cursor-pointer text-center justify-center items-center h-9 px-4 rounded-full"
-                    onClick={() =>
-                      togglePosition(
-                        position.value as unknown as FootballPosition
-                      )
-                    }
-                  >
-                    {`${position.value} - ${position.label}`}
-                  </Badge>
-                ))}
-              </div>
-              {errors.footballPositions && (
-                <Alert>
-                  <AlertDescription>
-                    {errors.footballPositions.message}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </div>
-          )} */}
-
           {/* 선수 출신 여부 */}
           <div className="space-y-3">
             <Label className="px-1">출신</Label>
             <CustomRadioGroup
               options={PLAYER_BACKGROUND_OPTIONS}
               value={watch("playerBackground")}
-              onValueChange={(value) =>
-                setValue("playerBackground", value as PlayerBackground)
-              }
+              onValueChange={(value) => {
+                setValue("playerBackground", value as PlayerBackground);
+
+                // 선수 출신 여부에 따라 실력 수준 변경
+                if (
+                  value === "PROFESSIONAL" &&
+                  (watch("skillLevel") === "AMATEUR" ||
+                    watch("skillLevel") === "BEGINNER")
+                ) {
+                  setValue("skillLevel", "SEMIPRO");
+                }
+
+                // 비선수 출신 여부에 따라 실력 수준 변경
+                if (
+                  value === "NON_PROFESSIONAL" &&
+                  (watch("skillLevel") === "SEMIPRO" ||
+                    watch("skillLevel") === "ACE")
+                ) {
+                  setValue("skillLevel", "BEGINNER");
+                }
+              }}
               error={errors.playerBackground?.message}
             />
           </div>
@@ -300,7 +337,16 @@ export function OnboardingProfile({
           <div className="space-y-3">
             <Label className="px-1">실력</Label>
             <CustomRadioGroup
-              options={SKILL_LEVEL_OPTIONS}
+              key={watch("playerBackground")}
+              options={
+                watch("playerBackground") === "PROFESSIONAL"
+                  ? SKILL_LEVEL_OPTIONS.filter(
+                      (option) =>
+                        option.value !== "AMATEUR" &&
+                        option.value !== "BEGINNER"
+                    )
+                  : SKILL_LEVEL_OPTIONS
+              }
               value={watch("skillLevel")}
               onValueChange={(value) =>
                 setValue("skillLevel", value as PlayerSkillLevel)
@@ -308,6 +354,40 @@ export function OnboardingProfile({
               error={errors.skillLevel?.message}
               direction="vertical"
             />
+          </div>
+
+          {/* 인스타그램 */}
+          <div className="space-y-3">
+            <Label htmlFor="name" className="px-1">
+              인스타그램 (선택)
+            </Label>
+            <Input
+              {...register("instagram")}
+              id="instagram"
+              placeholder="예) futsalgo_official"
+            />
+            {errors.instagram && (
+              <Alert variant="destructive">
+                <AlertDescription>{errors.instagram.message}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+
+          {/* 유튜브 */}
+          <div className="space-y-3">
+            <Label htmlFor="name" className="px-1">
+              유튜브 (선택)
+            </Label>
+            <Input
+              {...register("youtube")}
+              id="youtube"
+              placeholder="예) futsalgo_official"
+            />
+            {errors.youtube && (
+              <Alert variant="destructive">
+                <AlertDescription>{errors.youtube.message}</AlertDescription>
+              </Alert>
+            )}
           </div>
 
           {errors.root && (

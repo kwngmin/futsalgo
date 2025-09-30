@@ -32,9 +32,9 @@ export function OnboardingNickname({
     if (nickname.status === "valid") {
       try {
         await updateNickname(nickname.value);
-        await updateOnboardingStep(OnboardingStep.NICKNAME);
+        await updateOnboardingStep(OnboardingStep.PROFILE);
         await update({
-          user: { ...session?.user, onboardingStep: OnboardingStep.NICKNAME },
+          user: { ...session?.user, onboardingStep: OnboardingStep.PROFILE },
         });
         setCurrentStep(OnboardingStep.PROFILE);
       } catch (error) {

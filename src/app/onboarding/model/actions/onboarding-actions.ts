@@ -32,8 +32,6 @@ export async function updateOnboardingStep(
       "PHONE",
       "NICKNAME",
       "PROFILE",
-      "PLAYER",
-      "SNS",
       "COMPLETE",
     ];
 
