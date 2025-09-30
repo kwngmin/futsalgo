@@ -16,7 +16,7 @@ import { Loader2, Check, X } from "lucide-react";
 import { updateNickname } from "@/app/(no-layout)/profile/model/actions";
 import { useNicknameValidation } from "@/features/validation/hooks/use-validation";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { OnboardingStep } from "@prisma/client";
 
 export function OnboardingNickname({
@@ -45,6 +45,13 @@ export function OnboardingNickname({
 
   return (
     <Card className="w-full max-w-md mx-auto">
+      <button
+        onClick={() => signOut()}
+        type="button"
+        className="absolute top-4 right-4"
+      >
+        <X className="size-5 text-gray-500" />
+      </button>
       <CardHeader>
         <CardTitle>닉네임 설정</CardTitle>
         <CardDescription>

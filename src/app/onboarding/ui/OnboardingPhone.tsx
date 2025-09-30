@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 import { updatePhone } from "@/app/(no-layout)/profile/model/actions";
 import { usePhoneValidation } from "@/features/validation/hooks/use-validation";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
 import { OnboardingStep } from "@prisma/client";
 
@@ -46,6 +46,13 @@ export function OnboardingPhone({
 
   return (
     <Card className="w-full max-w-md mx-auto">
+      <button
+        onClick={() => signOut()}
+        type="button"
+        className="absolute top-4 right-4"
+      >
+        <X className="size-5 text-gray-500" />
+      </button>
       <CardHeader>
         <CardTitle>전화번호 입력</CardTitle>
         <CardDescription>

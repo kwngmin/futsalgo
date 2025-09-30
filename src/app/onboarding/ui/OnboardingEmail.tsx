@@ -18,7 +18,7 @@ import { updateEmail } from "@/app/(no-layout)/profile/model/actions";
 import { useEmailValidation } from "@/features/validation/hooks/use-validation";
 import { OnboardingStep } from "@prisma/client";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export function OnboardingEmail({
   setCurrentStep,
@@ -50,6 +50,13 @@ export function OnboardingEmail({
 
   return (
     <Card className="w-full max-w-md mx-auto">
+      <button
+        onClick={() => signOut()}
+        type="button"
+        className="absolute top-4 right-4"
+      >
+        <X className="size-5 text-gray-500" />
+      </button>
       <CardHeader>
         <CardTitle>이메일 확인</CardTitle>
         <CardDescription>사용할 이메일 주소를 확인해주세요</CardDescription>

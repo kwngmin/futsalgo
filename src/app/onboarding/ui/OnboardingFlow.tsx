@@ -11,7 +11,6 @@ import { OnboardingStep } from "@prisma/client";
 
 export function OnboardingFlow() {
   const { data: session } = useSession();
-  console.log(session, "session");
   const initialStep = session?.user?.onboardingStep || OnboardingStep.EMAIL;
   const [currentStep, setCurrentStep] = useState<OnboardingStep>(initialStep);
 

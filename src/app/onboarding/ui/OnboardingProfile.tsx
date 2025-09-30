@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import {
   Position,
   PlayerBackground,
@@ -34,7 +34,7 @@ import {
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { validateBirthDate } from "@/features/validation/model/actions";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
 // 실력 등급별 사용 가능한 총 포인트
@@ -210,6 +210,13 @@ export function OnboardingProfile({
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
+      <button
+        onClick={() => signOut()}
+        type="button"
+        className="absolute top-4 right-4"
+      >
+        <X className="size-5 text-gray-500" />
+      </button>
       <CardHeader className="px-4">
         <CardTitle>프로필 정보 입력</CardTitle>
         <CardDescription>
@@ -438,7 +445,7 @@ export function OnboardingProfile({
           {selectedSkillLevel && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label className="px-1">자기평가</Label>
+                <Label className="px-1">자기 평가</Label>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">남은 포인트:</span>
                   <span
