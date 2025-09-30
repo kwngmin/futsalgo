@@ -36,7 +36,13 @@ export function AuthButton({
         <Image
           src={symbol}
           alt=""
-          className={providerName === "구글" ? "size-5.5" : "size-5"}
+          className={
+            providerName === "구글"
+              ? "size-5.5"
+              : providerName === "네이버"
+              ? "size-4.5"
+              : "size-5"
+          }
           width={24}
           height={24}
         />
