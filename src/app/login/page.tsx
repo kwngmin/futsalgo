@@ -52,8 +52,8 @@ export default function LoginPage() {
         </div>
 
         {/* 하단 정보 */}
-        <p className="mt-6 text-center text-sm text-gray-500 break-keep leading-normal px-4">
-          계속하면 Futsalgo의{" "}
+        <p className="mt-6 text-center sm:text-sm text-gray-500 break-keep leading-normal px-4">
+          계속하면 <span className="font-semibold">Futsalgo</span>의{" "}
           <a href="/terms" className="font-semibold text-gray-900">
             이용 약관
           </a>{" "}
