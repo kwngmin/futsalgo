@@ -9,13 +9,11 @@ import {
   Loader2,
   CircleUserRound,
   ChartPie,
-  // Heart,
   Bug,
-  // Bookmark,
   Lightbulb,
   NotebookPen,
 } from "lucide-react";
-import { signOut, signIn } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -112,7 +110,8 @@ const MorePage = () => {
             <div className="flex gap-2 justify-center mt-3">
               <button
                 className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                onClick={() => signIn()}
+                // onClick={() => signIn()}
+                onClick={() => router.push("/login")}
               >
                 시작하기
               </button>
