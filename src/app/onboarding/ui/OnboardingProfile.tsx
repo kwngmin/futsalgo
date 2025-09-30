@@ -17,8 +17,12 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2 } from "lucide-react";
-import { ValidationStep } from "../model/types";
-import { Position, PlayerBackground, PlayerSkillLevel } from "@prisma/client";
+import {
+  Position,
+  PlayerBackground,
+  PlayerSkillLevel,
+  OnboardingStep,
+} from "@prisma/client";
 import { updateProfileData } from "@/app/(no-layout)/profile/model/actions";
 import {
   FOOT_OPTIONS,
@@ -29,6 +33,8 @@ import {
 } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { validateBirthDate } from "@/features/validation/model/actions";
+import { updateOnboardingStep } from "../model/actions/onboarding-actions";
+import { useSession } from "next-auth/react";
 
 // 유효성 검증 스키마 (중복확인 필드 제외)
 const profileSchema = z.object({
@@ -63,8 +69,9 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 export function OnboardingProfile({
   setCurrentStep,
 }: {
-  setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
+  setCurrentStep: Dispatch<SetStateAction<OnboardingStep>>;
 }) {
+  const { data: session, update } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -108,7 +115,11 @@ export function OnboardingProfile({
       });
 
       if (response.success) {
-        setCurrentStep("complete");
+        await updateOnboardingStep(OnboardingStep.COMPLETE);
+        await update({
+          user: { ...session?.user, onboardingStep: OnboardingStep.NICKNAME },
+        });
+        setCurrentStep(OnboardingStep.COMPLETE);
         setTimeout(() => {
           router.push("/");
           router.refresh();
@@ -309,7 +320,7 @@ export function OnboardingProfile({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setCurrentStep("nickname")}
+              onClick={() => setCurrentStep(OnboardingStep.NICKNAME)}
               className="flex-1"
             >
               이전

@@ -13,15 +13,18 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { ValidationStep } from "../model/types";
 import { updateNickname } from "@/app/(no-layout)/profile/model/actions";
 import { useNicknameValidation } from "@/features/validation/hooks/use-validation";
+import { updateOnboardingStep } from "../model/actions/onboarding-actions";
+import { useSession } from "next-auth/react";
+import { OnboardingStep } from "@prisma/client";
 
 export function OnboardingNickname({
   setCurrentStep,
 }: {
-  setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
+  setCurrentStep: Dispatch<SetStateAction<OnboardingStep>>;
 }) {
+  const { data: session, update } = useSession();
   const { nickname, onChange } = useNicknameValidation();
 
   // 단계별 진행
@@ -29,7 +32,11 @@ export function OnboardingNickname({
     if (nickname.status === "valid") {
       try {
         await updateNickname(nickname.value);
-        setCurrentStep("profile");
+        await updateOnboardingStep(OnboardingStep.NICKNAME);
+        await update({
+          user: { ...session?.user, onboardingStep: OnboardingStep.NICKNAME },
+        });
+        setCurrentStep(OnboardingStep.PROFILE);
       } catch (error) {
         console.error("닉네임 업데이트 실패:", error);
       }
@@ -77,7 +84,7 @@ export function OnboardingNickname({
         <div className="flex gap-3">
           <Button
             variant="outline"
-            onClick={() => setCurrentStep("phone")}
+            onClick={() => setCurrentStep(OnboardingStep.PHONE)}
             className="flex-1"
           >
             이전

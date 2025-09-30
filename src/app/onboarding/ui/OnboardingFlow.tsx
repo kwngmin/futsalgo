@@ -7,22 +7,23 @@ import { OnboardingEmail } from "./OnboardingEmail";
 import { OnboardingPhone } from "./OnboardingPhone";
 import { OnboardingNickname } from "./OnboardingNickname";
 import { OnboardingProfile } from "./OnboardingProfile";
-import { ValidationStep } from "../model/types";
+import { OnboardingStep } from "@prisma/client";
 
 export function OnboardingFlow() {
   const { data: session } = useSession();
-  const initialStep = session?.user?.email ? "phone" : "email";
-  const [currentStep, setCurrentStep] = useState<ValidationStep>(initialStep);
+  console.log(session, "session");
+  const initialStep = session?.user?.onboardingStep || OnboardingStep.EMAIL;
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>(initialStep);
 
   // 완료 화면
-  if (currentStep === "complete") return <OnboardingComplete />;
+  if (currentStep === OnboardingStep.COMPLETE) return <OnboardingComplete />;
 
   // 이메일 확인 단계
-  if (currentStep === "email")
+  if (currentStep === OnboardingStep.EMAIL)
     return <OnboardingEmail setCurrentStep={setCurrentStep} />;
 
   // 전화번호 확인 단계
-  if (currentStep === "phone")
+  if (currentStep === OnboardingStep.PHONE)
     return (
       <OnboardingPhone
         setCurrentStep={setCurrentStep}
@@ -31,7 +32,7 @@ export function OnboardingFlow() {
     );
 
   // 닉네임 확인 단계
-  if (currentStep === "nickname")
+  if (currentStep === OnboardingStep.NICKNAME)
     return <OnboardingNickname setCurrentStep={setCurrentStep} />;
 
   // 프로필 정보 입력 단계

@@ -13,19 +13,21 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { ValidationStep } from "../model/types";
-// import { useRouter } from "next/navigation";
 import { updatePhone } from "@/app/(no-layout)/profile/model/actions";
 import { usePhoneValidation } from "@/features/validation/hooks/use-validation";
+import { useSession } from "next-auth/react";
+import { updateOnboardingStep } from "../model/actions/onboarding-actions";
+import { OnboardingStep } from "@prisma/client";
 
 export function OnboardingPhone({
   setCurrentStep,
   initialStep,
 }: {
-  setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
-  initialStep: ValidationStep;
+  setCurrentStep: Dispatch<SetStateAction<OnboardingStep>>;
+  initialStep: OnboardingStep;
 }) {
   // const router = useRouter();
+  const { data: session, update } = useSession();
   const { phone, onChange } = usePhoneValidation();
 
   // 단계별 진행
@@ -33,7 +35,11 @@ export function OnboardingPhone({
     if (phone.status === "valid") {
       try {
         await updatePhone(phone.value);
-        setCurrentStep("nickname");
+        await updateOnboardingStep(OnboardingStep.NICKNAME);
+        await update({
+          user: { ...session?.user, onboardingStep: OnboardingStep.NICKNAME },
+        });
+        setCurrentStep(OnboardingStep.NICKNAME);
       } catch (error) {
         console.error("전화번호 업데이트 실패:", error);
       }
@@ -79,7 +85,7 @@ export function OnboardingPhone({
           )}
         </div>
         <div className="flex gap-3">
-          {initialStep !== "phone" && (
+          {initialStep !== OnboardingStep.PHONE && (
             //   <Button
             //     variant="outline"
             //     onClick={() => router.push("/")}
@@ -90,7 +96,7 @@ export function OnboardingPhone({
             // ) : (
             <Button
               variant="outline"
-              onClick={() => setCurrentStep("email")}
+              onClick={() => setCurrentStep(OnboardingStep.EMAIL)}
               className="flex-1"
             >
               이전

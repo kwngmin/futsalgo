@@ -14,24 +14,34 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { ValidationStep } from "../model/types";
 import { updateEmail } from "@/app/(no-layout)/profile/model/actions";
 import { useEmailValidation } from "@/features/validation/hooks/use-validation";
+import { OnboardingStep } from "@prisma/client";
+import { updateOnboardingStep } from "../model/actions/onboarding-actions";
+import { useSession } from "next-auth/react";
 
 export function OnboardingEmail({
   setCurrentStep,
 }: {
-  setCurrentStep: Dispatch<SetStateAction<ValidationStep>>;
+  setCurrentStep: Dispatch<SetStateAction<OnboardingStep>>;
 }) {
   // const router = useRouter();
+  const { data: session, update } = useSession();
+
   const { email, onChange } = useEmailValidation();
+  console.log(session, "session default");
 
   // 단계별 진행
   const handleNextStep = async () => {
     if (email.status === "valid") {
       try {
         await updateEmail(email.value);
-        setCurrentStep("phone");
+        await updateOnboardingStep(OnboardingStep.PHONE);
+        await update({
+          user: { ...session?.user, onboardingStep: OnboardingStep.PHONE },
+        });
+        setCurrentStep(OnboardingStep.PHONE);
+        console.log(session, "session after");
       } catch (error) {
         console.error("이메일 업데이트 실패:", error);
       }
