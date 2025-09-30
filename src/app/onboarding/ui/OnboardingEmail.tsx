@@ -56,13 +56,13 @@ export function OnboardingEmail({
               placeholder="example@email.com"
             />
             {email.status === "checking" && (
-              <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin" />
+              <Loader2 className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 animate-spin" />
             )}
             {email.status === "valid" && (
-              <Check className="absolute right-3 top-2.5 h-4 w-4 text-green-600" />
+              <Check className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 text-green-600" />
             )}
             {email.status === "invalid" && (
-              <X className="absolute right-3 top-2.5 h-4 w-4 text-red-600" />
+              <X className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 text-red-600" />
             )}
           </div>
           {email.error && (

@@ -1,10 +1,13 @@
+// src/shared/lib/auth.ts
+
 import NextAuth, { type DefaultSession } from "next-auth";
 import { prisma } from "@/shared/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import Kakao from "next-auth/providers/kakao";
-// import Naver from "next-auth/providers/naver";
+import Naver from "next-auth/providers/naver";
+import { OnboardingStep } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session {
@@ -13,13 +16,19 @@ declare module "next-auth" {
       nickname: string | null;
       createdAt: Date;
       provider: string;
+      onboardingStep: OnboardingStep;
     } & DefaultSession["user"];
+  }
+  interface User {
+    nickname?: string | null;
+    onboardingStep?: OnboardingStep;
   }
   interface JWT {
     id?: string;
     nickname?: string | null;
     createdAt?: Date;
     provider?: string;
+    onboardingStep?: OnboardingStep;
   }
 }
 
@@ -63,8 +72,8 @@ export function CustomPrismaAdapter(): Adapter {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomPrismaAdapter(),
-  // providers: [Google, Kakao, Naver],
-  providers: [Google, Kakao],
+  providers: [Google, Kakao, Naver],
+  // providers: [Google, Kakao],
   // 세션 전략을 JWT로 설정
   session: {
     strategy: "jwt",
@@ -98,15 +107,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // 초기 로그인 시 또는 사용자 정보 업데이트 시
       if (user || trigger === "update") {
         try {
+          const userId = user?.id || (token.id as string);
+
           // 데이터베이스에서 최신 사용자 정보 가져오기
           const dbUser = await prisma.user.findUnique({
-            where: { id: user.id },
+            where: { id: userId },
+            select: {
+              id: true,
+              nickname: true,
+              createdAt: true,
+              onboardingStep: true,
+            },
           });
 
           if (dbUser) {
             token.id = dbUser.id;
             token.nickname = dbUser.nickname;
             token.createdAt = dbUser.createdAt;
+            token.onboardingStep = dbUser.onboardingStep;
           }
         } catch (error) {
           console.error("JWT 콜백에서 사용자 조회 실패:", error);
@@ -129,6 +147,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.createdAt = token.createdAt as Date;
         // Provider 정보도 세션에 포함
         session.user.provider = token.provider as string;
+        session.user.onboardingStep = token.onboardingStep as OnboardingStep;
       }
       return session;
     },
