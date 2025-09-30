@@ -46,6 +46,12 @@ const StatCard = ({ label, value }: { label: string; value: number }) => (
   </div>
 );
 
+const PROVIDER_LABEL = {
+  naver: "네이버",
+  google: "구글",
+  kakao: "카카오",
+};
+
 /**
  * yyyymmdd 형식의 문자열을 "yyyy년 m월 d일"로 변환
  * @param dateStr yyyymmdd 형식 문자열 (예: "19860302")
@@ -233,7 +239,12 @@ const PlayerContent = ({ id }: { id: string }) => {
                     </span>
                     {data?.data?.accounts?.[0]?.provider && (
                       <span className="text-sm tracking-tight">
-                        {` • ${data?.data?.accounts?.[0]?.provider}`}
+                        {` • ${
+                          PROVIDER_LABEL[
+                            data?.data?.accounts?.[0]
+                              ?.provider as keyof typeof PROVIDER_LABEL
+                          ]
+                        }`}
                       </span>
                     )}
                   </div>
@@ -252,7 +263,7 @@ const PlayerContent = ({ id }: { id: string }) => {
             ))}
           </div>
         ) : (
-          <div className="flex justify-center items-center px-4 py-6 my-3 font-medium text-muted-foreground">
+          <div className="flex justify-center items-center px-4 py-6 my-3 font-medium text-muted-foreground bg-gray-50 mx-4 rounded-md sm:text-sm">
             소속 팀이 존재하지 않습니다
           </div>
         )}

@@ -24,12 +24,7 @@ export function OnboardingFlow() {
 
   // 전화번호 확인 단계
   if (currentStep === OnboardingStep.PHONE)
-    return (
-      <OnboardingPhone
-        setCurrentStep={setCurrentStep}
-        initialStep={initialStep}
-      />
-    );
+    return <OnboardingPhone setCurrentStep={setCurrentStep} />;
 
   // 닉네임 확인 단계
   if (currentStep === OnboardingStep.NICKNAME)

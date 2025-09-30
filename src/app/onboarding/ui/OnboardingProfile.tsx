@@ -69,6 +69,24 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
+interface RatingData {
+  shooting: number;
+  passing: number;
+  stamina: number;
+  physical: number;
+  dribbling: number;
+  defense: number;
+}
+
+const RATING_ITEMS = [
+  { key: "shooting", label: "슈팅" },
+  { key: "passing", label: "패스" },
+  { key: "stamina", label: "체력" },
+  { key: "physical", label: "피지컬" },
+  { key: "dribbling", label: "드리블" },
+  { key: "defense", label: "수비" },
+] as const;
+
 export function OnboardingProfile({
   setCurrentStep,
 }: {
@@ -77,6 +95,22 @@ export function OnboardingProfile({
   const { data: session, update } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  const [ratings, setRatings] = useState<RatingData>({
+    shooting: 1,
+    passing: 1,
+    stamina: 1,
+    physical: 1,
+    dribbling: 1,
+    defense: 1,
+  });
+
+  const handleRatingChange = (key: keyof RatingData, value: number) => {
+    setRatings((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
   const {
     register,
@@ -88,24 +122,6 @@ export function OnboardingProfile({
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
   });
-
-  // const selectedPositions = watch("footballPositions");
-
-  // 포지션 토글
-  // const togglePosition = (position: string) => {
-  //   const current = selectedPositions || [];
-  //   let updated;
-
-  //   if (current.includes(position)) {
-  //     updated = current.filter((p) => p !== position);
-  //   } else if (current.length < 5) {
-  //     updated = [...current, position];
-  //   } else {
-  //     return; // 최대 5개 제한
-  //   }
-
-  //   setValue("footballPositions", updated);
-  // };
 
   // 최종 제출
   const onSubmit = async (data: ProfileFormData) => {
@@ -139,6 +155,8 @@ export function OnboardingProfile({
       setIsLoading(false);
     }
   };
+
+  console.log(errors, "errors");
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
@@ -217,7 +235,9 @@ export function OnboardingProfile({
               options={GENDER_OPTIONS}
               value={watch("gender")}
               onValueChange={(value) =>
-                setValue("gender", value as "MALE" | "FEMALE")
+                setValue("gender", value as "MALE" | "FEMALE", {
+                  shouldValidate: true,
+                })
               }
               error={errors.gender?.message}
             />
@@ -231,7 +251,9 @@ export function OnboardingProfile({
               options={FOOT_OPTIONS}
               value={watch("foot")}
               onValueChange={(value) =>
-                setValue("foot", value as "LEFT" | "RIGHT" | "BOTH")
+                setValue("foot", value as "LEFT" | "RIGHT" | "BOTH", {
+                  shouldValidate: true,
+                })
               }
               error={errors.foot?.message}
             />
@@ -296,7 +318,11 @@ export function OnboardingProfile({
             <CustomRadioGroup
               options={FUTSAL_POSITION_OPTIONS}
               value={watch("position") ?? ""}
-              onValueChange={(value) => setValue("position", value as Position)}
+              onValueChange={(value) =>
+                setValue("position", value as Position, {
+                  shouldValidate: true,
+                })
+              }
               error={errors.position?.message}
               direction="vertical"
             />
@@ -309,7 +335,9 @@ export function OnboardingProfile({
               options={PLAYER_BACKGROUND_OPTIONS}
               value={watch("playerBackground")}
               onValueChange={(value) => {
-                setValue("playerBackground", value as PlayerBackground);
+                setValue("playerBackground", value as PlayerBackground, {
+                  shouldValidate: true,
+                });
 
                 // 선수 출신 여부에 따라 실력 수준 변경
                 if (
@@ -349,16 +377,69 @@ export function OnboardingProfile({
               }
               value={watch("skillLevel")}
               onValueChange={(value) =>
-                setValue("skillLevel", value as PlayerSkillLevel)
+                setValue("skillLevel", value as PlayerSkillLevel, {
+                  shouldValidate: true,
+                })
               }
               error={errors.skillLevel?.message}
               direction="vertical"
             />
           </div>
 
+          {/* 능력치 */}
+          {watch("skillLevel") && (
+            <div className="">
+              {/* header */}
+              <div className="flex items-center justify-between">
+                <Label className="px-1">자기평가</Label>
+              </div>
+
+              {/* rating items */}
+              <div className="divide-y divide-gray-100">
+                {RATING_ITEMS.map((item, index) => (
+                  <div
+                    key={item.key}
+                    className="h-18 sm:h-16 flex items-center justify-between space-x-2 gap-1"
+                  >
+                    <div className="px-1 flex items-center gap-1">
+                      <span className="text-sm font-gray-300">
+                        {index + 1}.
+                      </span>
+                      <label className="text-sm font-medium text-gray-700">
+                        {item.label}
+                      </label>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                      {[1, 2, 3, 4, 5].map((score) => (
+                        <button
+                          key={score}
+                          type="button"
+                          onClick={() => handleRatingChange(item.key, score)}
+                          className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
+                            ratings[item.key] >= score
+                              ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
+                              : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700"
+                          }`}
+                        >
+                          {score}
+                        </button>
+                      ))}
+                      <span className="hidden sm:block text-gray-600 ml-4">
+                        <span className="font-medium text-gray-800">
+                          {ratings[item.key]}
+                        </span>
+                        점
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* 인스타그램 */}
           <div className="space-y-3">
-            <Label htmlFor="name" className="px-1">
+            <Label htmlFor="instagram" className="px-1">
               인스타그램 (선택)
             </Label>
             <Input
@@ -375,7 +456,7 @@ export function OnboardingProfile({
 
           {/* 유튜브 */}
           <div className="space-y-3">
-            <Label htmlFor="name" className="px-1">
+            <Label htmlFor="youtube" className="px-1">
               유튜브 (선택)
             </Label>
             <Input
@@ -397,14 +478,9 @@ export function OnboardingProfile({
           )}
 
           <div className="flex gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setCurrentStep(OnboardingStep.NICKNAME)}
-              className="flex-1"
-            >
-              이전
-            </Button>
+            {/* <Button variant="outline" className="flex-1">
+            로그아웃
+          </Button> */}
             <Button type="submit" disabled={isLoading} className="flex-1">
               {isLoading ? (
                 <>

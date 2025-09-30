@@ -21,10 +21,8 @@ import { OnboardingStep } from "@prisma/client";
 
 export function OnboardingPhone({
   setCurrentStep,
-  initialStep,
 }: {
   setCurrentStep: Dispatch<SetStateAction<OnboardingStep>>;
-  initialStep: OnboardingStep;
 }) {
   // const router = useRouter();
   const { data: session, update } = useSession();
@@ -66,13 +64,13 @@ export function OnboardingPhone({
               placeholder="'-' 없이 입력해주세요 (ex. 01012345678)"
             />
             {phone.status === "checking" && (
-              <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin" />
+              <Loader2 className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 animate-spin" />
             )}
             {phone.status === "valid" && (
-              <Check className="absolute right-3 top-2.5 h-4 w-4 text-green-600" />
+              <Check className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 text-green-600" />
             )}
             {phone.status === "invalid" && (
-              <X className="absolute right-3 top-2.5 h-4 w-4 text-red-600" />
+              <X className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 text-red-600" />
             )}
           </div>
           {phone.error && (
@@ -85,23 +83,9 @@ export function OnboardingPhone({
           )}
         </div>
         <div className="flex gap-3">
-          {initialStep !== OnboardingStep.PHONE && (
-            //   <Button
-            //     variant="outline"
-            //     onClick={() => router.push("/")}
-            //     className="flex-1"
-            //   >
-            //     나중에 하기
-            //   </Button>
-            // ) : (
-            <Button
-              variant="outline"
-              onClick={() => setCurrentStep(OnboardingStep.EMAIL)}
-              className="flex-1"
-            >
-              이전
-            </Button>
-          )}
+          {/* <Button variant="outline" className="flex-1">
+            로그아웃
+          </Button> */}
           <Button
             onClick={handleNextStep}
             disabled={phone.status !== "valid"}

@@ -46,12 +46,12 @@ interface RatingData {
 }
 
 const RATING_ITEMS = [
-  { key: "shooting", label: "슈팅", icon: "⚽" },
-  { key: "passing", label: "패스", icon: "🎯" },
-  { key: "stamina", label: "체력", icon: "💪" },
-  { key: "physical", label: "피지컬", icon: "🏃" },
-  { key: "dribbling", label: "드리블", icon: "⚡" },
-  { key: "defense", label: "수비", icon: "🛡️" },
+  { key: "shooting", label: "슈팅" },
+  { key: "passing", label: "패스" },
+  { key: "stamina", label: "체력" },
+  { key: "physical", label: "피지컬" },
+  { key: "dribbling", label: "드리블" },
+  { key: "defense", label: "수비" },
 ] as const;
 
 export default function TeamMemberRatingList({

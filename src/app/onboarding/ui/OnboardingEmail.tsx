@@ -82,12 +82,8 @@ export function OnboardingEmail({
           )}
         </div>
         <div className="flex gap-3">
-          {/* <Button
-            variant="outline"
-            onClick={() => router.push("/")}
-            className="flex-1"
-          >
-            나중에 하기
+          {/* <Button variant="outline" className="flex-1">
+            로그아웃
           </Button> */}
           <Button
             onClick={handleNextStep}
