@@ -231,6 +231,11 @@ const PlayerContent = ({ id }: { id: string }) => {
                           )} 가입`
                         : "데이터 없음"}
                     </span>
+                    {data?.data?.accounts?.[0]?.provider && (
+                      <span className="text-sm tracking-tight">
+                        {` • ${data?.data?.accounts?.[0]?.provider}`}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -529,12 +534,6 @@ const PlayerContent = ({ id }: { id: string }) => {
                   {/* <ChartPie className="size-5 text-gray-600" /> */}
                   <span className="font-medium">친선전</span>
                 </div>
-                {/* <div className="flex items-center gap-1">
-              <span className="text-base font-medium text-gray-500">
-                {new Date().getFullYear()}년
-              </span>
-              <ChevronRight className="size-5 text-gray-400" />
-            </div> */}
               </div>
               <div className="bg-gradient-to-b from-neutral-200/70 to-neutral-100 grid grid-cols-4 gap-3 px-4 py-2">
                 <StatCard label="경기" value={playerData.stats.team.matches} />
@@ -545,10 +544,6 @@ const PlayerContent = ({ id }: { id: string }) => {
             </div>
           </div>
         </div>
-
-        {/* {selectedTab === "photos" && <PlayerPhotosGallery userId={id} />}
-
-        {selectedTab === "matches" && <PlayerSchedule userId={id} />} */}
       </div>
     </div>
   );

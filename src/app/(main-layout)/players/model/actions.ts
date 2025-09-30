@@ -3,7 +3,7 @@
 import { PlayerFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { OnboardingStep, Prisma } from "@prisma/client";
 
 const PLAYERS_PER_PAGE = 20;
 
@@ -133,6 +133,7 @@ function createSearchCondition(searchQuery?: string) {
 // 필터 조건 생성 함수 (DRY 원칙 적용)
 function createFilterConditions(filters?: PlayerFilters) {
   return {
+    onboardingStep: OnboardingStep.COMPLETE,
     ...createSearchCondition(filters?.searchQuery),
     ...(filters?.gender && { gender: filters.gender }),
     ...(filters?.background && { playerBackground: filters.background }),

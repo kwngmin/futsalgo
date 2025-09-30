@@ -39,6 +39,7 @@ const baseUserInclude = {
     },
   },
   followers: true,
+  accounts: { select: { provider: true } },
 } satisfies Prisma.UserInclude;
 
 // 팀원 평가 데이터 타입 정의
