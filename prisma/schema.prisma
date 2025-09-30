@@ -257,6 +257,14 @@ model User {
   playerBackground PlayerBackground @default(NON_PROFESSIONAL) // 선수 출신 여부
   skillLevel       PlayerSkillLevel @default(BEGINNER) // 실력 수준
 
+  // 자기평가 능력치 (1-5점)
+  shooting        Int      @default(1)
+  passing         Int      @default(1)
+  stamina         Int      @default(1)
+  physical        Int      @default(1)
+  dribbling       Int      @default(1)
+  defense         Int      @default(1)
+
   position        Position?   
   teams           TeamMember[]
 

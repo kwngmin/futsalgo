@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +37,14 @@ import { updateOnboardingStep } from "../model/actions/onboarding-actions";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
-// 유효성 검증 스키마 (중복확인 필드 제외)
+// 실력 등급별 사용 가능한 총 포인트
+const SKILL_LEVEL_POINTS: Record<PlayerSkillLevel, number> = {
+  BEGINNER: 10,
+  AMATEUR: 14,
+  ACE: 18,
+  SEMIPRO: 22,
+};
+
 const profileSchema = z.object({
   name: z.string().min(1, "이름을 입력해주세요"),
   foot: z.enum(["LEFT", "RIGHT", "BOTH"], {
@@ -105,13 +112,6 @@ export function OnboardingProfile({
     defense: 1,
   });
 
-  const handleRatingChange = (key: keyof RatingData, value: number) => {
-    setRatings((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
   const {
     register,
     handleSubmit,
@@ -123,7 +123,56 @@ export function OnboardingProfile({
     resolver: zodResolver(profileSchema),
   });
 
-  // 최종 제출
+  const selectedSkillLevel = watch("skillLevel");
+
+  // 현재 사용한 총 포인트 계산
+  const totalUsedPoints = useMemo(() => {
+    return Object.values(ratings).reduce((sum, value) => sum + value, 0);
+  }, [ratings]);
+
+  // 선택한 실력 등급에 따른 최대 포인트
+  const maxPoints = selectedSkillLevel
+    ? SKILL_LEVEL_POINTS[selectedSkillLevel]
+    : 0;
+
+  // 남은 포인트
+  const remainingPoints = maxPoints - totalUsedPoints;
+
+  // 실력 등급이 변경되면 ratings 초기화
+  useEffect(() => {
+    if (selectedSkillLevel) {
+      const defaultValue = 1;
+      setRatings({
+        shooting: defaultValue,
+        passing: defaultValue,
+        stamina: defaultValue,
+        physical: defaultValue,
+        dribbling: defaultValue,
+        defense: defaultValue,
+      });
+    }
+  }, [selectedSkillLevel]);
+
+  const handleRatingChange = (key: keyof RatingData, value: number) => {
+    const currentValue = ratings[key];
+    const pointDifference = value - currentValue;
+
+    // 포인트 초과 여부 확인
+    if (totalUsedPoints + pointDifference <= maxPoints) {
+      setRatings((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    }
+  };
+
+  // 특정 점수 버튼이 비활성화되어야 하는지 확인
+  const isScoreDisabled = (currentItemKey: keyof RatingData, score: number) => {
+    const currentValue = ratings[currentItemKey];
+    const pointDifference = score - currentValue;
+    return totalUsedPoints + pointDifference > maxPoints;
+  };
+
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
@@ -131,6 +180,7 @@ export function OnboardingProfile({
         profile: {
           ...data,
         },
+        ratings,
       });
 
       if (response.success) {
@@ -187,13 +237,13 @@ export function OnboardingProfile({
               생년월일 8자리
             </Label>
             <Input
-              {...register("birthDate")} // valueAsNumber 제거
+              {...register("birthDate")}
               id="birthDate"
               type="number"
               placeholder="예) 19850101"
               className="text-base"
-              maxLength={8} // 8자리 제한
-              pattern="\d{8}" // 숫자만 입력 가능
+              maxLength={8}
+              pattern="\d{8}"
             />
             {errors.birthDate && (
               <Alert variant="destructive">
@@ -339,7 +389,6 @@ export function OnboardingProfile({
                   shouldValidate: true,
                 });
 
-                // 선수 출신 여부에 따라 실력 수준 변경
                 if (
                   value === "PROFESSIONAL" &&
                   (watch("skillLevel") === "AMATEUR" ||
@@ -348,7 +397,6 @@ export function OnboardingProfile({
                   setValue("skillLevel", "SEMIPRO");
                 }
 
-                // 비선수 출신 여부에 따라 실력 수준 변경
                 if (
                   value === "NON_PROFESSIONAL" &&
                   (watch("skillLevel") === "SEMIPRO" ||
@@ -387,19 +435,31 @@ export function OnboardingProfile({
           </div>
 
           {/* 능력치 */}
-          {watch("skillLevel") && (
-            <div className="">
-              {/* header */}
+          {selectedSkillLevel && (
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="px-1">자기평가</Label>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">남은 포인트:</span>
+                  <span
+                    className={`text-sm font-semibold ${
+                      remainingPoints === 0
+                        ? "text-green-600"
+                        : remainingPoints < 0
+                        ? "text-red-600"
+                        : "text-blue-600"
+                    }`}
+                  >
+                    {remainingPoints} / {maxPoints}
+                  </span>
+                </div>
               </div>
 
-              {/* rating items */}
               <div className="divide-y divide-gray-100">
                 {RATING_ITEMS.map((item, index) => (
                   <div
                     key={item.key}
-                    className="h-18 sm:h-16 flex items-center justify-between space-x-2 gap-1"
+                    className="h-16 sm:h-16 flex items-center justify-between space-x-2 gap-1"
                   >
                     <div className="px-1 flex items-center gap-1">
                       <span className="text-sm font-gray-300">
@@ -410,20 +470,28 @@ export function OnboardingProfile({
                       </label>
                     </div>
                     <div className="flex gap-2 items-center">
-                      {[1, 2, 3, 4, 5].map((score) => (
-                        <button
-                          key={score}
-                          type="button"
-                          onClick={() => handleRatingChange(item.key, score)}
-                          className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
-                            ratings[item.key] >= score
-                              ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
-                              : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700"
-                          }`}
-                        >
-                          {score}
-                        </button>
-                      ))}
+                      {[1, 2, 3, 4, 5].map((score) => {
+                        const disabled = isScoreDisabled(item.key, score);
+                        const isSelected = ratings[item.key] >= score;
+
+                        return (
+                          <button
+                            key={score}
+                            type="button"
+                            onClick={() => handleRatingChange(item.key, score)}
+                            disabled={disabled}
+                            className={`size-10 sm:size-9 rounded-full border transition-colors ${
+                              isSelected
+                                ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
+                                : disabled
+                                ? "font-medium border-transparent text-gray-300 cursor-not-allowed bg-gray-50"
+                                : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700 cursor-pointer"
+                            }`}
+                          >
+                            {score}
+                          </button>
+                        );
+                      })}
                       <span className="hidden sm:block text-gray-600 ml-4">
                         <span className="font-medium text-gray-800">
                           {ratings[item.key]}
@@ -478,9 +546,6 @@ export function OnboardingProfile({
           )}
 
           <div className="flex gap-3">
-            {/* <Button variant="outline" className="flex-1">
-            로그아웃
-          </Button> */}
             <Button type="submit" disabled={isLoading} className="flex-1">
               {isLoading ? (
                 <>

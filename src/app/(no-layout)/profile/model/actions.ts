@@ -12,6 +12,14 @@ export type ProfileData = {
   phone?: string;
   nickname?: string;
   profile?: Profile;
+  ratings?: {
+    shooting: number;
+    passing: number;
+    stamina: number;
+    physical: number;
+    dribbling: number;
+    defense: number;
+  };
 };
 
 export type ProfileResult = {
@@ -31,8 +39,10 @@ export async function updateProfileData(
       return { success: false, error: "인증이 필요합니다" };
     }
 
+    const { ratings, ...rest } = data;
+
     // 2. 데이터 검증
-    const validationResult = validateProfileData(data);
+    const validationResult = validateProfileData(rest);
     if (!validationResult.success) {
       return validationResult;
     }
@@ -58,6 +68,15 @@ export async function updateProfileData(
         updateData.playerBackground = data.profile.playerBackground;
       if (data.profile.skillLevel)
         updateData.skillLevel = data.profile.skillLevel;
+
+      if (ratings) {
+        updateData.shooting = ratings.shooting;
+        updateData.passing = ratings.passing;
+        updateData.stamina = ratings.stamina;
+        updateData.physical = ratings.physical;
+        updateData.dribbling = ratings.dribbling;
+        updateData.defense = ratings.defense;
+      }
     }
 
     const updatedUser = await prisma.user.update({
