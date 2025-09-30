@@ -1,5 +1,3 @@
-// src/shared/lib/auth.ts
-
 import NextAuth, { type DefaultSession } from "next-auth";
 import { prisma } from "@/shared/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -32,6 +30,10 @@ declare module "next-auth" {
   }
 }
 
+/**
+ * 이메일 충돌을 처리하는 커스텀 Prisma Adapter
+ * 동일한 이메일로 다른 provider 로그인 시 이메일을 null로 설정
+ */
 export function CustomPrismaAdapter(): Adapter {
   const adapter = PrismaAdapter(prisma);
 
@@ -58,10 +60,10 @@ export function CustomPrismaAdapter(): Adapter {
             email: "",
           };
           return adapter.createUser!(userWithoutEmail);
-        } else {
-          // 이메일이 사용 가능하면 그대로 사용
-          return adapter.createUser!(data);
         }
+
+        // 이메일이 사용 가능하면 그대로 사용
+        return adapter.createUser!(data);
       } catch (error) {
         console.error("사용자 생성 중 오류:", error);
         throw error;
@@ -73,21 +75,12 @@ export function CustomPrismaAdapter(): Adapter {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomPrismaAdapter(),
   providers: [Google, Kakao, Naver],
-  // providers: [Google, Kakao],
-  // 세션 전략을 JWT로 설정
   session: {
     strategy: "jwt",
-    // 세션 유지기간 설정 (초 단위)
-    maxAge: 30 * 24 * 60 * 60, // 30일 (기본값)
-    // maxAge: 7 * 24 * 60 * 60,  // 7일
-    // maxAge: 24 * 60 * 60,      // 1일
-
-    // 세션 업데이트 주기 (JWT에서는 사용되지 않음)
+    maxAge: 30 * 24 * 60 * 60, // 30일
     updateAge: 24 * 60 * 60, // 24시간마다 토큰 갱신
   },
-  // JWT 토큰 설정
   jwt: {
-    // JWT 토큰 유지기간 (session.maxAge와 동일하게 설정 권장)
     maxAge: 30 * 24 * 60 * 60, // 30일
   },
   callbacks: {
@@ -99,10 +92,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return false;
       }
 
-      // 기본 검증만 수행, 이메일 처리는 어댑터에서
       return true;
     },
-    // JWT 토큰에 모든 사용자 정보 포함
     jwt: async ({ token, user, account, trigger }) => {
       // 초기 로그인 시 또는 사용자 정보 업데이트 시
       if (user || trigger === "update") {
@@ -138,14 +129,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return token;
     },
-
-    // 세션에 모든 정보 포함
     session: async ({ session, token }) => {
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.nickname = token.nickname as string | null;
         session.user.createdAt = token.createdAt as Date;
-        // Provider 정보도 세션에 포함
         session.user.provider = token.provider as string;
         session.user.onboardingStep = token.onboardingStep as OnboardingStep;
       }
@@ -158,7 +146,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         console.log(
           `이메일 없이 사용자 생성 완료: ${user.name} (ID: ${user.id})`
         );
-        // 필요시 이메일 설정 안내 로직
       } else {
         console.log(`사용자 생성 완료: ${user.email}`);
       }
@@ -167,13 +154,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log(`로그인 완료: ${user.email} via ${account?.provider}`);
     },
     signOut: async () => {
-      console.log(`로그아웃 완료`);
+      console.log("로그아웃 완료");
     },
   },
   pages: {
-    // signIn: "/login",
+    signIn: "/login",
     newUser: "/onboarding",
-    // error: "/login",
   },
-  // debug: process.env.NODE_ENV === "development", // 개발 환경에서만 디버그
+  debug: process.env.NODE_ENV === "development",
 });
