@@ -23,7 +23,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex justify-center bg-gray-50 px-4 pt-20">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-sm">
         {/* 로고/타이틀 영역 */}
         <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Futsalgo</h1>

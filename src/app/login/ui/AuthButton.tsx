@@ -29,7 +29,7 @@ export function AuthButton({
     >
       {/* 로고 영역 - 실제 로고 이미지가 들어갈 자리 */}
       <div
-        className="size-11 rounded flex items-center justify-center flex-shrink-0"
+        className="size-12 sm:size-11 rounded flex items-center justify-center flex-shrink-0"
         aria-label={`${providerName} 로고`}
       >
         {/* 여기에 실제 로고 이미지가 들어갑니다 */}
@@ -50,7 +50,7 @@ export function AuthButton({
 
       {/* 버튼 텍스트 */}
       <div
-        className={`grow text-sm border-l border-white/15 flex items-center justify-center pl-3 ${
+        className={`grow sm:text-sm border-l border-white/15 flex items-center justify-center pl-3 ${
           lableColor === "#000000/85" ? "font-medium " : "font-bold"
         }`} //
         style={{ color: lableColor }}
@@ -58,7 +58,7 @@ export function AuthButton({
         {isLoading ? "로그인 중..." : `${providerName} 로그인`}
       </div>
 
-      <div className="size-11 flex items-center justify-center">
+      <div className="size-12 sm:size-11 flex items-center justify-center">
         {/* 로딩 스피너 */}
         {isLoading && (
           <div className="size-5 border-2 border-black/15 border-t-gray-600 rounded-full animate-spin flex-shrink-0" />
