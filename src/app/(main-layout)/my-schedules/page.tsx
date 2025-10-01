@@ -5,8 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getMySchedules } from "./actions/get-my-schedules";
-import SchedulePageLoading from "../ui/loading";
-import ScheduleList from "../ui/ScheduleList";
+
 import { useCallback, useMemo, useState } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
@@ -20,9 +19,11 @@ import FilterDays, {
 import ScheduleFilterBar from "../../../features/filter-list/ui/ScheduleFilterBar";
 import FilterLocation from "@/features/filter-list/ui/FilterLocation";
 import FilterMatchType from "@/features/filter-list/ui/FilterScheduleMatch";
-import AddScheduleButton from "../ui/AddScheduleButton";
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
+import SchedulePageLoading from "../home/ui/loading";
+import ScheduleList from "../home/ui/ScheduleList";
+import AddScheduleButton from "../home/ui/AddScheduleButton";
 
 const MySchedulesPage = () => {
   const router = useRouter();

@@ -28,7 +28,7 @@ const MemoizedScheduleSection = memo(ScheduleSection);
 /**
  * 일정 목록 컨테이너 - 최적화 버전
  */
-const ScheduleListContainer = () => {
+const SchedulesContainer = () => {
   const router = useRouter();
   const session = useSession();
   const searchParams = useSearchParams();
@@ -138,4 +138,4 @@ const ScheduleListContainer = () => {
   );
 };
 
-export default ScheduleListContainer;
+export default SchedulesContainer;
