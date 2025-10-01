@@ -1,18 +1,32 @@
-"use client";
-
 import { Suspense } from "react";
 import SchedulePageLoading from "./home/ui/loading";
-import SchedulesContainer from "./home/ui/SchedulesContainer";
+import { getSchedules } from "./home/actions/get-schedules";
+import SchedulesInfiniteClient from "./home/ui/SchedulesInfiniteClient";
 
-/**
- * 홈 페이지 - 데이터 페칭과 렌더링을 분리하여 즉시 로딩 UI 표시
- */
-const HomePage = () => {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: { search?: string };
+}) {
   return (
-    <Suspense fallback={<SchedulePageLoading isPage />}>
-      <SchedulesContainer />
-    </Suspense>
+    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
+      <Suspense fallback={<SchedulePageLoading isPage />}>
+        <ScheduleDataFetcher searchParams={searchParams} />
+      </Suspense>
+    </div>
   );
-};
+}
 
-export default HomePage;
+async function ScheduleDataFetcher({
+  searchParams,
+}: {
+  searchParams: { search?: string };
+}) {
+  const initialData = await getSchedules({
+    searchQuery: searchParams.search,
+    page: 1,
+    pageSize: 20,
+  });
+
+  return <SchedulesInfiniteClient initialData={initialData} />;
+}
