@@ -250,7 +250,7 @@ const HomePage = () => {
       )}
 
       {/* 로그인 버튼 */}
-      {!session.data?.user && <LoginButton />}
+      {!session.data?.user?.id && <LoginButton />}
 
       {/* 일정 섹션들 */}
       <ScheduleSection
