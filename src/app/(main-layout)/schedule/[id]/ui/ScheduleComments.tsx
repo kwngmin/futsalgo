@@ -629,6 +629,8 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
             onClick={() => {
               if (currentUser) {
                 setFocusNewComment(true);
+              } else {
+                router.push("/login");
               }
             }}
           >
