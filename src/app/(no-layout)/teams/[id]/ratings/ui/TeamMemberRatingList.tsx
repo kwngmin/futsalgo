@@ -265,20 +265,19 @@ export default function TeamMemberRatingList({
                   {selectedMember.user.name}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">남은 포인트:</span>
-                <span
-                  className={`text-sm font-semibold ${
-                    remainingPoints === 0
-                      ? "text-green-600"
-                      : remainingPoints < 0
-                      ? "text-red-600"
-                      : "text-blue-600"
-                  }`}
-                >
-                  {remainingPoints} / {maxPoints}
-                </span>
-              </div>
+
+              {/* 남은 포인트 */}
+              <span
+                className={`px-1 text-sm font-semibold ${
+                  remainingPoints === 0
+                    ? "text-green-600"
+                    : remainingPoints < 0
+                    ? "text-red-600"
+                    : "text-blue-600"
+                }`}
+              >
+                {remainingPoints} / {maxPoints}
+              </span>
             </div>
 
             {/* skill level */}
