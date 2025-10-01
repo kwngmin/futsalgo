@@ -24,8 +24,11 @@ export function AuthButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full flex items-stretch rounded-sm transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-      style={{ backgroundColor: containerColor }}
+      className="w-full flex items-stretch rounded-sm transition-colors duration-200 group disabled:opacity-50 cursor-pointer disabled:cursor-default active:scale-98 hover:ring-2 ring-black"
+      style={{
+        backgroundColor: containerColor,
+        transition: "scale 0.05s ease-in-out",
+      }}
     >
       {/* 로고 영역 - 실제 로고 이미지가 들어갈 자리 */}
       <div
@@ -50,8 +53,10 @@ export function AuthButton({
 
       {/* 버튼 텍스트 */}
       <div
-        className={`grow sm:text-sm border-l border-white/15 flex items-center justify-center pl-3 ${
-          lableColor === "#000000/85" ? "font-medium " : "font-bold"
+        className={`grow sm:text-sm border-l flex items-center justify-center pl-3 ${
+          lableColor === "#000000/85"
+            ? "font-medium border-black/5"
+            : "font-bold border-white/20 "
         }`} //
         style={{ color: lableColor }}
       >
