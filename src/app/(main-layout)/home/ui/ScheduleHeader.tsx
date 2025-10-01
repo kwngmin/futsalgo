@@ -1,9 +1,9 @@
 // @/app/(main-layout)/home/components/Header.tsx
 "use client";
 
+import SearchInput from "@/features/filter-list/ui/SearchInput";
 import { Search } from "lucide-react";
 import { memo } from "react";
-import SearchInput from "../../../features/filter-list/ui/SearchInput";
 
 type TabType = "schedules" | "my-schedules";
 
