@@ -4,8 +4,10 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { AuthButton } from "./ui/AuthButton";
 import { AUTH_PROVIDERS, ProviderId } from "@/shared/config/provider-config";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<ProviderId | null>(null);
 
   const handleLogin = async (providerId: ProviderId) => {
@@ -25,12 +27,16 @@ export default function LoginPage() {
     <div className="min-h-screen flex justify-center bg-gradient-to-b from-white to-gray-50 px-4 pt-20">
       <div className="w-full max-w-sm">
         {/* 로고/타이틀 영역 */}
-        <div className="text-center mb-6">
+        <button
+          type="button"
+          onClick={() => router.push("/")}
+          className="text-center mb-6 w-full cursor-pointer"
+        >
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Futsalgo</h1>
           <p className="text-gray-600">
             당신의 풋살 기록, 매칭, 커뮤니티 플랫폼
           </p>
-        </div>
+        </button>
 
         {/* 로그인 카드 */}
         <div className="bg-white border rounded-lg shadow-lg shadow-gray-100 p-6">

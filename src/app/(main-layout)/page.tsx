@@ -24,6 +24,7 @@ import FilterLocation from "../../features/filter-list/ui/FilterLocation";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
+import LoginButton from "./ui/LoginButton";
 
 const HomePage = () => {
   const router = useRouter();
@@ -247,6 +248,9 @@ const HomePage = () => {
       {data?.data?.manageableTeams && data.data.manageableTeams.length > 0 && (
         <AddScheduleButton onClick={() => router.push("/schedule/new")} />
       )}
+
+      {/* 로그인 버튼 */}
+      {!session.data?.user && <LoginButton />}
 
       {/* 일정 섹션들 */}
       <ScheduleSection
