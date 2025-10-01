@@ -504,7 +504,17 @@ const PlayerContent = ({ id }: { id: string }) => {
         </div>
 
         {/* 레이더 차트 */}
-        <PlayerRatingRadarChart ratingsData={playerData.ratings} />
+        <PlayerRatingRadarChart
+          ratingsData={playerData.ratings}
+          selfRatings={{
+            shooting: playerData.shooting,
+            passing: playerData.passing,
+            stamina: playerData.stamina,
+            physical: playerData.physical,
+            dribbling: playerData.dribbling,
+            defense: playerData.defense,
+          }}
+        />
 
         <div className="px-4">
           <div className="flex justify-between items-center py-2 min-h-13">

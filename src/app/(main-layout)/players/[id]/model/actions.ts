@@ -63,7 +63,7 @@ type TeamMemberRatingWithRelations = Prisma.TeamMemberRatingGetPayload<{
 }>;
 
 // 평가 평균 데이터 타입
-interface RatingAverages {
+interface TotalRatings {
   shooting: number;
   passing: number;
   stamina: number;
@@ -74,8 +74,8 @@ interface RatingAverages {
 
 // 평가 데이터 처리 결과 타입
 interface ProcessedRatings {
-  averageRatings: RatingAverages;
-  totalRatings: number;
+  totalRatings: TotalRatings;
+  raterCount: number;
   hasRatings: boolean;
 }
 
@@ -116,7 +116,7 @@ function processPlayerRatings(
 ): ProcessedRatings {
   if (ratings.length === 0) {
     return {
-      averageRatings: {
+      totalRatings: {
         shooting: 0,
         passing: 0,
         stamina: 0,
@@ -124,24 +124,41 @@ function processPlayerRatings(
         dribbling: 0,
         defense: 0,
       },
-      totalRatings: 0,
+      raterCount: 0,
       hasRatings: false,
     };
   }
 
-  const averageRatings: RatingAverages = {
-    shooting: ratings.reduce((sum, r) => sum + r.shooting, 0) / ratings.length,
-    passing: ratings.reduce((sum, r) => sum + r.passing, 0) / ratings.length,
-    stamina: ratings.reduce((sum, r) => sum + r.stamina, 0) / ratings.length,
-    physical: ratings.reduce((sum, r) => sum + r.physical, 0) / ratings.length,
-    dribbling:
-      ratings.reduce((sum, r) => sum + r.dribbling, 0) / ratings.length,
-    defense: ratings.reduce((sum, r) => sum + r.defense, 0) / ratings.length,
-  };
+  const ratingKeys: (keyof TotalRatings)[] = [
+    "shooting",
+    "passing",
+    "stamina",
+    "physical",
+    "dribbling",
+    "defense",
+  ];
+
+  // 한 번의 순회로 모든 합계 계산
+  const totalRatings: TotalRatings = ratings.reduce(
+    (acc, rating) => {
+      ratingKeys.forEach((key) => {
+        acc[key] += rating[key];
+      });
+      return acc;
+    },
+    {
+      shooting: 0,
+      passing: 0,
+      stamina: 0,
+      physical: 0,
+      dribbling: 0,
+      defense: 0,
+    } as TotalRatings
+  );
 
   return {
-    averageRatings,
-    totalRatings: ratings.length,
+    totalRatings,
+    raterCount: ratings.length,
     hasRatings: true,
   };
 }

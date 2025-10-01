@@ -2,6 +2,7 @@
 "use client";
 
 import { UserRoundSearch } from "lucide-react";
+import { calculateAverageRatings } from "../lib/calculrate-average-ratings";
 
 interface RatingItem {
   key: string;
@@ -12,8 +13,16 @@ interface RatingItem {
 }
 
 interface Props {
+  selfRatings: {
+    shooting: number;
+    passing: number;
+    stamina: number;
+    physical: number;
+    dribbling: number;
+    defense: number;
+  };
   ratingsData: {
-    averageRatings: {
+    totalRatings: {
       shooting: number;
       passing: number;
       stamina: number;
@@ -21,7 +30,7 @@ interface Props {
       dribbling: number;
       defense: number;
     };
-    totalRatings: number;
+    raterCount: number;
     hasRatings: boolean;
   };
 }
@@ -223,24 +232,6 @@ const RadarChart = ({
   );
 };
 
-const NoRatingsMessage = () => (
-  <div className="border rounded-2xl overflow-hidden flex flex-col mx-4">
-    <div className="w-full flex items-center justify-between px-4 h-12 sm:h-11 border-b gap-3 bg-neutral-50">
-      <div className="flex items-center space-x-3">
-        <UserRoundSearch className="size-5 text-gray-600" />
-        <span className="font-medium">분석</span>
-      </div>
-      {/* <span className="text-base font-medium text-gray-500">없음</span> */}
-    </div>
-    <div className="grow flex flex-col items-center justify-center h-32 mt-4 pb-4">
-      <div className="text-gray-500">아직 받은 평가가 없습니다</div>
-      <div className="text-sm text-gray-400">
-        팀원들이 평가를 완료하면 여기에 표시됩니다
-      </div>
-    </div>
-  </div>
-);
-
 // const calculateTotalScore = (ratings: RatingItem[]): string => {
 //   if (ratings.length === 0) return "0.0";
 
@@ -248,9 +239,14 @@ const NoRatingsMessage = () => (
 //   return sum.toFixed(1);
 // };
 
-const mapRatingsData = (
-  averageRatings: Props["ratingsData"]["averageRatings"]
-): RatingItem[] => {
+const mapRatingsData = (averageRatings: {
+  shooting: number;
+  passing: number;
+  stamina: number;
+  physical: number;
+  dribbling: number;
+  defense: number;
+}): RatingItem[] => {
   return RATING_CONFIG.map((config) => ({
     key: config.key,
     label: config.label,
@@ -260,12 +256,18 @@ const mapRatingsData = (
   }));
 };
 
-export default function PlayerRatingRadarChart({ ratingsData }: Props) {
-  if (!ratingsData.hasRatings) {
-    return <NoRatingsMessage />;
-  }
+export default function PlayerRatingRadarChart({
+  ratingsData,
+  selfRatings,
+}: Props) {
+  console.log(selfRatings);
 
-  const { averageRatings, totalRatings } = ratingsData;
+  const { raterCount } = ratingsData;
+
+  const averageRatings = calculateAverageRatings({
+    selfRatings,
+    ratingsData,
+  });
   const ratings = mapRatingsData(averageRatings);
   // const totalScore = calculateTotalScore(ratings);
 
@@ -278,7 +280,7 @@ export default function PlayerRatingRadarChart({ ratingsData }: Props) {
             <span className="font-medium">분석</span>
             <span className="font-medium text-sm text-gray-600">팀원 평가</span>
             <span className="text-sm font-semibold text-amber-600">
-              {totalRatings}
+              {raterCount}
             </span>
           </div>
         </div>
