@@ -278,7 +278,7 @@ export default function TeamMemberRatingList({
                 >
                   <div className="flex items-center gap-1">
                     <span className="text-sm font-gray-300">{index + 1}.</span>
-                    <label className="text-sm font-medium text-gray-700">
+                    <label className="sm:text-sm font-medium text-gray-700">
                       {item.label}
                     </label>
                   </div>
@@ -308,11 +308,11 @@ export default function TeamMemberRatingList({
             </div>
 
             {/* footer */}
-            <div className="flex space-x-1 p-4">
+            <div className="flex gap-2 p-4">
               <button
                 onClick={closeModal}
                 disabled={isSubmitting}
-                className="flex-1 px-4 h-11 sm:h-10 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
+                className="flex-1 px-4 h-11 sm:h-10 rounded-md text-gray-700 bg-gray-100 hover:bg-gray-50 disabled:opacity-50 cursor-pointer"
               >
                 취소
               </button>

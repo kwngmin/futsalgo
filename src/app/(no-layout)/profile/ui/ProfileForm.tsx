@@ -335,7 +335,7 @@ const ProfileForm = ({ data }: { data: User }) => {
               >
                 <div className="px-1 flex items-center gap-1">
                   <span className="text-sm font-gray-300">{index + 1}.</span>
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="sm:text-sm font-medium text-gray-700">
                     {item.label}
                   </label>
                 </div>
