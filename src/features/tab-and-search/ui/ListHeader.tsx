@@ -3,6 +3,8 @@
 
 import SearchInput from "@/features/filter-list/ui/SearchInput";
 import { Plus, Search } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { memo } from "react";
 
 export type TabType =
@@ -40,13 +42,20 @@ const ListHeader = memo(
     onSearchClose,
     onPlusAction,
   }: HeaderProps) => {
+    const session = useSession();
+    const router = useRouter();
+
     // 탭 컴포넌트
     const TabButton = ({ tab, label }: { tab: TabType; label: string }) => (
       <h1
         className={`text-[1.625rem] font-bold cursor-pointer transition-opacity ${
           currentTab === tab ? "" : "opacity-30 hover:opacity-50"
         }`}
-        onClick={() => onTabChange(tab)}
+        onClick={() =>
+          (tab === "my-schedules" || tab === "following") && !session.data?.user
+            ? router.push("/login")
+            : onTabChange(tab)
+        }
       >
         {label}
       </h1>
