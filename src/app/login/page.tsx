@@ -22,7 +22,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center bg-gray-50 px-4 pt-20">
+    <div className="min-h-screen flex justify-center bg-gradient-to-b from-white to-gray-50 px-4 pt-20">
       <div className="w-full max-w-sm">
         {/* 로고/타이틀 영역 */}
         <div className="text-center mb-6">
@@ -33,7 +33,7 @@ export default function LoginPage() {
         </div>
 
         {/* 로그인 카드 */}
-        <div className="bg-white rounded-lg shadow-lg shadow-gray-100 p-6">
+        <div className="bg-white border rounded-lg shadow-lg shadow-gray-100 p-6">
           {/* Provider 버튼 리스트 */}
           <div className="space-y-3">
             {AUTH_PROVIDERS.map((provider) => (
@@ -53,7 +53,7 @@ export default function LoginPage() {
 
         {/* 하단 정보 */}
         <p className="mt-6 text-center sm:text-sm text-gray-500 break-keep leading-normal px-4">
-          계속하면 <span className="font-semibold">Futsalgo</span>의{" "}
+          계속하면 <span className="font-medium text-gray-600">Futsalgo</span>의{" "}
           <a href="/terms" className="font-medium text-gray-900">
             이용 약관
           </a>{" "}
