@@ -450,7 +450,6 @@ const NewScheduleForm = ({
                     }
                   }}
                   error={errors.matchType?.message}
-                  direction="horizontal"
                 />
               </div>
               {/* 과거 날짜 선택 시 친선전 비활성화 안내 */}

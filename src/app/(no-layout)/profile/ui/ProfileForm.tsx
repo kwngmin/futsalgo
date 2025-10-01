@@ -4,7 +4,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Condition,
   Position,
@@ -23,6 +23,20 @@ import {
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { updateProfileData } from "../model/actions";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import {
+  RatingData,
+  SKILL_LEVEL_POINTS,
+} from "@/app/onboarding/ui/OnboardingProfile";
+
+const RATING_ITEMS = [
+  { key: "shooting", label: "슈팅" },
+  { key: "passing", label: "패스" },
+  { key: "stamina", label: "체력" },
+  { key: "physical", label: "피지컬" },
+  { key: "dribbling", label: "드리블" },
+  { key: "defense", label: "수비" },
+] as const;
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
@@ -66,6 +80,50 @@ const ProfileForm = ({ data }: { data: User }) => {
     },
   });
 
+  const [ratings, setRatings] = useState<RatingData>({
+    shooting: data.shooting,
+    passing: data.passing,
+    stamina: data.stamina,
+    physical: data.physical,
+    dribbling: data.dribbling,
+    defense: data.defense,
+  });
+
+  const selectedSkillLevel = watch("skillLevel");
+
+  // 현재 사용한 총 포인트 계산
+  const totalUsedPoints = useMemo(() => {
+    return Object.values(ratings).reduce((sum, value) => sum + value, 0);
+  }, [ratings]);
+
+  // 선택한 실력 등급에 따른 최대 포인트
+  const maxPoints = selectedSkillLevel
+    ? SKILL_LEVEL_POINTS[selectedSkillLevel]
+    : 0;
+
+  // 남은 포인트
+  const remainingPoints = maxPoints - totalUsedPoints;
+
+  const handleRatingChange = (key: keyof RatingData, value: number) => {
+    const currentValue = ratings[key];
+    const pointDifference = value - currentValue;
+
+    // 포인트 초과 여부 확인
+    if (totalUsedPoints + pointDifference <= maxPoints) {
+      setRatings((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    }
+  };
+
+  // 특정 점수 버튼이 비활성화되어야 하는지 확인
+  const isScoreDisabled = (currentItemKey: keyof RatingData, score: number) => {
+    const currentValue = ratings[currentItemKey];
+    const pointDifference = score - currentValue;
+    return totalUsedPoints + pointDifference > maxPoints;
+  };
+
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
@@ -73,6 +131,7 @@ const ProfileForm = ({ data }: { data: User }) => {
         profile: {
           ...data,
         },
+        ratings,
       });
 
       if (response.success) {
@@ -124,13 +183,64 @@ const ProfileForm = ({ data }: { data: User }) => {
       {/* 포지션 */}
       <div className="space-y-3">
         <Label className="px-1">선호하는 포지션</Label>
-        <CustomRadioGroup
-          options={FUTSAL_POSITION_OPTIONS}
-          value={watch("position") ?? ""}
-          onValueChange={(value) => setValue("position", value as Position)}
-          error={errors.position?.message}
-          direction="vertical"
-        />
+        <div className="grid sm:grid-cols-2 items-start gap-2">
+          <div className="relative select-none sm:order-2">
+            <div className="w-full h-full flex items-center justify-center ">
+              <Image
+                src="/full_pitch.svg"
+                alt="position"
+                width={806}
+                height={406}
+                className="object-cover"
+              />
+            </div>
+            <div className="absolute w-full h-full top-0 left-0 flex">
+              <div className="h-full w-1/4 flex items-center justify-center">
+                <div
+                  className={`mr-3 size-4 rounded-full ${
+                    watch("position") === "GOLEIRO"
+                      ? "bg-red-500"
+                      : "bg-white/50"
+                  }`}
+                />
+              </div>
+              <div className="h-full w-1/4 flex items-center justify-center">
+                <div
+                  className={`size-4 rounded-full ${
+                    watch("position") === "FIXO" ? "bg-red-500" : "bg-white/50"
+                  }`}
+                />
+              </div>
+              <div className="h-full w-1/4 flex flex-col justify-between items-center py-5 sm:py-4">
+                <div
+                  className={`size-4 rounded-full ${
+                    watch("position") === "ALA" ? "bg-red-500" : "bg-white/50"
+                  }`}
+                />
+                <div
+                  className={`size-4 rounded-full ${
+                    watch("position") === "ALA" ? "bg-red-500" : "bg-white/50"
+                  }`}
+                />
+              </div>
+              <div className="h-full w-1/4 flex items-center justify-center">
+                <div
+                  className={`size-4 rounded-full ${
+                    watch("position") === "PIVO" ? "bg-red-500" : "bg-white/50"
+                  }`}
+                />
+              </div>
+              <div className="w-1/5 shrink-0" />
+            </div>
+          </div>
+          <CustomRadioGroup
+            options={FUTSAL_POSITION_OPTIONS}
+            value={watch("position") ?? ""}
+            onValueChange={(value) => setValue("position", value as Position)}
+            error={errors.position?.message}
+            containerClassName="grid gap-1"
+          />
+        </div>
       </div>
 
       {/* 선수 출신 여부 */}
@@ -141,9 +251,20 @@ const ProfileForm = ({ data }: { data: User }) => {
           value={watch("playerBackground")}
           onValueChange={(value) => {
             setValue("playerBackground", value as PlayerBackground);
-            if (value === "PROFESSIONAL") {
+
+            if (
+              value === "PROFESSIONAL" &&
+              (watch("skillLevel") === "AMATEUR" ||
+                watch("skillLevel") === "BEGINNER")
+            ) {
               setValue("skillLevel", "SEMIPRO");
-            } else {
+            }
+
+            if (
+              value === "NON_PROFESSIONAL" &&
+              (watch("skillLevel") === "SEMIPRO" ||
+                watch("skillLevel") === "ACE")
+            ) {
               setValue("skillLevel", "BEGINNER");
             }
           }}
@@ -152,29 +273,94 @@ const ProfileForm = ({ data }: { data: User }) => {
       </div>
 
       {/* 실력 수준 */}
-      <div className="space-y-3 sm:hidden">
+      <div className="space-y-3">
         <Label className="px-1">실력</Label>
         <CustomRadioGroup
-          options={SKILL_LEVEL_OPTIONS}
+          options={
+            watch("playerBackground") === "PROFESSIONAL"
+              ? SKILL_LEVEL_OPTIONS.filter(
+                  (option) =>
+                    option.value !== "AMATEUR" && option.value !== "BEGINNER"
+                )
+              : SKILL_LEVEL_OPTIONS
+          }
           value={watch("skillLevel")}
           onValueChange={(value) =>
             setValue("skillLevel", value as PlayerSkillLevel)
           }
           error={errors.skillLevel?.message}
-          direction="vertical"
+          containerClassName="grid gap-1 sm:grid-cols-2"
         />
       </div>
-      <div className="space-y-3 hidden sm:block">
-        <Label className="px-1">실력</Label>
-        <CustomRadioGroup
-          options={SKILL_LEVEL_OPTIONS}
-          value={watch("skillLevel")}
-          onValueChange={(value) =>
-            setValue("skillLevel", value as PlayerSkillLevel)
-          }
-          error={errors.skillLevel?.message}
-        />
-      </div>
+
+      {/* 능력치 */}
+      {selectedSkillLevel && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label className="px-1">자기 평가</Label>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">남은 포인트:</span>
+              <span
+                className={`text-sm font-semibold ${
+                  remainingPoints === 0
+                    ? "text-green-600"
+                    : remainingPoints < 0
+                    ? "text-red-600"
+                    : "text-blue-600"
+                }`}
+              >
+                {remainingPoints} / {maxPoints}
+              </span>
+            </div>
+          </div>
+
+          <div className="divide-y divide-gray-100">
+            {RATING_ITEMS.map((item, index) => (
+              <div
+                key={item.key}
+                className="h-16 sm:h-16 flex items-center justify-between space-x-2 gap-1"
+              >
+                <div className="px-1 flex items-center gap-1">
+                  <span className="text-sm font-gray-300">{index + 1}.</span>
+                  <label className="text-sm font-medium text-gray-700">
+                    {item.label}
+                  </label>
+                </div>
+                <div className="flex gap-2 items-center">
+                  {[1, 2, 3, 4, 5].map((score) => {
+                    const disabled = isScoreDisabled(item.key, score);
+                    const isSelected = ratings[item.key] >= score;
+
+                    return (
+                      <button
+                        key={score}
+                        type="button"
+                        onClick={() => handleRatingChange(item.key, score)}
+                        disabled={disabled}
+                        className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
+                          isSelected
+                            ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
+                            : disabled
+                            ? "font-medium border-transparent text-gray-300 cursor-not-allowed bg-gray-50"
+                            : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700 cursor-pointer"
+                        }`}
+                      >
+                        {score}
+                      </button>
+                    );
+                  })}
+                  <span className="hidden sm:block text-gray-600 ml-4 min-w-10 text-center">
+                    <span className="font-medium text-gray-800">
+                      {ratings[item.key]}
+                    </span>
+                    점
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {errors.root && (
         <Alert variant="destructive">

@@ -235,7 +235,7 @@ const EditTeamForm = ({
           value={watch("level")}
           onValueChange={(value) => setValue("level", value as TeamLevel)}
           error={errors.level?.message}
-          direction="vertical"
+          containerClassName="grid gap-1"
         />
       </div>
 

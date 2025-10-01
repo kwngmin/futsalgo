@@ -7,20 +7,22 @@ const CustomRadioGroup = ({
   value,
   onValueChange,
   error,
-  direction = "horizontal",
+  containerClassName = "flex",
 }: {
   name?: string;
   options: readonly { value: string; label: string }[];
   value: string;
   onValueChange: (value: string) => void;
   error?: string;
-  direction?: "horizontal" | "vertical";
+  containerClassName?: string;
 }) => (
   <>
     <RadioGroup
-      className={`flex ${
-        direction === "vertical" ? "flex-col" : "flex-wrap"
-      } gap-1`}
+      className={
+        containerClassName === "flex"
+          ? "flex gap-1 flex-wrap"
+          : containerClassName
+      }
       value={value}
       onValueChange={onValueChange}
     >

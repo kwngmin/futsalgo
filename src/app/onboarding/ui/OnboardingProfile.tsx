@@ -38,7 +38,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
 // 실력 등급별 사용 가능한 총 포인트
-const SKILL_LEVEL_POINTS: Record<PlayerSkillLevel, number> = {
+export const SKILL_LEVEL_POINTS: Record<PlayerSkillLevel, number> = {
   BEGINNER: 10,
   AMATEUR: 14,
   ACE: 18,
@@ -76,7 +76,7 @@ const profileSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
-interface RatingData {
+export interface RatingData {
   shooting: number;
   passing: number;
   stamina: number;
@@ -319,7 +319,7 @@ export function OnboardingProfile({
           {/* 포지션 */}
           <div className="space-y-3">
             <Label className="px-1">선호하는 포지션</Label>
-            <div className="relative select-none sm:hidden">
+            <div className="relative select-none">
               <div className="w-full h-full flex items-center justify-center ">
                 <Image
                   src="/full_pitch.svg"
@@ -381,7 +381,7 @@ export function OnboardingProfile({
                 })
               }
               error={errors.position?.message}
-              direction="vertical"
+              containerClassName="grid gap-1"
             />
           </div>
 
@@ -437,7 +437,7 @@ export function OnboardingProfile({
                 })
               }
               error={errors.skillLevel?.message}
-              direction="vertical"
+              containerClassName="grid gap-1"
             />
           </div>
 
@@ -487,7 +487,7 @@ export function OnboardingProfile({
                             type="button"
                             onClick={() => handleRatingChange(item.key, score)}
                             disabled={disabled}
-                            className={`size-10 sm:size-9 rounded-full border transition-colors ${
+                            className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
                               isSelected
                                 ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
                                 : disabled
@@ -499,7 +499,7 @@ export function OnboardingProfile({
                           </button>
                         );
                       })}
-                      <span className="hidden sm:block text-gray-600 ml-4">
+                      <span className="hidden sm:block text-gray-600 ml-4 min-w-10 text-center">
                         <span className="font-medium text-gray-800">
                           {ratings[item.key]}
                         </span>

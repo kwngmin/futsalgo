@@ -262,7 +262,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                       setValue("level", value as TeamLevel)
                     }
                     error={errors.level?.message}
-                    direction="vertical"
+                    containerClassName="grid gap-1"
                   />
                 </div>
 
