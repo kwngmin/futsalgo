@@ -8,6 +8,9 @@ import { toast } from "sonner";
 import { rateTeamMember } from "../actions/rate-team-memer";
 import { Separator } from "@/shared/components/ui/separator";
 import { SquarePen, X } from "lucide-react";
+import { PlayerSkillLevel } from "@prisma/client";
+import CustomSelect from "@/shared/components/ui/custom-select";
+import { SKILL_LEVEL_OPTIONS } from "@/entities/user/model/constants";
 
 interface Member {
   id: string;
@@ -17,6 +20,7 @@ interface Member {
     name: string | null;
     nickname: string | null;
     image: string | null;
+    skillLevel: PlayerSkillLevel;
   };
   hasRated: boolean;
   ratedAt: Date | null;
@@ -72,9 +76,11 @@ export default function TeamMemberRatingList({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const [skillLevel, setSkillLevel] = useState<null | PlayerSkillLevel>(null);
 
   const openModal = (member: Member) => {
     setSelectedMember(member);
+    setSkillLevel(member.user.skillLevel);
     // 기존 평가가 있다면 해당 값으로 초기화, 없다면 1로 초기화
     if (member.currentRating) {
       setRatings(member.currentRating);
@@ -102,6 +108,7 @@ export default function TeamMemberRatingList({
       dribbling: 1,
       defense: 1,
     });
+    setSkillLevel(null);
   };
 
   const handleRatingChange = (key: keyof RatingData, value: number) => {
@@ -114,6 +121,7 @@ export default function TeamMemberRatingList({
   const handleSubmit = async () => {
     if (!selectedMember) return;
 
+    setSkillLevel(null);
     setIsSubmitting(true);
     try {
       const result = await rateTeamMember({
@@ -224,9 +232,15 @@ export default function TeamMemberRatingList({
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             {/* header */}
             <div className="flex items-center justify-between px-4 h-16">
-              <h2 className="text-xl font-medium text-gray-900">
-                {selectedMember.user.nickname || selectedMember.user.name}{" "}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-medium text-gray-900">
+                  {selectedMember.user.nickname}
+                </h2>
+                <span className="text-muted-foreground">
+                  {selectedMember.user.name}
+                </span>
+                {/* <span>{selectedMember.user.skillLevel}</span> */}
+              </div>
               <button
                 onClick={closeModal}
                 className="text-gray-400 hover:text-gray-600 cursor-pointer"
@@ -235,17 +249,40 @@ export default function TeamMemberRatingList({
               </button>
             </div>
 
+            {/* skill level */}
+            <div className="px-4 flex mb-2">
+              {/* <span className="text-sm font-medium text-gray-700">실력</span> */}
+              <CustomSelect
+                size="sm"
+                value={skillLevel || ""}
+                onChange={(e) =>
+                  setSkillLevel(e.target.value as PlayerSkillLevel)
+                }
+                options={SKILL_LEVEL_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+                aria-label="skillLevel"
+                isPlaceholderSelectable={false}
+                className="w-40 grow shrink-0"
+              />
+            </div>
+
             {/* rating items */}
             <div className="px-4 divide-y divide-gray-100">
-              {RATING_ITEMS.map((item) => (
+              {RATING_ITEMS.map((item, index) => (
                 <div
                   key={item.key}
                   className="h-18 sm:h-16 flex items-center justify-between space-x-2 gap-1"
                 >
-                  <label className="text-lg font-medium text-gray-700">
-                    {item.label}
-                  </label>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm font-gray-300">{index + 1}.</span>
+                    <label className="text-sm font-medium text-gray-700">
+                      {item.label}
+                    </label>
+                  </div>
+                  <div className="flex gap-1.5 sm:gap-2 items-center">
                     {[1, 2, 3, 4, 5].map((score) => (
                       <button
                         key={score}

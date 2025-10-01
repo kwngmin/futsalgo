@@ -53,6 +53,7 @@ export async function getTeamMembers(teamId: string, currentUserId: string) {
               name: true,
               nickname: true,
               image: true,
+              skillLevel: true,
             },
           },
         },
