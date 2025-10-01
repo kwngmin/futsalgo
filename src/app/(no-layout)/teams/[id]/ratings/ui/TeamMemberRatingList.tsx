@@ -2,15 +2,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { rateTeamMember } from "../actions/rate-team-memer";
 import { Separator } from "@/shared/components/ui/separator";
-import { SquarePen, X } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import { PlayerSkillLevel } from "@prisma/client";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { SKILL_LEVEL_OPTIONS } from "@/entities/user/model/constants";
+import { SKILL_LEVEL_POINTS } from "@/app/onboarding/ui/OnboardingProfile";
 
 interface Member {
   id: string;
@@ -58,6 +59,16 @@ const RATING_ITEMS = [
   { key: "defense", label: "수비" },
 ] as const;
 
+// 초기 ratings 값 상수로 추출 (DRY 원칙)
+const INITIAL_RATINGS: RatingData = {
+  shooting: 1,
+  passing: 1,
+  stamina: 1,
+  physical: 1,
+  dribbling: 1,
+  defense: 1,
+};
+
 export default function TeamMemberRatingList({
   members,
   teamId,
@@ -66,33 +77,27 @@ export default function TeamMemberRatingList({
   console.log(currentUserId, "currentUserId");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ratings, setRatings] = useState<RatingData>({
-    shooting: 1,
-    passing: 1,
-    stamina: 1,
-    physical: 1,
-    dribbling: 1,
-    defense: 1,
-  });
+  const [ratings, setRatings] = useState<RatingData>(INITIAL_RATINGS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const [skillLevel, setSkillLevel] = useState<null | PlayerSkillLevel>(null);
+  const [skillLevel, setSkillLevel] = useState<PlayerSkillLevel | null>(null);
 
   const openModal = (member: Member) => {
     setSelectedMember(member);
     setSkillLevel(member.user.skillLevel);
     // 기존 평가가 있다면 해당 값으로 초기화, 없다면 1로 초기화
     if (member.currentRating) {
-      setRatings(member.currentRating);
-    } else {
+      // 명시적으로 필요한 속성만 추출하여 설정
       setRatings({
-        shooting: 1,
-        passing: 1,
-        stamina: 1,
-        physical: 1,
-        dribbling: 1,
-        defense: 1,
+        shooting: member.currentRating.shooting,
+        passing: member.currentRating.passing,
+        stamina: member.currentRating.stamina,
+        physical: member.currentRating.physical,
+        dribbling: member.currentRating.dribbling,
+        defense: member.currentRating.defense,
       });
+    } else {
+      setRatings(INITIAL_RATINGS);
     }
     setIsModalOpen(true);
   };
@@ -100,16 +105,35 @@ export default function TeamMemberRatingList({
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedMember(null);
-    setRatings({
-      shooting: 1,
-      passing: 1,
-      stamina: 1,
-      physical: 1,
-      dribbling: 1,
-      defense: 1,
-    });
+    setRatings(INITIAL_RATINGS);
     setSkillLevel(null);
   };
+
+  // 선택한 실력 등급에 따른 최대 포인트 (안전하게 처리)
+  const maxPoints = useMemo(() => {
+    if (!skillLevel) return 0;
+    return SKILL_LEVEL_POINTS[skillLevel] ?? 0;
+  }, [skillLevel]);
+
+  console.log(skillLevel, "skillLevel");
+
+  // 현재 사용한 총 포인트 계산 (정의된 rating 항목만 사용)
+  const totalUsedPoints = useMemo(() => {
+    return RATING_ITEMS.reduce((sum, item) => sum + ratings[item.key], 0);
+  }, [ratings]);
+
+  // 남은 포인트
+  const remainingPoints = maxPoints - totalUsedPoints;
+  console.log(remainingPoints, "remainingPoints");
+  console.log(maxPoints, "maxPoints");
+  console.log(totalUsedPoints, "totalUsedPoints");
+
+  // 남은 포인트가 음수일 때 ratings 초기화
+  useEffect(() => {
+    if (remainingPoints < 0) {
+      setRatings(INITIAL_RATINGS);
+    }
+  }, [remainingPoints]);
 
   const handleRatingChange = (key: keyof RatingData, value: number) => {
     setRatings((prev) => ({
@@ -118,10 +142,16 @@ export default function TeamMemberRatingList({
     }));
   };
 
+  // 특정 점수 버튼이 비활성화되어야 하는지 확인
+  const isScoreDisabled = (currentItemKey: keyof RatingData, score: number) => {
+    const currentValue = ratings[currentItemKey];
+    const pointDifference = score - currentValue;
+    return totalUsedPoints + pointDifference > maxPoints;
+  };
+
   const handleSubmit = async () => {
     if (!selectedMember) return;
 
-    setSkillLevel(null);
     setIsSubmitting(true);
     try {
       const result = await rateTeamMember({
@@ -196,11 +226,6 @@ export default function TeamMemberRatingList({
                             }
                           )}
                         </span>
-                        // <span className="text-gray-500">
-                        //   {format(new Date(member.ratedAt), "YYYY년 M월 dd일", {
-                        //     locale: ko,
-                        //   })}{" "}
-                        // </span>
                       )}
                       <span className="text-gray-400"> • </span>
                       <span className="text-gray-500">평가 완료</span>
@@ -239,19 +264,25 @@ export default function TeamMemberRatingList({
                 <span className="text-muted-foreground">
                   {selectedMember.user.name}
                 </span>
-                {/* <span>{selectedMember.user.skillLevel}</span> */}
               </div>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-600 cursor-pointer"
-              >
-                <X className="size-6" />
-              </button>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">남은 포인트:</span>
+                <span
+                  className={`text-sm font-semibold ${
+                    remainingPoints === 0
+                      ? "text-green-600"
+                      : remainingPoints < 0
+                      ? "text-red-600"
+                      : "text-blue-600"
+                  }`}
+                >
+                  {remainingPoints} / {maxPoints}
+                </span>
+              </div>
             </div>
 
             {/* skill level */}
             <div className="px-4 flex mb-2">
-              {/* <span className="text-sm font-medium text-gray-700">실력</span> */}
               <CustomSelect
                 size="sm"
                 value={skillLevel || ""}
@@ -282,21 +313,30 @@ export default function TeamMemberRatingList({
                       {item.label}
                     </label>
                   </div>
-                  <div className="flex gap-1.5 sm:gap-2 items-center">
-                    {[1, 2, 3, 4, 5].map((score) => (
-                      <button
-                        key={score}
-                        onClick={() => handleRatingChange(item.key, score)}
-                        className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
-                          ratings[item.key] >= score
-                            ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
-                            : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700"
-                        }`}
-                      >
-                        {score}
-                      </button>
-                    ))}
-                    <span className="hidden sm:block text-gray-600 ml-4">
+                  <div className="flex gap-2 items-center">
+                    {[1, 2, 3, 4, 5].map((score) => {
+                      const disabled = isScoreDisabled(item.key, score);
+                      const isSelected = ratings[item.key] >= score;
+
+                      return (
+                        <button
+                          key={score}
+                          type="button"
+                          onClick={() => handleRatingChange(item.key, score)}
+                          disabled={disabled}
+                          className={`size-10 sm:size-9 rounded-full border transition-colors cursor-pointer ${
+                            isSelected
+                              ? "font-semibold bg-gray-700 border-transparent hover:bg-gray-500 text-white"
+                              : disabled
+                              ? "font-medium border-transparent text-gray-300 cursor-not-allowed bg-gray-50"
+                              : "font-medium border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-700 cursor-pointer"
+                          }`}
+                        >
+                          {score}
+                        </button>
+                      );
+                    })}
+                    <span className="hidden sm:block text-gray-600 ml-4 min-w-10 text-center">
                       <span className="font-medium text-gray-800">
                         {ratings[item.key]}
                       </span>

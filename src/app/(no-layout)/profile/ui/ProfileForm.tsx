@@ -115,7 +115,7 @@ const ProfileForm = ({ data }: { data: User }) => {
         defense: 1,
       });
     }
-  }, [remainingPoints, setRatings]);
+  }, [remainingPoints]);
 
   const handleRatingChange = (key: keyof RatingData, value: number) => {
     const currentValue = ratings[key];

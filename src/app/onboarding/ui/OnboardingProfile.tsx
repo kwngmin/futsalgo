@@ -149,7 +149,7 @@ export function OnboardingProfile({
         defense: 1,
       });
     }
-  }, [remainingPoints, setRatings]);
+  }, [remainingPoints]);
 
   // 실력 등급이 변경되면 ratings 초기화
   useEffect(() => {
