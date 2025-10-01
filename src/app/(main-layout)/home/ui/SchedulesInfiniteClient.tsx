@@ -67,6 +67,17 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
     router,
   });
 
+  // 필터가 적용되었는지 확인
+  const hasActiveFilters = useMemo(() => {
+    return Boolean(
+      filters.searchQuery ||
+        filters.matchType ||
+        filters.days ||
+        filters.startPeriod ||
+        filters.city
+    );
+  }, [filters]);
+
   // useInfiniteQuery로 페이지네이션 처리
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -88,11 +99,13 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         }
         return allPages.length + 1; // 다음 페이지 번호
       },
-      // 초기 데이터 설정
-      initialData: {
-        pages: [initialData],
-        pageParams: [1],
-      },
+      // 필터가 없을 때만 초기 데이터 사용
+      initialData: !hasActiveFilters
+        ? {
+            pages: [initialData],
+            pageParams: [1],
+          }
+        : undefined,
       staleTime: 1000 * 60 * 2,
       gcTime: 1000 * 60 * 10,
       refetchOnWindowFocus: false,

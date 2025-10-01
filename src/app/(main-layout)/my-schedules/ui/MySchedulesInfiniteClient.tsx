@@ -64,6 +64,17 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
     defaultTab: "my-schedules",
   });
 
+  // 필터가 적용되었는지 확인
+  const hasActiveFilters = useMemo(() => {
+    return Boolean(
+      filters.searchQuery ||
+        filters.matchType ||
+        filters.days ||
+        filters.startPeriod ||
+        filters.city
+    );
+  }, [filters]);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["my-schedules", session.data?.user?.id, filters],
@@ -80,10 +91,13 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
         }
         return allPages.length + 1;
       },
-      initialData: {
-        pages: [initialData],
-        pageParams: [1],
-      },
+      // 필터가 없을 때만 초기 데이터 사용
+      initialData: !hasActiveFilters
+        ? {
+            pages: [initialData],
+            pageParams: [1],
+          }
+        : undefined,
       enabled: !!session.data?.user?.id,
       staleTime: 1000 * 60 * 2,
       gcTime: 1000 * 60 * 10,
