@@ -3,10 +3,11 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import ScheduleList from "@/app/(main-layout)/ui/ScheduleList";
-import SchedulePageLoading from "@/app/(main-layout)/ui/loading";
+
 import { getPlayerSchedules } from "../actions/get-player-schedules";
 import { CalendarBlankIcon } from "@phosphor-icons/react";
+import SchedulePageLoading from "@/app/(main-layout)/home/ui/loading";
+import ScheduleList from "@/app/(main-layout)/home/ui/ScheduleList";
 
 interface PlayerScheduleProps {
   userId: string;
