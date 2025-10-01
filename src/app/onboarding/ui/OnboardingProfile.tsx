@@ -138,6 +138,19 @@ export function OnboardingProfile({
   // 남은 포인트
   const remainingPoints = maxPoints - totalUsedPoints;
 
+  useEffect(() => {
+    if (remainingPoints < 0) {
+      setRatings({
+        shooting: 1,
+        passing: 1,
+        stamina: 1,
+        physical: 1,
+        dribbling: 1,
+        defense: 1,
+      });
+    }
+  }, [remainingPoints, setRatings]);
+
   // 실력 등급이 변경되면 ratings 초기화
   useEffect(() => {
     if (selectedSkillLevel) {

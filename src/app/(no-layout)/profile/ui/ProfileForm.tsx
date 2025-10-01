@@ -4,7 +4,7 @@ import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Condition,
   Position,
@@ -103,6 +103,19 @@ const ProfileForm = ({ data }: { data: User }) => {
 
   // 남은 포인트
   const remainingPoints = maxPoints - totalUsedPoints;
+
+  useEffect(() => {
+    if (remainingPoints < 0) {
+      setRatings({
+        shooting: 1,
+        passing: 1,
+        stamina: 1,
+        physical: 1,
+        dribbling: 1,
+        defense: 1,
+      });
+    }
+  }, [remainingPoints, setRatings]);
 
   const handleRatingChange = (key: keyof RatingData, value: number) => {
     const currentValue = ratings[key];
