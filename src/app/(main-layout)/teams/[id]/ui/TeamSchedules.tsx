@@ -1,12 +1,12 @@
 "use client";
 
-import SchedulePageLoading from "@/app/(main-layout)/ui/loading";
-import ScheduleList from "@/app/(main-layout)/ui/ScheduleList";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { getTeamSchedules } from "../actions/get-team-schedules";
 import { CalendarBlankIcon } from "@phosphor-icons/react";
+import SchedulePageLoading from "@/app/(main-layout)/home/ui/loading";
+import ScheduleList from "@/app/(main-layout)/home/ui/ScheduleList";
 
 interface TeamSchedulesProps {
   teamId: string;
