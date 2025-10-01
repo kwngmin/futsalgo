@@ -1,5 +1,6 @@
 "use server";
 
+import { cache } from "react";
 import { ScheduleFilters } from "@/features/filter-list/model/types";
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
@@ -25,10 +26,16 @@ export interface GetMySchedulesResponse {
   data?: {
     schedules: ScheduleWithDetails[];
     manageableTeams: Team[];
+    hasMore?: boolean;
+    totalCount?: number;
   };
 }
 
-// 공통 include 객체를 상수로 정의하여 DRY 원칙 적용
+export interface ScheduleFiltersWithPagination extends ScheduleFilters {
+  page?: number;
+  pageSize?: number;
+}
+
 const SCHEDULE_INCLUDE = {
   hostTeam: true,
   invitedTeam: true,
@@ -37,15 +44,6 @@ const SCHEDULE_INCLUDE = {
   likes: true,
 } as const;
 
-// 날짜 유틸리티 함수들을 별도 파일로 분리하는 것을 고려해보세요
-// utils/date-helpers.ts
-// function getStartOfDay(date: Date = new Date()): Date {
-//   const startOfDay = new Date(date);
-//   startOfDay.setHours(0, 0, 0, 0);
-//   return startOfDay;
-// }
-
-// 일정 조회를 위한 공통 where 조건 생성
 function createScheduleWhereCondition(teamIds: string[]) {
   return {
     status: { not: "DELETED" as const },
@@ -53,7 +51,6 @@ function createScheduleWhereCondition(teamIds: string[]) {
   };
 }
 
-// 사용자의 팀 정보 조회
 async function getUserTeamInfo(userId: string) {
   const player = await prisma.user.findUnique({
     where: { id: userId },
@@ -80,7 +77,6 @@ async function getUserTeamInfo(userId: string) {
   };
 }
 
-// 검색 조건 생성 함수
 function createSearchCondition(searchQuery?: string) {
   if (!searchQuery || searchQuery.trim() === "") {
     return {};
@@ -105,44 +101,38 @@ function createSearchCondition(searchQuery?: string) {
   };
 }
 
-// 모든 일정을 조회하는 통합 함수
 async function getAllSchedules(
   teamIds: string[],
-  filters?: ScheduleFilters
-): Promise<ScheduleWithDetails[]> {
-  // const today = getStartOfDay();
+  filters: ScheduleFiltersWithPagination
+): Promise<{ schedules: ScheduleWithDetails[]; totalCount: number }> {
+  const page = filters.page || 1;
+  const pageSize = filters.pageSize || 20;
+  const skip = (page - 1) * pageSize;
 
-  return prisma.schedule.findMany({
-    where: {
-      ...createScheduleWhereCondition(teamIds),
-      ...createSearchCondition(filters?.searchQuery),
-      matchType: filters?.matchType,
-      dayOfWeek: filters?.days ? { in: filters.days } : undefined,
-      startPeriod: filters?.startPeriod
-        ? { in: filters.startPeriod }
-        : undefined,
-      city: filters?.city,
-      district: filters?.district,
-    },
-    include: SCHEDULE_INCLUDE,
-    orderBy: [
-      // 오늘 날짜 기준으로 미래 일정은 오름차순, 과거 일정은 내림차순
-      {
-        date: "desc",
-      },
-      // 날짜가 같은 경우 시간순 정렬
-      {
-        startTime: "desc",
-      },
-      // 동일 시간대 일정은 최신 생성순
-      {
-        createdAt: "desc",
-      },
-    ],
-  });
+  const whereCondition = {
+    ...createScheduleWhereCondition(teamIds),
+    ...createSearchCondition(filters.searchQuery),
+    matchType: filters.matchType,
+    dayOfWeek: filters.days ? { in: filters.days } : undefined,
+    startPeriod: filters.startPeriod ? { in: filters.startPeriod } : undefined,
+    city: filters.city,
+    district: filters.district,
+  };
+
+  const [schedules, totalCount] = await Promise.all([
+    prisma.schedule.findMany({
+      where: whereCondition,
+      include: SCHEDULE_INCLUDE,
+      orderBy: [{ date: "desc" }, { startTime: "desc" }, { createdAt: "desc" }],
+      skip,
+      take: pageSize,
+    }) as Promise<ScheduleWithDetails[]>,
+    prisma.schedule.count({ where: whereCondition }),
+  ]);
+
+  return { schedules, totalCount };
 }
 
-// 에러 처리를 위한 헬퍼 함수
 function handleDatabaseError(error: unknown): string {
   if (
     error instanceof Error &&
@@ -153,54 +143,72 @@ function handleDatabaseError(error: unknown): string {
   return "서버 오류가 발생했습니다";
 }
 
-export async function getMySchedules(
-  filters?: ScheduleFilters
-): Promise<GetMySchedulesResponse> {
-  try {
-    // 데이터베이스 연결 확인
-    await prisma.$queryRaw`SELECT 1`;
+/**
+ * 내 일정 조회 - 페이지네이션 지원
+ * React의 cache()로 요청 중복 제거
+ */
+export const getMySchedules = cache(
+  async (
+    filters: ScheduleFiltersWithPagination = {}
+  ): Promise<GetMySchedulesResponse> => {
+    const startTime = performance.now();
+    const page = filters.page || 1;
+    const pageSize = filters.pageSize || 20;
 
-    const session = await auth();
+    console.log(`🔍 Fetching my schedules - Page ${page}:`, filters);
 
-    // 로그인하지 않은 경우
-    if (!session?.user?.id) {
-      return {
-        success: false,
-        error: "로그인이 필요합니다",
-      };
-    }
+    try {
+      await prisma.$queryRaw`SELECT 1`;
 
-    const { approvedTeamIds, manageableTeams } = await getUserTeamInfo(
-      session.user.id
-    );
+      const session = await auth();
 
-    // 팀에 속하지 않은 경우
-    if (approvedTeamIds.length === 0) {
+      if (!session?.user?.id) {
+        return {
+          success: false,
+          error: "로그인이 필요합니다",
+        };
+      }
+
+      const { approvedTeamIds, manageableTeams } = await getUserTeamInfo(
+        session.user.id
+      );
+
+      if (approvedTeamIds.length === 0) {
+        return {
+          success: true,
+          data: {
+            schedules: [],
+            manageableTeams: [],
+            hasMore: false,
+            totalCount: 0,
+          },
+        };
+      }
+
+      const { schedules, totalCount } = await getAllSchedules(
+        approvedTeamIds,
+        filters
+      );
+
+      const endTime = performance.now();
+      console.log(`✅ My schedules fetched in ${endTime - startTime}ms`);
+
       return {
         success: true,
         data: {
-          schedules: [],
-          manageableTeams: [],
+          schedules,
+          manageableTeams: page === 1 ? manageableTeams : [],
+          hasMore: schedules.length === pageSize,
+          totalCount,
         },
       };
+    } catch (error) {
+      console.error("내 일정 목록 조회 실패:", error);
+
+      return {
+        success: false,
+        error: handleDatabaseError(error),
+      };
     }
-
-    // 모든 일정을 한 번에 조회
-    const schedules = await getAllSchedules(approvedTeamIds, filters);
-
-    return {
-      success: true,
-      data: {
-        schedules,
-        manageableTeams,
-      },
-    };
-  } catch (error) {
-    console.error("내 일정 목록 조회 실패:", error);
-
-    return {
-      success: false,
-      error: handleDatabaseError(error),
-    };
   }
-}
+);

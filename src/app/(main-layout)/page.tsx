@@ -24,5 +24,10 @@ async function ScheduleDataFetcher({ searchQuery }: { searchQuery?: string }) {
     pageSize: 20,
   });
 
-  return <SchedulesInfiniteClient initialData={initialData} />;
+  return (
+    <SchedulesInfiniteClient
+      initialData={initialData}
+      searchQuery={searchQuery}
+    />
+  );
 }

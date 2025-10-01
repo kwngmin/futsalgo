@@ -19,11 +19,16 @@ interface FilterValues {
 /**
  * 일정 필터 관리 커스텀 훅
  */
-export const useScheduleFilters = (
-  initialSearch: string,
-  router: AppRouterInstance
-) => {
-  const [currentTab, setCurrentTab] = useState<TabType>("schedules");
+export const useScheduleFilters = ({
+  initialSearch,
+  router,
+  defaultTab = "schedules",
+}: {
+  initialSearch: string;
+  router: AppRouterInstance;
+  defaultTab?: TabType;
+}) => {
+  const [currentTab, setCurrentTab] = useState<TabType>(defaultTab);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState(initialSearch);
   const [openFilter, setOpenFilter] = useState<FilterType | null>(null);

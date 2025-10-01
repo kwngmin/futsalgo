@@ -5,18 +5,19 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, lazy, Suspense, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { ArrowLeft } from "lucide-react";
 
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
-import ListHeader from "@/features/tab-and-search/ui/ListHeader";
-
+import { useScheduleFilters } from "../../home/lib/use-schedule-filters";
 import ScheduleFilterBar from "@/features/filter-list/ui/ScheduleFilterBar";
-import { getSchedules, GetSchedulesResponse } from "../actions/get-schedules";
-import { useScheduleFilters } from "../lib/use-schedule-filters";
-import LoginButton from "./LoginButton";
-import AddScheduleButton from "./AddScheduleButton";
-import ScheduleSection from "./ScheduleSection";
+import AddScheduleButton from "../../home/ui/AddScheduleButton";
+import ScheduleList from "../../home/ui/ScheduleList";
+import {
+  getMySchedules,
+  GetMySchedulesResponse,
+} from "../actions/get-my-schedules";
+import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
 
-// 필터 컴포넌트 동적 임포트
 const FilterMatchType = lazy(
   () => import("@/features/filter-list/ui/FilterScheduleMatch")
 );
@@ -31,19 +32,15 @@ const FilterStartPeriod = lazy(
 );
 
 interface Props {
-  initialData: GetSchedulesResponse;
-  searchQuery?: string;
+  initialData: GetMySchedulesResponse;
 }
 
-/**
- * Client Component - 인피니티 스크롤 처리
- */
-const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
+const MySchedulesInfiniteClient = ({ initialData }: Props) => {
   const router = useRouter();
   const session = useSession();
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: "100px", // 뷰포트보다 100px 전에 로딩 시작
+    rootMargin: "100px",
   });
 
   const {
@@ -53,7 +50,6 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
     openFilter,
     filterValues,
     filters,
-    handleTabChange,
     handleSearchChange,
     handleSearchClear,
     handleSearchFocus,
@@ -63,42 +59,37 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
     setOpenFilter,
     setFilterValues,
   } = useScheduleFilters({
-    initialSearch: searchQuery ?? "",
+    initialSearch: "",
     router,
+    defaultTab: "my-schedules",
   });
 
-  // useInfiniteQuery로 페이지네이션 처리
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["schedules", session.data?.user?.id, filters],
+      queryKey: ["my-schedules", session.data?.user?.id, filters],
       queryFn: ({ pageParam = 1 }) =>
-        getSchedules({
+        getMySchedules({
           ...filters,
           page: pageParam,
           pageSize: 20,
         }),
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => {
-        // 더 가져올 데이터가 있는지 확인
-        if (
-          !lastPage.data?.pastSchedules ||
-          lastPage.data.pastSchedules.length < 20
-        ) {
-          return undefined; // 더 이상 페이지 없음
+        if (!lastPage.data?.schedules || lastPage.data.schedules.length < 20) {
+          return undefined;
         }
-        return allPages.length + 1; // 다음 페이지 번호
+        return allPages.length + 1;
       },
-      // 초기 데이터 설정
       initialData: {
         pages: [initialData],
         pageParams: [1],
       },
+      enabled: !!session.data?.user?.id,
       staleTime: 1000 * 60 * 2,
       gcTime: 1000 * 60 * 10,
       refetchOnWindowFocus: false,
     });
 
-  // 스크롤이 하단에 도달하면 자동으로 다음 페이지 로드
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
@@ -109,26 +100,27 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
     router.push("/schedule/new");
   }, [router]);
 
-  // 모든 페이지의 데이터를 병합
-  const allSchedules = useMemo(() => {
-    if (!data)
-      return { todaysSchedules: [], upcomingSchedules: [], pastSchedules: [] };
+  const handleGoBack = useCallback(() => {
+    router.push("/");
+  }, [router]);
 
-    return {
-      // 첫 페이지의 오늘/예정 일정만 사용
-      todaysSchedules: data.pages[0]?.data?.todaysSchedules || [],
-      upcomingSchedules: data.pages[0]?.data?.upcomingSchedules || [],
-      // 모든 페이지의 과거 일정을 병합
-      pastSchedules: data.pages.flatMap(
-        (page) => page.data?.pastSchedules || []
-      ),
-    };
+  const handleMySchedulesTabChange = useCallback(
+    (tab: TabType) => {
+      if (tab === "schedules") {
+        router.push("/");
+      }
+    },
+    [router]
+  );
+
+  const allSchedules = useMemo(() => {
+    if (!data) return [];
+    return data.pages.flatMap((page) => page.data?.schedules || []);
   }, [data]);
 
   const hasManageableTeams =
     data?.pages[0]?.data?.manageableTeams &&
     data.pages[0].data.manageableTeams.length > 0;
-  const isLoggedIn = !!session.data?.user?.id;
 
   const tabOptions = useMemo(
     () => [
@@ -138,6 +130,30 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
     []
   );
 
+  // 에러 처리
+  if (!initialData.success) {
+    return (
+      <>
+        <div className="flex items-center justify-between px-4 h-16 shrink-0">
+          <div className="flex items-center gap-3">
+            <button
+              className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+              onClick={handleGoBack}
+            >
+              <ArrowLeft style={{ width: "24px", height: "24px" }} />
+            </button>
+            <h1 className="text-[1.625rem] font-bold cursor-default">
+              내 일정
+            </h1>
+          </div>
+        </div>
+        <div className="mx-4 bg-red-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-red-600">
+          {initialData.error || "일정을 불러오는 중 오류가 발생했습니다."}
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <ListHeader
@@ -146,7 +162,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         currentTab={currentTab}
         searchFocused={searchFocused}
         searchValue={searchValue}
-        onTabChange={handleTabChange}
+        onTabChange={handleMySchedulesTabChange}
         onSearchChange={handleSearchChange}
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
@@ -162,7 +178,6 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         setFilterValues={setFilterValues}
       />
 
-      {/* 필터 컴포넌트 - Lazy Loading */}
       <Suspense fallback={null}>
         {openFilter === "matchType" && (
           <FilterMatchType
@@ -194,18 +209,18 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         <AddScheduleButton onClick={handleScheduleCreate} />
       )}
 
-      {!isLoggedIn && <LoginButton />}
+      <div className="mt-3">
+        {allSchedules.map((schedule) => (
+          <ScheduleList schedule={schedule} key={schedule.id} />
+        ))}
 
-      {/* 일정 목록 */}
-      <ScheduleSection
-        todaysSchedules={allSchedules.todaysSchedules}
-        upcomingSchedules={allSchedules.upcomingSchedules}
-        pastSchedules={allSchedules.pastSchedules}
-        userId={session.data?.user?.id}
-        error={undefined}
-      />
+        {allSchedules.length === 0 && (
+          <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-muted-foreground">
+            소속된 팀의 일정이 없습니다.
+          </div>
+        )}
+      </div>
 
-      {/* 인피니티 스크롤 트리거 */}
       {hasNextPage && (
         <div ref={ref} className="flex justify-center py-4">
           {isFetchingNextPage ? (
@@ -218,8 +233,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         </div>
       )}
 
-      {/* 모든 데이터 로드 완료 */}
-      {!hasNextPage && allSchedules.pastSchedules.length > 0 && (
+      {!hasNextPage && allSchedules.length > 0 && (
         <div className="flex justify-center py-4">
           <div className="text-sm text-muted-foreground">
             모든 일정을 불러왔습니다
@@ -230,4 +244,4 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
   );
 };
 
-export default SchedulesInfiniteClient;
+export default MySchedulesInfiniteClient;
