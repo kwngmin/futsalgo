@@ -26,7 +26,7 @@ const BottomNav = () => {
               type="button"
             >
               <Icon
-                className="my-1 size-7 group-active:scale-125 transition-transform duration-100 ease-in-out"
+                className="my-1 size-7 group-active:scale-125 transition-all duration-200 ease-in-out"
                 // className="mb-1 mt-0.5"
                 // className="w-6 h-6 mb-1"
                 // weight="fill"
