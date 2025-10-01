@@ -7,7 +7,7 @@ const SchedulePageLoading = ({
 }) => {
   if (isPage) {
     return (
-      <div className="max-w-2xl mx-auto pb-16 flex flex-col">
+      <div className="max-w-2xl mx-auto pb-16 flex flex-col w-full">
         <div className="flex items-center justify-between px-4 h-16 shrink-0">
           <div className="flex gap-3">
             <h1

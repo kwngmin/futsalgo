@@ -70,7 +70,7 @@ const SchedulesContainer = () => {
   const handleScheduleCreate = () => router.push("/schedule/new");
 
   return (
-    <>
+    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <MemoizedListHeader
         tabOptions={[
           { tab: "schedules", label: "경기일정" },
@@ -134,7 +134,7 @@ const SchedulesContainer = () => {
         userId={session.data?.user?.id}
         error={error}
       />
-    </>
+    </div>
   );
 };
 

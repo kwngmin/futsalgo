@@ -9,11 +9,9 @@ import SchedulesContainer from "./home/ui/SchedulesContainer";
  */
 const HomePage = () => {
   return (
-    <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <Suspense fallback={<SchedulePageLoading isPage />}>
-        <SchedulesContainer />
-      </Suspense>
-    </div>
+    <Suspense fallback={<SchedulePageLoading isPage />}>
+      <SchedulesContainer />
+    </Suspense>
   );
 };
 
