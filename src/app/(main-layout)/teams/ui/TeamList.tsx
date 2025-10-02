@@ -3,8 +3,8 @@ import { TEAM_GENDER } from "@/entities/team/model/constants";
 import { Team } from "@prisma/client";
 import { Blend, ChevronRight, Mars, Venus } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { formatCityName } from "@/entities/team/lib/format-city-name";
+import Link from "next/link";
 
 const TeamList = ({
   team,
@@ -20,14 +20,12 @@ const TeamList = ({
   };
   size?: "sm" | "md";
 }) => {
-  const router = useRouter();
-
   return (
-    <div
+    <Link
+      href={`/teams/${team.id}`}
       className={`${
         size === "md" ? "py-1.5" : "py-3 border-t first:border-t-0"
       } gap-3 px-4 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer relative flex items-center`}
-      onClick={() => router.push(`/teams/${team.id}`)}
     >
       {/* 팀 로고 */}
       <div
@@ -121,7 +119,7 @@ const TeamList = ({
           {size === "sm" && <ChevronRight className="size-5 text-gray-500" />}
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 
