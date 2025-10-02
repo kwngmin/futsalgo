@@ -2,13 +2,11 @@
 
 import { useNavigation } from "@/shared/hooks/use-navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { Fragment } from "react";
 
 const SideNav = () => {
-  const { navItems, activeMenu, router } = useNavigation();
-  const handleClick = (href: string) => {
-    router.push(href);
-  };
+  const { navItems, activeMenu } = useNavigation();
 
   return (
     <Fragment>
@@ -16,10 +14,10 @@ const SideNav = () => {
       <div className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-1/2 -translate-x-[31.5rem] lg:w-64 lg:bg-white lg:border-r lg:border-gray-200">
         <div className="flex flex-col w-full">
           {/* 로고 */}
-          <button
+          <Link
             className="flex items-center justify-center h-15 px-8 cursor-pointer my-1"
             type="button"
-            onClick={() => router.push("/")}
+            href="/"
           >
             <Image
               src="/futsalgo_logo_v4.svg"
@@ -27,7 +25,7 @@ const SideNav = () => {
               width={130}
               height={22}
             />
-          </button>
+          </Link>
 
           {/* 데스크톱 네비게이션 */}
           <nav className="flex-1 px-4 mb-4 space-y-1 overflow-y-auto">
@@ -35,9 +33,9 @@ const SideNav = () => {
               const Icon = item.icon;
               const isActive = activeMenu === item.id;
               return (
-                <button
+                <Link
                   key={item.id}
-                  onClick={() => handleClick(item.href)}
+                  href={item.href}
                   className={`w-full flex items-center px-4 py-3 text-xl rounded-lg transition-colors cursor-pointer ${
                     isActive
                       ? "bg-slate-100 text-gray-900 font-bold"
@@ -52,7 +50,7 @@ const SideNav = () => {
                     size={28}
                   />
                   {item.label}
-                </button>
+                </Link>
               );
             })}
           </nav>
@@ -63,10 +61,10 @@ const SideNav = () => {
       <div className="hidden md:flex md:lg:hidden md:fixed md:inset-y-0 md:left-0 md:w-20 md:bg-white md:border-r md:border-gray-200">
         <div className="flex flex-col w-full">
           {/* 로고 */}
-          <button
+          <Link
             className="flex items-center justify-center h-18 cursor-pointer"
             type="button"
-            onClick={() => router.push("/")}
+            href="/"
           >
             <Image
               src="/futsalgo_symbol.svg"
@@ -74,7 +72,7 @@ const SideNav = () => {
               width={28}
               height={25}
             />
-          </button>
+          </Link>
 
           {/* 태블릿 네비게이션 (아이콘만) */}
           <nav className="flex-1 p-2 pt-0 mb-4 space-y-1">
@@ -82,9 +80,9 @@ const SideNav = () => {
               const Icon = item.icon;
               const isActive = activeMenu === item.id;
               return (
-                <button
+                <Link
                   key={item.id}
-                  onClick={() => handleClick(item.href)}
+                  href={item.href}
                   className={`w-full flex items-center justify-center p-3 rounded-lg transition-colors cursor-pointer ${
                     isActive
                       ? "bg-gray-100 text-gray-900"
@@ -98,7 +96,7 @@ const SideNav = () => {
                     size={28}
                     weight={isActive ? "fill" : "regular"}
                   />
-                </button>
+                </Link>
               );
             })}
           </nav>

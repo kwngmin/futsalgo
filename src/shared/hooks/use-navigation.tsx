@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   CalendarIcon,
   TShirtIcon,
@@ -88,7 +88,6 @@ export const navItems = [
  * @returns 현재 활성화된 메뉴 ID, 라우터 객체, 전체 메뉴 항목
  */
 export const useNavigation = () => {
-  const router = useRouter();
   const pathname = usePathname();
 
   const getActiveMenu = (path: string) => {
@@ -114,6 +113,5 @@ export const useNavigation = () => {
   return {
     navItems,
     activeMenu,
-    router,
   };
 };
