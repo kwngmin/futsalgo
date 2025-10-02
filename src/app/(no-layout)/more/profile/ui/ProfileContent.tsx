@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ChevronRight, IdCard, Mail, Phone, User2, X } from "lucide-react";
 import { User } from "@prisma/client";
 import ProfileForm from "./ProfileForm";
@@ -16,9 +15,9 @@ import {
   getCurrentAge,
 } from "@/entities/user/model/actions";
 import ProfilePhoto from "./ProfilePhoto";
+import Link from "next/link";
 
 export default function ProfileContent({ data }: { data: User }) {
-  const router = useRouter();
   const [modalStates, setModalStates] = useState({
     nickname: false,
     email: false,
@@ -34,11 +33,6 @@ export default function ProfileContent({ data }: { data: User }) {
 
   const closeModal = (field: keyof typeof modalStates) => {
     setModalStates((prev) => ({ ...prev, [field]: false }));
-  };
-
-  const handleGoBack = () => {
-    // router.back();
-    router.push("/more");
   };
 
   const renderFieldModal = (
@@ -122,12 +116,12 @@ export default function ProfileContent({ data }: { data: User }) {
         </Button> */}
         <h1 className="text-[1.625rem] font-bold">프로필</h1>
 
-        <button
+        <Link
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
-          onClick={handleGoBack}
+          href="/more"
         >
           <X className="size-6" />
-        </button>
+        </Link>
       </div>
 
       <div className="space-y-3">

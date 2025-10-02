@@ -23,7 +23,7 @@ import {
   PlayerSkillLevel,
   OnboardingStep,
 } from "@prisma/client";
-import { updateProfileData } from "@/app/(no-layout)/profile/model/actions";
+import { updateProfileData } from "@/app/(no-layout)/more/profile/model/actions";
 import {
   FOOT_OPTIONS,
   GENDER_OPTIONS,

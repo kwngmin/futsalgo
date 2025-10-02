@@ -13,7 +13,7 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { updateNickname } from "@/app/(no-layout)/profile/model/actions";
+import { updateNickname } from "@/app/(no-layout)/more/profile/model/actions";
 import { useNicknameValidation } from "@/features/validation/hooks/use-validation";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
 import { signOut, useSession } from "next-auth/react";

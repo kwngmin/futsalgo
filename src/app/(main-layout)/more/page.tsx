@@ -8,17 +8,14 @@ import {
   ChevronRight,
   Loader2,
   CircleUserRound,
-  ChartPie,
   Bug,
   Lightbulb,
-  NotebookPen,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 const MorePage = () => {
-  const router = useRouter();
   const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,50 +25,57 @@ const MorePage = () => {
         {
           icon: CircleUserRound,
           label: "프로필 수정",
-          action: () => {
-            setIsLoading(true);
-            router.push("/profile");
-          },
+          // action: () => {
+          //   setIsLoading(true);
+          //   router.push("/profile");
+          // },
+          href: "/more/profile",
         },
-        {
-          icon: NotebookPen,
-          label: "작성한 후기",
-          action: () => {
-            alert("작성한 후기");
-            // setIsLoading(true);
-            // router.push("/profile");
-          },
-        },
+        // {
+        //   icon: NotebookPen,
+        //   label: "작성한 후기",
+        //   action: () => {
+        //     alert("작성한 후기");
+        //   },
+        // },
       ],
     },
-    {
-      category: "분석",
-      items: [
-        {
-          icon: ChartPie,
-          label: "통계",
-          action: () => alert("통계"),
-        },
-      ],
-    },
+    // {
+    //   category: "분석",
+    //   items: [
+    //     {
+    //       icon: ChartPie,
+    //       label: "통계",
+    //       action: () => alert("통계"),
+    //     },
+    //   ],
+    // },
     {
       category: "지원",
       items: [
         {
           icon: Lightbulb,
           label: "제안하기",
-          action: () => alert("제안하기"),
+          href: "/more/profile",
+          // action: () => alert("제안하기"),
         },
         {
           icon: Bug,
           label: "버그 신고하기",
-          action: () => alert("버그 신고"),
+          href: "/more/profile",
+          // action: () => alert("버그 신고"),
         },
-        { icon: FileText, label: "이용약관", action: () => alert("이용약관") },
+        {
+          icon: FileText, //
+          label: "이용약관",
+          href: "/more/profile",
+          // action: () => alert("이용약관"),
+        },
         {
           icon: Shield,
           label: "개인정보처리방침",
-          action: () => alert("개인정보처리방침"),
+          href: "/more/profile",
+          // action: () => alert("개인정보처리방침"),
         },
       ],
     },
@@ -108,13 +112,12 @@ const MorePage = () => {
               원활한 서비스 이용을 위해 로그인이 필요합니다
             </h3>
             <div className="flex gap-2 justify-center mt-3">
-              <button
+              <Link
                 className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
-                // onClick={() => signIn()}
-                onClick={() => router.push("/login")}
+                href="/login"
               >
                 시작하기
-              </button>
+              </Link>
             </div>
           </div>
         )}
@@ -133,9 +136,10 @@ const MorePage = () => {
               )}
               <div className="">
                 {section.items.map((item, itemIndex) => (
-                  <button
+                  <Link
                     key={itemIndex}
-                    onClick={item.action}
+                    href={item.href}
+                    // onClick={item.action}
                     className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 sm:hover:rounded-lg transition-colors cursor-pointer"
                     // className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 hover:rounded-lg transition-colors cursor-pointer ${
                     //   itemIndex !== section.items.length - 1 ? `border-b` : ""
@@ -146,7 +150,7 @@ const MorePage = () => {
                       <span className="font-medium">{item.label}</span>
                     </div>
                     <ChevronRight className="size-5 text-gray-400" />
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>

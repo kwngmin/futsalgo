@@ -14,7 +14,7 @@ import {
 } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
-import { updateEmail } from "@/app/(no-layout)/profile/model/actions";
+import { updateEmail } from "@/app/(no-layout)/more/profile/model/actions";
 import { useEmailValidation } from "@/features/validation/hooks/use-validation";
 import { OnboardingStep } from "@prisma/client";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";

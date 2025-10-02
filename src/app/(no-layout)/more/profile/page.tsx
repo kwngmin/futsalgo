@@ -17,8 +17,6 @@ const ProfilePage = async () => {
     },
   });
 
-  console.log(user, "user");
-
   if (!user) {
     return (
       <div className="flex flex-col gap-4 items-center justify-center h-screen">

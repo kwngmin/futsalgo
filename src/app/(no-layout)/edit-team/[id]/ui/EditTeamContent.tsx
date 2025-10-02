@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ChevronRight, Flame, X } from "lucide-react";
 import { Team } from "@prisma/client";
 import { useState } from "react";
-import { FieldModal } from "@/app/(no-layout)/profile/ui/FieldModal";
+import { FieldModal } from "@/app/(no-layout)/more/profile/ui/FieldModal";
 import EditTeamForm from "./EditTeamForm";
 import EditTeamLogo from "./EditTeamLogo";
 
