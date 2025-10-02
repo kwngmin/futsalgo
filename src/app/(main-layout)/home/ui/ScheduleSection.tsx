@@ -11,6 +11,7 @@ interface ScheduleSectionProps {
   pastSchedules?: ScheduleWithDetails[];
   userId?: string;
   error?: Error | null;
+  isFetching?: boolean;
 }
 
 interface SectionHeaderProps {
@@ -25,6 +26,7 @@ const ScheduleSection = ({
   pastSchedules,
   userId,
   error,
+  isFetching,
 }: ScheduleSectionProps) => {
   // 섹션 헤더 컴포넌트
   const SectionHeader = ({ dotColor, title, subtitle }: SectionHeaderProps) => (
@@ -94,8 +96,28 @@ const ScheduleSection = ({
         </>
       )}
 
+      {isFetching && (
+        <div className="px-4">
+          {Array.from({ length: 10 }).map((_, index) => {
+            return (
+              <div key={index} className="flex items-center gap-3 py-2">
+                <div className="size-14 rounded-2xl bg-gray-100 animate-pulse shrink-0" />
+                <div className="grow flex flex-col gap-2">
+                  <div className="w-48 h-4 bg-gray-100 rounded animate-pulse" />
+                  <div className="w-32 h-5 bg-gray-100 rounded animate-pulse" />
+                </div>
+                <div className="size-10 flex items-center justify-center">
+                  <div className="size-6 bg-gray-100 rounded-full animate-pulse" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* 빈 상태 */}
-      {userId &&
+      {!isFetching &&
+        userId &&
         todaysSchedules?.length === 0 &&
         upcomingSchedules?.length === 0 &&
         pastSchedules?.length === 0 && <EmptyState />}

@@ -75,7 +75,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
     );
   }, [filters]);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery({
       queryKey: ["my-schedules", session.data?.user?.id, filters],
       queryFn: ({ pageParam = 1 }) =>
@@ -228,7 +228,26 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
           <ScheduleList schedule={schedule} key={schedule.id} />
         ))}
 
-        {allSchedules.length === 0 && (
+        {isFetching && (
+          <div className="px-4">
+            {Array.from({ length: 10 }).map((_, index) => {
+              return (
+                <div key={index} className="flex items-center gap-3 py-2">
+                  <div className="size-14 rounded-2xl bg-gray-100 animate-pulse shrink-0" />
+                  <div className="grow flex flex-col gap-2">
+                    <div className="w-48 h-4 bg-gray-100 rounded animate-pulse" />
+                    <div className="w-32 h-5 bg-gray-100 rounded animate-pulse" />
+                  </div>
+                  <div className="size-10 flex items-center justify-center">
+                    <div className="size-6 bg-gray-100 rounded-full animate-pulse" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {!isFetching && allSchedules.length === 0 && (
           <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-muted-foreground">
             소속된 팀의 일정이 없습니다.
           </div>

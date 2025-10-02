@@ -79,7 +79,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
   }, [filters]);
 
   // useInfiniteQuery로 페이지네이션 처리
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery({
       queryKey: ["schedules", session.data?.user?.id, filters],
       queryFn: ({ pageParam = 1 }) =>
@@ -216,6 +216,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         pastSchedules={allSchedules.pastSchedules}
         userId={session.data?.user?.id}
         error={undefined}
+        isFetching={isFetching}
       />
 
       {/* 인피니티 스크롤 트리거 */}
