@@ -1,11 +1,11 @@
 // model/actions/fetch-privacy.ts
 "use server";
 
-import getJsonFile from "@/shared/lib/file/get-json-file";
-import getMdFile from "@/shared/lib/file/get-md-file";
+import { readFile } from "fs/promises";
+import path from "path";
 import { cache } from "react";
 
-type PrivacyItem = {
+export type PrivacyItem = {
   id: string;
   fileName: string;
   date: string;
@@ -16,23 +16,40 @@ type PrivacyData = {
   content: string;
 };
 
-export const fetchPrivacy = cache(async (): Promise<PrivacyData> => {
-  // 병렬 처리: JSON 파일 읽기와 파싱을 동시에 시작
-  const [list] = await Promise.all([getJsonFile<PrivacyItem[]>("privacy")]);
+// 리스트만 가져오는 함수 (캐싱)
+export const fetchPrivacyList = cache(async (): Promise<PrivacyItem[]> => {
+  const jsonPath = path.join(process.cwd(), "data/legal", "privacy.json");
+  const jsonContent = await readFile(jsonPath, "utf-8");
+  const list = JSON.parse(jsonContent) as PrivacyItem[];
 
-  // 정렬 후 첫 번째 항목의 파일명 추출
-  const sortedList = list.sort(
+  return list.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+});
 
-  // MD 파일은 필요한 파일명을 알아낸 후에만 읽기
-  const content = await getMdFile({
-    fileName: sortedList[0].fileName,
-    type: "privacy",
-  });
+// 특정 파일의 콘텐츠만 가져오는 함수 (캐싱)
+export const fetchPrivacyContent = cache(
+  async (fileName: string): Promise<string> => {
+    try {
+      const mdPath = path.join(
+        process.cwd(),
+        "data/legal",
+        "privacy",
+        `${fileName}.md`
+      );
+      return await readFile(mdPath, "utf-8");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to load privacy/${fileName}.md: ${errorMessage}`);
+    }
+  }
+);
 
-  return {
-    list: sortedList,
-    content,
-  };
+// 초기 데이터 로딩 (리스트 + 첫 번째 콘텐츠)
+export const fetchInitialPrivacy = cache(async (): Promise<PrivacyData> => {
+  const list = await fetchPrivacyList();
+  const content = await fetchPrivacyContent(list[0].fileName);
+
+  return { list, content };
 });
