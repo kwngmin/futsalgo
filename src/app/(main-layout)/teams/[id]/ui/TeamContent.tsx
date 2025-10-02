@@ -293,36 +293,7 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 가입하기 */}
           <div className="px-4 mb-3">
-            {!data.data.currentUserMembership.isMember ? (
-              data.data.recruitmentStatus === "RECRUITING" && (
-                <Button
-                  className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
-                  size="lg"
-                  onClick={async () => {
-                    if (session.data) {
-                      try {
-                        const result = await joinTeam(id);
-                        console.log(result);
-                        if (result?.success) {
-                          alert("가입 신청이 완료되었습니다.");
-                          refetch();
-                        } else {
-                          alert(result?.error);
-                        }
-                      } catch (error) {
-                        console.error(error);
-                        alert("가입 신청에 실패했습니다.");
-                      }
-                    } else {
-                      alert("로그인이 필요합니다.");
-                      signIn();
-                    }
-                  }}
-                >
-                  가입 신청
-                </Button>
-              )
-            ) : data.data.currentUserMembership.status === "PENDING" ? (
+            {data.data.currentUserMembership.status === "PENDING" ? (
               <Button
                 className="w-full text-base font-semibold"
                 size="lg"
@@ -369,7 +340,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   </Button>
                 </div>
               </div>
-            ) : (
+            ) : data.data.currentUserMembership.status === "APPROVED" ? (
               <Button
                 className="w-full font-semibold"
                 size="lg"
@@ -382,6 +353,35 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
                 팀원 평가
               </Button>
+            ) : (
+              data.data.recruitmentStatus === "RECRUITING" && (
+                <Button
+                  className="w-full text-base font-semibold bg-gradient-to-r from-indigo-600 to-emerald-600"
+                  size="lg"
+                  onClick={async () => {
+                    if (session.data) {
+                      try {
+                        const result = await joinTeam(id);
+                        console.log(result);
+                        if (result?.success) {
+                          alert("가입 신청이 완료되었습니다.");
+                          refetch();
+                        } else {
+                          alert(result?.error);
+                        }
+                      } catch (error) {
+                        console.error(error);
+                        alert("가입 신청에 실패했습니다.");
+                      }
+                    } else {
+                      alert("로그인이 필요합니다.");
+                      signIn();
+                    }
+                  }}
+                >
+                  가입 신청
+                </Button>
+              )
             )}
           </div>
 

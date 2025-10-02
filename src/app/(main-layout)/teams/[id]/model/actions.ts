@@ -88,9 +88,12 @@ export async function getTeam(id: string) {
     const currentUserMembership: UserMembershipInfo = session?.user?.id
       ? (() => {
           const userMember = team.members.find(
-            (member) =>
-              member.user.id === session.user.id && member.status === "APPROVED"
+            (member) => member.user.id === session.user.id
           );
+          // const userMember = team.members.find(
+          //   (member) =>
+          //     member.user.id === session.user.id && member.status === "APPROVED"
+          // );
 
           return {
             isMember: !!userMember,
