@@ -106,8 +106,8 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
             pageParams: [1],
           }
         : undefined,
-      staleTime: 1000 * 60 * 2,
-      gcTime: 1000 * 60 * 10,
+      staleTime: 1000 * 60 * 10,
+      gcTime: 1000 * 60 * 30,
       refetchOnWindowFocus: false,
     });
 

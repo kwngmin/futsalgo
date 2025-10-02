@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import SchedulePageLoading from "./home/ui/loading";
+// import { Suspense } from "react";
+// import SchedulePageLoading from "./home/ui/loading";
 import { getSchedules } from "./home/actions/get-schedules";
 import SchedulesInfiniteClient from "./home/ui/SchedulesInfiniteClient";
 
@@ -10,9 +10,9 @@ export default async function HomePage(props: {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <Suspense fallback={<SchedulePageLoading isPage />}>
-        <ScheduleDataFetcher searchQuery={searchParams.search} />
-      </Suspense>
+      {/* <Suspense fallback={<SchedulePageLoading isPage />}> */}
+      <ScheduleDataFetcher searchQuery={searchParams.search} />
+      {/* </Suspense> */}
     </div>
   );
 }

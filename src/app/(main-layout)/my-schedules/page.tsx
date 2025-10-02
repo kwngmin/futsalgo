@@ -1,6 +1,6 @@
-import { Suspense } from "react";
+// import { Suspense } from "react";
+// import SchedulePageLoading from "../home/ui/loading";
 import { getMySchedules } from "./actions/get-my-schedules";
-import SchedulePageLoading from "../home/ui/loading";
 import MySchedulesInfiniteClient from "./ui/MySchedulesInfiniteClient";
 
 /**
@@ -10,9 +10,9 @@ import MySchedulesInfiniteClient from "./ui/MySchedulesInfiniteClient";
 export default async function MySchedulesPage() {
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <Suspense fallback={<SchedulePageLoading isPage isMySchedules />}>
-        <MySchedulesDataFetcher />
-      </Suspense>
+      {/* <Suspense fallback={<SchedulePageLoading isPage isMySchedules />}> */}
+      <MySchedulesDataFetcher />
+      {/* </Suspense> */}
     </div>
   );
 }

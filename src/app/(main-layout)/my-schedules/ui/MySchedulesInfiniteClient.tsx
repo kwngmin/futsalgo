@@ -99,8 +99,8 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
           }
         : undefined,
       enabled: !!session.data?.user?.id,
-      staleTime: 1000 * 60 * 2,
-      gcTime: 1000 * 60 * 10,
+      staleTime: 1000 * 60 * 10,
+      gcTime: 1000 * 60 * 30,
       refetchOnWindowFocus: false,
     });
 
