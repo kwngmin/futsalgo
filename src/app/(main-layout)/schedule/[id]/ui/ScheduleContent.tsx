@@ -49,6 +49,7 @@ import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSid
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import { getMatchLineupCount } from "../lib/summary-versus";
 import MatchStatsLeaderboard from "./MatchStatsLeaderboard";
+import Link from "next/link";
 
 /**
  * 시간 범위를 한국어 표기 형식으로 변환
@@ -651,15 +652,11 @@ const ScheduleContent = ({
                     className="overflow-hidden border-b border-gray-300 last:border-b-0 group-hover:border-gray-400 transition-colors"
                     key={match.id}
                   >
-                    <div
+                    <Link
                       className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                      onClick={() => {
-                        router.push(
-                          `/schedule/${scheduleId}/match/${
-                            match.id
-                          }?tab=${searchParams.get("tab")}`
-                        );
-                      }}
+                      href={`/schedule/${scheduleId}/match/${
+                        match.id
+                      }?tab=${searchParams.get("tab")}`}
                     >
                       <div className="flex items-center space-x-2 shrink-0">
                         <SoccerBallIcon
@@ -690,7 +687,7 @@ const ScheduleContent = ({
                       ) : (
                         <ChevronRight className="size-5 text-gray-400 shrink-0" />
                       )}
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -967,11 +964,9 @@ const ScheduleContent = ({
               )
             : ""}
         </span>
-        <div
+        <Link
+          href={`/players/${data.data.schedule?.createdBy.id}`}
           className="flex items-center gap-2 group cursor-pointer"
-          onClick={() => {
-            router.push(`/players/${data.data.schedule?.createdBy.id}`);
-          }}
         >
           <Image
             src={data.data.schedule?.createdBy.image ?? ""}
@@ -983,7 +978,7 @@ const ScheduleContent = ({
           <span className="text-sm font-medium text-gray-500 group-hover:underline group-hover:text-gray-700 underline-offset-2">
             {data.data.schedule?.createdBy.nickname}
           </span>
-        </div>
+        </Link>
       </div>
 
       {/* 수정 및 삭제 */}
