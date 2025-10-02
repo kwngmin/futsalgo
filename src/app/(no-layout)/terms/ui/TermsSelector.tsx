@@ -1,23 +1,20 @@
-// components/PrivacySelector.tsx
+// components/TermsSelector.tsx
 "use client";
 
 import { useState, useTransition } from "react";
 import {
-  fetchPrivacyContent,
-  type PrivacyItem,
-} from "../model/actions/fetch-privacy";
+  fetchTermsContent,
+  type TermsItem,
+} from "../model/actions/fetch-terms";
 import MarkdownView from "@/shared/components/MarkdownViewer";
 import { ChevronDown } from "lucide-react";
 
-type PrivacySelectorProps = {
-  initialList: PrivacyItem[];
+type TermsSelectorProps = {
+  initialList: TermsItem[];
   initialContent: string;
 };
 
-const PrivacySelector = ({
-  initialList,
-  initialContent,
-}: PrivacySelectorProps) => {
+const TermsSelector = ({ initialList, initialContent }: TermsSelectorProps) => {
   const [selectedFileName, setSelectedFileName] = useState(
     initialList[0].fileName
   );
@@ -30,10 +27,10 @@ const PrivacySelector = ({
     // useTransition을 사용하여 UI 블로킹 없이 콘텐츠 로드
     startTransition(async () => {
       try {
-        const newContent = await fetchPrivacyContent(fileName);
+        const newContent = await fetchTermsContent(fileName);
         setContent(newContent);
       } catch (error) {
-        console.error("Failed to load privacy content:", error);
+        console.error("Failed to load Terms content:", error);
       }
     });
   };
@@ -76,4 +73,4 @@ const PrivacySelector = ({
   );
 };
 
-export default PrivacySelector;
+export default TermsSelector;
