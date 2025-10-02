@@ -2,16 +2,12 @@
 "use client";
 
 import { ChevronRight, Plus } from "lucide-react";
+import Link from "next/link";
 
-interface AddScheduleButtonProps {
-  onClick: () => void;
-}
-
-const AddScheduleButton = ({ onClick }: AddScheduleButtonProps) => {
+const AddScheduleButton = () => {
   return (
-    <button
-      type="button"
-      onClick={onClick}
+    <Link
+      href="/schedule/new"
       className="fixed bottom-28 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-4 sm:mx-auto shrink-0 h-12 sm:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-full md:rounded-b-none md:rounded-t-2xl cursor-pointer font-semibold z-20 px-3 active:bg-indigo-900 active:scale-98 transition-all shadow-md inset-shadow-sm inset-shadow-white/50"
       aria-label="새로운 일정 추가"
     >
@@ -22,7 +18,7 @@ const AddScheduleButton = ({ onClick }: AddScheduleButtonProps) => {
         <span className="md:text-sm font-semibold">새로운 일정 추가</span>
       </div>
       <ChevronRight className="size-6 opacity-80" strokeWidth={1.5} />
-    </button>
+    </Link>
   );
 };
 

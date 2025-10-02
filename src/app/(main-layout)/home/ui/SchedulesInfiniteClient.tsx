@@ -203,9 +203,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         )}
       </Suspense>
 
-      {hasManageableTeams && (
-        <AddScheduleButton onClick={handleScheduleCreate} />
-      )}
+      {hasManageableTeams && <AddScheduleButton />}
 
       {!isLoggedIn && <LoginButton />}
 

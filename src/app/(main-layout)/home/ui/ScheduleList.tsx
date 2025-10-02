@@ -1,13 +1,13 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { CalendarCheckIcon } from "@phosphor-icons/react";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { Fragment } from "react";
 import { Separator } from "@/shared/components/ui/separator";
-// import { Ban, Hourglass } from "lucide-react";
+import Link from "next/link";
 
 type ScheduleListProps = Prisma.ScheduleGetPayload<{
   include: {
@@ -19,70 +19,9 @@ type ScheduleListProps = Prisma.ScheduleGetPayload<{
   };
 }>;
 
-// function isSameDate(date: Date | string): boolean {
-//   const d1 = new Date(date);
-//   const d2 = new Date();
-
-//   return (
-//     d1.getFullYear() === d2.getFullYear() &&
-//     d1.getMonth() === d2.getMonth() &&
-//     d1.getDate() === d2.getDate()
-//   );
-// }
-
-const ScheduleList = ({
-  schedule,
-}: // myTeams,
-{
-  schedule: ScheduleListProps;
-  // myTeams?: string[];
-}) => {
-  const router = useRouter();
+const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
   const session = useSession();
   const pathname = usePathname();
-  // const queryClient = useQueryClient();
-  // const dDay = calculateDday(schedule?.date as Date);
-
-  const handleScheduleClick = (scheduleId: string) => {
-    if (pathname === "/my-schedules") {
-      router.push(`/schedule/${scheduleId}?tab=${pathname}`);
-    } else {
-      router.push(`/schedule/${scheduleId}`);
-    }
-  };
-
-  // const handleLikeClick = async (scheduleId: string) => {
-  //   const result = await likeSchedule({ scheduleId });
-  //   console.log(result);
-  //   if (result.success) {
-  //     queryClient.invalidateQueries({ queryKey: ["schedules"] });
-  //   } else {
-  //     console.warn(result.error);
-  //   }
-  // };
-
-  // const isLiked = schedule.likes.some(
-  //   (like) => like.userId === session.data?.user?.id
-  // );
-
-  // const getDateStatus = (day: number) => {
-  //   if (day > 1) {
-  //     return {
-  //       text: `D-${day}`,
-  //       style: "bg-muted",
-  //     };
-  //   } else if (day === 1) {
-  //     return { text: "내일", style: "bg-indigo-500/15 text-indigo-600" };
-  //   } else if (day === 0) {
-  //     return { text: "오늘", style: "bg-teal-500/15 text-teal-600" };
-  //   }
-  //   return {
-  //     text: `${schedule.date.getMonth() + 1}.${schedule.date.getDate()}`,
-  //     style: "bg-muted",
-  //   };
-  // };
-
-  // const dateStatus = getDateStatus(dDay);
 
   const isAttendance = schedule.attendances.find(
     (attendance) => attendance.userId === session.data?.user?.id
@@ -94,14 +33,15 @@ const ScheduleList = ({
   });
 
   return (
-    <div
+    <Link
+      href={
+        pathname === "/my-schedules"
+          ? `/schedule/${schedule.id}?tab=${pathname}`
+          : `/schedule/${schedule.id}`
+      }
       className="flex flex-col py-1.5 select-none hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group"
-      onClick={() => handleScheduleClick(schedule.id)}
     >
       <div className="flex px-4 gap-3 items-center relative">
-        {/* {isSameDate(schedule.date) && (
-          <div className="absolute top-0 left-4 z-20 bg-red-600 rounded-full size-2 outline-2 outline-white" />
-        )} */}
         <div
           className={`shrink-0 size-14 rounded-2xl flex flex-col justify-center items-center truncate leading-none gap-0.5 bg-neutral-100/80 group-hover:bg-white group-hover:shadow-lg group-hover:outline group-active:bg-white group-active:shadow-lg group-active:outline outline-gray-300 pb-1 z-10`}
         >
@@ -277,7 +217,7 @@ const ScheduleList = ({
           </div>
         </div>
       ) : null}
-    </div>
+    </Link>
   );
 };
 

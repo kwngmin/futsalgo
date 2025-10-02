@@ -17,6 +17,7 @@ import {
   GetMySchedulesResponse,
 } from "../actions/get-my-schedules";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
+import Link from "next/link";
 
 const FilterMatchType = lazy(
   () => import("@/features/filter-list/ui/FilterScheduleMatch")
@@ -114,10 +115,6 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
     router.push("/schedule/new");
   }, [router]);
 
-  const handleGoBack = useCallback(() => {
-    router.push("/");
-  }, [router]);
-
   const handleMySchedulesTabChange = useCallback(
     (tab: TabType) => {
       if (tab === "schedules") {
@@ -150,12 +147,12 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
       <>
         <div className="flex items-center justify-between px-4 h-16 shrink-0">
           <div className="flex items-center gap-3">
-            <button
+            <Link
+              href="/"
               className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
-              onClick={handleGoBack}
             >
               <ArrowLeft style={{ width: "24px", height: "24px" }} />
-            </button>
+            </Link>
             <h1 className="text-[1.625rem] font-bold cursor-default">
               내 일정
             </h1>
@@ -219,9 +216,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
         )}
       </Suspense>
 
-      {hasManageableTeams && (
-        <AddScheduleButton onClick={handleScheduleCreate} />
-      )}
+      {hasManageableTeams && <AddScheduleButton />}
 
       <div className="mt-3">
         {allSchedules.map((schedule) => (
