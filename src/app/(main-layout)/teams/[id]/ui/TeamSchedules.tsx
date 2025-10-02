@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { getTeamSchedules } from "../actions/get-team-schedules";
 import { CalendarBlankIcon } from "@phosphor-icons/react";
-import SchedulePageLoading from "@/app/(main-layout)/home/ui/loading";
-import ScheduleList from "@/app/(main-layout)/home/ui/ScheduleList";
+import SchedulePageLoading from "@/app/(main-layout)/schedules/ui/loading";
+import ScheduleList from "@/app/(main-layout)/schedules/ui/ScheduleList";
 
 interface TeamSchedulesProps {
   teamId: string;

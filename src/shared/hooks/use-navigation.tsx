@@ -95,6 +95,10 @@ export const useNavigation = () => {
     switch (firstSegment) {
       // case "/matches":
       //   return "match";
+      case "/":
+        return "home";
+      case "/schedules":
+        return "home";
       case "/teams":
         return "team";
       case "/players":
@@ -104,7 +108,7 @@ export const useNavigation = () => {
       case "/more":
         return "more";
       default:
-        return "home";
+        return "";
     }
   };
 

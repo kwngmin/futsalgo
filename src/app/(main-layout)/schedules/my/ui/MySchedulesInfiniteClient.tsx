@@ -8,10 +8,10 @@ import { useInView } from "react-intersection-observer";
 import { ArrowLeft } from "lucide-react";
 
 import { SCHEDULE_FILTER_OPTIONS } from "@/entities/schedule/model/constants";
-import { useScheduleFilters } from "../../home/lib/use-schedule-filters";
+import { useScheduleFilters } from "../../lib/use-schedule-filters";
 import ScheduleFilterBar from "@/features/filter-list/ui/ScheduleFilterBar";
-import AddScheduleButton from "../../home/ui/AddScheduleButton";
-import ScheduleList from "../../home/ui/ScheduleList";
+import AddScheduleButton from "../../ui/AddScheduleButton";
+import ScheduleList from "../../ui/ScheduleList";
 import {
   getMySchedules,
   GetMySchedulesResponse,

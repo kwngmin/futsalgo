@@ -68,13 +68,13 @@ const MorePage = () => {
         {
           icon: FileText, //
           label: "이용약관",
-          href: "/more/profile",
+          href: "/terms",
           // action: () => alert("이용약관"),
         },
         {
           icon: Shield,
           label: "개인정보처리방침",
-          href: "/more/profile",
+          href: "/privacy",
           // action: () => alert("개인정보처리방침"),
         },
       ],

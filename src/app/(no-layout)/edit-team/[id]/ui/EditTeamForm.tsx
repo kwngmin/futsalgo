@@ -22,7 +22,7 @@ import { updateTeam } from "../model/actions";
 import { editTeamFormSchema } from "../model/schema.model";
 import { useRouter } from "next/navigation";
 import { cityData } from "@/features/search-address-sgis/constants";
-import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
+import { useDistricts } from "@/app/(main-layout)/schedules/lib/use-districts";
 import { Input } from "@/shared/components/ui/input";
 
 export type EditTeamFormData = z.infer<typeof editTeamFormSchema>;

@@ -96,7 +96,7 @@ export const useScheduleFilters = ({
     (tab: TabType) => {
       setCurrentTab(tab);
       if (tab === "my-schedules") {
-        router.push("/my-schedules");
+        router.push("/schedules/my");
       }
     },
     [router]

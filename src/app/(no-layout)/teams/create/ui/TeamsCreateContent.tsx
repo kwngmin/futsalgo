@@ -21,7 +21,7 @@ import CustomSelect from "@/shared/components/ui/custom-select";
 import { Button } from "@/shared/components/ui/button";
 import { TeamLevel } from "@prisma/client";
 import { cityData } from "@/features/search-address-sgis/constants";
-import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
+import { useDistricts } from "@/app/(main-layout)/schedules/lib/use-districts";
 import { useQueryClient } from "@tanstack/react-query";
 
 const teamSchema = z.object({

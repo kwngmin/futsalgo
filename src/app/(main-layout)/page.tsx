@@ -1,7 +1,7 @@
 // import { Suspense } from "react";
 // import SchedulePageLoading from "./home/ui/loading";
-import { getSchedules } from "./home/actions/get-schedules";
-import SchedulesInfiniteClient from "./home/ui/SchedulesInfiniteClient";
+import { getSchedules } from "./schedules/actions/get-schedules";
+import SchedulesInfiniteClient from "./schedules/ui/SchedulesInfiniteClient";
 
 export default async function HomePage(props: {
   searchParams: Promise<{ search?: string }>;

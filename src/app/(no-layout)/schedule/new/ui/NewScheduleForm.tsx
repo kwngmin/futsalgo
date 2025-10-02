@@ -38,7 +38,7 @@ import { TEAM_GENDER } from "@/entities/team/model/constants";
 import { formatCityName } from "@/entities/team/lib/format-city-name";
 import Image from "next/image";
 import { cityData } from "@/features/search-address-sgis/constants";
-import { useDistricts } from "@/app/(main-layout)/home/lib/use-districts";
+import { useDistricts } from "@/app/(main-layout)/schedules/lib/use-districts";
 import { Textarea } from "@/shared/components/ui/textarea";
 
 const newFormSchema = z

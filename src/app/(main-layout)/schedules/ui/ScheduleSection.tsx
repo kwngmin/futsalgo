@@ -2,8 +2,8 @@
 "use client";
 
 import { Separator } from "@/shared/components/ui/separator";
-import ScheduleList from "../ui/ScheduleList";
-import { ScheduleWithDetails } from "@/app/(main-layout)/home/actions/get-schedules";
+import ScheduleList from "./ScheduleList";
+import { ScheduleWithDetails } from "@/app/(main-layout)/schedules/actions/get-schedules";
 
 interface ScheduleSectionProps {
   todaysSchedules?: ScheduleWithDetails[];

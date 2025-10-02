@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-import { ScheduleWithDetails } from "@/app/(main-layout)/home/actions/get-schedules";
+import { ScheduleWithDetails } from "@/app/(main-layout)/schedules/actions/get-schedules";
 
 interface GetUserSchedulesParams {
   userId: string;

@@ -6,8 +6,8 @@ import { useInView } from "react-intersection-observer";
 
 import { getPlayerSchedules } from "../actions/get-player-schedules";
 import { CalendarBlankIcon } from "@phosphor-icons/react";
-import SchedulePageLoading from "@/app/(main-layout)/home/ui/loading";
-import ScheduleList from "@/app/(main-layout)/home/ui/ScheduleList";
+import SchedulePageLoading from "@/app/(main-layout)/schedules/ui/loading";
+import ScheduleList from "@/app/(main-layout)/schedules/ui/ScheduleList";
 
 interface PlayerScheduleProps {
   userId: string;
