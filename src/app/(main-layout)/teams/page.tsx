@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, useCallback, useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
 import { getTeams, type GetTeamsResponse } from "./model/actions";
 import { useSession } from "next-auth/react";
@@ -16,18 +16,31 @@ import TeamFilterBar, {
   TeamFilterValues,
 } from "@/features/filter-list/ui/TeamFilterBar";
 import { TEAM_FILTER_OPTIONS } from "@/entities/team/model/constants";
-import FilterTeamGender from "@/features/filter-list/ui/FilterTeamGender";
-import FilterLocation from "@/features/filter-list/ui/FilterLocation";
-import FilterTeamRecruitment from "@/features/filter-list/ui/FilterTeamRecruitment";
-import FilterTeamMatchAvailable from "@/features/filter-list/ui/FilterTeamMatchAvailable";
-import FilterTeamLevel, {
-  TeamLevelFilter,
-} from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamLevel } from "@prisma/client";
-import { TeamFilters } from "@/features/filter-list/model/types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { Separator } from "@/shared/components/ui/separator";
-import FilterTeamHasFormerPro from "@/features/filter-list/ui/FilterTeamHasFormerPro";
+import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
+import { TeamFilters } from "@/features/filter-list/model/types";
+
+// 필터 컴포넌트 동적 임포트
+const FilterTeamGender = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamGender")
+);
+const FilterLocation = lazy(
+  () => import("@/features/filter-list/ui/FilterLocation")
+);
+const FilterTeamRecruitment = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamRecruitment")
+);
+const FilterTeamMatchAvailable = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamMatchAvailable")
+);
+const FilterTeamHasFormerPro = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamHasFormerPro")
+);
+const FilterTeamLevel = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamLevel")
+);
 
 const TeamsPage = () => {
   const router = useRouter();
@@ -190,22 +203,9 @@ const TeamsPage = () => {
       ? data.pages[0].data.myTeams
       : [];
 
-  console.log(data, "data");
-  console.log(isLoading, "isLoading");
-  console.log(error, "error");
-  console.log(myTeams, "myTeams");
-
-  // 팔로잉 페이지로 이동
-  // const handleFollowingClick = () => {
-  //   if (isLoggedIn) {
-  //     router.push("/teams/following");
-  //   }
-  // };
-
-  // 전체 팀 페이지로 이동
-  // const handleAllTeamsClick = () => {
-  //   router.push("/teams");
-  // };
+  if (error) {
+    console.warn(error);
+  }
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">

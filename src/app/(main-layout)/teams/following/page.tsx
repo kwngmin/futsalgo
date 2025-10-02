@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   getFollowingTeams,
@@ -20,15 +20,29 @@ import TeamFilterBar, {
   TeamFilterType,
   TeamFilterValues,
 } from "@/features/filter-list/ui/TeamFilterBar";
-import FilterTeamLevel, {
-  TeamLevelFilter,
-} from "@/features/filter-list/ui/FilterTeamLevel";
+import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamLevel } from "@prisma/client";
-import FilterTeamMatchAvailable from "@/features/filter-list/ui/FilterTeamMatchAvailable";
-import FilterTeamRecruitment from "@/features/filter-list/ui/FilterTeamRecruitment";
-import FilterLocation from "@/features/filter-list/ui/FilterLocation";
-import FilterTeamGender from "@/features/filter-list/ui/FilterTeamGender";
 import { TEAM_FILTER_OPTIONS } from "@/entities/team/model/constants";
+
+// 필터 컴포넌트 동적 임포트
+const FilterTeamGender = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamGender")
+);
+const FilterLocation = lazy(
+  () => import("@/features/filter-list/ui/FilterLocation")
+);
+const FilterTeamRecruitment = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamRecruitment")
+);
+const FilterTeamMatchAvailable = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamMatchAvailable")
+);
+const FilterTeamHasFormerPro = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamHasFormerPro")
+);
+const FilterTeamLevel = lazy(
+  () => import("@/features/filter-list/ui/FilterTeamLevel")
+);
 
 const FollowingTeamsPage = () => {
   const router = useRouter();
@@ -48,6 +62,7 @@ const FollowingTeamsPage = () => {
     recruitment: undefined,
     teamMatchAvailable: undefined,
     teamLevel: undefined,
+    hasFormerPro: undefined,
   });
 
   // TeamLevelFilter를 TeamLevel 배열로 변환하는 헬퍼 함수
@@ -99,6 +114,11 @@ const FollowingTeamsPage = () => {
     if (filterValues.teamMatchAvailable) {
       filterObj.teamMatchAvailable = filterValues.teamMatchAvailable.value;
       console.log("filterObj.teamMatchAvailable", filterObj.teamMatchAvailable);
+    }
+
+    // hasFormerPro 필터
+    if (filterValues.hasFormerPro) {
+      filterObj.hasFormerPro = filterValues.hasFormerPro.value === "TRUE";
     }
 
     return filterObj;
@@ -272,6 +292,14 @@ const FollowingTeamsPage = () => {
       )}
       {openFilter === "teamLevel" && (
         <FilterTeamLevel
+          onClose={() => setOpenFilter(null)}
+          setFilterValues={(values) =>
+            setFilterValues({ ...filterValues, ...values })
+          }
+        />
+      )}
+      {openFilter === "hasFormerPro" && (
+        <FilterTeamHasFormerPro
           onClose={() => setOpenFilter(null)}
           setFilterValues={(values) =>
             setFilterValues({ ...filterValues, ...values })
