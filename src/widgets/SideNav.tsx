@@ -28,32 +28,48 @@ const SideNav = () => {
           </Link>
 
           {/* 데스크톱 네비게이션 */}
-          <nav className="flex-1 px-4 mb-4 space-y-1 overflow-y-auto">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeMenu === item.id;
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className={`w-full flex items-center px-4 py-3 text-xl rounded-lg transition-colors cursor-pointer ${
-                    isActive
-                      ? "bg-slate-100 text-gray-900 font-bold"
-                      : // ? "bg-blue-50 text-blue-600 font-bold"
-                        "text-gray-700 hover:bg-gray-50 font-medium"
-                  }`}
-                  type="button"
-                >
-                  <Icon
-                    className="mr-4"
-                    weight={isActive ? "fill" : "regular"}
-                    size={28}
-                  />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
+          <div className="grow flex flex-col justify-between overflow-y-auto">
+            <nav className="flex-1 px-4 mb-4 space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeMenu === item.id;
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className={`w-full flex items-center px-4 py-3 text-xl rounded-lg transition-colors cursor-pointer ${
+                      isActive
+                        ? "bg-slate-100 text-gray-900 font-bold"
+                        : // ? "bg-blue-50 text-blue-600 font-bold"
+                          "text-gray-700 hover:bg-gray-50 font-medium"
+                    }`}
+                    type="button"
+                  >
+                    <Icon
+                      className="mr-4"
+                      weight={isActive ? "fill" : "regular"}
+                      size={28}
+                    />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+            <nav className="flex flex-col px-4 mb-4 space-y-1">
+              <Link
+                href="/privacy"
+                className="text-gray-700 hover:bg-gray-50 font-medium"
+              >
+                개인정보처리방침
+              </Link>
+              <Link
+                href="/terms"
+                className="text-gray-700 hover:bg-gray-50 font-medium"
+              >
+                이용약관
+              </Link>
+            </nav>
+          </div>
         </div>
       </div>
 

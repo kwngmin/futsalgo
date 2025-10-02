@@ -1,5 +1,3 @@
-// export { auth as middleware } from "@/shared/lib/auth";
-// middleware.ts
 import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/shared/lib/auth";
 
@@ -15,17 +13,6 @@ export default async function middleware(request: NextRequest) {
   if (isAuthCallback) {
     return NextResponse.next();
   }
-
-  // 로그인하지 않은 사용자 - 로그인 페이지로
-  // if (!session?.user) {
-  //   console.log("로그인하지 않은 사용자");
-  //   const isPublicPage = pathname === "/login" || pathname === "/signup";
-  //   if (!isPublicPage) {
-  //     console.log("로그인 페이지로 리다이렉트");
-  //     return NextResponse.redirect(new URL("/login", request.url));
-  //   }
-  //   return NextResponse.next();
-  // }
 
   // 로그인한 사용자
   if (session?.user) {
