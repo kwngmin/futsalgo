@@ -1,8 +1,39 @@
 import { NextResponse, NextRequest } from "next/server";
-import { auth } from "@/shared/lib/auth";
+import { jwtVerify } from "jose";
+
+// NextAuth가 사용하는 쿠키 이름
+const SESSION_COOKIE_NAME =
+  process.env.NODE_ENV === "production"
+    ? "__Secure-authjs.session-token"
+    : "authjs.session-token";
+
+/**
+ * JWT 토큰에서 세션 정보 추출 (경량화)
+ */
+async function getSessionFromToken(request: NextRequest) {
+  try {
+    const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+
+    if (!token) {
+      return null;
+    }
+
+    const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
+    const { payload } = await jwtVerify(token, secret);
+
+    return {
+      user: {
+        id: payload.id as string,
+        onboardingStep: payload.onboardingStep as string,
+      },
+    };
+  } catch (error) {
+    console.error("토큰 검증 실패:", error);
+    return null;
+  }
+}
 
 export default async function middleware(request: NextRequest) {
-  const session = await auth();
   const { pathname } = request.nextUrl;
 
   // Auth 관련 경로 (미들웨어 체크 예외)
@@ -13,6 +44,8 @@ export default async function middleware(request: NextRequest) {
   if (isAuthCallback) {
     return NextResponse.next();
   }
+
+  const session = await getSessionFromToken(request);
 
   // 로그인한 사용자
   if (session?.user) {
