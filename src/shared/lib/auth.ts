@@ -85,46 +85,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     signIn: async ({ user, account }) => {
-      console.log(`로그인 시도: ${user.email} via ${account?.provider}`);
-
-      if (!account) {
-        console.error("계정 정보가 없습니다.");
-        return false;
+      // 로그 제거 (프로덕션에서는 불필요)
+      if (process.env.NODE_ENV === "development") {
+        console.log(`로그인 시도: ${user.email} via ${account?.provider}`);
       }
-
       return true;
     },
-    jwt: async ({ token, user, account, trigger }) => {
-      // 초기 로그인 시 또는 사용자 정보 업데이트 시
-      if (user || trigger === "update") {
-        try {
-          const userId = user?.id || (token.id as string);
-
-          // 데이터베이스에서 최신 사용자 정보 가져오기
-          const dbUser = await prisma.user.findUnique({
-            where: { id: userId },
-            select: {
-              id: true,
-              nickname: true,
-              createdAt: true,
-              onboardingStep: true,
-            },
-          });
-
-          if (dbUser) {
-            token.id = dbUser.id;
-            token.nickname = dbUser.nickname;
-            token.createdAt = dbUser.createdAt;
-            token.onboardingStep = dbUser.onboardingStep;
-          }
-        } catch (error) {
-          console.error("JWT 콜백에서 사용자 조회 실패:", error);
-        }
+    jwt: async ({ token, user, trigger }) => {
+      if (user) {
+        token.id = user.id;
+        token.nickname = user.nickname;
+        token.createdAt = new Date();
+        token.onboardingStep = user.onboardingStep;
       }
 
-      // Provider 정보도 추가
-      if (account) {
-        token.provider = account.provider;
+      // update trigger 시에만 DB 조회
+      if (trigger === "update") {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { nickname: true, onboardingStep: true },
+        });
+
+        if (dbUser) {
+          token.nickname = dbUser.nickname;
+          token.onboardingStep = dbUser.onboardingStep;
+        }
       }
 
       return token;
@@ -141,21 +126,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   events: {
-    createUser: async ({ user }) => {
-      if (!user.email) {
-        console.log(
-          `이메일 없이 사용자 생성 완료: ${user.name} (ID: ${user.id})`
-        );
-      } else {
-        console.log(`사용자 생성 완료: ${user.email}`);
-      }
-    },
-    signIn: async ({ user, account }) => {
-      console.log(`로그인 완료: ${user.email} via ${account?.provider}`);
-    },
-    signOut: async () => {
-      console.log("로그아웃 완료");
-    },
+    ...(process.env.NODE_ENV === "development" && {
+      createUser: async ({ user }) => {
+        if (!user.email) {
+          console.log(
+            `이메일 없이 사용자 생성 완료: ${user.name} (ID: ${user.id})`
+          );
+        } else {
+          console.log(`사용자 생성 완료: ${user.email}`);
+        }
+      },
+    }),
+    ...(process.env.NODE_ENV === "development" && {
+      signIn: async ({ user, account }) => {
+        console.log(`로그인 완료: ${user.email} via ${account?.provider}`);
+      },
+    }),
+    ...(process.env.NODE_ENV === "development" && {
+      signOut: async () => {
+        console.log("로그아웃 완료");
+      },
+    }),
   },
   pages: {
     signIn: "/login",
