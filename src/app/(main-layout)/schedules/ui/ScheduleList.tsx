@@ -36,8 +36,8 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
     <Link
       href={
         pathname === "/my-schedules"
-          ? `/schedule/${schedule.id}?tab=${pathname}`
-          : `/schedule/${schedule.id}`
+          ? `/schedules/${schedule.id}?tab=${pathname}`
+          : `/schedules/${schedule.id}`
       }
       className="flex flex-col py-1.5 select-none hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group"
     >
