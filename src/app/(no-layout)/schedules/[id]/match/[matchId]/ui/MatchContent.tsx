@@ -190,7 +190,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
       if (targetMatch) {
         router.push(
-          `/schedule/${data.match.scheduleId}/match/${targetMatch.id}${
+          `/schedules/${data.match.scheduleId}/match/${targetMatch.id}${
             searchParams.get("tab") === "/my-schedules"
               ? `?tab=/my-schedules`
               : ""
@@ -347,7 +347,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
         queryKey: ["my-schedule"],
       });
       router.push(
-        `/schedule/${data.match.scheduleId}${
+        `/schedules/${data.match.scheduleId}${
           searchParams.get("tab") === "/my-schedules"
             ? `?tab=/my-schedules`
             : ""
@@ -392,7 +392,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
             onClick={() =>
               router.push(
-                `/schedule/${data.match.scheduleId}${
+                `/schedules/${data.match.scheduleId}${
                   searchParams.get("tab") === "/my-schedules"
                     ? `?tab=/my-schedules`
                     : ""

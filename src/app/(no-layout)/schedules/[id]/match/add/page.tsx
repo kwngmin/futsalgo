@@ -30,7 +30,7 @@ const AddMatchPage = async ({
   });
 
   console.log(attendance, "attendance");
-  if (!attendance) return redirect(`/schedule/${scheduleId}`);
+  if (!attendance) return redirect(`/schedules/${scheduleId}`);
 
   // 참가자 정보만 최소로 조회 (이후 Content에 넘길 값)
   const attendances = await prisma.scheduleAttendance.findMany({

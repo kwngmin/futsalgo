@@ -115,8 +115,8 @@ export async function deleteMatch(matchId: string, scheduleId: string) {
       await updateScheduleStatusBasedOnMatches(scheduleId, tx);
     });
 
-    revalidatePath(`/schedule/${scheduleId}`);
-    redirect(`/schedule/${scheduleId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
+    redirect(`/schedules/${scheduleId}`);
   } catch (error) {
     console.error("경기 삭제 실패:", error);
     return { success: false, error: "경기 삭제에 실패했습니다" };
@@ -204,7 +204,7 @@ export async function updateSquadLineup(matchId: string) {
       data: newLineups,
     });
 
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
     return {
       success: true,
       message: `${missingAttendees.length}명의 인원이 추가되었습니다`,
@@ -287,7 +287,7 @@ export async function updateTeamMatchLineup(matchId: string) {
       };
     });
 
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
 
     return {
       success: true,
@@ -381,7 +381,7 @@ export async function updateTeamMatchLineupSide(
       };
     });
 
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
 
     return {
       success: true,
@@ -437,7 +437,7 @@ export async function updateLineupSide(lineupId: string, side: TeamSide) {
       };
     });
 
-    revalidatePath(`/schedule/${result.scheduleId}/match/${result.matchId}`);
+    revalidatePath(`/schedules/${result.scheduleId}/match/${result.matchId}`);
     return { success: true };
   } catch (error) {
     console.error("라인업 사이드 변경 실패:", error);
@@ -492,7 +492,7 @@ export async function removeFromLineup(lineupId: string) {
     });
 
     revalidatePath(
-      `/schedule/${lineup.match.scheduleId}/match/${lineup.match.id}`
+      `/schedules/${lineup.match.scheduleId}/match/${lineup.match.id}`
     );
     return { success: true };
   } catch (error) {
@@ -557,7 +557,7 @@ export async function updateMercenaryCount(
       });
     }
 
-    revalidatePath(`/schedule/${match.schedule.id}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.schedule.id}/match/${matchId}`);
     return { success: true };
   } catch (error) {
     console.error("용병 수 업데이트 실패:", error);
@@ -623,7 +623,7 @@ export async function resetLineups(matchId: string) {
       await updateScheduleStatusBasedOnMatches(match.schedule.id, tx);
     });
 
-    revalidatePath(`/schedule/${match.schedule.id}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.schedule.id}/match/${matchId}`);
     return { success: true };
   } catch (error) {
     console.error("출전 명단 초기화 실패:", error);

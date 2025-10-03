@@ -78,7 +78,7 @@ export async function shuffleLineups(matchId: string) {
     // 트랜잭션으로 모든 라인업 업데이트
     await prisma.$transaction(updatePromises);
 
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
 
     return {
       success: true,
@@ -229,7 +229,7 @@ export async function shuffleLineupsAdvanced(matchId: string) {
       },
     });
 
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
 
     return {
       success: true,

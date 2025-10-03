@@ -124,7 +124,7 @@ export async function createGoalRecord(
       });
     }
 
-    revalidatePath(`/schedule/${match.scheduleId}/match/${matchId}`);
+    revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
 
     return {
       success: true,
@@ -186,7 +186,7 @@ export async function deleteGoalRecord(goalRecordId: string) {
     }
 
     revalidatePath(
-      `/schedule/${goalRecord.match.scheduleId}/match/${goalRecord.matchId}`
+      `/schedules/${goalRecord.match.scheduleId}/match/${goalRecord.matchId}`
     );
 
     return { success: true };

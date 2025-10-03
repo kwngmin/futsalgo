@@ -62,7 +62,7 @@ export async function addAttendances({
       });
     }
 
-    revalidatePath(`/schedule/${scheduleId}/attendances/${teamId}`);
+    revalidatePath(`/schedules/${scheduleId}/attendances/${teamId}`);
 
     return {
       success: true,

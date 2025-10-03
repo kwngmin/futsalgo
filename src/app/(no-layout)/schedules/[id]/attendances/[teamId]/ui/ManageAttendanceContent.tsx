@@ -2,7 +2,6 @@
 
 import { AttendanceStatus, Prisma } from "@prisma/client";
 import { Minus, Plus, RefreshCcw, SquareCheckBig, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { addAttendances } from "../actions/add-attendances";
 import { updateAttendance } from "../actions/update-attendance";
 import { updateMercenaryCount } from "../actions/update-mercenary-count";
@@ -12,6 +11,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { updateAllAttendanceStatus } from "../actions/update-all-attendace-status";
 import { removeAttendance } from "../actions/remove-attendance";
 import { Separator } from "@/shared/components/ui/separator";
+import Link from "next/link";
 
 type AttendanceWithUser = Prisma.ScheduleAttendanceGetPayload<{
   select: {
@@ -47,7 +47,6 @@ const ManageAttendanceContent = ({
   teamType,
   initialMercenaryCount,
 }: ManageAttendanceContentProps) => {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [showAllAttendanceMenu, setShowAllAttendanceMenu] = useState(false);
@@ -276,14 +275,13 @@ const ManageAttendanceContent = ({
       {/* 상단: 제목과 닫기 버튼 */}
       <header className="flex items-center justify-between px-4 h-16 shrink-0">
         <h1 className="text-[1.625rem] font-bold">팀원 명단</h1>
-        <button
-          type="button"
+        <Link
           className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-          onClick={() => router.push(`/schedule/${scheduleId}?tab=attendance`)}
+          href={`/schedules/${scheduleId}?tab=attendance`}
           aria-label="닫기"
         >
           <X className="size-6" />
-        </button>
+        </Link>
       </header>
 
       <div className="px-4">

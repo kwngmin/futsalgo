@@ -75,7 +75,7 @@ export async function updateMercenaryCount({
       data: updateData,
     });
 
-    revalidatePath(`/schedule/${scheduleId}/attendances/${teamId}`);
+    revalidatePath(`/schedules/${scheduleId}/attendances/${teamId}`);
 
     return {
       success: true,
