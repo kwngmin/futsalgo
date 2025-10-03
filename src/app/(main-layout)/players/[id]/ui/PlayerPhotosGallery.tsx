@@ -6,15 +6,13 @@ import Image from "next/image";
 import { useState } from "react";
 import { useUserPhotos } from "../lib/use-player-photos";
 import { ImagesIcon } from "@phosphor-icons/react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface PlayerPhotosGalleryProps {
   userId: string;
 }
 
 export const PlayerPhotosGallery = ({ userId }: PlayerPhotosGalleryProps) => {
-  const router = useRouter();
-
   const { photos, isLoading, error, hasMore, refresh, loadMore } =
     useUserPhotos({
       userId,
@@ -105,25 +103,21 @@ export const PlayerPhotosGallery = ({ userId }: PlayerPhotosGalleryProps) => {
               <div key={photo.id}>
                 {/* 경기 정보 */}
                 <div className="flex justify-between items-center h-10 select-none">
-                  <div
+                  <Link
                     className="flex items-center gap-2 shrink-0 cursor-pointer"
-                    onClick={() =>
-                      router.push(`/schedule/${photo.schedule.id}`)
-                    }
+                    href={`/schedules/${photo.schedule.id}`}
                   >
                     {renderTeamLogo(
                       photo.schedule.hostTeam.logoUrl,
                       photo.schedule.hostTeam.name
                     )}
                     <div className="flex items-center gap-1.5">
-                      <span
+                      <Link
                         className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
-                        onClick={() =>
-                          router.push(`/schedule/${photo.schedule.id}`)
-                        }
+                        href={`/schedules/${photo.schedule.id}`}
                       >
                         {renderMatchInfo(photo)}
-                      </span>
+                      </Link>
                       <span className="text-sm sm:text-xs text-gray-500 tracking-tight">
                         {new Date(photo.createdAt).toLocaleDateString("ko-KR", {
                           month: "short",
@@ -133,7 +127,7 @@ export const PlayerPhotosGallery = ({ userId }: PlayerPhotosGalleryProps) => {
                         })}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
 
                 <div
@@ -235,14 +229,9 @@ export const PlayerPhotosGallery = ({ userId }: PlayerPhotosGalleryProps) => {
             {/* 이미지 정보 */}
             <div className="fixed bottom-4 left-4 right-4 bg-black/20 text-white p-4 rounded-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
-                <div
+                <Link
                   className="flex items-center gap-3 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(
-                      `/schedule/${photos[selectedImageIndex].schedule.id}`
-                    );
-                  }}
+                  href={`/schedules/${photos[selectedImageIndex].schedule.id}`}
                 >
                   {renderTeamLogo(
                     photos[selectedImageIndex].schedule.hostTeam.logoUrl,
@@ -263,7 +252,7 @@ export const PlayerPhotosGallery = ({ userId }: PlayerPhotosGalleryProps) => {
                       })}
                     </p>
                   </div>
-                </div>
+                </Link>
                 <span className="text-sm text-gray-300">
                   {selectedImageIndex + 1} / {photos.length}
                 </span>

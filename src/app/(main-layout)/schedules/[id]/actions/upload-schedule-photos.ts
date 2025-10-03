@@ -64,7 +64,7 @@ export const uploadSchedulePhotos = async ({
     });
 
     // 4. 관련 페이지 캐시 무효화
-    revalidatePath(`/schedule/${scheduleId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
 
     // 5. 성공 로그
     console.log(

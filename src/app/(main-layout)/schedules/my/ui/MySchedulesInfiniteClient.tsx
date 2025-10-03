@@ -112,7 +112,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleScheduleCreate = useCallback(() => {
-    router.push("/schedule/new");
+    router.push("/schedules/new");
   }, [router]);
 
   const handleMySchedulesTabChange = useCallback(

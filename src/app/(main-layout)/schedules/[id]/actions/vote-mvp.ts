@@ -92,7 +92,7 @@ export async function voteMvp(scheduleId: string, mvpUserId: string) {
       });
     });
 
-    revalidatePath(`/schedule/${scheduleId}/mvp`);
+    revalidatePath(`/schedules/${scheduleId}/mvp`);
 
     return { success: true };
   } catch (error) {

@@ -45,7 +45,7 @@ import { updateScheduleNotice } from "../actions/update-schedule-notice";
 import Image from "next/image";
 import { updateAttendanceStatus } from "../actions/update-attendance-status";
 import { Separator } from "@/shared/components/ui/separator";
-import TeamSide from "@/app/(no-layout)/schedule/[id]/match/[matchId]/ui/TeamSide";
+import TeamSide from "@/app/(no-layout)/schedules/[id]/match/[matchId]/ui/TeamSide";
 import { respondTeamInvitation } from "../actions/respond-team-invitation";
 import { getMatchLineupCount } from "../lib/summary-versus";
 import MatchStatsLeaderboard from "./MatchStatsLeaderboard";
@@ -402,12 +402,12 @@ const ScheduleContent = ({
                 if (process.env.NODE_ENV === "development") {
                   console.log("development");
                   await navigator.clipboard.writeText(
-                    `localhost:3000/schedule/${scheduleId}`
+                    `localhost:3000/schedules/${scheduleId}`
                   );
                 } else {
                   console.log("production");
                   await navigator.clipboard.writeText(
-                    `www.futsalgo.com/schedule/${scheduleId}`
+                    `www.futsalgo.com/schedules/${scheduleId}`
                   );
                 }
               } catch (error) {
@@ -654,7 +654,7 @@ const ScheduleContent = ({
                   >
                     <Link
                       className="w-full flex items-center justify-between px-4 h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
-                      href={`/schedule/${scheduleId}/match/${
+                      href={`/schedules/${scheduleId}/match/${
                         match.id
                       }?tab=${searchParams.get("tab")}`}
                     >

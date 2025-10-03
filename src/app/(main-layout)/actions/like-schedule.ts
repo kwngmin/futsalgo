@@ -53,6 +53,6 @@ export async function likeSchedule({ scheduleId }: { scheduleId: string }) {
       error: "좋아요 업데이트 중 오류가 발생했습니다",
     };
   } finally {
-    revalidatePath(`/schedule/${scheduleId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
   }
 }

@@ -69,8 +69,8 @@ export async function deleteSchedule(
       },
     });
 
-    revalidatePath("/schedule");
-    revalidatePath(`/schedule/${scheduleId}`);
+    revalidatePath("/schedules");
+    revalidatePath(`/schedules/${scheduleId}`);
 
     return {
       success: true,

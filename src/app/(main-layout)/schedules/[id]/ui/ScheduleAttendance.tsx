@@ -233,7 +233,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
               className="text-base sm:text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 gap-1 hover:bg-blue-50"
               onClick={() => {
                 router.push(
-                  `/schedule/${scheduleId}/attendances/${
+                  `/schedules/${scheduleId}/attendances/${
                     data?.data?.manageableTeams.includes("host")
                       ? data?.data?.schedule?.hostTeamId
                       : data?.data?.manageableTeams.includes("invited")

@@ -103,7 +103,7 @@ export async function updateAttendanceStatus(
     });
 
     // 7. 캐시 무효화
-    revalidatePath(`/schedule/${scheduleId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
     revalidatePath("/");
 
     return {

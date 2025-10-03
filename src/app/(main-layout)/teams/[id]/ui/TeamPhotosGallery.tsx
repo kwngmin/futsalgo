@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useTeamPhotos } from "../lib/use-team-photos";
 import { ImagesIcon } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface TeamPhotosGalleryProps {
   teamId: string;
@@ -100,14 +101,12 @@ export const TeamPhotosGallery = ({ teamId }: TeamPhotosGalleryProps) => {
                       </div>
                     )}
                     <div className="flex items-center gap-1.5">
-                      <span
+                      <Link
                         className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
-                        onClick={() =>
-                          router.push(`/schedule/${photo.schedule.id}`)
-                        }
+                        href={`/schedules/${photo.schedule.id}`}
                       >
                         {renderMatchInfo(photo)}
-                      </span>
+                      </Link>
                       {/* <span
                         className="sm:text-sm font-medium hover:underline underline-offset-2 cursor-pointer"
                         onClick={() =>
@@ -235,14 +234,9 @@ export const TeamPhotosGallery = ({ teamId }: TeamPhotosGalleryProps) => {
             {/* 이미지 정보 */}
             <div className="fixed bottom-4 left-4 right-4 bg-black/20 text-white p-4 rounded-lg backdrop-blur-sm">
               <div className="flex items-center justify-between">
-                <div
+                <Link
+                  href={`/schedules/${photos[selectedImageIndex].schedule.id}`}
                   className="flex items-center gap-3 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(
-                      `/schedule/${photos[selectedImageIndex].schedule.id}`
-                    );
-                  }}
                 >
                   {photos[selectedImageIndex].uploader.image ? (
                     <Image
@@ -274,7 +268,7 @@ export const TeamPhotosGallery = ({ teamId }: TeamPhotosGalleryProps) => {
                       })}
                     </p>
                   </div>
-                </div>
+                </Link>
                 <span className="text-sm text-gray-300">
                   {selectedImageIndex + 1} / {photos.length}
                 </span>

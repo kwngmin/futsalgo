@@ -7,7 +7,7 @@ import Link from "next/link";
 const AddScheduleButton = () => {
   return (
     <Link
-      href="/schedule/new"
+      href="/schedules/new"
       className="fixed bottom-28 md:left-20 lg:left-72 md:bottom-0 left-0 right-0 sm:max-w-xs md:max-w-2xl mx-4 sm:mx-auto shrink-0 h-12 sm:h-11 flex items-center justify-between bg-indigo-600 text-white hover:bg-indigo-800 rounded-full md:rounded-b-none md:rounded-t-2xl cursor-pointer font-semibold z-20 px-3 active:bg-indigo-900 active:scale-98 transition-all shadow-md inset-shadow-sm inset-shadow-white/50"
       aria-label="새로운 일정 추가"
     >

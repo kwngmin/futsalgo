@@ -79,7 +79,7 @@ export async function updateScheduleNotice(
       },
     });
 
-    revalidatePath(`/schedule/${scheduleId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
     revalidatePath("/");
     revalidatePath("/my-schedules");
 

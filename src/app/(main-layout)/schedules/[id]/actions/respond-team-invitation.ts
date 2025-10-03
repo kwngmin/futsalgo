@@ -181,7 +181,7 @@ export async function respondTeamInvitation(
     });
 
     // 6. 캐시 무효화
-    revalidatePath(`/schedule/${scheduleId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
     revalidatePath("/");
     revalidatePath("/my-schedules");
 

@@ -119,7 +119,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleScheduleCreate = useCallback(() => {
-    router.push("/schedule/new");
+    router.push("/schedules/new");
   }, [router]);
 
   // 모든 페이지의 데이터를 병합
