@@ -1,5 +1,6 @@
 import BottomNav from "../../widgets/BottomNav";
 import SideNav from "@/widgets/SideNav";
+import { NavigationLoading } from "@/shared/components/ui/navigation-loading";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -8,6 +9,9 @@ interface MainLayoutProps {
 const MainLayout = async ({ children }: MainLayoutProps) => {
   return (
     <div className="min-h-dvh">
+      {/* 네비게이션 로딩 인디케이터 */}
+      <NavigationLoading />
+
       {/* <div className="min-h-dvh bg-gray-100"> */}
       {/* 데스크톱 & 태블릿 사이드바 */}
       <SideNav />

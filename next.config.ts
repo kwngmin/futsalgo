@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production",
   },
 
+  // 성능 최적화 설정
+  experimental: {
+    // 페이지 로딩 성능 향상
+    optimizePackageImports: ["@phosphor-icons/react", "lucide-react"],
+  },
+
+  // 정적 최적화 설정
+  output: "standalone",
+
   images: {
     remotePatterns: [
       {

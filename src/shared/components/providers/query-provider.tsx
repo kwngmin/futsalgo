@@ -13,6 +13,9 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             gcTime: 10 * 60 * 1000, // 10분
             retry: 1,
             refetchOnWindowFocus: false,
+            // 네비게이션 성능 최적화
+            refetchOnMount: false,
+            refetchOnReconnect: false,
           },
         },
       })
