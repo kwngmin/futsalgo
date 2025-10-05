@@ -13,6 +13,7 @@ import SkeletonContent from "../ui/SkeletonPlayerContent";
 import { useRouter } from "next/navigation";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
 import { useDebounce } from "@/shared/hooks/use-debounce";
+import { useInView } from "react-intersection-observer";
 import PlayerFilterBar, {
   PlayerFilterType,
   PlayerFilterValues,
@@ -152,29 +153,26 @@ const FollowingPlayersPage = () => {
     enabled: isLoggedIn, // 로그인된 사용자만 쿼리 실행
   });
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.offsetHeight - 1000
-    ) {
-      if (hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
+  // Intersection Observer를 사용한 무한 스크롤
+  const { ref: loadMoreRef } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
+
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // 스크롤 이벤트 등록
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
-  // 모든 페이지의 데이터를 합치기
-  const allPlayers =
-    data?.pages.flatMap((page) =>
-      page?.success && page.data?.players ? page.data.players : []
-    ) || [];
+  // 모든 페이지의 데이터를 합치기 (메모이제이션 적용)
+  const allPlayers = useMemo(
+    () =>
+      data?.pages.flatMap((page) =>
+        page?.success && page.data?.players ? page.data.players : []
+      ) || [],
+    [data?.pages]
+  );
 
   // 로그인되지 않은 사용자 처리
   if (!isLoggedIn) {
@@ -297,6 +295,9 @@ const FollowingPlayersPage = () => {
               모든 팔로잉 회원을 불러왔습니다
             </div>
           )}
+
+          {/* 무한 스크롤 트리거 */}
+          <div ref={loadMoreRef} className="h-4" />
         </div>
       ) : (
         <div className="text-center py-12">

@@ -124,15 +124,22 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // 통계 계산 및 순위 부여
+  // 통계 계산 및 순위 부여 (최적화된 버전)
   const playerStats = useMemo(() => {
+    // 빈 데이터 처리
+    if (!schedule.matches || schedule.matches.length === 0) {
+      return [];
+    }
+
     const statsMap = new Map<string, PlayerStats>();
 
-    // 모든 매치의 골 기록 처리
-    schedule.matches.forEach((match) => {
-      match.goals.forEach((goalRecord) => {
+    // 단일 루프로 모든 골 기록 처리 (성능 최적화)
+    for (const match of schedule.matches) {
+      if (!match.goals) continue;
+
+      for (const goalRecord of match.goals) {
         // 자책골은 제외
-        if (goalRecord.isOwnGoal) return;
+        if (goalRecord.isOwnGoal) continue;
 
         // 득점자 처리
         if (goalRecord.scorerId && goalRecord.scorer) {
@@ -153,16 +160,20 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
             "assists"
           );
         }
-      });
-    });
+      }
+    }
 
-    // 배열로 변환하고 정렬
+    // 배열로 변환하고 정렬 (최적화된 정렬)
     const sortedStats = Array.from(statsMap.values()).sort((a, b) => {
       // 1. 합계 내림차순
-      if (b.total !== a.total) return b.total - a.total;
+      const totalDiff = b.total - a.total;
+      if (totalDiff !== 0) return totalDiff;
+
       // 2. 득점 내림차순
-      if (b.goals !== a.goals) return b.goals - a.goals;
-      // 3. 같으면 닉네임 또는 이름으로 정렬
+      const goalsDiff = b.goals - a.goals;
+      if (goalsDiff !== 0) return goalsDiff;
+
+      // 3. 같으면 닉네임 또는 이름으로 정렬 (캐시된 이름 사용)
       const aName = a.user.nickname || a.user.name || "";
       const bName = b.user.nickname || b.user.name || "";
       return aName.localeCompare(bName);

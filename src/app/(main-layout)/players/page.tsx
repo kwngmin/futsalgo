@@ -10,6 +10,7 @@ import SkeletonContent from "./ui/SkeletonPlayerContent";
 import { useRouter } from "next/navigation";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
 import { useDebounce } from "@/shared/hooks/use-debounce";
+import { useInView } from "react-intersection-observer";
 import PlayerFilterBar, {
   PlayerFilterType,
   PlayerFilterValues,
@@ -142,29 +143,26 @@ const PlayersPage = () => {
     initialPageParam: 1,
   });
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.offsetHeight - 1000
-    ) {
-      if (hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
+  // Intersection Observer를 사용한 무한 스크롤
+  const { ref: loadMoreRef } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
+
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // 스크롤 이벤트 등록
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
-  // 모든 페이지의 데이터를 합치기
-  const players =
-    data?.pages.flatMap((page) =>
-      page?.success && page.data?.players ? page.data.players : []
-    ) || [];
+  // 모든 페이지의 데이터를 합치기 (메모이제이션 적용)
+  const players = useMemo(
+    () =>
+      data?.pages.flatMap((page) =>
+        page?.success && page.data?.players ? page.data.players : []
+      ) || [],
+    [data?.pages]
+  );
 
   const currentUser =
     data?.pages?.[0]?.success && data.pages[0].data?.user
@@ -316,6 +314,9 @@ const PlayersPage = () => {
               모든 회원을 불러왔습니다
             </div>
           )}
+
+          {/* 무한 스크롤 트리거 */}
+          <div ref={loadMoreRef} className="h-4" />
         </div>
       ) : (
         <div className="text-center py-12">

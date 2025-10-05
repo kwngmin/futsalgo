@@ -18,6 +18,7 @@ import TeamFilterBar, {
 import { TEAM_FILTER_OPTIONS } from "@/entities/team/model/constants";
 import { TeamLevel } from "@prisma/client";
 import { useDebounce } from "@/shared/hooks/use-debounce";
+import { useInView } from "react-intersection-observer";
 import { Separator } from "@/shared/components/ui/separator";
 import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamFilters } from "@/features/filter-list/model/types";
@@ -173,29 +174,26 @@ const TeamsPage = () => {
     initialPageParam: 1,
   });
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-      document.documentElement.offsetHeight - 1000
-    ) {
-      if (hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
+  // Intersection Observer를 사용한 무한 스크롤
+  const { ref: loadMoreRef } = useInView({
+    threshold: 0,
+    rootMargin: "100px",
+  });
+
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // 스크롤 이벤트 등록
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
-
-  // 모든 페이지의 데이터를 합치기
-  const allTeams =
-    data?.pages.flatMap((page) =>
-      page?.success && page.data?.teams ? page.data.teams : []
-    ) || [];
+  // 모든 페이지의 데이터를 합치기 (메모이제이션 적용)
+  const allTeams = useMemo(
+    () =>
+      data?.pages.flatMap((page) =>
+        page?.success && page.data?.teams ? page.data.teams : []
+      ) || [],
+    [data?.pages]
+  );
 
   // 내 팀들은 첫 번째 페이지에서만 가져옴
   const myTeams =
@@ -353,6 +351,9 @@ const TeamsPage = () => {
               모든 팀을 불러왔습니다
             </div>
           )}
+
+          {/* 무한 스크롤 트리거 */}
+          <div ref={loadMoreRef} className="h-4" />
         </div>
       ) : (
         <div className="text-center py-12">

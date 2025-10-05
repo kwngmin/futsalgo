@@ -1,6 +1,15 @@
 import { auth } from "@/shared/lib/auth";
-import NewScheduleContent from "./ui/NewScheduleContent";
 import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
+
+// 동적 import로 번들 크기 최적화
+const NewScheduleContent = dynamic(() => import("./ui/NewScheduleContent"), {
+  loading: () => (
+    <div className="flex justify-center items-center min-h-screen">
+      로딩 중...
+    </div>
+  ),
+});
 
 const NewPage = async () => {
   const session = await auth();

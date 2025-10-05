@@ -84,15 +84,7 @@ type PlayerWithTeams = Prisma.UserGetPayload<{
   include: typeof baseUserInclude;
 }>;
 
-type LineupWithMatch = Prisma.LineupGetPayload<{
-  include: {
-    match: {
-      include: {
-        schedule: true;
-      };
-    };
-  };
-}>;
+// LineupWithMatch 타입은 더 이상 사용하지 않음 (성능 최적화로 제거)
 
 // type GoalWithMatch = Prisma.GoalRecordGetPayload<{
 //   include: {
@@ -163,11 +155,13 @@ function processPlayerRatings(
   };
 }
 
-// 유니크한 경기 수를 계산하는 헬퍼 함수
-function getUniqueMatchesCount(lineups: LineupWithMatch[]): number {
+// 유니크한 경기 수를 계산하는 헬퍼 함수 (최적화된 버전)
+function getUniqueMatchesCount(
+  lineups: Array<{ match: { id: string } }>
+): number {
   const uniqueMatches = new Set(
     lineups
-      .filter((lineup) => lineup.match?.schedule)
+      .filter((lineup) => lineup.match?.id)
       .map((lineup) => lineup.match.id)
   );
   return uniqueMatches.size;
@@ -202,10 +196,19 @@ export async function getPlayer(id: string) {
               },
             },
           },
-          include: {
+          select: {
+            id: true,
+            matchId: true,
             match: {
-              include: {
-                schedule: true,
+              select: {
+                id: true,
+                schedule: {
+                  select: {
+                    id: true,
+                    place: true,
+                    date: true,
+                  },
+                },
               },
             },
           },
@@ -223,10 +226,19 @@ export async function getPlayer(id: string) {
               },
             },
           },
-          include: {
+          select: {
+            id: true,
+            matchId: true,
             match: {
-              include: {
-                schedule: true,
+              select: {
+                id: true,
+                schedule: {
+                  select: {
+                    id: true,
+                    place: true,
+                    date: true,
+                  },
+                },
               },
             },
           },
@@ -243,16 +255,25 @@ export async function getPlayer(id: string) {
               },
             },
           },
-          include: {
+          select: {
+            id: true,
+            matchId: true,
             match: {
-              include: {
-                schedule: true,
+              select: {
+                id: true,
+                schedule: {
+                  select: {
+                    id: true,
+                    place: true,
+                    date: true,
+                  },
+                },
               },
             },
           },
         }),
 
-        // MVP 데이터
+        // MVP 데이터 (최적화된 쿼리)
         prisma.scheduleAttendance.findMany({
           where: {
             userId: id,
@@ -263,8 +284,16 @@ export async function getPlayer(id: string) {
               matchType: MatchType.TEAM,
             },
           },
-          include: {
-            schedule: true,
+          select: {
+            id: true,
+            mvpReceived: true,
+            schedule: {
+              select: {
+                id: true,
+                place: true,
+                date: true,
+              },
+            },
           },
         }),
       ]);
@@ -283,10 +312,19 @@ export async function getPlayer(id: string) {
               },
             },
           },
-          include: {
+          select: {
+            id: true,
+            matchId: true,
             match: {
-              include: {
-                schedule: true,
+              select: {
+                id: true,
+                schedule: {
+                  select: {
+                    id: true,
+                    place: true,
+                    date: true,
+                  },
+                },
               },
             },
           },
@@ -304,10 +342,19 @@ export async function getPlayer(id: string) {
               },
             },
           },
-          include: {
+          select: {
+            id: true,
+            matchId: true,
             match: {
-              include: {
-                schedule: true,
+              select: {
+                id: true,
+                schedule: {
+                  select: {
+                    id: true,
+                    place: true,
+                    date: true,
+                  },
+                },
               },
             },
           },
@@ -324,10 +371,19 @@ export async function getPlayer(id: string) {
               },
             },
           },
-          include: {
+          select: {
+            id: true,
+            matchId: true,
             match: {
-              include: {
-                schedule: true,
+              select: {
+                id: true,
+                schedule: {
+                  select: {
+                    id: true,
+                    place: true,
+                    date: true,
+                  },
+                },
               },
             },
           },
@@ -411,7 +467,7 @@ export async function getPlayer(id: string) {
         goals: teamGoals.length,
         assists: teamAssists.length,
         mvp: teamAttendances.reduce(
-          (total: number, attendance: AttendanceWithSchedule) =>
+          (total: number, attendance: { mvpReceived: number }) =>
             total + attendance.mvpReceived,
           0
         ),

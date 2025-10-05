@@ -106,8 +106,8 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
             pageParams: [1],
           }
         : undefined,
-      staleTime: 1000 * 60 * 10,
-      gcTime: 1000 * 60 * 30,
+      staleTime: 1000 * 60 * 30, // 30분으로 증가
+      gcTime: 1000 * 60 * 60, // 1시간으로 증가
       refetchOnWindowFocus: false,
     });
 

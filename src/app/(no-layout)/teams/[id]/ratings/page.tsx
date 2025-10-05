@@ -2,9 +2,22 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { auth } from "@/shared/lib/auth";
-import TeamMemberRatingList from "./ui/TeamMemberRatingList";
-import TeamMemberHeader from "./ui/TeamMemberHeader";
+import dynamic from "next/dynamic";
 import { getTeamMembers } from "./actions/get-team-members";
+
+// 동적 import로 번들 크기 최적화
+const TeamMemberRatingList = dynamic(
+  () => import("./ui/TeamMemberRatingList"),
+  {
+    loading: () => (
+      <div className="flex justify-center items-center py-8">로딩 중...</div>
+    ),
+  }
+);
+
+const TeamMemberHeader = dynamic(() => import("./ui/TeamMemberHeader"), {
+  loading: () => <div className="h-16 bg-gray-100 animate-pulse rounded" />,
+});
 
 export default async function TeamRatingPage({
   params,
