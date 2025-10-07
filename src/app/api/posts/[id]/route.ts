@@ -10,10 +10,10 @@ import { prisma } from "@/shared/lib/prisma";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const postId = params.id;
+    const { id: postId } = await params;
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
@@ -88,7 +88,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -97,7 +97,7 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const postId = params.id;
+    const { id: postId } = await params;
     const body = await request.json();
     const { title, content } = body;
 
@@ -154,7 +154,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -163,7 +163,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const postId = params.id;
+    const { id: postId } = await params;
 
     // 게시글 존재 및 작성자 확인
     const existingPost = await prisma.post.findUnique({

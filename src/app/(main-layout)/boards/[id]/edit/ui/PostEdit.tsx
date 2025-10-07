@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -35,7 +35,7 @@ const PostEdit = ({ postId }: PostEditProps) => {
   /**
    * 게시글 조회
    */
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/posts/${postId}`);
@@ -57,7 +57,7 @@ const PostEdit = ({ postId }: PostEditProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [postId, router]);
 
   /**
    * 게시글 수정

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -42,7 +42,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
   /**
    * 게시글 조회
    */
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/posts/${postId}`);
@@ -58,7 +58,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [postId]);
 
   /**
    * 게시글 삭제

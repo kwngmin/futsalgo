@@ -10,7 +10,7 @@ import { prisma } from "@/shared/lib/prisma";
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string; commentId: string } }
+  { params }: { params: Promise<{ id: string; commentId: string }> }
 ) {
   try {
     const session = await auth();
@@ -19,7 +19,7 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { commentId } = params;
+    const { commentId } = await params;
     const body = await request.json();
     const { content } = body;
 
@@ -76,7 +76,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string; commentId: string } }
+  { params }: { params: Promise<{ id: string; commentId: string }> }
 ) {
   try {
     const session = await auth();
@@ -85,7 +85,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { commentId } = params;
+    const { commentId } = await params;
 
     // 댓글 존재 및 작성자 확인
     const existingComment = await prisma.postComment.findUnique({

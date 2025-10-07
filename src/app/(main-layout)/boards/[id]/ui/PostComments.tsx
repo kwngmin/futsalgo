@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -40,7 +40,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
   /**
    * 댓글 목록 조회
    */
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/posts/${postId}/comments`);
@@ -56,7 +56,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [postId]);
 
   /**
    * 새 댓글 작성
