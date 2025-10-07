@@ -762,6 +762,9 @@ model Post {
   views     Int      @default(0)        // 조회수
   isPinned  Boolean  @default(false)    // 상단 고정
   isHidden  Boolean  @default(false)    // 숨김 (삭제 대신)
+
+  isDeleted  Boolean  @default(false)
+  deletedAt  DateTime?
   
   // 익명 게시글 지원
   isAnonymous Boolean @default(false)   // 익명 작성 여부
