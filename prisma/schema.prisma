@@ -66,11 +66,6 @@ enum TeamMemberRole {
   MEMBER    // 일반 멤버
 }
 
-enum BoardType {
-  GENERAL
-  NOTICE
-}
-
 enum TeamGender {
   MALE
   FEMALE
@@ -191,6 +186,25 @@ enum OnboardingStep {
   COMPLETE        
 }
 
+enum BoardCategory {
+  FREE           // 자유 게시판
+  TEAM           // 팀 게시판
+  // OVERSEAS       // 해외축구 게시판
+  // TRANSFER       // 이적시장 게시판
+  // EQUIPMENT      // 용품 게시판
+  // RECRUIT        // 팀원 모집 게시판
+  // 향후 추가될 카테고리들...
+}
+
+enum PostType {
+  GENERAL        // 일반 게시글
+  NOTICE         // 공지사항
+  // POLL           // 투표
+  // PHOTO          // 사진
+  // VIDEO          // 영상
+  // 향후 추가될 타입들...
+}
+
 
 // ========== AUTHENTICATION MODELS ==========
 
@@ -288,6 +302,8 @@ model User {
 
   // 게시판
   posts           Post[]
+  postComments    PostComment[]
+  likedPosts      PostLike[]
 
   // 팀원 평가 관계
   givenRatings    TeamMemberRating[] @relation("GivenRatings")
@@ -351,7 +367,6 @@ model Team {
   activityFrequency ActivityFrequency @default(WEEKLY)
 
   members       TeamMember[]  // TeamManager 제거하고 TeamMember로 통합
-  posts         Post[]
   followers     TeamFollow[]  // 팔로워 (기존 likedByUsers 대체)
 
   // 일정 관련
@@ -365,6 +380,10 @@ model Team {
 
   // 팀 멤버들의 평가 관계
   memberRatings   TeamMemberRating[] 
+
+  // 게시판 관련
+  boards          Board[]  // 팀 전용 게시판들
+  posts           Post[]   // 기존 유지
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -691,20 +710,131 @@ model ScheduleComment {
 
 // ========== BOARD MODELS ==========
 
+// 게시판 메타 정보를 관리하는 모델
+model Board {
+  id          String        @id @default(cuid())
+  name        String        // 게시판 이름 (예: "자유게시판", "해외축구")
+  slug        String        @unique // URL용 식별자 (예: "free", "overseas")
+  description String?       // 게시판 설명
+  category    BoardCategory // 게시판 카테고리
+  
+  // 게시판별 설정
+  isActive    Boolean       @default(true)  // 활성화 여부
+  requireAuth Boolean       @default(true)  // 로그인 필수 여부
+  allowAnonymous Boolean    @default(false) // 익명 작성 허용 여부
+  
+  // 팀 전용 게시판인 경우
+  teamId      String?       
+  team        Team?         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  
+  posts       Post[]
+  
+  order       Int           @default(0)     // 게시판 정렬 순서
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@index([category, isActive])
+  @@index([teamId])
+  @@index([slug])
+  @@index([order])
+  @@map("boards")
+}
+
 model Post {
   id        String   @id @default(cuid())
+  
+  // 기존 필드들
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
+  title     String
+  content   String   @db.Text // 긴 내용을 위해 Text 타입 사용
+  type      PostType @default(GENERAL) // enum 이름 변경
+  
+  // 새로운 관계: Board 참조
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId   String
+  
+  // 팀 관계는 선택적으로 유지 (팀 게시판인 경우에만)
   team      Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId    String?
-  title     String
-  content   String
-  type      BoardType   
+  
+  // 게시글 추가 기능들
+  views     Int      @default(0)        // 조회수
+  isPinned  Boolean  @default(false)    // 상단 고정
+  isHidden  Boolean  @default(false)    // 숨김 (삭제 대신)
+  
+  // 익명 게시글 지원
+  isAnonymous Boolean @default(false)   // 익명 작성 여부
+  
+  // 관계들
+  comments    PostComment[]
+  likes       PostLike[]
+  attachments PostAttachment[]
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  @@index([teamId, type])
+  @@index([boardId, createdAt])
+  @@index([boardId, isPinned, createdAt]) // 고정글 우선 정렬
   @@index([authorId])
-  @@index([createdAt])
+  @@index([teamId])
+  @@index([boardId, type])
   @@map("posts")
+}
+
+// 댓글 모델 (확장성 고려)
+model PostComment {
+  id        String   @id @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  content   String
+  
+  // 대댓글 지원
+  parentId  String?
+  parent    PostComment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   PostComment[] @relation("CommentReplies")
+  
+  isDeleted Boolean  @default(false)
+  deletedAt DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([postId, createdAt])
+  @@index([parentId])
+  @@map("post_comments")
+}
+
+// 좋아요 모델
+model PostLike {
+  id        String   @id @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([postId, userId])
+  @@index([userId])
+  @@index([postId])
+  @@map("post_likes")
+}
+
+// 첨부파일 모델
+model PostAttachment {
+  id        String   @id @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  url       String
+  fileName  String
+  fileSize  Int?     // bytes
+  mimeType  String?
+  
+  createdAt DateTime @default(now())
+  
+  @@index([postId])
+  @@map("post_attachments")
 }
