@@ -3,9 +3,9 @@ import PostDetail from "./ui/PostDetail";
 import PostHeader from "./ui/PostHeader";
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -13,12 +13,14 @@ interface PostPageProps {
  * @param params - 라우트 파라미터
  * @returns 게시글 상세보기 페이지
  */
-const PostPage = ({ params }: PostPageProps) => {
+const PostPage = async ({ params }: PostPageProps) => {
+  const { id } = await params;
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <PostHeader />
       <Suspense fallback={<div className="p-4">로딩 중...</div>}>
-        <PostDetail postId={params.id} />
+        <PostDetail postId={id} />
       </Suspense>
     </div>
   );

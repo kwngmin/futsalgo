@@ -3,9 +3,9 @@ import PostEdit from "./ui/PostEdit";
 import PostEditHeader from "./ui/PostEditHeader";
 
 interface PostEditPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 /**
@@ -13,12 +13,14 @@ interface PostEditPageProps {
  * @param params - 라우트 파라미터
  * @returns 게시글 수정 페이지
  */
-const PostEditPage = ({ params }: PostEditPageProps) => {
+const PostEditPage = async ({ params }: PostEditPageProps) => {
+  const { id } = await params;
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <PostEditHeader />
       <Suspense fallback={<div className="p-4">로딩 중...</div>}>
-        <PostEdit postId={params.id} />
+        <PostEdit postId={id} />
       </Suspense>
     </div>
   );
