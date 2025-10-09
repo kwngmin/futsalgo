@@ -175,7 +175,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
 
   useEffect(() => {
     fetchComments();
-  }, [postId]);
+  }, [postId, fetchComments]);
 
   if (loading) {
     return (
@@ -216,7 +216,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
             <button
               onClick={handleSubmitComment}
               disabled={!newComment.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 sm:w-28"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0 sm:w-28 cursor-pointer"
             >
               댓글 작성
             </button>
