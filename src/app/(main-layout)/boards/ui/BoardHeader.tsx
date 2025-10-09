@@ -13,19 +13,16 @@ const BoardHeader = () => {
 
   return (
     <div className="flex items-center justify-between px-4 h-16 shrink-0">
-      <h1 className="text-[1.625rem] font-bold">자유게시판</h1>
-      {session ? (
-        <Link
-          href="/boards/write"
-          className="shrink-0 size-10 flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-colors cursor-pointer"
-        >
-          <Plus className="size-5" />
-        </Link>
-      ) : (
-        <div className="text-sm text-gray-500">
-          글쓰기는 로그인이 필요합니다
-        </div>
-      )}
+      <h1 className="text-[1.625rem] font-bold">게시판</h1>
+      <Link
+        href={session ? "/boards/write" : "/login"}
+        className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+      >
+        <Plus
+          className="size-6"
+          // strokeWidth={1.75}
+        />
+      </Link>
     </div>
   );
 };

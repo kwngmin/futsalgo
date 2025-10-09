@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Eye, MessageCircle, Heart } from "lucide-react";
+// import { Eye, MessageCircle, Heart } from "lucide-react";
 
 interface Post {
   id: string;
@@ -96,55 +96,57 @@ const BoardList = () => {
   return (
     <div className="flex-1">
       {/* 게시글 목록 */}
-      <div className="px-4 space-y-4">
-        {posts.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            아직 게시글이 없습니다.
-          </div>
-        ) : (
-          posts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/boards/${post.id}`}
-              className="block p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 truncate">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                    {post.content}
-                  </p>
-                  <div className="flex items-center mt-2 text-xs text-gray-500 space-x-4">
-                    <span>{post.author.nickname}</span>
-                    <span>
-                      {formatDistanceToNow(new Date(post.createdAt), {
-                        addSuffix: true,
-                        locale: ko,
-                      })}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3 ml-4 text-sm text-gray-500">
+      {posts.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          아직 게시글이 없습니다.
+        </div>
+      ) : (
+        posts.map((post) => (
+          <Link
+            key={post.id}
+            href={`/boards/${post.id}`}
+            className="flex flex-col justify-center px-4 py-2 bg-white transition-colors hover:bg-gray-50"
+          >
+            <h3 className="font-semibold text-gray-900 truncate">
+              {post.title}
+              {post._count &&
+                post._count.comments > 0 &&
+                post._count.comments !== 0 && (
+                  <span className="text-sm font-medium text-amber-600 px-2">
+                    {post._count.comments}
+                  </span>
+                )}
+            </h3>
+            {/* <p className="text-gray-600 mt-1 line-clamp-2">{post.content}</p> */}
+            <div className="flex items-center my-1 space-x-1 text-sm">
+              <span className="font-medium text-gray-700">
+                {post.author.nickname}
+              </span>
+              <span className="text-gray-400"> • </span>
+              <span className="text-gray-500">
+                {formatDistanceToNow(new Date(post.createdAt), {
+                  addSuffix: true,
+                  locale: ko,
+                })}
+              </span>
+              {/* <div className="flex items-center space-x-3 ml-4 text-sm text-gray-500">
                   <div className="flex items-center space-x-1">
-                    <Eye className="size-4" />
+                    <Eye className="size-3.5" />
                     <span>{post.views}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <MessageCircle className="size-4" />
+                    <MessageCircle className="size-3.5" />
                     <span>{post._count.comments}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Heart className="size-4" />
+                    <Heart className="size-3.5" />
                     <span>{post._count.likes}</span>
                   </div>
-                </div>
-              </div>
-            </Link>
-          ))
-        )}
-      </div>
+                </div> */}
+            </div>
+          </Link>
+        ))
+      )}
 
       {/* 페이지네이션 */}
       {pagination && pagination.totalPages > 1 && (
