@@ -18,7 +18,7 @@ const PostPage = async ({ params }: PostPageProps) => {
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      <PostHeader />
+      <PostHeader id={id} />
       <Suspense fallback={<div className="p-4">로딩 중...</div>}>
         <PostDetail postId={id} />
       </Suspense>

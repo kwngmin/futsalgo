@@ -116,68 +116,67 @@ const PostDetail = ({ postId }: PostDetailProps) => {
   return (
     <div className="flex-1">
       {/* 게시글 내용 */}
-      <div className="px-4 mb-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900 flex-1">
-              {post.title}
-            </h1>
-            {isAuthor && (
-              <div className="flex items-center space-x-2 ml-4">
-                <button
-                  onClick={() =>
-                    (window.location.href = `/boards/${postId}/edit`)
-                  }
-                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                >
-                  <Edit className="size-4" />
-                </button>
-                <button
-                  onClick={() => setShowDeleteConfirm(true)}
-                  className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                >
-                  <Trash2 className="size-4" />
-                </button>
-              </div>
-            )}
+      <div className="bg-white sm:px-4 mb-6">
+        {/* 게시글 작성자 및 작성 일시 */}
+        <div className="flex items-center justify-between mb-4 text-sm text-gray-500 py-2 bg-gray-50 px-4 sm:rounded-sm">
+          <div className="flex items-center space-x-4">
+            <span>{post.author.nickname}</span>
+            <span>
+              {formatDistanceToNow(new Date(post.createdAt), {
+                addSuffix: true,
+                locale: ko,
+              })}
+            </span>
           </div>
-
-          <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
-            <div className="flex items-center space-x-4">
-              <span>{post.author.nickname}</span>
-              <span>
-                {formatDistanceToNow(new Date(post.createdAt), {
-                  addSuffix: true,
-                  locale: ko,
-                })}
-              </span>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <Eye className="size-4" />
+              <span>{post.views}</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1">
-                <Eye className="size-4" />
-                <span>{post.views}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <MessageCircle className="size-4" />
-                <span>{post._count.comments}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Heart className="size-4" />
-                <span>{post._count.likes}</span>
-              </div>
+            <div className="flex items-center space-x-1">
+              <MessageCircle className="size-4" />
+              <span>{post._count.comments}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Heart className="size-4" />
+              <span>{post._count.likes}</span>
             </div>
           </div>
+        </div>
 
-          <div className="prose max-w-none">
-            <div className="whitespace-pre-wrap text-gray-900">
-              {post.content}
-            </div>
+        <div className="flex items-start justify-between mb-4 px-4">
+          <h1 className="text-2xl font-bold text-gray-900 flex-1">
+            {post.title}
+          </h1>
+        </div>
+
+        <div className="prose max-w-none px-4">
+          <div className="whitespace-pre-wrap text-gray-900">
+            {post.content}
           </div>
         </div>
       </div>
 
       {/* 댓글 섹션 */}
       <PostComments postId={postId} />
+
+      {/* 게시글 수정 및 삭제 버튼 */}
+      {isAuthor && (
+        <div className="flex items-center space-x-2 ml-4">
+          <button
+            onClick={() => (window.location.href = `/boards/${postId}/edit`)}
+            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+          >
+            <Edit className="size-4" />
+          </button>
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+          >
+            <Trash2 className="size-4" />
+          </button>
+        </div>
+      )}
 
       {/* 삭제 확인 모달 */}
       {showDeleteConfirm && (
