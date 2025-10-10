@@ -20,7 +20,7 @@ const SideNav = () => {
             href="/"
           >
             <Image
-              src="/futsalgo_logo_v4.svg"
+              src="/futsalgo_logo_italic.svg"
               alt="FutsalGo logo"
               width={130}
               height={22}
