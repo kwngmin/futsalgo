@@ -692,13 +692,12 @@ const ScheduleContent = ({
                 ))}
               </div>
             ) : isAvailableAddMatch ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">
-                  경기가 없습니다
-                </h3>
-                <p className="text-gray-500 mb-6">
-                  경기를 추가하고 골과 어시스트를 기록하세요
+              <div className="py-6 px-8 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
+                <p className="text-lg sm:text-base font-medium text-gray-600">
+                  경기가 없습니다.
+                </p>
+                <p className="whitespace-pre-line break-keep sm:text-sm">
+                  경기를 추가하고 골과 어시스트를 기록하세요.
                 </p>
               </div>
             ) : (

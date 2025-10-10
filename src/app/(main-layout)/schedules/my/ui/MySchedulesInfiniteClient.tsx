@@ -18,6 +18,7 @@ import {
 } from "../actions/get-my-schedules";
 import ListHeader, { TabType } from "@/features/tab-and-search/ui/ListHeader";
 import Link from "next/link";
+import { SmileyXEyesIcon } from "@phosphor-icons/react";
 
 const FilterMatchType = lazy(
   () => import("@/features/filter-list/ui/FilterScheduleMatch")
@@ -243,8 +244,18 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
         )}
 
         {!isFetching && allSchedules.length === 0 && (
-          <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-20 flex justify-center items-center text-sm text-muted-foreground">
-            소속된 팀의 일정이 없습니다.
+          <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh]">
+            {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
+            <SmileyXEyesIcon
+              className="size-28 mx-auto text-gray-200 mb-4"
+              weight="fill"
+            />
+            <h3 className="text-lg font-medium text-gray-900">
+              경기가 없습니다
+            </h3>
+            <p className="text-gray-500 mb-6">
+              경기를 추가하고 골과 어시스트를 기록하세요
+            </p>
           </div>
         )}
       </div>
