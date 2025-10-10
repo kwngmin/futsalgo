@@ -22,6 +22,7 @@ import { useInView } from "react-intersection-observer";
 import { Separator } from "@/shared/components/ui/separator";
 import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamFilters } from "@/features/filter-list/model/types";
+import { SmileyXEyesIcon } from "@phosphor-icons/react";
 
 // 필터 컴포넌트 동적 임포트
 const FilterTeamGender = lazy(
@@ -333,8 +334,12 @@ const TeamsPage = () => {
 
           {/* 팀이 없는 경우 */}
           {allTeams.length === 0 && !isLoading && (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+            <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh]">
+              {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
+              <SmileyXEyesIcon
+                className="size-28 mx-auto text-gray-200 mb-4"
+                weight="fill"
+              />
               <h3 className="text-lg font-medium text-gray-900">
                 팀이 없습니다
               </h3>

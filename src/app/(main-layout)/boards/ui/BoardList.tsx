@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
+import { SmileyXEyesIcon } from "@phosphor-icons/react";
 // import { Eye, MessageCircle, Heart } from "lucide-react";
 
 interface Post {
@@ -97,8 +98,12 @@ const BoardList = () => {
     <div className="flex-1">
       {/* 게시글 목록 */}
       {posts.length === 0 ? (
-        <div className="text-center py-12 mt-3">
-          <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+        <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh] mt-3">
+          {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
+          <SmileyXEyesIcon
+            className="size-28 mx-auto text-gray-200 mb-4"
+            weight="fill"
+          />
           <h3 className="text-lg font-medium text-gray-900">
             게시글이 없습니다
           </h3>

@@ -4,6 +4,7 @@
 import { Separator } from "@/shared/components/ui/separator";
 import ScheduleList from "./ScheduleList";
 import { ScheduleWithDetails } from "@/app/(main-layout)/schedules/actions/get-schedules";
+import { SmileyXEyesIcon } from "@phosphor-icons/react";
 
 interface ScheduleSectionProps {
   todaysSchedules?: ScheduleWithDetails[];
@@ -58,8 +59,12 @@ const ScheduleSection = ({
 
   // 빈 상태 컴포넌트
   const EmptyState = () => (
-    <div className="text-center py-12">
-      <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+    <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh]">
+      {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
+      <SmileyXEyesIcon
+        className="size-28 mx-auto text-gray-200 mb-4"
+        weight="fill"
+      />
       <h3 className="text-lg font-medium text-gray-900">경기가 없습니다</h3>
       <p className="text-gray-500 mb-6">
         경기를 추가하고 골과 어시스트를 기록하세요

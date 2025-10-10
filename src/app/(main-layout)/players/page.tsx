@@ -24,6 +24,7 @@ import FilterPlayerGender from "@/features/filter-list/ui/FilterPlayerGender";
 import FilterPlayerBackground from "@/features/filter-list/ui/FilterPlayerBackground";
 import FilterPlayerAge from "@/features/filter-list/ui/FilterPlayerAge";
 import { Separator } from "@/shared/components/ui/separator";
+import { SmileyXEyesIcon } from "@phosphor-icons/react";
 
 const PlayersPage = () => {
   const router = useRouter();
@@ -294,8 +295,12 @@ const PlayersPage = () => {
 
           {/* 회원이 없는 경우 */}
           {players?.length === 0 && !isLoading && (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+            <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh]">
+              {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
+              <SmileyXEyesIcon
+                className="size-28 mx-auto text-gray-200 mb-4"
+                weight="fill"
+              />
               <h3 className="text-lg font-medium text-gray-900">
                 회원이 없습니다
               </h3>
