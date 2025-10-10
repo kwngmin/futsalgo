@@ -5,8 +5,25 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { Check } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const OnboardingComplete = () => {
+  const [countdown, setCountdown] = useState(3);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
@@ -14,7 +31,15 @@ const OnboardingComplete = () => {
           <Check className="w-6 h-6 text-green-600" />
         </div>
         <CardTitle>온보딩 완료!</CardTitle>
-        <CardDescription>잠시 후 대시보드로 이동합니다...</CardDescription>
+        <CardDescription>
+          {countdown > 0 ? (
+            <span className="text-lg font-semibold text-blue-600">
+              {countdown}초 후 대시보드로 이동합니다...
+            </span>
+          ) : (
+            "대시보드로 이동 중..."
+          )}
+        </CardDescription>
       </CardHeader>
     </Card>
   );

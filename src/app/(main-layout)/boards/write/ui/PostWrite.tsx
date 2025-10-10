@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { createApiRequestOptions } from "@/shared/lib/api-utils";
 
 /**
  * 게시글 작성 컴포넌트
@@ -26,17 +27,14 @@ const PostWrite = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await fetch(
+        "/api/posts",
+        createApiRequestOptions("POST", {
           title: title.trim(),
           content: content.trim(),
           boardId: "free",
-        }),
-      });
+        })
+      );
 
       if (response.ok) {
         const post = await response.json();

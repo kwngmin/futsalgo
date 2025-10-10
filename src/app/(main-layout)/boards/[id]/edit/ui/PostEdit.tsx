@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { createApiRequestOptions } from "@/shared/lib/api-utils";
 
 interface Post {
   id: string;
@@ -70,16 +71,13 @@ const PostEdit = ({ postId }: PostEditProps) => {
 
     try {
       setSaving(true);
-      const response = await fetch(`/api/posts/${postId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await fetch(
+        `/api/posts/${postId}`,
+        createApiRequestOptions("PUT", {
           title: title.trim(),
           content: content.trim(),
-        }),
-      });
+        })
+      );
 
       if (response.ok) {
         router.push(`/boards/${postId}`);
@@ -97,7 +95,7 @@ const PostEdit = ({ postId }: PostEditProps) => {
 
   useEffect(() => {
     fetchPost();
-  }, [postId]);
+  }, [postId, fetchPost]);
 
   if (loading) {
     return (

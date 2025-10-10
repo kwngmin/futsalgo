@@ -25,6 +25,7 @@ import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamLevel } from "@prisma/client";
 import { TEAM_FILTER_OPTIONS } from "@/entities/team/model/constants";
 import { SmileyXEyesIcon } from "@phosphor-icons/react";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
 // 필터 컴포넌트 동적 임포트
 const FilterTeamGender = lazy(
@@ -172,7 +173,11 @@ const FollowingTeamsPage = () => {
     string[],
     number
   >({
-    queryKey: ["teams", "following", JSON.stringify(filters)],
+    queryKey: createEntityQueryKey(
+      "teams",
+      "following",
+      filters as Record<string, unknown>
+    ),
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getFollowingTeams(pageParam, filters),
     getNextPageParam: (lastPage) => {

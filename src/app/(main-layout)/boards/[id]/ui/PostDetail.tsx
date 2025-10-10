@@ -84,7 +84,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
 
   useEffect(() => {
     fetchPost();
-  }, [postId]);
+  }, [postId, fetchPost]);
 
   if (loading) {
     return (

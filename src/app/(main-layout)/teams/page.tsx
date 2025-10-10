@@ -23,6 +23,7 @@ import { Separator } from "@/shared/components/ui/separator";
 import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamFilters } from "@/features/filter-list/model/types";
 import { SmileyXEyesIcon } from "@phosphor-icons/react";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
 // 필터 컴포넌트 동적 임포트
 const FilterTeamGender = lazy(
@@ -163,7 +164,11 @@ const TeamsPage = () => {
     string[],
     number
   >({
-    queryKey: ["teams", "all", JSON.stringify(filters)],
+    queryKey: createEntityQueryKey(
+      "teams",
+      "all",
+      filters as Record<string, unknown>
+    ),
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getTeams(pageParam, filters),
     getNextPageParam: (lastPage) => {

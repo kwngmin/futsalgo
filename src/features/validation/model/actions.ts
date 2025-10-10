@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { ValidationField } from "./types";
+import { createApiRequestOptions, safeJsonParse } from "@/shared/lib/api-utils";
 
 // 중복확인 함수
 export const validateField = async (
@@ -12,13 +13,12 @@ export const validateField = async (
   setFieldState((prev) => ({ ...prev, status: "checking" }));
 
   try {
-    const response = await fetch(`/api/check/${type}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [type]: value }),
-    });
+    const response = await fetch(
+      `/api/check/${type}`,
+      createApiRequestOptions("POST", { [type]: value })
+    );
 
-    const data = await response.json();
+    const data = await safeJsonParse(response);
 
     if (data.available) {
       setFieldState((prev) => ({

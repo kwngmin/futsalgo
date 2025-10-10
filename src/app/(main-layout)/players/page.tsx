@@ -25,6 +25,7 @@ import FilterPlayerBackground from "@/features/filter-list/ui/FilterPlayerBackgr
 import FilterPlayerAge from "@/features/filter-list/ui/FilterPlayerAge";
 import { Separator } from "@/shared/components/ui/separator";
 import { SmileyXEyesIcon } from "@phosphor-icons/react";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
 const PlayersPage = () => {
   const router = useRouter();
@@ -132,7 +133,11 @@ const PlayersPage = () => {
     string[],
     number
   >({
-    queryKey: ["players", "all", JSON.stringify(filters)],
+    queryKey: createEntityQueryKey(
+      "players",
+      "all",
+      filters as Record<string, unknown>
+    ),
     queryFn: ({ pageParam }: { pageParam: number }) =>
       getPlayers(pageParam, filters),
     getNextPageParam: (lastPage) => {

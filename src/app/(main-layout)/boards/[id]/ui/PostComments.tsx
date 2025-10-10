@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { MessageCircle, Reply, Edit, Trash2 } from "lucide-react";
+import { createApiRequestOptions } from "@/shared/lib/api-utils";
 
 interface Comment {
   id: string;
@@ -65,13 +66,10 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await fetch(`/api/posts/${postId}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content: newComment }),
-      });
+      const response = await fetch(
+        `/api/posts/${postId}/comments`,
+        createApiRequestOptions("POST", { content: newComment })
+      );
 
       if (response.ok) {
         setNewComment("");
@@ -93,13 +91,10 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     if (!replyContent.trim()) return;
 
     try {
-      const response = await fetch(`/api/posts/${postId}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content: replyContent, parentId }),
-      });
+      const response = await fetch(
+        `/api/posts/${postId}/comments`,
+        createApiRequestOptions("POST", { content: replyContent, parentId })
+      );
 
       if (response.ok) {
         setReplyContent("");
@@ -124,13 +119,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     try {
       const response = await fetch(
         `/api/posts/${postId}/comments/${commentId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ content: editContent }),
-        }
+        createApiRequestOptions("PUT", { content: editContent })
       );
 
       if (response.ok) {

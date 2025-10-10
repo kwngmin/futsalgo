@@ -36,6 +36,7 @@ import { validateBirthDate } from "@/features/validation/model/actions";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { ConfirmationDialog } from "@/shared/components/ui/confirmation-dialog";
 
 // 실력 등급별 사용 가능한 총 포인트
 export const SKILL_LEVEL_POINTS: Record<PlayerSkillLevel, number> = {
@@ -102,6 +103,7 @@ export function OnboardingProfile({
   const { data: session, update } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [ratings, setRatings] = useState<RatingData>({
     shooting: 1,
@@ -186,7 +188,18 @@ export function OnboardingProfile({
     return totalUsedPoints + pointDifference > maxPoints;
   };
 
-  const onSubmit = async (data: ProfileFormData) => {
+  const handleFormSubmit = async (data: ProfileFormData) => {
+    // 남은 포인트가 있으면 확인창 표시
+    if (remainingPoints > 0) {
+      setShowConfirmation(true);
+      return;
+    }
+
+    // 남은 포인트가 없으면 바로 제출
+    await submitForm(data);
+  };
+
+  const submitForm = async (data: ProfileFormData) => {
     setIsLoading(true);
     try {
       const response = await updateProfileData({
@@ -219,6 +232,15 @@ export function OnboardingProfile({
     }
   };
 
+  const handleConfirmSubmit = async () => {
+    const formData = watch();
+    await submitForm(formData);
+  };
+
+  const handleCancelSubmit = () => {
+    setShowConfirmation(false);
+  };
+
   console.log(errors, "errors");
 
   return (
@@ -237,7 +259,7 @@ export function OnboardingProfile({
         </CardDescription>
       </CardHeader>
       <CardContent className="px-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
           {/* 이름 */}
           <div className="space-y-3">
             <Label htmlFor="name" className="px-1">
@@ -578,6 +600,18 @@ export function OnboardingProfile({
             </Button>
           </div>
         </form>
+
+        {/* 확인 다이얼로그 */}
+        <ConfirmationDialog
+          open={showConfirmation}
+          onOpenChange={setShowConfirmation}
+          title="포인트 미사용 확인"
+          description={`자기평가의 포인트가 ${remainingPoints}점 남았습니다. 포인트를 전부 사용하지 않으셨습니다. 완료하시겠습니까?`}
+          confirmText="예"
+          cancelText="아니요"
+          onConfirm={handleConfirmSubmit}
+          onCancel={handleCancelSubmit}
+        />
       </CardContent>
     </Card>
   );
