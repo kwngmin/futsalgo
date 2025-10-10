@@ -58,8 +58,12 @@ const ScheduleSection = ({
 
   // 빈 상태 컴포넌트
   const EmptyState = () => (
-    <div className="mx-4 bg-neutral-50 rounded-2xl px-4 h-24 flex justify-center items-center text-sm text-muted-foreground mt-3">
-      경기가 없습니다.
+    <div className="text-center py-12">
+      <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+      <h3 className="text-lg font-medium text-gray-900">경기가 없습니다</h3>
+      <p className="text-gray-500 mb-6">
+        경기를 추가하고 골과 어시스트를 기록하세요
+      </p>
     </div>
   );
 

@@ -17,9 +17,9 @@ const OnboardingPage = async () => {
           <h1 className="text-[1.625rem] font-bold text-gray-900">
             환영합니다! 👋
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          {/* <p className="mt-2 text-sm text-gray-600">
             서비스 이용을 위해 닉네임을 설정해주세요
-          </p>
+          </p> */}
         </div>
         <OnboardingFlow />
       </div>

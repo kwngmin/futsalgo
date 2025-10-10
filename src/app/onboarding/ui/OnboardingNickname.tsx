@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
+// import { Label } from "@/shared/components/ui/label";
 import {
   Card,
   CardContent,
@@ -53,14 +53,14 @@ export function OnboardingNickname({
         <X className="size-5 text-gray-500" />
       </button>
       <CardHeader>
-        <CardTitle>닉네임 설정</CardTitle>
+        <CardTitle>닉네임</CardTitle>
         <CardDescription>
           다른 사용자들에게 표시될 닉네임을 설정해주세요
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
-          <Label htmlFor="nickname">닉네임</Label>
+          {/* <Label htmlFor="nickname">닉네임</Label> */}
           <div className="relative">
             <Input
               id="nickname"

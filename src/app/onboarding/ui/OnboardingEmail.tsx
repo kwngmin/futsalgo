@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 // import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
+// import { Label } from "@/shared/components/ui/label";
 import {
   Card,
   CardContent,
@@ -58,12 +58,12 @@ export function OnboardingEmail({
         <X className="size-5 text-gray-500" />
       </button>
       <CardHeader>
-        <CardTitle>이메일 확인</CardTitle>
+        <CardTitle>이메일</CardTitle>
         <CardDescription>사용할 이메일 주소를 확인해주세요</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
-          <Label htmlFor="email">이메일</Label>
+          {/* <Label htmlFor="email">이메일</Label> */}
           <div className="relative">
             <Input
               id="email"

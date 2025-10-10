@@ -238,6 +238,15 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
           </div>
         </div>
       )}
+
+      {/* 모든 데이터 로드 완료 */}
+      {!hasNextPage && allSchedules.pastSchedules.length === 0 && (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900">일정이 없습니다</h3>
+          <p className="text-gray-500 mb-6">새로운 일정을 추가해보세요</p>
+        </div>
+      )}
     </>
   );
 };

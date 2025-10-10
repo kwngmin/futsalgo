@@ -3,7 +3,7 @@
 import { SetStateAction, Dispatch } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
+// import { Label } from "@/shared/components/ui/label";
 import {
   Card,
   CardContent,
@@ -54,14 +54,14 @@ export function OnboardingPhone({
         <X className="size-5 text-gray-500" />
       </button>
       <CardHeader>
-        <CardTitle>전화번호 입력</CardTitle>
+        <CardTitle>전화번호</CardTitle>
         <CardDescription>
           팀원들과의 연락을 위한 전화번호를 입력해주세요
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
-          <Label htmlFor="phone">전화번호</Label>
+          {/* <Label htmlFor="phone">전화번호</Label> */}
           <div className="relative">
             <Input
               id="phone"

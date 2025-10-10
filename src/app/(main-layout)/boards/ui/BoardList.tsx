@@ -97,8 +97,12 @@ const BoardList = () => {
     <div className="flex-1">
       {/* 게시글 목록 */}
       {posts.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          아직 게시글이 없습니다.
+        <div className="text-center py-12 mt-3">
+          <div className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900">
+            게시글이 없습니다
+          </h3>
+          <p className="text-gray-500 mb-6">새로운 게시글을 작성해보세요</p>
         </div>
       ) : (
         posts.map((post) => (

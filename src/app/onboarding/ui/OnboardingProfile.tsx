@@ -231,7 +231,7 @@ export function OnboardingProfile({
         <X className="size-5 text-gray-500" />
       </button>
       <CardHeader className="px-4">
-        <CardTitle>프로필 정보 입력</CardTitle>
+        <CardTitle>프로필</CardTitle>
         <CardDescription>
           축구 활동을 위한 기본 정보를 입력해주세요
         </CardDescription>
