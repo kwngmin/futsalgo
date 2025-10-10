@@ -242,7 +242,7 @@ const EditTeamForm = ({
       {/* 인스타그램, 유튜브 */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
         <div className="space-y-3">
-          <Label className="px-1">인스타그램</Label>
+          <Label className="px-1">인스타그램 (선택)</Label>
           <Input
             type="text"
             {...register("instagram")}
@@ -251,7 +251,7 @@ const EditTeamForm = ({
         </div>
 
         <div className="space-y-3">
-          <Label className="px-1">유튜브</Label>
+          <Label className="px-1">유튜브 (선택)</Label>
           <Input
             type="text"
             {...register("youtube")}

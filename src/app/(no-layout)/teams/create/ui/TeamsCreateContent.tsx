@@ -38,8 +38,8 @@ const teamSchema = z.object({
   teamMatchAvailable: z.enum(["AVAILABLE", "UNAVAILABLE"], {
     error: () => "친선전 초청 가능 여부를 선택해주세요",
   }),
-  instagram: z.string().min(1, "인스타그램 아이디를 입력해주세요").optional(),
-  youtube: z.string().min(1, "유튜브 채널명을 입력해주세요").optional(),
+  instagram: z.string().optional(),
+  youtube: z.string().optional(),
 });
 
 export type TeamFormData = z.infer<typeof teamSchema>;
@@ -269,7 +269,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 {/* 인스타그램, 유튜브 */}
                 <div className="grid grid-cols-3 gap-1">
                   <div className="space-y-3">
-                    <Label className="px-1">인스타그램</Label>
+                    <Label className="px-1">인스타그램 (선택)</Label>
                     <Input
                       type="text"
                       {...register("instagram")}
@@ -278,7 +278,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="px-1">유튜브</Label>
+                    <Label className="px-1">유튜브 (선택)</Label>
                     <Input
                       type="text"
                       {...register("youtube")}
