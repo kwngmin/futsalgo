@@ -9,13 +9,13 @@ export interface ProviderConfig {
 
 // 현재 사용 중인 providers
 export const AUTH_PROVIDERS: readonly ProviderConfig[] = [
-  {
-    id: "naver",
-    name: "네이버",
-    symbol: "/assets/logos/naver-symbol-w.svg",
-    containerColor: "#03C75A",
-    lableColor: "#ffffff",
-  },
+  // {
+  //   id: "naver",
+  //   name: "네이버",
+  //   symbol: "/assets/logos/naver-symbol-w.svg",
+  //   containerColor: "#03C75A",
+  //   lableColor: "#ffffff",
+  // },
   {
     id: "kakao",
     name: "카카오",

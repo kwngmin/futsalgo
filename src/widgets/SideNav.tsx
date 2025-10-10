@@ -15,7 +15,7 @@ const SideNav = () => {
         <div className="flex flex-col w-full">
           {/* 로고 */}
           <Link
-            className="flex items-center justify-center h-15 px-8 cursor-pointer my-1"
+            className="flex items-center justify-center h-20 px-8 cursor-pointer my-1"
             type="button"
             href="/"
           >
