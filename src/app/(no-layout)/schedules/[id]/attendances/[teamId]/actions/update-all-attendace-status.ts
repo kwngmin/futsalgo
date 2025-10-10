@@ -71,7 +71,7 @@ export async function updateAllAttendanceStatus({
       },
     });
 
-    revalidatePath(`/schedules/${scheduleId}/attendances/${teamId}`);
+    revalidatePath(`/schedules/${scheduleId}`);
 
     return {
       success: true,

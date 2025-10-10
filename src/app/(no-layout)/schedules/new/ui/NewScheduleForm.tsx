@@ -335,7 +335,12 @@ const NewScheduleForm = ({
 
       if (result.success) {
         alert("일정이 추가되었습니다.");
-        queryClient.invalidateQueries({ queryKey: ["schedules"] });
+        await queryClient.invalidateQueries({
+          queryKey: ["schedules"],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["my-schedules"],
+        });
         router.replace(`/`);
       }
     } catch (error) {
