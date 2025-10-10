@@ -1,6 +1,7 @@
 "use client";
 
 import { useNavigation } from "@/shared/hooks/use-navigation";
+import { FileText, Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
@@ -37,7 +38,7 @@ const SideNav = () => {
                   <Link
                     key={item.id}
                     href={item.href}
-                    className={`w-full flex items-center px-4 py-3 text-xl rounded-lg transition-colors cursor-pointer ${
+                    className={`w-full flex items-center px-4 py-3 text-xl rounded-lg transition-colors cursor-pointer active:scale-98 ${
                       isActive
                         ? "bg-slate-100 text-gray-900 font-bold"
                         : // ? "bg-blue-50 text-blue-600 font-bold"
@@ -58,14 +59,16 @@ const SideNav = () => {
             <nav className="flex flex-col px-4 mb-4 space-y-1">
               <Link
                 href="/privacy"
-                className="text-gray-700 hover:bg-gray-50 font-medium"
+                className="h-10 px-2 rounded-sm active:scale-98 flex items-center gap-2 text-gray-700 hover:bg-gray-50 font-medium"
               >
+                <Shield className="size-5 text-gray-600" />
                 개인정보처리방침
               </Link>
               <Link
                 href="/terms"
-                className="text-gray-700 hover:bg-gray-50 font-medium"
+                className="h-10 px-2 rounded-sm active:scale-98 flex items-center gap-2 text-gray-700 hover:bg-gray-50 font-medium"
               >
+                <FileText className="size-5 text-gray-600" />
                 이용약관
               </Link>
             </nav>

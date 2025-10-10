@@ -113,7 +113,7 @@ const MorePage = () => {
             </h3>
             <div className="flex gap-2 justify-center mt-3">
               <Link
-                className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer"
+                className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer active:scale-98"
                 href="/login"
               >
                 시작하기

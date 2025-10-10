@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 // import { Label } from "@/shared/components/ui/label";
@@ -26,19 +26,48 @@ export function OnboardingNickname({
 }) {
   const { data: session, update } = useSession();
   const { nickname, onChange } = useNicknameValidation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // 단계별 진행
   const handleNextStep = async () => {
-    if (nickname.status === "valid") {
+    if (nickname.status === "valid" && !isLoading) {
+      setIsLoading(true);
+      setError(null);
+
       try {
-        await updateNickname(nickname.value);
-        await updateOnboardingStep(OnboardingStep.PROFILE);
+        // 1. 닉네임 업데이트
+        const nicknameResult = await updateNickname(nickname.value);
+        if (!nicknameResult.success) {
+          throw new Error(
+            nicknameResult.error || "닉네임 업데이트에 실패했습니다"
+          );
+        }
+
+        // 2. 온보딩 단계 업데이트
+        const stepResult = await updateOnboardingStep(OnboardingStep.PROFILE);
+        if (!stepResult.success) {
+          throw new Error(
+            stepResult.error || "온보딩 단계 업데이트에 실패했습니다"
+          );
+        }
+
+        // 3. 세션 업데이트
         await update({
           user: { ...session?.user, onboardingStep: OnboardingStep.PROFILE },
         });
+
+        // 4. UI 상태 업데이트
         setCurrentStep(OnboardingStep.PROFILE);
       } catch (error) {
         console.error("닉네임 업데이트 실패:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "알 수 없는 오류가 발생했습니다"
+        );
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -87,6 +116,14 @@ export function OnboardingNickname({
               <AlertDescription>{nickname.error}</AlertDescription>
             </Alert>
           )}
+          {error && (
+            <Alert
+              variant="destructive"
+              className="bg-destructive/5 border-none"
+            >
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
         </div>
         <div className="flex gap-3">
           {/* <Button variant="outline" className="flex-1">
@@ -94,10 +131,17 @@ export function OnboardingNickname({
           </Button> */}
           <Button
             onClick={handleNextStep}
-            disabled={nickname.status !== "valid"}
+            disabled={nickname.status !== "valid" || isLoading}
             className="flex-1"
           >
-            다음
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                처리 중...
+              </>
+            ) : (
+              "다음"
+            )}
           </Button>
         </div>
       </CardContent>

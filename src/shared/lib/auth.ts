@@ -1,7 +1,7 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import { prisma } from "@/shared/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import type { Adapter, AdapterUser } from "next-auth/adapters";
+import type { Adapter, AdapterUser, AdapterAccount } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import Kakao from "next-auth/providers/kakao";
 // import Naver from "next-auth/providers/naver";
@@ -69,6 +69,23 @@ export function CustomPrismaAdapter(): Adapter {
         throw error;
       }
     },
+    async linkAccount(account): Promise<AdapterAccount | null> {
+      try {
+        const result = await adapter.linkAccount!(account);
+        return result || null;
+      } catch (error) {
+        // OAuthAccountNotLinked 에러 처리
+        if (
+          error instanceof Error &&
+          error.message.includes("OAuthAccountNotLinked")
+        ) {
+          console.log("OAuth 계정 연결 실패 - 이메일 충돌로 인한 에러 무시");
+          // 에러를 무시하고 계속 진행
+          return null;
+        }
+        throw error;
+      }
+    },
   };
 }
 
@@ -97,7 +114,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.nickname = user.nickname;
         token.createdAt = new Date();
-        token.onboardingStep = user.onboardingStep;
+        token.onboardingStep = user.email
+          ? OnboardingStep.PHONE
+          : user.onboardingStep;
       }
 
       // update trigger 시에만 DB 조회
