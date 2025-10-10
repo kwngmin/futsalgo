@@ -3,6 +3,7 @@
 import { prisma } from "@/shared/lib/prisma";
 import { TeamSide } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { updateScheduleStatusBasedOnMatches } from "./match-actions";
 
 /**
  * 주어진 matchId의 라인업을 무작위로 HOME과 AWAY로 재배정하는 함수
@@ -219,14 +220,21 @@ export async function shuffleLineupsAdvanced(matchId: string) {
       }
     }
 
-    await prisma.match.update({
-      where: { id: matchId },
-      data: {
-        homeTeamMercenaryCount: homeMercenaryCount,
-        awayTeamMercenaryCount: awayMercenaryCount,
-        undecidedTeamMercenaryCount: 0,
-        isLinedUp: homeCount > 0 && awayCount > 0,
-      },
+    // 트랜잭션으로 모든 업데이트를 원자적으로 처리
+    await prisma.$transaction(async (tx) => {
+      // 매치 정보 업데이트
+      await tx.match.update({
+        where: { id: matchId },
+        data: {
+          homeTeamMercenaryCount: homeMercenaryCount,
+          awayTeamMercenaryCount: awayMercenaryCount,
+          undecidedTeamMercenaryCount: 0,
+          isLinedUp: homeCount > 0 && awayCount > 0,
+        },
+      });
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
     });
 
     revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);

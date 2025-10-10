@@ -23,7 +23,7 @@ type TransactionClient = Omit<
  * READY: 경기 있으나 모두 isLinedUp false
  * PLAY: 경기 있고 최소 1개 isLinedUp true
  */
-async function updateScheduleStatusBasedOnMatches(
+export async function updateScheduleStatusBasedOnMatches(
   scheduleId: string,
   tx: TransactionClient
 ) {

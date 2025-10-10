@@ -338,7 +338,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
     try {
       await deleteMatch(data.match.id, data.match.scheduleId);
       await queryClient.invalidateQueries({
-        queryKey: ["schedule", data.match.scheduleId],
+        queryKey: ["schedule"],
       });
       await queryClient.invalidateQueries({
         queryKey: ["schedules"],
