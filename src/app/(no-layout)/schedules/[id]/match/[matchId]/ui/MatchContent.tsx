@@ -135,9 +135,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
   }, [data]);
 
   // 공통 쿼리 무효화 함수
-  const invalidateMatchQueries = useCallback(() => {
+  const invalidateMatchQueries = useCallback(async () => {
     if (!data) return;
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: ["matchData", data.match.id, data.match.scheduleId],
     });
   }, [queryClient, data]);
@@ -224,10 +224,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
     );
 
     if (result && result.success) {
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["matchData", data.match.id, data.match.scheduleId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
       if (typeof result === "object" && "data" in result) {
@@ -243,10 +243,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
       await handleAsyncOperation(() =>
         updateTeamMatchLineupSide(data.match.id, side)
       );
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["matchData", data.match.id, data.match.scheduleId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
       alert("출전 명단 업데이트가 완료되었습니다");
@@ -269,10 +269,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
         "출전 명단 업데이트가 완료되었습니다"
       );
 
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["matchData", data.match.id, data.match.scheduleId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
     } catch (error) {
@@ -319,10 +319,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
       // 로컬 상태 초기화
       setHomeMercenaryCount(0);
       setAwayMercenaryCount(0);
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["matchData", data.match.id, data.match.scheduleId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
     }
@@ -337,13 +337,13 @@ const MatchContent = ({ data }: MatchContentProps) => {
     setIsLoading(true);
     try {
       await deleteMatch(data.match.id, data.match.scheduleId);
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedules"],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["my-schedule"],
       });
       router.push(

@@ -116,8 +116,8 @@ export const useInvalidateSchedulePhotos = () => {
   const queryClient = useQueryClient();
 
   return useCallback(
-    (scheduleId: string) => {
-      queryClient.invalidateQueries({
+    async (scheduleId: string) => {
+      await queryClient.invalidateQueries({
         queryKey: ["schedulePhotos", scheduleId],
       });
     },

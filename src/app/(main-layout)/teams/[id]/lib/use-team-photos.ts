@@ -113,8 +113,8 @@ export const useInvalidateTeamPhotos = () => {
   const queryClient = useQueryClient();
 
   return useCallback(
-    (teamId: string) => {
-      queryClient.invalidateQueries({
+    async (teamId: string) => {
+      await queryClient.invalidateQueries({
         queryKey: ["teamPhotos", teamId],
       });
     },

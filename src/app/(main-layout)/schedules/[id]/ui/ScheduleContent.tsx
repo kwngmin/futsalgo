@@ -292,7 +292,9 @@ const ScheduleContent = ({
       const result = await updateAttendanceStatus(scheduleId, status);
       if (result.success) {
         refetch(); // 데이터 새로고침
-        queryClient.invalidateQueries({ queryKey: ["scheduleAttendance"] });
+        await queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance"],
+        });
       } else {
         alert(result.error);
       }
@@ -723,10 +725,10 @@ const ScheduleContent = ({
                       const result = await addMatch(scheduleId);
                       if (result.success) {
                         refetch();
-                        queryClient.invalidateQueries({
+                        await queryClient.invalidateQueries({
                           queryKey: ["schedules"],
                         });
-                        queryClient.invalidateQueries({
+                        await queryClient.invalidateQueries({
                           queryKey: ["my-schedules"],
                         });
                       } else {

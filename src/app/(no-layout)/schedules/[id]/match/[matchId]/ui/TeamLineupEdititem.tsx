@@ -36,7 +36,7 @@ export const TeamLineupEditItem = ({
         console.error(result.error);
         alert("출전 명단에서 제외하는 데 실패했습니다.");
       }
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["matchData"],
       });
     } catch (error) {

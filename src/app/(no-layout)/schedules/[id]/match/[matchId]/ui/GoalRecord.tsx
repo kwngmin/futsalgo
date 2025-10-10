@@ -215,10 +215,10 @@ const GoalRecord = ({
 
       await createGoalRecord(matchId, submitData);
       alert("골이 기록되었습니다!");
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["schedule", scheduleId],
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["matchData", matchId, scheduleId],
       });
       reset();

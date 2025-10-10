@@ -101,7 +101,7 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         // 특정 쿼리만 무효화하여 순서 유지
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ["scheduleAttendance", scheduleId, teamId],
         });
       } else {
@@ -133,14 +133,11 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId, teamId],
+        await queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance"],
         });
-        queryClient.invalidateQueries({
-          queryKey: ["schedule", scheduleId],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId],
+        await queryClient.invalidateQueries({
+          queryKey: ["schedule"],
         });
         setShowAllAttendanceMenu(false);
       } else {
@@ -158,8 +155,8 @@ const ManageAttendanceContent = ({
     try {
       setIsLoading(true);
       await addAttendances({ scheduleId, teamId, teamType });
-      queryClient.invalidateQueries({
-        queryKey: ["scheduleAttendance", scheduleId, teamId],
+      await queryClient.invalidateQueries({
+        queryKey: ["scheduleAttendance"],
       });
       alert("팀원 업데이트가 완료되었습니다.");
     } catch (error) {
@@ -189,8 +186,8 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId, teamId],
+        await queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance"],
         });
       } else {
         alert(result.error || "참석자 삭제에 실패했습니다.");
@@ -218,18 +215,11 @@ const ManageAttendanceContent = ({
       if (result.success) {
         setMercenaryCount(newCount);
         // 필요시 쿼리 무효화
-        queryClient.invalidateQueries({
-          predicate: (query) => {
-            const queryKey = query.queryKey;
-            return (
-              (Array.isArray(queryKey) &&
-                queryKey[0] === "schedule" &&
-                queryKey[1] === scheduleId) ||
-              (Array.isArray(queryKey) &&
-                queryKey[0] === "scheduleAttendance" &&
-                queryKey[1] === scheduleId)
-            );
-          },
+        await queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance"],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["schedule"],
         });
       } else {
         alert(result.error || "용병 수 업데이트에 실패했습니다.");

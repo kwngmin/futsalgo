@@ -113,8 +113,8 @@ export const useInvalidateUserPhotos = () => {
   const queryClient = useQueryClient();
 
   return useCallback(
-    (userId: string) => {
-      queryClient.invalidateQueries({
+    async (userId: string) => {
+      await queryClient.invalidateQueries({
         queryKey: ["userPhotos", userId],
       });
     },

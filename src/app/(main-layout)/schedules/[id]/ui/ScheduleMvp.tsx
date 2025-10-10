@@ -33,12 +33,12 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
 
   const voteMutation = useMutation({
     mutationFn: (mvpUserId: string) => voteMvp(scheduleId, mvpUserId),
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
       if (result.success) {
         toast.success("MVP 투표가 완료되었습니다");
         setIsVoting(false);
         setSelectedMvpId("");
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ["scheduleMvp", scheduleId],
         });
       } else {
