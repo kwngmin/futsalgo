@@ -2,6 +2,11 @@ import { Dispatch, SetStateAction } from "react";
 import { ValidationField } from "./types";
 import { createApiRequestOptions, safeJsonParse } from "@/shared/lib/api-utils";
 
+// API 응답 타입 정의
+interface ValidationResponse {
+  available: boolean;
+}
+
 // 중복확인 함수
 export const validateField = async (
   type: "email" | "phone" | "nickname" | "teamCode",
@@ -18,7 +23,7 @@ export const validateField = async (
       createApiRequestOptions("POST", { [type]: value })
     );
 
-    const data = await safeJsonParse(response);
+    const data = await safeJsonParse<ValidationResponse>(response);
 
     if (data.available) {
       setFieldState((prev) => ({
