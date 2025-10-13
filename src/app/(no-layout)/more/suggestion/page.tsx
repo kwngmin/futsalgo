@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { ArrowLeft, Lightbulb, Upload, X, Loader2 } from "lucide-react";
+import { Lightbulb, Upload, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -15,6 +15,7 @@ import {
   type FeedbackFormData,
 } from "@/features/feedback/actions/feedback-actions";
 import { useFileUpload } from "@/shared/lib/use-file-upload";
+import Link from "next/link";
 
 const SuggestionPage = () => {
   const { data: session } = useSession();
@@ -126,20 +127,17 @@ const SuggestionPage = () => {
       )}
 
       {/* 헤더 */}
-      <div className="flex items-center gap-4 px-4 h-16 shrink-0">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => router.back()}
-          className="shrink-0"
-          disabled={isLoading}
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </Button>
+      <div className="flex justify-between items-center gap-4 px-4 h-16 shrink-0">
         <div className="flex items-center gap-2">
-          <Lightbulb className="w-6 h-6 text-yellow-500" />
+          <Lightbulb className="size-7 text-yellow-500" />
           <h1 className="text-[1.625rem] font-bold">제안하기</h1>
         </div>
+        <Link
+          href="/more"
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
+        >
+          <X className="size-6" />
+        </Link>
       </div>
 
       <form onSubmit={handleSubmit} className="px-4 space-y-6">

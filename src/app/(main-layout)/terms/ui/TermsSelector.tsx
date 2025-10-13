@@ -7,7 +7,8 @@ import {
   type TermsItem,
 } from "../model/actions/fetch-terms";
 import MarkdownView from "@/shared/components/MarkdownViewer";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
+import Link from "next/link";
 
 type TermsSelectorProps = {
   initialList: TermsItem[];
@@ -36,8 +37,23 @@ const TermsSelector = ({ initialList, initialContent }: TermsSelectorProps) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto pb-16 px-4">
-      <div className="relative mt-4">
+    <div className="max-w-2xl mx-auto pb-16 px-4 relative">
+      <div className="sm:hidden flex items-center justify-end h-16 shrink-0 absolute -top-8 right-4">
+        <Link
+          href="/more"
+          className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
+        >
+          <X className="size-6" />
+        </Link>
+      </div>
+      <div
+        className={
+          isPending ? "opacity-50 transition-opacity" : "transition-opacity"
+        }
+      >
+        <MarkdownView content={content} />
+      </div>
+      <div className="relative mt-12">
         <select
           value={selectedFileName}
           onChange={(e) => handleSelectChange(e.target.value)}
@@ -61,13 +77,6 @@ const TermsSelector = ({ initialList, initialContent }: TermsSelectorProps) => {
             <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
-      </div>
-      <div
-        className={
-          isPending ? "opacity-50 transition-opacity" : "transition-opacity"
-        }
-      >
-        <MarkdownView content={content} />
       </div>
     </div>
   );
