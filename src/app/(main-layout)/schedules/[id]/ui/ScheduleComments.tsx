@@ -363,6 +363,7 @@ const ScheduleComments: React.FC<ScheduleCommentsProps> = ({ scheduleId }) => {
 
       try {
         await addCommentMutation.mutateAsync({ content: currentContent });
+        setFocusNewComment(false);
       } catch (error) {
         console.error("댓글 작성 실패:", error);
         setNewComment(currentContent);
