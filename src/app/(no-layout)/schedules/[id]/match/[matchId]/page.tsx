@@ -5,12 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import { getMatchData } from "./actions/get-match-data";
 import MatchContent from "./ui/MatchContent";
 import { MatchDataResult } from "./model/types";
+import { useState } from "react";
 
 const MatchPage = () => {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
   const matchId = params.matchId as string;
+  const [loading, setLoading] = useState(false);
 
   const {
     data: matchData,
@@ -26,7 +28,7 @@ const MatchPage = () => {
   });
 
   // 로딩 상태
-  if (isLoading) {
+  if (isLoading || loading) {
     return (
       <div className="max-w-2xl mx-auto pb-16">
         <div className="flex items-center justify-between px-4 h-16 shrink-0">
@@ -105,7 +107,12 @@ const MatchPage = () => {
     );
   }
 
-  return <MatchContent data={matchData as MatchDataResult} />;
+  return (
+    <MatchContent
+      data={matchData as MatchDataResult}
+      setLoading={() => setLoading(true)}
+    />
+  );
 };
 
 export default MatchPage;

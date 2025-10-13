@@ -33,9 +33,10 @@ import { calculateDday, formatDday } from "@/shared/lib/date-utils";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
+  setLoading: () => void;
 }
 
-const MatchContent = ({ data }: MatchContentProps) => {
+const MatchContent = ({ data, setLoading }: MatchContentProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
@@ -343,6 +344,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
       if (result.success) {
         console.log(result, "result");
+        setLoading();
 
         await Promise.all([
           queryClient.invalidateQueries({
