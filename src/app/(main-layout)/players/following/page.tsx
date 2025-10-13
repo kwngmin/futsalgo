@@ -279,7 +279,7 @@ const FollowingPlayersPage = () => {
 
           {/* 회원이 없는 경우 */}
           {allPlayers?.length === 0 && !isLoading && (
-            <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh]">
+            <div className="text-center py-12 flex flex-col items-center justify-center">
               {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
               <SmileyXEyesIcon
                 className="size-28 mx-auto text-gray-200 mb-4"

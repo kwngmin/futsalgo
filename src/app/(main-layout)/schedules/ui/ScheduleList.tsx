@@ -64,9 +64,9 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
                     schedule.status === "REJECTED"
                       ? "text-red-600"
                       : schedule.status === "PENDING"
-                      ? "text-amber-600"
+                      ? "text-green-600"
                       : schedule.status === "CONFIRMED"
-                      ? "text-slate-500"
+                      ? "text-amber-600"
                       : "text-sky-700"
                   }`}
                 >

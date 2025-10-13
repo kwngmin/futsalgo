@@ -98,7 +98,7 @@ const BoardList = () => {
     <div className="flex-1">
       {/* 게시글 목록 */}
       {posts.length === 0 ? (
-        <div className="text-center py-12 flex flex-col items-center justify-center h-[65vh] mt-3">
+        <div className="text-center py-12 flex flex-col items-center justify-center mt-3">
           {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
           <SmileyXEyesIcon
             className="size-28 mx-auto text-gray-200 mb-4"
