@@ -32,7 +32,7 @@ export const getMatchLineupCount = (match: Match): string => {
   const awayTotalCount = awayPlayerCount + match.awayTeamMercenaryCount;
 
   if (homeTotalCount === 0 || awayTotalCount === 0) {
-    return "출전 명단 없음";
+    return "출전 명단 미정";
   }
 
   return `${homeTotalCount} vs ${awayTotalCount}`;

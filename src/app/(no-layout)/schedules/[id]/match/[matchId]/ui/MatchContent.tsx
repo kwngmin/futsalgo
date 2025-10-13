@@ -29,6 +29,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import CustomSelect from "@/shared/components/ui/custom-select";
 import { Separator } from "@/shared/components/ui/separator";
 import { TeamLineupEditItem } from "./TeamLineupEdititem";
+import { calculateDday, formatDday } from "@/shared/lib/date-utils";
 
 interface MatchContentProps {
   data: MatchDataResult | null;
@@ -48,6 +49,11 @@ const MatchContent = ({ data }: MatchContentProps) => {
   const [awayMercenaryCount, setAwayMercenaryCount] = useState(
     data?.match.awayTeamMercenaryCount ?? 0
   );
+
+  const matchDateTime = new Date(
+    `${data?.match.schedule.date} ${data?.match.schedule.startTime}`
+  );
+  const dday = calculateDday(matchDateTime);
 
   // 골 기록을 기반으로 각 시점의 점수 계산 (useMemo로 최적화)
   const goalsWithScore = useMemo((): GoalWithScore[] => {
@@ -228,6 +234,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
       // 추가로 필요한 쿼리만 무효화
       queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
+        refetchType: "all",
       });
       if (typeof result === "object" && "data" in result) {
         setHomeMercenaryCount(result.data?.homeMercenaryCount ?? 0);
@@ -340,15 +347,15 @@ const MatchContent = ({ data }: MatchContentProps) => {
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: ["schedule", data.match.scheduleId],
-          }),
-          queryClient.invalidateQueries({
-            queryKey: ["schedule"],
+            refetchType: "all",
           }),
           queryClient.invalidateQueries({
             queryKey: ["schedules"],
+            refetchType: "all",
           }),
           queryClient.invalidateQueries({
             queryKey: ["my-schedule"],
+            refetchType: "all",
           }),
         ]);
 
@@ -423,11 +430,22 @@ const MatchContent = ({ data }: MatchContentProps) => {
             label={data.match.schedule.matchType === "SQUAD" ? "A팀" : "주최팀"}
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 shrink-0 w-20 pt-4 pb-3 sm:pb-6">
-            <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
-              <span>{data.match.homeScore}</span>
-              <span>-</span>
-              <span>{data.match.awayScore}</span>
-            </div>
+            {dday > 0 ? (
+              <div className="flex flex-col items-center gap-1">
+                <span className="text-muted-foreground font-medium">
+                  경기 일정
+                </span>
+                <span className="text-4xl font-bold tracking-wider my-auto">
+                  {formatDday(dday)}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-4xl font-bold tracking-tighter my-auto">
+                <span>{data.match.homeScore}</span>
+                <span>-</span>
+                <span>{data.match.awayScore}</span>
+              </div>
+            )}
           </div>
           <TeamSide
             logoUrl={data.match.awayTeam.logoUrl}
@@ -525,6 +543,14 @@ const MatchContent = ({ data }: MatchContentProps) => {
               </div>
               <div className="grow border-t border-gray-200" />
             </div>
+          </div>
+        )}
+
+        {dday > 0 && (
+          <div className="mx-4 flex flex-col items-center justify-center gap-2 py-3 px-4 bg-indigo-50 rounded-sm">
+            <span className="text-indigo-700 font-medium">
+              골과 어시스트는 경기하는 날부터 기록할 수 있습니다
+            </span>
           </div>
         )}
 
@@ -840,7 +866,7 @@ const MatchContent = ({ data }: MatchContentProps) => {
             <button
               type="button"
               disabled={isLoading}
-              className="my-8 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="my-8 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/5 active:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleDeleteMatch}
             >
               경기 삭제

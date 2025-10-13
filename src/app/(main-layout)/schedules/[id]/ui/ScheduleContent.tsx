@@ -94,24 +94,6 @@ function formatTimeRange(date: string, start: string, end: string): string {
   return `${startPeriod} ${startTime} - ${endPeriod} ${endTime}`;
 }
 
-/**
- * @param date YYYY-MM-DD 형식의 날짜 문자열
- * @returns D-day 숫자 (예: D-3이면 3, 오늘이면 0, 지났으면 음수)
- */
-export function calculateDday(date: Date): number {
-  const today = new Date();
-  const targetDate = new Date(date);
-
-  // 시차 보정: 시간을 00:00:00으로 맞춰줌 (UTC 문제 방지)
-  today.setHours(0, 0, 0, 0);
-  targetDate.setHours(0, 0, 0, 0);
-
-  const diffMs = targetDate.getTime() - today.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  return diffDays;
-}
-
 const ScheduleContent = ({
   scheduleId,
   isLikedSchedule,
@@ -627,22 +609,7 @@ const ScheduleContent = ({
         )}
 
         {/* 경기 정보 */}
-        {(() => {
-          // date 필드 사용 (날짜만 포함)
-          const scheduleDate = new Date(data.data.schedule.date);
-          const today = new Date();
-
-          // 날짜만 비교하기 위해 시간 제거
-          scheduleDate.setHours(0, 0, 0, 0);
-          today.setHours(0, 0, 0, 0);
-
-          return (
-            (data.data.schedule.status === "CONFIRMED" &&
-              scheduleDate <= today) ||
-            data.data.schedule.status === "READY" ||
-            data.data.schedule.status === "PLAY"
-          );
-        })() && (
+        {data.data.schedule.status !== "PENDING" && (
           <div className="px-4">
             {data.data.schedule.matches.length > 0 ? (
               <div className="rounded-md border border-gray-300 hover:border-gray-400 transition-colors overflow-hidden shadow-xs group">
