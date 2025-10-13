@@ -136,7 +136,14 @@ const MorePage = () => {
                 {section.items.map((item, itemIndex) => (
                   <Link
                     key={itemIndex}
-                    href={item.href}
+                    href={
+                      !session.data &&
+                      (item.label === "제안하기" ||
+                        item.label === "버그 신고하기")
+                        ? "/login"
+                        : item.href
+                    }
+                    // href={item.href}
                     // onClick={item.action}
                     className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 sm:hover:rounded-lg transition-colors cursor-pointer"
                     // className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 hover:rounded-lg transition-colors cursor-pointer ${
