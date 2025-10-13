@@ -8,7 +8,6 @@ import {
   ScheduleStatus,
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import type { PrismaClient } from "@prisma/client";
 
 // 타입 정의
@@ -116,7 +115,7 @@ export async function deleteMatch(matchId: string, scheduleId: string) {
     });
 
     revalidatePath(`/schedules/${scheduleId}`);
-    redirect(`/schedules/${scheduleId}`);
+    return { success: true, message: "경기가 삭제되었습니다" };
   } catch (error) {
     console.error("경기 삭제 실패:", error);
     return { success: false, error: "경기 삭제에 실패했습니다" };

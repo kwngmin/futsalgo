@@ -135,9 +135,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
   }, [data]);
 
   // 공통 쿼리 무효화 함수
-  const invalidateMatchQueries = useCallback(async () => {
+  const invalidateMatchQueries = useCallback(() => {
     if (!data) return;
-    await queryClient.invalidateQueries({
+    queryClient.invalidateQueries({
       queryKey: ["matchData", data.match.id, data.match.scheduleId],
     });
   }, [queryClient, data]);
@@ -224,10 +224,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
     );
 
     if (result && result.success) {
-      await queryClient.invalidateQueries({
-        queryKey: ["matchData", data.match.id, data.match.scheduleId],
-      });
-      await queryClient.invalidateQueries({
+      // handleAsyncOperation에서 이미 invalidateMatchQueries()가 호출되므로 중복 제거
+      // 추가로 필요한 쿼리만 무효화
+      queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
       if (typeof result === "object" && "data" in result) {
@@ -243,10 +242,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
       await handleAsyncOperation(() =>
         updateTeamMatchLineupSide(data.match.id, side)
       );
-      await queryClient.invalidateQueries({
-        queryKey: ["matchData", data.match.id, data.match.scheduleId],
-      });
-      await queryClient.invalidateQueries({
+      // handleAsyncOperation에서 이미 invalidateMatchQueries()가 호출되므로 중복 제거
+      // 추가로 필요한 쿼리만 무효화
+      queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
       alert("출전 명단 업데이트가 완료되었습니다");
@@ -269,10 +267,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
         "출전 명단 업데이트가 완료되었습니다"
       );
 
-      await queryClient.invalidateQueries({
-        queryKey: ["matchData", data.match.id, data.match.scheduleId],
-      });
-      await queryClient.invalidateQueries({
+      // handleAsyncOperation에서 이미 invalidateMatchQueries()가 호출되므로 중복 제거
+      // 추가로 필요한 쿼리만 무효화
+      queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
     } catch (error) {
@@ -319,10 +316,9 @@ const MatchContent = ({ data }: MatchContentProps) => {
       // 로컬 상태 초기화
       setHomeMercenaryCount(0);
       setAwayMercenaryCount(0);
-      await queryClient.invalidateQueries({
-        queryKey: ["matchData", data.match.id, data.match.scheduleId],
-      });
-      await queryClient.invalidateQueries({
+      // handleAsyncOperation에서 이미 invalidateMatchQueries()가 호출되므로 중복 제거
+      // 추가로 필요한 쿼리만 무효화
+      queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
     }
@@ -336,23 +332,34 @@ const MatchContent = ({ data }: MatchContentProps) => {
 
     setIsLoading(true);
     try {
-      await deleteMatch(data.match.id, data.match.scheduleId);
-      await queryClient.invalidateQueries({
-        queryKey: ["schedule"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["schedules"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["my-schedule"],
-      });
-      router.push(
-        `/schedules/${data.match.scheduleId}${
-          searchParams.get("tab") === "/my-schedules"
-            ? `?tab=/my-schedules`
-            : ""
-        }`
-      );
+      const result = await deleteMatch(data.match.id, data.match.scheduleId);
+
+      if (result.success) {
+        console.log(result, "result");
+
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: ["schedule", data.match.scheduleId],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["schedule"],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["schedules"],
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["my-schedule"],
+          }),
+        ]);
+
+        router.push(
+          `/schedules/${data.match.scheduleId}${
+            searchParams.get("tab") === "/my-schedules"
+              ? `?tab=/my-schedules`
+              : ""
+          }`
+        );
+      }
     } catch (error) {
       console.error("경기 삭제 오류:", error);
       alert("경기 삭제에 실패했습니다.");

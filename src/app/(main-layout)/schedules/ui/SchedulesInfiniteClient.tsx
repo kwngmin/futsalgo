@@ -109,7 +109,8 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         : undefined,
       staleTime: 1000 * 60 * 30, // 30분으로 증가
       gcTime: 1000 * 60 * 60, // 1시간으로 증가
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     });
 
   // 스크롤이 하단에 도달하면 자동으로 다음 페이지 로드

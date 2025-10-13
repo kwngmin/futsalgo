@@ -1,6 +1,6 @@
 "use client";
 
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getPlayer, type PlayerData } from "../model/actions";
 import { followUser } from "../actions/follow-user"; // 새로 추가한 액션 import
 import { useRouter } from "next/navigation";
@@ -74,7 +74,7 @@ const PlayerContent = ({ id }: { id: string }) => {
   const { data, refetch } = useQuery({
     queryKey: ["player", id],
     queryFn: () => getPlayer(id),
-    placeholderData: keepPreviousData,
+    placeholderData: (previousData) => previousData,
     enabled: !!id,
   });
 

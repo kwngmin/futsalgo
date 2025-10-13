@@ -103,7 +103,8 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
       enabled: !!session.data?.user?.id,
       staleTime: 1000 * 60 * 30, // 30분으로 증가
       gcTime: 1000 * 60 * 60, // 1시간으로 증가
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     });
 
   useEffect(() => {

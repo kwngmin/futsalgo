@@ -122,6 +122,7 @@ export async function addNewSchedule({
     });
 
     revalidatePath("/");
+    revalidatePath("/schedules/my");
 
     return {
       success: true,
@@ -223,7 +224,8 @@ export async function acceptTeamMatchInvitation({
       }
     });
 
-    revalidatePath("/");
+    revalidatePath("/", "page");
+    revalidatePath("/schedules/my", "page");
     return { success: true };
   } catch (error) {
     console.error("초대 수락 실패:", error);

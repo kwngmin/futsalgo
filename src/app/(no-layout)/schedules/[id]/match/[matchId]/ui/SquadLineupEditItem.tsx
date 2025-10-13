@@ -59,8 +59,9 @@ export const SquadLineupEditItem = ({
         // queryClient.invalidateQueries({ queryKey });
       }
 
-      await queryClient.invalidateQueries({ queryKey });
-      await queryClient.invalidateQueries({
+      // 쿼리 무효화를 병렬로 처리하여 성능 향상
+      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({
         queryKey: ["schedule", scheduleId],
       });
     } catch (error) {
@@ -68,7 +69,7 @@ export const SquadLineupEditItem = ({
       alert("오류가 발생했습니다.");
 
       // 실패 시 데이터 다시 가져오기
-      await queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey });
     } finally {
       setIsLoading(false);
     }
@@ -108,14 +109,14 @@ export const SquadLineupEditItem = ({
         alert("선수 제거에 실패했습니다.");
 
         // 실패 시 데이터 다시 가져오기
-        await queryClient.invalidateQueries({ queryKey });
+        queryClient.invalidateQueries({ queryKey });
       }
     } catch (error) {
       console.error("선수 제거 오류:", error);
       alert("오류가 발생했습니다.");
 
       // 실패 시 데이터 다시 가져오기
-      await queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey });
     } finally {
       setIsLoading(false);
     }

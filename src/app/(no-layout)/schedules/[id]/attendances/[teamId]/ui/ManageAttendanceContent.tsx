@@ -100,9 +100,9 @@ const ManageAttendanceContent = ({
       });
 
       if (result.success) {
-        // 특정 쿼리만 무효화하여 순서 유지
-        await queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId, teamId],
+        // 쿼리 무효화를 병렬로 처리하여 성능 향상
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId],
         });
       } else {
         alert(result.error || "참석 상태 변경에 실패했습니다.");
@@ -133,10 +133,11 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        await queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance"],
+        // 쿼리 무효화를 병렬로 처리하여 성능 향상
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId],
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["schedule"],
         });
         setShowAllAttendanceMenu(false);
@@ -155,8 +156,9 @@ const ManageAttendanceContent = ({
     try {
       setIsLoading(true);
       await addAttendances({ scheduleId, teamId, teamType });
-      await queryClient.invalidateQueries({
-        queryKey: ["scheduleAttendance"],
+      // 쿼리 무효화를 병렬로 처리하여 성능 향상
+      queryClient.invalidateQueries({
+        queryKey: ["scheduleAttendance", scheduleId],
       });
       alert("팀원 업데이트가 완료되었습니다.");
     } catch (error) {
@@ -186,8 +188,9 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        await queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance"],
+        // 쿼리 무효화를 병렬로 처리하여 성능 향상
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId],
         });
       } else {
         alert(result.error || "참석자 삭제에 실패했습니다.");
@@ -214,11 +217,11 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         setMercenaryCount(newCount);
-        // 필요시 쿼리 무효화
-        await queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance"],
+        // 쿼리 무효화를 병렬로 처리하여 성능 향상
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance", scheduleId],
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["schedule"],
         });
       } else {

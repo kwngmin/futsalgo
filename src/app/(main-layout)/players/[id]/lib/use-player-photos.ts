@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import {
   getUserPhotos,
@@ -40,7 +36,7 @@ export const useUserPhotos = ({
     queryKey: ["userPhotos", userId],
     queryFn: () => getUserPhotos({ userId, limit, offset: 0 }),
     enabled: enabled && !!userId,
-    placeholderData: keepPreviousData,
+    placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000, // 5분간 fresh 상태 유지
     gcTime: 10 * 60 * 1000, // 10분간 캐시 유지
   });
@@ -113,8 +109,8 @@ export const useInvalidateUserPhotos = () => {
   const queryClient = useQueryClient();
 
   return useCallback(
-    async (userId: string) => {
-      await queryClient.invalidateQueries({
+    (userId: string) => {
+      queryClient.invalidateQueries({
         queryKey: ["userPhotos", userId],
       });
     },

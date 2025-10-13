@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { getMatchData } from "./actions/get-match-data";
 import MatchContent from "./ui/MatchContent";
@@ -19,7 +19,7 @@ const MatchPage = () => {
   } = useQuery({
     queryKey: ["matchData", matchId, id],
     queryFn: () => getMatchData(matchId, id),
-    placeholderData: keepPreviousData,
+    placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60, // 1분 동안 fresh 상태 유지
     gcTime: 1000 * 60 * 5, // 5분 동안 캐시 유지
     retry: 3,

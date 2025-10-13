@@ -1,16 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import {
-  keepPreviousData,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getScheduleMvp } from "../actions/get-schedule-mvp";
 import { voteMvp } from "../actions/vote-mvp";
 import { useRouter } from "next/navigation";
-// import { AttendanceStatus } from "@prisma/client";
 import { Label } from "@/shared/components/ui/label";
 import { ChevronDown, Vote } from "lucide-react";
 import { useState, useMemo } from "react";
@@ -26,19 +20,19 @@ const ScheduleMvp = ({ scheduleId }: { scheduleId: string }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["scheduleMvp", scheduleId],
     queryFn: () => getScheduleMvp(scheduleId),
-    placeholderData: keepPreviousData,
+    placeholderData: (previousData) => previousData,
   });
 
   console.log(error, "error");
 
   const voteMutation = useMutation({
     mutationFn: (mvpUserId: string) => voteMvp(scheduleId, mvpUserId),
-    onSuccess: async (result) => {
+    onSuccess: (result) => {
       if (result.success) {
         toast.success("MVP 투표가 완료되었습니다");
         setIsVoting(false);
         setSelectedMvpId("");
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["scheduleMvp", scheduleId],
         });
       } else {

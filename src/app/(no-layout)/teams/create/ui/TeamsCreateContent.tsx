@@ -136,7 +136,8 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
 
       if (team) {
         alert("팀이 성공적으로 생성되었습니다!");
-        await queryClient.invalidateQueries({ queryKey: ["teams"] });
+        // 쿼리 무효화를 병렬로 처리하여 성능 향상
+        queryClient.invalidateQueries({ queryKey: ["teams"] });
         router.push(`/teams`);
       } else {
         throw new Error("팀 생성에 실패했습니다.");

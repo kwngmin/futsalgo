@@ -27,11 +27,7 @@ import {
   MegaphoneSimpleIcon,
   SoccerBallIcon,
 } from "@phosphor-icons/react";
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
 import { MatchType } from "@prisma/client";
 import ScheduleComments from "./ScheduleComments";
@@ -143,7 +139,7 @@ const ScheduleContent = ({
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["schedule", scheduleId],
     queryFn: () => getSchedule(scheduleId),
-    placeholderData: keepPreviousData,
+    placeholderData: (previousData) => previousData,
   });
 
   const today = new Date();
@@ -231,10 +227,11 @@ const ScheduleContent = ({
     try {
       const result = await deleteSchedule(scheduleId);
       if (result.success) {
-        await queryClient.invalidateQueries({
+        // 쿼리 무효화를 병렬로 처리하여 성능 향상
+        queryClient.invalidateQueries({
           queryKey: ["schedules"],
         });
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["my-schedules"],
         });
         router.push("/"); // 메인 페이지로 이동
@@ -292,7 +289,7 @@ const ScheduleContent = ({
       const result = await updateAttendanceStatus(scheduleId, status);
       if (result.success) {
         refetch(); // 데이터 새로고침
-        await queryClient.invalidateQueries({
+        queryClient.invalidateQueries({
           queryKey: ["scheduleAttendance"],
         });
       } else {
@@ -725,10 +722,10 @@ const ScheduleContent = ({
                       const result = await addMatch(scheduleId);
                       if (result.success) {
                         refetch();
-                        await queryClient.invalidateQueries({
+                        queryClient.invalidateQueries({
                           queryKey: ["schedules"],
                         });
-                        await queryClient.invalidateQueries({
+                        queryClient.invalidateQueries({
                           queryKey: ["my-schedules"],
                         });
                       } else {
