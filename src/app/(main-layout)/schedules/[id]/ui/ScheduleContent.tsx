@@ -290,7 +290,7 @@ const ScheduleContent = ({
       if (result.success) {
         refetch(); // 데이터 새로고침
         queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance"],
+          queryKey: ["scheduleAttendance", scheduleId],
         });
       } else {
         alert(result.error);

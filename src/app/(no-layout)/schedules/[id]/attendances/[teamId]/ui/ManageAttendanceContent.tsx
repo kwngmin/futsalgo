@@ -7,7 +7,7 @@ import { updateAttendance } from "../actions/update-attendance";
 import { updateMercenaryCount } from "../actions/update-mercenary-count";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { updateAllAttendanceStatus } from "../actions/update-all-attendace-status";
 import { removeAttendance } from "../actions/remove-attendance";
 import { Separator } from "@/shared/components/ui/separator";
@@ -54,15 +54,10 @@ const ManageAttendanceContent = ({
   const [isMercenaryUpdating, setIsMercenaryUpdating] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 초기 순서를 유지하기 위해 정렬된 데이터 생성 (생성 시점 또는 ID 기준)
   const sortedData = useMemo(() => {
-    return [...data].sort((a, b) => {
-      // ID 기준으로 정렬하여 일관된 순서 유지
-      return a.id.localeCompare(b.id);
-    });
+    return [...data].sort((a, b) => a.id.localeCompare(b.id));
   }, [data]);
 
-  // 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -82,6 +77,19 @@ const ManageAttendanceContent = ({
     };
   }, [showAllAttendanceMenu]);
 
+  // 쿼리 무효화를 위한 공통 함수
+  const invalidateScheduleQueries = useCallback(() => {
+    // 다른 페이지의 쿼리도 무효화하기 위해 refetchType: "all" 사용
+    queryClient.invalidateQueries({
+      queryKey: ["scheduleAttendance", scheduleId],
+      refetchType: "all",
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["schedule", scheduleId],
+      refetchType: "all",
+    });
+  }, [queryClient, scheduleId]);
+
   const handleUpdate = async ({
     attendanceId,
     attendanceStatus,
@@ -100,10 +108,7 @@ const ManageAttendanceContent = ({
       });
 
       if (result.success) {
-        // 쿼리 무효화를 병렬로 처리하여 성능 향상
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId],
-        });
+        invalidateScheduleQueries();
       } else {
         alert(result.error || "참석 상태 변경에 실패했습니다.");
       }
@@ -132,14 +137,8 @@ const ManageAttendanceContent = ({
       });
 
       if (result.success) {
+        invalidateScheduleQueries();
         alert(result.message);
-        // 쿼리 무효화를 병렬로 처리하여 성능 향상
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["schedule"],
-        });
         setShowAllAttendanceMenu(false);
       } else {
         alert(result.error || "전체 참석처리에 실패했습니다.");
@@ -155,12 +154,15 @@ const ManageAttendanceContent = ({
   const handleUpdateAttendances = async () => {
     try {
       setIsLoading(true);
-      await addAttendances({ scheduleId, teamId, teamType });
-      // 쿼리 무효화를 병렬로 처리하여 성능 향상
-      queryClient.invalidateQueries({
-        queryKey: ["scheduleAttendance", scheduleId],
-      });
-      alert("팀원 업데이트가 완료되었습니다.");
+
+      const result = await addAttendances({ scheduleId, teamId, teamType });
+
+      if (result.success) {
+        invalidateScheduleQueries();
+        alert("팀원 업데이트가 완료되었습니다.");
+      } else {
+        alert(result.error || "팀원 업데이트에 실패했습니다.");
+      }
     } catch (error) {
       console.error(error);
       alert("팀원 업데이트에 실패했습니다.");
@@ -188,10 +190,7 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         alert(result.message);
-        // 쿼리 무효화를 병렬로 처리하여 성능 향상
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId],
-        });
+        invalidateScheduleQueries();
       } else {
         alert(result.error || "참석자 삭제에 실패했습니다.");
       }
@@ -217,13 +216,7 @@ const ManageAttendanceContent = ({
 
       if (result.success) {
         setMercenaryCount(newCount);
-        // 쿼리 무효화를 병렬로 처리하여 성능 향상
-        queryClient.invalidateQueries({
-          queryKey: ["scheduleAttendance", scheduleId],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["schedule"],
-        });
+        invalidateScheduleQueries();
       } else {
         alert(result.error || "용병 수 업데이트에 실패했습니다.");
       }
@@ -266,9 +259,24 @@ const ManageAttendanceContent = ({
     );
   };
 
+  const renderMercenaryButton = (count: number) => (
+    <button
+      key={count}
+      type="button"
+      disabled={isMercenaryUpdating || mercenaryCount === count}
+      className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
+        mercenaryCount === count
+          ? "bg-white border-gray-300"
+          : "border-transparent"
+      }`}
+      onClick={() => handleMercenaryCountChange(count)}
+    >
+      {count}
+    </button>
+  );
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 상단: 제목과 닫기 버튼 */}
       <header className="flex items-center justify-between px-4 h-16 shrink-0">
         <h1 className="text-[1.625rem] font-bold">팀원 명단</h1>
         <Link
@@ -281,7 +289,6 @@ const ManageAttendanceContent = ({
       </header>
 
       <div className="px-4">
-        {/* 전체 참석처리, 팀원 업데이트 버튼 */}
         <div className="grid grid-cols-2 gap-2 sm:max-w-2/3">
           <button
             type="button"
@@ -307,7 +314,6 @@ const ManageAttendanceContent = ({
           </button>
         </div>
 
-        {/* 참석자 목록 */}
         <div className="mt-4">
           {sortedData.map((attendance, index) => (
             <article
@@ -368,10 +374,9 @@ const ManageAttendanceContent = ({
           ))}
         </div>
 
-        {/* 용병 수 관리 섹션 */}
         <article className="flex items-center gap-4 py-3 border-t border-gray-100 min-h-16">
           <div className="flex items-center justify-center size-6 text-sm font-medium text-muted-foreground">
-            {/* {sortedData.length + 1} */}-
+            -
           </div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-2 grow">
             <div className="flex gap-2 items-center">
@@ -381,63 +386,8 @@ const ManageAttendanceContent = ({
               </span>
             </div>
             <div className="flex items-center gap-2 sm:min-w-72 h-10 rounded-md bg-gray-100 p-0.5">
-              {/* <button
-                type="button"
-                disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                className="h-9 w-20 grow rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opaci ty-50 disabled:cursor-not-allowed transition-colors text-sm font-medium cursor-pointer"
-                onClick={() => handleMercenaryCountChange(0)}
-              >
-                없음
-              </button> */}
               <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  disabled={isMercenaryUpdating || mercenaryCount === 0}
-                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
-                    mercenaryCount === 0
-                      ? "bg-white border-gray-300"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => handleMercenaryCountChange(0)}
-                >
-                  0
-                </button>
-                <button
-                  type="button"
-                  disabled={isMercenaryUpdating || mercenaryCount === 1}
-                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
-                    mercenaryCount === 1
-                      ? "bg-white border-gray-300"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => handleMercenaryCountChange(1)}
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  disabled={isMercenaryUpdating || mercenaryCount === 2}
-                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
-                    mercenaryCount === 2
-                      ? "bg-white border-gray-300"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => handleMercenaryCountChange(2)}
-                >
-                  2
-                </button>
-                <button
-                  type="button"
-                  disabled={isMercenaryUpdating || mercenaryCount === 3}
-                  className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
-                    mercenaryCount === 3
-                      ? "bg-white border-gray-300"
-                      : "border-transparent"
-                  }`}
-                  onClick={() => handleMercenaryCountChange(3)}
-                >
-                  3
-                </button>
+                {[0, 1, 2, 3].map((count) => renderMercenaryButton(count))}
               </div>
               <Separator orientation="vertical" className="!h-7 w-px" />
               <div className="flex items-center gap-1">
