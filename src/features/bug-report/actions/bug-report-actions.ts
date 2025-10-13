@@ -2,9 +2,6 @@
 
 import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
 import { BugSeverity, BugStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
@@ -20,7 +17,7 @@ export type BugReportFormData = {
   screenSize?: string;
   url?: string;
   severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | "TRIVIAL";
-  attachments?: File[];
+  attachmentUrls?: string[];
 };
 
 export type BugReportListParams = {
@@ -56,7 +53,7 @@ export async function createBugReport(formData: BugReportFormData) {
       screenSize,
       url,
       severity,
-      attachments = [],
+      attachmentUrls = [],
     } = formData;
 
     if (!title || !description) {
@@ -66,32 +63,6 @@ export async function createBugReport(formData: BugReportFormData) {
       };
     }
 
-    // 첨부파일 처리
-    const attachmentUrls: string[] = [];
-
-    if (attachments.length > 0) {
-      const uploadDir = join(process.cwd(), "public", "uploads", "bug-reports");
-
-      // 디렉토리가 없으면 생성
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true });
-      }
-
-      for (const file of attachments) {
-        if (file.size > 0) {
-          const bytes = await file.arrayBuffer();
-          const buffer = Buffer.from(bytes);
-
-          const fileName = `${Date.now()}-${file.name}`;
-          const filePath = join(uploadDir, fileName);
-
-          await writeFile(filePath, buffer);
-          attachmentUrls.push(`/uploads/bug-reports/${fileName}`);
-        }
-      }
-    }
-
-    // 버그리포트 생성
     const bugReport = await prisma.bugReport.create({
       data: {
         reporterId: session.user.id,
@@ -107,12 +78,15 @@ export async function createBugReport(formData: BugReportFormData) {
         url: url || null,
         severity: severity as BugSeverity,
         attachments: {
-          create: attachmentUrls.map((url, index) => ({
-            url,
-            fileName: attachments[index]?.name || `attachment-${index}`,
-            fileSize: attachments[index]?.size || null,
-            mimeType: attachments[index]?.type || null,
-          })),
+          create: attachmentUrls.map((url, index) => {
+            const fileName = url.split("/").pop() || `attachment-${index}`;
+            return {
+              url,
+              fileName,
+              fileSize: null,
+              mimeType: null,
+            };
+          }),
         },
       },
       include: {
@@ -223,7 +197,7 @@ export async function updateBugReportStatus(
     const bugReport = await prisma.bugReport.update({
       where: {
         id: bugReportId,
-        reporterId: session.user.id, // 본인이 작성한 것만 수정 가능
+        reporterId: session.user.id,
       },
       data: {
         status,

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { ArrowLeft, Bug, Upload, X } from "lucide-react";
+import { ArrowLeft, Bug, Upload, X, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -13,12 +14,15 @@ import {
   createBugReport,
   type BugReportFormData,
 } from "@/features/bug-report/actions/bug-report-actions";
+import { useFileUpload } from "@/shared/lib/use-file-upload";
 
 const BugReportPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<BugReportFormData>({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<
+    Omit<BugReportFormData, "attachments">
+  >({
     title: "",
     description: "",
     stepsToReproduce: "",
@@ -31,22 +35,37 @@ const BugReportPage = () => {
     url: "",
     severity: "MEDIUM",
   });
-  const [attachments, setAttachments] = useState<File[]>([]);
 
-  const handleInputChange = (field: keyof BugReportFormData, value: string) => {
+  const {
+    files,
+    isUploading,
+    uploadProgress,
+    addFiles,
+    removeFile,
+    clearAllFiles,
+    uploadFiles,
+  } = useFileUpload({
+    maxFiles: 5,
+    maxFileSize: 10 * 1024 * 1024,
+    acceptedTypes: ["image/*", ".txt", ".log"],
+  });
+
+  const handleInputChange = (
+    field: keyof Omit<BugReportFormData, "attachments">,
+    value: string
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    setAttachments((prev) => [...prev, ...files]);
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFiles = Array.from(event.target.files || []);
+    await addFiles(selectedFiles);
+    event.target.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,11 +77,22 @@ const BugReportPage = () => {
     }
 
     try {
-      setIsLoading(true);
+      setIsSubmitting(true);
+
+      let attachmentUrls: string[] = [];
+      if (files.length > 0) {
+        try {
+          attachmentUrls = await uploadFiles();
+        } catch (error) {
+          console.error("File upload error:", error);
+          alert("파일 업로드 중 오류가 발생했습니다.");
+          return;
+        }
+      }
 
       const result = await createBugReport({
         ...formData,
-        attachments,
+        attachmentUrls,
       });
 
       if (result.success) {
@@ -75,7 +105,7 @@ const BugReportPage = () => {
       console.error("Bug report submission error:", error);
       alert("버그 신고 제출에 실패했습니다.");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -87,8 +117,22 @@ const BugReportPage = () => {
     );
   }
 
+  const isLoading = isUploading || isSubmitting;
+
   return (
     <div className="max-w-2xl mx-auto pb-16">
+      {/* 로딩 오버레이 */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
+            <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+            <div className="text-base text-gray-700">
+              {isUploading ? "파일을 업로드하는 중입니다..." : "제출 중..."}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 헤더 */}
       <div className="flex items-center gap-4 px-4 h-16 shrink-0">
         <Button
@@ -96,6 +140,7 @@ const BugReportPage = () => {
           size="icon"
           onClick={() => router.back()}
           className="shrink-0"
+          disabled={isLoading}
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
@@ -120,6 +165,7 @@ const BugReportPage = () => {
               }
               placeholder="버그의 간단한 제목을 입력해주세요"
               className="mt-1"
+              disabled={isLoading}
               required
             />
           </div>
@@ -136,6 +182,7 @@ const BugReportPage = () => {
               }
               placeholder="발견한 버그에 대해 자세히 설명해주세요"
               className="mt-1 min-h-[120px]"
+              disabled={isLoading}
               required
             />
           </div>
@@ -147,6 +194,7 @@ const BugReportPage = () => {
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                 handleInputChange("severity", e.target.value)
               }
+              disabled={isLoading}
               options={
                 <>
                   <option value="CRITICAL">치명적 (서비스 불가)</option>
@@ -176,6 +224,7 @@ const BugReportPage = () => {
               }
               placeholder="버그를 재현하는 단계를 순서대로 적어주세요"
               className="mt-1 min-h-[100px]"
+              disabled={isLoading}
             />
           </div>
 
@@ -191,6 +240,7 @@ const BugReportPage = () => {
               }
               placeholder="정상적으로 동작했을 때 어떻게 되어야 하는지 설명해주세요"
               className="mt-1 min-h-[80px]"
+              disabled={isLoading}
             />
           </div>
 
@@ -206,6 +256,7 @@ const BugReportPage = () => {
               }
               placeholder="실제로 어떤 문제가 발생했는지 설명해주세요"
               className="mt-1 min-h-[80px]"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -227,6 +278,7 @@ const BugReportPage = () => {
                 }
                 placeholder="Chrome, Safari 등"
                 className="mt-1"
+                disabled={isLoading}
               />
             </div>
 
@@ -242,6 +294,7 @@ const BugReportPage = () => {
                 }
                 placeholder="Windows, macOS, iOS 등"
                 className="mt-1"
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -255,6 +308,7 @@ const BugReportPage = () => {
                   handleInputChange("deviceType", e.target.value)
                 }
                 placeholder="기기 유형 선택"
+                disabled={isLoading}
                 options={
                   <>
                     <option value="mobile">모바일</option>
@@ -277,6 +331,7 @@ const BugReportPage = () => {
                 }
                 placeholder="1920x1080 등"
                 className="mt-1"
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -293,6 +348,7 @@ const BugReportPage = () => {
               }
               placeholder="https://example.com/page"
               className="mt-1"
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -313,39 +369,70 @@ const BugReportPage = () => {
                 accept="image/*,.txt,.log"
                 onChange={handleFileUpload}
                 className="hidden"
+                disabled={isLoading}
               />
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => document.getElementById("attachments")?.click()}
-                className="w-full"
+                disabled={isLoading || files.length >= 5}
+                className="cursor-pointer rounded-md flex justify-center items-center gap-2 px-4 h-12 sm:h-11 bg-white border border-gray-400 transition-shadow shadow-xs hover:shadow-md w-full mb-3 text-base font-medium"
               >
-                <Upload className="w-4 h-4 mr-2" />
-                파일 선택
+                <Upload className="size-5 mr-2" />
+                파일 선택 ({files.length}/5)
               </Button>
             </div>
           </div>
 
-          {attachments.length > 0 && (
+          {files.length > 0 && (
             <div className="space-y-2">
-              {attachments.map((file, index) => (
+              {files.map((fileWithPreview) => (
                 <div
-                  key={index}
-                  className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                  key={fileWithPreview.id}
+                  className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg"
                 >
-                  <span className="text-sm text-gray-700 truncate">
-                    {file.name}
+                  {fileWithPreview.file.type.startsWith("image/") && (
+                    <div className="relative w-12 h-12 shrink-0">
+                      <Image
+                        src={fileWithPreview.previewUrl}
+                        alt={fileWithPreview.file.name}
+                        fill
+                        className="object-cover rounded"
+                        sizes="48px"
+                      />
+                      {uploadProgress[fileWithPreview.id] && (
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded">
+                          <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <span className="text-sm text-gray-700 truncate flex-1">
+                    {fileWithPreview.file.name}
                   </span>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    onClick={() => removeAttachment(index)}
+                    onClick={() => removeFile(fileWithPreview.id)}
+                    disabled={isLoading}
                   >
                     <X className="w-4 h-4" />
                   </Button>
                 </div>
               ))}
+              {files.length > 0 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearAllFiles}
+                  disabled={isLoading}
+                  className="w-full text-gray-600"
+                >
+                  전체 삭제
+                </Button>
+              )}
             </div>
           )}
         </div>
