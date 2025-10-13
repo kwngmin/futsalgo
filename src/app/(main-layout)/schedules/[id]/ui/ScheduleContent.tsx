@@ -332,13 +332,6 @@ const ScheduleContent = ({
     "sdsds"
   );
 
-  console.log(
-    data.data.schedule.attendances.filter(
-      (attendance) => attendance.attendanceStatus === "ATTENDING"
-    ),
-    "11111sdsds"
-  );
-
   const attendances = data.data.schedule.attendances.filter(
     (attendance) => attendance.attendanceStatus === "ATTENDING"
   );
@@ -694,6 +687,10 @@ const ScheduleContent = ({
                         });
                         queryClient.invalidateQueries({
                           queryKey: ["my-schedules"],
+                        });
+                        queryClient.invalidateQueries({
+                          queryKey: ["matchData"],
+                          refetchType: "all",
                         });
                       } else {
                         console.log(result.error, "result.error");

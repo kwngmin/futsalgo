@@ -357,6 +357,10 @@ const MatchContent = ({ data }: MatchContentProps) => {
             queryKey: ["my-schedule"],
             refetchType: "all",
           }),
+          queryClient.invalidateQueries({
+            queryKey: ["matchData"],
+            refetchType: "all",
+          }),
         ]);
 
         router.push(
