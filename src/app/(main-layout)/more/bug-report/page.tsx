@@ -1,0 +1,369 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { ArrowLeft, Bug, Upload, X } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { Label } from "@/shared/components/ui/label";
+import CustomSelect from "@/shared/components/ui/custom-select";
+import {
+  createBugReport,
+  type BugReportFormData,
+} from "@/features/bug-report/actions/bug-report-actions";
+
+const BugReportPage = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<BugReportFormData>({
+    title: "",
+    description: "",
+    stepsToReproduce: "",
+    expectedBehavior: "",
+    actualBehavior: "",
+    browser: "",
+    os: "",
+    deviceType: "",
+    screenSize: "",
+    url: "",
+    severity: "MEDIUM",
+  });
+  const [attachments, setAttachments] = useState<File[]>([]);
+
+  const handleInputChange = (field: keyof BugReportFormData, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setAttachments((prev) => [...prev, ...files]);
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.title.trim() || !formData.description.trim()) {
+      alert("제목과 설명을 모두 입력해주세요.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const result = await createBugReport({
+        ...formData,
+        attachments,
+      });
+
+      if (result.success) {
+        alert("버그 신고가 성공적으로 제출되었습니다.");
+        router.push("/more");
+      } else {
+        alert(result.error || "버그 신고 제출에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Bug report submission error:", error);
+      alert("버그 신고 제출에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!session) {
+    return (
+      <div className="p-4 text-center text-gray-500">
+        버그 신고를 하려면 로그인이 필요합니다.
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto pb-16">
+      {/* 헤더 */}
+      <div className="flex items-center gap-4 px-4 h-16 shrink-0">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+          className="shrink-0"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </Button>
+        <div className="flex items-center gap-2">
+          <Bug className="w-6 h-6 text-red-500" />
+          <h1 className="text-[1.625rem] font-bold">버그 신고하기</h1>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="px-4 space-y-6">
+        {/* 기본 정보 */}
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="title" className="text-base font-medium">
+              제목 *
+            </Label>
+            <Input
+              id="title"
+              value={formData.title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleInputChange("title", e.target.value)
+              }
+              placeholder="버그의 간단한 제목을 입력해주세요"
+              className="mt-1"
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="description" className="text-base font-medium">
+              설명 *
+            </Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                handleInputChange("description", e.target.value)
+              }
+              placeholder="발견한 버그에 대해 자세히 설명해주세요"
+              className="mt-1 min-h-[120px]"
+              required
+            />
+          </div>
+
+          <div>
+            <CustomSelect
+              label="심각도"
+              value={formData.severity}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                handleInputChange("severity", e.target.value)
+              }
+              options={
+                <>
+                  <option value="CRITICAL">치명적 (서비스 불가)</option>
+                  <option value="HIGH">높음 (주요 기능 오작동)</option>
+                  <option value="MEDIUM">보통 (일부 기능 오작동)</option>
+                  <option value="LOW">낮음 (경미한 오류)</option>
+                  <option value="TRIVIAL">사소함 (UI 깨짐 등)</option>
+                </>
+              }
+            />
+          </div>
+        </div>
+
+        {/* 재현 정보 */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">재현 정보</h3>
+
+          <div>
+            <Label htmlFor="stepsToReproduce" className="text-base font-medium">
+              재현 단계
+            </Label>
+            <Textarea
+              id="stepsToReproduce"
+              value={formData.stepsToReproduce}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                handleInputChange("stepsToReproduce", e.target.value)
+              }
+              placeholder="버그를 재현하는 단계를 순서대로 적어주세요"
+              className="mt-1 min-h-[100px]"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="expectedBehavior" className="text-base font-medium">
+              예상 동작
+            </Label>
+            <Textarea
+              id="expectedBehavior"
+              value={formData.expectedBehavior}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                handleInputChange("expectedBehavior", e.target.value)
+              }
+              placeholder="정상적으로 동작했을 때 어떻게 되어야 하는지 설명해주세요"
+              className="mt-1 min-h-[80px]"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="actualBehavior" className="text-base font-medium">
+              실제 동작
+            </Label>
+            <Textarea
+              id="actualBehavior"
+              value={formData.actualBehavior}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                handleInputChange("actualBehavior", e.target.value)
+              }
+              placeholder="실제로 어떤 문제가 발생했는지 설명해주세요"
+              className="mt-1 min-h-[80px]"
+            />
+          </div>
+        </div>
+
+        {/* 환경 정보 */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">환경 정보</h3>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="browser" className="text-base font-medium">
+                브라우저
+              </Label>
+              <Input
+                id="browser"
+                value={formData.browser}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleInputChange("browser", e.target.value)
+                }
+                placeholder="Chrome, Safari 등"
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="os" className="text-base font-medium">
+                운영체제
+              </Label>
+              <Input
+                id="os"
+                value={formData.os}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleInputChange("os", e.target.value)
+                }
+                placeholder="Windows, macOS, iOS 등"
+                className="mt-1"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <CustomSelect
+                label="기기 유형"
+                value={formData.deviceType}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  handleInputChange("deviceType", e.target.value)
+                }
+                placeholder="기기 유형 선택"
+                options={
+                  <>
+                    <option value="mobile">모바일</option>
+                    <option value="tablet">태블릿</option>
+                    <option value="desktop">데스크톱</option>
+                  </>
+                }
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="screenSize" className="text-base font-medium">
+                화면 크기
+              </Label>
+              <Input
+                id="screenSize"
+                value={formData.screenSize}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleInputChange("screenSize", e.target.value)
+                }
+                placeholder="1920x1080 등"
+                className="mt-1"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="url" className="text-base font-medium">
+              버그 발생 페이지 URL
+            </Label>
+            <Input
+              id="url"
+              value={formData.url}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleInputChange("url", e.target.value)
+              }
+              placeholder="https://example.com/page"
+              className="mt-1"
+            />
+          </div>
+        </div>
+
+        {/* 첨부파일 */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">첨부파일</h3>
+
+          <div>
+            <Label htmlFor="attachments" className="text-base font-medium">
+              스크린샷 또는 로그 파일
+            </Label>
+            <div className="mt-1">
+              <input
+                id="attachments"
+                type="file"
+                multiple
+                accept="image/*,.txt,.log"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => document.getElementById("attachments")?.click()}
+                className="w-full"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                파일 선택
+              </Button>
+            </div>
+          </div>
+
+          {attachments.length > 0 && (
+            <div className="space-y-2">
+              {attachments.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                >
+                  <span className="text-sm text-gray-700 truncate">
+                    {file.name}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeAttachment(index)}
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 제출 버튼 */}
+        <div className="pt-6">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full"
+            size="lg"
+          >
+            {isLoading ? "제출 중..." : "버그 신고 제출"}
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default BugReportPage;

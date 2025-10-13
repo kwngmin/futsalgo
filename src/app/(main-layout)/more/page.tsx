@@ -56,14 +56,12 @@ const MorePage = () => {
         {
           icon: Lightbulb,
           label: "제안하기",
-          href: "/more/profile",
-          // action: () => alert("제안하기"),
+          href: "/more/suggestion",
         },
         {
           icon: Bug,
           label: "버그 신고하기",
-          href: "/more/profile",
-          // action: () => alert("버그 신고"),
+          href: "/more/bug-report",
         },
         {
           icon: FileText, //
