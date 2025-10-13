@@ -205,6 +205,35 @@ enum PostType {
   // 향후 추가될 타입들...
 }
 
+// ========== FEEDBACK & BUG REPORT ENUMS ==========
+
+enum FeedbackCategory {
+  FEATURE_REQUEST    // 기능 제안
+  IMPROVEMENT        // 개선 제안
+  UI_UX              // UI/UX 개선
+  CONTENT            // 콘텐츠 관련
+  OTHER              // 기타
+}
+
+enum FeedbackStatus {
+  PENDING            // 검토 대기
+  PLANNED            // 계획됨
+  REJECTED           // 반려
+}
+
+enum BugSeverity {
+  CRITICAL           // 치명적 (서비스 불가)
+  HIGH               // 높음 (주요 기능 오작동)
+  MEDIUM             // 보통 (일부 기능 오작동)
+  LOW                // 낮음 (경미한 오류)
+  TRIVIAL            // 사소함 (UI 깨짐 등)
+}
+
+enum BugStatus {
+  REPORTED           // 신고됨
+  CONFIRMED          // 확인됨
+  CANNOT_REPRODUCE   // 재현 불가
+}
 
 // ========== AUTHENTICATION MODELS ==========
 
@@ -308,6 +337,10 @@ model User {
   // 팀원 평가 관계
   givenRatings    TeamMemberRating[] @relation("GivenRatings")
   receivedRatings TeamMemberRating[] @relation("ReceivedRatings") 
+
+  // 피드백 & 버그 신고 관계
+  feedbacks            Feedback[]
+  bugReports           BugReport[]
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -840,4 +873,110 @@ model PostAttachment {
   
   @@index([postId])
   @@map("post_attachments")
+}
+
+// ========== FEEDBACK & BUG REPORT MODELS ==========
+
+// 제안하기 모델
+model Feedback {
+  id          String            @id @default(cuid())
+  
+  // 제안자 정보
+  authorId    String
+  author      User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  // 제안 내용
+  title       String
+  description String            @db.Text
+  category    FeedbackCategory
+  
+  // 간단한 상태 관리
+  status      FeedbackStatus    @default(PENDING)
+  
+  // 관계
+  attachments FeedbackAttachment[]
+  
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  @@index([authorId])
+  @@index([status])
+  @@index([category, status])
+  @@index([createdAt])
+  @@map("feedbacks")
+}
+
+// 제안 첨부파일
+model FeedbackAttachment {
+  id          String   @id @default(cuid())
+  feedbackId  String
+  feedback    Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  
+  url         String
+  fileName    String
+  fileSize    Int?     // bytes
+  mimeType    String?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([feedbackId])
+  @@map("feedback_attachments")
+}
+
+// 버그 신고 모델
+model BugReport {
+  id              String        @id @default(cuid())
+  
+  // 신고자 정보
+  reporterId      String
+  reporter        User          @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  
+  // 버그 정보
+  title           String
+  description     String        @db.Text
+  
+  // 재현 정보
+  stepsToReproduce String?      @db.Text  // 재현 단계
+  expectedBehavior String?      @db.Text  // 예상 동작
+  actualBehavior   String?      @db.Text  // 실제 동작
+  
+  // 환경 정보
+  browser         String?       // 브라우저 정보
+  os              String?       // 운영체제
+  deviceType      String?       // 기기 유형 (mobile, tablet, desktop)
+  screenSize      String?       // 화면 크기
+  url             String?       // 버그 발생 페이지 URL
+  
+  // 간단한 관리 정보
+  severity        BugSeverity
+  status          BugStatus     @default(REPORTED)
+  
+  // 관계
+  attachments     BugReportAttachment[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([reporterId])
+  @@index([status])
+  @@index([severity, status])
+  @@index([createdAt])
+  @@map("bug_reports")
+}
+
+// 버그 신고 첨부파일 (스크린샷, 로그 등)
+model BugReportAttachment {
+  id           String    @id @default(cuid())
+  bugReportId  String
+  bugReport    BugReport @relation(fields: [bugReportId], references: [id], onDelete: Cascade)
+  
+  url          String
+  fileName     String
+  fileSize     Int?      // bytes
+  mimeType     String?
+  
+  createdAt    DateTime  @default(now())
+  
+  @@index([bugReportId])
+  @@map("bug_report_attachments")
 }
