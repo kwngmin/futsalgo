@@ -4,7 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser, AdapterAccount } from "next-auth/adapters";
 import Google from "next-auth/providers/google";
 import Kakao from "next-auth/providers/kakao";
-// import Naver from "next-auth/providers/naver";
+import Naver from "next-auth/providers/naver";
 import { OnboardingStep } from "@prisma/client";
 
 declare module "next-auth" {
@@ -91,8 +91,7 @@ export function CustomPrismaAdapter(): Adapter {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomPrismaAdapter(),
-  providers: [Google, Kakao],
-  // providers: [Google, Kakao, Naver],
+  providers: [Google, Kakao, Naver],
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30일
