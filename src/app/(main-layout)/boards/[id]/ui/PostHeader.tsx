@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Share } from "lucide-react";
+import { ArrowLeft, LinkIcon } from "lucide-react";
 
 /**
  * 게시글 상세보기 헤더 컴포넌트
@@ -55,7 +55,7 @@ const PostHeader = ({ id }: { id: string }) => {
             }
           }}
         >
-          <Share className="size-5" />
+          <LinkIcon className="size-5" />
         </button>
       </div>
     </div>

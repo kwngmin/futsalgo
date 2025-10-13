@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   CircleX,
   Loader2,
-  Share,
   ChevronUp,
   ChevronDown,
   SquareArrowOutUpRight,
@@ -16,6 +15,7 @@ import {
   Pencil,
   ChevronRight,
   Info,
+  LinkIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -215,7 +215,7 @@ const TeamContent = ({ id }: { id: string }) => {
               }
             }}
           >
-            <Share className="size-5" />
+            <LinkIcon className="size-5" />
           </button>
         </div>
       </div>

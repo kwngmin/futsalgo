@@ -2,7 +2,6 @@
 
 import {
   ArrowLeft,
-  Share,
   ChevronRight,
   Loader2,
   PlusIcon,
@@ -16,6 +15,7 @@ import {
   ClockIcon,
   Calendar,
   Info,
+  LinkIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
@@ -391,7 +391,7 @@ const ScheduleContent = ({
               }
             }}
           >
-            <Share className="size-5" />
+            <LinkIcon className="size-5" />
           </button>
         </div>
       </div>

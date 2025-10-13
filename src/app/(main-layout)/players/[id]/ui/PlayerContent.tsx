@@ -13,10 +13,10 @@ import {
   CalendarDays,
   Footprints,
   History,
+  LinkIcon,
   Loader2,
   Ruler,
   Shapes,
-  Share,
   VenusAndMars,
 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
@@ -185,7 +185,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               }
             }}
           >
-            <Share className="size-5" />
+            <LinkIcon className="size-5" />
           </button>
           {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
             <EllipsisVertical className="size-5" />
