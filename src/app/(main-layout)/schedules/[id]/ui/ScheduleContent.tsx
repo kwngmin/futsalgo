@@ -936,7 +936,7 @@ const ScheduleContent = ({
             alt="avatar"
             width={24}
             height={24}
-            className="rounded-lg"
+            className="rounded-full size-6 object-cover"
           />
           <span className="text-sm font-medium text-gray-500 group-hover:underline group-hover:text-gray-700 underline-offset-2">
             {data.data.schedule?.createdBy.nickname}

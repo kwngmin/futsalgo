@@ -97,7 +97,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                   alt="team_logo"
                   width={24}
                   height={24}
-                  className="rounded-lg"
+                  className="rounded-md size-6 object-cover"
                 />
               ) : (
                 <div className="size-6 rounded-full bg-gradient-to-br from-slate-300 to-gray-100 flex items-center justify-center text-sm text-slate-700" />
