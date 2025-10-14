@@ -59,11 +59,11 @@ export default function LoginPageClient() {
           <Image
             src="/futsalgo_logo_italic.svg"
             alt="FutsalGo logo"
-            width={213}
-            height={36}
+            width={189}
+            height={32}
             className="group-active:scale-95 transition-all duration-200"
           />
-          <p className="text-gray-600 group-hover:text-indigo-800 group-hover:font-medium transition-all duration-200">
+          <p className="text-gray-600 group-hover:text-indigo-800 group-hover:font-medium transition-all duration-200 tracking-tight">
             당신의 풋살 기록, 매칭, 커뮤니티 플랫폼
           </p>
         </Link>
