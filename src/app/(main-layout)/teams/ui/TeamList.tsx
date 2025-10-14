@@ -31,7 +31,7 @@ const TeamList = ({
       <div
         className={`${
           size === "md" ? "size-14" : "size-10"
-        } rounded-lg flex items-center justify-center text-[1.625rem] flex-shrink-0`}
+        } rounded-lg flex items-center justify-center text-[1.625rem] flex-shrink-0 overflow-hidden`}
       >
         {team.logoUrl ? (
           <Image

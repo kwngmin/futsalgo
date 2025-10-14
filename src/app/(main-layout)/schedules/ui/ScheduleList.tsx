@@ -113,7 +113,7 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
                   alt={schedule.hostTeam.name}
                   width={16}
                   height={16}
-                  className="rounded-full"
+                  className="rounded-full overflow-hidden size-4 object-cover"
                 />
               ) : (
                 <div className="size-4 rounded-full bg-gradient-to-br from-slate-300 to-gray-100" />
