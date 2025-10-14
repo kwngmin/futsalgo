@@ -271,7 +271,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                 </div>
 
                 {/* 인스타그램, 유튜브 */}
-                <div className="grid grid-cols-3 gap-1">
+                <div className="grid sm:grid-cols-3 gap-x-1 gap-y-6">
                   <div className="space-y-3">
                     <Label className="px-1">인스타그램 (선택)</Label>
                     <Input

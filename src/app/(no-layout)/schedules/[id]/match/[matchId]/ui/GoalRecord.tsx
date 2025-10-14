@@ -217,6 +217,7 @@ const GoalRecord = ({
       alert("골이 기록되었습니다!");
       queryClient.invalidateQueries({
         queryKey: ["schedule", scheduleId],
+        refetchType: "all",
       });
       queryClient.invalidateQueries({
         queryKey: ["matchData", matchId, scheduleId],
@@ -327,7 +328,16 @@ const GoalRecord = ({
                   {actualScoringTeam === "HOME"
                     ? renderPlayerOptions(homeLineups, scorerId)
                     : renderPlayerOptions(awayLineups, scorerId)}
-                  <option value="mercenary_assist">용병</option>
+                  {actualScoringTeam === "HOME"
+                    ? homeMercenaryCount &&
+                      homeMercenaryCount > 0 && (
+                        <option value="mercenary_assist">용병</option>
+                      )
+                    : awayMercenaryCount &&
+                      awayMercenaryCount > 0 && (
+                        <option value="mercenary_assist">용병</option>
+                      )}
+                  {/* <option value="mercenary_assist">용병</option> */}
                 </>
               }
             />
