@@ -233,7 +233,7 @@ const TeamContent = ({ id }: { id: string }) => {
                       height={80}
                       src={data?.data?.logoUrl}
                       alt="profile_image"
-                      className="object-cover"
+                      className="object-cover w-full h-full"
                     />
                   ) : (
                     <div className="size-16 bg-gray-100 text-[1.625rem] flex items-center justify-center">

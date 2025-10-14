@@ -39,6 +39,7 @@ const TeamList = ({
             alt={team.name}
             width={size === "md" ? 56 : 40}
             height={size === "md" ? 56 : 40}
+            className="object-cover w-full h-full"
           />
         ) : (
           <div
