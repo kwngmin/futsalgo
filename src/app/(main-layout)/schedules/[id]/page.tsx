@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/shared/lib/auth";
 import ScheduleContent from "./ui/ScheduleContent";
-import { prisma } from "@/shared/lib/prisma";
+// import { prisma } from "@/shared/lib/prisma";
 
 /**
  * 일정 페이지 메타데이터 생성
@@ -47,40 +47,42 @@ const SchedulePage = async ({
   const session = await auth();
   const userId = session?.user.id;
 
-  const schedule = await prisma.schedule.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      startTime: true,
-      matchType: true,
-    },
-  });
+  console.log(session, "session");
+
+  // const schedule = await prisma.schedule.findUnique({
+  //   where: {
+  //     id,
+  //   },
+  //   select: {
+  //     startTime: true,
+  //     matchType: true,
+  //   },
+  // });
 
   if (userId) {
     // 이미 좋아요 되어있는지 확인
-    const isLiked = await prisma.scheduleLike.findUnique({
-      where: {
-        scheduleId_userId: {
-          scheduleId: id,
-          userId,
-        },
-      },
-    });
+    // const isLiked = await prisma.scheduleLike.findUnique({
+    //   where: {
+    //     scheduleId_userId: {
+    //       scheduleId: id,
+    //       userId,
+    //     },
+    //   },
+    // });
     return (
       <ScheduleContent
         scheduleId={id}
-        isLikedSchedule={Boolean(isLiked)}
-        startTime={schedule?.startTime}
-        matchType={schedule?.matchType}
+        // isLikedSchedule={Boolean(isLiked)}
+        // startTime={schedule?.startTime}
+        // matchType={schedule?.matchType}
       />
     );
   }
   return (
     <ScheduleContent
       scheduleId={id}
-      startTime={schedule?.startTime}
-      matchType={schedule?.matchType}
+      // startTime={schedule?.startTime}
+      // matchType={schedule?.matchType}
     />
   );
 };

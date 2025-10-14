@@ -29,7 +29,7 @@ import {
 } from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import SchedulePhotosGallery from "./SchedulePhotosGallery";
-import { MatchType } from "@prisma/client";
+// import { MatchType } from "@prisma/client";
 import ScheduleComments from "./ScheduleComments";
 import ScheduleMvp from "./ScheduleMvp";
 import { useSession } from "next-auth/react";
@@ -96,26 +96,21 @@ function formatTimeRange(date: string, start: string, end: string): string {
 
 const ScheduleContent = ({
   scheduleId,
-  isLikedSchedule,
-  startTime,
-  matchType,
-}: {
+}: // isLikedSchedule,
+// startTime,
+// matchType,
+{
   scheduleId: string;
-  isLikedSchedule?: boolean;
-  startTime?: string;
-  matchType?: MatchType;
+  // isLikedSchedule?: boolean;
+  // startTime?: string;
+  // matchType?: MatchType;
 }) => {
-  console.log(isLikedSchedule, "isLikedSchedule");
-  console.log(startTime, "startTime");
-  console.log(matchType, "matchType");
   const router = useRouter();
-
   const searchParams = useSearchParams();
-  console.log(searchParams, "searchParams");
-  const tab = searchParams.get("tab");
-  console.log(tab, "tab");
+  // const tab = searchParams.get("tab");
 
   const session = useSession();
+  console.log(session, "session");
   const currentUserId = session.data?.user?.id;
 
   const { data, isLoading, error, refetch } = useQuery({

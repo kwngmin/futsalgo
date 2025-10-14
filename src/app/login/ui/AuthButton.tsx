@@ -24,7 +24,7 @@ export function AuthButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full flex items-stretch rounded-sm transition-colors duration-200 group disabled:opacity-50 cursor-pointer disabled:cursor-default active:scale-98 hover:ring-2 ring-black"
+      className="w-full flex items-stretch rounded-sm transition-colors duration-200 group disabled:opacity-50 cursor-pointer disabled:cursor-default active:scale-98 hover:ring-2 ring-black active:ring-2"
       style={{
         backgroundColor: containerColor,
         transition: "scale 0.05s ease-in-out",

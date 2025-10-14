@@ -1,3 +1,4 @@
+// auth.ts
 import NextAuth, { type DefaultSession } from "next-auth";
 import { prisma } from "@/shared/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -108,17 +109,59 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true;
     },
-    jwt: async ({ token, user, trigger }) => {
+    jwt: async ({ token, user, trigger, account }) => {
+      // 로그인 시점 (user 객체가 존재)
       if (user) {
-        token.id = user.id;
-        token.nickname = user.nickname;
-        token.createdAt = new Date();
-        token.onboardingStep = user.email
-          ? OnboardingStep.PHONE
-          : user.onboardingStep;
+        // DB에서 최신 사용자 정보 조회 (기존 사용자인지 확인)
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: {
+            nickname: true,
+            onboardingStep: true,
+            email: true,
+            createdAt: true,
+          },
+        });
+
+        if (dbUser) {
+          // 기존 사용자: DB의 현재 온보딩 상태 유지
+          token.id = user.id;
+          token.nickname = dbUser.nickname;
+          token.createdAt = dbUser.createdAt;
+          token.provider = account?.provider;
+          token.onboardingStep = dbUser.onboardingStep;
+
+          if (process.env.NODE_ENV === "development") {
+            console.log("[JWT] 기존 사용자 로그인:", {
+              id: token.id,
+              onboardingStep: token.onboardingStep,
+              email: dbUser.email,
+            });
+          }
+        } else {
+          // 신규 사용자: 초기 온보딩 단계 설정
+          token.id = user.id;
+          token.nickname = user.nickname;
+          token.createdAt = new Date();
+          token.provider = account?.provider;
+
+          // OAuth로 이메일이 제공된 경우: PHONE 단계부터 시작
+          // 이메일이 없는 경우: EMAIL 단계부터 시작
+          token.onboardingStep = user.email
+            ? OnboardingStep.PHONE
+            : OnboardingStep.EMAIL;
+
+          if (process.env.NODE_ENV === "development") {
+            console.log("[JWT] 신규 사용자 생성:", {
+              id: token.id,
+              hasEmail: !!user.email,
+              onboardingStep: token.onboardingStep,
+            });
+          }
+        }
       }
 
-      // update trigger 시에만 DB 조회
+      // update trigger 시에만 DB 조회 (온보딩 진행 중 업데이트)
       if (trigger === "update") {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
@@ -128,6 +171,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (dbUser) {
           token.nickname = dbUser.nickname;
           token.onboardingStep = dbUser.onboardingStep;
+
+          if (process.env.NODE_ENV === "development") {
+            console.log("[JWT] 토큰 업데이트:", {
+              id: token.id,
+              onboardingStep: token.onboardingStep,
+            });
+          }
         }
       }
 
@@ -157,8 +207,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
     ...(process.env.NODE_ENV === "development" && {
-      signIn: async ({ user, account }) => {
-        console.log(`로그인 완료: ${user.email} via ${account?.provider}`);
+      signIn: async ({ user }) => {
+        console.log(`로그인 이벤트 완료: User ID ${user.id}`);
       },
     }),
     ...(process.env.NODE_ENV === "development" && {
