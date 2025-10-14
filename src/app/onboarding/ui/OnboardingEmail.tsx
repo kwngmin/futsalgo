@@ -53,7 +53,7 @@ export function OnboardingEmail({
       <button
         onClick={() => signOut()}
         type="button"
-        className="absolute top-4 right-4 opacity-0 hover:opacity-100 cursor-pointer transition-opacity duration-200"
+        className="absolute top-4 right-4 opacity-50 hover:opacity-100 cursor-pointer transition-opacity duration-200"
       >
         <X className="size-5 text-gray-500" />
       </button>
