@@ -2,7 +2,7 @@
 import { auth } from "@/shared/lib/auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { OnboardingStep } from "@prisma/client";
+// import { OnboardingStep } from "@prisma/client";
 
 const AUTH_ROUTES = ["/login", "/signup"];
 const ONBOARDING_PREFIX = "/onboarding";
@@ -27,8 +27,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // 세션이 있는 경우
-  const isOnboardingComplete =
-    session.user.onboardingStep === OnboardingStep.COMPLETE;
+  const isOnboardingComplete = session.user.onboardingStep === "COMPLETE";
 
   if (process.env.NODE_ENV === "development") {
     console.log("[Middleware] 세션 확인:", {
