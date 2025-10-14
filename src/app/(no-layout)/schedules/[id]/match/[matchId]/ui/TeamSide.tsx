@@ -24,9 +24,15 @@ const TeamSide = ({
       }}
     >
       {label && <span className="font-medium text-gray-700">{label}</span>}
-      <div>
+      <div className="rounded-lg overflow-hidden size-16">
         {logoUrl ? (
-          <Image src={logoUrl} alt="home team logo" width={64} height={64} />
+          <Image
+            src={logoUrl}
+            alt="home team logo"
+            width={64}
+            height={64}
+            className="object-cover w-full h-full"
+          />
         ) : (
           <div className="size-16 rounded-full bg-gradient-to-br from-slate-300 to-gray-100 flex items-center justify-center text-[1.625rem] text-slate-700">
             {name?.charAt(0)}
