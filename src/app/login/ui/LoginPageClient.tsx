@@ -51,18 +51,8 @@ export default function LoginPageClient() {
     <div className="min-h-screen flex justify-center bg-gradient-to-b from-white to-gray-50 px-4 pt-20">
       <div className="w-full max-w-sm">
         {/* 로고/타이틀 영역 */}
-        {/* <button
-          type="button"
-          onClick={() => router.push("/")}
-          className="text-center mb-6 w-full cursor-pointer"
-        >
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Futsalgo</h1>
-          <p className="text-gray-600">
-            당신의 풋살 기록, 매칭, 커뮤니티 플랫폼
-          </p>
-        </button> */}
         <Link
-          className="flex flex-col items-center justify-center gap-3 h-20 px-8 cursor-pointer mb-6"
+          className="flex flex-col items-center justify-center gap-3 h-20 px-8 cursor-pointer mb-4 group"
           type="button"
           href="/"
         >
@@ -71,8 +61,9 @@ export default function LoginPageClient() {
             alt="FutsalGo logo"
             width={213}
             height={36}
+            className="group-active:scale-95 transition-all duration-200"
           />
-          <p className="text-gray-600">
+          <p className="text-gray-600 group-hover:text-indigo-800 group-hover:font-medium transition-all duration-200">
             당신의 풋살 기록, 매칭, 커뮤니티 플랫폼
           </p>
         </Link>
