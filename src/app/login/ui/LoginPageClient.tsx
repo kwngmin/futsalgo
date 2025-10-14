@@ -4,14 +4,15 @@ import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { AuthButton } from "./AuthButton";
 import { AUTH_PROVIDERS, ProviderId } from "@/shared/config/provider-config";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 /**
  * 로그인 페이지 클라이언트 컴포넌트
  * @returns 로그인 페이지 JSX
  */
 export default function LoginPageClient() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<ProviderId | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +51,7 @@ export default function LoginPageClient() {
     <div className="min-h-screen flex justify-center bg-gradient-to-b from-white to-gray-50 px-4 pt-20">
       <div className="w-full max-w-sm">
         {/* 로고/타이틀 영역 */}
-        <button
+        {/* <button
           type="button"
           onClick={() => router.push("/")}
           className="text-center mb-6 w-full cursor-pointer"
@@ -59,7 +60,22 @@ export default function LoginPageClient() {
           <p className="text-gray-600">
             당신의 풋살 기록, 매칭, 커뮤니티 플랫폼
           </p>
-        </button>
+        </button> */}
+        <Link
+          className="flex flex-col items-center justify-center gap-3 h-20 px-8 cursor-pointer mb-6"
+          type="button"
+          href="/"
+        >
+          <Image
+            src="/futsalgo_logo_italic.svg"
+            alt="FutsalGo logo"
+            width={213}
+            height={36}
+          />
+          <p className="text-gray-600">
+            당신의 풋살 기록, 매칭, 커뮤니티 플랫폼
+          </p>
+        </Link>
 
         {/* 로그인 카드 */}
         <div className="bg-white border rounded-lg shadow-lg shadow-gray-100 p-6">
