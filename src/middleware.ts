@@ -1,55 +1,11 @@
 // middleware.ts
-import { NextResponse, NextRequest } from "next/server";
-import { jwtDecrypt } from "jose";
+import { auth } from "@/shared/lib/auth";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import { OnboardingStep } from "@prisma/client";
-
-const SESSION_COOKIE_NAME =
-  process.env.NODE_ENV === "production"
-    ? "__Secure-authjs.session-token"
-    : "authjs.session-token";
-
-interface SessionPayload {
-  id: string;
-  onboardingStep: OnboardingStep;
-}
 
 const AUTH_ROUTES = ["/login", "/signup"];
 const ONBOARDING_PREFIX = "/onboarding";
-
-async function getSessionFromToken(
-  request: NextRequest
-): Promise<SessionPayload | null> {
-  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
-
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
-    // jwtVerify 대신 jwtDecrypt 사용 (Auth.js는 JWT를 암호화함)
-    const { payload } = await jwtDecrypt(token, secret);
-
-    const session: SessionPayload = {
-      id: payload.id as string,
-      onboardingStep:
-        (payload.onboardingStep as OnboardingStep) ?? OnboardingStep.EMAIL,
-    };
-
-    if (process.env.NODE_ENV === "development") {
-      console.log("[Middleware] 세션 확인:", {
-        id: session.id,
-        onboardingStep: session.onboardingStep,
-        pathname: request.nextUrl.pathname,
-      });
-    }
-
-    return session;
-  } catch (error) {
-    console.error("[Middleware] JWT 복호화 실패:", error);
-    return null;
-  }
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -59,24 +15,34 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const session = await getSessionFromToken(request);
+  // Auth.js의 auth() 헬퍼로 세션 가져오기
+  const session = await auth();
+
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
   const isOnboardingRoute = pathname.startsWith(ONBOARDING_PREFIX);
 
-  // 세션이 없는 경우: 모든 페이지 접근 허용 (각 페이지에서 처리)
-  if (!session) {
+  // 세션이 없는 경우: 모든 페이지 접근 허용
+  if (!session?.user) {
     return NextResponse.next();
   }
 
   // 세션이 있는 경우
   const isOnboardingComplete =
-    session.onboardingStep === OnboardingStep.COMPLETE;
+    session.user.onboardingStep === OnboardingStep.COMPLETE;
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Middleware] 세션 확인:", {
+      id: session.user.id,
+      onboardingStep: session.user.onboardingStep,
+      pathname,
+    });
+  }
 
   // 1. 온보딩 미완료 → /onboarding으로 강제 리다이렉트
   if (!isOnboardingComplete && !isOnboardingRoute) {
     if (process.env.NODE_ENV === "development") {
       console.log("[Middleware] 온보딩 미완료 -> /onboarding으로 리다이렉트", {
-        currentStep: session.onboardingStep,
+        currentStep: session.user.onboardingStep,
       });
     }
     return NextResponse.redirect(new URL(ONBOARDING_PREFIX, request.url));
