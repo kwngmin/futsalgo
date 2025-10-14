@@ -21,20 +21,31 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://futsalgo.com"),
 
   title: {
-    default: "Futsalgo - 풋살 일정 등록 및 경기 기록 플랫폼",
+    default: "Futsalgo - 풋살 기록 플랫폼",
     template: "%s | Futsalgo",
   },
 
   description:
-    "풋살 일정등록, 매칭, 경기 기록, 기념 사진 공유까지. 풋살 하러 Go! Futsalgo! - 우리팀 풋살 경기, 상대 팀과 한 풋살 경기! 모두 기록하고 관리 해보세요.",
+    "풋살 일정 등록, 매칭, 득점·도움 기록, 참석자 관리, MVP 투표, 사진 공유까지. 풋살 하러 Go! Futsalgo!",
 
   keywords: [
     "풋살",
+    "풋살 경기",
     "풋살 기록",
+    "풋살 경기 기록",
     "풋살 매칭",
     "풋살 일정",
-    "풋살 경기",
+    "풋살 일정 관리",
+    "풋살 일정 등록",
     "풋살 팀",
+    "풋살 팀 관리",
+    "풋살 MVP",
+    "풋살 참석 관리",
+    "풋살 참석자 관리",
+    "풋살 자체전 기록",
+    "자체전 기록",
+    "풋살 친선전 기록",
+    "친선전 기록",
     "풋살 노트",
     "풋살 커뮤니티",
     "풋살 커뮤니티 웹",
@@ -60,9 +71,9 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: "https://futsalgo.com",
     siteName: "Futsalgo",
-    title: "Futsalgo - 풋살 일정등록 및 경기 기록 플랫폼",
+    title: "Futsalgo - 풋살 기록 플랫폼",
     description:
-      "풋살 일정등록, 매칭, 경기 기록, 기념 사진 공유까지. 풋살 하러 Go! Futsalgo!",
+      "풋살 일정 등록, 매칭, 득점·도움 기록, 참석자 관리, MVP 투표, 사진 공유까지. 풋살 하러 Go! Futsalgo!",
     images: [
       {
         url: "/og-image.png", // public 폴더에 1200x630 크기의 이미지 추가 필요
@@ -76,9 +87,9 @@ export const metadata: Metadata = {
   // Twitter 카드 설정
   twitter: {
     card: "summary_large_image",
-    title: "Futsalgo - 풋살 일정등록 및 경기 기록 플랫폼",
+    title: "Futsalgo - 풋살 기록 플랫폼",
     description:
-      "풋살 일정등록, 매칭, 경기 기록, 기념 사진 공유까지. 풋살 하러 Go! Futsalgo!",
+      "풋살 일정 등록, 매칭, 득점·도움 기록, 참석자 관리, MVP 투표, 사진 공유까지. 풋살 하러 Go! Futsalgo!",
     images: ["/og-image.png"],
     creator: "@futsalgo", // 실제 트위터 계정으로 변경
   },
