@@ -246,6 +246,14 @@ const ScheduleContent = ({
       //       });
       if (result.success) {
         refetch(); // 데이터 새로고침
+
+        queryClient.invalidateQueries({
+          queryKey: ["schedules", scheduleId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["my-schedules", scheduleId],
+        });
+
         if (response === "ACCEPT") {
           alert("대전신청을 수락했습니다.");
         } else {
