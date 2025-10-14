@@ -1,11 +1,14 @@
 // middleware.ts
-import { auth } from "@/shared/lib/auth";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-// import { OnboardingStep } from "@prisma/client";
+import authConfig from "./shared/config/auth.config";
 
 const AUTH_ROUTES = ["/login", "/signup"];
 const ONBOARDING_PREFIX = "/onboarding";
+
+// 경량 설정으로 Auth 인스턴스 생성 (Prisma adapter 제외)
+const { auth } = NextAuth(authConfig);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -17,7 +20,6 @@ export async function middleware(request: NextRequest) {
 
   // Auth.js의 auth() 헬퍼로 세션 가져오기
   const session = await auth();
-
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
   const isOnboardingRoute = pathname.startsWith(ONBOARDING_PREFIX);
 

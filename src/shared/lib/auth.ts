@@ -3,10 +3,8 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import { prisma } from "@/shared/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser, AdapterAccount } from "next-auth/adapters";
-import Google from "next-auth/providers/google";
-import Kakao from "next-auth/providers/kakao";
-import Naver from "next-auth/providers/naver";
 import { OnboardingStep } from "@prisma/client";
+import authConfig from "../config/auth.config";
 
 declare module "next-auth" {
   interface Session {
@@ -91,16 +89,8 @@ export function CustomPrismaAdapter(): Adapter {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   adapter: CustomPrismaAdapter(),
-  providers: [Google, Kakao, Naver],
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30일
-    updateAge: 24 * 60 * 60, // 24시간마다 토큰 갱신
-  },
-  jwt: {
-    maxAge: 30 * 24 * 60 * 60, // 30일
-  },
   callbacks: {
     signIn: async ({ user, account }) => {
       // 로그 제거 (프로덕션에서는 불필요)
@@ -217,9 +207,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   },
-  pages: {
-    signIn: "/login",
-    newUser: "/onboarding",
-  },
-  debug: process.env.NODE_ENV === "development",
 });
