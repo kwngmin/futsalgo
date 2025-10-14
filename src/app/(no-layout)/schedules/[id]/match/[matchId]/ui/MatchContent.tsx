@@ -441,7 +441,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
                 <span className="text-muted-foreground font-medium">
                   경기 일정
                 </span>
-                <span className="text-4xl font-bold tracking-wider my-auto">
+                <span className="text-2xl font-bold tracking-wider my-auto">
                   {formatDday(dday)}
                 </span>
               </div>

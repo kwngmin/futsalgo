@@ -77,7 +77,12 @@ export async function updateAttendanceStatus(
     }
 
     // 4. 일정 상태 확인
-    if (schedule.status !== "READY") {
+    if (
+      schedule.status === "PENDING" ||
+      schedule.status === "REJECTED" ||
+      schedule.status === "DELETED" ||
+      schedule.status === "PLAY"
+    ) {
       return {
         success: false,
         error: "참석 투표가 불가능한 일정 상태입니다",
