@@ -6,6 +6,11 @@ import { SessionProviderWrapper } from "@/shared/components/providers/session-pr
 import { QueryProvider } from "@/shared/components/providers/query-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/shared/components/ui/sonner";
+import {
+  WebsiteStructuredData,
+  OrganizationStructuredData,
+  SoftwareApplicationStructuredData,
+} from "@/shared/components/seo/structured-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -145,6 +150,9 @@ export default async function RootLayout({
           <QueryProvider>{children}</QueryProvider>
         </SessionProviderWrapper>
         <Analytics />
+        <WebsiteStructuredData />
+        <OrganizationStructuredData />
+        <SoftwareApplicationStructuredData />
       </body>
     </html>
   );

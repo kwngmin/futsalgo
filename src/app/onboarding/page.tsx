@@ -1,6 +1,31 @@
+import type { Metadata } from "next";
 import { auth } from "@/shared/lib/auth";
 import { redirect } from "next/navigation";
 import { OnboardingFlow } from "./ui/OnboardingFlow";
+
+export const metadata: Metadata = {
+  title: "온보딩",
+  description:
+    "Futsalgo 서비스 이용을 위한 기본 정보를 설정하세요. 프로필, 닉네임, 연락처 등을 입력하여 완전한 풋살 경험을 시작하세요.",
+  keywords: [
+    "풋살 온보딩",
+    "풋살 프로필 설정",
+    "풋살 회원가입",
+    "풋살 초기 설정",
+    "풋살 서비스 시작",
+  ],
+  openGraph: {
+    title: "Futsalgo 온보딩 - 서비스 시작",
+    description:
+      "Futsalgo 서비스 이용을 위한 기본 정보를 설정하세요. 프로필, 닉네임, 연락처 등을 입력하여 완전한 풋살 경험을 시작하세요.",
+    url: "https://futsalgo.com/onboarding",
+  },
+  twitter: {
+    title: "Futsalgo 온보딩 - 서비스 시작",
+    description:
+      "Futsalgo 서비스 이용을 위한 기본 정보를 설정하세요. 프로필, 닉네임, 연락처 등을 입력하여 완전한 풋살 경험을 시작하세요.",
+  },
+};
 
 const OnboardingPage = async () => {
   const session = await auth();
