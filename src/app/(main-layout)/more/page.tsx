@@ -145,7 +145,7 @@ const MorePage = () => {
                     }
                     // href={item.href}
                     // onClick={item.action}
-                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 sm:hover:rounded-lg transition-colors cursor-pointer"
+                    className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 sm:hover:rounded-lg transition-colors cursor-pointer active:bg-gray-100"
                     // className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 hover:rounded-lg transition-colors cursor-pointer ${
                     //   itemIndex !== section.items.length - 1 ? `border-b` : ""
                     // }`}
@@ -168,7 +168,7 @@ const MorePage = () => {
               setIsLoading(true);
               signOut();
             }}
-            className="w-full flex items-center justify-between px-4 py-3 cursor-pointer sm:hover:bg-red-500/5 transition-colors text-red-500"
+            className="w-full flex items-center justify-between px-4 py-3 cursor-pointer sm:hover:bg-red-500/5 transition-colors text-red-500 active:bg-red-500/10"
           >
             <div className="flex items-center space-x-3">
               <LogOut className="size-5" />

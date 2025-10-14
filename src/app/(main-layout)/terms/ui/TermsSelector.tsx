@@ -37,8 +37,10 @@ const TermsSelector = ({ initialList, initialContent }: TermsSelectorProps) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto pb-16 px-4 relative">
-      <div className="sm:hidden flex items-center justify-end h-16 shrink-0 absolute -top-8 right-4">
+    <div className="max-w-2xl mx-auto pb-16 px-4">
+      {/* 상단 헤더 */}
+      <div className="flex items-center justify-between h-16 shrink-0">
+        <h1 className="text-[1.625rem] font-bold">풋살고 이용약관</h1>
         <Link
           href="/more"
           className="shrink-0 w-9 h-9 flex items-center justify-center text-gray-600 bg-gray-50 hover:bg-white rounded-full transition-colors cursor-pointer"
@@ -46,6 +48,8 @@ const TermsSelector = ({ initialList, initialContent }: TermsSelectorProps) => {
           <X className="size-6" />
         </Link>
       </div>
+
+      {/* 콘텐트 영역 */}
       <div
         className={
           isPending ? "opacity-50 transition-opacity" : "transition-opacity"
