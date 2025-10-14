@@ -665,7 +665,9 @@ const ScheduleContent = ({
                   참석 인원이 부족합니다.
                 </p>
                 <p className="whitespace-pre-line break-keep sm:text-sm">
-                  참석자가 2명 이상이 되어야 경기를 추가할 수 있습니다.
+                  {data.data.schedule.matchType === "SQUAD"
+                    ? "참석자가 2명 이상이 되어야 경기를 추가할 수 있습니다."
+                    : "팀별로 참석자가 1명 이상이 되어야 경기를 추가할 수 있습니다."}
                 </p>
               </div>
             )}
