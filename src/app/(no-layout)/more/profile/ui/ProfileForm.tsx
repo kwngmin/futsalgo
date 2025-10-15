@@ -28,6 +28,7 @@ import {
   RatingData,
   SKILL_LEVEL_POINTS,
 } from "@/app/onboarding/ui/OnboardingProfile";
+import Link from "next/link";
 
 const RATING_ITEMS = [
   { key: "shooting", label: "슈팅" },
@@ -381,7 +382,17 @@ const ProfileForm = ({ data }: { data: User }) => {
         </Alert>
       )}
 
-      <div className="mt-12 space-y-3 sm:grid grid-cols-3 gap-2">
+      {/* 최근 수정일 */}
+      <div className="text-center text-sm font-medium px-2 text-gray-600">
+        최근 수정일:{" "}
+        {data.updatedAt.toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </div>
+
+      <div className="mt-10 space-y-3 sm:grid grid-cols-3 gap-2">
         {/* 저장 버튼 */}
         <Button
           type="submit"
@@ -410,16 +421,13 @@ const ProfileForm = ({ data }: { data: User }) => {
         >
           취소
         </Button>
-      </div>
 
-      {/* 최근 수정일 */}
-      <div className="text-center text-sm font-medium mb-3 px-2 text-gray-600">
-        최근 수정일:{" "}
-        {data.updatedAt.toLocaleDateString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
+        <Link
+          href="/more/profile/withdraw"
+          className="w-full font-medium text-base h-11 sm:h-12 flex items-center justify-center text-destructive"
+        >
+          탈퇴하기
+        </Link>
       </div>
     </form>
   );

@@ -14,11 +14,13 @@ declare module "next-auth" {
       createdAt: Date;
       provider: string;
       onboardingStep: OnboardingStep;
+      isDeleted: boolean; // 추가
     } & DefaultSession["user"];
   }
   interface User {
     nickname?: string | null;
     onboardingStep?: OnboardingStep;
+    isDeleted?: boolean; // 추가
   }
   interface JWT {
     id?: string;
@@ -26,6 +28,7 @@ declare module "next-auth" {
     createdAt?: Date;
     provider?: string;
     onboardingStep?: OnboardingStep;
+    isDeleted?: boolean; // 추가
   }
 }
 
@@ -98,6 +101,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     signIn: async ({ user, account }) => {
       devLog(`로그인 시도: ${user.email} via ${account?.provider}`);
+
+      // 탈퇴한 사용자 로그인 차단
+      if (user.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { isDeleted: true },
+        });
+
+        if (dbUser?.isDeleted) {
+          devLog(`탈퇴한 사용자 로그인 시도 차단: ${user.id}`);
+          return false;
+        }
+      }
+
       return true;
     },
 
@@ -112,21 +129,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             onboardingStep: true,
             email: true,
             createdAt: true,
+            isDeleted: true, // 추가
           },
         });
 
         if (dbUser) {
-          // 기존 사용자: DB의 현재 온보딩 상태 유지
+          // 탈퇴한 사용자는 토큰 발급 중단
+          if (dbUser.isDeleted) {
+            devLog(`탈퇴한 사용자 토큰 발급 차단: ${user.id}`);
+            throw new Error("탈퇴한 사용자입니다.");
+          }
+
           token.id = user.id;
           token.nickname = dbUser.nickname;
           token.createdAt = dbUser.createdAt;
           token.provider = account?.provider;
           token.onboardingStep = dbUser.onboardingStep;
+          token.isDeleted = dbUser.isDeleted; // 추가
 
           devLog("[JWT] 기존 사용자 로그인:", {
             id: token.id,
             onboardingStep: token.onboardingStep,
             email: dbUser.email,
+            isDeleted: token.isDeleted,
           });
         } else {
           // 신규 사용자: 초기 온보딩 단계 설정
@@ -139,6 +164,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.onboardingStep = user.email
             ? OnboardingStep.PHONE
             : OnboardingStep.EMAIL;
+          token.isDeleted = false; // 신규 사용자는 false
 
           devLog("[JWT] 신규 사용자 생성:", {
             id: token.id,
@@ -148,20 +174,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
-      // update trigger 시에만 DB 조회 (온보딩 진행 중 업데이트)
+      // update trigger 시에만 DB 조회
       if (trigger === "update") {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { nickname: true, onboardingStep: true },
+          select: {
+            nickname: true,
+            onboardingStep: true,
+            isDeleted: true, // 추가
+          },
         });
 
         if (dbUser) {
+          // 탈퇴 상태가 변경되었다면 토큰 무효화
+          if (dbUser.isDeleted && !token.isDeleted) {
+            devLog(`사용자 탈퇴 감지: ${token.id}`);
+            throw new Error("탈퇴한 사용자입니다.");
+          }
+
           token.nickname = dbUser.nickname;
           token.onboardingStep = dbUser.onboardingStep;
+          token.isDeleted = dbUser.isDeleted; // 추가
 
           devLog("[JWT] 토큰 업데이트:", {
             id: token.id,
             onboardingStep: token.onboardingStep,
+            isDeleted: token.isDeleted,
           });
         }
       }
@@ -176,6 +214,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.createdAt = token.createdAt as Date;
         session.user.provider = token.provider as string;
         session.user.onboardingStep = token.onboardingStep as OnboardingStep;
+        session.user.isDeleted = token.isDeleted as boolean; // 추가
       }
       return session;
     },

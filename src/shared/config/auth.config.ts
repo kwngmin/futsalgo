@@ -28,6 +28,7 @@ export default {
         token.nickname = user.nickname;
         token.onboardingStep = user.onboardingStep;
         token.provider = account?.provider;
+        token.isDeleted = user.isDeleted; // 추가
       }
       return token;
     },
@@ -39,6 +40,7 @@ export default {
         session.user.nickname = token.nickname as string | null;
         session.user.provider = token.provider as string;
         session.user.onboardingStep = token.onboardingStep as OnboardingStep;
+        session.user.isDeleted = token.isDeleted as boolean; // 추가
       }
       return session;
     },
@@ -48,7 +50,7 @@ export default {
       const isLoggedIn = !!auth?.user;
       const pathname = nextUrl.pathname;
 
-      // API 라우트는 항상 허용 (NextAuth API 포함)
+      // API 라우트는 항상 허용
       if (pathname.startsWith("/api")) {
         return true;
       }
@@ -57,6 +59,12 @@ export default {
       const isOnAuth = pathname === "/login" || pathname === "/signup";
 
       if (isLoggedIn) {
+        // 탈퇴한 사용자는 로그인 페이지로 리다이렉트
+        if (auth.user.isDeleted) {
+          // 로그아웃 페이지로 리다이렉트 (세션 정리 필요)
+          return Response.redirect(new URL("/api/auth/signout", nextUrl));
+        }
+
         const isOnboardingComplete = auth.user.onboardingStep === "COMPLETE";
 
         // 온보딩 미완료 시 /onboarding으로
