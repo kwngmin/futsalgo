@@ -30,8 +30,17 @@ declare module "next-auth" {
 }
 
 /**
+ * 개발 환경에서만 로그를 출력하는 헬퍼 함수
+ */
+const devLog = (message: string, data?: Record<string, unknown>) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(message, data || "");
+  }
+};
+
+/**
  * 이메일 충돌을 처리하는 커스텀 Prisma Adapter
- * 동일한 이메일로 다른 provider 로그인 시 이메일을 null로 설정
+ * 동일한 이메일로 다른 provider 로그인 시 이메일을 빈 문자열로 설정
  */
 export function CustomPrismaAdapter(): Adapter {
   const adapter = PrismaAdapter(prisma);
@@ -52,13 +61,8 @@ export function CustomPrismaAdapter(): Adapter {
         });
 
         if (existingUser) {
-          // 이메일이 이미 사용 중이면 null로 설정
-          console.log(`이메일 충돌 감지: ${email} → null로 설정`);
-          const userWithoutEmail = {
-            ...userData,
-            email: "",
-          };
-          return adapter.createUser!(userWithoutEmail);
+          devLog(`이메일 충돌 감지: ${email} → 빈 문자열로 설정`);
+          return adapter.createUser!({ ...userData, email: "" });
         }
 
         // 이메일이 사용 가능하면 그대로 사용
@@ -68,6 +72,7 @@ export function CustomPrismaAdapter(): Adapter {
         throw error;
       }
     },
+
     async linkAccount(account): Promise<AdapterAccount | null> {
       try {
         const result = await adapter.linkAccount!(account);
@@ -78,8 +83,7 @@ export function CustomPrismaAdapter(): Adapter {
           error instanceof Error &&
           error.message.includes("OAuthAccountNotLinked")
         ) {
-          console.log("OAuth 계정 연결 실패 - 이메일 충돌로 인한 에러 무시");
-          // 에러를 무시하고 계속 진행
+          devLog("OAuth 계정 연결 실패 - 이메일 충돌로 인한 에러 무시");
           return null;
         }
         throw error;
@@ -93,16 +97,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomPrismaAdapter(),
   callbacks: {
     signIn: async ({ user, account }) => {
-      // 로그 제거 (프로덕션에서는 불필요)
-      if (process.env.NODE_ENV === "development") {
-        console.log(`로그인 시도: ${user.email} via ${account?.provider}`);
-      }
+      devLog(`로그인 시도: ${user.email} via ${account?.provider}`);
       return true;
     },
+
     jwt: async ({ token, user, trigger, account }) => {
       // 로그인 시점 (user 객체가 존재)
       if (user) {
-        // DB에서 최신 사용자 정보 조회 (기존 사용자인지 확인)
+        // DB에서 최신 사용자 정보 조회
         const dbUser = await prisma.user.findUnique({
           where: { id: user.id },
           select: {
@@ -121,33 +123,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.provider = account?.provider;
           token.onboardingStep = dbUser.onboardingStep;
 
-          if (process.env.NODE_ENV === "development") {
-            console.log("[JWT] 기존 사용자 로그인:", {
-              id: token.id,
-              onboardingStep: token.onboardingStep,
-              email: dbUser.email,
-            });
-          }
+          devLog("[JWT] 기존 사용자 로그인:", {
+            id: token.id,
+            onboardingStep: token.onboardingStep,
+            email: dbUser.email,
+          });
         } else {
           // 신규 사용자: 초기 온보딩 단계 설정
+          // OAuth로 이메일이 제공된 경우: PHONE 단계부터 시작
+          // 이메일이 없는 경우: EMAIL 단계부터 시작
           token.id = user.id;
           token.nickname = user.nickname;
           token.createdAt = new Date();
           token.provider = account?.provider;
-
-          // OAuth로 이메일이 제공된 경우: PHONE 단계부터 시작
-          // 이메일이 없는 경우: EMAIL 단계부터 시작
           token.onboardingStep = user.email
             ? OnboardingStep.PHONE
             : OnboardingStep.EMAIL;
 
-          if (process.env.NODE_ENV === "development") {
-            console.log("[JWT] 신규 사용자 생성:", {
-              id: token.id,
-              hasEmail: !!user.email,
-              onboardingStep: token.onboardingStep,
-            });
-          }
+          devLog("[JWT] 신규 사용자 생성:", {
+            id: token.id,
+            hasEmail: !!user.email,
+            onboardingStep: token.onboardingStep,
+          });
         }
       }
 
@@ -162,17 +159,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.nickname = dbUser.nickname;
           token.onboardingStep = dbUser.onboardingStep;
 
-          if (process.env.NODE_ENV === "development") {
-            console.log("[JWT] 토큰 업데이트:", {
-              id: token.id,
-              onboardingStep: token.onboardingStep,
-            });
-          }
+          devLog("[JWT] 토큰 업데이트:", {
+            id: token.id,
+            onboardingStep: token.onboardingStep,
+          });
         }
       }
 
       return token;
     },
+
     session: async ({ session, token }) => {
       if (token && session.user) {
         session.user.id = token.id as string;
@@ -184,27 +180,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-  events: {
-    ...(process.env.NODE_ENV === "development" && {
-      createUser: async ({ user }) => {
-        if (!user.email) {
-          console.log(
-            `이메일 없이 사용자 생성 완료: ${user.name} (ID: ${user.id})`
-          );
-        } else {
-          console.log(`사용자 생성 완료: ${user.email}`);
+  events:
+    process.env.NODE_ENV === "development"
+      ? {
+          createUser: async ({ user }) => {
+            const message = user.email
+              ? `사용자 생성 완료: ${user.email}`
+              : `이메일 없이 사용자 생성 완료: ${user.name} (ID: ${user.id})`;
+            console.log(message);
+          },
+          signIn: async ({ user }) => {
+            console.log(`로그인 이벤트 완료: User ID ${user.id}`);
+          },
+          signOut: async () => {
+            console.log("로그아웃 완료");
+          },
         }
-      },
-    }),
-    ...(process.env.NODE_ENV === "development" && {
-      signIn: async ({ user }) => {
-        console.log(`로그인 이벤트 완료: User ID ${user.id}`);
-      },
-    }),
-    ...(process.env.NODE_ENV === "development" && {
-      signOut: async () => {
-        console.log("로그아웃 완료");
-      },
-    }),
-  },
+      : {},
 });

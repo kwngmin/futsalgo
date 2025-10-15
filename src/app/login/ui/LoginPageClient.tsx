@@ -8,9 +8,26 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
+// 에러 메시지 상수
+const ERROR_MESSAGES = {
+  OAuthAccountNotLinked:
+    "이미 다른 소셜 로그인으로 가입된 이메일입니다. 기존 계정으로 로그인해주세요.",
+  default: "로그인 중 오류가 발생했습니다. 다시 시도해주세요.",
+} as const;
+
+/**
+ * URL 파라미터에서 에러 타입을 가져와 메시지 반환
+ */
+const getErrorMessage = (errorParam: string | null): string | null => {
+  if (!errorParam) return null;
+
+  return errorParam === "OAuthAccountNotLinked"
+    ? ERROR_MESSAGES.OAuthAccountNotLinked
+    : ERROR_MESSAGES.default;
+};
+
 /**
  * 로그인 페이지 클라이언트 컴포넌트
- * @returns 로그인 페이지 JSX
  */
 export default function LoginPageClient() {
   const searchParams = useSearchParams();
@@ -18,31 +35,23 @@ export default function LoginPageClient() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const errorParam = searchParams.get("error");
-    if (errorParam === "OAuthAccountNotLinked") {
-      setError(
-        "이미 다른 소셜 로그인으로 가입된 이메일입니다. 기존 계정으로 로그인해주세요."
-      );
-    } else if (errorParam) {
-      setError("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+    const errorMessage = getErrorMessage(searchParams.get("error"));
+    if (errorMessage) {
+      setError(errorMessage);
     }
   }, [searchParams]);
 
   /**
    * 로그인 처리 함수
-   * @param providerId - 로그인 제공자 ID
    */
   const handleLogin = async (providerId: ProviderId) => {
     try {
-      setError(null); // 에러 메시지 초기화
+      setError(null);
       setIsLoading(providerId);
-      await signIn(providerId, {
-        callbackUrl: "/",
-        redirect: true,
-      });
+      await signIn(providerId, { redirect: true });
     } catch (error) {
       console.error("로그인 오류:", error);
-      setError("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setError(ERROR_MESSAGES.default);
       setIsLoading(null);
     }
   };
@@ -53,7 +62,6 @@ export default function LoginPageClient() {
         {/* 로고/타이틀 영역 */}
         <Link
           className="flex flex-col items-center justify-center gap-3 h-20 px-8 cursor-pointer mb-4 group"
-          type="button"
           href="/"
         >
           <Image
