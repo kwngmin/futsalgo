@@ -16,15 +16,15 @@ const SideNav = () => {
         <div className="flex flex-col w-full">
           {/* 로고 */}
           <Link
-            className="flex items-center justify-center h-20 px-8 cursor-pointer my-1"
+            className="flex items-center justify-center h-24 px-8 cursor-pointer my-1 active:scale-95 transition-all duration-200"
             type="button"
             href="/"
           >
             <Image
               src="/futsalgo_logo_italic.svg"
               alt="FutsalGo logo"
-              width={130}
-              height={22}
+              width={154}
+              height={26}
             />
           </Link>
 
@@ -81,15 +81,15 @@ const SideNav = () => {
         <div className="flex flex-col w-full">
           {/* 로고 */}
           <Link
-            className="flex items-center justify-center h-18 cursor-pointer"
+            className="flex items-center justify-center h-18 cursor-pointer active:scale-95 transition-all duration-200"
             type="button"
             href="/"
           >
             <Image
               src="/futsalgo_symbol.svg"
               alt="FUTSALGO"
-              width={28}
-              height={25}
+              width={32}
+              height={29}
             />
           </Link>
 
