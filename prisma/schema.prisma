@@ -342,9 +342,16 @@ model User {
   feedbacks            Feedback[]
   bugReports           BugReport[]
 
+  // 회원 탈퇴 관련 필드 추가
+  isDeleted       Boolean    @default(false)
+  deletedAt       DateTime?
+  deleteReason    String?    // 탈퇴 사유 (선택)
+
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
    
+  @@index([isDeleted])
+  @@index([deletedAt])
   @@map("users")
 }
 
