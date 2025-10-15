@@ -4,6 +4,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { withdrawUser } from "./model/actions/withdrawal";
+import { requireAuth } from "@/shared/lib/auth-utils";
 
 export default function WithdrawPage() {
   const [reason, setReason] = useState("");
@@ -11,6 +13,11 @@ export default function WithdrawPage() {
   const router = useRouter();
 
   const handleWithdraw = async () => {
+    const userId = await requireAuth();
+    if (!userId) {
+      return;
+    }
+
     if (
       !confirm(
         "정말로 탈퇴하시겠습니까?\n\n탈퇴 시 다음 정보가 삭제됩니다:\n- 개인정보 (이메일, 전화번호, 프로필)\n- 팔로우/팔로잉 관계\n\n단, 팀 활동 기록은 통계를 위해 보존됩니다."
@@ -22,23 +29,15 @@ export default function WithdrawPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/user/withdraw", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ reason: reason || undefined }),
-      });
+      const response = await withdrawUser(userId.id, reason);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.error || "탈퇴 처리에 실패했습니다.");
+      if (!response.success) {
+        alert(response.error || "탈퇴 처리에 실패했습니다.");
         return;
       }
 
       alert("회원 탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다.");
-      router.push("/login");
+      router.push("/");
       router.refresh();
     } catch (error) {
       console.error("탈퇴 오류:", error);
@@ -73,13 +72,13 @@ export default function WithdrawPage() {
             <button
               onClick={handleWithdraw}
               disabled={isLoading}
-              className="bg-red-600 text-white px-4 py-2 rounded-sm text-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="bg-red-600 text-white px-4 py-2 rounded-sm text-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium active:scale-95"
             >
               {isLoading ? "처리 중..." : "탈퇴하기"}
             </button>
             <Link
               href="/more/profile"
-              className={`bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm hover:bg-gray-300 font-medium ${
+              className={`bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm hover:bg-gray-300 font-medium active:scale-95 ${
                 isLoading ? "opacity-50 pointer-events-none" : ""
               }`}
             >

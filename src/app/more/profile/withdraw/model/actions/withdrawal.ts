@@ -71,8 +71,8 @@ export async function withdrawUser(
           // 개인정보 마스킹
           email: `deleted_${userId}@deleted.com`,
           phone: null,
-          name: "탈퇴한 사용자",
-          nickname: `deleted_${userId}`,
+          name: "탈퇴한 회원",
+          nickname: `탈퇴한 회원_${userId}`,
           image: null,
           instagram: null,
           youtube: null,
