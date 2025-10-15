@@ -101,11 +101,11 @@ const TeamContent = ({ id }: { id: string }) => {
         alert("팀 탈퇴가 완료되었습니다.");
         await refetch();
         queryClient.invalidateQueries({
-          queryKey: ["teams", "all", id],
+          queryKey: ["teams", "all"],
           refetchType: "all",
         });
         queryClient.invalidateQueries({
-          queryKey: ["teams", "following", id],
+          queryKey: ["teams", "following"],
           refetchType: "all",
         });
         queryClient.invalidateQueries({
