@@ -4,9 +4,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { withdrawUser } from "./model/actions/withdrawal";
-// import { requireAuth } from "@/shared/lib/auth-utils";
 import { signOut, useSession } from "next-auth/react";
+import { withdrawUser } from "./model/actions/withdrawal";
 
 export default function WithdrawPage() {
   const [reason, setReason] = useState("");
@@ -17,6 +16,7 @@ export default function WithdrawPage() {
 
   const handleWithdraw = async () => {
     if (!userId) {
+      alert("로그인이 필요합니다.");
       return;
     }
 
@@ -31,23 +31,32 @@ export default function WithdrawPage() {
     setIsLoading(true);
 
     try {
-      const response = await withdrawUser(userId, reason);
+      // 1. DB에서 회원 탈퇴 처리
+      const response = await withdrawUser(userId, reason || undefined);
 
       if (!response.success) {
-        alert(response.error || "탈퇴 처리에 실패했습니다.");
+        alert(response.message || "탈퇴 처리에 실패했습니다.");
+        setIsLoading(false);
         return;
       }
 
+      // 2. 성공 메시지 표시
       alert("회원 탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다.");
-      await signOut();
-      router.push("/");
+
+      // 3. 클라이언트 세션 정리 (쿠키, JWT 토큰 삭제)
+      await signOut({
+        redirect: false, // 자동 리다이렉트 방지
+      });
+
+      // 4. 로그인 페이지로 이동
+      router.push("/login");
       router.refresh();
     } catch (error) {
       console.error("탈퇴 오류:", error);
       alert("탈퇴 처리 중 오류가 발생했습니다.");
-    } finally {
       setIsLoading(false);
     }
+    // finally는 사용하지 않음 (signOut 후에는 의미 없음)
   };
 
   return (
@@ -69,19 +78,20 @@ export default function WithdrawPage() {
             placeholder="서비스 개선을 위해 탈퇴 사유를 알려주세요."
             className="w-full border rounded-lg p-2 text-sm mb-4 bg-white resize-none"
             rows={3}
+            disabled={isLoading}
           />
 
           <div className="flex gap-2">
             <button
               onClick={handleWithdraw}
               disabled={isLoading}
-              className="bg-red-600 text-white px-4 py-2 rounded-sm sm:text-sm hover:bg-red-700 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed font-medium active:scale-95"
+              className="bg-red-600 text-white px-4 py-2 rounded-sm text-sm hover:bg-red-700 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed font-medium active:scale-95"
             >
               {isLoading ? "처리 중..." : "탈퇴하기"}
             </button>
             <Link
               href="/more/profile"
-              className={`bg-gray-200 text-gray-700 px-4 py-2 rounded-sm sm:text-sm hover:bg-gray-300 font-medium active:scale-95 ${
+              className={`bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm hover:bg-gray-300 font-medium active:scale-95 flex items-center justify-center ${
                 isLoading ? "opacity-50 pointer-events-none" : ""
               }`}
             >
