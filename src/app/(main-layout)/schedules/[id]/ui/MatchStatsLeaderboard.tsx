@@ -12,6 +12,7 @@ interface User {
   name?: string | null;
   nickname?: string | null;
   image?: string | null;
+  isDeleted?: boolean;
 }
 
 interface GoalRecord {
@@ -237,7 +238,9 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
                   onClick={() => router.push(`/players/${stat.user.id}`)}
                   className="font-medium text-gray-900 hover:underline underline-offset-4 cursor-pointer hover:font-semibold leading-tight"
                 >
-                  {stat.user.nickname || stat.user.name || "선수"}
+                  {stat.user.isDeleted
+                    ? "탈퇴한 회원"
+                    : stat.user.nickname || stat.user.name}
                 </button>
                 {isMember && stat.user.name && stat.user.nickname && (
                   <span className="text-sm text-gray-500">

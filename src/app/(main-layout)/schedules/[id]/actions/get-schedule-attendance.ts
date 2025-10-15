@@ -93,6 +93,7 @@ export async function getScheduleAttendance(scheduleId: string) {
             nickname: true,
             image: true,
             name: manageableTeams.length > 0 ? true : false,
+            isDeleted: true,
           },
         },
       },

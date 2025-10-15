@@ -18,7 +18,7 @@ import {
   updateTeamMatchLineup,
   updateMercenaryCount,
   resetLineups,
-  updateTeamMatchLineupSide, // 새로운 액션 함수
+  updateTeamMatchLineupSide,
 } from "../actions/match-actions";
 import {
   SneakerMoveIcon,
@@ -56,7 +56,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
   );
   const dday = calculateDday(matchDateTime);
 
-  // 골 기록을 기반으로 각 시점의 점수 계산 (useMemo로 최적화)
+  // 골 기록을 기반으로 각 시점의 점수 계산
   const goalsWithScore = useMemo((): GoalWithScore[] => {
     if (!data) return [];
 
@@ -115,7 +115,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
     return { homeMax, awayMax, undecidedCount };
   }, [data, homeMercenaryCount, awayMercenaryCount]);
 
-  // 라인업 필터링 (useMemo로 최적화)
+  // 라인업 필터링
   const { homeLineup, awayLineup } = useMemo(() => {
     if (!data) return { homeLineup: [], awayLineup: [] };
 
@@ -125,7 +125,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
     };
   }, [data]);
 
-  // 네비게이션 관련 계산 (useMemo로 최적화)
+  // 네비게이션 관련 계산
   const navigationInfo = useMemo(() => {
     if (!data)
       return { currentIndex: -1, isPrevDisabled: true, isNextDisabled: true };
@@ -213,7 +213,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
     return <div>데이터를 찾을 수 없습니다.</div>;
   }
 
-  // 랜덤 팀 나누기 핸들러 (개선됨)
+  // 랜덤 팀 나누기 핸들러
   const handleShuffleLineups = async () => {
     // 이미 팀이 나뉘어져 있는지 확인
     const hasExistingTeams = homeLineup.length > 0 || awayLineup.length > 0;
@@ -308,7 +308,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
     }
   };
 
-  // 초기화 핸들러 (새로 구현됨)
+  // 초기화 핸들러
   const handleResetLineups = async () => {
     const confirmed = confirm(
       "출전 명단을 초기화하시겠습니까? 모든 팀 배정이 취소됩니다."
@@ -343,7 +343,6 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
       const result = await deleteMatch(data.match.id, data.match.scheduleId);
 
       if (result.success) {
-        console.log(result, "result");
         setLoading();
 
         await Promise.all([
@@ -464,28 +463,6 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
         {/* 골 기록 */}
         {goalsWithScore.length > 0 && (
           <div className="px-4">
-            {/* {data.permissions.isEditable && (
-              <div className="flex justify-between items-center py-2 min-h-13 border-b border-gray-200">
-                <div className="flex items-center gap-2">
-                  <ClockCounterClockwiseIcon
-                    className="size-7 text-stone-500"
-                    weight="fill"
-                  />
-                  <h2 className="text-lg font-semibold">득점기록</h2>
-                </div>
-                <button
-                  type="button"
-                  className={`font-semibold text-sm px-4 rounded-full h-8 flex items-center justify-center select-none cursor-pointer transition-all border ${
-                    mode !== "view"
-                      ? "bg-gray-800 text-white hover:bg-gray-600 border-transparent"
-                      : "text-gray-700 hover:text-gray-800 hover:bg-gray-200 bg-gray-100 border-gray-300 hover:border-gray-400"
-                  }`}
-                >
-                  수정
-                </button>
-              </div>
-            )} */}
-
             {goalsWithScore.map((goal, index) => (
               <div
                 key={goal.id}

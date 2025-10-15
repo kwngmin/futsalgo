@@ -10,6 +10,7 @@ export interface MatchDataUser {
   nickname: string | null;
   image: string | null;
   position: Position | null;
+  isDeleted: boolean;
   name?: string; // 멤버인 경우에만 포함
 }
 
@@ -63,6 +64,7 @@ export interface MatchDataGoalUser {
   id: string;
   nickname: string | null;
   name?: string; // 멤버인 경우에만 포함
+  isDeleted: boolean;
 }
 
 export interface MatchDataGoal {

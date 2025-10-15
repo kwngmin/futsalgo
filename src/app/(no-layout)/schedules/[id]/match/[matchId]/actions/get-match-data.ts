@@ -83,6 +83,7 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           nickname: true,
           image: true,
           position: true,
+          isDeleted: true,
           // 멤버인 경우에만 실명 포함
           ...(isMember && { name: true }),
         },
@@ -90,7 +91,6 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
     },
     // 일관된 순서 유지를 위한 정렬 추가
     orderBy: { user: { nickname: "asc" } },
-    // orderBy: { user: { id: "asc" } },
   });
 
   // 4. 부가 정보 조회
@@ -113,6 +113,7 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           select: {
             id: true,
             nickname: true,
+            isDeleted: true,
             // 멤버인 경우에만 실명 포함
             ...(isMember && { name: true }),
           },
@@ -121,6 +122,7 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           select: {
             id: true,
             nickname: true,
+            isDeleted: true,
             // 멤버인 경우에만 실명 포함
             ...(isMember && { name: true }),
           },

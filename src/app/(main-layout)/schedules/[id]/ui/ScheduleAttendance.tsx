@@ -188,7 +188,9 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
                   )}
                   <div className="flex items-center gap-1.5">
                     <span className="font-medium hover:underline underline-offset-2 cursor-pointer">
-                      {attendance.user.nickname}
+                      {attendance.user.isDeleted
+                        ? "탈퇴한 회원"
+                        : attendance.user.nickname}
                     </span>
                     <span className="text-sm font-medium text-gray-500">
                       {attendance.user.name}

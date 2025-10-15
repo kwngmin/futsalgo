@@ -236,9 +236,11 @@ const GoalRecord = ({
       .filter((lineup) => lineup.userId !== excludeUserId)
       .map((lineup) => (
         <option key={lineup.id} value={lineup.userId}>
-          {`${lineup.user.nickname} ${
-            "name" in lineup.user ? `(${lineup.user.name})` : ""
-          }`}
+          {lineup.user.isDeleted
+            ? "탈퇴한 회원"
+            : `${lineup.user.nickname} ${
+                "name" in lineup.user ? `(${lineup.user.name})` : ""
+              }`}
         </option>
       ));
 

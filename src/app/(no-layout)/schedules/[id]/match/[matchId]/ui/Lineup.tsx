@@ -5,19 +5,21 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-type Lineup = LineupsData | LineupsWithNameData;
+type LineupItem = LineupsData[number] | LineupsWithNameData[number];
 
-const Lineup = ({
-  lineups,
-  MercenaryCount,
-}: // side,
-{
-  lineups: Lineup;
+interface LineupProps {
+  lineups: LineupsData | LineupsWithNameData;
   MercenaryCount: number | null;
-  // side: "home" | "away";
-}) => {
+}
+
+// 플레이어 이름 표시 헬퍼 함수
+const getPlayerName = (user: LineupItem["user"]): string => {
+  if (user.isDeleted) return "탈퇴한 회원";
+  return user.nickname ?? "알 수 없음";
+};
+
+const Lineup = ({ lineups, MercenaryCount }: LineupProps) => {
   const router = useRouter();
-  console.log(MercenaryCount, "MercenaryCount");
 
   if (!lineups) {
     return <div className="text-center text-sm text-gray-500">미정</div>;
@@ -25,20 +27,7 @@ const Lineup = ({
 
   return (
     <div className="border rounded-xl overflow-hidden bg-white hover:border-gray-400 transition-colors">
-      {/* <div className="font-medium text-muted-foreground py-2 flex gap-2 items-center px-4 h-11 bg-gray-50 border-b border-gray-200">
-        <div
-          className={`size-2 rounded-full ${
-            side === "home" ? "bg-indigo-600" : "bg-emerald-600"
-          }`}
-        />
-        <span
-          className={`${
-            side === "home" ? "text-indigo-700" : "text-emerald-700"
-          }`}
-        >
-          {side === "home" ? "홈" : "어웨이"}
-        </span>
-      </div> */}
+      {/* 플레이어 목록 */}
       {lineups.length > 0 &&
         lineups.map((player, index) => (
           <div
@@ -58,11 +47,17 @@ const Lineup = ({
                 className="hidden sm:block object-cover size-8 sm:size-9 rounded-full shrink-0 ring ring-gray-200"
               />
             ) : (
-              <div className="hidden sm:block size-10 rounded-full bg-gray-100"></div>
+              <div className="hidden sm:block size-9 rounded-full bg-gray-100 shrink-0"></div>
             )}
             <div className="w-full flex flex-col justify-center">
-              <span className="text-sm font-semibold leading-tight group-hover:underline underline-offset-2">
-                {player.user.nickname}
+              <span
+                className={`text-sm leading-tight group-hover:underline underline-offset-2 ${
+                  player.user.isDeleted
+                    ? "text-muted-foreground font-medium"
+                    : "font-semibold"
+                }`}
+              >
+                {getPlayerName(player.user)}
               </span>
               {/* 권한이 있는 경우에만 실명 표시 */}
               {"name" in player.user && (
@@ -74,11 +69,13 @@ const Lineup = ({
             <ChevronRight className="hidden md:group-hover:block size-4 text-gray-500 shrink-0" />
           </div>
         ))}
+
+      {/* 용병 목록 */}
       {MercenaryCount !== null &&
         MercenaryCount > 0 &&
         Array.from({ length: MercenaryCount }).map((_, index) => (
           <div
-            key={index}
+            key={`mercenary-${index}`}
             className="flex items-center gap-2 px-3 sm:px-4 h-14 select-none group border-b last:border-b-0 border-gray-200"
           >
             <span className="text-sm text-gray-400/80 mr-0.5 sm:mr-1">
@@ -95,6 +92,8 @@ const Lineup = ({
             </span>
           </div>
         ))}
+
+      {/* 빈 명단 메시지 */}
       {lineups.length === 0 && !MercenaryCount && (
         <div className="text-center text-sm font-medium text-muted-foreground py-2 flex items-center justify-center h-14">
           명단이 없습니다.

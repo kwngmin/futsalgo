@@ -17,6 +17,7 @@ import {
   Loader2,
   Ruler,
   Shapes,
+  UserCircle,
   VenusAndMars,
 } from "lucide-react";
 import { getCurrentAge } from "@/entities/user/model/actions";
@@ -146,51 +147,51 @@ const PlayerContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex justify-end items-center gap-1.5">
-          {/* 자기 자신이 아닐 때만 팔로우 버튼 표시 */}
-          {!isOwnProfile && (
+
+        {!playerData.isDeleted && (
+          <div className="flex justify-end items-center gap-1.5">
+            {/* 자기 자신이 아닐 때만 팔로우 버튼 표시 */}
+            {!isOwnProfile && (
+              <button
+                type="button"
+                className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
+                  isFollowing
+                    ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
+                    : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
+                }`}
+                onClick={() => handleFollowClick(id)}
+              >
+                {isFollowing ? "팔로잉" : "팔로우"}
+              </button>
+            )}
             <button
+              className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
               type="button"
-              className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
-                isFollowing
-                  ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
-                  : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
-              }`}
-              onClick={() => handleFollowClick(id)}
-            >
-              {isFollowing ? "팔로잉" : "팔로우"}
-            </button>
-          )}
-          <button
-            className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-            type="button"
-            onClick={async () => {
-              console.log(process.env.NODE_ENV, "env");
-              try {
-                if (process.env.NODE_ENV === "development") {
-                  console.log("development");
-                  await navigator.clipboard.writeText(
-                    `localhost:3000/players/${id}`
-                  );
-                } else {
-                  console.log("production");
-                  await navigator.clipboard.writeText(
-                    `www.futsalgo.com/players/${id}`
-                  );
+              onClick={async () => {
+                console.log(process.env.NODE_ENV, "env");
+                try {
+                  if (process.env.NODE_ENV === "development") {
+                    console.log("development");
+                    await navigator.clipboard.writeText(
+                      `localhost:3000/players/${id}`
+                    );
+                  } else {
+                    console.log("production");
+                    await navigator.clipboard.writeText(
+                      `www.futsalgo.com/players/${id}`
+                    );
+                  }
+                } catch (error) {
+                  console.error(error, "error");
+                } finally {
+                  alert("URL이 복사되었습니다.");
                 }
-              } catch (error) {
-                console.error(error, "error");
-              } finally {
-                alert("URL이 복사되었습니다.");
-              }
-            }}
-          >
-            <LinkIcon className="size-5" />
-          </button>
-          {/* <button className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer">
-            <EllipsisVertical className="size-5" />
-          </button> */}
-        </div>
+              }}
+            >
+              <LinkIcon className="size-5" />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="space-y-3">
@@ -201,13 +202,17 @@ const PlayerContent = ({ id }: { id: string }) => {
               {/* 프로필 사진 */}
               <div className="relative">
                 <div className="size-20 flex items-center justify-center shrink-0 overflow-hidden rounded-full border">
-                  <Image
-                    width={80}
-                    height={80}
-                    src={playerData.image || ""}
-                    alt="profile_image"
-                    className="object-cover scale-105"
-                  />
+                  {playerData.isDeleted ? (
+                    <UserCircle className="size-8 text-gray-400" />
+                  ) : (
+                    <Image
+                      width={80}
+                      height={80}
+                      src={playerData.image || ""}
+                      alt="profile_image"
+                      className="object-cover scale-105"
+                    />
+                  )}
                 </div>
                 {playerData.condition === "INJURED" && (
                   <InjuredBadge size="lg" />
@@ -215,7 +220,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl sm:text-lg font-semibold">
-                  {playerData.nickname}
+                  {playerData.isDeleted ? "탈퇴한 회원" : playerData.nickname}
                 </h1>
                 <span className="font-medium text-muted-foreground tracking-tight leading-tight">
                   {SKILL_LEVEL_OPTIONS.find(
@@ -308,7 +313,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-base font-medium text-gray-500">
-                  {formatKoreanDate(playerData.birthDate as string)}
+                  {playerData.isDeleted
+                    ? "-"
+                    : formatKoreanDate(playerData.birthDate as string)}
                 </span>
               </div>
             </div>
@@ -320,7 +327,9 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-base font-medium text-gray-500">
-                  {getCurrentAge(playerData.birthDate as string).age}살
+                  {playerData.isDeleted
+                    ? "-"
+                    : `${getCurrentAge(playerData.birthDate as string).age}살`}
                 </span>
               </div>
             </div>
@@ -332,7 +341,7 @@ const PlayerContent = ({ id }: { id: string }) => {
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-base font-medium text-gray-500">
-                  {playerData.height}cm
+                  {playerData.isDeleted ? "-" : `${playerData.height}cm`}
                 </span>
               </div>
             </div>

@@ -58,6 +58,7 @@ export const lineupsValidator = Prisma.validator<Prisma.LineupFindManyArgs>()({
         nickname: true,
         image: true,
         position: true,
+        isDeleted: true,
       },
     },
   },
@@ -75,6 +76,7 @@ export const lineupsWithNameValidator =
           nickname: true,
           image: true,
           position: true,
+          isDeleted: true,
         },
       },
     },
@@ -86,10 +88,10 @@ export const goalsValidator = Prisma.validator<Prisma.GoalRecordFindManyArgs>()(
     where: { matchId: "" },
     include: {
       scorer: {
-        select: { id: true, nickname: true },
+        select: { id: true, nickname: true, isDeleted: true },
       },
       assist: {
-        select: { id: true, nickname: true },
+        select: { id: true, nickname: true, isDeleted: true },
       },
     },
     orderBy: { createdAt: "asc" },
@@ -102,10 +104,10 @@ export const goalsWithNameValidator =
     where: { matchId: "" },
     include: {
       scorer: {
-        select: { id: true, name: true, nickname: true },
+        select: { id: true, name: true, nickname: true, isDeleted: true },
       },
       assist: {
-        select: { id: true, name: true, nickname: true },
+        select: { id: true, name: true, nickname: true, isDeleted: true },
       },
     },
     orderBy: { createdAt: "asc" },
