@@ -1,3 +1,5 @@
+"use server";
+
 // features/user/lib/withdrawal.ts
 import { PrismaClient } from "@prisma/client";
 
@@ -68,11 +70,10 @@ export async function withdrawUser(
           deletedAt: now,
           deleteReason: reason,
 
-          // 개인정보 마스킹
-          email: `deleted_${userId}@deleted.com`,
+          email: null,
           phone: null,
-          name: "탈퇴한 회원",
-          nickname: `탈퇴한 회원_${userId}`,
+          name: null,
+          nickname: null,
           image: null,
           instagram: null,
           youtube: null,

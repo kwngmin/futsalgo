@@ -5,15 +5,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { withdrawUser } from "./model/actions/withdrawal";
-import { requireAuth } from "@/shared/lib/auth-utils";
+// import { requireAuth } from "@/shared/lib/auth-utils";
+import { signOut, useSession } from "next-auth/react";
 
 export default function WithdrawPage() {
   const [reason, setReason] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const session = useSession();
+  const userId = session?.data?.user?.id;
 
   const handleWithdraw = async () => {
-    const userId = await requireAuth();
     if (!userId) {
       return;
     }
@@ -29,7 +31,7 @@ export default function WithdrawPage() {
     setIsLoading(true);
 
     try {
-      const response = await withdrawUser(userId.id, reason);
+      const response = await withdrawUser(userId, reason);
 
       if (!response.success) {
         alert(response.error || "탈퇴 처리에 실패했습니다.");
@@ -37,6 +39,7 @@ export default function WithdrawPage() {
       }
 
       alert("회원 탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다.");
+      await signOut();
       router.push("/");
       router.refresh();
     } catch (error) {
@@ -72,13 +75,13 @@ export default function WithdrawPage() {
             <button
               onClick={handleWithdraw}
               disabled={isLoading}
-              className="bg-red-600 text-white px-4 py-2 rounded-sm text-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium active:scale-95"
+              className="bg-red-600 text-white px-4 py-2 rounded-sm sm:text-sm hover:bg-red-700 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed font-medium active:scale-95"
             >
               {isLoading ? "처리 중..." : "탈퇴하기"}
             </button>
             <Link
               href="/more/profile"
-              className={`bg-gray-200 text-gray-700 px-4 py-2 rounded-sm text-sm hover:bg-gray-300 font-medium active:scale-95 ${
+              className={`bg-gray-200 text-gray-700 px-4 py-2 rounded-sm sm:text-sm hover:bg-gray-300 font-medium active:scale-95 ${
                 isLoading ? "opacity-50 pointer-events-none" : ""
               }`}
             >

@@ -183,12 +183,13 @@ export async function getPlayers(
     const skip = (page - 1) * PLAYERS_PER_PAGE;
 
     const filterConditions = createFilterConditions(filters);
-    const whereCondition = session?.user?.id
-      ? {
-          NOT: { id: session.user.id },
-          ...filterConditions,
-        }
-      : filterConditions;
+
+    // 올바른 조건: 탈퇴하지 않은 사용자만 + 자신 제외 (로그인한 경우)
+    const whereCondition = {
+      isDeleted: false, // 모든 사용자에 대해 탈퇴하지 않은 사용자만 조회
+      ...(session?.user?.id && { NOT: { id: session.user.id } }), // 로그인한 경우 자신 제외
+      ...filterConditions,
+    };
 
     const playersPromise = prisma.user.findMany({
       where: whereCondition,
@@ -250,16 +251,19 @@ export async function getFollowingPlayers(
     const skip = (page - 1) * PLAYERS_PER_PAGE;
     const filterConditions = createFilterConditions(filters);
 
-    // 내가 팔로우하는 사용자들 가져오기
-    const followingUsersPromise = prisma.user.findMany({
-      where: {
-        followers: {
-          some: {
-            followerId: session.user.id,
-          },
+    // 탈퇴하지 않은 사용자만 조회
+    const whereCondition = {
+      isDeleted: false, // 탈퇴하지 않은 사용자만
+      followers: {
+        some: {
+          followerId: session.user.id,
         },
-        ...filterConditions,
       },
+      ...filterConditions,
+    };
+
+    const followingUsersPromise = prisma.user.findMany({
+      where: whereCondition,
       include: createTeamIncludeOptions(),
       orderBy: {
         createdAt: "desc",
@@ -270,14 +274,7 @@ export async function getFollowingPlayers(
 
     // 팔로잉하는 사용자 총 개수 (필터 조건 적용)
     const totalCountPromise = prisma.user.count({
-      where: {
-        followers: {
-          some: {
-            followerId: session.user.id,
-          },
-        },
-        ...filterConditions,
-      },
+      where: whereCondition,
     });
 
     const [followingUsers, totalCount] = await Promise.all([
