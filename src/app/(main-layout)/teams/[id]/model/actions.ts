@@ -694,6 +694,8 @@ export async function leaveTeam(teamId: string) {
     });
 
     revalidatePath(`/teams/${teamId}`);
+    revalidatePath(`/`);
+    revalidatePath(`/schedules/my`);
 
     return {
       success: true,

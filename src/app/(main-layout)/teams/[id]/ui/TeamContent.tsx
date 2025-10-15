@@ -3,7 +3,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { cancelJoinTeam, getTeam, joinTeam, leaveTeam } from "../model/actions";
 import { followTeam } from "../actions/follow-team";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
   CircleX,
@@ -68,9 +68,10 @@ const TeamContent = ({ id }: { id: string }) => {
   const router = useRouter();
   const session = useSession();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+
   const [isLoading, setIsLoading] = useState(false);
   const [copy, setCopy] = useState(false);
-
   const [isIntroOpen, setIsIntroOpen] = useState(true);
 
   const { data, refetch } = useQuery({
@@ -99,6 +100,22 @@ const TeamContent = ({ id }: { id: string }) => {
       if (result?.success) {
         alert("팀 탈퇴가 완료되었습니다.");
         await refetch();
+        queryClient.invalidateQueries({
+          queryKey: ["teams", "all", id],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["teams", "following", id],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["schedules"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["my-schedules"],
+          refetchType: "all",
+        });
       } else {
         alert(result?.error);
       }
