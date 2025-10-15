@@ -2,6 +2,7 @@
 
 import { Profile } from "@/entities/user/model/types";
 import { auth } from "@/shared/lib/auth";
+import { encrypt, hashEmail, hashPhone } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 import { User } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -49,14 +50,24 @@ export async function updateProfileData(
 
     // 3. DB 업데이트 (부분 업데이트)
     const updateData: Partial<User> = {};
-    if (data.email) updateData.email = data.email;
-    if (data.phone) updateData.phone = data.phone;
+    if (data.email) {
+      const emailHashValue = hashEmail(data.email);
+      const encryptedEmail = encrypt(data.email);
+      updateData.emailHash = emailHashValue;
+      updateData.email = encryptedEmail;
+    }
+    if (data.phone) {
+      const phoneHashValue = hashPhone(data.phone);
+      const encryptedPhone = encrypt(data.phone);
+      updateData.phoneHash = phoneHashValue;
+      updateData.phone = encryptedPhone;
+    }
     if (data.nickname) updateData.nickname = data.nickname;
 
     // 프로필 데이터 처리
     if (data.profile) {
       // User 테이블의 직접 필드들
-      if (data.profile.name) updateData.name = data.profile.name;
+      if (data.profile.name) updateData.name = encrypt(data.profile.name);
       if (data.profile.foot) updateData.foot = data.profile.foot;
       if (data.profile.gender) updateData.gender = data.profile.gender;
       if (data.profile.height) updateData.height = data.profile.height;

@@ -271,7 +271,8 @@ model Session {
 
 model User {
   id              String     @id @default(cuid())
-  email           String?    @unique
+  email           String?    // 암호화된 이메일
+  emailHash       String?    @unique // 이메일 중복 체크용
   emailVerified   DateTime?  @map("email_verified")
   name            String?
   nickname        String?    @unique
@@ -279,7 +280,8 @@ model User {
   accounts        Account[]
   sessions        Session[]
 
-  phone           String?   @unique
+  phone           String?    // 암호화된 전화번호
+  phoneHash       String?    @unique // 전화번호 중복 체크용
   image           String?
 
   foot            Foot?   // 'left' | 'right' | 'both'

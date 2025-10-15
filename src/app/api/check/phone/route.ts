@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/shared/lib/prisma";
+import { hashPhone } from "@/shared/lib/crypto";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const phoneHashValue = hashPhone(phone);
+
     const existingUser = await prisma.user.findUnique({
-      where: { phone },
+      where: { phoneHash: phoneHashValue },
     });
 
     return NextResponse.json({ available: !existingUser });

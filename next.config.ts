@@ -16,51 +16,82 @@ const nextConfig: NextConfig = {
   // 정적 최적화 설정
   output: "standalone",
 
+  // 보안 헤더 설정
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            // HTTPS 강제 (1년간 유효, 서브도메인 포함)
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            // XSS 공격 방지
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            // 클릭재킹 방지
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            // XSS 필터 활성화
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            // Referer 정보 제한
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            // 권한 정책 설정
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
+      // Google 프로필 이미지
       {
-        // Google 프로필 이미지
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
         pathname: "/**",
       },
-      {
-        protocol: "http",
-        hostname: "t1.kakaocdn.net",
+      // 카카오 프로필 이미지 (https로 변경)
+      ...["img1.kakaocdn.net", "t1.kakaocdn.net", "k.kakaocdn.net"].map(
+        (hostname) => ({
+          protocol: "https" as const,
+          hostname,
+          pathname: "/**",
+        })
+      ),
+      // 네이버 프로필 이미지
+      ...[
+        "ssl.pstatic.net",
+        "phinf.pstatic.net",
+        "dthumb-phinf.pstatic.net",
+      ].map((hostname) => ({
+        protocol: "https" as const,
+        hostname,
         pathname: "/**",
-      },
+      })),
+      // 클라우드플레어 이미지
       {
-        // 카카오 프로필 이미지
-        protocol: "http",
-        hostname: "img1.kakaocdn.net",
-        pathname: "/**",
-      },
-      {
-        // 카카오 프로필 이미지
-        protocol: "http",
-        hostname: "k.kakaocdn.net",
-        pathname: "/**",
-      },
-      {
-        // 네이버 프로필 이미지
-        protocol: "https",
-        hostname: "ssl.pstatic.net",
-        pathname: "/**",
-      },
-      {
-        // 필요 시 네이버 등 다른 외부 도메인도 추가
-        protocol: "https",
-        hostname: "dthumb-phinf.pstatic.net",
-        pathname: "/**",
-      },
-      {
-        // 클라우드플레어 이미지 도메인
         protocol: "https",
         hostname: "imagedelivery.net",
         pathname: "/**",
       },
     ],
   },
+
   // 개발 모드에서 브라우저 확장 에러 억제
   webpack: (config) => {
     config.module.rules.push({

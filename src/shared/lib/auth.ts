@@ -5,6 +5,12 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter, AdapterUser, AdapterAccount } from "next-auth/adapters";
 import { OnboardingStep } from "@prisma/client";
 import authConfig from "../config/auth.config";
+import { encrypt, decrypt, hashEmail } from "@/shared/lib/crypto";
+
+function convertToHttps(url: string | null | undefined): string | null {
+  if (!url) return null;
+  return url.replace(/^http:\/\//i, "https://");
+}
 
 declare module "next-auth" {
   interface Session {
@@ -14,13 +20,13 @@ declare module "next-auth" {
       createdAt: Date;
       provider: string;
       onboardingStep: OnboardingStep;
-      isDeleted: boolean; // 추가
+      isDeleted: boolean;
     } & DefaultSession["user"];
   }
   interface User {
     nickname?: string | null;
     onboardingStep?: OnboardingStep;
-    isDeleted?: boolean; // 추가
+    isDeleted?: boolean;
   }
   interface JWT {
     id?: string;
@@ -28,7 +34,7 @@ declare module "next-auth" {
     createdAt?: Date;
     provider?: string;
     onboardingStep?: OnboardingStep;
-    isDeleted?: boolean; // 추가
+    isDeleted?: boolean;
   }
 }
 
@@ -53,26 +59,103 @@ export function CustomPrismaAdapter(): Adapter {
     async createUser(data): Promise<AdapterUser> {
       const { email, ...userData } = data;
 
+      // 케이스 1: 이메일이 없는 경우 → EMAIL 단계부터 시작
       if (!email) {
-        // 이메일이 없으면 그대로 생성
-        return adapter.createUser!(data);
+        const newUser = await prisma.user.create({
+          data: {
+            ...userData,
+            onboardingStep: OnboardingStep.EMAIL,
+          },
+        });
+
+        devLog("이메일 없이 사용자 생성:", {
+          id: newUser.id,
+          onboardingStep: OnboardingStep.EMAIL,
+        });
+
+        return {
+          ...newUser,
+          email: "",
+          emailVerified: newUser.emailVerified,
+        };
       }
 
       try {
+        const emailHashValue = hashEmail(email);
+
         const existingUser = await prisma.user.findUnique({
-          where: { email },
+          where: { emailHash: emailHashValue },
         });
 
+        // 케이스 3: 이메일 중복 → email = '' + EMAIL 단계
         if (existingUser) {
-          devLog(`이메일 충돌 감지: ${email} → 빈 문자열로 설정`);
-          return adapter.createUser!({ ...userData, email: "" });
+          devLog(`이메일 충돌 감지: ${email} → 빈 문자열 + EMAIL 단계`);
+
+          const newUser = await prisma.user.create({
+            data: {
+              ...userData,
+              email: "",
+              onboardingStep: OnboardingStep.EMAIL,
+            },
+          });
+
+          return {
+            ...newUser,
+            email: "",
+            emailVerified: newUser.emailVerified,
+          };
         }
 
-        // 이메일이 사용 가능하면 그대로 사용
-        return adapter.createUser!(data);
+        // 케이스 2: 이메일 제공 + 중복 없음 → 암호화 + PHONE 단계
+        const encryptedEmail = encrypt(email);
+
+        const newUser = await prisma.user.create({
+          data: {
+            ...userData,
+            email: encryptedEmail,
+            emailHash: emailHashValue,
+            onboardingStep: OnboardingStep.PHONE,
+          },
+        });
+
+        devLog("새 사용자 생성 (이메일 암호화):", {
+          email,
+          onboardingStep: OnboardingStep.PHONE,
+        });
+
+        return {
+          ...newUser,
+          email: decrypt(newUser.email || ""),
+          emailVerified: newUser.emailVerified,
+        };
       } catch (error) {
         console.error("사용자 생성 중 오류:", error);
         throw error;
+      }
+    },
+
+    async getUserByEmail(email): Promise<AdapterUser | null> {
+      if (!email) return null;
+
+      try {
+        const emailHashValue = hashEmail(email);
+
+        const user = await prisma.user.findUnique({
+          where: { emailHash: emailHashValue },
+        });
+
+        if (!user) return null;
+
+        const decryptedEmail = user.email ? decrypt(user.email) : "";
+
+        return {
+          ...user,
+          email: decryptedEmail,
+          emailVerified: user.emailVerified,
+        };
+      } catch (error) {
+        console.error("사용자 조회 중 오류:", error);
+        return null;
       }
     },
 
@@ -129,7 +212,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             onboardingStep: true,
             email: true,
             createdAt: true,
-            isDeleted: true, // 추가
+            isDeleted: true,
           },
         });
 
@@ -145,12 +228,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.createdAt = dbUser.createdAt;
           token.provider = account?.provider;
           token.onboardingStep = dbUser.onboardingStep;
-          token.isDeleted = dbUser.isDeleted; // 추가
+          token.isDeleted = dbUser.isDeleted;
 
           devLog("[JWT] 기존 사용자 로그인:", {
             id: token.id,
             onboardingStep: token.onboardingStep,
-            email: dbUser.email,
             isDeleted: token.isDeleted,
           });
         } else {
@@ -164,9 +246,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.onboardingStep = user.email
             ? OnboardingStep.PHONE
             : OnboardingStep.EMAIL;
-          token.isDeleted = false; // 신규 사용자는 false
+          token.isDeleted = false;
 
-          devLog("[JWT] 신규 사용자 생성:", {
+          devLog("[JWT] 예외: DB에서 찾지 못한 사용자:", {
             id: token.id,
             hasEmail: !!user.email,
             onboardingStep: token.onboardingStep,
@@ -181,7 +263,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           select: {
             nickname: true,
             onboardingStep: true,
-            isDeleted: true, // 추가
+            isDeleted: true,
           },
         });
 
@@ -194,7 +276,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           token.nickname = dbUser.nickname;
           token.onboardingStep = dbUser.onboardingStep;
-          token.isDeleted = dbUser.isDeleted; // 추가
+          token.isDeleted = dbUser.isDeleted;
 
           devLog("[JWT] 토큰 업데이트:", {
             id: token.id,
@@ -214,7 +296,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.createdAt = token.createdAt as Date;
         session.user.provider = token.provider as string;
         session.user.onboardingStep = token.onboardingStep as OnboardingStep;
-        session.user.isDeleted = token.isDeleted as boolean; // 추가
+        session.user.image = convertToHttps(token.picture as string | null);
+        session.user.isDeleted = token.isDeleted as boolean;
       }
       return session;
     },

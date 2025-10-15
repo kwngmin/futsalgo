@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/shared/lib/prisma";
+import { hashEmail } from "@/shared/lib/crypto";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const emailHashValue = hashEmail(email);
+
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { emailHash: emailHashValue },
     });
 
     return NextResponse.json({ available: !existingUser });
