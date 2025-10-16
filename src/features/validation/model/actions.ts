@@ -2,6 +2,7 @@
 
 import { prisma } from "@/shared/lib/prisma";
 import { ValidationField } from "./types";
+import { hashEmail, hashPhone } from "@/shared/lib/crypto";
 
 /**
  * 팀 이름 중복 검증 server action
@@ -142,8 +143,9 @@ export async function validateField(
  */
 export async function checkPhoneAvailability(phone: string) {
   try {
+    const phoneHash = hashPhone(phone);
     const existingUser = await prisma.user.findFirst({
-      where: { phone },
+      where: { phoneHash },
       select: { id: true },
     });
 
@@ -194,8 +196,9 @@ export async function checkNicknameAvailability(nickname: string) {
  */
 export async function checkEmailAvailability(email: string) {
   try {
+    const emailHash = hashEmail(email);
     const existingUser = await prisma.user.findFirst({
-      where: { email },
+      where: { emailHash: emailHash },
       select: { id: true },
     });
 
