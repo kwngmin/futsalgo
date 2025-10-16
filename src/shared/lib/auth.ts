@@ -7,10 +7,16 @@ import { OnboardingStep } from "@prisma/client";
 import authConfig from "../config/auth.config";
 import { encrypt, decrypt, hashEmail } from "@/shared/lib/crypto";
 
-function convertToHttps(url: string | null | undefined): string | null {
-  if (!url) return null;
-  return url.replace(/^http:\/\//i, "https://");
-}
+// function convertToHttps(url: string | null | undefined): string | null {
+//   if (!url) return null;
+
+//   // http를 https로 변경
+//   if (url.startsWith("http://")) {
+//     return url.replace("http://", "https://");
+//   }
+
+//   return url;
+// }
 
 declare module "next-auth" {
   interface Session {
@@ -296,7 +302,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.createdAt = token.createdAt as Date;
         session.user.provider = token.provider as string;
         session.user.onboardingStep = token.onboardingStep as OnboardingStep;
-        session.user.image = convertToHttps(token.picture as string | null);
+        // session.user.image = convertToHttps(token.picture as string | null);
         session.user.isDeleted = token.isDeleted as boolean;
       }
       return session;

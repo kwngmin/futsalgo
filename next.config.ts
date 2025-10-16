@@ -66,12 +66,19 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
       // 카카오 프로필 이미지 (https로 변경)
-      ...["img1.kakaocdn.net", "t1.kakaocdn.net", "k.kakaocdn.net"].map(
-        (hostname) => ({
-          protocol: "https" as const,
-          hostname,
-          pathname: "/**",
-        })
+      ...["img1.kakaocdn.net", "t1.kakaocdn.net", "k.kakaocdn.net"].flatMap(
+        (hostname) => [
+          {
+            protocol: "https" as const,
+            hostname,
+            pathname: "/**",
+          },
+          {
+            protocol: "http" as const,
+            hostname,
+            pathname: "/**",
+          },
+        ]
       ),
       // 네이버 프로필 이미지
       ...[
