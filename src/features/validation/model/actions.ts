@@ -1,46 +1,7 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-
-/**
- * 생년월일 유효성 검증 함수
- * @param birthDate 8자리 생년월일 문자열 (예: "19850101")
- * @returns 유효한 생년월일인지 여부
- */
-export function validateBirthDate(birthDate: string): boolean {
-  // 8자리 숫자인지 확인
-  if (!/^\d{8}$/.test(birthDate)) {
-    return false;
-  }
-
-  const year = parseInt(birthDate.substring(0, 4));
-  const month = parseInt(birthDate.substring(4, 6));
-  const day = parseInt(birthDate.substring(6, 8));
-
-  // 년도 범위 확인 (1900년 ~ 현재년도)
-  const currentYear = new Date().getFullYear();
-  if (year < 1900 || year > currentYear) {
-    return false;
-  }
-
-  // 월 범위 확인
-  if (month < 1 || month > 12) {
-    return false;
-  }
-
-  // 일 범위 확인
-  if (day < 1 || day > 31) {
-    return false;
-  }
-
-  // 실제 날짜 유효성 확인
-  const date = new Date(year, month - 1, day);
-  return (
-    date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day
-  );
-}
+import { ValidationField } from "./types";
 
 /**
  * 팀 이름 중복 검증 server action
@@ -105,6 +66,177 @@ export async function checkTeamNameAvailability({
     return {
       success: false,
       error: "서버 오류가 발생했습니다.",
+    };
+  }
+}
+
+/**
+ * 필드별 검증 server action
+ * @param field 검증할 필드 타입
+ * @param value 검증할 값
+ * @param setField 상태 업데이트 함수
+ */
+export async function validateField(
+  field: "phone" | "nickname" | "email" | "teamCode",
+  value: string,
+  setField: React.Dispatch<React.SetStateAction<ValidationField>>
+) {
+  try {
+    setField((prev) => ({
+      ...prev,
+      status: "checking",
+    }));
+
+    let result;
+
+    switch (field) {
+      case "phone":
+        result = await checkPhoneAvailability(value);
+        break;
+      case "nickname":
+        result = await checkNicknameAvailability(value);
+        break;
+      case "email":
+        result = await checkEmailAvailability(value);
+        break;
+      case "teamCode":
+        result = await checkTeamCodeAvailability(value);
+        break;
+      default:
+        throw new Error(`Unknown field type: ${field}`);
+    }
+
+    if (result.success) {
+      if (result.isDuplicate) {
+        setField((prev) => ({
+          ...prev,
+          status: "invalid",
+          error: result.message,
+        }));
+      } else {
+        setField((prev) => ({
+          ...prev,
+          status: "valid",
+          error: undefined,
+        }));
+      }
+    } else {
+      setField((prev) => ({
+        ...prev,
+        status: "invalid",
+        error: result.error || "검증 중 오류가 발생했습니다.",
+      }));
+    }
+  } catch (error) {
+    console.error(`${field} validation error:`, error);
+    setField((prev) => ({
+      ...prev,
+      status: "invalid",
+      error: "검증 중 오류가 발생했습니다.",
+    }));
+  }
+}
+
+/**
+ * 전화번호 중복 검증 server action
+ */
+async function checkPhoneAvailability(phone: string) {
+  try {
+    const existingUser = await prisma.user.findFirst({
+      where: { phone },
+      select: { id: true },
+    });
+
+    return {
+      success: true,
+      isDuplicate: !!existingUser,
+      message: existingUser
+        ? "이미 사용 중인 전화번호입니다."
+        : "사용 가능한 전화번호입니다.",
+    };
+  } catch (error) {
+    console.error("Phone validation error:", error);
+    return {
+      success: false,
+      error: "전화번호 검증 중 오류가 발생했습니다.",
+    };
+  }
+}
+
+/**
+ * 닉네임 중복 검증 server action
+ */
+async function checkNicknameAvailability(nickname: string) {
+  try {
+    const existingUser = await prisma.user.findFirst({
+      where: { nickname },
+      select: { id: true },
+    });
+
+    return {
+      success: true,
+      isDuplicate: !!existingUser,
+      message: existingUser
+        ? "이미 사용 중인 닉네임입니다."
+        : "사용 가능한 닉네임입니다.",
+    };
+  } catch (error) {
+    console.error("Nickname validation error:", error);
+    return {
+      success: false,
+      error: "닉네임 검증 중 오류가 발생했습니다.",
+    };
+  }
+}
+
+/**
+ * 이메일 중복 검증 server action
+ */
+async function checkEmailAvailability(email: string) {
+  try {
+    const existingUser = await prisma.user.findFirst({
+      where: { email },
+      select: { id: true },
+    });
+
+    return {
+      success: true,
+      isDuplicate: !!existingUser,
+      message: existingUser
+        ? "이미 사용 중인 이메일입니다."
+        : "사용 가능한 이메일입니다.",
+    };
+  } catch (error) {
+    console.error("Email validation error:", error);
+    return {
+      success: false,
+      error: "이메일 검증 중 오류가 발생했습니다.",
+    };
+  }
+}
+
+/**
+ * 팀 코드 중복 검증 server action
+ */
+async function checkTeamCodeAvailability(teamCode: string) {
+  try {
+    const existingTeam = await prisma.team.findFirst({
+      where: { code: teamCode },
+      select: { id: true },
+    });
+
+    return {
+      success: true,
+      isDuplicate: !!existingTeam,
+      message: existingTeam
+        ? "이미 사용 중인 팀 코드입니다."
+        : "사용 가능한 팀 코드입니다.",
+    };
+  } catch (error) {
+    console.error("Team code validation error:", error);
+    return {
+      success: false,
+      error: "팀 코드 검증 중 오류가 발생했습니다.",
     };
   }
 }

@@ -13,7 +13,7 @@ import { Button } from "@/shared/components/ui/button";
 import { GENDER_OPTIONS } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { updateProfileData } from "../../model/actions";
-import { validateBirthDate } from "@/features/validation/model/actions";
+import { validateBirthDate } from "@/features/validation/lib/validate-birth-date";
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({

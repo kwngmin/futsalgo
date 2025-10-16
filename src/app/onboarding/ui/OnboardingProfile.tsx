@@ -32,7 +32,7 @@ import {
   SKILL_LEVEL_OPTIONS,
 } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
-import { validateBirthDate } from "@/features/validation/model/actions";
+import { validateBirthDate } from "@/features/validation/lib/validate-birth-date";
 import { updateOnboardingStep } from "../model/actions/onboarding-actions";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
