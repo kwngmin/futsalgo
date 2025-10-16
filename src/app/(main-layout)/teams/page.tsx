@@ -342,7 +342,7 @@ const TeamsPage = () => {
             <div className="text-center py-12 flex flex-col items-center justify-center">
               {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
               <SmileyXEyesIcon
-                className="size-28 mx-auto text-gray-200 mb-4"
+                className="size-24 mx-auto text-gray-300 mb-3"
                 weight="fill"
               />
               <h3 className="text-lg font-medium text-gray-900">
