@@ -1,50 +1,52 @@
 // app/api/encrypt/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { encrypt } from "@/shared/lib/crypto";
-import { z } from "zod";
-
-// Request 스키마 정의
-const encryptRequestSchema = z.object({
-  text: z.string().min(1, "Text is required"),
-});
+import { validateApiKey, checkRateLimit } from "@/shared/lib/api-auth";
 
 export async function POST(request: NextRequest) {
+  // API 키 검증
+  const auth = validateApiKey(request);
+  if (!auth.isValid) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status });
+  }
+
+  // Rate limiting (API 키별로 제한)
+  const apiKey = request.headers.get("x-api-key")!;
+  if (!checkRateLimit(apiKey)) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
+
   try {
-    // Request body 파싱
     const body = await request.json();
 
-    // 유효성 검사
-    const validationResult = encryptRequestSchema.safeParse(body);
-
-    if (!validationResult.success) {
+    // 입력 검증
+    if (!body.text || typeof body.text !== "string") {
       return NextResponse.json(
-        {
-          error: "Invalid request",
-          details: validationResult.error.flatten(),
-        },
+        { error: "Missing or invalid 'text' field" },
         { status: 400 }
       );
     }
 
-    const { text } = validationResult.data;
-
     // 암호화 수행
-    const encrypted = encrypt(text);
+    const encrypted = encrypt(body.text);
 
-    return NextResponse.json(
-      {
-        encrypted,
-        success: true,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      success: true,
+      encrypted,
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
     console.error("Encryption error:", error);
-
     return NextResponse.json(
       {
         error: "Encryption failed",
-        message: error instanceof Error ? error.message : "Unknown error",
+        details:
+          process.env.NODE_ENV === "development"
+            ? (error as Error).message
+            : undefined,
       },
       { status: 500 }
     );
