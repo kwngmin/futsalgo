@@ -1,82 +1,70 @@
-import { Dispatch, SetStateAction } from "react";
-import { ValidationField } from "./types";
-import { createApiRequestOptions, safeJsonParse } from "@/shared/lib/api-utils";
+"use server";
 
-// API 응답 타입 정의
-interface ValidationResponse {
-  available: boolean;
-}
+import { prisma } from "@/shared/lib/prisma";
 
-// 중복확인 함수
-export const validateField = async (
-  type: "email" | "phone" | "nickname" | "teamCode",
-  value: string,
-  setFieldState: Dispatch<SetStateAction<ValidationField>>
-) => {
-  if (!value || value.trim() === "") return;
-
-  setFieldState((prev) => ({ ...prev, status: "checking" }));
-
+/**
+ * 팀 이름 중복 검증 server action
+ * @param name 검증할 팀 이름
+ * @param teamId 수정 시 현재 팀 ID (선택사항)
+ * @returns 중복 여부를 포함한 결과
+ */
+export async function checkTeamNameAvailability({
+  name,
+  teamId,
+}: {
+  name: string;
+  teamId?: string;
+}) {
   try {
-    const response = await fetch(
-      `/api/check/${type}`,
-      createApiRequestOptions("POST", { [type]: value })
-    );
-
-    const data = await safeJsonParse<ValidationResponse>(response);
-
-    if (data.available) {
-      setFieldState((prev) => ({
-        ...prev,
-        status: "valid",
-        error: undefined,
-      }));
-    } else {
-      setFieldState((prev) => ({
-        ...prev,
-        status: "invalid",
-        error:
-          type === "teamCode"
-            ? `존재하지 않는 팀 코드입니다`
-            : `이미 사용 중인 ${
-                type === "email"
-                  ? "이메일"
-                  : type === "phone"
-                  ? "전화번호"
-                  : "닉네임"
-              }입니다`,
-      }));
+    if (!name || typeof name !== "string") {
+      return {
+        success: false,
+        error: "팀 이름이 필요합니다.",
+      };
     }
+
+    const trimmedName = name.trim();
+
+    if (trimmedName.length === 0) {
+      return {
+        success: false,
+        error: "팀 이름을 입력해주세요.",
+      };
+    }
+
+    // 기존 팀 이름과 중복 검사 (수정 시에는 현재 팀 제외)
+    const whereClause: {
+      name: string;
+      id?: { not: string };
+    } = {
+      name: trimmedName,
+    };
+
+    if (teamId) {
+      whereClause.id = {
+        not: teamId,
+      };
+    }
+
+    const existingTeam = await prisma.team.findFirst({
+      where: whereClause,
+      select: {
+        id: true,
+      },
+    });
+
+    return {
+      success: true,
+      isDuplicate: !!existingTeam,
+      message: existingTeam
+        ? "이미 사용 중인 팀 이름입니다."
+        : "사용 가능한 팀 이름입니다.",
+    };
   } catch (error) {
-    console.error(`${type} validation error:`, error);
-    setFieldState((prev) => ({
-      ...prev,
-      status: "invalid",
-      error: "확인 중 오류가 발생했습니다",
-    }));
+    console.error("팀 이름 중복 검증 오류:", error);
+    return {
+      success: false,
+      error: "서버 오류가 발생했습니다.",
+    };
   }
-};
-
-// 생년월일 검증 함수
-export const validateBirthDate = (birthDate: string): boolean => {
-  // 8자리 숫자인지 확인
-  if (!/^\d{8}$/.test(birthDate)) return false;
-
-  // 유효한 날짜인지 확인
-  const year = parseInt(birthDate.substring(0, 4));
-  const month = parseInt(birthDate.substring(4, 6));
-  const day = parseInt(birthDate.substring(6, 8));
-
-  // 기본 범위 체크
-  if (year < 1900 || year > new Date().getFullYear()) return false;
-  if (month < 1 || month > 12) return false;
-  if (day < 1 || day > 31) return false;
-
-  // 실제 날짜 유효성 체크
-  const date = new Date(year, month - 1, day);
-  return (
-    date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day
-  );
-};
+}

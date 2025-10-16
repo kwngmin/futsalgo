@@ -23,6 +23,7 @@ import { TeamLevel } from "@prisma/client";
 import { cityData } from "@/features/search-address-sgis/constants";
 import { useDistricts } from "@/app/(main-layout)/schedules/lib/use-districts";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTeamNameValidation } from "@/features/validation/hooks/use-team-name-validation";
 
 const teamSchema = z.object({
   name: z.string().min(1, "팀 이름을 입력해주세요"),
@@ -50,6 +51,9 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>();
 
   const router = useRouter();
+
+  // 팀 이름 validation hook
+  const { teamName, onChange: onTeamNameChange } = useTeamNameValidation();
   const {
     register,
     handleSubmit,
@@ -125,6 +129,12 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (data: TeamFormData) => {
+    // 팀 이름 validation 체크
+    if (teamName.status === "invalid" || teamName.status === "checking") {
+      setError("name", { message: "팀 이름을 확인해주세요." });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -217,7 +227,30 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                     {...register("name")}
                     type="text"
                     placeholder="팀 이름을 입력하세요"
+                    value={teamName.value}
+                    onChange={(e) => {
+                      onTeamNameChange(e.target.value);
+                      setValue("name", e.target.value);
+                    }}
                   />
+                  {teamName.status === "checking" && (
+                    <p className="text-sm text-blue-600">
+                      팀 이름을 확인하고 있습니다...
+                    </p>
+                  )}
+                  {teamName.status === "valid" && (
+                    <p className="text-sm text-green-600">
+                      사용 가능한 팀 이름입니다.
+                    </p>
+                  )}
+                  {teamName.status === "invalid" && teamName.error && (
+                    <p className="text-sm text-red-600">{teamName.error}</p>
+                  )}
+                  {errors.name && (
+                    <p className="text-sm text-red-600">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-3">
