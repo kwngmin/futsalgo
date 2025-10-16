@@ -270,42 +270,6 @@ const TeamContent = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
-
-            {/* 탭 */}
-            {/* <div className="flex items-center justify-between gap-2 px-4 border-b">
-              <div className="flex h-12 space-x-2">
-                {tabs.map((tab) => (
-                  <div
-                    key={tab.value}
-                    className={`flex justify-center items-center min-w-14 font-semibold text-base px-2 cursor-pointer border-b-4 ${
-                      selectedTab === tab.value
-                        ? "border-gray-700"
-                        : "border-transparent"
-                    } ${
-                      tab.isDisabled ? "pointer-events-none opacity-50" : ""
-                    }`}
-                    onClick={() => setSelectedTab(tab.value)}
-                  >
-                    {tab.label}
-                  </div>
-                ))}
-              </div>
-            </div> */}
-
-            {/* 탭 */}
-            {/* <div className="bg-slate-100 flex items-center px-4 sm:px-2 sm:mx-4 h-12  sm:rounded-full">
-              {tabs.map((tab) => (
-                <div
-                  key={tab.value}
-                  className={`flex justify-center items-center font-semibold text-base px-4 cursor-pointer h-9 rounded-full ${
-                    selectedTab === tab.value ? "bg-black text-white" : ""
-                  } ${tab.isDisabled ? "pointer-events-none opacity-50" : ""}`}
-                  onClick={() => setSelectedTab(tab.value)}
-                >
-                  {tab.label}
-                </div>
-              ))}
-            </div> */}
           </div>
 
           {/* 가입하기 */}

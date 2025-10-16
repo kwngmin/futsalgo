@@ -311,7 +311,9 @@ const FollowingTeamsPage = () => {
         />
       )}
 
-      {isLoggedIn && myTeams.length === 0 && <RegisterTeamButton />}
+      {!isLoading && isLoggedIn && myTeams.length === 0 && (
+        <RegisterTeamButton />
+      )}
 
       {isLoading ? (
         <SkeletonContent />
