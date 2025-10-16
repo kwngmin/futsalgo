@@ -176,14 +176,14 @@ const EditTeamForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-4 bg-white rounded-2xl pt-6"
+      className="space-y-6 p-4 sm:p-6 bg-gray-50 rounded-2xl"
     >
       <div className="space-y-3">
         <Label className="">팀 소개</Label>
         <Textarea
           {...register("description")}
           // className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none"
-          className="min-h-24"
+          className="min-h-24 bg-white"
           placeholder="팀에 대한 간단한 소개를 작성해주세요"
         />
       </div>
@@ -247,6 +247,7 @@ const EditTeamForm = ({
             type="text"
             {...register("instagram")}
             placeholder="아이디를 입력하세요"
+            className="bg-white"
           />
         </div>
 
@@ -256,13 +257,14 @@ const EditTeamForm = ({
             type="text"
             {...register("youtube")}
             placeholder="채널명을 입력하세요"
+            className="bg-white"
           />
         </div>
       </div>
 
       {/* 활동 지역 섹션 */}
-      <div className="bg-white rounded-lg overflow-hidden">
-        <div className="w-full flex items-center justify-between py-3 border-b border-gray-100">
+      <div className="overflow-hidden">
+        <div className="w-full flex items-center justify-between py-3 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <MapPin className="size-5" />
             <span className="font-medium">활동 지역</span>
