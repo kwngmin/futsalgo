@@ -140,7 +140,7 @@ export async function validateField(
 /**
  * 전화번호 중복 검증 server action
  */
-async function checkPhoneAvailability(phone: string) {
+export async function checkPhoneAvailability(phone: string) {
   try {
     const existingUser = await prisma.user.findFirst({
       where: { phone },
@@ -166,7 +166,7 @@ async function checkPhoneAvailability(phone: string) {
 /**
  * 닉네임 중복 검증 server action
  */
-async function checkNicknameAvailability(nickname: string) {
+export async function checkNicknameAvailability(nickname: string) {
   try {
     const existingUser = await prisma.user.findFirst({
       where: { nickname },
@@ -192,7 +192,7 @@ async function checkNicknameAvailability(nickname: string) {
 /**
  * 이메일 중복 검증 server action
  */
-async function checkEmailAvailability(email: string) {
+export async function checkEmailAvailability(email: string) {
   try {
     const existingUser = await prisma.user.findFirst({
       where: { email },
@@ -218,7 +218,7 @@ async function checkEmailAvailability(email: string) {
 /**
  * 팀 코드 중복 검증 server action
  */
-async function checkTeamCodeAvailability(teamCode: string) {
+export async function checkTeamCodeAvailability(teamCode: string) {
   try {
     const existingTeam = await prisma.team.findFirst({
       where: { code: teamCode },
