@@ -8,7 +8,7 @@ interface MainLayoutProps {
 
 const MainLayout = async ({ children }: MainLayoutProps) => {
   return (
-    <div className="min-h-dvh">
+    <div className="min-h-dvh flex justify-center">
       {/* 네비게이션 로딩 인디케이터 */}
       <NavigationLoading />
 
@@ -17,7 +17,12 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
       <SideNav />
 
       {/* 콘텐츠 */}
-      <main className="md:pl-20 lg:pl-72 pb-28 md:pb-0">{children}</main>
+      <main
+        className="pb-28 md:pb-0 w-full lg:max-w-3xl"
+        // className="md:pl-20 lg:pl-72 pb-28 md:pb-0"
+      >
+        {children}
+      </main>
 
       {/* 모바일 하단 네비게이션 */}
       <BottomNav />

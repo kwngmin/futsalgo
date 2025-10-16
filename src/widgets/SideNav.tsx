@@ -19,7 +19,7 @@ const Logo = memo(({ isMobile = false }: { isMobile?: boolean }) => {
   if (isMobile) {
     return (
       <Link
-        className="flex items-center justify-center h-18 cursor-pointer active:scale-95 transition-all duration-200"
+        className="flex items-center justify-center h-18 cursor-pointer active:scale-95 transition-all duration-200 shrink-0"
         href="/"
       >
         <Image
@@ -36,7 +36,7 @@ const Logo = memo(({ isMobile = false }: { isMobile?: boolean }) => {
 
   return (
     <Link
-      className="flex items-center justify-center h-24 px-8 cursor-pointer my-1 active:scale-95 transition-all duration-200"
+      className="flex items-center justify-center h-24 px-8 cursor-pointer my-1 active:scale-95 transition-all duration-200 shrink-0"
       href="/"
     >
       <Image
@@ -150,7 +150,7 @@ const SideNav = () => {
   return (
     <>
       {/* 데스크톱 사이드바 */}
-      <aside className="hidden lg:flex lg:fixed lg:inset-y-0 lg:left-1/2 -translate-x-[31.5rem] lg:w-64 lg:bg-white lg:border-r lg:border-gray-200">
+      <aside className="hidden lg:flex lg:w-64 lg:bg-white lg:border-r lg:border-gray-200 max-h-dvh sticky top-0">
         <div className="flex flex-col w-full">
           <Logo />
           <div className="grow flex flex-col justify-between overflow-y-auto">
@@ -161,7 +161,7 @@ const SideNav = () => {
       </aside>
 
       {/* 태블릿 사이드바 */}
-      <aside className="hidden md:flex md:lg:hidden md:fixed md:inset-y-0 md:left-0 md:w-20 md:bg-white md:border-r md:border-gray-200">
+      <aside className="hidden md:flex md:lg:hidden md:w-20 md:bg-white md:border-r md:border-gray-200 sticky top-0">
         <div className="flex flex-col w-full">
           <Logo isMobile />
           <div className="grow flex flex-col justify-between overflow-y-auto">
