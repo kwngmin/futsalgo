@@ -62,7 +62,7 @@ const ScheduleSection = ({
     <div className="text-center py-12 flex flex-col items-center justify-center">
       {/* <div className="w-16 h-16 mx-auto text-gray-300 mb-4" /> */}
       <SmileyXEyesIcon
-        className="size-24 mx-auto text-gray-300"
+        className="size-24 mx-auto text-gray-300 mb-3"
         weight="fill"
         // weight="light"
       />

@@ -295,9 +295,7 @@ const TeamsPage = () => {
         />
       )}
 
-      {isLoggedIn && !myTeams && Array.isArray(myTeams) && (
-        <RegisterTeamButton onClick={() => router.push("/teams/create")} />
-      )}
+      {isLoggedIn && myTeams.length === 0 && <RegisterTeamButton />}
 
       {isLoading ? (
         <SkeletonContent />
