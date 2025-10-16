@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/shared/lib/auth";
+import { decrypt } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 import { Prisma, TeamMemberRole, TeamMemberStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -137,9 +138,16 @@ export async function getTeam(id: string) {
     });
 
     // 승인된 멤버들만 필터링
-    const approvedMembers = members.filter(
-      (member) => member.status === "APPROVED"
-    );
+    const approvedMembers = members
+      .filter((member) => member.status === "APPROVED")
+      .map((member) => ({
+        ...member,
+        user: {
+          ...member.user,
+          ...(member.user.name && { name: decrypt(member.user.name) }),
+          ...(member.user.phone && { phone: decrypt(member.user.phone) }),
+        },
+      }));
 
     // 승인된 멤버들만 필터링
     const pendingMembers = members.filter(

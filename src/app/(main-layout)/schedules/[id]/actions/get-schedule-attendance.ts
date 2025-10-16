@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/shared/lib/auth";
+import { decrypt } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 import { AttendanceStatus } from "@prisma/client";
 
@@ -104,7 +105,15 @@ export async function getScheduleAttendance(scheduleId: string) {
       data: {
         hostTeam,
         invitedTeam,
-        attendances,
+        attendances: attendances.map((attendance) => ({
+          ...attendance,
+          user: {
+            ...attendance.user,
+            ...(attendance.user.name && {
+              name: decrypt(attendance.user.name),
+            }),
+          },
+        })),
         manageableTeams,
         schedule,
       },

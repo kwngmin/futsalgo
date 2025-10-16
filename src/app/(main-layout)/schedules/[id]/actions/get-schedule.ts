@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/shared/lib/auth";
+import { decrypt } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 
 export async function getSchedule(scheduleId: string) {
@@ -117,7 +118,21 @@ export async function getSchedule(scheduleId: string) {
     return {
       success: true,
       data: {
-        schedule,
+        schedule: {
+          ...schedule,
+          matches: schedule.matches.map((match) => ({
+            ...match,
+            goals: match.goals.map((goal) => ({
+              ...goal,
+              scorer: goal.scorer
+                ? { ...goal.scorer, name: decrypt(goal.scorer.name || "") }
+                : null,
+              assist: goal.assist
+                ? { ...goal.assist, name: decrypt(goal.assist.name || "") }
+                : null,
+            })),
+          })),
+        },
         isManager,
         isMember,
       },

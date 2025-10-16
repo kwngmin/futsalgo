@@ -1,5 +1,6 @@
 import { prisma } from "@/shared/lib/prisma";
 import ManageAttendanceContent from "./ui/ManageAttendanceContent";
+import { decrypt } from "@/shared/lib/crypto";
 
 const ManageAttendancePage = async ({
   params,
@@ -47,7 +48,13 @@ const ManageAttendancePage = async ({
 
   return (
     <ManageAttendanceContent
-      data={attendances}
+      data={attendances.map((attendance) => ({
+        ...attendance,
+        user: {
+          ...attendance.user,
+          ...(attendance.user.name && { name: decrypt(attendance.user.name) }),
+        },
+      }))}
       scheduleId={id}
       teamId={teamId}
       teamType={teamType}

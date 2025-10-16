@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/shared/lib/auth";
+import { decrypt } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 
 export const getMatchData = async (matchId: string, scheduleId: string) => {
@@ -137,7 +138,13 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
 
   return {
     match,
-    lineups,
+    lineups: lineups.map((lineup) => ({
+      ...lineup,
+      user: {
+        ...lineup.user,
+        ...(lineup.user.name && { name: decrypt(lineup.user.name) }),
+      },
+    })),
     allMatches,
     goals,
     matchOrder,
