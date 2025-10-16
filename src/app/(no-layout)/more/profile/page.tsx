@@ -3,6 +3,7 @@ import { prisma } from "@/shared/lib/prisma";
 import { Loader2 } from "lucide-react";
 import { redirect } from "next/navigation";
 import ProfileContent from "./ui/ProfileContent";
+import { decrypt } from "@/shared/lib/crypto";
 
 const ProfilePage = async () => {
   const session = await auth();
@@ -31,7 +32,14 @@ const ProfilePage = async () => {
     );
   }
 
-  return <ProfileContent data={user} />;
+  const data = {
+    ...user,
+    name: decrypt(user.name || ""),
+    phone: decrypt(user.phone || ""),
+    email: decrypt(user.email || ""),
+  };
+
+  return <ProfileContent data={data} />;
 };
 
 export default ProfilePage;

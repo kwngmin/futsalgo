@@ -50,13 +50,13 @@ const ProfileNickname = ({
             placeholder="닉네임을 입력하세요"
           />
           {nickname.status === "checking" && (
-            <Loader2 className="absolute right-3 top-2.5 h-4 w-4 animate-spin" />
+            <Loader2 className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 animate-spin" />
           )}
           {nickname.status === "valid" && (
-            <Check className="absolute right-3 top-2.5 h-4 w-4 text-green-600" />
+            <Check className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 text-green-600" />
           )}
           {nickname.status === "invalid" && (
-            <X className="absolute right-3 top-2.5 h-4 w-4 text-red-600" />
+            <X className="absolute right-3 top-4 sm:top-3.5 h-4 w-4 text-red-600" />
           )}
         </div>
         {nickname.error && (

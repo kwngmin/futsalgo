@@ -143,7 +143,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased  overflow-y-scroll`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-scroll`}
       >
         <Toaster position="top-center" />
         <SessionProviderWrapper session={session}>

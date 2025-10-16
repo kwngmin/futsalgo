@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/shared/lib/auth";
+import { decrypt } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 import { AttendanceStatus } from "@prisma/client";
 
@@ -155,12 +156,20 @@ export async function getScheduleMvp(scheduleId: string) {
       (att) => att.teamType === "INVITED"
     );
 
+    const decryptedAttendances = attendances.map((att) => ({
+      ...att,
+      user: {
+        ...att.user,
+        ...(att.user.name && { name: decrypt(att.user.name) }),
+      },
+    }));
+
     return {
       success: true,
       data: {
         hostTeam,
         invitedTeam,
-        attendances,
+        attendances: decryptedAttendances,
         manageableTeams,
         schedule,
         currentUserAttendance,
