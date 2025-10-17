@@ -348,7 +348,9 @@ const TeamsPage = () => {
               <h3 className="text-lg font-medium text-gray-900">
                 팀이 없습니다
               </h3>
-              <p className="text-gray-500 mb-6">새로운 팀을 만들어보세요</p>
+              <p className="text-gray-500 mb-6">
+                새로운 팀을 만들거나 필터를 변경해보세요
+              </p>
             </div>
           )}
 

@@ -66,7 +66,7 @@ const ScheduleSection = ({
       />
       <h3 className="text-lg font-medium text-gray-900">일정이 없습니다</h3>
       <p className="text-gray-500 mb-6">
-        일정을 등록하고 경기 내용을 기록하세요
+        새로운 일정을 등록하거나 필터를 변경해보세요
       </p>
     </div>
   );
