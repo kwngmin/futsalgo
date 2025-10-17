@@ -8,6 +8,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Check, Loader2, X } from "lucide-react";
 import { updateNickname } from "../../model/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfileNickname = ({
   data,
@@ -16,6 +17,7 @@ const ProfileNickname = ({
   data?: string;
   onSuccess: () => void;
 }) => {
+  const queryClient = useQueryClient();
   const { nickname, onChange } = useNicknameValidation();
 
   // 단계별 진행
@@ -24,6 +26,30 @@ const ProfileNickname = ({
       try {
         await updateNickname(nickname.value);
         alert("닉네임이 성공적으로 업데이트되었습니다.");
+        queryClient.invalidateQueries({
+          queryKey: ["players"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["player"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["team"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["schedule"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["matchData"],
+          refetchType: "all",
+        });
         onSuccess?.();
       } catch (error) {
         console.error("닉네임 업데이트 실패:", error);

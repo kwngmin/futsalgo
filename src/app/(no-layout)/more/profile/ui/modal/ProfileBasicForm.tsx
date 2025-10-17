@@ -14,6 +14,7 @@ import { GENDER_OPTIONS } from "@/entities/user/model/constants";
 import CustomRadioGroup from "@/shared/components/ui/custom-radio-group";
 import { updateProfileData } from "../../model/actions";
 import { validateBirthDate } from "@/features/validation/lib/validate-birth-date";
+import { useQueryClient } from "@tanstack/react-query";
 
 // 프로필 스키마 (개선된 버전)
 const profileSchema = z.object({
@@ -40,6 +41,7 @@ const ProfileBasicForm = ({
   data: User;
   onSuccess: () => void;
 }) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -68,6 +70,30 @@ const ProfileBasicForm = ({
 
       if (response.success) {
         alert("프로필이 성공적으로 저장되었습니다.");
+        queryClient.invalidateQueries({
+          queryKey: ["players"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["player"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["team"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["schedule"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["scheduleAttendance"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["matchData"],
+          refetchType: "all",
+        });
         onSuccess?.(); // 성공 시 콜백 실행 (모달 닫기)
       } else {
         throw new Error(response.error || "저장에 실패했습니다.");

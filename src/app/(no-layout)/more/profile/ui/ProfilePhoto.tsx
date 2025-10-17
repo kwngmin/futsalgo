@@ -7,8 +7,10 @@ import { Camera, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import updateProfilePhoto from "../model/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfilePhoto = ({ url, userId }: { url?: string; userId: string }) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(url || null);
@@ -69,6 +71,30 @@ const ProfilePhoto = ({ url, userId }: { url?: string; userId: string }) => {
 
         if (result.success) {
           alert("프로필 사진이 성공적으로 업데이트되었습니다.");
+          queryClient.invalidateQueries({
+            queryKey: ["players"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["player"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["team"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["schedule"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["scheduleAttendance"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["matchData"],
+            refetchType: "all",
+          });
         } else {
           alert(result.message);
         }

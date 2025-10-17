@@ -210,7 +210,7 @@ const PlayerContent = ({ id }: { id: string }) => {
                       height={80}
                       src={playerData.image || ""}
                       alt="profile_image"
-                      className="object-cover scale-105"
+                      className="object-cover w-full h-full"
                     />
                   )}
                 </div>

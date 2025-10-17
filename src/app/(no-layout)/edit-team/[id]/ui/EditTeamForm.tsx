@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { cityData } from "@/features/search-address-sgis/constants";
 import { useDistricts } from "@/app/(main-layout)/schedules/lib/use-districts";
 import { Input } from "@/shared/components/ui/input";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type EditTeamFormData = z.infer<typeof editTeamFormSchema>;
 
@@ -35,6 +36,7 @@ const EditTeamForm = ({
   teamId: string;
   userId: string;
 }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   console.log(data, "data");
@@ -133,7 +135,14 @@ const EditTeamForm = ({
 
       if (result.success) {
         console.log("✅ Team update successful:", result);
-
+        queryClient.invalidateQueries({
+          queryKey: ["teams"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["team"],
+          refetchType: "all",
+        });
         // 성공 알림
         alert(result.message || "팀 정보가 업데이트되었습니다.");
 

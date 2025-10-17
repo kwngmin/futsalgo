@@ -4,25 +4,10 @@ import updateTeamLogo from "@/features/update-team-logo/model/actions";
 import { Button } from "@/shared/components/ui/button";
 import { createUploadUrl } from "@/shared/lib/cloudflare/create-upload-url";
 import { uploadImage } from "@/shared/lib/cloudflare/upload-image";
+import { useQueryClient } from "@tanstack/react-query";
 import { Camera, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
-
-// {
-//   "result": {
-//       "id": "af60720b-94cd-4c34-9ed3-409a4e216d00",
-//       "filename": "doosan.png",
-//       "meta": {},
-//       "uploaded": "2025-06-26T06:32:52.244Z",
-//       "requireSignedURLs": false,
-//       "variants": [
-//           "https://imagedelivery.net/pXiEidAZDcXP-QKb9ZHtcg/af60720b-94cd-4c34-9ed3-409a4e216d00/public"
-//       ]
-//   },
-//   "success": true,
-//   "errors": [],
-//   "messages": []
-// }
 
 const EditTeamLogo = ({
   url,
@@ -33,6 +18,7 @@ const EditTeamLogo = ({
   teamId: string;
   userId: string;
 }) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(url || null);
@@ -94,6 +80,14 @@ const EditTeamLogo = ({
 
         if (result.success) {
           alert("팀 로고가 성공적으로 업데이트되었습니다.");
+          queryClient.invalidateQueries({
+            queryKey: ["teams"],
+            refetchType: "all",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["team"],
+            refetchType: "all",
+          });
         } else {
           alert(result.message);
         }

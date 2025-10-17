@@ -9,6 +9,7 @@ import { Check, Loader2, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { updatePhone } from "../../model/actions";
 import { formatPhoneNumber } from "@/entities/user/model/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfilePhone = ({
   data,
@@ -17,6 +18,7 @@ const ProfilePhone = ({
   data?: string;
   onSuccess: () => void;
 }) => {
+  const queryClient = useQueryClient();
   const { phone, onChange } = usePhoneValidation();
 
   const handleClick = async () => {
@@ -24,6 +26,10 @@ const ProfilePhone = ({
       try {
         await updatePhone(phone.value);
         alert("전화번호가 성공적으로 업데이트되었습니다.");
+        queryClient.invalidateQueries({
+          queryKey: ["team"],
+          refetchType: "all",
+        });
         onSuccess?.();
       } catch (error) {
         console.error("전화번호 업데이트 실패:", error);

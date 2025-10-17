@@ -29,6 +29,7 @@ import {
   SKILL_LEVEL_POINTS,
 } from "@/app/onboarding/ui/OnboardingProfile";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 
 const RATING_ITEMS = [
   { key: "shooting", label: "슈팅" },
@@ -61,6 +62,7 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 const ProfileForm = ({ data }: { data: User }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -150,6 +152,14 @@ const ProfileForm = ({ data }: { data: User }) => {
 
       if (response.success) {
         alert("프로필이 성공적으로 저장되었습니다.");
+        queryClient.invalidateQueries({
+          queryKey: ["players"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["player"],
+          refetchType: "all",
+        });
         router.push("/more");
       } else {
         throw new Error(response.error || "저장에 실패했습니다.");
