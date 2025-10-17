@@ -11,6 +11,7 @@ import {
   Bug,
   Lightbulb,
   Instagram,
+  ExternalLink,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -26,31 +27,11 @@ const MorePage = () => {
         {
           icon: CircleUserRound,
           label: "프로필 수정",
-          // action: () => {
-          //   setIsLoading(true);
-          //   router.push("/profile");
-          // },
           href: "/more/profile",
+          key: "profile",
         },
-        // {
-        //   icon: NotebookPen,
-        //   label: "작성한 후기",
-        //   action: () => {
-        //     alert("작성한 후기");
-        //   },
-        // },
       ],
     },
-    // {
-    //   category: "분석",
-    //   items: [
-    //     {
-    //       icon: ChartPie,
-    //       label: "통계",
-    //       action: () => alert("통계"),
-    //     },
-    //   ],
-    // },
     {
       category: "지원",
       items: [
@@ -58,28 +39,31 @@ const MorePage = () => {
           icon: Instagram,
           label: "풋살고 인스타그램",
           href: "https://www.instagram.com/futsalgo_official/",
+          key: "instagram",
         },
         {
           icon: Lightbulb,
           label: "제안하기",
           href: "/more/suggestion",
+          key: "suggestion",
         },
         {
           icon: Bug,
           label: "버그 신고하기",
           href: "/more/bug-report",
+          key: "bug-report",
         },
         {
           icon: FileText, //
           label: "이용약관",
           href: "/terms",
-          // action: () => alert("이용약관"),
+          key: "terms",
         },
         {
           icon: Shield,
           label: "개인정보처리방침",
           href: "/privacy",
-          // action: () => alert("개인정보처리방침"),
+          key: "privacy",
         },
       ],
     },
@@ -120,7 +104,7 @@ const MorePage = () => {
                 className="text-base bg-black text-white px-6 min-w-28 py-1.5 rounded-full font-bold cursor-pointer active:scale-98"
                 href="/login"
               >
-                시작하기
+                로그인
               </Link>
             </div>
           </div>
@@ -149,21 +133,18 @@ const MorePage = () => {
                         ? "/login"
                         : item.href
                     }
-                    target={
-                      item.label === "풋살고 인스타그램" ? "_blank" : undefined
-                    }
-                    // href={item.href}
-                    // onClick={item.action}
+                    target={item.key === "instagram" ? "_blank" : undefined}
                     className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 sm:hover:rounded-lg transition-colors cursor-pointer active:bg-gray-100"
-                    // className={`w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 hover:rounded-lg transition-colors cursor-pointer ${
-                    //   itemIndex !== section.items.length - 1 ? `border-b` : ""
-                    // }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <item.icon className="size-5 text-gray-600" />
+                      <item.icon className="size-6 text-gray-600" />
                       <span className="font-medium">{item.label}</span>
                     </div>
-                    <ChevronRight className="size-5 text-gray-400" />
+                    {item.key === "instagram" ? (
+                      <ExternalLink className="size-5 text-gray-400" />
+                    ) : (
+                      <ChevronRight className="size-5 text-gray-400" />
+                    )}
                   </Link>
                 ))}
               </div>

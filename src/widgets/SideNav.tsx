@@ -65,7 +65,7 @@ const FooterLinks = memo(({ iconOnly = false }: { iconOnly?: boolean }) => (
       } text-gray-700 hover:bg-gray-50 font-medium`}
       aria-label="개인정보처리방침"
     >
-      <Shield className="size-5 text-gray-600" />
+      <Shield className="size-6 text-gray-600" />
       {!iconOnly && "개인정보처리방침"}
     </Link>
     <Link
@@ -77,7 +77,7 @@ const FooterLinks = memo(({ iconOnly = false }: { iconOnly?: boolean }) => (
       } text-gray-700 hover:bg-gray-50 font-medium`}
       aria-label="이용약관"
     >
-      <FileText className="size-5 text-gray-600" />
+      <FileText className="size-6 text-gray-600" />
       {!iconOnly && "이용약관"}
     </Link>
   </nav>

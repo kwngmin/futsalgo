@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Flame, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { Team } from "@prisma/client";
 import { useState } from "react";
 import { FieldModal } from "@/app/(no-layout)/more/profile/ui/FieldModal";
@@ -8,6 +8,7 @@ import EditTeamForm from "./EditTeamForm";
 import EditTeamLogo from "./EditTeamLogo";
 import EditTeamName from "./EditTeamName";
 import Link from "next/link";
+import { SignpostIcon } from "@phosphor-icons/react";
 
 export default function EditTeamContent({
   data,
@@ -41,10 +42,15 @@ export default function EditTeamContent({
           className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-t border-gray-100"
         >
           <div className="flex items-center space-x-3">
-            <Flame className="size-5 text-gray-600" />
+            <SignpostIcon
+              className="size-5 text-gray-600"
+              // weight="fill"
+              weight="bold"
+            />
             <span className="font-medium">{data.name}</span>
           </div>
           <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">팀 이름 변경</span>
             <ChevronRight className="size-5 text-gray-400" />
           </div>
         </div>
