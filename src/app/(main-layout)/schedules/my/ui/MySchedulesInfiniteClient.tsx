@@ -231,6 +231,13 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
           <p className="text-gray-500 mb-6">
             일정을 등록하고 경기 내용을 기록하세요
           </p>
+          <button
+            // onClick={handleAllPlayersClick}
+            onClick={() => handleMySchedulesTabChange("schedules")}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium cursor-pointer"
+          >
+            경기일정 보기
+          </button>
         </div>
       )}
 
