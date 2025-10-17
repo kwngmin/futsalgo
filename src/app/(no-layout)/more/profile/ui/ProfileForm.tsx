@@ -177,7 +177,7 @@ const ProfileForm = ({ data }: { data: User }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="border mx-4 space-y-6 p-4 bg-white rounded-2xl pt-6"
+      className="mx-4 space-y-6 p-4 sm:p-6 bg-gray-50 rounded-2xl"
     >
       {/* 부상 여부 */}
       <div className="space-y-3">
@@ -338,7 +338,7 @@ const ProfileForm = ({ data }: { data: User }) => {
             </div>
           </div>
 
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 bg-white rounded-lg px-4">
             {RATING_ITEMS.map((item, index) => (
               <div
                 key={item.key}

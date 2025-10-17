@@ -179,9 +179,9 @@ const ProfilePhoto = ({ url, userId }: { url?: string; userId: string }) => {
       ) : (
         <label
           htmlFor="avatar"
-          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-3 h-8 font-semibold"
+          className="cursor-pointer rounded-full flex items-center gap-2 border border-input px-3 h-9 font-semibold"
         >
-          <Camera className="size-5 text-gray-600" />
+          <Camera className="size-6 text-gray-600" />
           <span className="font-medium">
             {isLoading ? "로딩중..." : "프로필 사진 변경"}
           </span>

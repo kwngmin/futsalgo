@@ -52,13 +52,13 @@ export default function ProfileContent({ data }: { data: User }) {
         >
           <div className="flex items-center space-x-3">
             {field === "nickname" ? (
-              <IdCard className={`size-5 text-gray-600`} />
+              <IdCard className={`size-6 text-gray-600`} />
             ) : field === "email" ? (
-              <Mail className={`size-5 text-gray-600`} />
+              <Mail className={`size-6 text-gray-600`} />
             ) : field === "phone" ? (
-              <Phone className={`size-5 text-gray-600`} />
+              <Phone className={`size-6 text-gray-600`} />
             ) : (
-              <User2 className="size-5 text-gray-600" />
+              <User2 className="size-6 text-gray-600" />
             )}
             <span className="font-medium">
               {field === "basic"
