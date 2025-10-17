@@ -121,8 +121,6 @@ const NewScheduleForm = ({
   const [deadlineDate, setDeadlineDate] = useState<Date>();
   const queryClient = useQueryClient();
 
-  const { teamCode, onChange, resetValidation } = useTeamCodeValidation();
-
   const [selectedCity, setSelectedCity] = useState<string>();
   const [selectedDistrict, setSelectedDistrict] = useState<string>();
   // 주최팀 정보가 초기 설정되었는지 추적하는 플래그
@@ -218,6 +216,9 @@ const NewScheduleForm = ({
 
   const hostTeamId = watch("hostTeamId");
   const matchType = watch("matchType");
+
+  const { teamCode, onChange, resetValidation } =
+    useTeamCodeValidation(hostTeamId);
 
   // 주최팀 정보 가져오기 - 메모이제이션으로 최적화
   const hostTeamInfo = useMemo(() => {
@@ -494,10 +495,36 @@ const NewScheduleForm = ({
                 </div>
                 {teamCode.error && (
                   <Alert
+                    // variant={
+                    //   teamCode.duplicateMembers ? "warning" : "destructive"
+                    // }
                     variant="destructive"
-                    className="bg-destructive/5 border-none"
+                    className={
+                      teamCode.duplicateMembers
+                        ? "bg-orange-50 border-orange-200"
+                        : "bg-destructive/5 border-none"
+                    }
                   >
-                    <AlertDescription>{teamCode.error}</AlertDescription>
+                    <AlertDescription>
+                      {teamCode.error}
+
+                      {/* 중복 멤버가 많은 경우 상세 리스트 표시 (선택사항) */}
+                      {teamCode.duplicateMembers &&
+                        teamCode.duplicateMembers.length > 3 && (
+                          <details className="mt-2">
+                            <summary className="cursor-pointer text-sm font-medium">
+                              중복 멤버 전체 보기
+                            </summary>
+                            <ul className="mt-1 text-sm space-y-0.5">
+                              {teamCode.duplicateMembers.map((name, index) => (
+                                <li key={index} className="ml-4">
+                                  • {name}
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        )}
+                    </AlertDescription>
                   </Alert>
                 )}
 

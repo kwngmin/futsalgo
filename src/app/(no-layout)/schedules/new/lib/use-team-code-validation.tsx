@@ -15,9 +15,10 @@ interface TeamValidationField extends ValidationField {
     level: string;
     gender: string;
   };
+  duplicateMembers?: string[];
 }
 
-export function useTeamCodeValidation() {
+export function useTeamCodeValidation(hostTeamId?: string) {
   const [teamCode, setTeamCode] = useState<TeamValidationField>({
     value: "",
     status: "idle",
@@ -32,6 +33,7 @@ export function useTeamCodeValidation() {
           value: "",
           status: "idle",
           team: undefined,
+          duplicateMembers: undefined,
         });
         return;
       }
@@ -44,6 +46,19 @@ export function useTeamCodeValidation() {
           status: "invalid",
           error: "팀 코드는 6자리 숫자여야 합니다",
           team: undefined,
+          duplicateMembers: undefined,
+        }));
+        return;
+      }
+
+      // 주최팀이 선택되지 않은 경우 경고
+      if (!hostTeamId) {
+        setTeamCode((prev) => ({
+          ...prev,
+          status: "invalid",
+          error: "먼저 주최팀을 선택해주세요",
+          team: undefined,
+          duplicateMembers: undefined,
         }));
         return;
       }
@@ -54,10 +69,14 @@ export function useTeamCodeValidation() {
         status: "checking",
         error: undefined,
         team: undefined,
+        duplicateMembers: undefined,
       }));
 
       try {
-        const result = await validateTeamCodeAndGetInfo(debouncedTeamCode);
+        const result = await validateTeamCodeAndGetInfo(
+          debouncedTeamCode,
+          hostTeamId // 주최팀 ID 전달
+        );
 
         if (!result.success) {
           setTeamCode((prev) => ({
@@ -65,6 +84,7 @@ export function useTeamCodeValidation() {
             status: "invalid",
             error: result.error || "서버 오류가 발생했습니다",
             team: undefined,
+            duplicateMembers: undefined,
           }));
           return;
         }
@@ -75,6 +95,7 @@ export function useTeamCodeValidation() {
             status: "valid",
             error: undefined,
             team: result.team,
+            duplicateMembers: undefined,
           }));
         } else {
           setTeamCode((prev) => ({
@@ -82,6 +103,7 @@ export function useTeamCodeValidation() {
             status: "invalid",
             error: result.error || "존재하지 않는 팀 코드입니다",
             team: undefined,
+            duplicateMembers: result.duplicateMembers,
           }));
         }
       } catch (error) {
@@ -91,12 +113,13 @@ export function useTeamCodeValidation() {
           status: "invalid",
           error: "팀 코드 확인 중 오류가 발생했습니다",
           team: undefined,
+          duplicateMembers: undefined,
         }));
       }
     };
 
     validateTeamCode();
-  }, [debouncedTeamCode]);
+  }, [debouncedTeamCode, hostTeamId]);
 
   const onChange = (raw: string) => {
     // 숫자만 허용하고 6자리 제한
@@ -107,6 +130,7 @@ export function useTeamCodeValidation() {
       status: "idle",
       error: undefined,
       team: undefined,
+      duplicateMembers: undefined,
     }));
   };
 
@@ -116,6 +140,7 @@ export function useTeamCodeValidation() {
       status: "idle",
       error: undefined,
       team: undefined,
+      duplicateMembers: undefined,
     });
   };
 
