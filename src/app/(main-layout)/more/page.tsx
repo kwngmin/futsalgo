@@ -10,6 +10,7 @@ import {
   CircleUserRound,
   Bug,
   Lightbulb,
+  Instagram,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -53,6 +54,11 @@ const MorePage = () => {
     {
       category: "지원",
       items: [
+        {
+          icon: Instagram,
+          label: "풋살고 인스타그램",
+          href: "https://www.instagram.com/futsalgo_official/",
+        },
         {
           icon: Lightbulb,
           label: "제안하기",
@@ -142,6 +148,9 @@ const MorePage = () => {
                         item.label === "버그 신고하기")
                         ? "/login"
                         : item.href
+                    }
+                    target={
+                      item.label === "풋살고 인스타그램" ? "_blank" : undefined
                     }
                     // href={item.href}
                     // onClick={item.action}
