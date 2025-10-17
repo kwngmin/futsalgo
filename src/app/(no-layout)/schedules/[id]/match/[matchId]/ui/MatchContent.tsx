@@ -383,6 +383,11 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
   const handleDeleteGoal = async (goalId: string) => {
     await handleAsyncOperation(async () => {
       await deleteGoalRecord(goalId);
+      queryClient.invalidateQueries({
+        queryKey: ["schedule"],
+        refetchType: "all",
+      });
+
       return { success: true };
     });
   };

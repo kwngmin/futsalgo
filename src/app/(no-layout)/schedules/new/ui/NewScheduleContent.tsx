@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import NewScheduleForm from "./NewScheduleForm";
 // import { getTeam } from "@/features/add-schedule/model/actions/get-my-team";
@@ -28,7 +28,12 @@ const NewScheduleContent = ({ userId }: { userId: string }) => {
   };
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-8 text-center min-h-[80vh] flex flex-col items-center justify-center">
+        <Loader2 className="animate-spin mx-auto mb-4" size={48} />
+        <p className="text-gray-500">데이터를 불러오는 중...</p>
+      </div>
+    );
   }
 
   if (data.success === false) {
