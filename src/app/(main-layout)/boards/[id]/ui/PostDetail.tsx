@@ -1,80 +1,54 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Eye, MessageCircle, Heart, Trash2, Edit } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getPost, type PostDetail } from "../../actions/get-post";
+import { deletePost } from "../../actions/delete-post";
+import { useRouter } from "next/navigation";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 import PostComments from "./PostComments";
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  views: number;
-  createdAt: string;
-  author: {
-    id: string;
-    nickname: string;
-    image?: string;
-  };
-  _count: {
-    comments: number;
-    likes: number;
-  };
-}
 
 interface PostDetailProps {
   postId: string;
+  initialData?: PostDetail;
 }
 
 /**
  * 게시글 상세보기 컴포넌트
  * @param postId - 게시글 ID
+ * @param initialData - 초기 데이터
  * @returns 게시글 상세보기
  */
-const PostDetail = ({ postId }: PostDetailProps) => {
+const PostDetail = ({ postId, initialData }: PostDetailProps) => {
   const { data: session } = useSession();
-  const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  /**
-   * 게시글 조회
-   */
-  const fetchPost = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/posts/${postId}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setPost(data);
-      } else {
-        console.error("Failed to fetch post:", data.error);
-      }
-    } catch (error) {
-      console.error("Error fetching post:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [postId]);
+  // TanStack Query를 사용한 데이터 페칭
+  const { data, isLoading, error } = useQuery({
+    queryKey: createEntityQueryKey("post", "detail", { postId }),
+    queryFn: () => getPost(postId),
+    initialData: initialData ? { success: true, data: initialData } : undefined,
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 가비지 컬렉션 방지
+  });
 
   /**
    * 게시글 삭제
    */
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/posts/${postId}`, {
-        method: "DELETE",
-      });
+      const result = await deletePost(postId);
 
-      if (response.ok) {
+      if (result.success) {
         // 삭제 성공 시 목록으로 이동
-        window.location.href = "/boards";
+        router.push("/boards");
       } else {
-        const data = await response.json();
-        alert(data.error || "삭제에 실패했습니다.");
+        alert(result.error || "삭제에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -82,11 +56,8 @@ const PostDetail = ({ postId }: PostDetailProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchPost();
-  }, [postId, fetchPost]);
-
-  if (loading) {
+  // 초기 데이터가 있는 경우 로딩 상태를 보여주지 않음
+  if (isLoading && !initialData) {
     return (
       <div className="p-4">
         <div className="animate-pulse">
@@ -103,7 +74,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
     );
   }
 
-  if (!post) {
+  if (error || !data?.success || !data.data) {
     return (
       <div className="p-4 text-center text-gray-500">
         게시글을 찾을 수 없습니다.
@@ -111,6 +82,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
     );
   }
 
+  const post = data.data;
   const isAuthor = session?.user?.id === post.author.id;
 
   return (
@@ -125,7 +97,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
             </span>
             <span className="text-gray-500">•</span>
             <span>
-              {formatDistanceToNow(new Date(post.createdAt), {
+              {formatDistanceToNow(post.createdAt, {
                 addSuffix: true,
                 locale: ko,
               })}
@@ -169,7 +141,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
       </div>
 
       {/* 댓글 섹션 */}
-      <PostComments postId={postId} />
+      <PostComments postId={postId} initialComments={post.comments} />
 
       {/* 게시글 수정 및 삭제 버튼 */}
       {isAuthor && (

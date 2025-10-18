@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import PostDetail from "./ui/PostDetail";
 import PostHeader from "./ui/PostHeader";
+import { getPost } from "../actions/get-post";
 
 /**
  * 게시글 페이지 메타데이터 생성
@@ -52,12 +52,16 @@ interface PostPageProps {
 const PostPage = async ({ params }: PostPageProps) => {
   const { id } = await params;
 
+  // 서버에서 초기 데이터 가져오기
+  const initialData = await getPost(id);
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <PostHeader id={id} />
-      <Suspense fallback={<div className="p-4">로딩 중...</div>}>
-        <PostDetail postId={id} />
-      </Suspense>
+      <PostDetail
+        postId={id}
+        initialData={initialData.success ? initialData.data : undefined}
+      />
     </div>
   );
 };

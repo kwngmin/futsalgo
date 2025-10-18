@@ -1,63 +1,52 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { MessageCircle, Reply, Edit, Trash2 } from "lucide-react";
-import { createApiRequestOptions } from "@/shared/lib/api-utils";
-
-interface Comment {
-  id: string;
-  content: string;
-  createdAt: string;
-  author: {
-    id: string;
-    nickname: string;
-    image?: string;
-  };
-  replies: Comment[];
-}
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getComments,
+  createComment,
+  updateComment,
+  deleteComment,
+  type Comment,
+} from "../../actions/comment-actions";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
 interface PostCommentsProps {
   postId: string;
+  initialComments?: Comment[];
 }
 
 /**
  * 게시글 댓글 컴포넌트
  * @param postId - 게시글 ID
+ * @param initialComments - 초기 댓글 데이터
  * @returns 댓글 섹션
  */
-const PostComments = ({ postId }: PostCommentsProps) => {
+const PostComments = ({ postId, initialComments }: PostCommentsProps) => {
   const { data: session } = useSession();
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
 
-  /**
-   * 댓글 목록 조회
-   */
-  const fetchComments = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/posts/${postId}/comments`);
-      const data = await response.json();
+  // TanStack Query를 사용한 댓글 데이터 페칭
+  const { data, isLoading } = useQuery({
+    queryKey: createEntityQueryKey("comments", "list", { postId }),
+    queryFn: () => getComments(postId),
+    initialData: initialComments
+      ? { success: true, data: initialComments }
+      : undefined,
+    staleTime: 2 * 60 * 1000, // 2분간 캐시 유지
+    gcTime: 5 * 60 * 1000, // 5분간 가비지 컬렉션 방지
+  });
 
-      if (response.ok) {
-        setComments(data);
-      } else {
-        console.error("Failed to fetch comments:", data.error);
-      }
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [postId]);
+  const comments = data?.success ? data.data || [] : [];
 
   /**
    * 새 댓글 작성
@@ -66,17 +55,16 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await fetch(
-        `/api/posts/${postId}/comments`,
-        createApiRequestOptions("POST", { content: newComment })
-      );
+      const result = await createComment(postId, newComment);
 
-      if (response.ok) {
+      if (result.success) {
         setNewComment("");
-        fetchComments();
+        // 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("comments", "list", { postId }),
+        });
       } else {
-        const data = await response.json();
-        alert(data.error || "댓글 작성에 실패했습니다.");
+        alert(result.error || "댓글 작성에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error creating comment:", error);
@@ -91,18 +79,17 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     if (!replyContent.trim()) return;
 
     try {
-      const response = await fetch(
-        `/api/posts/${postId}/comments`,
-        createApiRequestOptions("POST", { content: replyContent, parentId })
-      );
+      const result = await createComment(postId, replyContent, parentId);
 
-      if (response.ok) {
+      if (result.success) {
         setReplyContent("");
         setReplyingTo(null);
-        fetchComments();
+        // 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("comments", "list", { postId }),
+        });
       } else {
-        const data = await response.json();
-        alert(data.error || "답글 작성에 실패했습니다.");
+        alert(result.error || "답글 작성에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error creating reply:", error);
@@ -117,18 +104,17 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     if (!editContent.trim()) return;
 
     try {
-      const response = await fetch(
-        `/api/posts/${postId}/comments/${commentId}`,
-        createApiRequestOptions("PUT", { content: editContent })
-      );
+      const result = await updateComment(commentId, editContent);
 
-      if (response.ok) {
+      if (result.success) {
         setEditContent("");
         setEditingComment(null);
-        fetchComments();
+        // 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("comments", "list", { postId }),
+        });
       } else {
-        const data = await response.json();
-        alert(data.error || "댓글 수정에 실패했습니다.");
+        alert(result.error || "댓글 수정에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error updating comment:", error);
@@ -143,18 +129,15 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     if (!confirm("정말로 이 댓글을 삭제하시겠습니까?")) return;
 
     try {
-      const response = await fetch(
-        `/api/posts/${postId}/comments/${commentId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const result = await deleteComment(commentId);
 
-      if (response.ok) {
-        fetchComments();
+      if (result.success) {
+        // 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("comments", "list", { postId }),
+        });
       } else {
-        const data = await response.json();
-        alert(data.error || "댓글 삭제에 실패했습니다.");
+        alert(result.error || "댓글 삭제에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -162,11 +145,8 @@ const PostComments = ({ postId }: PostCommentsProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchComments();
-  }, [postId, fetchComments]);
-
-  if (loading) {
+  // 초기 데이터가 있는 경우 로딩 상태를 보여주지 않음
+  if (isLoading && !initialComments) {
     return (
       <div className="px-4">
         <div className="animate-pulse space-y-4">
@@ -207,7 +187,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
                       {comment.author.nickname}
                     </span>
                     <span className="text-sm text-gray-500">
-                      {formatDistanceToNow(new Date(comment.createdAt), {
+                      {formatDistanceToNow(comment.createdAt, {
                         addSuffix: true,
                         locale: ko,
                       })}
@@ -311,7 +291,7 @@ const PostComments = ({ postId }: PostCommentsProps) => {
                   )}
 
                   {/* 답글 목록 */}
-                  {comment.replies.length > 0 && (
+                  {comment.replies && comment.replies.length > 0 && (
                     <div className="mt-3 ml-6 space-y-3">
                       {comment.replies.map((reply) => (
                         <div
@@ -324,13 +304,10 @@ const PostComments = ({ postId }: PostCommentsProps) => {
                                 {reply.author.nickname}
                               </span>
                               <span className="text-xs text-gray-500">
-                                {formatDistanceToNow(
-                                  new Date(reply.createdAt),
-                                  {
-                                    addSuffix: true,
-                                    locale: ko,
-                                  }
-                                )}
+                                {formatDistanceToNow(reply.createdAt, {
+                                  addSuffix: true,
+                                  locale: ko,
+                                })}
                               </span>
                             </div>
                             <div className="text-sm text-gray-900 whitespace-pre-wrap">

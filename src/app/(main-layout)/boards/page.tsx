@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import BoardList from "./ui/BoardList";
 import BoardHeader from "./ui/BoardHeader";
+import { getPosts } from "./actions/get-posts";
 
 export const metadata: Metadata = {
   title: "게시판",
@@ -32,13 +32,14 @@ export const metadata: Metadata = {
  * 게시판 메인 페이지
  * @returns 게시판 목록 페이지
  */
-const BoardsPage = () => {
+const BoardsPage = async () => {
+  // 서버에서 초기 데이터 가져오기
+  const initialData = await getPosts(1, 20, "free");
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <BoardHeader />
-      <Suspense fallback={<div className="p-4">로딩 중...</div>}>
-        <BoardList />
-      </Suspense>
+      <BoardList initialData={initialData} />
     </div>
   );
 };

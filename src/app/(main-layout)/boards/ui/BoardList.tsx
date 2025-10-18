@@ -1,85 +1,48 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { SmileyXEyesIcon } from "@phosphor-icons/react";
-// import { Eye, MessageCircle, Heart } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getPosts, type GetPostsResponse } from "../actions/get-posts";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  views: number;
-  createdAt: string;
-  author: {
-    id: string;
-    nickname: string;
-    image?: string;
-  };
-  _count: {
-    comments: number;
-    likes: number;
-  };
-}
-
-interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
-  hasNext: boolean;
-  hasPrev: boolean;
+interface BoardListProps {
+  initialData: GetPostsResponse;
 }
 
 /**
  * 게시판 목록 컴포넌트
+ * @param initialData - 초기 데이터
  * @returns 게시판 목록
  */
-const BoardList = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [pagination, setPagination] = useState<Pagination | null>(null);
+const BoardList = ({ initialData }: BoardListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
 
-  /**
-   * 게시글 목록 조회
-   * @param page - 페이지 번호
-   */
-  const fetchPosts = async (page: number) => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `/api/posts?boardId=free&page=${page}&limit=20`
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        setPosts(data.posts);
-        setPagination(data.pagination);
-      } else {
-        console.error("Failed to fetch posts:", data.error);
-      }
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts(currentPage);
-  }, [currentPage]);
+  // TanStack Query를 사용한 데이터 페칭
+  const { data, isLoading, error } = useQuery({
+    queryKey: createEntityQueryKey("posts", "list", {
+      boardId: "free",
+      page: currentPage,
+    }),
+    queryFn: () => getPosts(currentPage, 20, "free"),
+    initialData: currentPage === 1 ? initialData : undefined,
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 가비지 컬렉션 방지
+  });
 
   /**
    * 페이지 변경 핸들러
    * @param page - 페이지 번호
    */
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-  };
+  }, []);
 
-  if (loading) {
+  // 초기 데이터가 있고 첫 페이지인 경우 로딩 상태를 보여주지 않음
+  if (isLoading && currentPage !== 1) {
     return (
       <div className="p-4">
         <div className="space-y-4">
@@ -93,6 +56,17 @@ const BoardList = () => {
       </div>
     );
   }
+
+  if (error || !data?.success) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-500">데이터를 불러오는데 실패했습니다</p>
+      </div>
+    );
+  }
+
+  const posts = data.data?.posts || [];
+  const pagination = data.data?.pagination;
 
   return (
     <div className="flex-1">
@@ -133,7 +107,7 @@ const BoardList = () => {
               </span>
               <span className="text-gray-400"> • </span>
               <span className="text-gray-500">
-                {formatDistanceToNow(new Date(post.createdAt), {
+                {formatDistanceToNow(post.createdAt, {
                   addSuffix: true,
                   locale: ko,
                 })}

@@ -1,64 +1,43 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { createApiRequestOptions } from "@/shared/lib/api-utils";
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  author: {
-    id: string;
-    nickname: string;
-  };
-}
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getPost,
+  type PostDetail,
+} from "@/app/(main-layout)/boards/actions/get-post";
+import { updatePost } from "@/app/(main-layout)/boards/actions/update-post";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
 interface PostEditProps {
   postId: string;
+  initialData?: PostDetail;
 }
 
 /**
  * 게시글 수정 컴포넌트
  * @param postId - 게시글 ID
+ * @param initialData - 초기 데이터
  * @returns 게시글 수정 폼
  */
-const PostEdit = ({ postId }: PostEditProps) => {
+const PostEdit = ({ postId, initialData }: PostEditProps) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [post, setPost] = useState<Post | null>(null);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [content, setContent] = useState(initialData?.content || "");
   const [saving, setSaving] = useState(false);
 
-  /**
-   * 게시글 조회
-   */
-  const fetchPost = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/posts/${postId}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setPost(data);
-        setTitle(data.title);
-        setContent(data.content);
-      } else {
-        console.error("Failed to fetch post:", data.error);
-        alert("게시글을 불러올 수 없습니다.");
-        router.push("/boards");
-      }
-    } catch (error) {
-      console.error("Error fetching post:", error);
-      alert("게시글을 불러올 수 없습니다.");
-      router.push("/boards");
-    } finally {
-      setLoading(false);
-    }
-  }, [postId, router]);
+  // TanStack Query를 사용한 데이터 페칭
+  const { data, isLoading, error } = useQuery({
+    queryKey: createEntityQueryKey("post", "detail", { postId }),
+    queryFn: () => getPost(postId),
+    initialData: initialData ? { success: true, data: initialData } : undefined,
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 가비지 컬렉션 방지
+  });
 
   /**
    * 게시글 수정
@@ -71,19 +50,19 @@ const PostEdit = ({ postId }: PostEditProps) => {
 
     try {
       setSaving(true);
-      const response = await fetch(
-        `/api/posts/${postId}`,
-        createApiRequestOptions("PUT", {
-          title: title.trim(),
-          content: content.trim(),
-        })
-      );
+      const result = await updatePost(postId, title.trim(), content.trim());
 
-      if (response.ok) {
+      if (result.success) {
+        // 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("post", "detail", { postId }),
+        });
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("posts", "list", { boardId: "free" }),
+        });
         router.push(`/boards/${postId}`);
       } else {
-        const data = await response.json();
-        alert(data.error || "게시글 수정에 실패했습니다.");
+        alert(result.error || "게시글 수정에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error updating post:", error);
@@ -93,11 +72,8 @@ const PostEdit = ({ postId }: PostEditProps) => {
     }
   };
 
-  useEffect(() => {
-    fetchPost();
-  }, [postId, fetchPost]);
-
-  if (loading) {
+  // 초기 데이터가 있는 경우 로딩 상태를 보여주지 않음
+  if (isLoading && !initialData) {
     return (
       <div className="p-4">
         <div className="animate-pulse">
@@ -114,13 +90,15 @@ const PostEdit = ({ postId }: PostEditProps) => {
     );
   }
 
-  if (!post) {
+  if (error || !data?.success || !data.data) {
     return (
       <div className="p-4 text-center text-gray-500">
         게시글을 찾을 수 없습니다.
       </div>
     );
   }
+
+  const post = data.data;
 
   if (!session || session.user.id !== post.author.id) {
     return (

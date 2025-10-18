@@ -1,6 +1,6 @@
-import { Suspense } from "react";
 import PostEdit from "./ui/PostEdit";
 import PostEditHeader from "./ui/PostEditHeader";
+import { getPost } from "@/app/(main-layout)/boards/actions/get-post";
 
 interface PostEditPageProps {
   params: Promise<{
@@ -16,12 +16,16 @@ interface PostEditPageProps {
 const PostEditPage = async ({ params }: PostEditPageProps) => {
   const { id } = await params;
 
+  // 서버에서 초기 데이터 가져오기
+  const initialData = await getPost(id);
+
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <PostEditHeader />
-      <Suspense fallback={<div className="p-4">로딩 중...</div>}>
-        <PostEdit postId={id} />
-      </Suspense>
+      <PostEdit
+        postId={id}
+        initialData={initialData.success ? initialData.data : undefined}
+      />
     </div>
   );
 };

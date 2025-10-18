@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { createApiRequestOptions } from "@/shared/lib/api-utils";
+import { createPost } from "../../actions/create-post";
+import { useQueryClient } from "@tanstack/react-query";
+import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
 
 /**
  * 게시글 작성 컴포넌트
@@ -12,6 +14,7 @@ import { createApiRequestOptions } from "@/shared/lib/api-utils";
 const PostWrite = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,21 +30,16 @@ const PostWrite = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(
-        "/api/posts",
-        createApiRequestOptions("POST", {
-          title: title.trim(),
-          content: content.trim(),
-          boardId: "free",
-        })
-      );
+      const result = await createPost(title.trim(), content.trim(), "free");
 
-      if (response.ok) {
-        const post = await response.json();
-        router.push(`/boards/${post.id}`);
+      if (result.success && result.data) {
+        // 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: createEntityQueryKey("posts", "list", { boardId: "free" }),
+        });
+        router.push(`/boards/${result.data.id}`);
       } else {
-        const data = await response.json();
-        alert(data.error || "게시글 작성에 실패했습니다.");
+        alert(result.error || "게시글 작성에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error creating post:", error);
