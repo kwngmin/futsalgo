@@ -26,6 +26,7 @@ interface Member {
   hasRated: boolean;
   ratedAt: Date | null;
   currentRating: {
+    skillLevel: PlayerSkillLevel;
     shooting: number;
     passing: number;
     stamina: number;
@@ -84,9 +85,12 @@ export default function TeamMemberRatingList({
 
   const openModal = (member: Member) => {
     setSelectedMember(member);
-    setSkillLevel(member.user.skillLevel);
+
     // 기존 평가가 있다면 해당 값으로 초기화, 없다면 1로 초기화
     if (member.currentRating) {
+      // 기존 평가의 skillLevel 사용
+      setSkillLevel(member.currentRating.skillLevel);
+
       // 명시적으로 필요한 속성만 추출하여 설정
       setRatings({
         shooting: member.currentRating.shooting,
@@ -97,6 +101,8 @@ export default function TeamMemberRatingList({
         defense: member.currentRating.defense,
       });
     } else {
+      // 새 평가는 피평가자의 기본 skillLevel로 시작
+      setSkillLevel(member.user.skillLevel);
       setRatings(INITIAL_RATINGS);
     }
     setIsModalOpen(true);
@@ -129,11 +135,22 @@ export default function TeamMemberRatingList({
   console.log(totalUsedPoints, "totalUsedPoints");
 
   // 남은 포인트가 음수일 때 ratings 초기화
+  // 모달이 열려 있고 skillLevel이 설정된 경우에만 동작하도록 가드 추가
   useEffect(() => {
-    if (remainingPoints < 0) {
-      setRatings(INITIAL_RATINGS);
+    if (!isModalOpen || !skillLevel) return;
+
+    // skillLevel 변경 시에만 리셋 (사용자가 직접 변경한 경우)
+    if (selectedMember?.currentRating?.skillLevel !== skillLevel) {
+      if (remainingPoints < 0) {
+        setRatings(INITIAL_RATINGS);
+      }
     }
-  }, [remainingPoints]);
+  }, [
+    skillLevel,
+    isModalOpen,
+    remainingPoints,
+    selectedMember?.currentRating?.skillLevel,
+  ]);
 
   const handleRatingChange = (key: keyof RatingData, value: number) => {
     setRatings((prev) => ({
@@ -150,7 +167,7 @@ export default function TeamMemberRatingList({
   };
 
   const handleSubmit = async () => {
-    if (!selectedMember) return;
+    if (!selectedMember || !skillLevel) return;
 
     setIsSubmitting(true);
     try {
@@ -158,6 +175,7 @@ export default function TeamMemberRatingList({
         teamId,
         toUserId: selectedMember.userId,
         ratings,
+        skillLevel,
       });
 
       if (result.success) {
@@ -185,7 +203,7 @@ export default function TeamMemberRatingList({
             onClick={() => openModal(member)}
           >
             <div className="flex items-center space-x-4 grow">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200 shrink-0">
                 {member.user.image ? (
                   <Image
                     src={member.user.image}

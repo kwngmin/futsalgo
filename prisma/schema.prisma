@@ -470,6 +470,9 @@ model TeamMemberRating {
   fromUserId  String   // 평가를 준 사람
   toUserId    String   // 평가를 받은 사람
   
+  // 평가자가 판단한 피평가자의 실력 수준 추가
+  skillLevel  PlayerSkillLevel
+  
   // 평가 항목별 점수 (1-5점)
   shooting    Int      @default(1)  // 슈팅 (1-5)
   passing     Int      @default(1)  // 패스 (1-5)

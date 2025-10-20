@@ -5,10 +5,12 @@ import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { PlayerSkillLevel } from "@prisma/client";
 
 const ratingSchema = z.object({
   teamId: z.string().min(1),
   toUserId: z.string().min(1),
+  skillLevel: z.nativeEnum(PlayerSkillLevel), // skillLevel 추가
   ratings: z.object({
     shooting: z.number().min(1).max(5),
     passing: z.number().min(1).max(5),
@@ -22,6 +24,7 @@ const ratingSchema = z.object({
 interface RateTeamMemberParams {
   teamId: string;
   toUserId: string;
+  skillLevel: PlayerSkillLevel; // 추가
   ratings: {
     shooting: number;
     passing: number;
@@ -42,7 +45,7 @@ export async function rateTeamMember(params: RateTeamMemberParams) {
 
     // 입력값 검증
     const validatedData = ratingSchema.parse(params);
-    const { teamId, toUserId, ratings } = validatedData;
+    const { teamId, toUserId, skillLevel, ratings } = validatedData;
 
     // 자기 자신을 평가하려는지 확인
     if (session.user.id === toUserId) {
@@ -54,51 +57,48 @@ export async function rateTeamMember(params: RateTeamMemberParams) {
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
 
-    // 평가자가 해당 팀의 승인된 멤버인지 확인
-    const raterMember = await prisma.teamMember.findFirst({
-      where: {
-        teamId,
-        userId: session.user.id,
-        status: "APPROVED",
-      },
-    });
+    // 평가자와 피평가자가 해당 팀의 승인된 멤버인지 동시 확인
+    const [raterMember, ratedMember] = await Promise.all([
+      prisma.teamMember.findFirst({
+        where: {
+          teamId,
+          userId: session.user.id,
+          status: "APPROVED",
+        },
+      }),
+      prisma.teamMember.findFirst({
+        where: {
+          teamId,
+          userId: toUserId,
+          status: "APPROVED",
+        },
+      }),
+    ]);
 
-    if (!raterMember) {
+    if (!raterMember || !ratedMember) {
       return { success: false, error: "해당 팀의 멤버만 평가할 수 있습니다." };
     }
 
-    // 피평가자가 해당 팀의 승인된 멤버인지 확인
-    const ratedMember = await prisma.teamMember.findFirst({
-      where: {
-        teamId,
-        userId: toUserId,
-        status: "APPROVED",
-      },
-    });
+    // skillLevel에 따른 최대 포인트 검증 (선택적)
+    const SKILL_LEVEL_POINTS = {
+      BEGINNER: 12,
+      AMATEUR: 16,
+      ACE: 20,
+      SEMIPRO: 24,
+    };
 
-    if (!ratedMember) {
-      return { success: false, error: "해당 팀의 멤버만 평가할 수 있습니다." };
+    const maxPoints = SKILL_LEVEL_POINTS[skillLevel];
+    const totalPoints = Object.values(ratings).reduce(
+      (sum, val) => sum + val,
+      0
+    );
+
+    if (totalPoints > maxPoints) {
+      return {
+        success: false,
+        error: `선택한 실력 수준(${skillLevel})의 최대 포인트(${maxPoints})를 초과했습니다.`,
+      };
     }
-
-    // 평가자가 이번 달에 최소 1회 참석했는지 확인 (선택적 조건)
-    // const hasAttended = await prisma.scheduleAttendance.findFirst({
-    //   where: {
-    //     userId: session.user.id,
-    //     attendanceStatus: "ATTENDING",
-    //     schedule: {
-    //       hostTeamId: teamId,
-    //       date: {
-    //         gte: new Date(currentYear, currentMonth - 1, 1), // 이번 달 시작
-    //         lt: new Date(currentYear, currentMonth, 1), // 다음 달 시작
-    //       },
-    //     },
-    //   },
-    // });
-
-    // 참석 조건을 활성화하려면 주석 해제
-    // if (!hasAttended) {
-    //   return { success: false, error: '이번 달에 최소 1회 참석해야 평가할 수 있습니다.' };
-    // }
 
     // 기존 평가가 있는지 확인하고 upsert 실행
     const existingRating = await prisma.teamMemberRating.findFirst({
@@ -115,7 +115,10 @@ export async function rateTeamMember(params: RateTeamMemberParams) {
       // 기존 평가 업데이트
       await prisma.teamMemberRating.update({
         where: { id: existingRating.id },
-        data: ratings,
+        data: {
+          skillLevel, // skillLevel 업데이트
+          ...ratings,
+        },
       });
     } else {
       // 새 평가 생성
@@ -126,6 +129,7 @@ export async function rateTeamMember(params: RateTeamMemberParams) {
           toUserId,
           periodYear: currentYear,
           periodMonth: currentMonth,
+          skillLevel, // skillLevel 포함
           ...ratings,
         },
       });

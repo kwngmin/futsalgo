@@ -66,6 +66,17 @@ export async function getTeamMembers(teamId: string, currentUserId: string) {
           periodYear: currentYear,
           //   periodMonth: currentMonth,
         },
+        select: {
+          toUserId: true,
+          skillLevel: true, // 추가
+          shooting: true,
+          passing: true,
+          stamina: true,
+          physical: true,
+          dribbling: true,
+          defense: true,
+          createdAt: true,
+        },
       }),
     ]);
 
