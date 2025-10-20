@@ -1,5 +1,6 @@
 "use server";
 
+import { decrypt } from "@/shared/lib/crypto";
 import { prisma } from "@/shared/lib/prisma";
 
 /**
@@ -72,7 +73,12 @@ export async function getTeamMembers(teamId: string, currentUserId: string) {
     const membersWithRatings = members.map((member) => {
       const rating = myRatings.find((r) => r.toUserId === member.userId);
       return {
-        ...member,
+        id: member.id,
+        userId: member.userId,
+        user: {
+          ...member.user,
+          ...(member.user.name && { name: decrypt(member.user.name) }),
+        },
         hasRated: !!rating,
         ratedAt: rating?.createdAt || null,
         currentRating: rating || null,
