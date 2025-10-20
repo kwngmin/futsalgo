@@ -13,7 +13,7 @@ import {
   Instagram,
   ExternalLink,
   Mail,
-  AppWindow,
+  // AppWindow,
   LucideIcon,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
@@ -65,13 +65,13 @@ const MorePage = () => {
           key: "instagram",
           isExternal: true,
         },
-        {
-          icon: AppWindow,
-          label: "서비스 소개",
-          href: "/about",
-          key: "about",
-          isExternal: true,
-        },
+        // {
+        //   icon: AppWindow,
+        //   label: "서비스 소개",
+        //   href: "/about",
+        //   key: "about",
+        //   isExternal: true,
+        // },
         {
           icon: Mail,
           label: "문의하기",
