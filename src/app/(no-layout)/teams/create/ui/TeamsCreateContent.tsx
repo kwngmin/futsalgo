@@ -234,20 +234,22 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                     }}
                   />
                   {teamName.status === "checking" && (
-                    <p className="text-sm text-blue-600">
+                    <p className="text-sm text-blue-600 font-medium">
                       팀 이름을 확인하고 있습니다...
                     </p>
                   )}
                   {teamName.status === "valid" && (
-                    <p className="text-sm text-green-600">
+                    <p className="text-sm text-green-600 font-medium">
                       사용 가능한 팀 이름입니다.
                     </p>
                   )}
                   {teamName.status === "invalid" && teamName.error && (
-                    <p className="text-sm text-red-600">{teamName.error}</p>
+                    <p className="text-sm text-red-600 font-medium">
+                      {teamName.error}
+                    </p>
                   )}
                   {errors.name && (
-                    <p className="text-sm text-red-600">
+                    <p className="text-sm text-red-600 font-medium">
                       {errors.name.message}
                     </p>
                   )}
@@ -271,6 +273,7 @@ const TeamsCreateContent = ({ ownerId }: { ownerId: string }) => {
                       setValue("gender", value as "MALE" | "FEMALE")
                     }
                     error={errors.gender?.message}
+                    // disabled={}
                   />
                 </div>
 

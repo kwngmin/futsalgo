@@ -447,12 +447,25 @@ const ScheduleContent = ({
                   weight="fill"
                 />
               </div>
-              <div className="flex flex-col items-center">
-                <div className="w-full flex justify-center items-center gap-1 tracking-tight font-medium">
+              <div className="flex flex-col items-center sm:items-start">
+                <div className="w-full flex items-center gap-1 tracking-tight font-medium">
                   {data.data.isManager === "GUEST"
                     ? "친선전을 제안 받았습니다. 응답해주세요"
                     : "초청팀 응답을 기다리는 중입니다."}
                 </div>
+                {/* {data.data.schedule.description && (
+                  <p className="font-medium text-gray-700 whitespace-pre-line break-words">
+                    {data.data.schedule.description}
+                  </p>
+                )}
+                <div className="flex items-center gap-1">
+                  <span className="text-sm text-gray-500">
+                    풋살장 이용요금 분담금액
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {data.data.schedule.teamShareFee?.toLocaleString()}원
+                  </span>
+                </div> */}
               </div>
             </div>
             {data.data.isManager === "GUEST" && (

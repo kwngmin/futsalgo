@@ -442,6 +442,23 @@ const NewScheduleForm = ({
     >
       <div className="flex flex-col sm:flex-row gap-6">
         <div className="flex flex-col gap-6 grow">
+          {/* 주최팀 */}
+          <div className="space-y-2">
+            <Label className="px-1">주최팀</Label>
+            <CustomSelect
+              size="sm"
+              placeholder="선택"
+              options={teams.map((t) => (
+                <option key={t.team.id} value={t.team.id}>
+                  {t.team.name}
+                </option>
+              ))}
+              value={hostTeamId}
+              onChange={(e) => setValue("hostTeamId", e.target.value)}
+              disabled={teams.length === 1}
+            />
+          </div>
+
           {/* 경기 구분 */}
           <div className="space-y-6">
             <div className="space-y-2">
@@ -534,23 +551,6 @@ const NewScheduleForm = ({
                 )}
               </div>
             )}
-          </div>
-
-          {/* 주최팀 */}
-          <div className="space-y-2">
-            <Label className="px-1">주최팀</Label>
-            <CustomSelect
-              size="sm"
-              placeholder="선택"
-              options={teams.map((t) => (
-                <option key={t.team.id} value={t.team.id}>
-                  {t.team.name}
-                </option>
-              ))}
-              value={hostTeamId}
-              onChange={(e) => setValue("hostTeamId", e.target.value)}
-              disabled={teams.length === 1}
-            />
           </div>
 
           {/* 풋살장 */}
