@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { ValidationField } from "@/features/validation/model/types";
 import {
@@ -8,7 +8,9 @@ import {
   checkTeamCodeAvailability,
 } from "../model/actions";
 
-// 검증 규칙 타입
+// 타입 정의 개선
+type FieldType = "phone" | "nickname" | "email" | "teamCode";
+
 interface ValidationRule {
   pattern?: RegExp;
   minLength?: number;
@@ -17,8 +19,28 @@ interface ValidationRule {
   preprocessor?: (value: string) => string;
 }
 
+// 서버 검증 함수 타입
+type ServerValidator = (value: string) => Promise<{
+  success: boolean;
+  isDuplicate?: boolean;
+  message?: string;
+  error?: string;
+}>;
+
+// 검증 Hook 반환 타입
+interface ValidationHookReturn {
+  field: ValidationField;
+  setField: React.Dispatch<React.SetStateAction<ValidationField>>;
+  onChange: (value: string) => void;
+  onCompositionStart: () => void;
+  onCompositionEnd: (value: string) => void;
+  value: string;
+  status: ValidationField["status"];
+  error?: string;
+}
+
 // 검증 규칙 정의
-const VALIDATION_RULES: Record<string, ValidationRule> = {
+const VALIDATION_RULES: Record<FieldType, ValidationRule> = {
   phone: {
     pattern: /^01[0-9]-?\d{3,4}-?\d{4}$/,
     minLength: 10,
@@ -47,12 +69,12 @@ const VALIDATION_RULES: Record<string, ValidationRule> = {
 };
 
 // 서버 검증 함수 매핑
-const SERVER_VALIDATORS = {
+const SERVER_VALIDATORS: Record<FieldType, ServerValidator> = {
   phone: checkPhoneAvailability,
   nickname: checkNicknameAvailability,
   email: checkEmailAvailability,
   teamCode: checkTeamCodeAvailability,
-} as const;
+};
 
 // 기본 유효성 검증 함수
 function validateFormat(
@@ -77,18 +99,19 @@ function validateFormat(
 
 // 재사용 가능한 검증 Hook
 function useValidation(
-  fieldType: keyof typeof VALIDATION_RULES,
+  fieldType: FieldType,
   debounceMs: number = 300
-) {
+): ValidationHookReturn {
   const [field, setField] = useState<ValidationField>({
     value: "",
     status: "idle",
   });
 
+  // IME 조합 상태 추적
+  const isComposingRef = useRef(false);
   const debouncedValue = useDebounce(field.value, debounceMs);
   const rule = VALIDATION_RULES[fieldType];
-  const serverValidator =
-    SERVER_VALIDATORS[fieldType as keyof typeof SERVER_VALIDATORS];
+  const serverValidator = SERVER_VALIDATORS[fieldType];
 
   // 서버 검증 수행
   const performServerValidation = useCallback(
@@ -137,6 +160,11 @@ function useValidation(
 
   // 디바운스된 값 변경 시 검증
   useEffect(() => {
+    // IME 조합 중이면 검증 건너뛰기
+    if (isComposingRef.current) {
+      return;
+    }
+
     if (!debouncedValue) {
       setField({
         value: "",
@@ -176,10 +204,26 @@ function useValidation(
     [rule]
   );
 
+  // IME 이벤트 핸들러들
+  const onCompositionStart = useCallback(() => {
+    isComposingRef.current = true;
+  }, []);
+
+  const onCompositionEnd = useCallback(
+    (value: string) => {
+      isComposingRef.current = false;
+      // composition 종료 시 최종 값으로 업데이트
+      onChange(value);
+    },
+    [onChange]
+  );
+
   return {
     field,
     setField,
     onChange,
+    onCompositionStart,
+    onCompositionEnd,
     // 편의를 위한 추가 속성
     value: field.value,
     status: field.status,
@@ -187,31 +231,47 @@ function useValidation(
   };
 }
 
-// 특화된 Hook들 - 기존 API 유지
+// 특화된 Hook들 - 명확한 타입과 함께 원본 API 유지
 export function usePhoneValidation() {
-  const { field: phone, setField: setPhone, onChange } = useValidation("phone");
-  return { phone, setPhone, onChange };
+  const validation = useValidation("phone");
+  return {
+    phone: validation.field,
+    setPhone: validation.setField,
+    onChange: validation.onChange,
+    onCompositionStart: validation.onCompositionStart,
+    onCompositionEnd: validation.onCompositionEnd,
+  };
 }
 
 export function useNicknameValidation() {
-  const {
-    field: nickname,
-    setField: setNickname,
-    onChange,
-  } = useValidation("nickname");
-  return { nickname, setNickname, onChange };
+  const validation = useValidation("nickname", 500);
+  return {
+    nickname: validation.field,
+    setNickname: validation.setField,
+    onChange: validation.onChange,
+    onCompositionStart: validation.onCompositionStart,
+    onCompositionEnd: validation.onCompositionEnd,
+  };
 }
 
 export function useEmailValidation() {
-  const { field: email, setField: setEmail, onChange } = useValidation("email");
-  return { email, setEmail, onChange };
+  const validation = useValidation("email");
+  return {
+    email: validation.field,
+    setEmail: validation.setField,
+    onChange: validation.onChange,
+    onCompositionStart: validation.onCompositionStart,
+    onCompositionEnd: validation.onCompositionEnd,
+  };
 }
 
 export function useTeamCodeValidation() {
-  const {
-    field: teamCode,
-    setField: setTeamCode,
-    onChange,
-  } = useValidation("teamCode");
-  return { teamCode, setTeamCode, onChange };
+  const validation = useValidation("teamCode");
+  return {
+    teamCode: validation.field,
+    setTeamCode: validation.setField,
+    onChange: validation.onChange,
+    onCompositionStart: validation.onCompositionStart,
+    onCompositionEnd: validation.onCompositionEnd,
+  };
 }
