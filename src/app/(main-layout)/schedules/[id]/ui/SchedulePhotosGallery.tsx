@@ -1,11 +1,13 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import SchedulePhotoUpload from "./SchedulePhotoUpload";
 import { useSchedulePhotos } from "../lib/use-schedule-photos";
+import { deleteSchedulePhoto } from "../actions/delete-schedule-photo";
 import { ImagesIcon } from "@phosphor-icons/react";
 // import { useRouter } from "next/navigation";
 
@@ -28,6 +30,9 @@ export const SchedulePhotosGallery = ({
     null
   );
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const { data: session } = useSession();
 
   // 이미지 클릭 핸들러 (모달 또는 확대 보기)
   const handleImageClick = (index: number) => {
@@ -63,6 +68,32 @@ export const SchedulePhotosGallery = ({
       console.error("Failed to load more photos:", error);
     } finally {
       setIsLoadingMore(false);
+    }
+  };
+
+  // 사진 삭제 핸들러
+  const handleDeletePhoto = async (photoId: string) => {
+    if (isDeleting) return;
+
+    const confirmed = window.confirm("정말로 이 사진을 삭제하시겠습니까?");
+    if (!confirmed) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deleteSchedulePhoto(photoId);
+      if (result.success) {
+        // 모달 닫기
+        setSelectedImageIndex(null);
+        // 갤러리 새로고침
+        refresh();
+      } else {
+        alert(result.message || "사진 삭제에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Failed to delete photo:", error);
+      alert("사진 삭제 중 오류가 발생했습니다.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -231,12 +262,30 @@ export const SchedulePhotosGallery = ({
               </button>
             )}
 
+            {/* 삭제 버튼 (본인 사진인 경우에만) */}
+            {session?.user?.id === photos[selectedImageIndex].uploader.id && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeletePhoto(photos[selectedImageIndex].id);
+                }}
+                disabled={isDeleting}
+                className="fixed top-2 right-14 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-11 transition-colors text-white/80 hover:text-white text-xl font-medium overflow-hidden cursor-pointer flex items-center justify-center"
+              >
+                {isDeleting ? (
+                  <Loader2 className="size-5 animate-spin" />
+                ) : (
+                  <Trash2 className="size-5" />
+                )}
+              </button>
+            )}
+
             {/* 닫기 버튼 */}
             <button
               onClick={() => setSelectedImageIndex(null)}
-              className="fixed top-2 right-2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-11 transition-colors text-white/80 text-xl font-medium overflow-hidden cursor-pointer"
+              className="fixed top-2 right-2 backdrop-blur bg-black/30 hover:bg-black/30 rounded-full size-11 transition-colors text-white/80 hover:text-white text-xl font-medium overflow-hidden cursor-pointer flex items-center justify-center"
             >
-              ✕
+              <X className="size-5" />
             </button>
 
             {/* 이미지 정보 */}
