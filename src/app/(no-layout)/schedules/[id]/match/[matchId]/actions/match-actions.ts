@@ -393,6 +393,89 @@ export async function updateTeamMatchLineupSide(
 }
 
 /**
+ * 자체전 복제: 팀과 라인업을 유지한 채로 새로운 경기 생성
+ */
+export async function duplicateSquadMatch(matchId: string) {
+  try {
+    const originalMatch = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        schedule: {
+          include: {
+            attendances: {
+              where: {
+                attendanceStatus: AttendanceStatus.ATTENDING,
+              },
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        lineups: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!originalMatch) {
+      return { success: false, error: "원본 경기를 찾을 수 없습니다" };
+    }
+
+    if (originalMatch.schedule.matchType !== MatchType.SQUAD) {
+      return { success: false, error: "자체전만 복제할 수 있습니다" };
+    }
+
+    // 새로운 경기 생성 (라인업 포함)
+    const result = await prisma.$transaction(async (tx) => {
+      // 새로운 매치 생성
+      const newMatch = await tx.match.create({
+        data: {
+          scheduleId: originalMatch.scheduleId,
+          isLinedUp: originalMatch.isLinedUp,
+          homeTeamMercenaryCount: originalMatch.homeTeamMercenaryCount,
+          awayTeamMercenaryCount: originalMatch.awayTeamMercenaryCount,
+          createdById: originalMatch.createdById,
+          homeTeamId: originalMatch.homeTeamId,
+          awayTeamId: originalMatch.awayTeamId,
+        },
+      });
+
+      // 라인업 복제
+      if (originalMatch.lineups.length > 0) {
+        const newLineups = originalMatch.lineups.map((lineup) => ({
+          matchId: newMatch.id,
+          userId: lineup.userId,
+          side: lineup.side,
+        }));
+
+        await tx.lineup.createMany({
+          data: newLineups,
+        });
+      }
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(originalMatch.scheduleId, tx);
+
+      return newMatch;
+    });
+
+    revalidatePath(`/schedules/${originalMatch.scheduleId}/match/${result.id}`);
+
+    return {
+      success: true,
+      message: "새로운 경기가 생성되었습니다",
+      data: { matchId: result.id },
+    };
+  } catch (error) {
+    console.error("자체전 복제 실패:", error);
+    return { success: false, error: "경기 복제에 실패했습니다" };
+  }
+}
+
+/**
  * 라인업 사이드 변경 (자체전용)
  */
 export async function updateLineupSide(lineupId: string, side: TeamSide) {

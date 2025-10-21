@@ -18,6 +18,7 @@ import {
   updateTeamMatchLineup,
   updateMercenaryCount,
   resetLineups,
+  duplicateSquadMatch,
   updateTeamMatchLineupSide,
 } from "../actions/match-actions";
 import {
@@ -319,6 +320,36 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
       } else {
         setAwayMercenaryCount(count);
       }
+    }
+  };
+
+  // 자체전 복제 핸들러
+  const handleDuplicateMatch = async () => {
+    try {
+      const result = await duplicateSquadMatch(data.match.id);
+
+      if (result?.success) {
+        alert(result.message);
+
+        // 쿼리 무효화
+        invalidateMatchQueries();
+        queryClient.invalidateQueries({
+          queryKey: ["schedule", data.match.scheduleId],
+        });
+
+        // 새로 생성된 경기로 이동
+        if (result.data?.matchId) {
+          router.push(
+            `/schedules/${data.match.scheduleId}/match/${result.data.matchId}`
+          );
+        }
+      } else {
+        console.error(result?.error);
+        alert(result?.error || "경기 복제에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("경기 복제 오류:", error);
+      alert("경기 복제에 실패했습니다.");
     }
   };
 
@@ -865,14 +896,29 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
 
           {/* 관리 버튼들 */}
           {data.permissions.isEditable && (
-            <button
-              type="button"
-              disabled={isLoading}
-              className="my-8 rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/5 active:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleDeleteMatch}
-            >
-              경기 삭제
-            </button>
+            <div className="my-8 space-y-3">
+              {/* 자체전인 경우 새로운 경기 만들기 버튼 */}
+              {data.match.schedule.matchType === "SQUAD" && (
+                <button
+                  type="button"
+                  disabled={isLoading}
+                  className="rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors text-gray-600 font-medium disabled:opacity-50 disabled:cursor-default border border-gray-300 hover:border-gray-400"
+                  onClick={handleDuplicateMatch}
+                >
+                  팀 유지한 채 새로운 경기 만들기
+                </button>
+              )}
+
+              {/* 경기 삭제 버튼 */}
+              <button
+                type="button"
+                disabled={isLoading}
+                className="rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-destructive/5 active:bg-destructive/10 transition-colors text-destructive font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleDeleteMatch}
+              >
+                경기 삭제
+              </button>
+            </div>
           )}
 
           {/* 생성일 */}
