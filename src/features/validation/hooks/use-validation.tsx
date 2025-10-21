@@ -48,7 +48,7 @@ const VALIDATION_RULES: Record<FieldType, ValidationRule> = {
     preprocessor: (value) => value.replace(/\D/g, ""), // 숫자만 추출
   },
   nickname: {
-    pattern: /^[가-힣a-zA-Z0-9]+$/,
+    // pattern: /^[가-힣a-zA-Z0-9]+$/,
     minLength: 2,
     maxLength: 20,
     errorMessage: "닉네임은 2-20자의 한글, 영문, 숫자만 가능합니다",
