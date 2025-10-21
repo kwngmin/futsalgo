@@ -27,7 +27,7 @@ interface UseSchedulePhotosReturn {
 
 export const useSchedulePhotos = ({
   scheduleId,
-  limit = 20,
+  limit = 9, // 기본값을 9로 변경
   enabled = true,
 }: UseSchedulePhotosOptions): UseSchedulePhotosReturn => {
   const queryClient = useQueryClient();
@@ -42,7 +42,7 @@ export const useSchedulePhotos = ({
     gcTime: 10 * 60 * 1000, // 10분간 캐시 유지 (구 cacheTime)
   });
 
-  // 추가 사진 로딩을 위한 쿼리 (무한 스크롤)
+  // 추가 사진 로딩을 위한 함수 (더보기 버튼 방식)
   const loadMore = useCallback(async () => {
     if (!data?.success || !data.hasMore) return;
 
@@ -51,7 +51,7 @@ export const useSchedulePhotos = ({
     try {
       const morePhotos = await getSchedulePhotos({
         scheduleId,
-        limit,
+        limit, // 9개씩 추가 로드
         offset: currentOffset,
       });
 

@@ -21,12 +21,13 @@ export const SchedulePhotosGallery = ({
   const { photos, canUpload, isLoading, error, hasMore, refresh, loadMore } =
     useSchedulePhotos({
       scheduleId,
-      limit: 20,
+      limit: 9,
     });
 
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null
   );
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   // 이미지 클릭 핸들러 (모달 또는 확대 보기)
   const handleImageClick = (index: number) => {
@@ -49,6 +50,20 @@ export const SchedulePhotosGallery = ({
   // 업로드 완료 후 새로고침
   const handleUploadComplete = () => {
     refresh();
+  };
+
+  // 더보기 버튼 핸들러
+  const handleLoadMore = async () => {
+    if (isLoadingMore || !hasMore) return;
+
+    setIsLoadingMore(true);
+    try {
+      await loadMore();
+    } catch (error) {
+      console.error("Failed to load more photos:", error);
+    } finally {
+      setIsLoadingMore(false);
+    }
   };
 
   if (error) {
@@ -140,25 +155,26 @@ export const SchedulePhotosGallery = ({
 
           {/* 더 보기 버튼 */}
           {hasMore && (
-            <div className="text-center">
-              <Button onClick={loadMore} disabled={isLoading} variant="outline">
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    로딩 중...
-                  </>
-                ) : (
-                  "더 보기"
-                )}
-              </Button>
-            </div>
+            <Button
+              onClick={handleLoadMore}
+              disabled={isLoadingMore || isLoading}
+              // variant="outline"
+              variant="ghost"
+              className="w-full bg-gray-50 h-12 sm:h-11 text-base text-gray-600 hover:text-gray-800"
+              // size="lg"
+            >
+              {isLoadingMore ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  로딩 중...
+                </>
+              ) : (
+                "더 보기"
+              )}
+            </Button>
           )}
         </div>
-      ) : // ) : !isLoading ? (
-      //   <p className="py-8 bg-gray-50 text-gray-500 rounded-2xl whitespace-pre-line mb-3 break-words min-h-16 flex items-center justify-center sm:text-sm">
-      //     사진이 없습니다.
-      //   </p>
-      !isLoading ? (
+      ) : !isLoading ? (
         <div className="py-6 px-8 bg-gray-50 flex flex-col sm:items-center justify-center sm:gap-0.5 rounded-2xl min-h-16 text-gray-500">
           <p className="text-lg sm:text-base font-medium text-gray-600">
             사진이 없습니다.
