@@ -141,6 +141,14 @@ const TeamContent = ({ id }: { id: string }) => {
       if (result.success) {
         refetch(); // 데이터 재조회하여 UI 업데이트
         // toast.success(result.message); // 토스트 메시지가 있다면 활용
+        queryClient.invalidateQueries({
+          queryKey: ["teams", "all"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["teams", "following"],
+          refetchType: "all",
+        });
       } else {
         console.warn(result.error);
         alert(result.error);

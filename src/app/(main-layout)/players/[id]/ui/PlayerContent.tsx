@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPlayer, type PlayerData } from "../model/actions";
 import { followUser } from "../actions/follow-user"; // 새로 추가한 액션 import
 import { useRouter } from "next/navigation";
@@ -69,6 +69,7 @@ export function formatKoreanDate(dateStr: string): string {
 }
 
 const PlayerContent = ({ id }: { id: string }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const session = useSession(); // 세션 추가
 
@@ -99,6 +100,14 @@ const PlayerContent = ({ id }: { id: string }) => {
       if (result.success) {
         refetch(); // 데이터 재조회하여 UI 업데이트
         // toast.success(result.message); // 토스트 메시지가 있다면 활용
+        queryClient.invalidateQueries({
+          queryKey: ["players", "all"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["players", "following"],
+          refetchType: "all",
+        });
       } else {
         console.warn(result.error);
         alert(result.error);
