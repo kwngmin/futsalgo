@@ -63,6 +63,7 @@ export const SquadLineupEditItem = ({
       queryClient.invalidateQueries({ queryKey });
       queryClient.invalidateQueries({
         queryKey: ["schedule", scheduleId],
+        refetchType: "all",
       });
     } catch (error) {
       console.error("사이드 변경 오류:", error);
