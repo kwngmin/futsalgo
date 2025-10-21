@@ -264,22 +264,36 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
 
   // 명단 전체 업데이트 핸들러
   const handleUpdateLineup = async () => {
-    const operation =
-      data.match.schedule.matchType === "SQUAD"
-        ? () => updateSquadLineup(data.match.id)
-        : () => updateTeamMatchLineup(data.match.id);
-
     try {
-      await handleAsyncOperation(
-        operation,
-        "출전 명단 업데이트가 완료되었습니다"
-      );
+      let result;
 
-      // handleAsyncOperation에서 이미 invalidateMatchQueries()가 호출되므로 중복 제거
-      // 추가로 필요한 쿼리만 무효화
-      queryClient.invalidateQueries({
-        queryKey: ["schedule", data.match.scheduleId],
-      });
+      if (data.match.schedule.matchType === "SQUAD") {
+        result = await updateSquadLineup(data.match.id);
+      } else {
+        result = await updateTeamMatchLineup(data.match.id);
+      }
+
+      if (result?.success) {
+        alert("출전 명단 업데이트가 완료되었습니다");
+
+        // 쿼리 무효화
+        invalidateMatchQueries();
+        queryClient.invalidateQueries({
+          queryKey: ["schedule", data.match.scheduleId],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["schedules"],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["my-schedule"],
+          refetchType: "all",
+        });
+      } else {
+        console.error(result?.error);
+        alert(result?.error || "출전 명단 업데이트에 실패했습니다.");
+      }
     } catch (error) {
       console.error("출전 명단 업데이트 오류:", error);
       alert("출전 명단 업데이트에 실패했습니다.");

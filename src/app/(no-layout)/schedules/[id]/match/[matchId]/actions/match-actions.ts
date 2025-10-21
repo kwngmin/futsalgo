@@ -175,21 +175,20 @@ export async function updateSquadLineup(matchId: string) {
     // 현재 HOME과 AWAY 팀 인원 수 계산
     const lineupStatus = checkLineupStatus(match.lineups);
 
-    const newLineups = missingAttendees.map((attendance, index) => {
+    // 균등 배정을 위한 카운터
+    let homeCount = lineupStatus.homeCount;
+    let awayCount = lineupStatus.awayCount;
+
+    const newLineups = missingAttendees.map((attendance) => {
       let side: TeamSide;
 
       // 인원 수를 고려하여 균등하게 배정
-      const currentHomeCount =
-        lineupStatus.homeCount +
-        newLineups.slice(0, index).filter((l) => l.side === "HOME").length;
-      const currentAwayCount =
-        lineupStatus.awayCount +
-        newLineups.slice(0, index).filter((l) => l.side === "AWAY").length;
-
-      if (currentHomeCount <= currentAwayCount) {
+      if (homeCount <= awayCount) {
         side = "HOME";
+        homeCount++;
       } else {
         side = "AWAY";
+        awayCount++;
       }
 
       return {
