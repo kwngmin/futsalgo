@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import BoardList from "./ui/BoardList";
 import BoardHeader from "./ui/BoardHeader";
 import { getPosts } from "./actions/get-posts";
+import LoginButton from "../schedules/ui/LoginButton";
+import { auth } from "@/shared/lib/auth";
 
 export const metadata: Metadata = {
   title: "게시판",
@@ -35,11 +37,15 @@ export const metadata: Metadata = {
 const BoardsPage = async () => {
   // 서버에서 초기 데이터 가져오기
   const initialData = await getPosts(1, 20, "free");
+  const session = await auth();
+  const isLoggedIn = session?.user?.id;
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       <BoardHeader />
       <BoardList initialData={initialData} />
+
+      {!isLoggedIn && <LoginButton />}
     </div>
   );
 };

@@ -24,6 +24,7 @@ import { TeamLevelFilter } from "@/features/filter-list/ui/FilterTeamLevel";
 import { TeamFilters } from "@/features/filter-list/model/types";
 import { SmileyXEyesIcon } from "@phosphor-icons/react";
 import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
+import LoginButton from "../schedules/ui/LoginButton";
 
 // 필터 컴포넌트 동적 임포트
 const FilterTeamGender = lazy(
@@ -372,6 +373,8 @@ const TeamsPage = () => {
           <p className="text-red-500">데이터를 불러오는데 실패했습니다</p>
         </div>
       )}
+
+      {!isLoggedIn && <LoginButton />}
     </div>
   );
 };

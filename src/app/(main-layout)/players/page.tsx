@@ -26,6 +26,7 @@ import FilterPlayerAge from "@/features/filter-list/ui/FilterPlayerAge";
 import { Separator } from "@/shared/components/ui/separator";
 import { SmileyXEyesIcon } from "@phosphor-icons/react";
 import { createEntityQueryKey } from "@/shared/lib/query-key-utils";
+import LoginButton from "../schedules/ui/LoginButton";
 
 const PlayersPage = () => {
   const router = useRouter();
@@ -328,6 +329,8 @@ const PlayersPage = () => {
           <p className="text-red-500">데이터를 불러오는데 실패했습니다</p>
         </div>
       )}
+
+      {!isLoggedIn && <LoginButton />}
     </div>
   );
 };
