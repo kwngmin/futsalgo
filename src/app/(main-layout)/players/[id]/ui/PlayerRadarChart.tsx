@@ -309,12 +309,9 @@ export default function PlayerRatingRadarChart({
                 className="flex justify-between items-center px-4 sm:text-sm gap-3"
               >
                 <div className="min-w-16 flex items-center gap-2">
-                  <span className="font-semibold tracking-tight w-11 sm:w-10">
+                  <span className="font-semibold tracking-tight">
                     {rating.label}
                   </span>
-                  {/* <span className="text-gray-400 text-sm font-semibold">
-                    {rating.abbr}
-                  </span> */}
                 </div>
                 <div className="flex items-center gap-3 grow">
                   <div className="h-1 w-full bg-gray-200">
