@@ -19,6 +19,7 @@ import {
   updateMercenaryCount,
   resetLineups,
   duplicateSquadMatch,
+  duplicateTeamMatch,
   updateTeamMatchLineupSide,
 } from "../actions/match-actions";
 import {
@@ -323,10 +324,16 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
     }
   };
 
-  // 자체전 복제 핸들러
+  // 경기 복제 핸들러 (자체전/친선전 구분)
   const handleDuplicateMatch = async () => {
     try {
-      const result = await duplicateSquadMatch(data.match.id);
+      let result;
+
+      if (data.match.schedule.matchType === "SQUAD") {
+        result = await duplicateSquadMatch(data.match.id);
+      } else {
+        result = await duplicateTeamMatch(data.match.id);
+      }
 
       if (result?.success) {
         alert(result.message);
@@ -897,17 +904,15 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
           {/* 관리 버튼들 */}
           {data.permissions.isEditable && (
             <div className="my-8 space-y-3">
-              {/* 자체전인 경우 새로운 경기 만들기 버튼 */}
-              {data.match.schedule.matchType === "SQUAD" && (
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  className="rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors text-gray-600 font-medium disabled:opacity-50 disabled:cursor-default border border-gray-300 hover:border-gray-400"
-                  onClick={handleDuplicateMatch}
-                >
-                  팀 유지한 채 새로운 경기 만들기
-                </button>
-              )}
+              {/* 새로운 경기 만들기 버튼 (자체전/친선전 모두) */}
+              <button
+                type="button"
+                disabled={isLoading}
+                className="rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors text-gray-600 font-medium disabled:opacity-50 disabled:cursor-default border border-gray-300 hover:border-gray-400 hover:text-gray-800"
+                onClick={handleDuplicateMatch}
+              >
+                팀 유지한 채 새로운 경기 추가
+              </button>
 
               {/* 경기 삭제 버튼 */}
               <button
