@@ -168,8 +168,46 @@ export async function updateSquadLineup(matchId: string) {
       (attendance) => !currentLineupUserIds.has(attendance.userId)
     );
 
-    if (missingAttendees.length === 0) {
+    const matchMercenaryCount =
+      match.homeTeamMercenaryCount +
+      match.awayTeamMercenaryCount +
+      match.undecidedTeamMercenaryCount;
+
+    const scheduleMercenaryCount = match.schedule.hostTeamMercenaryCount;
+
+    const isUpdatedMercenaryCount =
+      matchMercenaryCount !== scheduleMercenaryCount;
+
+    if (missingAttendees.length === 0 && !isUpdatedMercenaryCount) {
       return { success: true, message: "추가할 인원이 없습니다" };
+    }
+
+    if (missingAttendees.length === 0 && isUpdatedMercenaryCount) {
+      // 용병 수만 조정하는 경우
+      const undecidedCount = Math.max(
+        0,
+        match.schedule.hostTeamMercenaryCount -
+          match.homeTeamMercenaryCount -
+          match.awayTeamMercenaryCount
+      );
+
+      await prisma.$transaction(async (tx) => {
+        // 매치의 용병 수 업데이트
+        await tx.match.update({
+          where: { id: matchId },
+          data: {
+            homeTeamMercenaryCount: match.homeTeamMercenaryCount,
+            awayTeamMercenaryCount: match.awayTeamMercenaryCount,
+            undecidedTeamMercenaryCount: undecidedCount,
+          },
+        });
+
+        // 스케줄 상태 업데이트
+        await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
+      });
+
+      revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
+      return { success: true, message: "용병 수가 조정되었습니다" };
     }
 
     // 현재 HOME과 AWAY 팀 인원 수 계산
@@ -198,14 +236,56 @@ export async function updateSquadLineup(matchId: string) {
       };
     });
 
-    await prisma.lineup.createMany({
-      data: newLineups,
+    // 트랜잭션으로 라인업 생성과 매치 상태 업데이트를 원자적으로 처리
+    const result = await prisma.$transaction(async (tx) => {
+      // 새 라인업 생성
+      await tx.lineup.createMany({
+        data: newLineups,
+      });
+
+      // 업데이트 후 전체 라인업 상태 확인
+      const allLineups = await tx.lineup.findMany({
+        where: { matchId },
+        select: { side: true },
+      });
+
+      const lineupStatus = checkLineupStatus(allLineups);
+
+      // 용병 수 재계산
+      const undecidedCount = Math.max(
+        0,
+        match.schedule.hostTeamMercenaryCount -
+          match.homeTeamMercenaryCount -
+          match.awayTeamMercenaryCount
+      );
+
+      // 매치의 isLinedUp 상태와 용병 수 업데이트
+      await tx.match.update({
+        where: { id: matchId },
+        data: {
+          isLinedUp: lineupStatus.isLinedUp,
+          homeTeamMercenaryCount: match.homeTeamMercenaryCount,
+          awayTeamMercenaryCount: match.awayTeamMercenaryCount,
+          undecidedTeamMercenaryCount: undecidedCount,
+        },
+      });
+
+      // 스케줄 상태 업데이트
+      await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
+
+      return {
+        lineupCount: newLineups.length,
+        homeCount: lineupStatus.homeCount,
+        awayCount: lineupStatus.awayCount,
+        isLinedUp: lineupStatus.isLinedUp,
+      };
     });
 
     revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
     return {
       success: true,
-      message: `${missingAttendees.length}명의 인원이 추가되었습니다`,
+      message: `${missingAttendees.length}명의 인원이 추가되었습니다 (HOME: ${result.homeCount}명, AWAY: ${result.awayCount}명)`,
+      isLinedUp: result.isLinedUp,
     };
   } catch (error) {
     console.error("자체전 명단 업데이트 실패:", error);

@@ -36,9 +36,10 @@ import { calculateDday, formatDday } from "@/shared/lib/date-utils";
 interface MatchContentProps {
   data: MatchDataResult | null;
   setLoading: () => void;
+  refetch: () => void;
 }
 
-const MatchContent = ({ data, setLoading }: MatchContentProps) => {
+const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
@@ -146,10 +147,8 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
   // 공통 쿼리 무효화 함수
   const invalidateMatchQueries = useCallback(() => {
     if (!data) return;
-    queryClient.invalidateQueries({
-      queryKey: ["matchData", data.match.id, data.match.scheduleId],
-    });
-  }, [queryClient, data]);
+    refetch();
+  }, [refetch, data]);
 
   // 공통 에러 처리 함수
   const handleAsyncOperation = useCallback(
@@ -292,6 +291,7 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
           queryKey: ["my-schedule"],
           refetchType: "all",
         });
+        refetch();
       } else {
         console.error(result?.error);
         alert(result?.error || "출전 명단 업데이트에 실패했습니다.");
@@ -846,7 +846,17 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
                       }
                       onChange={async (e) => {
                         const newCount = parseInt(e.target.value);
-                        await handleMercenaryUpdate("home", newCount);
+                        try {
+                          await handleMercenaryUpdate("home", newCount);
+                          refetch();
+                          queryClient.invalidateQueries({
+                            queryKey: ["schedule", data.match.scheduleId],
+                            refetchType: "all",
+                          });
+                        } catch (error) {
+                          console.error(error);
+                          alert("용병 수 업데이트에 실패했습니다.");
+                        }
                       }}
                       options={Array.from(
                         { length: mercenaryCalculation.homeMax + 1 },
@@ -876,7 +886,17 @@ const MatchContent = ({ data, setLoading }: MatchContentProps) => {
                       }
                       onChange={async (e) => {
                         const newCount = parseInt(e.target.value);
-                        await handleMercenaryUpdate("away", newCount);
+                        try {
+                          await handleMercenaryUpdate("away", newCount);
+                          refetch();
+                          queryClient.invalidateQueries({
+                            queryKey: ["schedule", data.match.scheduleId],
+                            refetchType: "all",
+                          });
+                        } catch (error) {
+                          console.error(error);
+                          alert("용병 수 업데이트에 실패했습니다.");
+                        }
                       }}
                       options={Array.from(
                         { length: mercenaryCalculation.awayMax + 1 },

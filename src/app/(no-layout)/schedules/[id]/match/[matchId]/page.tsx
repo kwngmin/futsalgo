@@ -18,6 +18,7 @@ const MatchPage = () => {
     data: matchData,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["matchData", matchId, id],
     queryFn: () => getMatchData(matchId, id),
@@ -111,6 +112,7 @@ const MatchPage = () => {
     <MatchContent
       data={matchData as MatchDataResult}
       setLoading={() => setLoading(true)}
+      refetch={refetch}
     />
   );
 };
