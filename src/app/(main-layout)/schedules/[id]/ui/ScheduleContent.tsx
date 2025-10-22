@@ -444,14 +444,14 @@ const ScheduleContent = ({
                   <div className="flex flex-col items-center sm:items-start">
                     <div className="w-full flex items-center gap-1 tracking-tight font-medium">
                       {data.data.isManager === "GUEST"
-                        ? "친선전을 제안 받았습니다"
-                        : "초청팀 응답을 기다리는 중입니다."}
+                        ? "경기 일정에 초청받았습니다"
+                        : "경기 일정을 주최했습니다"}
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm text-amber-700 font-medium">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm text-amber-700 font-semibold">
                         시설 이용료 분담금
                       </span>
-                      <div className="h-3 border-l border-gray-300 mx-1" />
+                      <div className="h-3 border-l border-gray-300" />
                       <div className="flex items-center gap-0.5">
                         <span className="text-gray-800 font-semibold tracking-tight">
                           {data.data.schedule.teamShareFee?.toLocaleString()}
@@ -463,7 +463,7 @@ const ScheduleContent = ({
                     </div>
                   </div>
                 </div>
-                {data.data.isManager === "GUEST" && (
+                {data.data.isManager === "GUEST" ? (
                   <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
                     <button
                       className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
@@ -486,6 +486,10 @@ const ScheduleContent = ({
                       거절
                     </button>
                   </div>
+                ) : (
+                  <span className="text-amber-800 font-medium text-sm px-4 bg-amber-600/10 rounded-full py-1 text-center">
+                    초청팀 응답을 기다리는 중
+                  </span>
                 )}
               </div>
             )}
