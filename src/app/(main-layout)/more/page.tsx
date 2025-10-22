@@ -210,7 +210,7 @@ const MorePage = () => {
           </button>
         )}
 
-        <div className="text-sm text-gray-500 p-8 bg-gray-50 rounded-2xl text-center mt-8">
+        <div className="text-sm text-gray-500 p-8 bg-gray-50 rounded-2xl text-center mt-8 mx-4 sm:mx-0">
           Copyright © 2025 FutsalGo. All Rights Reserved.
         </div>
 
