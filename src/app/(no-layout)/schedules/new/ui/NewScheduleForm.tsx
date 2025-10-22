@@ -660,9 +660,7 @@ const NewScheduleForm = ({
           {/* 비용 */}
           <div className="grid grid-cols-3 gap-2">
             <div className="space-y-2">
-              <Label htmlFor="invited-team-code">
-                풋살장 이용요금 분담금액
-              </Label>
+              <Label htmlFor="invited-team-code">시설 이용료 분담금</Label>
               <div className="relative">
                 <Input
                   id="invited-team-code"

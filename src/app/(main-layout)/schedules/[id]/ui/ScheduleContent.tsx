@@ -401,14 +401,6 @@ const ScheduleContent = ({
 
       {/* 공통 */}
       <div className="w-full flex flex-col items-center justify-center px-4 mb-6 gap-1">
-        {/* <span className="flex items-center gap-1 justify-center text-lg font-medium tracking-tight">
-          {data.data.schedule?.startTime?.toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            weekday: "long",
-          })}
-        </span> */}
         <span className="flex items-center gap-1 justify-center font-semibold text-2xl">
           {data.data.schedule?.place}
         </span>
@@ -439,58 +431,70 @@ const ScheduleContent = ({
       {/* 친선전 요청 대기 상태 (PENDING) */}
       {data.data.schedule.status === "PENDING" &&
         (isAttendance || data.data.isManager) && (
-          <div className="mx-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 rounded-2xl p-4 select-none mb-4 bg-amber-600/5 border border-amber-200">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-full bg-white">
-                <HourglassHighIcon
-                  className="size-6 text-amber-600"
-                  weight="fill"
-                />
-              </div>
-              <div className="flex flex-col items-center sm:items-start">
-                <div className="w-full flex items-center gap-1 tracking-tight font-medium">
-                  {data.data.isManager === "GUEST"
-                    ? "친선전을 제안 받았습니다. 응답해주세요"
-                    : "초청팀 응답을 기다리는 중입니다."}
+          <div className="mx-4 flex flex-col rounded-2xl border border-amber-600/40 overflow-hidden mb-4">
+            {data.data.schedule.status === "PENDING" && (
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 p-3 bg-amber-600/5">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-full bg-white">
+                    <HourglassHighIcon
+                      className="size-6 text-amber-600"
+                      weight="fill"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start">
+                    <div className="w-full flex items-center gap-1 tracking-tight font-medium">
+                      {data.data.isManager === "GUEST"
+                        ? "친선전을 제안 받았습니다"
+                        : "초청팀 응답을 기다리는 중입니다."}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm text-amber-700 font-medium">
+                        시설 이용료 분담금
+                      </span>
+                      <div className="h-3 border-l border-gray-300 mx-1" />
+                      <div className="flex items-center gap-0.5">
+                        <span className="text-gray-800 font-semibold tracking-tight">
+                          {data.data.schedule.teamShareFee?.toLocaleString()}
+                        </span>
+                        <span className="text-gray-700 font-medium text-sm">
+                          원
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                {/* {data.data.schedule.description && (
-                  <p className="font-medium text-gray-700 whitespace-pre-line break-words">
-                    {data.data.schedule.description}
-                  </p>
+                {data.data.isManager === "GUEST" && (
+                  <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
+                    <button
+                      className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      onClick={() => handleRespondInvitation("ACCEPT")}
+                      disabled={isRespondingInvitation}
+                    >
+                      {isRespondingInvitation ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : null}
+                      수락
+                    </button>
+                    <button
+                      className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      onClick={() => handleRespondInvitation("DECLINE")}
+                      disabled={isRespondingInvitation}
+                    >
+                      {isRespondingInvitation ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : null}
+                      거절
+                    </button>
+                  </div>
                 )}
-                <div className="flex items-center gap-1">
-                  <span className="text-sm text-gray-500">
-                    풋살장 이용요금 분담금액
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {data.data.schedule.teamShareFee?.toLocaleString()}원
-                  </span>
-                </div> */}
               </div>
-            </div>
-            {data.data.isManager === "GUEST" && (
-              <div className="w-full sm:w-48 shrink-0 grid grid-cols-2 items-center gap-1.5">
-                <button
-                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                  onClick={() => handleRespondInvitation("ACCEPT")}
-                  disabled={isRespondingInvitation}
-                >
-                  {isRespondingInvitation ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : null}
-                  수락
-                </button>
-                <button
-                  className="sm:text-sm grow h-11 sm:h-10 font-semibold rounded-sm active:scale-95 transition-all duration-200 flex items-center gap-3 justify-center text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                  onClick={() => handleRespondInvitation("DECLINE")}
-                  disabled={isRespondingInvitation}
-                >
-                  {isRespondingInvitation ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : null}
-                  거절
-                </button>
-              </div>
+            )}
+
+            {/* 주최팀 메시지 */}
+            {data.data.schedule.description && (
+              <p className="font-medium text-gray-700 whitespace-pre-line break-words w-full px-4 py-3 border-t border-amber-600/20">
+                {data.data.schedule.description}
+              </p>
             )}
           </div>
         )}
