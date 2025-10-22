@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "더보기",
+  title: "더 보기",
   description:
     "Futsalgo 서비스 설정, 프로필 관리, 제안하기, 버그 신고 등 다양한 기능을 이용할 수 있습니다.",
   keywords: [
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     "풋살 개인정보처리방침",
   ],
   openGraph: {
-    title: "Futsalgo 더보기 - 서비스 설정",
+    title: "Futsalgo 더 보기 - 서비스 설정",
     description:
       "Futsalgo 서비스 설정, 프로필 관리, 제안하기, 버그 신고 등 다양한 기능을 이용할 수 있습니다.",
     url: "https://futsalgo.com/more",
   },
   twitter: {
-    title: "Futsalgo 더보기 - 서비스 설정",
+    title: "Futsalgo 더 보기 - 서비스 설정",
     description:
       "Futsalgo 서비스 설정, 프로필 관리, 제안하기, 버그 신고 등 다양한 기능을 이용할 수 있습니다.",
   },

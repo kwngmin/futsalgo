@@ -42,7 +42,7 @@ export const useSchedulePhotos = ({
     gcTime: 10 * 60 * 1000, // 10분간 캐시 유지 (구 cacheTime)
   });
 
-  // 추가 사진 로딩을 위한 함수 (더보기 버튼 방식)
+  // 추가 사진 로딩을 위한 함수 (더 보기 버튼 방식)
   const loadMore = useCallback(async () => {
     if (!data?.success || !data.hasMore) return;
 

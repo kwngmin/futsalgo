@@ -358,7 +358,7 @@ const ScheduleContent = ({
 
   return (
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
-      {/* 상단: 뒤로 가기와 공유하기, 더보기 버튼 */}
+      {/* 상단: 뒤로 가기와 공유하기, 더 보기 버튼 */}
       <div className="flex justify-between items-center shrink-0 px-4 h-16">
         <button
           className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"

@@ -164,7 +164,7 @@ const MorePage = () => {
 
       {/* 헤더 */}
       <div className="flex items-center justify-between px-4 h-16 shrink-0">
-        <h1 className="text-[1.625rem] font-bold">더보기</h1>
+        <h1 className="text-[1.625rem] font-bold">더 보기</h1>
       </div>
 
       <div className="space-y-3">

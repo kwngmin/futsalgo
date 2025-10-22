@@ -260,13 +260,13 @@ const MatchStatsLeaderboard: React.FC<MatchStatsLeaderboardProps> = ({
         ))}
       </div>
 
-      {/* 더보기/접기 버튼 */}
+      {/* 더 보기/접기 버튼 */}
       {hasMoreItems && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="mt-3 w-full flex items-center justify-center gap-1 px-4 h-12 sm:h-11 sm:text-sm font-semibold text-gray-700 border border-gray-300 hover:bg-gray-100 rounded-md transition-colors cursor-pointer active:scale-98"
         >
-          {isExpanded ? "접기" : "더보기"}
+          {isExpanded ? "접기" : "펼치기"}
           {isExpanded ? (
             <ChevronUp className="size-4" />
           ) : (

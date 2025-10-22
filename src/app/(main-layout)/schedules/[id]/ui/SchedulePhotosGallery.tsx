@@ -57,7 +57,7 @@ export const SchedulePhotosGallery = ({
     refresh();
   };
 
-  // 더보기 버튼 핸들러
+  // 더 보기 버튼 핸들러
   const handleLoadMore = async () => {
     if (isLoadingMore || !hasMore) return;
 

@@ -40,7 +40,7 @@ export const navItems = [
   },
   {
     id: "more",
-    label: "더보기",
+    label: "더 보기",
     icon: DotsThreeOutlineIcon,
     href: "/more",
   },
@@ -76,7 +76,7 @@ export const navItems = [
 //   },
 //   {
 //     id: "more",
-//     label: "더보기",
+//     label: "더 보기",
 //     outlinedIcon: EllipsisHorizontalOutline,
 //     filledIcon: EllipsisHorizontalCircleIcon,
 //     href: "/more",
