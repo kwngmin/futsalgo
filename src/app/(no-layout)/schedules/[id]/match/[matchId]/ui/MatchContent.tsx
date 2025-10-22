@@ -931,7 +931,7 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
                 className="rounded-md px-3 w-full flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors text-gray-600 font-medium disabled:opacity-50 disabled:cursor-default border border-gray-300 hover:border-gray-400 hover:text-gray-800"
                 onClick={handleDuplicateMatch}
               >
-                팀 유지한 채 새로운 경기 추가
+                출전 명단 그대로 새로운 경기 추가
               </button>
 
               {/* 경기 삭제 버튼 */}
