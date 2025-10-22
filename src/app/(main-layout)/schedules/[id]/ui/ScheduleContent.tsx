@@ -828,7 +828,7 @@ const ScheduleContent = ({
                     // 읽기 모드
                     <div>
                       {hasNoticeContent ? (
-                        <div className="border px-4 py-3 bg-white rounded-2xl min-h-40 whitespace-pre-line break-words">
+                        <div className="border px-4 py-3 bg-white rounded-2xl min-h-24 whitespace-pre-line break-words">
                           {data?.data?.schedule?.description}
                         </div>
                       ) : (
