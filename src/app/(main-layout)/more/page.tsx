@@ -210,6 +210,10 @@ const MorePage = () => {
           </button>
         )}
 
+        <div className="text-sm text-gray-500 p-8 bg-gray-50 rounded-2xl text-center mt-8">
+          Copyright © 2025 FutsalGo. All Rights Reserved.
+        </div>
+
         {/* 다음 업데이트 안내 */}
         {/* <div className="mx-4 mt-8 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
           <div className="flex items-center space-x-3">

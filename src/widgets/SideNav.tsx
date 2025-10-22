@@ -155,7 +155,16 @@ const SideNav = () => {
           <Logo />
           <div className="grow flex flex-col justify-between overflow-y-auto">
             <nav className="flex-1 px-4 mb-4 space-y-1">{desktopNavItems}</nav>
-            <FooterLinks />
+            <div>
+              <FooterLinks />
+              {/* <div className="text-sm text-gray-500 mx-6 pb-3">
+                © 2025 FutsalGo
+              </div> */}
+              <div className="text-xs text-gray-600 mx-6 pb-6">
+                Copyright © 2025 FutsalGo. <br />
+                All Rights Reserved.
+              </div>
+            </div>
           </div>
         </div>
       </aside>
