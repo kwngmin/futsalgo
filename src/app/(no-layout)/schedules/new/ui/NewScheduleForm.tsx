@@ -46,7 +46,6 @@ const newFormSchema = z
     hostTeamId: z.string().min(1),
     invitedTeamId: z.string().optional(),
     place: z.string().min(1),
-    description: z.string().optional(),
     date: z.string().min(1),
     startTime: z.string().min(1),
     endTime: z.string().min(1),
@@ -651,7 +650,7 @@ const NewScheduleForm = ({
           <div className="space-y-2">
             <Label className="">메시지</Label>
             <Textarea
-              {...register("description")}
+              {...register("message")}
               className="min-h-24"
               placeholder="초청팀에게 전달 할 메시지를 작성해주세요"
             />

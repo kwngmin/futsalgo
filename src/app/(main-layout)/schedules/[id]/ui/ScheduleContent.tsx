@@ -491,9 +491,9 @@ const ScheduleContent = ({
             )}
 
             {/* 주최팀 메시지 */}
-            {data.data.schedule.description && (
+            {data.data.schedule.invitation?.message && (
               <p className="font-medium text-gray-700 whitespace-pre-line break-words w-full px-4 py-3 border-t border-amber-600/20">
-                {data.data.schedule.description}
+                {data.data.schedule.invitation.message}
               </p>
             )}
           </div>

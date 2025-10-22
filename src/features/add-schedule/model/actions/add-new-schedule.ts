@@ -62,9 +62,6 @@ export async function addNewSchedule({
       };
     }
 
-    console.log(formData.startTime, "startTime");
-    console.log(formData.endTime, "endTime");
-
     // 트랜잭션으로 처리
     const result = await prisma.$transaction(async (tx) => {
       // 1. 일정 생성
@@ -82,7 +79,6 @@ export async function addNewSchedule({
           createdById: createdById,
           hostTeamId: formData.hostTeamId,
           invitedTeamId: formData.invitedTeamId,
-          description: formData.description,
           city: formData.city,
           district: formData.district,
           enableAttendanceVote: formData.enableAttendanceVote,

@@ -51,6 +51,7 @@ export async function getSchedule(scheduleId: string) {
             createdAt: "asc",
           },
         },
+        invitation: true,
         createdBy: true,
       },
     });
