@@ -218,7 +218,7 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
   return (
     <div className="px-4">
       <div className="flex justify-between items-center py-2 min-h-13">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <UserCircleCheckIcon //
             weight="fill"
             className="size-7 text-zinc-600"

@@ -23,6 +23,8 @@ import ScheduleAttendance from "./ScheduleAttendance";
 import {
   CalendarCheckIcon,
   CalendarXIcon,
+  CurrencyKrwIcon,
+  EnvelopeOpenIcon,
   HourglassHighIcon,
   MegaphoneSimpleIcon,
   SoccerBallIcon,
@@ -115,6 +117,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
   const [isNoticeOpen, setIsNoticeOpen] = useState(true);
   const [isEditingNotice, setIsEditingNotice] = useState(false);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
   const [noticeContent, setNoticeContent] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -919,6 +922,80 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
 
         {/* 댓글 */}
         <ScheduleComments scheduleId={scheduleId} />
+
+        {/* 시설 이용료 분담금 */}
+        {(data.data.schedule.status === "CONFIRMED" ||
+          data.data.schedule.status === "READY" ||
+          data.data.schedule.status === "PLAY") &&
+          data.data.schedule.matchType === "TEAM" && (
+            <div className="px-4 mb-3">
+              <div className="flex justify-between items-center py-2 min-h-13">
+                <div className="flex items-center gap-2">
+                  <CurrencyKrwIcon
+                    weight="fill"
+                    className="size-7 text-zinc-500"
+                  />
+                  <h2 className="text-xl font-semibold">시설 이용료 분담금</h2>
+                </div>
+                <div className="flex items-center gap-0.5">
+                  <span className="text-lg font-semibold text-gray-800 tracking-tight">
+                    {data.data.schedule.teamShareFee?.toLocaleString()}
+                  </span>
+                  원
+                </div>
+              </div>
+            </div>
+          )}
+
+        {/* 초청 메시지 */}
+        {(data.data.schedule.status === "CONFIRMED" ||
+          data.data.schedule.status === "READY" ||
+          data.data.schedule.status === "PLAY") &&
+          data.data.schedule.matchType === "TEAM" &&
+          data.data.schedule.invitation?.message &&
+          data?.data?.isManager && (
+            <div className="px-4">
+              <div className="flex justify-between items-center py-2 min-h-13">
+                <div className="flex items-center gap-2">
+                  <EnvelopeOpenIcon
+                    weight="fill"
+                    className="size-7 text-zinc-500"
+                  />
+                  <h2 className="text-xl font-semibold">초청 메시지</h2>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    className="text-base sm:text-sm !font-semibold rounded-full bg-neutral-100 text-gray-700 hover:bg-neutral-200 gap-1.5"
+                    onClick={() => setIsMessageOpen(!isMessageOpen)}
+                  >
+                    {isMessageOpen ? "접기" : "펼치기"}
+                    {isMessageOpen ? (
+                      <ChevronUp className="size-4" />
+                    ) : (
+                      <ChevronDown className="size-4" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {/* 비공개 안내 */}
+              <div className="h-9 mb-2 flex items-center gap-1.5 px-4 bg-amber-400/10 rounded-sm text-amber-700">
+                <Info className="size-4" />
+                <span className="text-sm">
+                  <span className="font-medium text-amber-800">주최팀</span>과{" "}
+                  <span className="font-medium text-amber-800">초청팀</span>의
+                  팀장과 부팀장만 볼 수 있습니다.
+                </span>
+              </div>
+
+              {isMessageOpen && (
+                <div className="border px-4 py-3 bg-white rounded-2xl min-h-24 whitespace-pre-line break-words">
+                  {data.data.schedule.invitation?.message}
+                </div>
+              )}
+            </div>
+          )}
       </div>
 
       {/* 만든 날짜와 만든이 */}
