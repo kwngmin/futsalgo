@@ -50,21 +50,33 @@ const SCHEDULE_INCLUDE = {
 } as const;
 
 const DateUtils = {
-  getTodayString(): string {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
+  // 한국 시간 기준으로 Date 객체 가져오기
+  getKoreanDate(): Date {
+    const now = new Date();
+    // UTC 시간에 9시간 더하기 (KST = UTC+9)
+    const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
+    const koreanTime = new Date(utcTime + 9 * 60 * 60 * 1000);
+    return koreanTime;
+  },
+
+  // 날짜를 YYYY-MM-DD 형식으로 포맷팅하는 공통 함수
+  formatDateString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   },
 
+  getTodayString(): string {
+    const today = this.getKoreanDate();
+    return this.formatDateString(today);
+  },
+
   getTomorrowString(): string {
-    const tomorrow = new Date();
+    const today = this.getKoreanDate();
+    const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const year = tomorrow.getFullYear();
-    const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
-    const day = String(tomorrow.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    return this.formatDateString(tomorrow);
   },
 };
 
