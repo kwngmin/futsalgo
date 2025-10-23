@@ -137,7 +137,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
 
   const tabOptions = useMemo(
     () => [
-      { tab: "schedules" as const, label: "경기일정" },
+      { tab: "schedules" as const, label: "경기 일정" },
       { tab: "my-schedules" as const, label: "내 일정" },
     ],
     []
@@ -236,7 +236,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
             onClick={() => handleMySchedulesTabChange("schedules")}
             className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium cursor-pointer"
           >
-            경기일정 보기
+            경기 일정 보기
           </button>
         </div>
       )}

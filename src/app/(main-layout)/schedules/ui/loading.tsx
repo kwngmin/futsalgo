@@ -15,7 +15,7 @@ const SchedulePageLoading = ({
                 isMySchedules ? "opacity-30" : ""
               }`}
             >
-              경기일정
+              경기 일정
             </h1>
             <h1
               className={`text-[1.625rem] font-bold cursor-default ${

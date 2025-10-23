@@ -51,7 +51,7 @@ const TeamSchedules = ({ teamId }: TeamSchedulesProps) => {
       <div className="flex items-center justify-center py-8">
         <div className="text-center">
           <p className="text-destructive mb-2">
-            경기일정을 불러오는데 실패했습니다
+            경기 일정을 불러오는데 실패했습니다
           </p>
           <p className="text-sm text-muted-foreground">{error.message}</p>
         </div>
@@ -69,7 +69,7 @@ const TeamSchedules = ({ teamId }: TeamSchedulesProps) => {
           className="w-16 h-16 mx-auto mb-4 text-gray-300"
           weight="duotone"
         />
-        <p className="text-lg mb-2 font-medium">경기일정이 없습니다.</p>
+        <p className="text-lg mb-2 font-medium">경기 일정이 없습니다.</p>
       </div>
     );
   }
@@ -85,14 +85,14 @@ const TeamSchedules = ({ teamId }: TeamSchedulesProps) => {
         {isFetchingNextPage && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
-            경기일정을 불러오는 중...
+            경기 일정을 불러오는 중...
           </div>
         )}
       </div>
 
       {/* {!hasNextPage && allSchedules.length > 0 && (
         <div className="text-center py-8 text-muted-foreground">
-          모든 경기일정을 불러왔습니다
+          모든 경기 일정을 불러왔습니다
         </div>
       )} */}
     </div>

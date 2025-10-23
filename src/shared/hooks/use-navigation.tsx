@@ -12,7 +12,7 @@ import {
 export const navItems = [
   {
     id: "home",
-    label: "경기일정",
+    label: "경기 일정",
     // icon: CourtBasketballIcon,
     icon: CalendarIcon,
     href: "/",

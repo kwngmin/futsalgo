@@ -34,10 +34,10 @@ const OnboardingComplete = () => {
         <CardDescription>
           {countdown > 0 ? (
             <span className="font-semibold text-blue-600">
-              {countdown}초 후 경기일정으로 이동합니다...
+              {countdown}초 후 경기 일정으로 이동합니다...
             </span>
           ) : (
-            "경기일정으로 이동 중..."
+            "경기 일정으로 이동 중..."
           )}
         </CardDescription>
       </CardHeader>

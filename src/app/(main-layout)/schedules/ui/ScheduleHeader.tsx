@@ -66,7 +66,7 @@ const ScheduleHeader = memo(
         {/* 데스크톱 헤더 */}
         <div className="hidden sm:flex items-center justify-between px-4 h-16 shrink-0">
           <div className="flex gap-3">
-            <TabButton tab="schedules" label="경기일정" />
+            <TabButton tab="schedules" label="경기 일정" />
             <TabButton tab="my-schedules" label="내 일정" />
           </div>
           <div className="flex items-center gap-2">
@@ -83,7 +83,7 @@ const ScheduleHeader = memo(
         {!searchFocused ? (
           <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0">
             <div className="flex gap-3">
-              <TabButton tab="schedules" label="경기일정" />
+              <TabButton tab="schedules" label="경기 일정" />
               <TabButton tab="my-schedules" label="내 일정" />
             </div>
             <div className="flex items-center gap-2">

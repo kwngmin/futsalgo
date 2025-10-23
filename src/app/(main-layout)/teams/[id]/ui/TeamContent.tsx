@@ -53,7 +53,7 @@ import TeamManage from "./TeamManage";
 //     isDisabled: false,
 //   },
 //   {
-//     label: "경기일정",
+//     label: "경기 일정",
 //     value: "matches",
 //     isDisabled: false,
 //   },
@@ -566,7 +566,7 @@ const TeamContent = ({ id }: { id: string }) => {
             )}
           </div>
 
-          {/* 경기일정 */}
+          {/* 경기 일정 */}
           <div className="px-4">
             <div className="flex justify-between items-center p-2 min-h-13">
               <div className="flex items-center gap-3">
@@ -575,7 +575,7 @@ const TeamContent = ({ id }: { id: string }) => {
                   className="size-7 text-zinc-500"
                 />
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-semibold">경기일정</h2>
+                  <h2 className="text-xl font-semibold">경기 일정</h2>
                 </div>
               </div>
               <Button
@@ -819,7 +819,7 @@ const TeamContent = ({ id }: { id: string }) => {
           {/* 사진 */}
           {/* {selectedTab === "photos" && <TeamPhotosGallery teamId={id} />} */}
 
-          {/* 경기일정 */}
+          {/* 경기 일정 */}
           {/* {selectedTab === "matches" && <TeamSchedules teamId={id} />} */}
         </div>
       ) : null}

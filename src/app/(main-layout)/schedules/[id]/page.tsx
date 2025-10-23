@@ -16,7 +16,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   return {
-    title: "경기일정 상세",
+    title: "경기 일정 상세",
     description: `풋살 일정을 확인하고 참석 신청하세요. 경기 정보, 참석자, MVP 투표, 사진 공유 등 다양한 기능을 이용할 수 있습니다.`,
     keywords: [
       "풋살 일정",

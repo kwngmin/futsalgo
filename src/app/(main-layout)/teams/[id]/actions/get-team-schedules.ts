@@ -49,7 +49,7 @@ export async function getTeamSchedules({
       },
     });
 
-    // 팀이 호스트이거나 초대받은 모든 경기일정 조회
+    // 팀이 호스트이거나 초대받은 모든 경기 일정 조회
     const schedules = await prisma.schedule.findMany({
       where: {
         OR: [{ hostTeamId: teamId }, { invitedTeamId: teamId }],
@@ -85,7 +85,7 @@ export async function getTeamSchedules({
       },
     };
   } catch (error) {
-    console.error("팀 경기일정 조회 실패:", error);
+    console.error("팀 경기 일정 조회 실패:", error);
     return {
       success: false,
       error: "서버 오류가 발생했습니다",

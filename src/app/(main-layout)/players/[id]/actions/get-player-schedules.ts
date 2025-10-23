@@ -90,7 +90,7 @@ export async function getPlayerSchedules({
       },
     };
   } catch (error) {
-    console.error("사용자 경기일정 조회 실패:", error);
+    console.error("사용자 경기 일정 조회 실패:", error);
     return {
       success: false,
       error: "서버 오류가 발생했습니다",

@@ -509,7 +509,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
           </div>
         )}
 
-      {/* 경기일정 참석여부 투표 */}
+      {/* 경기 일정 참석여부 투표 */}
       {isAttendance &&
         (data.data.schedule.status === "CONFIRMED" ||
           data.data.schedule.status === "READY") &&
@@ -525,7 +525,7 @@ const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="font-semibold">경기일정 참석여부</span>
+                <span className="font-semibold">경기 일정 참석여부</span>
                 <div className="w-full flex items-center gap-1 tracking-tight text-sm">
                   <span className="font-medium text-indigo-700">
                     {new Date(
