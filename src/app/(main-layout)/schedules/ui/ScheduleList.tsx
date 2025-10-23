@@ -35,7 +35,7 @@ const ScheduleList = ({ schedule }: { schedule: ScheduleListProps }) => {
   return (
     <Link
       href={
-        pathname === "/my-schedules"
+        pathname === "/schedules/my"
           ? `/schedules/${schedule.id}?tab=${pathname}`
           : `/schedules/${schedule.id}`
       }

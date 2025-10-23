@@ -94,20 +94,9 @@ function formatTimeRange(date: string, start: string, end: string): string {
   return `${startPeriod} ${startTime} - ${endPeriod} ${endTime}`;
 }
 
-const ScheduleContent = ({
-  scheduleId,
-}: // isLikedSchedule,
-// startTime,
-// matchType,
-{
-  scheduleId: string;
-  // isLikedSchedule?: boolean;
-  // startTime?: string;
-  // matchType?: MatchType;
-}) => {
+const ScheduleContent = ({ scheduleId }: { scheduleId: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  // const tab = searchParams.get("tab");
 
   const session = useSession();
   console.log(session, "session");
@@ -162,14 +151,6 @@ const ScheduleContent = ({
 
   const canEditNotice = currentUserId === data?.data?.schedule?.createdBy.id;
   const hasNoticeContent = Boolean(data?.data?.schedule?.description);
-
-  const handleGoBack = () => {
-    if (searchParams.get("tab") === "/my-schedules") {
-      router.push("/my-schedules");
-    } else {
-      router.push("/");
-    }
-  };
 
   const handleStartEditNotice = () => {
     setNoticeContent(data?.data?.schedule?.description || "");
@@ -360,12 +341,14 @@ const ScheduleContent = ({
     <div className="max-w-2xl mx-auto pb-16 flex flex-col">
       {/* 상단: 뒤로 가기와 공유하기, 더 보기 버튼 */}
       <div className="flex justify-between items-center shrink-0 px-4 h-16">
-        <button
+        <Link
           className="shrink-0 size-10 flex items-center justify-center text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
-          onClick={handleGoBack}
+          href={
+            searchParams.get("tab") === "/schedules/my" ? "/schedules/my" : "/"
+          }
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
-        </button>
+        </Link>
         <span className="font-semibold tracking-tight text-lg">
           {data.data.schedule?.matchType === "TEAM" ? "친선전" : "자체전"}
         </span>
