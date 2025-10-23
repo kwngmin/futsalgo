@@ -37,7 +37,7 @@ const OnboardingPage = async () => {
 
   return (
     <div className="flex min-h-screen sm:items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-sm space-y-8 sm:mb-48">
+      <div className="w-full sm:max-w-sm space-y-8 sm:mb-48">
         <div className="text-center">
           <h1 className="text-[1.625rem] font-bold text-gray-900">
             환영합니다!
