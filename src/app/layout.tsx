@@ -11,7 +11,6 @@ import {
   OrganizationStructuredData,
   SoftwareApplicationStructuredData,
 } from "@/shared/components/seo/structured-data";
-import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -143,12 +142,12 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
-      <Head>
+      <head>
         <meta
           name="naver-site-verification"
           content="221ddc187cdd67fa9a81508a192ff02d43a2eb0c"
         />
-      </Head>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-y-scroll`}
       >
