@@ -348,7 +348,9 @@ const NewScheduleForm = ({
         queryClient.invalidateQueries({
           queryKey: ["my-schedules"],
         });
-        router.replace(`/`);
+        router.replace(
+          getMatchTypeOptions().length > 1 ? `/` : `/schedules/my`
+        );
         router.refresh();
       }
     } catch (error) {
