@@ -588,7 +588,12 @@ export function OnboardingProfile({
           )}
 
           <div className="flex gap-3">
-            <Button type="submit" disabled={isLoading} className="flex-1">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="flex-1 sm:!text-base"
+              size="lg"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

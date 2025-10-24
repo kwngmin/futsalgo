@@ -132,7 +132,8 @@ export function OnboardingNickname({
           <Button
             onClick={handleNextStep}
             disabled={nickname.status !== "valid" || isLoading}
-            className="flex-1"
+            className="flex-1 sm:!text-base"
+            size="lg"
           >
             {isLoading ? (
               <>

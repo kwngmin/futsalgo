@@ -95,7 +95,8 @@ export function OnboardingEmail({
           <Button
             onClick={handleNextStep}
             disabled={email.status !== "valid"}
-            className="flex-1"
+            className="flex-1 sm:!text-base"
+            size="lg"
           >
             다음
           </Button>
