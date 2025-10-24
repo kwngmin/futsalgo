@@ -312,6 +312,8 @@ const NewScheduleForm = ({
     [matchDate]
   );
 
+  console.log(getMatchTypeOptions(), "getMatchTypeOptions");
+
   const onSubmit = async (formData: NewFormData) => {
     setIsLoading(true);
 
@@ -334,7 +336,11 @@ const NewScheduleForm = ({
       });
 
       if (result.success) {
-        alert("일정이 추가되었습니다.");
+        alert(
+          getMatchTypeOptions().length > 1
+            ? "일정이 추가되었습니다."
+            : "경기가 없는 지난 일정은 [내 일정] 화면에서 확인 하실 수 있습니다"
+        );
         // 쿼리 무효화를 병렬로 처리하여 성능 향상
         queryClient.invalidateQueries({
           queryKey: ["schedules"],
