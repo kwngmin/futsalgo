@@ -40,6 +40,7 @@ import {
   YoutubeLogoIcon,
 } from "@phosphor-icons/react";
 import TeamManage from "./TeamManage";
+import { deleteTeam } from "../actions/delete.team";
 
 // const tabs = [
 //   {
@@ -80,7 +81,7 @@ const TeamContent = ({ id }: { id: string }) => {
     placeholderData: (previousData) => previousData,
     enabled: !!id, // id 없으면 fetch 안 함
   });
-  console.log(data, "datadata");
+
   const handleGoBack = () => {
     if (searchParams.get("goback") === "false") {
       router.push(`/teams`);
@@ -116,12 +117,78 @@ const TeamContent = ({ id }: { id: string }) => {
           queryKey: ["my-schedules"],
           refetchType: "all",
         });
+        queryClient.invalidateQueries({
+          queryKey: ["player", session.data?.user?.id],
+          refetchType: "all",
+        });
       } else {
         alert(result?.error);
       }
     } catch (error) {
       console.error(error);
       alert("팀 탈퇴에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteTeam = async () => {
+    const confirmMessage = `
+정말로 "${data?.data?.name}" 팀을 삭제하시겠습니까?
+
+⚠️ 주의사항:
+- 팀 삭제 후에는 복구할 수 없습니다
+- 모든 팀원이 자동으로 탈퇴 처리됩니다
+- 과거 경기 기록은 보존됩니다
+    `.trim();
+
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    // 2차 확인
+    const teamName = prompt(
+      `확인을 위해 팀 이름 "${data?.data?.name}"을 입력해주세요:`
+    );
+    
+    if (teamName !== data?.data?.name) {
+      alert("팀 이름이 일치하지 않습니다.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await deleteTeam(id);
+      
+      if (result?.success) {
+        alert(result.message);
+        
+        // 쿼리 무효화
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["teams"], refetchType:'all' }),
+          queryClient.invalidateQueries({ queryKey: ["team", id], refetchType:'all' }),
+          queryClient.invalidateQueries({ queryKey: ["schedules"], refetchType:'all' }),
+          queryClient.invalidateQueries({ queryKey: ["my-schedules"], refetchType:'all' }),
+          queryClient.invalidateQueries({ queryKey: ["player", session.data?.user?.id], refetchType:'all' }),
+        ]);
+        
+        // 팀 목록 페이지로 이동
+        router.push("/teams");
+      } else {
+        // 진행 중인 일정이 있는 경우 상세 정보 표시
+        if (result?.activeSchedules) {
+          const scheduleList = result.activeSchedules
+            .map((s) => `• ${s.date} (${new Date(s.date).toLocaleDateString("ko-KR")})`)
+            .join("\n");
+          
+          alert(`${result.error}\n\n진행 중인 일정:\n${scheduleList}`);
+        } else {
+          alert(result?.error || "팀 삭제에 실패했습니다.");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert("팀 삭제 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -798,6 +865,7 @@ const TeamContent = ({ id }: { id: string }) => {
                 <button
                   type="button"
                   className="rounded-md px-3 flex items-center justify-center h-12 sm:h-11 gap-3 cursor-pointer bg-destructive/5 hover:bg-destructive/10 w-full transition-colors text-destructive font-medium"
+                  onClick={handleDeleteTeam}
                 >
                   팀 삭제
                 </button>
