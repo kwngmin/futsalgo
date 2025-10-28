@@ -287,47 +287,49 @@ const TeamContent = ({ id }: { id: string }) => {
         >
           <ArrowLeft style={{ width: "24px", height: "24px" }} />
         </button>
-        <div className="flex items-center justify-end gap-1.5">
-          {/* 팔로우 버튼 수정 */}
-          <button
-            type="button"
-            className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
-              isFollowing
-                ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
-                : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
-            }`}
-            onClick={() => handleFollowClick(id)}
-          >
-            {/* {isFollowing && <UserRoundCheck className="size-5" />} */}
-            {isFollowing ? "팔로잉" : "팔로우"}
-          </button>
-          <button
-            className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-            type="button"
-            onClick={async () => {
-              console.log(process.env.NODE_ENV, "env");
-              try {
-                if (process.env.NODE_ENV === "development") {
-                  console.log("development");
-                  await navigator.clipboard.writeText(
-                    `localhost:3000/teams/${id}`
-                  );
-                } else {
-                  console.log("production");
-                  await navigator.clipboard.writeText(
-                    `www.futsalgo.com/teams/${id}`
-                  );
+        {!data.data.isDeleted && (
+          <div className="flex items-center justify-end gap-1.5">
+            {/* 팔로우 버튼 수정 */}
+            <button
+              type="button"
+              className={`shrink-0 h-9 px-4 gap-1.5 flex items-center justify-center rounded-full transition-colors cursor-pointer font-semibold ${
+                isFollowing
+                  ? "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"
+                  : "bg-neutral-100 hover:bg-neutral-200 text-gray-600 hover:text-gray-700"
+              }`}
+              onClick={() => handleFollowClick(id)}
+            >
+              {/* {isFollowing && <UserRoundCheck className="size-5" />} */}
+              {isFollowing ? "팔로잉" : "팔로우"}
+            </button>
+            <button
+              className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+              type="button"
+              onClick={async () => {
+                console.log(process.env.NODE_ENV, "env");
+                try {
+                  if (process.env.NODE_ENV === "development") {
+                    console.log("development");
+                    await navigator.clipboard.writeText(
+                      `localhost:3000/teams/${id}`
+                    );
+                  } else {
+                    console.log("production");
+                    await navigator.clipboard.writeText(
+                      `www.futsalgo.com/teams/${id}`
+                    );
+                  }
+                } catch (error) {
+                  console.error(error, "error");
+                } finally {
+                  alert("URL이 복사되었습니다.");
                 }
-              } catch (error) {
-                console.error(error, "error");
-              } finally {
-                alert("URL이 복사되었습니다.");
-              }
-            }}
-          >
-            <LinkIcon className="size-5" />
-          </button>
-        </div>
+              }}
+            >
+              <LinkIcon className="size-5" />
+            </button>
+          </div>
+        )}
       </div>
       {data ? (
         <div className="space-y-6">
