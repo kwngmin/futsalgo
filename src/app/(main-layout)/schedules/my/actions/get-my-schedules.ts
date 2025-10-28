@@ -25,6 +25,7 @@ export interface GetMySchedulesResponse {
   error?: string;
   data?: {
     schedules: ScheduleWithDetails[];
+    hasTeams: boolean;
     manageableTeams: Team[];
     hasMore?: boolean;
     totalCount?: number;
@@ -178,6 +179,7 @@ export const getMySchedules = cache(
           success: true,
           data: {
             schedules: [],
+            hasTeams: false,
             manageableTeams: [],
             hasMore: false,
             totalCount: 0,
@@ -197,6 +199,7 @@ export const getMySchedules = cache(
         success: true,
         data: {
           schedules,
+          hasTeams: approvedTeamIds.length > 0,
           manageableTeams: page === 1 ? manageableTeams : [],
           hasMore: schedules.length === pageSize,
           totalCount,

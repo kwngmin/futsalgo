@@ -227,32 +227,30 @@ const ScheduleAttendance = ({ scheduleId }: { scheduleId: string }) => {
         </div>
 
         {/* 관리 버튼 */}
-        {data?.data?.manageableTeams &&
-          data?.data?.manageableTeams.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-base sm:text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 gap-1 hover:bg-blue-50"
-              onClick={() => {
-                router.push(
-                  `/schedules/${scheduleId}/attendances/${
-                    data?.data?.manageableTeams.includes("host")
-                      ? data?.data?.schedule?.hostTeamId
-                      : data?.data?.manageableTeams.includes("invited")
-                      ? data?.data?.schedule?.invitedTeamId
-                      : null
-                  }`
-                );
-              }}
-            >
-              {/* <Settings className="size-4" strokeWidth={2.5} /> */}
-              관리
-              <ChevronRight
-                className="size-4 text-blue-800"
-                strokeWidth={2.5}
-              />
-            </Button>
-          )}
+        {(data?.data?.isAuthor ||
+          (data?.data?.manageableTeams &&
+            data?.data?.manageableTeams.length > 0)) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-base sm:text-sm font-semibold rounded-full text-blue-600 hover:text-blue-700 gap-1 hover:bg-blue-50"
+            onClick={() => {
+              router.push(
+                `/schedules/${scheduleId}/attendances/${
+                  data?.data?.manageableTeams.includes("host")
+                    ? data?.data?.schedule?.hostTeamId
+                    : data?.data?.manageableTeams.includes("invited")
+                    ? data?.data?.schedule?.invitedTeamId
+                    : null
+                }`
+              );
+            }}
+          >
+            {/* <Settings className="size-4" strokeWidth={2.5} /> */}
+            관리
+            <ChevronRight className="size-4 text-blue-800" strokeWidth={2.5} />
+          </Button>
+        )}
       </div>
 
       <div

@@ -131,9 +131,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
     return data.pages.flatMap((page) => page.data?.schedules || []);
   }, [data]);
 
-  const hasManageableTeams =
-    data?.pages[0]?.data?.manageableTeams &&
-    data.pages[0].data.manageableTeams.length > 0;
+  const hasTeams = data?.pages[0]?.data?.hasTeams || false;
 
   const tabOptions = useMemo(
     () => [
@@ -180,7 +178,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
         onSearchClose={handleSearchClose}
-        onPlusAction={hasManageableTeams ? handleScheduleCreate : undefined}
+        onPlusAction={hasTeams ? handleScheduleCreate : undefined}
       />
 
       <ScheduleFilterBar
@@ -218,7 +216,7 @@ const MySchedulesInfiniteClient = ({ initialData }: Props) => {
         )}
       </Suspense>
 
-      {hasManageableTeams && <AddScheduleButton />}
+      {hasTeams && <AddScheduleButton />}
 
       {!isFetching && allSchedules.length === 0 && (
         <div className="text-center py-12 flex flex-col items-center justify-center">

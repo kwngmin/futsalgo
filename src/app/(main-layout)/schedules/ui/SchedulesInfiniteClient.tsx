@@ -140,9 +140,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
     };
   }, [data]);
 
-  const hasManageableTeams =
-    data?.pages[0]?.data?.manageableTeams &&
-    data.pages[0].data.manageableTeams.length > 0;
+  const hasTeams = data?.pages[0]?.data?.hasTeams || false;
   const isLoggedIn = !!session.data?.user?.id;
 
   const tabOptions = useMemo(
@@ -166,7 +164,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         onSearchClear={handleSearchClear}
         onSearchFocus={handleSearchFocus}
         onSearchClose={handleSearchClose}
-        onPlusAction={hasManageableTeams ? handleScheduleCreate : undefined}
+        onPlusAction={hasTeams ? handleScheduleCreate : undefined}
       />
 
       <ScheduleFilterBar
@@ -205,7 +203,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
         )}
       </Suspense>
 
-      {hasManageableTeams && <AddScheduleButton />}
+      {hasTeams && <AddScheduleButton />}
 
       {!isLoggedIn && <LoginButton />}
 

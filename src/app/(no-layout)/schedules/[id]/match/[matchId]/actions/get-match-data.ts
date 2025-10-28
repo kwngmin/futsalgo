@@ -24,6 +24,7 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
           matchType: true,
           hostTeamMercenaryCount: true,
           invitedTeamMercenaryCount: true,
+          createdById: true,
         },
       },
       homeTeam: {
@@ -70,7 +71,9 @@ export const getMatchData = async (matchId: string, scheduleId: string) => {
     if (membershipData) {
       isMember = true;
       isEditable =
-        membershipData.role === "OWNER" || membershipData.role === "MANAGER";
+        membershipData.role === "OWNER" ||
+        membershipData.role === "MANAGER" ||
+        match.schedule.createdById === userId;
     }
   }
 

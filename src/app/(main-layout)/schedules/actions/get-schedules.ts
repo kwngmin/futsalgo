@@ -28,6 +28,7 @@ export interface GetSchedulesResponse {
     todaysSchedules: ScheduleWithDetails[];
     upcomingSchedules: ScheduleWithDetails[];
     pastSchedules: ScheduleWithDetails[];
+    hasTeams: boolean;
     manageableTeams: Team[];
     likes: ScheduleLike[];
     hasMore?: boolean; // 더 가져올 데이터가 있는지
@@ -282,6 +283,7 @@ export const getSchedules = cache(
             todaysSchedules: [],
             upcomingSchedules: [],
             pastSchedules,
+            hasTeams: false,
             manageableTeams: [],
             likes: [],
             hasMore: pastSchedules.length === pageSize,
@@ -315,6 +317,7 @@ export const getSchedules = cache(
           pastSchedules,
           todaysSchedules: todaysSchedulesWithTeams,
           upcomingSchedules: upcomingSchedulesWithTeams,
+          hasTeams: teamInfo.approvedTeamIds.length > 0,
           manageableTeams: shouldFetchTodayAndUpcoming
             ? teamInfo.manageableTeams
             : [],

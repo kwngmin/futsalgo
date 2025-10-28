@@ -31,6 +31,7 @@ export async function updateAllAttendanceStatus({
       select: {
         hostTeamId: true,
         invitedTeamId: true,
+        createdById: true,
       },
     });
 
@@ -55,7 +56,11 @@ export async function updateAllAttendanceStatus({
       },
     });
 
-    if (!userTeamInfo || !["OWNER", "MANAGER"].includes(userTeamInfo.role)) {
+    const isTeamManager =
+      userTeamInfo && ["OWNER", "MANAGER"].includes(userTeamInfo.role);
+    const isScheduleCreator = currentUserId === schedule.createdById;
+
+    if (!isTeamManager && !isScheduleCreator) {
       return { success: false, error: "수정 권한이 없습니다." };
     }
 

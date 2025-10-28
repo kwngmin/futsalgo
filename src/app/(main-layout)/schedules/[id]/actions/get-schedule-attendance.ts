@@ -24,6 +24,7 @@ export async function getScheduleAttendance(scheduleId: string) {
         invitedTeamId: true,
         hostTeamMercenaryCount: true,
         invitedTeamMercenaryCount: true,
+        createdById: true,
       },
     });
 
@@ -115,6 +116,7 @@ export async function getScheduleAttendance(scheduleId: string) {
           },
         })),
         manageableTeams,
+        isAuthor: schedule.createdById === session?.user?.id,
         schedule,
       },
     };
