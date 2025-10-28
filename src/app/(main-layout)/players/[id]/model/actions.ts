@@ -405,33 +405,9 @@ export async function getPlayer(id: string) {
           },
         }),
 
-        // 팀원 평가 데이터
-        prisma.teamMemberRating.findMany({
-          where: {
-            toUserId: id,
-            // periodYear: currentYear,
-            // periodMonth: currentMonth,
-          },
-          include: {
-            fromUser: {
-              select: {
-                id: true,
-                name: true,
-                nickname: true,
-                image: true,
-              },
-            },
-            team: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-          },
-        }),
       ]);
 
-    // 팀원 평가 데이터
+    // 팀원 평가 데이터를 별도로 조회
     const playerRatings = await prisma.teamMemberRating.findMany({
       where: {
         toUserId: id,
@@ -484,8 +460,35 @@ export async function getPlayer(id: string) {
       },
     };
 
+    // 현재 사용자의 활성화된 팀 ID 목록
+    const currentTeamIds = filteredTeams.map(team => team.team.id);
+    
+    // 평가를 한 사용자들의 ID 목록
+    const raterIds = playerRatings.map(rating => rating.fromUser.id);
+    
+    // 평가를 한 사용자들이 현재 사용자와 같은 팀에 있는지 확인
+    const ratersInSameTeams = await prisma.teamMember.findMany({
+      where: {
+        userId: { in: raterIds },
+        teamId: { in: currentTeamIds },
+        status: "APPROVED",
+      },
+      select: {
+        userId: true,
+        teamId: true,
+      },
+    });
+    
+    // 현재 같은 팀에 있는 사용자들의 ID 목록
+    const validRaterIds = new Set(ratersInSameTeams.map(member => member.userId));
+    
+    // 현재 같은 팀에 있는 사용자들의 평가만 필터링
+    const validRatings = playerRatings.filter(rating => {
+      return validRaterIds.has(rating.fromUser.id);
+    });
+
     // 평가 데이터 처리
-    const ratings = processPlayerRatings(playerRatings);
+    const ratings = processPlayerRatings(validRatings);
 
     return {
       success: true,
