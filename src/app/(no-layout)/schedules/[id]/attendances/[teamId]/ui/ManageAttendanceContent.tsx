@@ -264,7 +264,7 @@ const ManageAttendanceContent = ({
       key={count}
       type="button"
       disabled={isMercenaryUpdating || mercenaryCount === count}
-      className={`size-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
+      className={`w-full h-9 sm:w-9 rounded-sm border flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:cursor-default transition-colors cursor-pointer ${
         mercenaryCount === count
           ? "bg-white border-gray-300"
           : "border-transparent"
@@ -386,7 +386,7 @@ const ManageAttendanceContent = ({
               </span>
             </div>
             <div className="flex items-center gap-2 sm:min-w-72 h-10 rounded-md bg-gray-100 p-0.5">
-              <div className="flex items-center gap-1">
+              <div className="grow grid grid-cols-4 sm:flex items-center gap-1">
                 {[0, 1, 2, 3].map((count) => renderMercenaryButton(count))}
               </div>
               <Separator orientation="vertical" className="!h-7 w-px" />
@@ -394,18 +394,18 @@ const ManageAttendanceContent = ({
                 <button
                   type="button"
                   disabled={isMercenaryUpdating || mercenaryCount <= 0}
-                  className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="w-10 sm:w-9 h-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   onClick={() => handleMercenaryCountChange(mercenaryCount - 1)}
                 >
                   <Minus className="size-4.5 sm:size-4" />
                 </button>
-                <span className="min-w-[2rem] text-center font-semibold text-lg">
+                <span className="min-w-[3rem] sm:min-w-[2rem] text-center font-semibold text-lg">
                   {mercenaryCount}
                 </span>
                 <button
                   type="button"
                   disabled={isMercenaryUpdating}
-                  className="size-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  className="w-10 sm:w-9 h-9 rounded-sm bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   onClick={() => handleMercenaryCountChange(mercenaryCount + 1)}
                 >
                   <Plus className="size-4.5 sm:size-4" />
