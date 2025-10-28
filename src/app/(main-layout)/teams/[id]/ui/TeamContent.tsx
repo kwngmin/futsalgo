@@ -150,7 +150,7 @@ const TeamContent = ({ id }: { id: string }) => {
     const teamName = prompt(
       `확인을 위해 팀 이름 "${data?.data?.name}"을 입력해주세요:`
     );
-    
+
     if (teamName !== data?.data?.name) {
       alert("팀 이름이 일치하지 않습니다.");
       return;
@@ -159,28 +159,46 @@ const TeamContent = ({ id }: { id: string }) => {
     setIsLoading(true);
     try {
       const result = await deleteTeam(id);
-      
+
       if (result?.success) {
         alert(result.message);
-        
+
         // 쿼리 무효화
         await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ["teams"], refetchType:'all' }),
-          queryClient.invalidateQueries({ queryKey: ["team", id], refetchType:'all' }),
-          queryClient.invalidateQueries({ queryKey: ["schedules"], refetchType:'all' }),
-          queryClient.invalidateQueries({ queryKey: ["my-schedules"], refetchType:'all' }),
-          queryClient.invalidateQueries({ queryKey: ["player", session.data?.user?.id], refetchType:'all' }),
+          queryClient.invalidateQueries({
+            queryKey: ["teams"],
+            refetchType: "all",
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["team", id],
+            refetchType: "all",
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["schedules"],
+            refetchType: "all",
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["my-schedules"],
+            refetchType: "all",
+          }),
+          queryClient.invalidateQueries({
+            queryKey: ["player", session.data?.user?.id],
+            refetchType: "all",
+          }),
         ]);
-        
+
         // 팀 목록 페이지로 이동
         router.push("/teams");
       } else {
         // 진행 중인 일정이 있는 경우 상세 정보 표시
         if (result?.activeSchedules) {
           const scheduleList = result.activeSchedules
-            .map((s) => `• ${s.date} (${new Date(s.date).toLocaleDateString("ko-KR")})`)
+            .map(
+              (s) =>
+                `• ${s.date} (${new Date(s.date).toLocaleDateString("ko-KR")})`
+            )
             .join("\n");
-          
+
           alert(`${result.error}\n\n진행 중인 일정:\n${scheduleList}`);
         } else {
           alert(result?.error || "팀 삭제에 실패했습니다.");
@@ -336,11 +354,11 @@ const TeamContent = ({ id }: { id: string }) => {
                 <div className="grow flex flex-col">
                   <h1 className="text-2xl font-semibold">{data?.data?.name}</h1>
                   <span className="text-muted-foreground tracking-tight leading-normal">
-                    {
-                      TEAM_LEVEL_DESCRIPTION[
-                        data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
-                      ]
-                    }
+                    {data.data.isDeleted
+                      ? "삭제 된 팀입니다."
+                      : TEAM_LEVEL_DESCRIPTION[
+                          data.data.level as keyof typeof TEAM_LEVEL_DESCRIPTION
+                        ]}
                   </span>
                 </div>
               </div>
@@ -488,7 +506,9 @@ const TeamContent = ({ id }: { id: string }) => {
               </Label>
             </div>
             <div className="flex flex-col gap-1 items-center">
-              <div className="font-semibold">{data.data.stats.averageAge}</div>
+              <div className="font-semibold">
+                {data.data.isDeleted ? "-" : data.data.stats.averageAge}
+              </div>
               <Label className="text-muted-foreground leading-snug">
                 평균 연령
               </Label>
@@ -836,16 +856,35 @@ const TeamContent = ({ id }: { id: string }) => {
 
           {/* 등록 날짜와 만든이 */}
           <div className="flex items-center justify-center gap-2 pt-6">
-            <span className="text-center text-sm text-gray-500">
-              등록일:{" "}
-              {data?.data?.createdAt
-                ? new Date(data?.data?.createdAt).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                : ""}
-            </span>
+            {data.data.isDeleted ? (
+              <span className="text-center text-sm text-gray-500">
+                삭제일:{" "}
+                {data?.data?.deletedAt
+                  ? new Date(data?.data?.deletedAt).toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
+                  : ""}
+              </span>
+            ) : (
+              <span className="text-center text-sm text-gray-500">
+                등록일:{" "}
+                {data?.data?.createdAt
+                  ? new Date(data?.data?.createdAt).toLocaleDateString(
+                      "ko-KR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
+                  : ""}
+              </span>
+            )}
           </div>
 
           {/* 수정 & 삭제 */}
