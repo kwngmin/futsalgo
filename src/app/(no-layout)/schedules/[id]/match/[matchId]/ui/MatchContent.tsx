@@ -238,6 +238,14 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
         queryKey: ["schedule", data.match.scheduleId],
         refetchType: "all",
       });
+      queryClient.invalidateQueries({
+        queryKey: ["schedules"],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["my-schedules"],
+        refetchType: "all",
+      });
       if (typeof result === "object" && "data" in result) {
         setHomeMercenaryCount(result.data?.homeMercenaryCount ?? 0);
         setAwayMercenaryCount(result.data?.awayMercenaryCount ?? 0);
@@ -381,6 +389,14 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
       queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["schedules"],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["my-schedules"],
+        refetchType: "all",
+      });
     }
   };
 
@@ -407,7 +423,7 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
             refetchType: "all",
           }),
           queryClient.invalidateQueries({
-            queryKey: ["my-schedule"],
+            queryKey: ["my-schedules"],
             refetchType: "all",
           }),
           queryClient.invalidateQueries({
