@@ -220,6 +220,14 @@ const GoalRecord = ({
         refetchType: "all",
       });
       queryClient.invalidateQueries({
+        queryKey: ["player", data.scorerId],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["player", data.assistId],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
         queryKey: ["matchData", matchId, scheduleId],
       });
       reset();

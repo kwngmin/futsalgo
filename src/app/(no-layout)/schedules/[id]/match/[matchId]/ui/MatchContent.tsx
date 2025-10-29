@@ -432,14 +432,21 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
   };
 
   // 골 삭제 핸들러
-  const handleDeleteGoal = async (goalId: string) => {
+  const handleDeleteGoal = async (goal: GoalWithScore) => {
     await handleAsyncOperation(async () => {
-      await deleteGoalRecord(goalId);
+      await deleteGoalRecord(goal.id);
       queryClient.invalidateQueries({
         queryKey: ["schedule"],
         refetchType: "all",
       });
-
+      queryClient.invalidateQueries({
+        queryKey: ["player", goal.scorerId],
+        refetchType: "all",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["player", goal.assistId],
+        refetchType: "all",
+      });
       return { success: true };
     });
   };
@@ -543,7 +550,7 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
                     type="button"
                     className="absolute right-0 sm:right-4 text-sm font-medium size-9 sm:size-8 flex justify-center items-center cursor-pointer bg-destructive/5 rounded-md sm:hover:bg-destructive/10 transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur z-10"
                     disabled={isLoading}
-                    onClick={() => handleDeleteGoal(goal.id)}
+                    onClick={() => handleDeleteGoal(goal)}
                   >
                     <Minus className="size-4.5 sm:size-4 text-destructive" />
                   </button>
