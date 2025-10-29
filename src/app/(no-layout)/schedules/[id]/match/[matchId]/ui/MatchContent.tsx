@@ -388,6 +388,7 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
       // 추가로 필요한 쿼리만 무효화
       queryClient.invalidateQueries({
         queryKey: ["schedule", data.match.scheduleId],
+        refetchType: "all",
       });
       queryClient.invalidateQueries({
         queryKey: ["schedules"],
