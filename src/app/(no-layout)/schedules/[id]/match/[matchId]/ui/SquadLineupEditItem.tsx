@@ -47,6 +47,10 @@ export const SquadLineupEditItem = ({
         };
       }
     );
+    queryClient.invalidateQueries({
+      queryKey: ["schedule", scheduleId],
+      refetchType: "all",
+    });
 
     try {
       const result = await updateLineupSide(lineup.id, side);
@@ -101,6 +105,10 @@ export const SquadLineupEditItem = ({
         };
       }
     );
+    queryClient.invalidateQueries({
+      queryKey: ["schedule", scheduleId],
+      refetchType: "all",
+    });
 
     try {
       const result = await removeFromLineup(lineup.id);
@@ -111,6 +119,10 @@ export const SquadLineupEditItem = ({
 
         // 실패 시 데이터 다시 가져오기
         queryClient.invalidateQueries({ queryKey });
+        queryClient.invalidateQueries({
+          queryKey: ["schedule", scheduleId],
+          refetchType: "all",
+        });
       }
     } catch (error) {
       console.error("선수 제거 오류:", error);

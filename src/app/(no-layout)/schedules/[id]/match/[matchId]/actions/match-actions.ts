@@ -178,61 +178,61 @@ export async function updateSquadLineup(matchId: string) {
     const isUpdatedMercenaryCount =
       matchMercenaryCount !== scheduleMercenaryCount;
 
-    if (missingAttendees.length === 0 && !isUpdatedMercenaryCount) {
-      return { success: true, message: "추가할 인원이 없습니다" };
-    }
+    if (missingAttendees.length === 0) {
+      if (!isUpdatedMercenaryCount) {
+        return { success: true, message: "추가할 인원이 없습니다" };
+      } else {
+        // 용병 수만 조정하는 경우
+        const undecidedCount = Math.max(
+          0,
+          match.schedule.hostTeamMercenaryCount -
+            match.homeTeamMercenaryCount -
+            match.awayTeamMercenaryCount
+        );
 
-    if (missingAttendees.length === 0 && isUpdatedMercenaryCount) {
-      // 용병 수만 조정하는 경우
-      const undecidedCount = Math.max(
-        0,
-        match.schedule.hostTeamMercenaryCount -
-          match.homeTeamMercenaryCount -
-          match.awayTeamMercenaryCount
-      );
+        await prisma.$transaction(async (tx) => {
+          // 매치의 용병 수 업데이트
+          await tx.match.update({
+            where: { id: matchId },
+            data: {
+              homeTeamMercenaryCount: match.homeTeamMercenaryCount,
+              awayTeamMercenaryCount: match.awayTeamMercenaryCount,
+              undecidedTeamMercenaryCount: undecidedCount,
+            },
+          });
 
-      await prisma.$transaction(async (tx) => {
-        // 매치의 용병 수 업데이트
-        await tx.match.update({
-          where: { id: matchId },
-          data: {
-            homeTeamMercenaryCount: match.homeTeamMercenaryCount,
-            awayTeamMercenaryCount: match.awayTeamMercenaryCount,
-            undecidedTeamMercenaryCount: undecidedCount,
-          },
+          // 스케줄 상태 업데이트
+          await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
         });
 
-        // 스케줄 상태 업데이트
-        await updateScheduleStatusBasedOnMatches(match.scheduleId, tx);
-      });
-
-      revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
-      return { success: true, message: "용병 수가 조정되었습니다" };
+        revalidatePath(`/schedules/${match.scheduleId}/match/${matchId}`);
+        return { success: true, message: "용병 수가 조정되었습니다" };
+      }
     }
 
     // 현재 HOME과 AWAY 팀 인원 수 계산
-    const lineupStatus = checkLineupStatus(match.lineups);
+    // const lineupStatus = checkLineupStatus(match.lineups);
 
-    // 균등 배정을 위한 카운터
-    let homeCount = lineupStatus.homeCount;
-    let awayCount = lineupStatus.awayCount;
+    // // 균등 배정을 위한 카운터
+    // let homeCount = lineupStatus.homeCount;
+    // let awayCount = lineupStatus.awayCount;
 
     const newLineups = missingAttendees.map((attendance) => {
-      let side: TeamSide;
+      // let side: TeamSide;
 
-      // 인원 수를 고려하여 균등하게 배정
-      if (homeCount <= awayCount) {
-        side = "HOME";
-        homeCount++;
-      } else {
-        side = "AWAY";
-        awayCount++;
-      }
+      // // 인원 수를 고려하여 균등하게 배정
+      // if (homeCount <= awayCount) {
+      //   side = "HOME";
+      //   homeCount++;
+      // } else {
+      //   side = "AWAY";
+      //   awayCount++;
+      // }
 
       return {
         matchId,
         userId: attendance.userId,
-        side,
+        side: TeamSide.UNDECIDED,
       };
     });
 
