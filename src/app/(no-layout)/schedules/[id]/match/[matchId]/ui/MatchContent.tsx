@@ -632,6 +632,7 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
               homeMercenaryCount={homeMercenaryCount}
               awayMercenaryCount={awayMercenaryCount}
               matchType={data.match.schedule.matchType}
+              resetMode={() => setMode("view")}
             />
           )}
 
@@ -665,7 +666,7 @@ const MatchContent = ({ data, setLoading, refetch }: MatchContentProps) => {
             )}
           </div>
 
-          {mode === "view" ? (
+          {mode === "view" || goalsWithScore.length > 0 ? (
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col bg-gray-50 p-1 rounded-2xl">
                 <div className="flex flex-col sm:flex-row justify-center sm:justify-start sm:items-center gap-x-2 gap-y-0.5 shrink-0 h-12 sm:h-10 *:leading-tight px-3 sm:px-4">

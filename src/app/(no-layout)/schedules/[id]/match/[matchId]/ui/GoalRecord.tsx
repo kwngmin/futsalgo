@@ -79,6 +79,7 @@ const GoalRecord = ({
   homeMercenaryCount,
   awayMercenaryCount,
   matchType,
+  resetMode,
 }: {
   matchId: string;
   lineups: LineupsData | LineupsWithNameData;
@@ -86,6 +87,7 @@ const GoalRecord = ({
   homeMercenaryCount?: number;
   awayMercenaryCount?: number;
   matchType: MatchType;
+  resetMode: () => void;
 }) => {
   const queryClient = useQueryClient();
 
@@ -230,6 +232,7 @@ const GoalRecord = ({
       queryClient.invalidateQueries({
         queryKey: ["matchData", matchId, scheduleId],
       });
+      resetMode();
       reset();
     } catch (error) {
       console.error(error);
