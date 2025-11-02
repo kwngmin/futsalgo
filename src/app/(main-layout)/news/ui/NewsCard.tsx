@@ -56,7 +56,7 @@ const NewsCard = ({ news }: NewsCardProps) => {
     <Link href={`/news/${news.id}`} className="block">
       <Card className="mx-4 mb-4 cursor-pointer hover:shadow-md transition-shadow overflow-hidden py-0 gap-0">
         {/* 제목과 날짜 */}
-        <div className="py-3 space-y-1">
+        <div className="pb-3 space-y-1">
           <h3 className="text-lg sm:text-xl font-bold line-clamp-2">
             {news.title}
           </h3>
