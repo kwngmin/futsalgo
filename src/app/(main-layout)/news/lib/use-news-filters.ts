@@ -14,7 +14,7 @@ interface NewsFilters {
  */
 export const useNewsFilters = ({
   initialSearch,
-  router,
+  // router,
   defaultTab = "all",
 }: {
   initialSearch: string;
@@ -34,16 +34,13 @@ export const useNewsFilters = ({
     };
   }, [debouncedSearchValue, currentTab]);
 
-  const handleTabChange = useCallback(
-    (tab: NewsTabType) => {
-      setCurrentTab(tab);
-      // 찜한 소식 탭으로 이동 시 로그인 체크 (향후 구현)
-      // if (tab === "saved") {
-      //   // 로그인 확인 로직
-      // }
-    },
-    []
-  );
+  const handleTabChange = useCallback((tab: NewsTabType) => {
+    setCurrentTab(tab);
+    // 찜한 소식 탭으로 이동 시 로그인 체크 (향후 구현)
+    // if (tab === "saved") {
+    //   // 로그인 확인 로직
+    // }
+  }, []);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -74,4 +71,3 @@ export const useNewsFilters = ({
     handleSearchClose,
   };
 };
-
