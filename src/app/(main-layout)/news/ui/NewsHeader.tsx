@@ -1,0 +1,148 @@
+"use client";
+
+import SearchInput from "@/features/filter-list/ui/SearchInput";
+import { Plus, Search } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { memo } from "react";
+import { NewsTabType } from "../lib/use-news-filters";
+
+interface NewsHeaderProps {
+  tabOptions: { tab: NewsTabType; label: string }[];
+  placeholder?: string;
+  currentTab: NewsTabType;
+  searchFocused: boolean;
+  searchValue: string;
+  onTabChange: (tab: NewsTabType) => void;
+  onSearchChange: (value: string) => void;
+  onSearchClear: () => void;
+  onSearchFocus: () => void;
+  onSearchClose: () => void;
+  onPlusAction?: () => void;
+}
+
+const NewsHeader = memo(
+  ({
+    tabOptions,
+    placeholder,
+    currentTab,
+    searchFocused,
+    searchValue,
+    onTabChange,
+    onSearchChange,
+    onSearchClear,
+    onSearchFocus,
+    onSearchClose,
+    onPlusAction,
+  }: NewsHeaderProps) => {
+    const session = useSession();
+    const router = useRouter();
+
+    // 탭 컴포넌트
+    const TabButton = ({ tab, label }: { tab: NewsTabType; label: string }) => (
+      <h1
+        className={`text-[1.625rem] font-bold cursor-pointer transition-opacity ${
+          currentTab === tab ? "" : "opacity-30 hover:opacity-50"
+        }`}
+        onClick={() =>
+          tab === "saved" && !session.data?.user
+            ? router.push("/login")
+            : onTabChange(tab)
+        }
+      >
+        {label}
+      </h1>
+    );
+
+    // 검색 버튼 컴포넌트
+    const SearchButton = () => (
+      <button
+        className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+        onClick={onSearchFocus}
+      >
+        <Search className="size-5" />
+      </button>
+    );
+
+    // 플러스 버튼 컴포넌트
+    const PlusButton = () => (
+      <button
+        className="shrink-0 size-10 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+        onClick={onPlusAction}
+      >
+        <Plus className="size-6" strokeWidth={1.75} />
+      </button>
+    );
+
+    // 닫기 버튼 컴포넌트
+    const CloseButton = () => (
+      <button
+        className="shrink-0 px-3 h-10 sm:h-9 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors cursor-pointer text-sm font-semibold active:bg-gray-200"
+        onClick={onSearchClose}
+      >
+        닫기
+      </button>
+    );
+
+    return (
+      <>
+        {/* 데스크톱 헤더 */}
+        <div className="hidden sm:flex items-center justify-between px-4 h-16 shrink-0">
+          <div className="flex gap-3">
+            {tabOptions.map((tab) => (
+              <TabButton key={tab.tab} tab={tab.tab} label={tab.label} />
+            ))}
+          </div>
+          <div className="flex items-center gap-2">
+            {onPlusAction && <PlusButton />}
+            <SearchInput
+              placeholder={placeholder}
+              value={searchValue}
+              onChange={onSearchChange}
+              onClear={onSearchClear}
+            />
+          </div>
+        </div>
+
+        {/* 모바일 헤더 */}
+        {!searchFocused ? (
+          <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0">
+            <div className="flex gap-3">
+              {tabOptions.map((tab) => (
+                <TabButton key={tab.tab} tab={tab.tab} label={tab.label} />
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              {onPlusAction && <PlusButton />}
+              <SearchButton />
+            </div>
+          </div>
+        ) : (
+          <div className="flex sm:hidden items-center justify-between px-4 h-16 shrink-0 gap-2">
+            <SearchInput
+              placeholder={placeholder}
+              value={searchValue}
+              onChange={onSearchChange}
+              onClear={onSearchClear}
+              isMobile
+            />
+            <CloseButton />
+          </div>
+        )}
+      </>
+    );
+  },
+  (prevProps, nextProps) => {
+    // 검색 관련 props와 현재 탭만 비교하여 리렌더링 최적화
+    return (
+      prevProps.currentTab === nextProps.currentTab &&
+      prevProps.searchFocused === nextProps.searchFocused &&
+      prevProps.searchValue === nextProps.searchValue
+    );
+  }
+);
+
+NewsHeader.displayName = "NewsHeader";
+
+export default NewsHeader;
+
