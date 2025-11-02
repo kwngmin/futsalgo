@@ -2,15 +2,18 @@ import { getTournamentNews } from "./actions/get-tournament-news";
 import NewsInfiniteClient from "./ui/NewsInfiniteClient";
 
 interface Props {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ search?: string }>;
 }
 
 /**
  * 대회 소식 페이지
  */
 const NewsPage = async ({ searchParams }: Props) => {
+  const resolvedSearchParams = await searchParams;
   const searchQuery =
-    typeof searchParams.search === "string" ? searchParams.search : undefined;
+    typeof resolvedSearchParams.search === "string"
+      ? resolvedSearchParams.search
+      : undefined;
 
   // 초기 데이터 가져오기
   const initialData = await getTournamentNews({
