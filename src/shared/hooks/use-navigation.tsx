@@ -5,14 +5,15 @@ import {
   CalendarIcon,
   TShirtIcon,
   DotsThreeOutlineIcon,
-  NewspaperClippingIcon,
+  // NewspaperClippingIcon,
   UserSquareIcon,
+  TrophyIcon,
 } from "@phosphor-icons/react";
 
 export const navItems = [
   {
     id: "home",
-    label: "경기 일정",
+    label: "풋살 일정",
     // icon: CourtBasketballIcon,
     icon: CalendarIcon,
     href: "/",
@@ -32,12 +33,17 @@ export const navItems = [
     href: "/players",
   },
   {
-    id: "board",
-    label: "게시판",
-    icon: NewspaperClippingIcon,
-    // icon: ChatsCircleIcon,
+    id: "cup",
+    label: "대회 소식",
+    icon: TrophyIcon,
     href: "/boards",
   },
+  // {
+  //   id: "board",
+  //   label: "게시판",
+  //   icon: NewspaperClippingIcon,
+  //   href: "/boards",
+  // },
   {
     id: "more",
     label: "더 보기",
@@ -104,7 +110,7 @@ export const useNavigation = () => {
       case "/players":
         return "player";
       case "/boards":
-        return "board";
+        return "cup";
       case "/more":
         return "more";
       default:

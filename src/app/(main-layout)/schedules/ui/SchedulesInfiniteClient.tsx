@@ -145,7 +145,7 @@ const SchedulesInfiniteClient = ({ initialData, searchQuery }: Props) => {
 
   const tabOptions = useMemo(
     () => [
-      { tab: "schedules" as const, label: "경기 일정" },
+      { tab: "schedules" as const, label: "풋살 일정" },
       { tab: "my-schedules" as const, label: "내 일정" },
     ],
     []
