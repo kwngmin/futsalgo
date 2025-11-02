@@ -75,10 +75,12 @@ const NewsCard = ({ news }: NewsCardProps) => {
                 <Image
                   src={news.posterUrl}
                   alt={news.title}
-                  width={800}
-                  height={600}
+                  width={1080}
+                  height={1440}
                   className="w-full h-auto"
-                  sizes="(max-width: 640px) 100vw, 640px"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 800px, 1200px"
+                  quality={100}
+                  priority={news.isPinned}
                 />
               </div>
               {/* 고정 배지 */}
