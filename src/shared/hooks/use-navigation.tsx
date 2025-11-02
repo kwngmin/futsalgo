@@ -33,7 +33,7 @@ export const navItems = [
     href: "/players",
   },
   {
-    id: "cup",
+    id: "tournament",
     label: "대회 소식",
     icon: TrophyIcon,
     href: "/boards",
@@ -110,7 +110,7 @@ export const useNavigation = () => {
       case "/players":
         return "player";
       case "/boards":
-        return "cup";
+        return "tournament";
       case "/more":
         return "more";
       default:

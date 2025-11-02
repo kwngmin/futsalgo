@@ -235,6 +235,11 @@ enum BugStatus {
   CANNOT_REPRODUCE   // 재현 불가
 }
 
+enum TournamentNewsStatus {
+  PUBLISHED   // 게시됨 (기본값)
+  HIDDEN      // 숨김 (부적절한 컨텐츠 등으로 관리자가 숨김 처리)
+}
+
 // ========== AUTHENTICATION MODELS ==========
 
 model Account {
@@ -335,6 +340,9 @@ model User {
   posts           Post[]
   postComments    PostComment[]
   likedPosts      PostLike[]
+
+  // 대회 소식 관련
+  tournamentNews  TournamentNews[]
 
   // 팀원 평가 관계
   givenRatings    TeamMemberRating[] @relation("GivenRatings")
@@ -999,4 +1007,66 @@ model BugReportAttachment {
   
   @@index([bugReportId])
   @@map("bug_report_attachments")
+}
+
+model TournamentNews {
+  id              String               @id @default(cuid())
+  
+  // 기본 정보
+  title           String
+  content         String               @db.Text
+  
+  // 이미지 관련
+  posterUrl       String?              // 메인 포스터 이미지
+  images          TournamentNewsImage[] // 추가 이미지들 (별도 모델로 관리)
+  
+  // 대회 정보
+  startDate       DateTime?            // 대회 시작일
+  endDate         DateTime?            // 대회 종료일 (선택)
+  location        String?              // 대회 장소
+  registrationDeadline DateTime?       // 참가 신청 마감일
+  
+  // 링크 정보
+  websiteUrl      String?              // 대회 홈페이지
+  registrationUrl String?              // 참가 신청 링크 (네이버 폼 등)
+  
+  // 게시 관련
+  status          TournamentNewsStatus @default(PUBLISHED) 
+  isPinned        Boolean              @default(false)
+  views           Int                  @default(0)
+  
+  // 작성자 정보 (관리자가 작성)
+  authorId        String?
+  author          User?                @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  
+  // Soft Delete
+  isDeleted       Boolean              @default(false)
+  deletedAt       DateTime?
+  
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  publishedAt     DateTime?            // 최초 게시 시간
+  
+  @@index([status, isPinned, startDate])
+  @@index([status, createdAt])
+  @@index([startDate, endDate])
+  @@index([registrationDeadline])
+  @@index([isDeleted, status])
+  @@map("tournament_news")
+}
+
+// 대회 소식 이미지 모델 (여러 이미지 관리)
+model TournamentNewsImage {
+  id               String         @id @default(cuid())
+  tournamentNewsId String
+  url              String
+  order            Int            @default(0)  // 이미지 순서
+  caption          String?        // 이미지 설명 (선택)
+  
+  tournamentNews   TournamentNews @relation(fields: [tournamentNewsId], references: [id], onDelete: Cascade)
+  
+  createdAt        DateTime       @default(now())
+  
+  @@index([tournamentNewsId, order])
+  @@map("tournament_news_images")
 }
