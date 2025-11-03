@@ -1,9 +1,7 @@
 "use client";
 
 import { TournamentNewsWithDetails } from "../actions/get-tournament-news";
-import { Card } from "@/shared/components/ui/card";
 import Image from "next/image";
-import Link from "next/link";
 
 interface NewsCardProps {
   news: TournamentNewsWithDetails;
@@ -53,51 +51,54 @@ const NewsCard = ({ news }: NewsCardProps) => {
   const dateRange = formatDateRange();
 
   return (
-    <Link href={`/news/${news.id}`} className="block">
-      <Card className="mx-4 mb-4 cursor-pointer hover:shadow-md transition-shadow overflow-hidden py-0 gap-0">
-        {/* 제목과 날짜 */}
-        <div className="pb-3 space-y-1">
-          <h3 className="text-lg sm:text-xl font-bold line-clamp-2">
-            {news.title}
-          </h3>
-          {dateRange && (
-            <p className="text-sm text-muted-foreground">
-              <span className="font-bold">일정:</span> {dateRange}
-            </p>
-          )}
-        </div>
+    <div className="mb-4 overflow-hidden py-0 gap-0">
+      {/* 제목과 날짜 */}
+      <div className="px-4 pb-3 space-y-1">
+        <h3 className="text-lg sm:text-xl font-bold line-clamp-2">
+          {news.title}
+        </h3>
+        {dateRange && (
+          <p className="text-sm text-gray-700">
+            <span className="font-bold">일정:</span> {dateRange}
+          </p>
+        )}
+        {news.content && (
+          <p className="text-sm text-gray-700 whitespace-pre-line border-l-2 border-gray-300 pl-2 mt-2">
+            {news.content}
+          </p>
+        )}
+      </div>
 
-        {/* 포스터 이미지 - 메인 */}
-        <div className="relative w-full">
-          {news.posterUrl ? (
-            <>
-              <div className="relative w-full">
-                <Image
-                  src={news.posterUrl}
-                  alt={news.title}
-                  width={1080}
-                  height={1440}
-                  className="w-full h-auto"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 800px, 1200px"
-                  quality={100}
-                  priority={news.isPinned}
-                />
-              </div>
-              {/* 고정 배지 */}
-              {news.isPinned && (
-                <span className="absolute top-2 right-2 px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded z-10">
-                  고정
-                </span>
-              )}
-            </>
-          ) : (
-            <div className="w-full aspect-[4/3] bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-400 text-sm">포스터 이미지 없음</span>
+      {/* 포스터 이미지 - 메인 */}
+      <div className="relative w-full sm:px-4">
+        {news.posterUrl ? (
+          <>
+            <div className="relative w-full">
+              <Image
+                src={news.posterUrl}
+                alt={news.title}
+                width={1080}
+                height={1440}
+                className="w-full h-auto"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 800px, 1200px"
+                quality={100}
+                priority={news.isPinned}
+              />
             </div>
-          )}
-        </div>
-      </Card>
-    </Link>
+            {/* 고정 배지 */}
+            {news.isPinned && (
+              <span className="absolute top-2 right-2 px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded z-10">
+                고정
+              </span>
+            )}
+          </>
+        ) : (
+          <div className="w-full aspect-[4/3] bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-400 text-sm">포스터 이미지 없음</span>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
