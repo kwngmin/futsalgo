@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import SchedulePhotoUpload from "./SchedulePhotoUpload";
 import { useSchedulePhotos } from "../lib/use-schedule-photos";
-import { deleteSchedulePhoto } from "../actions/delete-schedule-photo";
+import deleteSchedulePhoto from "../actions/delete-schedule-photo";
 import { ImagesIcon } from "@phosphor-icons/react";
 // import { useRouter } from "next/navigation";
 

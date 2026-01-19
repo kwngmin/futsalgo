@@ -3,18 +3,14 @@
 import { prisma } from "@/shared/lib/prisma";
 import { auth } from "@/shared/lib/auth";
 import { revalidatePath } from "next/cache";
-
-export interface DeleteSchedulePhotoResult {
-  success: boolean;
-  message?: string;
-}
+import type { DeleteSchedulePhotoResult } from "./delete-schedule-photo.types";
 
 /**
  * 스케줄 사진 삭제
  * @param photoId 삭제할 사진 ID
  * @returns 삭제 결과
  */
-export const deleteSchedulePhoto = async (
+const deleteSchedulePhoto = async (
   photoId: string
 ): Promise<DeleteSchedulePhotoResult> => {
   try {

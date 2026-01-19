@@ -354,5 +354,5 @@ export const getSchedules = cache(
 export async function revalidateSchedules() {
   "use server";
   const { revalidateTag } = await import("next/cache");
-  revalidateTag("schedules");
+  revalidateTag("schedules", { expire: 0 });
 }

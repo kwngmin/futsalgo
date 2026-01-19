@@ -2,11 +2,11 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import {
-  getSchedulePhotos,
-  type GetSchedulePhotosResult,
-  type SchedulePhotoWithUploader,
-} from "../actions/get-schedule-photos";
+import getSchedulePhotos from "../actions/get-schedule-photos";
+import type {
+  GetSchedulePhotosResult,
+  SchedulePhotoWithUploader,
+} from "../actions/get-schedule-photos.types";
 
 interface UseSchedulePhotosOptions {
   scheduleId: string;

@@ -1,30 +1,13 @@
 "use server";
 
 import { prisma } from "@/shared/lib/prisma";
-import { auth } from "@/shared/lib/auth"; // auth 함수 경로에 맞게 수정
+import { auth } from "@/shared/lib/auth";
+import type {
+  SchedulePhotoWithUploader,
+  GetSchedulePhotosResult,
+} from "./get-schedule-photos.types";
 
-export interface SchedulePhotoWithUploader {
-  id: string;
-  url: string;
-  createdAt: Date;
-  uploader: {
-    id: string;
-    name: string | null;
-    nickname: string | null;
-    image: string | null;
-  };
-}
-
-export interface GetSchedulePhotosResult {
-  success: boolean;
-  photos: SchedulePhotoWithUploader[];
-  canUpload: boolean; // 사진 업로드 권한 여부
-  totalCount: number;
-  hasMore: boolean; // 더 가져올 데이터가 있는지
-  message?: string;
-}
-
-export const getSchedulePhotos = async ({
+const getSchedulePhotos = async ({
   scheduleId,
   limit = 50,
   offset = 0,
