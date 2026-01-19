@@ -16,6 +16,17 @@ const nextConfig: NextConfig = {
   // 정적 최적화 설정
   output: "standalone",
 
+  // Turbopack 설정 (빈 객체로 경고 제거)
+  turbopack: {
+    rules: {
+      // SVG를 React 컴포넌트로 변환
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
+  },
+
   // 보안 헤더 설정
   async headers() {
     return [
@@ -99,7 +110,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // 개발 모드에서 브라우저 확장 에러 억제
+  // webpack 설정 유지 (Turbopack 사용 시에도 fallback으로 작동)
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
